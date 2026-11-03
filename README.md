@@ -24,7 +24,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 - **Crew and Mission Control talk.** Each kerbal has a voice and a temperament. This is a new mechanic called stress. Stress comes from G force, spin,
   heat, fuel, a hard landing and so on, and every kerbal reacts in their own way. A brave pilot can stay calm while a
   nervous scientist panics easily.
-- **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers.
+- **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers or when they do a science experiment.
 - **Cabin intercom.** With two or more kerbals aboard they chat among themselves now and then with some jokes.
 - **The radio sounds like a radio.** Quindar tones on Mission Control, static that follows your CommNet signal (or
   RemoteTech), reentry blackout, a delay on the answers far from Kerbin and dropouts on a weak link. This way the radio is simulated in a way to your connection with the KSC.
