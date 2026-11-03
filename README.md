@@ -11,7 +11,7 @@ Your crew talks to Mission Control and to each other about what is actually goin
 mostly quiet. A capsule tumbling through reentry gets a crew shouting over each other while Mission Control tries to
 keep them calm. Probes get their own voice too in the form of beeping noises.
 
-Each kerbal has their own voice based on their gender, and their own personality too! The personality is based on the Kerbal's stats as seen in the Astronaut Complex. For example, a Kerbal with high stupidity would make more jokes in flight, while one that has a low stupidty would make less jokes. The voice is generated based on a seed, and the seed stays the same even after restart. That means that the Kerbal's will keep the voice that is unique to them.
+Each kerbal has their own voice based on their gender, and their own personality too! The personality is based on the Kerbal's stats as seen in the Astronaut Complex. For example, a Kerbal with high stupidity would make more jokes in flight, while one that has a low stupidity would make fewer jokes. The voice is generated based on a seed, and the seed stays the same even after restart. That means that the Kerbals will keep the voice that is unique to them.
 
 loñapsE is the language of the kerbals. Under the hood it is Spanish with every word spelled backwards ("Separación" becomes "nóicarapeS"), rendered
 with a text to speech voice and pitched up. It sounds like a real language without being one you can follow. If you are not fluent in loñapsE and you want to know what your Kerbals are saying during a flight you can turn on the subtitles and read their conversations. 
@@ -20,8 +20,8 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 
 - **Crew and Mission Control talk.** Each kerbal has a voice and a temperament. This is a new mechanic called stress. Stress comes from G force, spin,
   heat, fuel, a hard landing and so on, and every kerbal reacts in their own way. A brave pilot can stay calm while a
-  nervous scientist panicks easily.
-- **Callouts.** The crew will callout when staging, parachutes, full throttle or throttle cutoff happens. They will also callout during docking maneuvres.
+  nervous scientist panics easily.
+- **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers.
 - **Cabin intercom.** With two or more kerbals aboard they chat among themselves now and then with some jokes.
 - **The radio sounds like a radio.** Quindar tones on Mission Control, static that follows your CommNet signal (or
   RemoteTech), reentry blackout, a delay on the answers far from Kerbin and dropouts on a weak link. This way the radio is simulated in a way to your connection with the KSC.
@@ -32,8 +32,8 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 - **Animated talking kerbals.** Jaws move when a Kerbal talks and the others turn their heads to the speaker. This is visible in EVA, IVA and in the
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all).
-- **Stations and bases** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
-- **English subtitles** with a colour per speaker. The subtitles amount, size and position is fully customizable.
+- **Stations and bases.** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
+- **English subtitles** with a colour per speaker. The number of subtitle lines, their size and position are fully customizable.
 
 ## Install
 
@@ -55,7 +55,7 @@ Hotkeys:
 - **Alt+Y** mutes and unmutes.
 - **Alt+C** starts or stops the launch countdown on the pad.
 
-You can change both keys in the window
+You can change both keys in the window.
 
 Settings are saved in `GameData/Lonapse/PluginData/settings.cfg`.
 
