@@ -1,6 +1,6 @@
 # Audio credits
 
-The voice clips in `Sounds/crew/` and `Sounds/control/` are Lonapse lines spoken by Piper voices (below).
+The voice clips in `Sounds/crew/` and `Sounds/control/` are loñapsE lines spoken by Piper voices (below).
 
 Beeps (`Sounds/beeps/`) and static (`Sounds/static/`) are synthesized by `build_clips.py` with
 ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and plain Python. They contain no recorded material.
@@ -9,7 +9,7 @@ No audio from the Chatterer mod or any other mod was used.
 
 ## Lonapse voices: Piper
 
-The Lonapse clips (`audio/build_lonapse.py`, phrase table in `audio/lonapse/`) are spoken by Piper
+The loñapsE voice clips (`audio/build_lonapse.py`, phrase table in `audio/lonapse/`) are spoken by Piper
 (`piper-tts` 1.8.0, https://github.com/OHF-Voice/piper1-gpl, GPL-3.0-or-later) with these voice models from
 https://huggingface.co/rhasspy/piper-voices. The license of each voice is the one stated on its model card
 (`MODEL_CARD` in the voice folder), checked on 2026-11-02:
@@ -29,4 +29,4 @@ audio produced by a GPL program falls under the GPL is a legal question this pro
 project distributes the clips with this note.
 
 The phrase text is written by the project itself, in plain Spanish, and is reversed letter by letter by the
-build script. No recorded material is used in the Lonapse clips.
+build script. No recorded material is used in the voice clips.

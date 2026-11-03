@@ -1,12 +1,15 @@
-# Lonapse: sources, build and tables
+# loñapsE: the language of the kerbals
 
-Lonapse is the language of the kerbals. Every crew and Mission Control line in the mod is spoken in it. This file describes how the Lonapse clips are made. Lonapse is Spanish with the letters of every word reversed. The audio itself is not reversed.
+loñapsE is the language the kerbals speak in Lonapse. Every crew and Mission Control line in the mod is spoken in it.
+This page explains how the voice lines are made, how the phrase tables work and how you can add your own lines. The
+short version: I write the lines in Spanish, a script spells every word backwards, and a text to speech voice reads
+them out loud. The audio itself is not reversed, only the spelling.
 
 ## What is in this folder
 
 | File | Role |
 |---|---|
-| `phrases/*.tsv` | The source tables, one file per event family. I edit them by hand. |
+| `phrases/*.tsv` | The source tables, one file per kind of event. I write these by hand. |
 | `bodies.tsv` | Body names for the `{body}` placeholder. |
 | `README.md` | This file. |
 
@@ -30,9 +33,9 @@ Some older rows have keys without these prefixes.
 
 The build script is `audio/build_lonapse.py`. The clips go into the shared folder `audio/build/Sounds/`. The built table, the manifest and the render cache go into `audio/build/lonapse/`. Both paths are in `.gitignore`.
 
-## The idea
+## How a line becomes loñapsE
 
-Lonapse is Spanish with the letters of every word reversed. The script does this:
+Every line goes through the same steps:
 
 1. It normalizes the text to NFC, so an ñ is always one character.
 2. It reverses the letters of every word. Punctuation and spaces stay in place. The word order stays the same.
@@ -47,7 +50,7 @@ An accent stays on its own letter. "Separación" becomes "nóicarapeS".
 
 ## Table format
 
-Every file in `phrases/` is UTF-8 with tabs. Lines that start with `#` are comments. The first other line is the header. The script and the C# loader find the columns by name, so the order does not matter. I keep this order:
+Every file in `phrases/` is a plain tab separated table (UTF-8). Lines that start with `#` are comments. The first other line is the header. The columns are found by name, so their order doesn't matter, but I keep this order:
 
 ```
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
@@ -89,7 +92,7 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 
 `cause` says which stress component the line is about. The names are the components in `src/StressModel.cs`, plus `engine_out`. Use `any` for a line that fits every cause. A tense or panic line only names what the game measures. So no fire: the game has no fire. Use heat instead.
 
-Rules the build enforces:
+The build checks these rules for you, so you can't break the game with a typo:
 
 - All rows of one scene have the same `event`, `severity`, `band`, `phase`, `cause`, `trait`, `persona`, `topic` and `core`.
 - `topic` is `any` except on `science` and `soi_enter` (see the table above).
@@ -106,7 +109,7 @@ The C# loader (`PhraseTable.Parse`) checks the same probe rules and the same pla
 
 ## Probe mode
 
-Probe mode plays when a vessel has no crew but a probe core. Its scenes use the roles below. Only Mission Control and the probe talk.
+Probe mode plays when a vessel has no crew but does have a probe core. Then only Mission Control and the probe talk. The probe has no voice clips, it beeps, and the subtitle tells you what the beep means.
 
 | Role | Sound | Clip | Rules |
 |---|---|---|---|
@@ -144,13 +147,15 @@ A row with `{body}` becomes one row per line of `bodies.tsv`. That file has the 
 
 The variant gets the clip key `<clip_key>__<body key>` and the body key in the column `body`. Example: `chat_calm_s4_2` becomes `chat_calm_s4_2__kerbin`, `chat_calm_s4_2__mun` and so on. A row without `{body}` in the same scene stays one row with an empty `body`.
 
-The Spanish body names are written backwards on purpose. Lonapse reverses every word, so the clip then says the real name. "nibréK" is spoken as "Kérbin". I spelled the names for a Spanish voice: Jool is "luY" (spoken "Yul"), Eeloo is "ulI" ("Ilu"), Laythe is "ziéL" ("Léiz"). Only `generic` is plain Spanish ("el planeta"). It is spoken as Lonapse like every other word. The English names carry "the" where English needs it ("the Mun"). If `{body}` starts an English sentence, the build makes the first letter a capital.
+The Spanish body names are written backwards on purpose. loñapsE reverses every word, so the clip ends up saying the real name. "nibréK" is spoken as "Kérbin". I spelled the names for a Spanish voice: Jool is "luY" (spoken "Yul"), Eeloo is "ulI" ("Ilu"), Laythe is "ziéL" ("Léiz"). Only `generic` is plain Spanish ("el planeta"). It is spoken in loñapsE like every other word. The English names carry "the" where English needs it ("the Mun"). If `{body}` starts an English sentence, the build makes the first letter a capital.
 
 So write `{body}` where a name fits in Spanish and in English. "Qué vista sobre {body}." works for "Kerbin", "la Mun" and "el planeta". Avoid a word before `{body}` that changes with the name, like "del" or "de la".
 
 In game a body scene counts as one scene. `PhraseScene.LinesFor(body)` gives the lines for one body, and falls back to `generic`. Every body variant is a real clip, so one `{body}` row with `gender both` gives 36 clips.
 
-## Adding rows
+## Adding your own lines
+
+Want to give the kerbals something new to say? It doesn't need any code.
 
 1. Pick the file by event family (table above). Use its key prefix: `la_`, `re_`, `pa_`, `sp_`, `mj_`, `ic_`, `bl_`, `ev_`, `bo_`.
 2. Give the lines of one exchange the same `scene` and number them with `seq` from 1.
@@ -161,9 +166,9 @@ In game a body scene counts as one scene. `PhraseScene.LinesFor(body)` gives the
 python3 -I audio/build_lonapse.py --validate-only
 ```
 
-It prints the rows per file, per phase and per cause, and every bad row as `phrases/<file>:<line>`.
+It shows how many lines each file has, and points you to every bad row as `phrases/<file>:<line>`.
 
-5. Build. Only new or changed clips are rendered.
+5. Build. Only the new or changed lines are rendered, so this is quick.
 
 ## Folders
 
@@ -209,7 +214,8 @@ The pitch shift uses `asetrate`. That moves the formants too. It gives the small
 
 ## Installing Piper
 
-Piper runs in its own Python environment. Once:
+You only need this if you want to render voice lines yourself. Piper runs in its own Python environment. Set it up
+once:
 
 ```bash
 cd path/to/KSP-Lonapse
@@ -227,20 +233,20 @@ python3 -I audio/build_lonapse.py                  # build and verify
 python3 -I audio/build_lonapse.py --validate-only  # only check the tables
 python3 -I audio/build_lonapse.py --verify-only    # check the existing build
 python3 -I audio/build_lonapse.py --jobs 4         # number of render processes
-python3 -I audio/build_lonapse.py --clean          # remove the Lonapse clips and the cache first
+python3 -I audio/build_lonapse.py --clean          # remove the voice clips and the cache first
 python3 -I audio/build_lonapse.py --voice-m es_MX-ald-medium   # try another voice
 python3 -I audio/build_lonapse.py --try chatter_panic_03 chat_calm_s4_2 --out /tmp/lonapse_try
 ```
 
 `--try` renders the clips of the given keys into a scratch folder, with the time per clip. A base key also selects its body variants. It does not touch the cache or `Sounds/`. I use it to listen to a delivery change before a full build.
 
-The script installs nothing into the game. `python3 -I audio/build_clips.py --install` puts the whole `Sounds/` folder into the game. It refuses when the Lonapse clips are missing.
+The script installs nothing into the game. `python3 -I audio/build_clips.py --install` puts the whole `Sounds/` folder into the game. It refuses when the voice clips are missing.
 
 The script stops with an error when a table is wrong. It reports every bad row with its file and line number, and the shortfall per event.
 
 ### Render cache
 
-Every clip has a render key. It is a hash of the clip key, the gender, the Lonapse text, the voice and its model hash, the pitch and tempo, the level targets, the panic settings and `RENDER_VERSION`. The rendered OGG and its measurements are stored under that key in `audio/build/lonapse/cache/`. A build only renders clips whose key is new. Then it copies the clips into `Sounds/` and removes clips the tables no longer have. Verification reuses the stored measurements when the bytes on disk match the cache. So a build after a small table change takes seconds.
+Every clip has a render key. It is a hash of the clip key, the gender, the loñapsE text, the voice and its model hash, the pitch and tempo, the level targets, the panic settings and `RENDER_VERSION`. The rendered OGG and its measurements are stored under that key in `audio/build/lonapse/cache/`. A build only renders clips whose key is new. Then it copies the clips into `Sounds/` and removes clips the tables no longer have. Verification reuses the stored measurements when the bytes on disk match the cache. So a build after a small table change takes seconds.
 
 When I change the render chain in a way the key does not see (a filter, the gasp model, the trim rule), I raise `RENDER_VERSION` at the top of the script. `--clean` also empties the cache.
 

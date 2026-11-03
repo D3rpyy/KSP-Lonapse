@@ -1,17 +1,21 @@
 # Lonapse audio pipeline
 
+Every sound in Lonapse is made by a script. Nothing is recorded, and nothing is taken from another mod or game. This
+page explains how the beeps and static are built and how you can check or change them. The voices have their own page:
+[lonapse/README.md](lonapse/README.md).
+
 Two scripts build everything the plugin plays:
 
 | Folder | Built by |
 |---|---|
 | `Sounds/beeps/`, `Sounds/static/` | `build_clips.py` (WAV, synthesized, no recordings) |
-| `Sounds/crew/`, `Sounds/control/` | `build_lonapse.py` (Lonapse voices from Piper TTS, OGG) |
+| `Sounds/crew/`, `Sounds/control/` | `build_lonapse.py` (loñapsE voices from Piper TTS, OGG) |
 
-`audio/build/Sounds/` is the one tree that ships to the game. Each script only replaces and cleans its own
-folders. `build_clips.py` needs Python 3 (standard library only) and `ffmpeg` with `ffprobe`. The voices are
-described in `lonapse/README.md`.
+Both scripts write into `audio/build/Sounds/`, and that folder is what ships to the game. Each script only touches its
+own folders, so you can rebuild the beeps without losing the voices and the other way around. `build_clips.py` only
+needs Python 3 and `ffmpeg` with `ffprobe`.
 
-## Rebuild
+## Building the beeps and static
 
 ```bash
 python3 -I audio/build_clips.py                    # build and verify
@@ -26,14 +30,15 @@ python3 -I audio/build_clips.py --verify-only      # re-check an existing build
 | `--install` | After a successful build, sync the whole `audio/build/Sounds/` tree (WAV and OGG) into `GameData/Lonapse/Sounds/` and copy the phrase table to `GameData/Lonapse/Phrases/phrases.tsv`. Copies new or changed files and deletes stale files, only inside that folder. Aborts when `GameData/Squad` is missing, and when the voices are not built yet. The game folder comes from `KSP_DIR` or the first line of `.ksp_dir` in the repo root. |
 | `--seed N` | Random seed (default 1). The same seed gives byte-identical WAV files. |
 
-The script prints a summary table per folder (count against minimum, shortest and longest clip, loudness
-range, loudest peak) and exits with a nonzero code when anything breaks the contract. It also writes
+When it is done, the script prints a table per folder with the number of clips, the shortest and longest clip and
+how loud they are. If anything is out of bounds it stops with an error, so a broken clip never makes it into the
+game. It also writes
 `audio/build/manifest.json` with file, folder, duration, rms and peak per clip.
 
-## Lonapse QA after a render
+## Checking the voices
 
-About 2000 Lonapse clips are too many to hear one by one. `qa_lonapse.py` checks every clip by
-measurement and picks a small sample to listen to.
+There are thousands of voice clips, way too many to listen to one by one. `qa_lonapse.py` measures every clip
+and picks a small sample for you to listen to.
 
 ```bash
 python3 -I audio/qa_lonapse.py                       # checks audio/build
@@ -45,7 +50,7 @@ clip with ffmpeg and reports these as errors (exit code 1):
 
 - a clip the table needs is missing, or an OGG is not in the table
 - duration outside 0.3 to 3.0 s for a callout, 0.3 to 9 s for other lines
-- seconds per letter of the Lonapse text outside 0.5 to 2.0 times the median of its voice and band
+- seconds per letter of the loñapsE text outside 0.5 to 2.0 times the median of its voice and band
   (only for texts of 10 letters or more, screams excepted)
 - peak above -1.0 dBFS or clipped samples
 - a pause inside the clip longer than 0.8 s (1.0 s for panic)
@@ -59,12 +64,13 @@ Outputs, both under `<build>/lonapse/`:
 - `qa_report.json`: every clip with its measurements, errors and warnings, and the medians per group.
 - `review/index.html` and `review/review.m3u`: a random sample of 2 clips per source file, phase, band and
   role (`--per-stratum`, `--seed`), plus every flagged clip, plus every clip whose decoded audio changed
-  since the previous `qa_report.json`. Each entry shows the key, the English text, the Lonapse text and
+  since the previous `qa_report.json`. Each entry shows the key, the English text, the loñapsE text and
   the tags, with a player and OK and Bad buttons and a note field. The verdicts stay in the browser
   (localStorage). The Export button downloads them as `lonapse_verdicts.tsv`. Open the page from disk.
   The players use relative paths to `../../Sounds/`.
 
-The script measures. It does not listen. A clip can pass every check and still sound wrong.
+Keep in mind that the script only measures. A clip can pass every check and still sound wrong, so do listen to the
+sample.
 
 ## Output
 
@@ -90,6 +96,8 @@ leading or trailing silence.
 
 ## Making your own clips
 
+Want to change a sound or add your own lines? Here is how.
+
 - **Hand-made clips:** put WAV files (PCM 16-bit, mono, 44.1 kHz) into `GameData/Lonapse/Sounds/<folder>/`,
   named `<folder with _>_NNN.wav` with contiguous numbers from `000`. `--install` deletes files that are not in
   `audio/build/Sounds/`, so copy your clips there before installing. Aim for the same levels: about -20 dBFS RMS
@@ -102,8 +110,9 @@ leading or trailing silence.
 
 ## Radio profile clips
 
-These clips are synthesized in `build_clips.py` (ffmpeg `sine` and `anoisesrc`, no source file). They
-support the station, ship and EVA radio profiles.
+The radio sounds a bit different depending on where you are. A station or base has a desk microphone, a ship and
+an EVA suit have a headset. These clips make that happen. They are synthesized in `build_clips.py` from plain tones
+and noise.
 
 | Folder | Clips | What it holds |
 |---|---|---|
@@ -122,7 +131,8 @@ voices and the static. The headset squelch sits at the same file level as the ot
 
 ## Probe beeps
 
-Probe mode needs beeps for the probe. `build_clips.py` synthesizes them in plain Python (no ffmpeg source, no recording).
+Probes don't talk, they beep. Every stock probe core has its own beep voice, and every voice has seven moods.
+`build_clips.py` makes all of them in plain Python.
 
 | Folder | Clips | What it holds |
 |---|---|---|
