@@ -87,7 +87,8 @@ jetpack fuel far from any ship. The suit has no antenna of its own, so it relays
 
 The breathing speeds up when your kerbal runs. Running builds exertion over about 20 s (`evaExertRise`) and it fades
 over 30 s (`evaExertFall`). At its peak the breathing is 1.4x as fast (`evaBreathRate`) and 1.5x as loud
-(`evaBreathGain`). Hops and falls never count as a landing. When your kerbal falls over, they have a short talk with
+(`evaBreathGain`). Hops and falls never count as a landing or as something hitting the kerbal. Tumbling on the
+ground doesn't count as spinning, also not in the first 3 s after a fall (`evaSettleTime`). When your kerbal falls over, they have a short talk with
 Mission Control about it, at most once every 45 s (`evaFallCooldown`).
 
 When nobody is left on board (EVA, a crew transfer, switching to another vessel) everything fades out within 0.3 s.

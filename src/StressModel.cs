@@ -24,6 +24,7 @@ namespace Lonapse
         public double qv;          // q (kPa) * srfSpeed
         public float impulse;
         public float warmupLeft;
+        private float evaSettleLeft;  // EVA: seconds after a ragdoll in which spin and G still count as nothing
         public float motionQuietLeft; // docking: spin, G and impulse ignored, new impulses dropped
         public float belowTimer;   // how long raw has been below stress
         public float lossOfControlTime; // seconds the spin component has been at or above LossOfControlSpin
@@ -44,6 +45,7 @@ namespace Lonapse
             for (int i = 0; i < Count; i++) comp[i] = 0f;
             raw = stress = gF = gStrain = plasma = plasmaRaw = impulse = belowTimer = motionQuietLeft = 0f;
             lossOfControlTime = 0f;
+            evaSettleLeft = 0f;
             qv = 0;
             warmupLeft = tu.warmup;
         }
@@ -144,9 +146,13 @@ namespace Lonapse
             if (dt > 0.5f) dt = 0.5f;
 
             // EVA (req 12): jetpack turns and the bumps and tumbles of walking or ragdolling are not hazards.
-            // Spin and G are scaled by evaSpinWeight on EVA, and ignored while the kerbal is ragdolled.
+            // Spin and G are scaled by evaSpinWeight on EVA. They are ignored while the kerbal is ragdolled,
+            // standing or lying on the ground, and for evaSettleTime after a ragdoll (getting up, rolling).
             // Falling toward the ground stays a hazard through the Ground component.
-            float evaMotion = s.eva ? (s.evaRagdoll ? 0f : tu.evaSpinWeight) : 1f;
+            if (s.eva && s.evaRagdoll) evaSettleLeft = tu.evaSettleTime;
+            else if (evaSettleLeft > 0f) evaSettleLeft -= dt;
+            bool evaStill = s.eva && (s.evaRagdoll || s.landed || evaSettleLeft > 0f);
+            float evaMotion = s.eva ? (evaStill ? 0f : tu.evaSpinWeight) : 1f;
             weight[Spin] = s.eva ? tu.wSpin * evaMotion : tu.wSpin; weight[GForce] = tu.wG * evaMotion; weight[Q] = tu.wQ; weight[Ground] = tu.wGround;
             weight[Heat] = tu.wHeat; weight[Plasma] = tu.wPlasma; weight[Fuel] = tu.wFuel; weight[Impulse] = tu.wImpulse;
             weight[Rover] = tu.wRover; weight[Eva] = tu.wEva;
@@ -186,7 +192,8 @@ namespace Lonapse
             impulse *= (float)Math.Exp(-dt / Math.Max(tu.impulseTau, 0.01f));
             // the docking quiet window hides spin/G but not impulses that got through (part deaths)
             bool suppressImpulse = s.packed || warmupLeft > 0f;
-            comp[Impulse] = suppressImpulse ? 0f : impulse;
+            // on EVA nothing hits the kerbal: hops and bumps are no impulse
+            comp[Impulse] = (suppressImpulse || s.eva) ? 0f : impulse;
 
             raw = Combine(comp, weight);
             // sudden events only: impulses and an imminent ground impact

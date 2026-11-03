@@ -383,9 +383,13 @@ plan_node_02	plan_node	chatter	calm	mc	plan_node_02	1	m	any	any	any	any	any	any	
 burn_soon_01	burn_soon	warning	tense	mc	burn_soon_01	1	m	any	any	any	any	any	any		Maniobra en menos de un minuto.	arboinaM ne sonem ed nu otunim.	control/tense		Maneuver in less than a minute.
 burn_soon_02	burn_soon	warning	tense	mc	burn_soon_02	1	m	any	any	any	any	any	any		Preparaos para la maniobra.	soaraperP arap al arboinam.	control/tense		Get ready for the maneuver.
 station_check_01	station_check	chatter	calm	mc	station_check_01	1	m	any	any	any	any	any	any		¿Todo en orden en la estación?	¿odoT ne nedro ne al nóicatse?	control/calm		Everything in order on the station?
+station_check_01_2	station_check	chatter	calm	crew	station_check_01	2	both	any	any	any	any	any	any		Todo en orden aquí arriba.	odoT ne nedro íuqa abirra.	crew/calm		All in order up here.
 station_check_02	station_check	chatter	calm	mc	station_check_02	1	m	any	any	any	any	any	any		Revisión de estación. Confirmad.	nóisiveR ed nóicatse. damrifnoC.	control/calm		Station check. Please confirm.
+station_check_02_2	station_check	chatter	calm	crew	station_check_02	2	both	any	any	any	any	any	any		Confirmado, estación estable.	odamrifnoC, nóicatse elbatse.	crew/calm		Confirmed, station stable.
 eva_check_01	eva_check	chatter	calm	mc	eva_check_01	1	m	any	any	any	any	any	any		¿Cómo va la salida?	¿omóC av al adilas?	control/calm		How's the EVA going?
+eva_check_01_2	eva_check	chatter	calm	crew	eva_check_01	2	both	any	any	any	any	any	any		Va bien, Control. Disfrutando la vista.	aV neib, lortnoC. odnaturfsiD al atsiv.	crew/calm		Going well, Control. Enjoying the view.
 eva_check_02	eva_check	chatter	calm	mc	eva_check_02	1	m	any	any	any	any	any	any		Confirma el estado del traje.	amrifnoC le odatse led ejart.	control/calm		Confirm suit status.
+eva_check_02_2	eva_check	chatter	calm	crew	eva_check_02	2	both	any	any	any	any	any	any		Traje en verde. Todo bien.	ejarT ne edrev. odoT neib.	crew/calm		Suit is green. All good.
 relief_05	relief	chatter	none	crew	relief_05	1	both	any	any	any	any	any	any		Uf, eso estuvo cerca.	fU, ose ovutse acrec.	crew/relief		Phew, that was close.
 relief_06	relief	chatter	none	crew	relief_06	1	both	any	any	any	any	any	any		Ya pasó lo peor.	aY ósap ol roep.	crew/relief		The worst is over.
 relief_s1_1	relief	chatter	none	crew	relief_s1	1	both	any	any	any	any	any	any		Ya estamos bien.	aY somatse neib.	crew/relief		We're fine now.
@@ -447,6 +451,7 @@ ev_dkd_06	docked	chatter	none	crew	ev_dkd_06	1	both	any	any	any	any	any	any		Eng
 ev_dkd_07	docked	chatter	none	crew	ev_dkd_07	1	both	any	any	any	any	any	any		Contacto y captura.	otcatnoC y arutpac.	crew/calm		Contact and capture.
 ev_rel_01	relief	chatter	none	mc	ev_rel_01	1	m	any	any	any	any	any	any		Os oímos de nuevo. Bienvenidos.	sO somío ed oveun. sodinevneiB.	control/calm		We hear you again. Welcome back.
 ev_rel_02	relief	chatter	none	mc	ev_rel_02	1	m	any	any	any	any	any	any		Señal recuperada. ¿Cómo estáis?	lañeS adarepucer. ¿omóC siátse?	control/calm		Signal back. How are you?
+ev_rel_02_2	relief	chatter	none	crew	ev_rel_02	2	both	any	any	any	any	any	any		¡Bien! Un poco tostados.	¡neiB! nU ocop sodatsot.	crew/relief		Fine! A little toasted.
 ev_rel_03	relief	chatter	none	mc	ev_rel_03	1	m	any	any	any	any	any	any		Qué alegría oíros.	éuQ aírgela sorío.	control/calm		So good to hear you.
 ev_rel_04	relief	chatter	none	mc	ev_rel_04	1	m	any	any	any	any	any	any		Contacto restablecido. Respirad.	otcatnoC odicelbatser. daripseR.	control/calm		Contact restored. Breathe.
 ev_rel_05	relief	chatter	none	crew	ev_rel_05	1	both	any	any	any	any	any	any		Control, ya os oímos.	lortnoC, ay so somío.	crew/relief		Control, we hear you now.
@@ -490,7 +495,9 @@ ev_stc_05_1	station_check	chatter	calm	mc	ev_stc_05	1	m	any	any	any	any	any	any	
 ev_stc_05_2	station_check	chatter	calm	crew	ev_stc_05	2	both	any	any	any	any	any	any		Estado nominal. Gracias por preguntar.	odatsE lanimon. saicarG rop ratnugerp.	crew/calm		Status nominal. Thanks for asking.
 ev_stc_06	station_check	chatter	calm	mc	ev_stc_06	1	m	any	any	any	any	any	any		Hola, estación. Solo comprobando.	aloH, nóicatse. oloS odnaborpmoc.	control/calm		Hello, station. Just checking in.
 ev_stc_07	station_check	chatter	calm	mc	ev_stc_07	1	m	any	any	any	any	any	any		Control a estación. ¿Todo tranquilo?	lortnoC a nóicatse. ¿odoT oliuqnart?	control/calm		Control to station. All quiet?
+ev_stc_07_2	station_check	chatter	calm	crew	ev_stc_07	2	both	any	any	any	any	any	any		Muy tranquilo. Demasiado tranquilo.	yuM oliuqnart. odaisameD oliuqnart.	crew/calm		Very quiet. Too quiet.
 ev_eva_01	eva_check	chatter	calm	mc	ev_eva_01	1	m	any	any	any	any	any	any		¿Cómo va ahí fuera?	¿omóC av íha areuf?	control/calm		How's it going out there?
+ev_eva_01_2	eva_check	chatter	calm	crew	ev_eva_01	2	both	any	any	any	any	any	any		Todo bien. Aquí fuera es enorme.	odoT neib. íuqA areuf se emrone.	crew/calm		All good. It's huge out here.
 ev_eva_02	eva_check	chatter	calm	mc	ev_eva_02	1	m	any	any	any	any	any	any		Revisa el combustible del propulsor.	asiveR le elbitsubmoc led rosluporp.	control/calm		Check your jetpack fuel.
 ev_eva_03	eva_check	chatter	calm	mc	ev_eva_03	1	m	any	any	any	any	any	any		Recuerda dónde está la escotilla.	adreuceR ednód átse al allitocse.	control/calm		Remember where the hatch is.
 ev_eva_04	eva_check	chatter	calm	mc	ev_eva_04	1	m	any	any	any	any	any	any		No te alejes demasiado de la nave.	oN et sejela odaisamed ed al evan.	control/calm		Don't go too far from the ship.
@@ -531,6 +538,7 @@ in_pl_calm_c_1	part_lost	chatter	calm	crew	in_pl_calm_c	1	both	any	any	any	any	a
 in_pl_calm_c_2	part_lost	chatter	calm	mc	in_pl_calm_c	2	m	any	any	any	any	any	any		Esperemos que no. Anotado.	somerepsE euq on. odatonA.	control/calm		Let's hope not. Noted.
 in_pl_calm_d_1	part_lost	chatter	calm	crew	in_pl_calm_d	1	both	any	any	any	any	any	any		Algo explotó ahí fuera, pero era pequeño.	oglA ótolpxe íha areuf, orep are oñeuqep.	crew/calm		Something blew up out there, but it was small.
 in_pl_calm_d_2	part_lost	chatter	calm	mc	in_pl_calm_d	2	m	any	any	any	any	any	any		Recibido. ¿Todo bien dentro?	odibiceR. ¿odoT neib ortned?	control/calm		Copy. All good inside?
+in_pl_calm_d_3	part_lost	chatter	calm	crew	in_pl_calm_d	3	both	any	any	any	any	any	any		Todo bien dentro.	odoT neib ortned.	crew/calm		All good inside.
 in_pl_tense_01_1	part_lost	warning	tense	crew	in_pl_tense_01	1	both	any	impulse	any	any	any	any		¡Algo explotó! ¡Hemos perdido una pieza!	¡oglA ótolpxe! ¡someH odidrep anu azeip!	crew/tense		Something blew up! We lost a part!
 in_pl_tense_02_1	part_lost	warning	tense	crew	in_pl_tense_02	1	both	any	impulse	any	any	any	any		¡Boom! ¿Qué se ha roto?	¡mooB! ¿éuQ es ah otor?	crew/tense		Boom! What broke?
 in_pl_tense_03_1	part_lost	warning	tense	crew	in_pl_tense_03	1	both	any	impulse	any	any	any	any		Eso no era un ruido normal. Falta una pieza.	osE on are nu odiur lamron. atlaF anu azeip.	crew/tense		That wasn't a normal noise. A part is missing.
@@ -539,20 +547,22 @@ in_pl_tense_05_1	part_lost	warning	tense	crew	in_pl_tense_05	1	both	any	impulse	
 in_pl_tense_05_2	part_lost	warning	tense	mc	in_pl_tense_05	2	m	any	impulse	any	any	any	any		Recibido. Revisad los sistemas.	odibiceR. dasiveR sol sametsis.	control/tense		Copy. Check your systems.
 in_pl_tense_06_1	part_lost	warning	tense	crew	in_pl_tense_06	1	both	any	impulse	any	any	any	any		Hemos perdido una pieza. Seguimos de una pieza... casi.	someH odidrep anu azeip. somiugeS ed anu azeip... isac.	crew/tense		We lost a part. We're still in one piece... mostly.
 in_pl_tense_06_2	part_lost	warning	tense	mc	in_pl_tense_06	2	m	any	impulse	any	any	any	any		Recibido. Dadnos un informe.	odibiceR. sondaD nu emrofni.	control/tense		Copy. Give us a report.
+in_pl_tense_06_3	part_lost	warning	tense	crew	in_pl_tense_06	3	both	any	impulse	any	any	any	any		Daños menores. Seguimos volando.	soñaD seronem. somiugeS odnalov.	crew/tense		Minor damage. Still flying.
 in_pl_tense_07_1	part_lost	warning	tense	crew	in_pl_tense_07	1	both	any	impulse	any	any	any	any		¡Explosión en el exterior! Seguimos aquí.	¡nóisolpxE ne le roiretxe! somiugeS íuqa.	crew/tense		Explosion outside! We're still here.
 in_pl_tense_07_2	part_lost	warning	tense	mc	in_pl_tense_07	2	m	any	impulse	any	any	any	any		Os vemos. Mantened el control.	sO somev. denetnaM le lortnoc.	control/tense		We see you. Keep control.
 in_pl_tense_08_1	part_lost	warning	tense	crew	in_pl_tense_08	1	both	any	impulse	any	any	any	any		Ese golpe ha arrancado algo.	esE eplog ah odacnarra ogla.	crew/tense		That hit tore something off.
 in_pl_tense_08_2	part_lost	warning	tense	mc	in_pl_tense_08	2	m	any	impulse	any	any	any	any		Recibido. ¿Cuánto daño hay?	odibiceR. ¿otnáuC oñad yah?	control/tense		Copy. How much damage?
+in_pl_tense_08_3	part_lost	warning	tense	crew	in_pl_tense_08	3	both	any	impulse	any	any	any	any		Difícil de decir. Seguimos enteros.	licífiD ed riced. somiugeS soretne.	crew/tense		Hard to say. We're still in one piece.
 in_pl_panic_01_1	part_lost	warning	panic	crew	in_pl_panic_01	1	both	any	impulse	any	any	any	any		¡Todo explota! ¡Se cae a pedazos!	¡odoT atolpxe! ¡eS eac a sozadep!	crew/panic		Everything's exploding! It's falling apart!
 in_pl_panic_02_1	part_lost	warning	panic	crew	in_pl_panic_02	1	both	any	impulse	any	any	any	any		¡Boom, boom, boom! ¡Que pare ya!	¡mooB, moob, moob! ¡euQ erap ay!	crew/panic		Boom, boom, boom! Make it stop!
 in_pl_panic_03_1	part_lost	warning	panic	crew	in_pl_panic_03	1	both	any	impulse	any	any	any	any		¡Perdemos piezas! ¡Muchas piezas!	¡somedreP sazeip! ¡sahcuM sazeip!	crew/panic		We're losing parts! Lots of parts!
 in_pl_panic_04_1	part_lost	warning	panic	crew	in_pl_panic_04	1	both	any	impulse	any	any	any	any		¡Ha estallado otra! ¡Control, ayuda!	¡aH odallatse arto! ¡lortnoC, aduya!	crew/panic		Another one blew up! Control, help!
 in_pl_panic_05_1	part_lost	warning	panic	crew	in_pl_panic_05	1	both	any	impulse	any	any	any	any		¡Casi no queda nave! ¡Haced algo!	¡isaC on adeuq evan! ¡decaH ogla!	crew/panic		There's barely any ship left! Do something!
 in_pl_panic_06_1	part_lost	warning	panic	crew	in_pl_panic_06	1	both	any	impulse	any	any	any	any		¡Explosiones por todas partes! ¡Agarraos fuerte!	¡senoisolpxE rop sadot setrap! ¡soarragA etreuf!	crew/panic		Explosions everywhere! Hold on tight!
-in_pl_mc_01_1	part_lost	warning	tense	mc	in_pl_mc_01	1	m	any	impulse	any	any	any	any		Recibido, lo hemos visto. ¿Estado?	odibiceR, ol someh otsiv. ¿odatsE?	control/tense		Copy, we saw that. Status?
+in_pl_mc_01_1	part_lost	warning	tense	mc	in_pl_mc_01	1	m	any	impulse	any	any	any	any		Recibido, lo vimos. Mantenednos informados.	odibiceR, ol somiv. sondenetnaM sodamrofni.	control/tense		Copy, we saw that. Keep us posted.
 in_pl_mc_02_1	part_lost	warning	tense	mc	in_pl_mc_02	1	m	any	impulse	any	any	any	any		Control aquí. Hemos perdido los datos de una pieza.	lortnoC íuqa. someH odidrep sol sotad ed anu azeip.	control/tense		Control here. We lost the data from a part.
 in_pl_mc_03_1	part_lost	warning	tense	mc	in_pl_mc_03	1	m	any	impulse	any	any	any	any		Respirad. Contadnos qué funciona todavía.	daripseR. sondatnoC éuq anoicnuf aívadot.	control/tense		Breathe. Tell us what still works.
-in_pl_mc_04_1	part_lost	warning	tense	mc	in_pl_mc_04	1	m	any	impulse	any	any	any	any		Vimos la explosión. ¿Está todo el mundo bien?	somiV al nóisolpxe. ¿átsE odot le odnum neib?	control/tense		We saw the explosion. Is everyone okay?
+in_pl_mc_04_1	part_lost	warning	tense	mc	in_pl_mc_04	1	m	any	impulse	any	any	any	any		Vimos la explosión. Calma ahí arriba.	somiV al nóisolpxe. amlaC íha abirra.	control/tense		We saw the explosion. Stay calm up there.
 in_pl_mc_05_1	part_lost	warning	tense	mc	in_pl_mc_05	1	m	any	impulse	any	any	any	any		Recibido. Comprobad la presión de la cabina.	odibiceR. daborpmoC al nóiserp ed al anibac.	control/tense		Copy. Check the cabin pressure.
 in_pl_mc_06_1	part_lost	warning	tense	mc	in_pl_mc_06	1	m	any	impulse	any	any	any	any		Entendido. Olvidad la pieza y pilotad la nave.	odidnetnE. dadivlO al azeip y datolip al evan.	control/tense		Understood. Forget the part and fly the ship.
 in_pow_low_a_1	power_low	warning	tense	crew	in_pow_low_a	1	both	any	any	engineer	any	any	any		La batería está casi vacía. Apago lo que sobra.	aL aíretab átse isac aícav. ogapA ol euq arbos.	crew/tense		The battery is almost empty. Shutting off what we don't need.
@@ -595,6 +605,7 @@ in_sig_back_c_1	signal_back	chatter	calm	crew	in_sig_back_c	1	both	any	any	any	a
 in_sig_back_c_2	signal_back	chatter	calm	mc	in_sig_back_c	2	m	any	any	any	any	any	any		Un poco. Bueno, mucho.	nU ocop. oneuB, ohcum.	control/calm		A little. Well, a lot.
 in_sig_back_d_1	signal_back	chatter	calm	crew	in_sig_back_d	1	both	any	any	any	any	any	any		Volvemos a tener conexión.	somevloV a renet nóixenoc.	crew/calm		We have a link again.
 in_sig_back_d_2	signal_back	chatter	calm	mc	in_sig_back_d	2	m	any	any	any	any	any	any		Por fin. ¿Qué nos hemos perdido?	roP nif. ¿éuQ son someh odidrep?	control/calm		Finally. What did we miss?
+in_sig_back_d_3	signal_back	chatter	calm	crew	in_sig_back_d	3	both	any	any	any	any	any	any		Nada. Bueno, casi nada.	adaN. oneuB, isac adan.	crew/calm		Nothing. Well, almost nothing.
 in_sig_back_e_1	signal_back	chatter	calm	crew	in_sig_back_e	1	both	any	any	any	any	any	any		Aquí la nave. ¿Seguís ahí?	íuqA al evan. ¿síugeS íha?	crew/calm		Ship here. Are you still there?
 in_sig_back_e_2	signal_back	chatter	calm	mc	in_sig_back_e	2	m	any	any	any	any	any	any		Siempre. Nunca nos fuimos.	erpmeiS. acnuN son somiuf.	control/calm		Always. We never left.
 in_sig_back_f_1	signal_back	chatter	calm	crew	in_sig_back_f	1	both	any	any	any	any	any	any		La radio vuelve a funcionar.	aL oidar evleuv a ranoicnuf.	crew/calm		The radio works again.
@@ -986,7 +997,6 @@ chatter_tense_07	chatter	chatter	tense	crew	chatter_tense_07	1	both	any	q	any	an
 chatter_tense_08	chatter	chatter	tense	crew	chatter_tense_08	1	both	any	q	any	any	any	any		No me gusta ese traqueteo.	oN em atsug ese oeteuqart.	crew/tense		I don't like that rattling.
 chatter_tense_09	chatter	chatter	tense	crew	chatter_tense_09	1	both	any	fuel	any	any	any	any		Vamos un poco justos de combustible.	somaV nu ocop sotsuj ed elbitsubmoc.	crew/tense		We're cutting it close on fuel.
 chatter_tense_10	chatter	chatter	tense	mc	chatter_tense_10	1	m	any	heat	any	any	any	any		Vigilad la temperatura.	daligiV al arutarepmet.	control/tense		Watch the temperature.
-chatter_tense_11	chatter	chatter	tense	mc	chatter_tense_11	1	m	any	any	any	any	any	any		Confirmad estado, por favor.	damrifnoC odatse, rop rovaf.	control/tense		Confirm status, please.
 chat_tense_s1_1	chatter	chatter	tense	crew	chat_tense_s1	1	both	any	q	any	any	any	any		Control, la nave tiembla.	lortnoC, al evan albmeit.	crew/tense		Control, the ship is shaking.
 chat_tense_s1_2	chatter	chatter	tense	mc	chat_tense_s1	2	m	any	q	any	any	any	any		Recibido, reducid empuje si hace falta.	odibiceR, dicuder ejupme is ecah atlaf.	control/tense		Copy, reduce thrust if needed.
 chat_tense_s2_1	chatter	chatter	tense	mc	chat_tense_s2	1	m	any	heat	any	any	any	any		Vemos una temperatura alta.	someV anu arutarepmet atla.	control/tense		We see a high temperature.
@@ -1943,6 +1953,7 @@ re_dten_s3_1	chatter	chatter	tense	crew	re_dten_s3	1	both	descent	spin	any	any	a
 re_dten_s3_2	chatter	chatter	tense	mc	re_dten_s3	2	m	descent	spin	any	any	any	any		Recibido, se calmará pronto.	odibiceR, es áramlac otnorp.	control/tense		Copy, it will settle soon.
 re_dten_s4_1	chatter	chatter	tense	crew	re_dten_s4	1	both	descent	impulse	any	any	any	any		¡Fuerte tirón del paracaídas!	¡etreuF nórit led sadíacarap!	crew/tense		Hard jolt from the chute!
 re_dten_s4_2	chatter	chatter	tense	mc	re_dten_s4	2	m	descent	impulse	any	any	any	any		Recibido. ¿Todos bien?	odibiceR. ¿sodoT neib?	control/tense		Copy. Everyone okay?
+re_dten_s4_3	chatter	chatter	tense	crew	re_dten_s4	3	both	descent	impulse	any	any	any	any		Sí, todos bien. Solo el susto.	íS, sodot neib. oloS le otsus.	crew/tense		Yes, all fine. Just a scare.
 re_dten_02	chatter	chatter	tense	mc	re_dten_02	1	m	descent	ground	any	any	any	any		Altura baja, velocidad alta.	arutlA ajab, dadicolev atla.	control/tense		Low altitude, high speed.
 re_dten_03	chatter	chatter	tense	crew	re_dten_03	1	both	descent	impulse	any	any	any	any		Qué sacudida.	éuQ adiducas.	crew/tense		What a jolt.
 re_chs_1	chute_semi	callout	none	crew	re_chs_1	1	both	descent	any	any	any	any	any		Paracaídas de frenado fuera.	sadíacaraP ed odanerf areuf.	crew/callout		Drogues out.

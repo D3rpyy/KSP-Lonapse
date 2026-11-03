@@ -20,9 +20,13 @@ plan_node_02	plan_node	chatter	calm	mc	plan_node_02	1	m	any	any	Hay una maniobra
 burn_soon_01	burn_soon	warning	tense	mc	burn_soon_01	1	m	any	any	Maniobra en menos de un minuto.	Maneuver in less than a minute.
 burn_soon_02	burn_soon	warning	tense	mc	burn_soon_02	1	m	any	any	Preparaos para la maniobra.	Get ready for the maneuver.
 station_check_01	station_check	chatter	calm	mc	station_check_01	1	m	any	any	¿Todo en orden en la estación?	Everything in order on the station?
+station_check_01_2	station_check	chatter	calm	crew	station_check_01	2	both	any	any	Todo en orden aquí arriba.	All in order up here.
 station_check_02	station_check	chatter	calm	mc	station_check_02	1	m	any	any	Revisión de estación. Confirmad.	Station check. Please confirm.
+station_check_02_2	station_check	chatter	calm	crew	station_check_02	2	both	any	any	Confirmado, estación estable.	Confirmed, station stable.
 eva_check_01	eva_check	chatter	calm	mc	eva_check_01	1	m	any	any	¿Cómo va la salida?	How's the EVA going?
+eva_check_01_2	eva_check	chatter	calm	crew	eva_check_01	2	both	any	any	Va bien, Control. Disfrutando la vista.	Going well, Control. Enjoying the view.
 eva_check_02	eva_check	chatter	calm	mc	eva_check_02	1	m	any	any	Confirma el estado del traje.	Confirm suit status.
+eva_check_02_2	eva_check	chatter	calm	crew	eva_check_02	2	both	any	any	Traje en verde. Todo bien.	Suit is green. All good.
 relief_05	relief	chatter	none	crew	relief_05	1	both	any	any	Uf, eso estuvo cerca.	Phew, that was close.
 relief_06	relief	chatter	none	crew	relief_06	1	both	any	any	Ya pasó lo peor.	The worst is over.
 relief_s1_1	relief	chatter	none	crew	relief_s1	1	both	any	any	Ya estamos bien.	We're fine now.
@@ -89,6 +93,7 @@ ev_dkd_07	docked	chatter	none	crew	ev_dkd_07	1	both	any	any	Contacto y captura.	
 # More relief after the blackout. Single MC lines open a crew-only relief line.
 ev_rel_01	relief	chatter	none	mc	ev_rel_01	1	m	any	any	Os oímos de nuevo. Bienvenidos.	We hear you again. Welcome back.
 ev_rel_02	relief	chatter	none	mc	ev_rel_02	1	m	any	any	Señal recuperada. ¿Cómo estáis?	Signal back. How are you?
+ev_rel_02_2	relief	chatter	none	crew	ev_rel_02	2	both	any	any	¡Bien! Un poco tostados.	Fine! A little toasted.
 ev_rel_03	relief	chatter	none	mc	ev_rel_03	1	m	any	any	Qué alegría oíros.	So good to hear you.
 ev_rel_04	relief	chatter	none	mc	ev_rel_04	1	m	any	any	Contacto restablecido. Respirad.	Contact restored. Breathe.
 ev_rel_05	relief	chatter	none	crew	ev_rel_05	1	both	any	any	Control, ya os oímos.	Control, we hear you now.
@@ -135,8 +140,10 @@ ev_stc_05_1	station_check	chatter	calm	mc	ev_stc_05	1	m	any	any	Aquí control. C
 ev_stc_05_2	station_check	chatter	calm	crew	ev_stc_05	2	both	any	any	Estado nominal. Gracias por preguntar.	Status nominal. Thanks for asking.
 ev_stc_06	station_check	chatter	calm	mc	ev_stc_06	1	m	any	any	Hola, estación. Solo comprobando.	Hello, station. Just checking in.
 ev_stc_07	station_check	chatter	calm	mc	ev_stc_07	1	m	any	any	Control a estación. ¿Todo tranquilo?	Control to station. All quiet?
+ev_stc_07_2	station_check	chatter	calm	crew	ev_stc_07	2	both	any	any	Muy tranquilo. Demasiado tranquilo.	Very quiet. Too quiet.
 # More EVA checks (calm). One kerbal outside, so MC uses the singular.
 ev_eva_01	eva_check	chatter	calm	mc	ev_eva_01	1	m	any	any	¿Cómo va ahí fuera?	How's it going out there?
+ev_eva_01_2	eva_check	chatter	calm	crew	ev_eva_01	2	both	any	any	Todo bien. Aquí fuera es enorme.	All good. It's huge out here.
 ev_eva_02	eva_check	chatter	calm	mc	ev_eva_02	1	m	any	any	Revisa el combustible del propulsor.	Check your jetpack fuel.
 ev_eva_03	eva_check	chatter	calm	mc	ev_eva_03	1	m	any	any	Recuerda dónde está la escotilla.	Remember where the hatch is.
 ev_eva_04	eva_check	chatter	calm	mc	ev_eva_04	1	m	any	any	No te alejes demasiado de la nave.	Don't go too far from the ship.

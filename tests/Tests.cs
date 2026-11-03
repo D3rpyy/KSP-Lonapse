@@ -1500,6 +1500,20 @@ public static class Tests
             Check(rgm.weight[StressModel.Spin] == 0f && rgm.weight[StressModel.GForce] == 0f && rgm.raw < 0.05f,
                   "eva: ragdoll tumble does not count as spin or G", "raw " + rgm.raw.ToString("0.000"));
             Check(jm.weight[StressModel.GForce] < t.wG, "eva: G weight is damped on EVA", null);
+            FlightSample fall = Calm();
+            fall.eva = true; fall.landed = true; fall.omega = 4.0; fall.g = 6; fall.evaPropFrac = 1; fall.evaEcFrac = 1; fall.crewDist = 50;
+            StressModel fm = Fresh(); Tests.Run(fm, fall, 3f, 0.1f);
+            Check(fm.weight[StressModel.Spin] == 0f && fm.raw < 0.05f, "eva: tumbling on the ground does not count as spin", "raw " + fm.raw.ToString("0.000"));
+            StressModel sm = Fresh(); Tests.Run(sm, rag, 1f, 0.1f);
+            FlightSample up = rag; up.evaRagdoll = false;
+            Tests.Run(sm, up, 1f, 0.1f);
+            Check(sm.weight[StressModel.Spin] == 0f, "eva: right after a ragdoll (settle time) spin still counts as nothing", null);
+            Tests.Run(sm, up, 3f, 0.1f);
+            Check(sm.weight[StressModel.Spin] == 0.3f, "eva: after the settle time the EVA spin weight is back", null);
+            FlightSample hop = Calm();
+            hop.eva = true; hop.evaPropFrac = 1; hop.evaEcFrac = 1; hop.crewDist = 50;
+            StressModel hm = Fresh(); Tests.Run(hm, hop, 6f, 0.1f); hm.AddImpulse(0.5f, true); Tests.Run(hm, hop, 0.2f, 0.1f);
+            Check(hm.comp[StressModel.Impulse] == 0f, "eva: an impulse never counts on EVA (nothing hit the kerbal)", null);
             Check(StressModel.EvaComponent(0.05, false, 1, double.PositiveInfinity, 0.15f, 0.1f, 200f) == 0f,
                   "eva: low propellant without thrust gives 0 (direct)", null);
             Near(StressModel.EvaComponent(1, false, 0.05, 500, 0.15f, 0.1f, 200f), 0.5, 1e-6, "eva: low EC with no crewed vessel within 200 m gives 0.5");

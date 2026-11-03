@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.2 (2026-11-03)
+
+- On EVA, falling over or lying on the ground no longer counts as spinning. The kerbal also gets about 3 s to get up after a fall (`evaSettleTime`).
+- On EVA, hops and bumps no longer count as something hitting the kerbal.
+- Mission Control questions like "Station check. Please confirm." now get an answer from the crew. Mission Control no longer acknowledges a crew line with a question nobody answers, and "Confirm status, please." is gone.
+- Every crew and Mission Control line now shows its subtitle. When no line from the phrase table fits, the radio stays quiet instead of playing a random clip without a subtitle.
+
 ## 0.5.1 (2026-11-03)
 
 - The crew keeps talking during a reentry blackout. Staging and other callouts still work. Only Mission Control drops out and doesn't answer.

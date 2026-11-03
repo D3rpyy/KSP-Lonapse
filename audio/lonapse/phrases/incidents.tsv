@@ -10,6 +10,7 @@ in_pl_calm_c_1	part_lost	chatter	calm	crew	in_pl_calm_c	1	both	any	any	any	any	a
 in_pl_calm_c_2	part_lost	chatter	calm	mc	in_pl_calm_c	2	m	any	any	any	any	any	Esperemos que no. Anotado.	Let's hope not. Noted.
 in_pl_calm_d_1	part_lost	chatter	calm	crew	in_pl_calm_d	1	both	any	any	any	any	any	Algo explotó ahí fuera, pero era pequeño.	Something blew up out there, but it was small.
 in_pl_calm_d_2	part_lost	chatter	calm	mc	in_pl_calm_d	2	m	any	any	any	any	any	Recibido. ¿Todo bien dentro?	Copy. All good inside?
+in_pl_calm_d_3	part_lost	chatter	calm	crew	in_pl_calm_d	3	both	any	any	any	any	any	Todo bien dentro.	All good inside.
 in_pl_tense_01_1	part_lost	warning	tense	crew	in_pl_tense_01	1	both	any	impulse	any	any	any	¡Algo explotó! ¡Hemos perdido una pieza!	Something blew up! We lost a part!
 in_pl_tense_02_1	part_lost	warning	tense	crew	in_pl_tense_02	1	both	any	impulse	any	any	any	¡Boom! ¿Qué se ha roto?	Boom! What broke?
 in_pl_tense_03_1	part_lost	warning	tense	crew	in_pl_tense_03	1	both	any	impulse	any	any	any	Eso no era un ruido normal. Falta una pieza.	That wasn't a normal noise. A part is missing.
@@ -18,20 +19,22 @@ in_pl_tense_05_1	part_lost	warning	tense	crew	in_pl_tense_05	1	both	any	impulse	
 in_pl_tense_05_2	part_lost	warning	tense	mc	in_pl_tense_05	2	m	any	impulse	any	any	any	Recibido. Revisad los sistemas.	Copy. Check your systems.
 in_pl_tense_06_1	part_lost	warning	tense	crew	in_pl_tense_06	1	both	any	impulse	any	any	any	Hemos perdido una pieza. Seguimos de una pieza... casi.	We lost a part. We're still in one piece... mostly.
 in_pl_tense_06_2	part_lost	warning	tense	mc	in_pl_tense_06	2	m	any	impulse	any	any	any	Recibido. Dadnos un informe.	Copy. Give us a report.
+in_pl_tense_06_3	part_lost	warning	tense	crew	in_pl_tense_06	3	both	any	impulse	any	any	any	Daños menores. Seguimos volando.	Minor damage. Still flying.
 in_pl_tense_07_1	part_lost	warning	tense	crew	in_pl_tense_07	1	both	any	impulse	any	any	any	¡Explosión en el exterior! Seguimos aquí.	Explosion outside! We're still here.
 in_pl_tense_07_2	part_lost	warning	tense	mc	in_pl_tense_07	2	m	any	impulse	any	any	any	Os vemos. Mantened el control.	We see you. Keep control.
 in_pl_tense_08_1	part_lost	warning	tense	crew	in_pl_tense_08	1	both	any	impulse	any	any	any	Ese golpe ha arrancado algo.	That hit tore something off.
 in_pl_tense_08_2	part_lost	warning	tense	mc	in_pl_tense_08	2	m	any	impulse	any	any	any	Recibido. ¿Cuánto daño hay?	Copy. How much damage?
+in_pl_tense_08_3	part_lost	warning	tense	crew	in_pl_tense_08	3	both	any	impulse	any	any	any	Difícil de decir. Seguimos enteros.	Hard to say. We're still in one piece.
 in_pl_panic_01_1	part_lost	warning	panic	crew	in_pl_panic_01	1	both	any	impulse	any	any	any	¡Todo explota! ¡Se cae a pedazos!	Everything's exploding! It's falling apart!
 in_pl_panic_02_1	part_lost	warning	panic	crew	in_pl_panic_02	1	both	any	impulse	any	any	any	¡Boom, boom, boom! ¡Que pare ya!	Boom, boom, boom! Make it stop!
 in_pl_panic_03_1	part_lost	warning	panic	crew	in_pl_panic_03	1	both	any	impulse	any	any	any	¡Perdemos piezas! ¡Muchas piezas!	We're losing parts! Lots of parts!
 in_pl_panic_04_1	part_lost	warning	panic	crew	in_pl_panic_04	1	both	any	impulse	any	any	any	¡Ha estallado otra! ¡Control, ayuda!	Another one blew up! Control, help!
 in_pl_panic_05_1	part_lost	warning	panic	crew	in_pl_panic_05	1	both	any	impulse	any	any	any	¡Casi no queda nave! ¡Haced algo!	There's barely any ship left! Do something!
 in_pl_panic_06_1	part_lost	warning	panic	crew	in_pl_panic_06	1	both	any	impulse	any	any	any	¡Explosiones por todas partes! ¡Agarraos fuerte!	Explosions everywhere! Hold on tight!
-in_pl_mc_01_1	part_lost	warning	tense	mc	in_pl_mc_01	1	m	any	impulse	any	any	any	Recibido, lo hemos visto. ¿Estado?	Copy, we saw that. Status?
+in_pl_mc_01_1	part_lost	warning	tense	mc	in_pl_mc_01	1	m	any	impulse	any	any	any	Recibido, lo vimos. Mantenednos informados.	Copy, we saw that. Keep us posted.
 in_pl_mc_02_1	part_lost	warning	tense	mc	in_pl_mc_02	1	m	any	impulse	any	any	any	Control aquí. Hemos perdido los datos de una pieza.	Control here. We lost the data from a part.
 in_pl_mc_03_1	part_lost	warning	tense	mc	in_pl_mc_03	1	m	any	impulse	any	any	any	Respirad. Contadnos qué funciona todavía.	Breathe. Tell us what still works.
-in_pl_mc_04_1	part_lost	warning	tense	mc	in_pl_mc_04	1	m	any	impulse	any	any	any	Vimos la explosión. ¿Está todo el mundo bien?	We saw the explosion. Is everyone okay?
+in_pl_mc_04_1	part_lost	warning	tense	mc	in_pl_mc_04	1	m	any	impulse	any	any	any	Vimos la explosión. Calma ahí arriba.	We saw the explosion. Stay calm up there.
 in_pl_mc_05_1	part_lost	warning	tense	mc	in_pl_mc_05	1	m	any	impulse	any	any	any	Recibido. Comprobad la presión de la cabina.	Copy. Check the cabin pressure.
 in_pl_mc_06_1	part_lost	warning	tense	mc	in_pl_mc_06	1	m	any	impulse	any	any	any	Entendido. Olvidad la pieza y pilotad la nave.	Understood. Forget the part and fly the ship.
 in_pow_low_a_1	power_low	warning	tense	crew	in_pow_low_a	1	both	any	any	engineer	any	any	La batería está casi vacía. Apago lo que sobra.	The battery is almost empty. Shutting off what we don't need.
@@ -74,6 +77,7 @@ in_sig_back_c_1	signal_back	chatter	calm	crew	in_sig_back_c	1	both	any	any	any	a
 in_sig_back_c_2	signal_back	chatter	calm	mc	in_sig_back_c	2	m	any	any	any	any	any	Un poco. Bueno, mucho.	A little. Well, a lot.
 in_sig_back_d_1	signal_back	chatter	calm	crew	in_sig_back_d	1	both	any	any	any	any	any	Volvemos a tener conexión.	We have a link again.
 in_sig_back_d_2	signal_back	chatter	calm	mc	in_sig_back_d	2	m	any	any	any	any	any	Por fin. ¿Qué nos hemos perdido?	Finally. What did we miss?
+in_sig_back_d_3	signal_back	chatter	calm	crew	in_sig_back_d	3	both	any	any	any	any	any	Nada. Bueno, casi nada.	Nothing. Well, almost nothing.
 in_sig_back_e_1	signal_back	chatter	calm	crew	in_sig_back_e	1	both	any	any	any	any	any	Aquí la nave. ¿Seguís ahí?	Ship here. Are you still there?
 in_sig_back_e_2	signal_back	chatter	calm	mc	in_sig_back_e	2	m	any	any	any	any	any	Siempre. Nunca nos fuimos.	Always. We never left.
 in_sig_back_f_1	signal_back	chatter	calm	crew	in_sig_back_f	1	both	any	any	any	any	any	La radio vuelve a funcionar.	The radio works again.

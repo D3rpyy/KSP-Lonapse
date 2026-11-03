@@ -319,6 +319,14 @@ namespace Lonapse
         }
 
         /// <summary>Keeps the queued items that match, in order, and drops the rest. Returns the number kept.</summary>
+        /// <summary>A one-line MC scene that can acknowledge a crew line. Never a question: nobody would answer it.</summary>
+        internal static bool IsMcAck(PhraseScene x)
+        {
+            if (x.Lines.Count != 1 || x.McLines != 1) return false;
+            string en = x.Lines[0].English ?? "";
+            return !en.TrimEnd().EndsWith("?");
+        }
+
         private int KeepOnly(Predicate<Utterance> keep)
         {
             int kept = AirRules.StablePartitionRing(queue, head, count, keep, scratch);
@@ -853,6 +861,7 @@ namespace Lonapse
                 PhraseScene sc = PickScene(ev, null, single) ?? PickScene("chatter", "calm", single);
                 PhraseEntry e = FirstLine(sc);
                 if (e != null) { EnqueueMc(e.Folder, delay, e); return; }
+                return; // with the table, never a random clip: it would have no subtitle and could say anything
             }
             EnqueueMc("control/calm", delay);
         }
@@ -1058,7 +1067,7 @@ namespace Lonapse
                 if (s < tu.quietBand)
                 {
                     if (rng.NextDouble() < 0.4) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
-                    else if (!EnqueueRadioScene(PickScene("eva_check", null, null), null, U(0f, 0.3f)))
+                    else if (!EnqueueRadioScene(PickScene("eva_check", null, null), null, U(0f, 0.3f)) && !PhraseClips.Loaded)
                         EnqueueMcFor("eva_check", U(0f, 0.3f));
                     return true;
                 }
@@ -1074,15 +1083,20 @@ namespace Lonapse
             {
                 // burst at high stress: one extra crew line over the running exchange, no MC
                 KerbalVoice extra = PickRested();
+                PhraseScene one = null;
+                PhraseEntry e1 = null;
+                if (PhraseClips.Loaded)
+                {
+                    // with the table only a real line: a folder clip would have no subtitle
+                    if (extra == null) return true;
+                    one = PickSceneFor("chatter", BandOf(extra, s), extra, sc => sc.Lines.Count == 1 && sc.CrewLines == 1
+                                                                     && sc.GenderOk(extra.isFemale) && ScreamOk(sc, extra));
+                    e1 = FirstLine(one);
+                    if (e1 == null) return true;
+                }
                 Utterance u = Enqueue(UttKind.CrewLine, null, DcMath.Lerp(0.6f, 0.05f, s),
                                       rng.NextDouble() < tu.overlapMax * DcMath.Smooth(s, 0.6, 1.0) ? U(0.5f, 0.8f) : 0f, extra);
-                if (u != null && PhraseClips.Loaded && extra != null)
-                {
-                    PhraseScene one = PickSceneFor("chatter", BandOf(extra, s), extra, sc => sc.Lines.Count == 1 && sc.CrewLines == 1
-                                                                                   && sc.GenderOk(extra.isFemale) && ScreamOk(sc, extra));
-                    PhraseEntry e1 = FirstLine(one);
-                    if (e1 != null) { u.entry = e1; StampScream(one, extra); }
-                }
+                if (u != null && e1 != null) { u.entry = e1; StampScream(one, extra); }
                 return true;
             }
 
@@ -1112,13 +1126,14 @@ namespace Lonapse
                     if (sc.McLines == 0 && rng.NextDouble() < McP(0.5))
                     {
                         // in a panic MC answers with the slow, calm panic lines (the contrast the user asked for)
-                        PhraseScene ack = PickScene("chatter", band, x => x.Lines.Count == 1 && x.McLines == 1)
-                                          ?? PickScene("chatter", band == "panic" ? "tense" : band, x => x.Lines.Count == 1 && x.McLines == 1);
+                        PhraseScene ack = PickScene("chatter", band, IsMcAck)
+                                          ?? PickScene("chatter", band == "panic" ? "tense" : band, IsMcAck);
                         PhraseEntry ae = FirstLine(ack);
                         if (ae != null) EnqueueMc(ae.Folder, ResponseDelay(s), ae);
                     }
                     return true;
                 }
+                return false; // no fitting scene: stay quiet rather than play a random clip without a subtitle
             }
             FireFolders(s, sp);
             return true;
@@ -1192,6 +1207,7 @@ namespace Lonapse
                 return;
             }
             if (EnqueueRadioScene(sc, null, 0.4f)) return;
+            if (PhraseClips.Loaded) return; // folder clips only without the table (no subtitle, any content)
             EnqueueMcFor("relief", 0.4f);
             int n = 2 + (rng.NextDouble() < 0.5 ? 1 : 0);
             for (int i = 0; i < n; i++)
@@ -1212,6 +1228,7 @@ namespace Lonapse
             }
             if (count + 7 > Capacity) return;
             if (EnqueueRadioScene(PickScene(splash ? "splashdown" : "touchdown", null, null), null, delay)) return;
+            if (PhraseClips.Loaded) return;
             string f = (rng.NextDouble() < 0.6 && ClipLibrary.CountOf("crew/relief") > 0) ? "crew/relief" : "crew/calm";
             EnqueueCrew(f, delay, 0f);
             EnqueueMcFor("touchdown", ResponseDelay(0.2f));
@@ -1233,7 +1250,7 @@ namespace Lonapse
         {
             if (host.probeMode) return;
             if (!host.CanStartAudio || radioSilent || count + 10 > Capacity) return;
-            if (!EnqueueRadioScene(PickScene("dock_approach", null, null), null, U(0f, 0.4f)))
+            if (!EnqueueRadioScene(PickScene("dock_approach", null, null), null, U(0f, 0.4f)) && !PhraseClips.Loaded)
             {
                 EnqueueCrew("crew/tense", U(0f, 0.4f), 0f);
                 EnqueueMcFor("dock_approach", ResponseDelay(0.3f));
@@ -1247,6 +1264,7 @@ namespace Lonapse
             if (host.probeMode) return;
             if (!host.CanStartAudio || radioSilent || !host.settings.radioEnabled || HasRadioItems()) return;
             if (tense && EnqueueRadioScene(PickScene("dock_close", null, null), null, U(0f, 0.3f))) return;
+            if (PhraseClips.Loaded) return;
             EnqueueCrew(tense ? "crew/tense" : "crew/calm", U(0f, 0.3f), 0f);
             EnqueueMcFor("dock_approach", ResponseDelay(0.2f));
         }
@@ -1262,7 +1280,7 @@ namespace Lonapse
                 if (EnqueueRadioScene(PickScene("dock_hard", null, null), null, 0.4f)) { Log.Info("Hard dock exchange queued"); return; }
             }
             if (count + 10 > Capacity) return;
-            if (!EnqueueRadioScene(PickScene("docked", null, null), null, 0.8f))
+            if (!EnqueueRadioScene(PickScene("docked", null, null), null, 0.8f) && !PhraseClips.Loaded)
             {
                 EnqueueCrew(ClipLibrary.CountOf("crew/relief") > 0 ? "crew/relief" : "crew/calm", 0.8f, 0f);
                 EnqueueMcFor("docked", ResponseDelay(0.2f));
@@ -1283,7 +1301,11 @@ namespace Lonapse
             }
             if (!host.CanStartAudio || radioSilent || !host.settings.radioEnabled || HasRadioItems() || Holding) return false;
             PhraseScene sc = PickScene("plan_node", null, null);
-            if (sc == null) { EnqueueMcFor("plan_node", U(0.3f, 1.0f)); EnqueueCrew("crew/calm", ResponseDelay(0.2f), 0f); return true; }
+            if (sc == null)
+            {
+                if (PhraseClips.Loaded) return true; // nothing fits now: consumed, no random clips
+                EnqueueMcFor("plan_node", U(0.3f, 1.0f)); EnqueueCrew("crew/calm", ResponseDelay(0.2f), 0f); return true;
+            }
             if (!EnqueueRadioScene(sc, null, U(0.3f, 1.0f))) return false;
             Log.Info("Pre-planning exchange queued");
             return true;
@@ -1296,6 +1318,7 @@ namespace Lonapse
             if (host.probeMode) { if (host.settings.probePlanTalk) EnqueueProbeReaction(ProbeRules.BurnSoon, 0.3f, true); return true; }
             if (!host.CanStartAudio || radioSilent || !host.settings.radioEnabled) return false;
             PhraseScene sc = PickScene("burn_soon", null, null);
+            if (sc == null && PhraseClips.Loaded) return true; // nothing fits now: consumed, no random clips
             if (sc == null)
             {
                 // no Lonapse table: a tense crew line and an MC answer
@@ -1425,6 +1448,8 @@ namespace Lonapse
             string folder = null;
             var scLines = sc != null ? PhraseClips.LinesFor(sc, Body) : null; // {body} variants (req 5)
             if (scLines != null && scLines.Count > 0) clip = PhraseClips.Clip(scLines[0], sp.isFemale);
+            // with the table only a real line: a folder clip has no subtitle and could say anything
+            if (clip == null && PhraseClips.Loaded) return "no fitting line in the phrase table";
             if (clip == null)
             {
                 sc = null;
@@ -1604,7 +1629,7 @@ namespace Lonapse
                 stationMcLeft -= dt;
                 if (stationMcLeft <= 0f && !HasRadioItems() && !Holding)
                 {
-                    if (!EnqueueRadioScene(PickScene("station_check", null, null), PickRested(), U(0f, 0.3f)))
+                    if (!EnqueueRadioScene(PickScene("station_check", null, null), PickRested(), U(0f, 0.3f)) && !PhraseClips.Loaded)
                     {
                         EnqueueMcFor("station_check", U(0f, 0.3f));
                         EnqueueCrew("crew/calm", ResponseDelay(s), 0f);

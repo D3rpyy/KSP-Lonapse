@@ -102,6 +102,8 @@ namespace Lonapse
         public float panicMinGap = 8f, panicCooldown = 45f, screamCooldown = 60f, speakerCooldown = 8f, talkBurst = 4f, talkPerMinute = 8f;
         public float panicEscTau = 40f, panicEscStep = 0.04f, panicEscCap = 0.16f;
         // req 12: EVA stress. evaSpinWeight is a factor on wSpin and wG while on EVA (0 while ragdolled).
+        // evaSettleTime: seconds after a ragdoll in which EVA spin and G still count as nothing.
+        public float evaSettleTime = 3f;
         public float evaSpinWeight = 0.3f, wEva = 0.4f, evaLowProp = 0.15f, evaLowEC = 0.1f, evaFarDist = 200f;
         // req 13: rover stress component
         public float wRover = 0.7f, roverSpeedLo = 5f, roverSpeedHi = 25f, roverRoughLo = 0.5f, roverRoughHi = 3f;
@@ -270,6 +272,7 @@ namespace Lonapse
             alarmHold = DcMath.Clamp(alarmHold, 0f, 30f);
             alarmStress = DcMath.Clamp(alarmStress, 0f, 1f);
             causeRepeatGap = DcMath.Clamp(causeRepeatGap, 0f, 600f);
+            evaSettleTime = DcMath.Clamp(evaSettleTime, 0f, 30f);
             FixPair(ref dockSoftSpeed, ref dockHardSpeed);
             FixPair(ref roverSpeedLo, ref roverSpeedHi); FixPair(ref roverRoughLo, ref roverRoughHi);
             FixPair(ref roverAirTimeLo, ref roverAirTimeHi); FixPair(ref roverTiltLo, ref roverTiltHi);

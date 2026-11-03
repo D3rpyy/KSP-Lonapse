@@ -82,6 +82,7 @@ re_dten_s3_1	chatter	chatter	tense	crew	re_dten_s3	1	both	descent	spin	Giramos b
 re_dten_s3_2	chatter	chatter	tense	mc	re_dten_s3	2	m	descent	spin	Recibido, se calmará pronto.	Copy, it will settle soon.
 re_dten_s4_1	chatter	chatter	tense	crew	re_dten_s4	1	both	descent	impulse	¡Fuerte tirón del paracaídas!	Hard jolt from the chute!
 re_dten_s4_2	chatter	chatter	tense	mc	re_dten_s4	2	m	descent	impulse	Recibido. ¿Todos bien?	Copy. Everyone okay?
+re_dten_s4_3	chatter	chatter	tense	crew	re_dten_s4	3	both	descent	impulse	Sí, todos bien. Solo el susto.	Yes, all fine. Just a scare.
 re_dten_02	chatter	chatter	tense	mc	re_dten_02	1	m	descent	ground	Altura baja, velocidad alta.	Low altitude, high speed.
 re_dten_03	chatter	chatter	tense	crew	re_dten_03	1	both	descent	impulse	Qué sacudida.	What a jolt.
 re_chs_1	chute_semi	callout	none	crew	re_chs_1	1	both	descent	any	Paracaídas de frenado fuera.	Drogues out.

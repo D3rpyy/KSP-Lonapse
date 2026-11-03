@@ -11,7 +11,6 @@ chatter_tense_07	chatter	chatter	tense	crew	chatter_tense_07	1	both	any	q	Atenci
 chatter_tense_08	chatter	chatter	tense	crew	chatter_tense_08	1	both	any	q	No me gusta ese traqueteo.	I don't like that rattling.
 chatter_tense_09	chatter	chatter	tense	crew	chatter_tense_09	1	both	any	fuel	Vamos un poco justos de combustible.	We're cutting it close on fuel.
 chatter_tense_10	chatter	chatter	tense	mc	chatter_tense_10	1	m	any	heat	Vigilad la temperatura.	Watch the temperature.
-chatter_tense_11	chatter	chatter	tense	mc	chatter_tense_11	1	m	any	any	Confirmad estado, por favor.	Confirm status, please.
 chat_tense_s1_1	chatter	chatter	tense	crew	chat_tense_s1	1	both	any	q	Control, la nave tiembla.	Control, the ship is shaking.
 chat_tense_s1_2	chatter	chatter	tense	mc	chat_tense_s1	2	m	any	q	Recibido, reducid empuje si hace falta.	Copy, reduce thrust if needed.
 chat_tense_s2_1	chatter	chatter	tense	mc	chat_tense_s2	1	m	any	heat	Vemos una temperatura alta.	We see a high temperature.

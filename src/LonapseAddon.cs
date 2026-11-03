@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.5.1";
+        public const string Version = "0.5.2";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -514,7 +514,7 @@ namespace Lonapse
                 if (from == Vessel.Situations.PRELAUNCH) launchPhase = true;
                 if (to == Vessel.Situations.LANDED || to == Vessel.Situations.SPLASHED) launchPhase = false;
                 if ((from == Vessel.Situations.PRELAUNCH || from == Vessel.Situations.LANDED || from == Vessel.Situations.SPLASHED)
-                    && to == Vessel.Situations.FLYING)
+                    && to == Vessel.Situations.FLYING && !a.host.isEVA) // an EVA hop is no liftoff
                     stress.AddImpulse(settings.tuning.impulseLiftoff);
                 // an EVA kerbal goes LANDED and FLYING on every hop: no touchdown there, a fall has its own lines
                 if ((to == Vessel.Situations.LANDED || to == Vessel.Situations.SPLASHED) && !a.host.isEVA
