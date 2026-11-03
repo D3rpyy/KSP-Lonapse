@@ -1,0 +1,185 @@
+# Stress radio (tense and panic bands), one cause per scene. New keys: pa_
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
+chatter_tense_01	chatter	chatter	tense	crew	chatter_tense_01	1	both	any	impulse	Ese tirón no me ha gustado.	I didn't like that jolt.
+chatter_tense_02	chatter	chatter	tense	crew	chatter_tense_02	1	both	any	fuel	Vigilad el combustible.	Watch the fuel.
+chatter_tense_03	chatter	chatter	tense	mc	chatter_tense_03	1	m	any	any	Atentos a los datos.	Keep an eye on the data.
+chatter_tense_04	chatter	chatter	tense	crew	chatter_tense_04	1	both	any	heat	Hay una lectura rara de temperatura.	There's an odd temperature reading.
+chatter_tense_05	chatter	chatter	tense	crew	chatter_tense_05	1	both	any	q	Esto vibra bastante.	This is shaking a lot.
+chatter_tense_06	chatter	chatter	tense	crew	chatter_tense_06	1	both	any	heat	Está subiendo la temperatura.	The temperature is rising.
+chatter_tense_07	chatter	chatter	tense	crew	chatter_tense_07	1	both	any	q	Atención a la presión.	Watch the pressure.
+chatter_tense_08	chatter	chatter	tense	crew	chatter_tense_08	1	both	any	q	No me gusta ese traqueteo.	I don't like that rattling.
+chatter_tense_09	chatter	chatter	tense	crew	chatter_tense_09	1	both	any	fuel	Vamos un poco justos de combustible.	We're cutting it close on fuel.
+chatter_tense_10	chatter	chatter	tense	mc	chatter_tense_10	1	m	any	heat	Vigilad la temperatura.	Watch the temperature.
+chatter_tense_11	chatter	chatter	tense	mc	chatter_tense_11	1	m	any	any	Confirmad estado, por favor.	Confirm status, please.
+chat_tense_s1_1	chatter	chatter	tense	crew	chat_tense_s1	1	both	any	q	Control, la nave tiembla.	Control, the ship is shaking.
+chat_tense_s1_2	chatter	chatter	tense	mc	chat_tense_s1	2	m	any	q	Recibido, reducid empuje si hace falta.	Copy, reduce thrust if needed.
+chat_tense_s2_1	chatter	chatter	tense	mc	chat_tense_s2	1	m	any	heat	Vemos una temperatura alta.	We see a high temperature.
+chat_tense_s2_2	chatter	chatter	tense	crew	chat_tense_s2	2	both	any	heat	La vemos también, vigilando.	We see it too, monitoring.
+# Panic band: broken pieces with gasps between them (build_lonapse.py). MC answers stay calm. scream_* are screams.
+chatter_panic_01	chatter	chatter	panic	crew	chatter_panic_01	1	both	any	any	¡No, no, no!	No, no, no!
+chatter_panic_02	chatter	chatter	panic	crew	chatter_panic_02	1	both	any	ground	¡Se cae... se cae!	It's falling... it's falling!
+chatter_panic_03	chatter	chatter	panic	mc	chatter_panic_03	1	m	any	any	Os oímos. Calma. Paso a paso.	We hear you. Stay calm. One step at a time.
+chatter_panic_04	chatter	chatter	panic	crew	chatter_panic_04	1	both	any	any	¡Ay, ay, ay!	Oh, oh, oh!
+chatter_panic_05	chatter	chatter	panic	crew	chatter_panic_05	1	both	any	any	¡Mayday, mayday!	Mayday, mayday!
+chatter_panic_06	chatter	chatter	panic	crew	chatter_panic_06	1	both	any	spin	¡Estamos girando... no para!	We're spinning... it won't stop!
+chatter_panic_07	chatter	chatter	panic	crew	chatter_panic_07	1	both	any	spin	¡No puedo... no puedo estabilizarla!	I can't... I can't stabilize it!
+chatter_panic_08	chatter	chatter	panic	crew	chatter_panic_08	1	both	any	any	¡Vamos a... vamos a...!	We're going to... we're going to...!
+chatter_panic_09	chatter	chatter	panic	crew	chatter_panic_09	1	both	any	any	¡Agarraos! ¡Agarraos!	Hold on! Hold on!
+chatter_panic_10	chatter	chatter	panic	mc	chatter_panic_10	1	m	any	any	Calma. Respirad. Seguid el procedimiento.	Stay calm. Breathe. Follow the procedure.
+chatter_panic_11	chatter	chatter	panic	crew	chatter_panic_11	1	both	any	any	¡Control! ¡Control, ayuda!	Control! Control, help!
+chatter_panic_12	chatter	chatter	panic	crew	chatter_panic_12	1	both	any	ground	¡Demasiado rápido... demasiado!	Too fast... way too fast!
+chatter_panic_13	chatter	chatter	panic	crew	chatter_panic_13	1	both	any	heat	¡Qué calor... la temperatura no para de subir!	So hot... the temperature keeps climbing!
+chatter_panic_14	chatter	chatter	panic	mc	chatter_panic_14	1	m	any	any	Respirad hondo. Estamos con vosotros.	Take a deep breath. We're with you.
+chat_panic_s1_1	chatter	chatter	panic	crew	chat_panic_s1	1	both	any	spin	¡Control... perdemos el control!	Control... we're losing control!
+chat_panic_s1_2	chatter	chatter	panic	mc	chat_panic_s1	2	m	any	spin	Calma. Cortad empuje. Estabilizad.	Stay calm. Cut thrust. Stabilize.
+chat_panic_s2_1	chatter	chatter	panic	crew	chat_panic_s2	1	both	any	spin	¡Gira... gira sin parar!	It's spinning... spinning nonstop!
+chat_panic_s2_2	chatter	chatter	panic	mc	chat_panic_s2	2	m	any	spin	Recibido. Despacio. Control de actitud.	Copy. Slowly. Attitude control.
+chat_panic_s3_1	chatter	chatter	panic	crew	chat_panic_s3	1	both	any	gforce	¡Alarma! ¡Demasiadas G!	Alarm! Too many g's!
+chat_panic_s3_2	chatter	chatter	panic	mc	chat_panic_s3	2	m	any	gforce	Lo vemos. Calma. Menos empuje.	We see it. Stay calm. Less thrust.
+scream_01	chatter	chatter	panic	crew	scream_01	1	both	any	any	¡Aaaaah!	Aaaaah!
+scream_02	chatter	chatter	panic	crew	scream_02	1	both	any	any	¡Noooo!	Noooo!
+scream_03	chatter	chatter	panic	crew	scream_03	1	both	any	any	¡Aaay, aaay!	Aaay, aaay!
+chat_tense_s3_1	chatter	chatter	tense	mc	chat_tense_s3	1	m	any	q	Vemos vibraciones. ¿Todo bien?	We see vibrations. All good?
+chat_tense_s3_2	chatter	chatter	tense	crew	chat_tense_s3	2	both	any	q	Se mueve un poco. Lo vigilamos.	It's moving a bit. We're watching it.
+chat_tense_s4_1	chatter	chatter	tense	crew	chat_tense_s4	1	both	any	fuel	Control, el combustible baja rápido.	Control, the fuel is dropping fast.
+chat_tense_s4_2	chatter	chatter	tense	mc	chat_tense_s4	2	m	any	fuel	Recibido. Empuje suave para ahorrar.	Copy. Easy on the throttle to save fuel.
+chat_tense_s5_1	chatter	chatter	tense	mc	chat_tense_s5	1	m	any	ground	Atención, estáis algo rápidos.	Careful, you're a bit fast.
+chat_tense_s5_2	chatter	chatter	tense	crew	chat_tense_s5	2	both	any	ground	Recibido. Reduciendo.	Copy. Reducing.
+chat_tense_s6_1	chatter	chatter	tense	crew	chat_tense_s6	1	both	any	impulse	¿Eso era normal?	Was that normal?
+chat_tense_s6_2	chatter	chatter	tense	mc	chat_tense_s6	2	m	any	impulse	Lo estamos mirando. Esperad.	We're looking at it. Stand by.
+# Spin: rotation rate (omega). Tumbling, can't hold attitude, horizon whirling.
+pa_spin_t01	chatter	chatter	tense	crew	pa_spin_t01	1	both	any	spin	Estamos rotando un poco. Corrijo.	We're rotating a bit. Correcting.
+pa_spin_t02_1	chatter	chatter	tense	crew	pa_spin_t02	1	both	any	spin	Control, la nave no mantiene la actitud.	Control, the ship won't hold attitude.
+pa_spin_t02_2	chatter	chatter	tense	mc	pa_spin_t02	2	m	any	spin	Recibido. Activad el SAS y esperad.	Copy. Turn on SAS and wait.
+pa_spin_t03_1	chatter	chatter	tense	mc	pa_spin_t03	1	m	any	spin	Vemos rotación. ¿Podéis frenarla?	We see rotation. Can you stop it?
+pa_spin_t03_2	chatter	chatter	tense	crew	pa_spin_t03	2	both	any	spin	Lo intentamos. Gira despacio.	Trying. It's turning slowly.
+pa_spin_t04	chatter	chatter	tense	mc	pa_spin_t04	1	m	any	spin	Pequeños toques. No sobrecorrijáis.	Small inputs. Don't overcorrect.
+pa_spin_t05	chatter	chatter	tense	crew	pa_spin_t05	1	both	any	spin	El horizonte se está inclinando solo.	The horizon is tilting on its own.
+pa_spin_p01	chatter	chatter	panic	crew	pa_spin_p01	1	both	any	spin	¡El horizonte... da vueltas!	The horizon... it's whirling!
+pa_spin_p02	chatter	chatter	panic	crew	pa_spin_p02	1	both	any	spin	¡Arriba es abajo... abajo es arriba!	Up is down... down is up!
+pa_spin_p03	chatter	chatter	panic	crew	pa_spin_p03	1	both	any	spin	¡Damos vueltas... como una peonza!	We're spinning... like a top!
+pa_spin_p04_1	chatter	chatter	panic	crew	pa_spin_p04	1	both	any	spin	¡Estamos dando tumbos... no la sujeto!	We're tumbling... I can't hold her!
+pa_spin_p04_2	chatter	chatter	panic	mc	pa_spin_p04	2	m	any	spin	Soltad los mandos. Dejad que el SAS trabaje.	Let go of the controls. Let SAS work.
+pa_spin_p05_1	chatter	chatter	panic	crew	pa_spin_p05	1	both	any	spin	¡Control, giramos cada vez más rápido!	Control, we're spinning faster and faster!
+pa_spin_p05_2	chatter	chatter	panic	mc	pa_spin_p05	2	m	any	spin	Recibido. Cortad empuje. Frenad el giro despacio.	Copy. Cut thrust. Slow the spin gently.
+pa_spin_p06	chatter	chatter	panic	crew	pa_spin_p06	1	both	any	spin	¡Estrellas, planeta, estrellas, planeta!	Stars, planet, stars, planet!
+pa_spin_p07	chatter	chatter	panic	mc	pa_spin_p07	1	m	any	spin	Calma. Primero parad el giro. Lo demás después.	Stay calm. Stop the spin first. The rest later.
+pa_spin_p08	chatter	chatter	panic	crew	pa_spin_p08	1	both	any	spin	¡Tantas vueltas... me estoy mareando!	So many turns... I'm getting dizzy!
+pa_spin_p09	chatter	chatter	panic	crew	pa_spin_p09	1	both	any	spin	¡Los mandos no responden... seguimos girando!	The controls don't respond... still spinning!
+# Ground: descending fast with little time to impact. Ground coming up, pull up, altitude dropping.
+pa_ground_t01	chatter	chatter	tense	crew	pa_ground_t01	1	both	any	ground	Bajamos un poco rápido.	We're coming down a bit fast.
+pa_ground_t02_1	chatter	chatter	tense	mc	pa_ground_t02	1	m	any	ground	Velocidad vertical alta. Frenad ya.	High vertical speed. Slow down now.
+pa_ground_t02_2	chatter	chatter	tense	crew	pa_ground_t02	2	both	any	ground	Recibido. Más empuje.	Copy. More thrust.
+pa_ground_t03_1	chatter	chatter	tense	crew	pa_ground_t03	1	both	any	ground	Control, el suelo se acerca deprisa.	Control, the ground is coming up fast.
+pa_ground_t03_2	chatter	chatter	tense	mc	pa_ground_t03	2	m	any	ground	Lo vemos. Subid el empuje con calma.	We see it. Raise thrust calmly.
+pa_ground_t04	chatter	chatter	tense	crew	pa_ground_t04	1	both	any	ground	La altitud baja más de lo que quiero.	Altitude is dropping faster than I'd like.
+pa_ground_t05	chatter	chatter	tense	mc	pa_ground_t05	1	m	any	ground	Vigilad la velocidad de descenso.	Watch your descent rate.
+pa_ground_p01	chatter	chatter	panic	crew	pa_ground_p01	1	both	any	ground	¡El suelo... el suelo viene!	The ground... the ground is coming!
+pa_ground_p02	chatter	chatter	panic	crew	pa_ground_p02	1	both	any	ground	¡Arriba, arriba, arriba!	Pull up, pull up, pull up!
+pa_ground_p03	chatter	chatter	panic	crew	pa_ground_p03	1	both	any	ground	¡Demasiado rápido... frena, frena!	Too fast... brake, brake!
+pa_ground_p04	chatter	chatter	panic	crew	pa_ground_p04	1	both	any	ground	¡La altitud... se desploma!	The altitude... it's plummeting!
+pa_ground_p05_1	chatter	chatter	panic	crew	pa_ground_p05	1	both	any	ground	¡Control, vamos a tocar el suelo... muy fuerte!	Control, we're going to hit the ground... hard!
+pa_ground_p05_2	chatter	chatter	panic	mc	pa_ground_p05	2	m	any	ground	Empuje máximo ahora. Morro arriba.	Full thrust now. Nose up.
+pa_ground_p06_1	chatter	chatter	panic	crew	pa_ground_p06	1	both	any	ground	¡Veo cada piedra... demasiado cerca!	I can see every rock... too close!
+pa_ground_p06_2	chatter	chatter	panic	mc	pa_ground_p06	2	m	any	ground	Recibido. Frenad con todo. Lo conseguiréis.	Copy. Brake with everything. You'll make it.
+pa_ground_p07	chatter	chatter	panic	crew	pa_ground_p07	1	both	any	ground	¡No frenamos... no frenamos!	We're not slowing... we're not slowing!
+pa_ground_p08	chatter	chatter	panic	mc	pa_ground_p08	1	m	any	ground	Calma. Empuje a fondo y nivelad.	Stay calm. Full thrust and level out.
+pa_ground_p09	chatter	chatter	panic	crew	pa_ground_p09	1	both	any	ground	¡Cien metros... cincuenta... ay!	A hundred meters... fifty... oh no!
+pa_ground_p10	chatter	chatter	panic	crew	pa_ground_p10	1	both	any	ground	¡Esto no es un aterrizaje... es una caída!	This isn't a landing... it's a fall!
+pa_ground_p11	chatter	chatter	panic	mc	pa_ground_p11	1	m	any	ground	Os vemos. Frenad ahora, aún hay altura.	We see you. Brake now, there's still height.
+# G-force: low-passed g. Heavy g's, pressed into the seat, can't lift arms.
+pa_g_t01	chatter	chatter	tense	crew	pa_g_t01	1	both	any	gforce	Hay mucha fuerza G.	Lots of g-force here.
+pa_g_t02	chatter	chatter	tense	crew	pa_g_t02	1	both	any	gforce	Esto me aprieta contra el asiento.	This is pressing me into the seat.
+pa_g_t03_1	chatter	chatter	tense	mc	pa_g_t03	1	m	any	gforce	Aceleración alta. ¿Cómo lo lleváis?	High acceleration. How are you holding up?
+pa_g_t03_2	chatter	chatter	tense	crew	pa_g_t03	2	both	any	gforce	Pesa, pero aguantamos.	It's heavy, but we're holding.
+pa_g_t04_1	chatter	chatter	tense	crew	pa_g_t04	1	both	any	gforce	Control, esto pesa demasiado.	Control, this is too heavy.
+pa_g_t04_2	chatter	chatter	tense	mc	pa_g_t04	2	m	any	gforce	Recibido. Reducid empuje hasta que se alivie.	Copy. Reduce thrust until it eases.
+pa_g_t05	chatter	chatter	tense	mc	pa_g_t05	1	m	any	gforce	Atentos a las fuerzas G.	Mind the g-forces.
+pa_g_p01	chatter	chatter	panic	crew	pa_g_p01	1	both	any	gforce	¡No puedo... levantar los brazos!	I can't... lift my arms!
+pa_g_p02	chatter	chatter	panic	crew	pa_g_p02	1	both	any	gforce	¡Mi cara... se está aplastando!	My face... it's getting squashed!
+pa_g_p03	chatter	chatter	panic	crew	pa_g_p03	1	both	any	gforce	¡Peso como una montaña!	I weigh as much as a mountain!
+pa_g_p04	chatter	chatter	panic	crew	pa_g_p04	1	both	any	gforce	¡Las mejillas... me llegan a las orejas!	My cheeks... they're reaching my ears!
+pa_g_p05_1	chatter	chatter	panic	crew	pa_g_p05	1	both	any	gforce	¡Control, nos aplasta... demasiada fuerza!	Control, it's crushing us... too much force!
+pa_g_p05_2	chatter	chatter	panic	mc	pa_g_p05	2	m	any	gforce	Recibido. Reducid empuje. Respirad fuerte.	Copy. Reduce thrust. Breathe hard.
+pa_g_p06	chatter	chatter	panic	crew	pa_g_p06	1	both	any	gforce	¡No llego... no llego a los mandos!	I can't... I can't reach the controls!
+pa_g_p07	chatter	chatter	panic	crew	pa_g_p07	1	both	any	gforce	¡Se me nubla... la vista!	My vision... it's going gray!
+pa_g_p08	chatter	chatter	panic	mc	pa_g_p08	1	m	any	gforce	Calma. Tensad las piernas y respirad.	Stay calm. Tense your legs and breathe.
+pa_g_p09_1	chatter	chatter	panic	crew	pa_g_p09	1	both	any	gforce	¡El asiento... me está tragando!	The seat... it's swallowing me!
+pa_g_p09_2	chatter	chatter	panic	mc	pa_g_p09	2	m	any	gforce	Aguantad. Bajad el empuje ya.	Hold on. Throttle down now.
+# Heat: part temperature ratio. Hull heating, hot in here. Heat words only.
+pa_heat_t01	chatter	chatter	tense	crew	pa_heat_t01	1	both	any	heat	Se está calentando el casco.	The hull is heating up.
+pa_heat_t02_1	chatter	chatter	tense	crew	pa_heat_t02	1	both	any	heat	Control, las piezas se calientan deprisa.	Control, parts are heating up fast.
+pa_heat_t02_2	chatter	chatter	tense	mc	pa_heat_t02	2	m	any	heat	Recibido. Mantened el escudo delante.	Copy. Keep the shield in front.
+pa_heat_t03	chatter	chatter	tense	mc	pa_heat_t03	1	m	any	heat	Temperatura alta en algunas piezas.	High temperature on some parts.
+pa_heat_t04	chatter	chatter	tense	crew	pa_heat_t04	1	both	any	heat	Empieza a hacer calor aquí dentro.	It's getting warm in here.
+pa_heat_t05_1	chatter	chatter	tense	mc	pa_heat_t05	1	m	any	heat	Vemos piezas calientes. ¿Qué notáis?	We see hot parts. What do you feel?
+pa_heat_t05_2	chatter	chatter	tense	crew	pa_heat_t05	2	both	any	heat	Calor. Bastante calor.	Heat. Quite a lot of heat.
+pa_heat_p01	chatter	chatter	panic	crew	pa_heat_p01	1	both	any	heat	¡Qué calor... esto es un horno!	So hot... this is an oven!
+pa_heat_p02	chatter	chatter	panic	crew	pa_heat_p02	1	both	any	heat	¡La temperatura... en rojo!	The temperature... it's in the red!
+pa_heat_p03	chatter	chatter	panic	crew	pa_heat_p03	1	both	any	heat	¡Estoy sudando... no aguanto este calor!	I'm sweating... I can't take this heat!
+pa_heat_p04_1	chatter	chatter	panic	crew	pa_heat_p04	1	both	any	heat	¡Control, el casco se calienta demasiado!	Control, the hull is getting too hot!
+pa_heat_p04_2	chatter	chatter	panic	mc	pa_heat_p04	2	m	any	heat	Recibido. Escudo al frente. Pasará pronto.	Copy. Shield forward. It'll pass soon.
+pa_heat_p05	chatter	chatter	panic	crew	pa_heat_p05	1	both	any	heat	¡El termómetro... no deja de subir!	The thermometer... won't stop climbing!
+pa_heat_p06	chatter	chatter	panic	mc	pa_heat_p06	1	m	any	heat	Calma. Bajad la velocidad y el calor bajará.	Stay calm. Slow down and the heat will drop.
+pa_heat_p07	chatter	chatter	panic	crew	pa_heat_p07	1	both	any	heat	¡Me derrito... me derrito aquí dentro!	I'm melting... I'm melting in here!
+# Fuel: low fuel fraction while throttled up. Fuel low, tanks nearly dry.
+pa_fuel_t01	chatter	chatter	tense	crew	pa_fuel_t01	1	both	any	fuel	Ojo, el combustible está en reserva.	Careful, fuel is on reserve.
+pa_fuel_t02_1	chatter	chatter	tense	mc	pa_fuel_t02	1	m	any	fuel	Os queda poco combustible.	You're low on fuel.
+pa_fuel_t02_2	chatter	chatter	tense	crew	pa_fuel_t02	2	both	any	fuel	Lo vemos. Ahorrando.	We see it. Saving.
+pa_fuel_t03	chatter	chatter	tense	crew	pa_fuel_t03	1	both	any	fuel	Los tanques están casi secos.	The tanks are nearly dry.
+pa_fuel_t04	chatter	chatter	tense	mc	pa_fuel_t04	1	m	any	fuel	Vigilad el combustible. Cada gota cuenta.	Watch the fuel. Every drop counts.
+pa_fuel_t05_1	chatter	chatter	tense	crew	pa_fuel_t05	1	both	any	fuel	Control, ¿nos llega el combustible?	Control, will the fuel last?
+pa_fuel_t05_2	chatter	chatter	tense	mc	pa_fuel_t05	2	m	any	fuel	Justo. Empuje suave, sin desperdiciar.	Just barely. Gentle thrust, no waste.
+pa_fuel_p01	chatter	chatter	panic	crew	pa_fuel_p01	1	both	any	fuel	¡Los tanques... casi vacíos!	The tanks... nearly empty!
+pa_fuel_p02	chatter	chatter	panic	crew	pa_fuel_p02	1	both	any	fuel	¡El indicador... casi a cero!	The gauge... almost at zero!
+pa_fuel_p03	chatter	chatter	panic	crew	pa_fuel_p03	1	both	goofy	fuel	¿Alguien ha traído... un bidón de repuesto?	Did anyone bring... a spare can?
+pa_fuel_p04_1	chatter	chatter	panic	crew	pa_fuel_p04	1	both	any	fuel	¡Control, nos quedamos sin combustible!	Control, we're running out of fuel!
+pa_fuel_p04_2	chatter	chatter	panic	mc	pa_fuel_p04	2	m	any	fuel	Recibido. Usad lo que queda con cuidado.	Copy. Use what's left carefully.
+pa_fuel_p05	chatter	chatter	panic	crew	pa_fuel_p05	1	both	any	fuel	¡Queda poquísimo... poquísimo!	Hardly any left... hardly any!
+pa_fuel_p06	chatter	chatter	panic	mc	pa_fuel_p06	1	m	any	fuel	Calma. Tenemos un plan con lo que queda.	Stay calm. We have a plan for what's left.
+pa_fuel_p07	chatter	chatter	panic	crew	pa_fuel_p07	1	both	any	fuel	¡Los tanques... suenan a hueco!	The tanks... they sound hollow!
+# Engine out: an engine quit while it still had propellant. Lost thrust, no restart.
+pa_eng_t01	chatter	chatter	tense	crew	pa_eng_t01	1	both	any	engine_out	Control, hemos perdido un motor.	Control, we've lost an engine.
+pa_eng_t02_1	chatter	chatter	tense	crew	pa_eng_t02	1	both	any	engine_out	El motor se ha parado.	The engine has stopped.
+pa_eng_t02_2	chatter	chatter	tense	mc	pa_eng_t02	2	m	any	engine_out	Recibido. Intentad reencenderlo.	Copy. Try to restart it.
+pa_eng_t03_1	chatter	chatter	tense	mc	pa_eng_t03	1	m	any	engine_out	Vemos un motor parado. Confirmad.	We see an engine out. Confirm.
+pa_eng_t03_2	chatter	chatter	tense	crew	pa_eng_t03	2	both	any	engine_out	Confirmado. Sin empuje en ese motor.	Confirmed. No thrust on that engine.
+pa_eng_t04	chatter	chatter	tense	crew	pa_eng_t04	1	both	any	engine_out	Perdemos empuje. Algo falla en el motor.	Losing thrust. Something's wrong with the engine.
+pa_eng_t05	chatter	chatter	tense	mc	pa_eng_t05	1	m	any	engine_out	Comprobad la admisión y el suministro.	Check the intake and the feed.
+pa_eng_p01	chatter	chatter	panic	crew	pa_eng_p01	1	both	any	engine_out	¡Sin empuje... sin empuje!	No thrust... no thrust!
+pa_eng_p02	chatter	chatter	panic	crew	pa_eng_p02	1	both	any	engine_out	¡El motor... se ha callado!	The engine... it went quiet!
+pa_eng_p03	chatter	chatter	panic	crew	pa_eng_p03	1	both	any	engine_out	¡No arranca... no arranca!	It won't start... it won't start!
+pa_eng_p04	chatter	chatter	panic	crew	pa_eng_p04	1	both	any	engine_out	¡El motor tose... y se para!	The engine coughs... and quits!
+pa_eng_p05_1	chatter	chatter	panic	crew	pa_eng_p05	1	both	any	engine_out	¡Control, el motor ha muerto!	Control, the engine died!
+pa_eng_p05_2	chatter	chatter	panic	mc	pa_eng_p05	2	m	any	engine_out	Recibido. Calma. Reencendido, paso a paso.	Copy. Stay calm. Restart, step by step.
+pa_eng_p06_1	chatter	chatter	panic	crew	pa_eng_p06	1	both	any	engine_out	¡Le doy y no hace nada!	I push it and nothing happens!
+pa_eng_p06_2	chatter	chatter	panic	mc	pa_eng_p06	2	m	any	engine_out	Recibido. Revisad el acelerador y probad otra vez.	Copy. Check the throttle and try again.
+pa_eng_p07	chatter	chatter	panic	mc	pa_eng_p07	1	m	any	engine_out	Calma. Un motor parado tiene arreglo.	Stay calm. A dead engine can be fixed.
+pa_eng_p08	chatter	chatter	panic	crew	pa_eng_p08	1	both	any	engine_out	¡Hay combustible... pero el motor no quiere!	There's fuel... but the engine won't go!
+pa_eng_p09	chatter	chatter	panic	crew	pa_eng_p09	1	both	any	engine_out	¡Motor, por favor... despierta!	Engine, please... wake up!
+# Q: dynamic pressure. Shaking, buffeting.
+pa_q_p01	chatter	chatter	panic	crew	pa_q_p01	1	both	any	q	¡Todo tiembla... me castañetean los dientes!	Everything's shaking... my teeth are chattering!
+pa_q_p02_1	chatter	chatter	panic	crew	pa_q_p02	1	both	any	q	¡Control, el aire nos sacude!	Control, the air is battering us!
+pa_q_p02_2	chatter	chatter	panic	mc	pa_q_p02	2	m	any	q	Recibido. Menos empuje hasta pasar la presión máxima.	Copy. Less thrust until we're past max pressure.
+pa_q_p03	chatter	chatter	panic	crew	pa_q_p03	1	both	any	q	¡La nave vibra... entera!	The whole ship... it's vibrating!
+# Plasma: reentry plasma index. Glow on the windows, radio breaking up.
+pa_plasma_t01	chatter	chatter	tense	crew	pa_plasma_t01	1	both	any	plasma	Hay un brillo raro en las ventanas.	There's an odd glow on the windows.
+pa_plasma_t02_1	chatter	chatter	tense	crew	pa_plasma_t02	1	both	any	plasma	Control, la señal empieza a fallar.	Control, the signal is starting to break up.
+pa_plasma_t02_2	chatter	chatter	tense	mc	pa_plasma_t02	2	m	any	plasma	Normal. Es el plasma. Os esperamos al otro lado.	Normal. It's the plasma. See you on the other side.
+pa_plasma_t03	chatter	chatter	tense	mc	pa_plasma_t03	1	m	any	plasma	Perderemos la radio un rato. Tranquilos.	We'll lose the radio for a while. Easy.
+pa_plasma_p01	chatter	chatter	panic	crew	pa_plasma_p01	1	both	any	plasma	¡Todo brilla... ahí fuera!	Everything's glowing... out there!
+pa_plasma_p02	chatter	chatter	panic	crew	pa_plasma_p02	1	both	any	plasma	¡Las ventanas... se han puesto naranja!	The windows... they've gone orange!
+pa_plasma_p03	chatter	chatter	panic	crew	pa_plasma_p03	1	both	any	plasma	¡Control... os perdemos... la señal!	Control... we're losing you... the signal!
+pa_plasma_p04_1	chatter	chatter	panic	crew	pa_plasma_p04	1	both	any	plasma	¡Plasma por todas partes!	Plasma everywhere!
+pa_plasma_p04_2	chatter	chatter	panic	mc	pa_plasma_p04	2	m	any	plasma	Lo sabemos. Es normal. Aguantad.	We know. It's normal. Hang on.
+pa_plasma_p05	chatter	chatter	panic	crew	pa_plasma_p05	1	both	any	plasma	¡Estamos dentro... de una bola brillante!	We're inside... a glowing ball!
+# Impulse: sudden jolts and part losses.
+pa_imp_t01	chatter	chatter	tense	crew	pa_imp_t01	1	both	any	impulse	Eso ha sido un buen golpe.	That was quite a jolt.
+pa_imp_t02_1	chatter	chatter	tense	crew	pa_imp_t02	1	both	any	impulse	Control, hemos notado un tirón.	Control, we felt a jolt.
+pa_imp_t02_2	chatter	chatter	tense	mc	pa_imp_t02	2	m	any	impulse	Recibido. Revisad si falta alguna pieza.	Copy. Check if any part is missing.
+pa_imp_p01	chatter	chatter	panic	crew	pa_imp_p01	1	both	any	impulse	¿¡Qué ha sido eso!?	What was that?!
+pa_imp_p02	chatter	chatter	panic	crew	pa_imp_p02	1	both	any	impulse	¡Algo... nos ha golpeado!	Something... hit us!
+pa_imp_p03	chatter	chatter	panic	crew	pa_imp_p03	1	both	any	impulse	¡Menudo golpe... me he mordido la lengua!	What a bang... I bit my tongue!
+pa_imp_p04_1	chatter	chatter	panic	crew	pa_imp_p04	1	both	any	impulse	¡Control, algo se ha soltado!	Control, something came loose!
+pa_imp_p04_2	chatter	chatter	panic	mc	pa_imp_p04	2	m	any	impulse	Recibido. Calma. Decidnos qué veis.	Copy. Stay calm. Tell us what you see.

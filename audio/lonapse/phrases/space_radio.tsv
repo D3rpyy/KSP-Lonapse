@@ -1,0 +1,144 @@
+# Goofy kerbal radio with Mission Control in orbit, coast and landed. New keys: sp_
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	topic	spanish	english
+chatter_calm_01	chatter	chatter	calm	crew	chatter_calm_01	1	both	any	any	any	Todo sigue normal.	Everything still normal.
+chatter_calm_02	chatter	chatter	calm	crew	chatter_calm_02	1	both	any	any	any	Vamos bien por ahora.	So far so good.
+chatter_calm_03	chatter	chatter	calm	crew	chatter_calm_03	1	both	goofy	any	any	Esto va tranquilo.	Things are quiet.
+chatter_calm_04	chatter	chatter	calm	mc	chatter_calm_04	1	m	any	any	any	Seguid con el plan.	Stick to the plan.
+chatter_calm_05	chatter	chatter	calm	crew	chatter_calm_05	1	both	goofy	any	any	Todo tranquilo por aquí.	All quiet over here.
+chatter_calm_06	chatter	chatter	calm	crew	chatter_calm_06	1	both	any	any	any	Las lecturas están bien.	Readings look fine.
+chatter_calm_07	chatter	chatter	calm	crew	chatter_calm_07	1	both	goofy	any	any	Qué vista tan bonita.	What a beautiful view.
+chatter_calm_08	chatter	chatter	calm	crew	chatter_calm_08	1	both	any	any	any	Seguimos según el plan.	Proceeding as planned.
+chatter_calm_09	chatter	chatter	calm	crew	chatter_calm_09	1	both	any	any	any	Sistemas en verde.	Systems are green.
+chatter_calm_10	chatter	chatter	calm	crew	chatter_calm_10	1	both	goofy	any	any	Nada nuevo que contar.	Nothing new to report.
+chatter_calm_11	chatter	chatter	calm	crew	chatter_calm_11	1	both	any	any	any	Comprobando instrumentos.	Checking instruments.
+chatter_calm_12	chatter	chatter	calm	mc	chatter_calm_12	1	m	goofy	any	any	Os vemos bien desde aquí.	You look good from here.
+chatter_calm_13	chatter	chatter	calm	mc	chatter_calm_13	1	m	any	any	any	Todo nominal en tierra.	All nominal on the ground.
+chatter_calm_14	chatter	chatter	calm	mc	chatter_calm_14	1	m	any	any	any	Telemetría estable.	Telemetry is stable.
+chat_calm_s1_1	chatter	chatter	calm	crew	chat_calm_s1	1	both	any	any	any	Control, aquí todo bien.	Control, all good here.
+chat_calm_s1_2	chatter	chatter	calm	mc	chat_calm_s1	2	m	any	any	any	Recibido. Telemetría limpia.	Copy. Clean telemetry.
+chat_calm_s2_1	chatter	chatter	calm	mc	chat_calm_s2	1	m	goofy	any	any	¿Cómo va todo por ahí?	How's everything out there?
+chat_calm_s2_2	chatter	chatter	calm	crew	chat_calm_s2	2	both	goofy	any	any	Muy bien, sin problemas.	Very good, no problems.
+chat_calm_s3_1	chatter	chatter	calm	crew	chat_calm_s3	1	both	any	any	any	Pido confirmación de rumbo.	Requesting heading confirmation.
+chat_calm_s3_2	chatter	chatter	calm	mc	chat_calm_s3	2	m	any	any	any	Rumbo confirmado.	Heading confirmed.
+chat_calm_s3_3	chatter	chatter	calm	crew	chat_calm_s3	3	both	any	any	any	Gracias, control.	Thanks, control.
+chat_calm_s5_1	chatter	chatter	calm	mc	chat_calm_s5	1	m	goofy	any	any	Prueba de radio. ¿Nos oís bien?	Radio check. Do you read us?
+chat_calm_s5_2	chatter	chatter	calm	crew	chat_calm_s5	2	both	goofy	any	any	Alto y claro, control.	Loud and clear, control.
+chat_calm_s8_1	chatter	chatter	calm	crew	chat_calm_s8	1	both	any	any	any	Control, el combustible está bien.	Control, fuel is fine.
+chat_calm_s8_2	chatter	chatter	calm	mc	chat_calm_s8	2	m	any	any	any	Recibido. Gracias por el informe.	Copy. Thanks for the report.
+chat_calm_s12_1	chatter	chatter	calm	crew	chat_calm_s12	1	both	orbit	any	any	Control, todo tranquilo aquí arriba.	Control, all quiet up here.
+chat_calm_s12_2	chatter	chatter	calm	mc	chat_calm_s12	2	m	orbit	any	any	Perfecto. Así nos gusta.	Perfect. That's how we like it.
+chat_calm_s13_1	chatter	chatter	calm	mc	chat_calm_s13	1	m	goofy	any	any	Tenemos un mensaje de vuestras familias.	We have a message from your families.
+chat_calm_s13_2	chatter	chatter	calm	crew	chat_calm_s13	2	both	goofy	any	any	¿Qué dicen?	What do they say?
+chat_calm_s13_3	chatter	chatter	calm	mc	chat_calm_s13	3	m	goofy	any	any	Que volváis pronto.	Come home soon.
+chat_calm_s14_1	chatter	chatter	calm	crew	chat_calm_s14	1	both	goofy	any	any	Control, ¿cuánto falta?	Control, how much longer?
+chat_calm_s14_2	chatter	chatter	calm	mc	chat_calm_s14	2	m	goofy	any	any	Un poco más. Paciencia.	A little longer. Patience.
+chat_calm_s15_1	chatter	chatter	calm	mc	chat_calm_s15	1	m	any	any	solar	Confirmad estado de los paneles solares.	Confirm solar panel status.
+chat_calm_s15_2	chatter	chatter	calm	crew	chat_calm_s15	2	both	any	any	solar	Paneles bien. Batería cargando.	Panels good. Battery charging.
+sp_crumbs_1	chatter	chatter	calm	crew	sp_crumbs	1	both	orbit	any	any	Control, hay migas flotando por todas partes.	Control, there are crumbs floating everywhere.
+sp_crumbs_2	chatter	chatter	calm	mc	sp_crumbs	2	m	orbit	any	any	¿Otra vez las galletas?	The cookies again?
+sp_crumbs_3	chatter	chatter	calm	crew	sp_crumbs	3	both	orbit	any	any	Son galletas espaciales. No cuentan.	They're space cookies. They don't count.
+sp_sock_1	chatter	chatter	calm	crew	sp_sock	1	both	coast	any	any	Control, he perdido un calcetín.	Control, I lost a sock.
+sp_sock_2	chatter	chatter	calm	mc	sp_sock	2	m	coast	any	any	¿Dónde lo viste por última vez?	Where did you last see it?
+sp_sock_3	chatter	chatter	calm	crew	sp_sock	3	both	coast	any	any	Pasando por la ventana.	Drifting past the window.
+sp_stars_1	chatter	chatter	calm	crew	sp_stars	1	both	goofy	any	any	Control, llevo tres mil estrellas contadas.	Control, I've counted three thousand stars.
+sp_stars_2	chatter	chatter	calm	mc	sp_stars	2	m	goofy	any	any	¿Y cuántas te faltan?	And how many to go?
+sp_stars_3	chatter	chatter	calm	crew	sp_stars	3	both	goofy	any	any	Todas las demás.	All the others.
+sp_toilet_1	chatter	chatter	calm	crew	sp_toilet	1	both	goofy	any	any	Control, el inodoro hace un ruido raro.	Control, the toilet is making a weird noise.
+sp_toilet_2	chatter	chatter	calm	mc	sp_toilet	2	m	goofy	any	any	No toquéis nada, por favor.	Don't touch anything, please.
+sp_toilet_3	chatter	chatter	calm	crew	sp_toilet	3	both	goofy	any	any	Demasiado tarde.	Too late.
+sp_there_yet_1	chatter	chatter	calm	crew	sp_there_yet	1	both	orbit	any	any	Control, ¿ya hemos llegado?	Control, are we there yet?
+sp_there_yet_2	chatter	chatter	calm	mc	sp_there_yet	2	m	orbit	any	any	No. Seguís en órbita.	No. You're still in orbit.
+sp_there_yet_3	chatter	chatter	calm	crew	sp_there_yet	3	both	orbit	any	any	¿Y ahora?	How about now?
+sp_score_1	chatter	chatter	calm	crew	sp_score	1	both	goofy	any	any	Control, ¿cómo va el partido?	Control, what's the score of the game?
+sp_score_2	chatter	chatter	calm	mc	sp_score	2	m	goofy	any	any	Dos a uno. Vamos perdiendo.	Two to one. We're losing.
+sp_score_3	chatter	chatter	calm	crew	sp_score	3	both	goofy	any	any	Avisadnos si marcamos.	Tell us if we score.
+sp_debris_name_1	chatter	chatter	calm	crew	sp_debris_name	1	both	orbit	any	any	Control, vemos un trozo de chatarra.	Control, we see a piece of junk.
+sp_debris_name_2	chatter	chatter	calm	mc	sp_debris_name	2	m	orbit	any	any	Anotadlo en el registro.	Put it in the log.
+sp_debris_name_3	chatter	chatter	calm	crew	sp_debris_name	3	both	orbit	any	any	Anotado. Se llama Gustavo.	Logged. Its name is Gustavo.
+sp_debris_pet_1	chatter	chatter	calm	crew	sp_debris_pet	1	both	orbit	any	any	Control, un tornillo nos está siguiendo.	Control, a bolt is following us.
+sp_debris_pet_2	chatter	chatter	calm	mc	sp_debris_pet	2	m	orbit	any	any	Es vuestro. Se soltó en el despegue.	It's yours. It came loose at liftoff.
+sp_debris_pet_3	chatter	chatter	calm	crew	sp_debris_pet	3	both	orbit	any	any	Ahora es nuestra mascota.	Now it's our pet.
+sp_debris_old_1	chatter	chatter	calm	crew	sp_debris_old	1	both	orbit	any	any	Hay un panel viejo ahí fuera.	There's an old panel out there.
+sp_debris_old_2	chatter	chatter	calm	mc	sp_debris_old	2	m	orbit	any	any	Es de la misión anterior.	It's from the last mission.
+sp_debris_old_3	chatter	chatter	calm	crew	sp_debris_old	3	both	orbit	any	any	Le pondremos Bartolo.	We'll call it Bartolo.
+sp_falling_1	chatter	chatter	calm	crew	sp_falling	1	both	orbit	any	any	Control, ¿estamos cayendo?	Control, are we falling?
+sp_falling_2	chatter	chatter	calm	mc	sp_falling	2	m	orbit	any	any	Sí, pero muy rápido de lado.	Yes, but very fast sideways.
+sp_falling_3	chatter	chatter	calm	crew	sp_falling	3	both	orbit	any	any	Entonces todo bien.	Then all is well.
+sp_falling2_1	chatter	chatter	calm	crew	sp_falling2	1	both	orbit	any	any	Control, ya llevamos diez vueltas.	Control, that's ten laps already.
+sp_falling2_2	chatter	chatter	calm	mc	sp_falling2	2	m	orbit	any	any	Una más y os damos medalla.	One more and you get a medal.
+sp_struts_1	chatter	chatter	calm	crew	sp_struts	1	both	orbit	any	any	Control, creo que necesitamos más puntales.	Control, I think we need more struts.
+sp_struts_2	chatter	chatter	calm	mc	sp_struts	2	m	orbit	any	any	Estáis en órbita. No hacen falta.	You're in orbit. You don't need them.
+sp_struts_3	chatter	chatter	calm	crew	sp_struts	3	both	orbit	any	any	Siempre hacen falta.	You always need them.
+sp_booster_1	chatter	chatter	calm	crew	sp_booster	1	both	coast	any	any	Control, ¿podemos añadir otro propulsor?	Control, can we add another booster?
+sp_booster_2	chatter	chatter	calm	mc	sp_booster	2	m	coast	any	any	No desde ahí arriba.	Not from up there.
+sp_booster_3	chatter	chatter	calm	crew	sp_booster	3	both	coast	any	any	Lo apunto para la próxima.	I'll write it down for next time.
+sp_supplies_1	chatter	chatter	calm	crew	sp_supplies	1	both	goofy	any	any	Control, informe de provisiones.	Control, supply report.
+sp_supplies_2	chatter	chatter	calm	mc	sp_supplies	2	m	goofy	any	any	Adelante.	Go ahead.
+sp_supplies_3	chatter	chatter	calm	crew	sp_supplies	3	both	goofy	any	any	Quedan dos galletas y un pepinillo.	Two cookies and a pickle left.
+sp_water_ball_1	chatter	chatter	calm	crew	sp_water_ball	1	both	orbit	any	any	Control, he hecho una bola de agua gigante.	Control, I made a giant ball of water.
+sp_water_ball_2	chatter	chatter	calm	mc	sp_water_ball	2	m	orbit	any	any	Que no toque los paneles.	Keep it away from the panels.
+sp_water_ball_3	chatter	chatter	calm	crew	sp_water_ball	3	both	orbit	any	any	Uy.	Oops.
+sp_spin_exp_1	chatter	chatter	calm	crew	sp_spin_exp	1	both	goofy	any	any	Control, experimento nuevo: girar sin parar.	Control, new experiment: spinning nonstop.
+sp_spin_exp_2	chatter	chatter	calm	mc	sp_spin_exp	2	m	goofy	any	any	¿Resultado?	Result?
+sp_spin_exp_3	chatter	chatter	calm	crew	sp_spin_exp	3	both	goofy	any	any	Mareo. Mucho mareo.	Dizzy. Very dizzy.
+sp_sandwich_1	chatter	chatter	calm	crew	sp_sandwich	1	both	coast	any	any	Control, mi bocadillo se ha escapado.	Control, my sandwich escaped.
+sp_sandwich_2	chatter	chatter	calm	mc	sp_sandwich	2	m	coast	any	any	Seguro que vuelve.	I'm sure it will come back.
+sp_sandwich_3	chatter	chatter	calm	crew	sp_sandwich	3	both	coast	any	any	Lo veo. Va hacia la escotilla.	I see it. It's heading for the hatch.
+sp_smudge_1	chatter	chatter	calm	crew	sp_smudge	1	both	goofy	any	any	Control, la ventana tiene una mancha.	Control, the window has a smudge.
+sp_smudge_2	chatter	chatter	calm	mc	sp_smudge	2	m	goofy	any	any	Es la marca de tu nariz.	That's your nose print.
+sp_hiccups_1	chatter	chatter	calm	crew	sp_hiccups	1	both	orbit	any	any	Control, tengo hipo.	Control, I have hiccups.
+sp_hiccups_2	chatter	chatter	calm	mc	sp_hiccups	2	m	orbit	any	any	Bebe agua del revés.	Drink water upside down.
+sp_hiccups_3	chatter	chatter	calm	crew	sp_hiccups	3	both	orbit	any	any	Aquí todo está del revés.	Everything is upside down up here.
+sp_pizza_1	chatter	chatter	calm	crew	sp_pizza	1	both	orbit	any	any	Control, ¿hacéis entregas en órbita?	Control, do you deliver to orbit?
+sp_pizza_2	chatter	chatter	calm	mc	sp_pizza	2	m	orbit	any	any	Solo pizza. Tarda unos meses.	Only pizza. It takes a few months.
+sp_pizza_3	chatter	chatter	calm	crew	sp_pizza	3	both	orbit	any	any	Con doble de queso, por favor.	Double cheese, please.
+sp_photo_1	chatter	chatter	calm	crew	sp_photo	1	both	goofy	any	any	Control, he sacado una foto preciosa.	Control, I took a gorgeous photo.
+sp_photo_2	chatter	chatter	calm	mc	sp_photo	2	m	goofy	any	any	¿De qué?	Of what?
+sp_photo_3	chatter	chatter	calm	crew	sp_photo	3	both	goofy	any	any	De mi dedo.	Of my finger.
+sp_race_1	chatter	chatter	calm	crew	sp_race	1	both	goofy	any	any	Control, ¿vamos ganando la carrera espacial?	Control, are we winning the space race?
+sp_race_2	chatter	chatter	calm	mc	sp_race	2	m	goofy	any	any	Sois los únicos que corren.	You're the only ones racing.
+sp_race_3	chatter	chatter	calm	crew	sp_race	3	both	goofy	any	any	¡Entonces vamos primeros!	Then we're in first place!
+sp_rock_1	chatter	chatter	calm	crew	sp_rock	1	both	landed	any	any	Control, he encontrado una roca.	Control, I found a rock.
+sp_rock_2	chatter	chatter	calm	mc	sp_rock	2	m	landed	any	any	¡Excelente! ¿De qué tipo?	Excellent! What kind?
+sp_rock_3	chatter	chatter	calm	crew	sp_rock	3	both	landed	any	any	Del tipo roca.	The rock kind.
+sp_flag_1	chatter	chatter	calm	crew	sp_flag	1	both	landed	any	any	Control, bandera plantada. Un poco torcida.	Control, flag planted. A bit crooked.
+sp_flag_2	chatter	chatter	calm	mc	sp_flag	2	m	landed	any	any	Torcida, pero con orgullo.	Crooked, but proud.
+sp_jump_1	chatter	chatter	calm	crew	sp_jump	1	both	landed	any	any	Control, aquí salto altísimo.	Control, I can jump really high here.
+sp_jump_2	chatter	chatter	calm	mc	sp_jump	2	m	landed	any	any	No saltes hasta la órbita.	Don't jump into orbit.
+sp_jump_3	chatter	chatter	calm	crew	sp_jump	3	both	landed	any	any	No prometo nada.	No promises.
+sp_stay_1	chatter	chatter	calm	crew	sp_stay	1	both	landed	any	any	Control, me gusta este sitio.	Control, I like this place.
+sp_stay_2	chatter	chatter	calm	mc	sp_stay	2	m	landed	any	any	No os podéis quedar.	You can't stay.
+sp_stay_3	chatter	chatter	calm	crew	sp_stay	3	both	landed	any	any	¿Ni un ratito?	Not even a little while?
+sp_parked_1	chatter	chatter	calm	crew	sp_parked	1	both	landed	any	any	Control, hemos aparcado bien, ¿verdad?	Control, we parked well, right?
+sp_parked_2	chatter	chatter	calm	mc	sp_parked	2	m	landed	any	any	Casi en vertical. Casi.	Almost upright. Almost.
+sp_bathroom_1	chatter	chatter	calm	crew	sp_bathroom	1	both	prelaunch	any	any	Control, ¿me da tiempo a ir al baño?	Control, do I have time for the bathroom?
+sp_bathroom_2	chatter	chatter	calm	mc	sp_bathroom	2	m	prelaunch	any	any	Deberías haber ido antes.	You should have gone before.
+sp_bathroom_3	chatter	chatter	calm	crew	sp_bathroom	3	both	prelaunch	any	any	Me aguanto.	I'll hold it.
+sp_load_snacks_1	chatter	chatter	calm	crew	sp_load_snacks	1	both	prelaunch	any	any	Control, ¿habéis cargado los bocadillos?	Control, did you load the sandwiches?
+sp_load_snacks_2	chatter	chatter	calm	mc	sp_load_snacks	2	m	prelaunch	any	any	Ración doble, como pediste.	Double ration, like you asked.
+sp_load_snacks_3	chatter	chatter	calm	crew	sp_load_snacks	3	both	prelaunch	any	any	Triple habría sido mejor.	Triple would have been better.
+sp_checklist_1	chatter	chatter	calm	crew	sp_checklist	1	both	prelaunch	any	any	Control, tengo muchas ganas de volar.	Control, I really want to fly.
+sp_checklist_2	chatter	chatter	calm	mc	sp_checklist	2	m	prelaunch	any	any	Primero termina la lista de comprobación.	First finish the checklist.
+sp_checklist_3	chatter	chatter	calm	crew	sp_checklist	3	both	prelaunch	any	any	¿Qué lista?	What checklist?
+sp_more_struts_pad_1	chatter	chatter	calm	crew	sp_more_struts_pad	1	both	prelaunch	any	any	Control, ¿le ponemos un puntal más?	Control, shall we add one more strut?
+sp_more_struts_pad_2	chatter	chatter	calm	mc	sp_more_struts_pad	2	m	prelaunch	any	any	Ya tiene cuarenta.	It already has forty.
+sp_more_struts_pad_3	chatter	chatter	calm	crew	sp_more_struts_pad	3	both	prelaunch	any	any	Cuarenta y uno suena mejor.	Forty-one sounds better.
+sp_long_trip_1	chatter	chatter	calm	crew	sp_long_trip	1	both	coast	any	any	Control, este viaje es muy largo.	Control, this trip is really long.
+sp_long_trip_2	chatter	chatter	calm	mc	sp_long_trip	2	m	coast	any	any	Es el espacio. Es grande.	It's space. It's big.
+sp_long_trip_3	chatter	chatter	calm	crew	sp_long_trip	3	both	coast	any	any	Alguien debería hacerlo más pequeño.	Someone should make it smaller.
+sp_i_spy_1	chatter	chatter	calm	crew	sp_i_spy	1	both	coast	any	any	Control, ¿jugamos a veo veo?	Control, want to play I spy?
+sp_i_spy_2	chatter	chatter	calm	mc	sp_i_spy	2	m	coast	any	any	Vale. Empieza tú.	Okay. You start.
+sp_i_spy_3	chatter	chatter	calm	crew	sp_i_spy	3	both	coast	any	any	Veo veo algo negro.	I spy something black.
+sp_clock_1	chatter	chatter	calm	crew	sp_clock	1	both	coast	any	any	Control, ¿cuándo llegamos?	Control, when do we get there?
+sp_clock_2	chatter	chatter	calm	mc	sp_clock	2	m	coast	any	any	Mira el reloj de la misión.	Check the mission clock.
+sp_clock_3	chatter	chatter	calm	crew	sp_clock	3	both	coast	any	any	Se ha quedado sin pilas.	It ran out of batteries.
+sp_wish_1	chatter	chatter	calm	crew	sp_wish	1	both	goofy	any	any	Control, he visto una estrella fugaz.	Control, I saw a shooting star.
+sp_wish_2	chatter	chatter	calm	mc	sp_wish	2	m	goofy	any	any	¿Has pedido un deseo?	Did you make a wish?
+sp_wish_3	chatter	chatter	calm	crew	sp_wish	3	both	goofy	any	any	Sí. Más galletas.	Yes. More cookies.
+sp_leash_1	chatter	chatter	calm	crew	sp_leash	1	both	orbit	any	any	Control, ¿puedo salir a dar un paseo?	Control, can I go out for a walk?
+sp_leash_2	chatter	chatter	calm	mc	sp_leash	2	m	orbit	any	any	Hoy no hay paseo espacial.	No spacewalk today.
+sp_leash_3	chatter	chatter	calm	crew	sp_leash	3	both	orbit	any	any	¿Y si llevo correa?	What if I wear a leash?
+sp_magnet_1	chatter	chatter	calm	crew	sp_magnet	1	both	goofy	any	any	Control, la cuchara se ha pegado al techo.	Control, the spoon stuck to the ceiling.
+sp_magnet_2	chatter	chatter	calm	mc	sp_magnet	2	m	goofy	any	any	¿Con imanes?	With magnets?
+sp_magnet_3	chatter	chatter	calm	crew	sp_magnet	3	both	goofy	any	any	Con mermelada.	With jam.

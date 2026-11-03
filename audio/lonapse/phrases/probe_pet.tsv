@@ -1,0 +1,346 @@
+# Probe pet talk (plan v5 and v6): Mission Control and the probe talk on the radio. probe_chat and probe_sleepy:
+# MC starts. probe_hail (v6): the probe starts with a beep, MC answers. New keys: pp_
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
+# probe rows are subtitle only: empty spanish, english like [beeps excitedly], a beep mood. Core holds for the whole scene.
+# Cores: stayputnik eager old-timer, okto clever show-off, hecs anxious perfectionist, rovemate lazy dog, snob posh and aloof, generic plain.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
+pp_stayputnik_chat_01_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_01	1	m	goofy	any	any	any	any	stayputnik		Hola, Stayputnik. ¿Cómo va todo?	Hi, Stayputnik. How's it going?
+pp_stayputnik_chat_01_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_01	2	both	goofy	any	any	any	any	stayputnik	happy		[beeps very eagerly]
+pp_stayputnik_chat_01_3	probe_chat	chatter	calm	mc	pp_stayputnik_chat_01	3	m	goofy	any	any	any	any	stayputnik		Vale, vale. De una en una.	Okay, okay. One at a time.
+pp_stayputnik_chat_02_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_02	1	m	goofy	any	any	any	any	stayputnik		¿Ya sabes girar?	Have you learned to turn yet?
+pp_stayputnik_chat_02_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_02	2	both	goofy	any	any	any	any	stayputnik	offended		[beeps indignantly]
+pp_stayputnik_chat_03_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_03	1	m	goofy	any	any	any	any	stayputnik		Eres la sonda más antigua del programa.	You're the oldest probe in the program.
+pp_stayputnik_chat_03_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_03	2	both	goofy	any	any	any	any	stayputnik	proud		[beeps proudly]
+pp_stayputnik_chat_03_3	probe_chat	chatter	calm	mc	pp_stayputnik_chat_03	3	m	goofy	any	any	any	any	stayputnik		Y la más ruidosa.	And the loudest.
+pp_stayputnik_chat_04_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_04	1	m	goofy	any	any	any	any	stayputnik		¿Echas de menos la plataforma?	Do you miss the launchpad?
+pp_stayputnik_chat_04_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_04	2	both	goofy	any	any	any	any	stayputnik	happy		[beeps nostalgically]
+pp_stayputnik_chat_05_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_05	1	m	goofy	any	any	any	any	stayputnik		Pequeño, no hace falta pitar en cada vuelta.	Little one, you don't need to beep every orbit.
+pp_stayputnik_chat_05_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_05	2	both	goofy	any	any	any	any	stayputnik	happy		[beeps enthusiastically]
+pp_stayputnik_chat_06_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_06	1	m	goofy	any	any	any	any	stayputnik		¿Sigues ahí, abuelo?	Still there, grandpa?
+pp_stayputnik_chat_06_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_06	2	both	goofy	any	any	any	any	stayputnik	offended		[beeps indignantly]
+pp_stayputnik_chat_06_3	probe_chat	chatter	calm	mc	pp_stayputnik_chat_06	3	m	goofy	any	any	any	any	stayputnik		Perdón, perdón. Veterano.	Sorry, sorry. Veteran.
+pp_okto_chat_01_1	probe_chat	chatter	calm	mc	pp_okto_chat_01	1	m	goofy	any	any	any	any	okto		Okto, bonito giro.	Okto, nice turn.
+pp_okto_chat_01_2	probe_chat	chatter	calm	probe	pp_okto_chat_01	2	both	goofy	any	any	any	any	okto	proud		[beeps smugly]
+pp_okto_chat_02_1	probe_chat	chatter	calm	mc	pp_okto_chat_02	1	m	goofy	any	any	any	any	okto		¿Has calculado eso tú solo?	Did you calculate that all by yourself?
+pp_okto_chat_02_2	probe_chat	chatter	calm	probe	pp_okto_chat_02	2	both	goofy	any	any	any	any	okto	proud		[beeps smugly]
+pp_okto_chat_03_1	probe_chat	chatter	calm	mc	pp_okto_chat_03	1	m	goofy	any	any	any	any	okto		Okto, aquí alguien dice que eres una simple calculadora.	Okto, someone here says you're just a calculator.
+pp_okto_chat_03_2	probe_chat	chatter	calm	probe	pp_okto_chat_03	2	both	goofy	any	any	any	any	okto	offended		[beeps furiously]
+pp_okto_chat_03_3	probe_chat	chatter	calm	mc	pp_okto_chat_03	3	m	goofy	any	any	any	any	okto		Se lo diré. Con tus palabras.	I'll pass that on. In your words.
+pp_okto_chat_04_1	probe_chat	chatter	calm	mc	pp_okto_chat_04	1	m	goofy	any	any	any	any	okto		¿Nos ayudas con los deberes de mecánica orbital?	Can you help us with our orbital mechanics homework?
+pp_okto_chat_04_2	probe_chat	chatter	calm	probe	pp_okto_chat_04	2	both	goofy	any	any	any	any	okto	proud		[beeps in binary]
+pp_okto_chat_04_3	probe_chat	chatter	calm	mc	pp_okto_chat_04	3	m	goofy	any	any	any	any	okto		Eh... gracias. Creo.	Um... thanks. I think.
+pp_okto_chat_05_1	probe_chat	chatter	calm	mc	pp_okto_chat_05	1	m	goofy	any	any	any	any	okto		Okto, deja de presumir.	Okto, stop showing off.
+pp_okto_chat_05_2	probe_chat	chatter	calm	probe	pp_okto_chat_05	2	both	goofy	any	any	any	any	okto	bored		[beeps dismissively]
+pp_okto_chat_06_1	probe_chat	chatter	calm	mc	pp_okto_chat_06	1	m	goofy	any	any	any	any	okto		Tu órbita es casi perfecta.	Your orbit is almost perfect.
+pp_okto_chat_06_2	probe_chat	chatter	calm	probe	pp_okto_chat_06	2	both	goofy	any	any	any	any	okto	offended		[beeps indignantly]
+pp_hecs_chat_01_1	probe_chat	chatter	calm	mc	pp_hecs_chat_01	1	m	goofy	any	any	any	any	hecs		HECS, todo está bien. De verdad.	HECS, everything is fine. Really.
+pp_hecs_chat_01_2	probe_chat	chatter	calm	probe	pp_hecs_chat_01	2	both	goofy	any	any	any	any	hecs	scared		[beeps doubtfully]
+pp_hecs_chat_02_1	probe_chat	chatter	calm	mc	pp_hecs_chat_02	1	m	goofy	any	any	any	any	hecs		¿Has vuelto a comprobar los números?	Did you check the numbers again?
+pp_hecs_chat_02_2	probe_chat	chatter	calm	probe	pp_hecs_chat_02	2	both	goofy	any	any	any	any	hecs	curious		[beeps sheepishly]
+pp_hecs_chat_02_3	probe_chat	chatter	calm	mc	pp_hecs_chat_02	3	m	goofy	any	any	any	any	hecs		¿Cuántas veces? No, no me lo digas.	How many times? No, don't tell me.
+pp_hecs_chat_03_1	probe_chat	chatter	calm	mc	pp_hecs_chat_03	1	m	goofy	any	any	any	any	hecs		Tu inclinación está medio grado desviada.	Your inclination is off by half a degree.
+pp_hecs_chat_03_2	probe_chat	chatter	calm	probe	pp_hecs_chat_03	2	both	goofy	any	any	any	any	hecs	scared		[beeps in horror]
+pp_hecs_chat_03_3	probe_chat	chatter	calm	mc	pp_hecs_chat_03	3	m	goofy	any	any	any	any	hecs		¡Es broma! ¡Es broma!	Just kidding! Just kidding!
+pp_hecs_chat_04_1	probe_chat	chatter	calm	mc	pp_hecs_chat_04	1	m	goofy	any	any	any	any	hecs		Respira, HECS. Bueno, tú no respiras.	Breathe, HECS. Well, you don't breathe.
+pp_hecs_chat_04_2	probe_chat	chatter	calm	probe	pp_hecs_chat_04	2	both	goofy	any	any	any	any	hecs	scared		[beeps nervously]
+pp_hecs_chat_05_1	probe_chat	chatter	calm	mc	pp_hecs_chat_05	1	m	goofy	any	any	any	any	hecs		Buen trabajo hoy.	Good job today.
+pp_hecs_chat_05_2	probe_chat	chatter	calm	probe	pp_hecs_chat_05	2	both	goofy	any	any	any	any	hecs	curious		[beeps suspiciously]
+pp_hecs_chat_05_3	probe_chat	chatter	calm	mc	pp_hecs_chat_05	3	m	goofy	any	any	any	any	hecs		No es sarcasmo.	It's not sarcasm.
+pp_hecs_chat_06_1	probe_chat	chatter	calm	mc	pp_hecs_chat_06	1	m	goofy	any	any	any	any	hecs		¿Por qué pitas en orden alfabético?	Why are you beeping in alphabetical order?
+pp_hecs_chat_06_2	probe_chat	chatter	calm	probe	pp_hecs_chat_06	2	both	goofy	any	any	any	any	hecs	proud		[beeps very tidily]
+pp_rovemate_chat_01_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_01	1	m	landed	any	any	any	any	rovemate		¿Quién es una sonda buena? ¡Tú!	Who's a good probe? You are!
+pp_rovemate_chat_01_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_01	2	both	landed	any	any	any	any	rovemate	happy		[beeps excitedly]
+pp_rovemate_chat_02_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_02	1	m	landed	any	any	any	any	rovemate		Rovemate, ¿vas a moverte hoy?	Rovemate, are you moving today?
+pp_rovemate_chat_02_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_02	2	both	landed	any	any	any	any	rovemate	bored		[beeps lazily]
+pp_rovemate_chat_03_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_03	1	m	landed	any	any	any	any	rovemate		¡Esa piedra no se come!	Don't eat that rock!
+pp_rovemate_chat_03_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_03	2	both	landed	any	any	any	any	rovemate	offended		[beeps guiltily]
+pp_rovemate_chat_04_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_04	1	m	goofy	any	any	any	any	rovemate		Rovemate, ¿estás despierto?	Rovemate, are you awake?
+pp_rovemate_chat_04_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_04	2	both	goofy	any	any	any	any	rovemate	bored		[beeps very slowly]
+pp_rovemate_chat_05_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_05	1	m	landed	any	any	any	any	rovemate		¡Ve a por ese cráter!	Go get that crater!
+pp_rovemate_chat_05_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_05	2	both	landed	any	any	any	any	rovemate	happy		[beeps excitedly]
+pp_rovemate_chat_06_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_06	1	m	goofy	any	any	any	any	rovemate		Si haces ciencia, te damos una galleta.	If you do some science, you get a cookie.
+pp_rovemate_chat_06_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_06	2	both	goofy	any	any	any	any	rovemate	curious		[beeps very eagerly]
+pp_rovemate_chat_06_3	probe_chat	chatter	calm	mc	pp_rovemate_chat_06	3	m	goofy	any	any	any	any	rovemate		Bueno, una galleta de datos.	Well, a data cookie.
+pp_snob_chat_01_1	probe_chat	chatter	calm	mc	pp_snob_chat_01	1	m	goofy	any	any	any	any	snob		Buenos días, sonda.	Good morning, probe.
+pp_snob_chat_01_2	probe_chat	chatter	calm	probe	pp_snob_chat_01	2	both	goofy	any	any	any	any	snob	offended		[beeps coldly]
+pp_snob_chat_02_1	probe_chat	chatter	calm	mc	pp_snob_chat_02	1	m	goofy	any	any	any	any	snob		¿Te gusta la vista?	Do you like the view?
+pp_snob_chat_02_2	probe_chat	chatter	calm	probe	pp_snob_chat_02	2	both	goofy	any	any	any	any	snob	bored		[beeps dismissively]
+pp_snob_chat_02_3	probe_chat	chatter	calm	mc	pp_snob_chat_02	3	m	goofy	any	any	any	any	snob		Es el espacio entero.	It's the whole of space.
+pp_snob_chat_03_1	probe_chat	chatter	calm	mc	pp_snob_chat_03	1	m	goofy	any	any	any	any	snob		Hemos mejorado tu antena.	We upgraded your antenna.
+pp_snob_chat_03_2	probe_chat	chatter	calm	probe	pp_snob_chat_03	2	both	goofy	any	any	any	any	snob	bored		[beeps impatiently]
+pp_snob_chat_04_1	probe_chat	chatter	calm	mc	pp_snob_chat_04	1	m	goofy	any	any	any	any	snob		¿Quieres saludar al Stayputnik?	Want to say hi to the Stayputnik?
+pp_snob_chat_04_2	probe_chat	chatter	calm	probe	pp_snob_chat_04	2	both	goofy	any	any	any	any	snob	offended		[beeps in disgust]
+pp_snob_chat_05_1	probe_chat	chatter	calm	mc	pp_snob_chat_05	1	m	goofy	any	any	any	any	snob		Te hemos puesto en un cohete muy caro.	We put you on a very expensive rocket.
+pp_snob_chat_05_2	probe_chat	chatter	calm	probe	pp_snob_chat_05	2	both	goofy	any	any	any	any	snob	proud		[beeps contentedly]
+pp_snob_chat_06_1	probe_chat	chatter	calm	mc	pp_snob_chat_06	1	m	goofy	any	any	any	any	snob		Perdona, ¿podrías girar un poco?	Excuse me, could you turn a little?
+pp_snob_chat_06_2	probe_chat	chatter	calm	probe	pp_snob_chat_06	2	both	goofy	any	any	any	any	snob	bored		[beeps very slowly]
+pp_snob_chat_06_3	probe_chat	chatter	calm	mc	pp_snob_chat_06	3	m	goofy	any	any	any	any	snob		Gracias, su excelencia.	Thank you, your excellency.
+pp_generic_chat_01_1	probe_chat	chatter	calm	mc	pp_generic_chat_01	1	m	goofy	any	any	any	any	generic		Hola, sonda.	Hello, probe.
+pp_generic_chat_01_2	probe_chat	chatter	calm	probe	pp_generic_chat_01	2	both	goofy	any	any	any	any	generic	happy		[beeps cheerfully]
+pp_generic_chat_01_3	probe_chat	chatter	calm	mc	pp_generic_chat_01	3	m	goofy	any	any	any	any	generic		Bien. Igualmente.	Good. You too.
+pp_generic_chat_02_1	probe_chat	chatter	calm	mc	pp_generic_chat_02	1	m	goofy	any	any	any	any	generic		¿Todo normal ahí arriba?	Everything normal up there?
+pp_generic_chat_02_2	probe_chat	chatter	calm	probe	pp_generic_chat_02	2	both	goofy	any	any	any	any	generic	happy		[beeps normally]
+pp_generic_chat_03_1	probe_chat	chatter	calm	mc	pp_generic_chat_03	1	m	goofy	any	any	any	any	generic		No sabemos qué modelo eres.	We don't know what model you are.
+pp_generic_chat_03_2	probe_chat	chatter	calm	probe	pp_generic_chat_03	2	both	goofy	any	any	any	any	generic	curious		[beeps uncertainly]
+pp_generic_chat_04_1	probe_chat	chatter	calm	mc	pp_generic_chat_04	1	m	goofy	any	any	any	any	generic		Cuéntanos algo.	Tell us something.
+pp_generic_chat_04_2	probe_chat	chatter	calm	probe	pp_generic_chat_04	2	both	goofy	any	any	any	any	generic	curious		[beeps once]
+pp_generic_chat_04_3	probe_chat	chatter	calm	mc	pp_generic_chat_04	3	m	goofy	any	any	any	any	generic		Fascinante.	Fascinating.
+pp_generic_chat_05_1	probe_chat	chatter	calm	mc	pp_generic_chat_05	1	m	goofy	any	any	any	any	generic		Eres una sonda muy... de sonda.	You're a very... probe-like probe.
+pp_generic_chat_05_2	probe_chat	chatter	calm	probe	pp_generic_chat_05	2	both	goofy	any	any	any	any	generic	proud		[beeps contentedly]
+pp_generic_chat_06_1	probe_chat	chatter	calm	mc	pp_generic_chat_06	1	m	goofy	any	any	any	any	generic		¿Nos oyes?	Can you hear us?
+pp_generic_chat_06_2	probe_chat	chatter	calm	probe	pp_generic_chat_06	2	both	goofy	any	any	any	any	generic	happy		[beeps happily]
+pp_generic_chat_06_3	probe_chat	chatter	calm	mc	pp_generic_chat_06	3	m	goofy	any	any	any	any	generic		¿Y ahora?	And now?
+pp_generic_chat_06_4	probe_chat	chatter	calm	probe	pp_generic_chat_06	4	both	goofy	any	any	any	any	generic	happy		[beeps a bit louder]
+pp_stayputnik_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_stayputnik_sleepy_01	1	m	goofy	any	any	any	any	stayputnik		Stayputnik, ¿te estás durmiendo?	Stayputnik, are you nodding off?
+pp_stayputnik_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_stayputnik_sleepy_01	2	both	goofy	any	any	any	any	stayputnik	sleepy		[beeps drowsily]
+pp_stayputnik_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_stayputnik_sleepy_02	1	m	goofy	any	any	any	any	stayputnik		Poca batería, ¿eh, veterano?	Low on juice, eh, veteran?
+pp_stayputnik_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_stayputnik_sleepy_02	2	both	goofy	any	any	any	any	stayputnik	sleepy		[beeps sleepily]
+pp_okto_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_okto_sleepy_01	1	m	goofy	any	any	any	any	okto		Okto, te noto lento.	Okto, you seem slow.
+pp_okto_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_okto_sleepy_01	2	both	goofy	any	any	any	any	okto	sleepy		[beeps sleepily]
+pp_okto_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_okto_sleepy_02	1	m	goofy	any	any	any	any	okto		¿Cuánto es dos más dos?	What's two plus two?
+pp_okto_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_okto_sleepy_02	2	both	goofy	any	any	any	any	okto	sleepy		[beeps very slowly]
+pp_okto_sleepy_02_3	probe_sleepy	chatter	calm	mc	pp_okto_sleepy_02	3	m	goofy	any	any	any	any	okto		Duérmete, genio.	Go to sleep, genius.
+pp_hecs_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_hecs_sleepy_01	1	m	goofy	any	any	any	any	hecs		HECS, puedes descansar.	HECS, you can rest now.
+pp_hecs_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_hecs_sleepy_01	2	both	goofy	any	any	any	any	hecs	sleepy		[beeps drowsily]
+pp_hecs_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_hecs_sleepy_02	1	m	goofy	any	any	any	any	hecs		Las comprobaciones pueden esperar.	The checks can wait.
+pp_hecs_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_hecs_sleepy_02	2	both	goofy	any	any	any	any	hecs	sleepy		[beeps worriedly]
+pp_hecs_sleepy_02_3	probe_sleepy	chatter	calm	mc	pp_hecs_sleepy_02	3	m	goofy	any	any	any	any	hecs		Te lo prometo.	I promise.
+pp_rovemate_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_rovemate_sleepy_01	1	m	goofy	any	any	any	any	rovemate		Rovemate, ¿otra siesta?	Rovemate, another nap?
+pp_rovemate_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_rovemate_sleepy_01	2	both	goofy	any	any	any	any	rovemate	sleepy		[beeps like snoring]
+pp_rovemate_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_rovemate_sleepy_02	1	m	goofy	any	any	any	any	rovemate		Buen chico. A dormir.	Good boy. Time to sleep.
+pp_rovemate_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_rovemate_sleepy_02	2	both	goofy	any	any	any	any	rovemate	sleepy		[beeps very softly]
+pp_snob_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_snob_sleepy_01	1	m	goofy	any	any	any	any	snob		Su excelencia parece cansada.	Your excellency seems tired.
+pp_snob_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_snob_sleepy_01	2	both	goofy	any	any	any	any	snob	sleepy		[beeps with dignity]
+pp_snob_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_snob_sleepy_02	1	m	goofy	any	any	any	any	snob		¿Bajamos las luces?	Shall we dim the lights?
+pp_snob_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_snob_sleepy_02	2	both	goofy	any	any	any	any	snob	sleepy		[beeps drowsily]
+pp_generic_sleepy_01_1	probe_sleepy	chatter	calm	mc	pp_generic_sleepy_01	1	m	goofy	any	any	any	any	generic		Sonda, ¿sigues despierta?	Probe, still awake?
+pp_generic_sleepy_01_2	probe_sleepy	chatter	calm	probe	pp_generic_sleepy_01	2	both	goofy	any	any	any	any	generic	sleepy		[beeps sleepily]
+pp_generic_sleepy_02_1	probe_sleepy	chatter	calm	mc	pp_generic_sleepy_02	1	m	goofy	any	any	any	any	generic		Buenas noches, sonda.	Good night, probe.
+pp_generic_sleepy_02_2	probe_sleepy	chatter	calm	probe	pp_generic_sleepy_02	2	both	goofy	any	any	any	any	generic	sleepy		[beeps one last time]
+pp_stayputnik_chat_long_1_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_long_1	1	m	goofy	any	any	any	any	stayputnik		Stayputnik, cuéntanos algo de tus tiempos.	Stayputnik, tell us about the old days.
+pp_stayputnik_chat_long_1_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_long_1	2	both	goofy	any	any	any	any	stayputnik	happy		[beeps nostalgically]
+pp_stayputnik_chat_long_1_3	probe_chat	chatter	calm	mc	pp_stayputnik_chat_long_1	3	m	goofy	any	any	any	any	stayputnik		¿Y no tenías ruedas de reacción?	And you had no reaction wheels?
+pp_stayputnik_chat_long_1_4	probe_chat	chatter	calm	probe	pp_stayputnik_chat_long_1	4	both	goofy	any	any	any	any	stayputnik	proud		[beeps proudly]
+pp_stayputnik_chat_long_1_5	probe_chat	chatter	calm	mc	pp_stayputnik_chat_long_1	5	m	goofy	any	any	any	any	stayputnik		Qué duro.	Tough times.
+pp_okto_chat_long_1_1	probe_chat	chatter	calm	mc	pp_okto_chat_long_1	1	m	goofy	any	any	any	any	okto		Okto, ¿cuál es nuestra órbita?	Okto, what's our orbit?
+pp_okto_chat_long_1_2	probe_chat	chatter	calm	probe	pp_okto_chat_long_1	2	both	goofy	any	any	any	any	okto	proud		[beeps very fast]
+pp_okto_chat_long_1_3	probe_chat	chatter	calm	mc	pp_okto_chat_long_1	3	m	goofy	any	any	any	any	okto		Más despacio, por favor.	Slower, please.
+pp_okto_chat_long_1_4	probe_chat	chatter	calm	probe	pp_okto_chat_long_1	4	both	goofy	any	any	any	any	okto	bored		[beeps slowly and irritably]
+pp_hecs_chat_long_1_1	probe_chat	chatter	calm	mc	pp_hecs_chat_long_1	1	m	goofy	any	any	any	any	hecs		HECS, informe de estado.	HECS, status report.
+pp_hecs_chat_long_1_2	probe_chat	chatter	calm	probe	pp_hecs_chat_long_1	2	both	goofy	any	any	any	any	hecs	curious		[beeps at length]
+pp_hecs_chat_long_1_3	probe_chat	chatter	calm	mc	pp_hecs_chat_long_1	3	m	goofy	any	any	any	any	hecs		¿Y el resumen?	And the summary?
+pp_hecs_chat_long_1_4	probe_chat	chatter	calm	probe	pp_hecs_chat_long_1	4	both	goofy	any	any	any	any	hecs	scared		[beeps nervously]
+pp_hecs_chat_long_1_5	probe_chat	chatter	calm	mc	pp_hecs_chat_long_1	5	m	goofy	any	any	any	any	hecs		Nos vale.	That'll do.
+pp_rovemate_chat_long_1_1	probe_chat	chatter	calm	mc	pp_rovemate_chat_long_1	1	m	goofy	any	any	any	any	rovemate		Rovemate, ¿quieres dar un paseo?	Rovemate, do you want to go for a ride?
+pp_rovemate_chat_long_1_2	probe_chat	chatter	calm	probe	pp_rovemate_chat_long_1	2	both	goofy	any	any	any	any	rovemate	happy		[beeps very excitedly]
+pp_rovemate_chat_long_1_3	probe_chat	chatter	calm	mc	pp_rovemate_chat_long_1	3	m	goofy	any	any	any	any	rovemate		Pues muévete.	Then move.
+pp_rovemate_chat_long_1_4	probe_chat	chatter	calm	probe	pp_rovemate_chat_long_1	4	both	goofy	any	any	any	any	rovemate	bored		[beeps reluctantly]
+pp_snob_chat_long_1_1	probe_chat	chatter	calm	mc	pp_snob_chat_long_1	1	m	goofy	any	any	any	any	snob		Su excelencia, ¿le traemos algo?	Your excellency, can we get you anything?
+pp_snob_chat_long_1_2	probe_chat	chatter	calm	probe	pp_snob_chat_long_1	2	both	goofy	any	any	any	any	snob	bored		[beeps demandingly]
+pp_snob_chat_long_1_3	probe_chat	chatter	calm	mc	pp_snob_chat_long_1	3	m	goofy	any	any	any	any	snob		No tenemos té en órbita.	We don't have tea in orbit.
+pp_snob_chat_long_1_4	probe_chat	chatter	calm	probe	pp_snob_chat_long_1	4	both	goofy	any	any	any	any	snob	offended		[beeps in disappointment]
+pp_generic_chat_long_1_1	probe_chat	chatter	calm	mc	pp_generic_chat_long_1	1	m	goofy	any	any	any	any	generic		Sonda, ¿nos oyes bien?	Probe, do you hear us well?
+pp_generic_chat_long_1_2	probe_chat	chatter	calm	probe	pp_generic_chat_long_1	2	both	goofy	any	any	any	any	generic	happy		[beeps once]
+pp_generic_chat_long_1_3	probe_chat	chatter	calm	mc	pp_generic_chat_long_1	3	m	goofy	any	any	any	any	generic		¿Una vez es sí?	One beep means yes?
+pp_generic_chat_long_1_4	probe_chat	chatter	calm	probe	pp_generic_chat_long_1	4	both	goofy	any	any	any	any	generic	happy		[beeps twice]
+pp_generic_chat_long_1_5	probe_chat	chatter	calm	mc	pp_generic_chat_long_1	5	m	goofy	any	any	any	any	generic		Vale. Ahora no sabemos nada.	Okay. Now we know nothing.
+pp_stayputnik_hail_01_1	probe_hail	chatter	calm	probe	pp_stayputnik_hail_01	1	both	goofy	any	any	any	any	stayputnik	happy		[beeps out of nowhere]
+pp_stayputnik_hail_01_2	probe_hail	chatter	calm	mc	pp_stayputnik_hail_01	2	m	goofy	any	any	any	any	stayputnik		Sí, Stayputnik, seguimos aquí.	Yes, Stayputnik, we're still here.
+pp_stayputnik_hail_01_3	probe_hail	chatter	calm	probe	pp_stayputnik_hail_01	3	both	goofy	any	any	any	any	stayputnik	happy		[beeps contentedly]
+pp_stayputnik_hail_02_1	probe_hail	chatter	calm	probe	pp_stayputnik_hail_02	1	both	goofy	any	any	any	any	stayputnik	curious		[beeps hopefully]
+pp_stayputnik_hail_02_2	probe_hail	chatter	calm	mc	pp_stayputnik_hail_02	2	m	goofy	any	any	any	any	stayputnik		Siempre te escuchamos, veterano.	We always listen, veteran.
+pp_stayputnik_hail_03_1	probe_hail	chatter	calm	probe	pp_stayputnik_hail_03	1	both	goofy	any	any	any	any	stayputnik	proud		[beeps on and on]
+pp_stayputnik_hail_03_2	probe_hail	chatter	calm	mc	pp_stayputnik_hail_03	2	m	goofy	any	any	any	any	stayputnik		Lo sabemos. Nos lo contaste ayer.	We know. You told us yesterday.
+pp_stayputnik_hail_03_3	probe_hail	chatter	calm	probe	pp_stayputnik_hail_03	3	both	goofy	any	any	any	any	stayputnik	offended		[beeps on anyway]
+pp_stayputnik_hail_04_1	probe_hail	chatter	calm	probe	pp_stayputnik_hail_04	1	both	goofy	any	any	any	any	stayputnik	bored		[beeps slowly]
+pp_stayputnik_hail_04_2	probe_hail	chatter	calm	mc	pp_stayputnik_hail_04	2	m	goofy	any	any	any	any	stayputnik		¿Aburrido? Eres una esfera en el espacio.	Bored? You're a ball in space.
+pp_stayputnik_hail_04_3	probe_hail	chatter	calm	probe	pp_stayputnik_hail_04	3	both	goofy	any	any	any	any	stayputnik	offended		[beeps indignantly]
+pp_okto_hail_01_1	probe_hail	chatter	calm	probe	pp_okto_hail_01	1	both	goofy	any	any	any	any	okto	proud		[beeps smugly]
+pp_okto_hail_01_2	probe_hail	chatter	calm	mc	pp_okto_hail_01	2	m	goofy	any	any	any	any	okto		Okto, ¿otra vez corrigiendo nuestros números?	Okto, are you correcting our numbers again?
+pp_okto_hail_01_3	probe_hail	chatter	calm	probe	pp_okto_hail_01	3	both	goofy	any	any	any	any	okto	proud		[beeps even more smugly]
+pp_okto_hail_02_1	probe_hail	chatter	calm	probe	pp_okto_hail_02	1	both	goofy	any	any	any	any	okto	curious		[beeps impatiently]
+pp_okto_hail_02_2	probe_hail	chatter	calm	mc	pp_okto_hail_02	2	m	goofy	any	any	any	any	okto		¿Ya te aburres? Te buscaremos algo más difícil.	Bored already? We'll find you something harder.
+pp_okto_hail_03_1	probe_hail	chatter	calm	probe	pp_okto_hail_03	1	both	goofy	any	any	any	any	okto	bored		[beeps very impatiently]
+pp_okto_hail_03_2	probe_hail	chatter	calm	mc	pp_okto_hail_03	2	m	goofy	any	any	any	any	okto		Paciencia, Okto. Ya llegará la maniobra.	Patience, Okto. The maneuver will come.
+pp_okto_hail_03_3	probe_hail	chatter	calm	probe	pp_okto_hail_03	3	both	goofy	any	any	any	any	okto	bored		[beeps with a sigh]
+pp_okto_hail_04_1	probe_hail	chatter	calm	probe	pp_okto_hail_04	1	both	goofy	any	any	any	any	okto	proud		[beeps very precisely]
+pp_okto_hail_04_2	probe_hail	chatter	calm	mc	pp_okto_hail_04	2	m	goofy	any	any	any	any	okto		Gracias por la corrección. Otra vez.	Thanks for the correction. Again.
+pp_hecs_hail_01_1	probe_hail	chatter	calm	probe	pp_hecs_hail_01	1	both	goofy	any	any	any	any	hecs	scared		[beeps worriedly]
+pp_hecs_hail_01_2	probe_hail	chatter	calm	mc	pp_hecs_hail_01	2	m	goofy	any	any	any	any	hecs		HECS, no es nada. Nunca es nada.	HECS, it's nothing. It's always nothing.
+pp_hecs_hail_01_3	probe_hail	chatter	calm	probe	pp_hecs_hail_01	3	both	goofy	any	any	any	any	hecs	scared		[beeps even more worriedly]
+pp_hecs_hail_02_1	probe_hail	chatter	calm	probe	pp_hecs_hail_02	1	both	goofy	any	any	any	any	hecs	curious		[beeps inquisitively]
+pp_hecs_hail_02_2	probe_hail	chatter	calm	mc	pp_hecs_hail_02	2	m	goofy	any	any	any	any	hecs		Sí, HECS, la lista está al día.	Yes, HECS, the checklist is up to date.
+pp_hecs_hail_03_1	probe_hail	chatter	calm	probe	pp_hecs_hail_03	1	both	goofy	any	any	any	any	hecs	scared		[beeps anxiously]
+pp_hecs_hail_03_2	probe_hail	chatter	calm	mc	pp_hecs_hail_03	2	m	goofy	any	any	any	any	hecs		Lo hemos visto. Medio grado. Sobreviviremos.	We saw it. Half a degree. We'll survive.
+pp_hecs_hail_03_3	probe_hail	chatter	calm	probe	pp_hecs_hail_03	3	both	goofy	any	any	any	any	hecs	curious		[beeps doubtfully]
+pp_hecs_hail_04_1	probe_hail	chatter	calm	probe	pp_hecs_hail_04	1	both	goofy	any	any	any	any	hecs	proud		[beeps very tidily]
+pp_hecs_hail_04_2	probe_hail	chatter	calm	mc	pp_hecs_hail_04	2	m	goofy	any	any	any	any	hecs		Informe perfecto, HECS. Como siempre.	Perfect report, HECS. As always.
+pp_rovemate_hail_01_1	probe_hail	chatter	calm	probe	pp_rovemate_hail_01	1	both	goofy	any	any	any	any	rovemate	happy		[beeps excitedly]
+pp_rovemate_hail_01_2	probe_hail	chatter	calm	mc	pp_rovemate_hail_01	2	m	goofy	any	any	any	any	rovemate		¿Es una piedra? Muy bonita. Déjala.	Is that a rock? Very nice. Leave it.
+pp_rovemate_hail_01_3	probe_hail	chatter	calm	probe	pp_rovemate_hail_01	3	both	goofy	any	any	any	any	rovemate	offended		[beeps sadly]
+pp_rovemate_hail_02_1	probe_hail	chatter	calm	probe	pp_rovemate_hail_02	1	both	goofy	any	any	any	any	rovemate	bored		[beeps whiningly]
+pp_rovemate_hail_02_2	probe_hail	chatter	calm	mc	pp_rovemate_hail_02	2	m	goofy	any	any	any	any	rovemate		Luego damos un paseo.	We'll go for a ride later.
+pp_rovemate_hail_02_3	probe_hail	chatter	calm	probe	pp_rovemate_hail_02	3	both	goofy	any	any	any	any	rovemate	happy		[beeps very happily]
+pp_rovemate_hail_03_1	probe_hail	chatter	calm	probe	pp_rovemate_hail_03	1	both	goofy	any	any	any	any	rovemate	curious		[beeps curiously]
+pp_rovemate_hail_03_2	probe_hail	chatter	calm	mc	pp_rovemate_hail_03	2	m	goofy	any	any	any	any	rovemate		¿Qué has encontrado?	What did you find?
+pp_rovemate_hail_03_3	probe_hail	chatter	calm	probe	pp_rovemate_hail_03	3	both	goofy	any	any	any	any	rovemate	happy		[beeps happily]
+pp_rovemate_hail_04_1	probe_hail	chatter	calm	probe	pp_rovemate_hail_04	1	both	goofy	any	any	any	any	rovemate	happy		[beeps affectionately]
+pp_rovemate_hail_04_2	probe_hail	chatter	calm	mc	pp_rovemate_hail_04	2	m	goofy	any	any	any	any	rovemate		Sí, eres un buen chico.	Yes, you're a good boy.
+pp_snob_hail_01_1	probe_hail	chatter	calm	probe	pp_snob_hail_01	1	both	goofy	any	any	any	any	snob	bored		[beeps expectantly]
+pp_snob_hail_01_2	probe_hail	chatter	calm	mc	pp_snob_hail_01	2	m	goofy	any	any	any	any	snob		No, su excelencia, todavía no hay mejora.	No, your excellency, no upgrade yet.
+pp_snob_hail_01_3	probe_hail	chatter	calm	probe	pp_snob_hail_01	3	both	goofy	any	any	any	any	snob	offended		[beeps coldly]
+pp_snob_hail_02_1	probe_hail	chatter	calm	probe	pp_snob_hail_02	1	both	goofy	any	any	any	any	snob	offended		[beeps disapprovingly]
+pp_snob_hail_02_2	probe_hail	chatter	calm	mc	pp_snob_hail_02	2	m	goofy	any	any	any	any	snob		Es la misma vista de siempre.	It's the same view as always.
+pp_snob_hail_03_1	probe_hail	chatter	calm	probe	pp_snob_hail_03	1	both	goofy	any	any	any	any	snob	bored		[beeps imperiously]
+pp_snob_hail_03_2	probe_hail	chatter	calm	mc	pp_snob_hail_03	2	m	goofy	any	any	any	any	snob		Sí, su excelencia. Un informe. Enseguida.	Yes, your excellency. A report. Right away.
+pp_snob_hail_03_3	probe_hail	chatter	calm	probe	pp_snob_hail_03	3	both	goofy	any	any	any	any	snob	proud		[beeps approvingly]
+pp_snob_hail_04_1	probe_hail	chatter	calm	probe	pp_snob_hail_04	1	both	goofy	any	any	any	any	snob	proud		[beeps magnificently]
+pp_snob_hail_04_2	probe_hail	chatter	calm	mc	pp_snob_hail_04	2	m	goofy	any	any	any	any	snob		Anotado.	Noted.
+pp_generic_hail_01_1	probe_hail	chatter	calm	probe	pp_generic_hail_01	1	both	goofy	any	any	any	any	generic	happy		[beeps cheerfully]
+pp_generic_hail_01_2	probe_hail	chatter	calm	mc	pp_generic_hail_01	2	m	goofy	any	any	any	any	generic		Hola a ti también, sonda.	Hello to you too, probe.
+pp_generic_hail_02_1	probe_hail	chatter	calm	probe	pp_generic_hail_02	1	both	goofy	any	any	any	any	generic	curious		[beeps questioningly]
+pp_generic_hail_02_2	probe_hail	chatter	calm	mc	pp_generic_hail_02	2	m	goofy	any	any	any	any	generic		No sabemos la respuesta. Ni la pregunta.	We don't know the answer. Or the question.
+pp_generic_hail_02_3	probe_hail	chatter	calm	probe	pp_generic_hail_02	3	both	goofy	any	any	any	any	generic	curious		[beeps thoughtfully]
+pp_generic_hail_03_1	probe_hail	chatter	calm	probe	pp_generic_hail_03	1	both	goofy	any	any	any	any	generic	bored		[beeps twice slowly]
+pp_generic_hail_03_2	probe_hail	chatter	calm	mc	pp_generic_hail_03	2	m	goofy	any	any	any	any	generic		Recibido. Las dos.	Copy. Both of them.
+pp_generic_hail_04_1	probe_hail	chatter	calm	probe	pp_generic_hail_04	1	both	goofy	any	any	any	any	generic	happy		[beeps rhythmically]
+pp_generic_hail_04_2	probe_hail	chatter	calm	mc	pp_generic_hail_04	2	m	goofy	any	any	any	any	generic		¿Eso era una canción?	Was that a song?
+pp_generic_hail_04_3	probe_hail	chatter	calm	probe	pp_generic_hail_04	3	both	goofy	any	any	any	any	generic	proud		[beeps proudly]
+# plan v6: callouts, plan_node, stress, say again, milestones, rover, data
+pp_stress_spin_any_1	probe_stress	chatter	tense	mc	pp_stress_spin_any	1	m	any	spin	any	any	any	any		Sonda, giras demasiado. Aguanta.	Probe, you're spinning too much. Hang on.
+pp_stress_spin_any_2	probe_stress	chatter	tense	probe	pp_stress_spin_any	2	both	any	spin	any	any	any	any	scared		[beeps dizzily]
+pp_stress_gforce_any_1	probe_stress	chatter	tense	mc	pp_stress_gforce_any	1	m	any	gforce	any	any	any	any		Mucha fuerza. Ya casi está.	Lots of g. Almost done.
+pp_stress_gforce_any_2	probe_stress	chatter	tense	probe	pp_stress_gforce_any	2	both	any	gforce	any	any	any	any	scared		[beeps under strain]
+pp_stress_q_any_1	probe_stress	chatter	tense	mc	pp_stress_q_any	1	m	any	q	any	any	any	any		Mucha presión de aire. Aguanta un poco.	Lots of air pressure. Hang on a bit.
+pp_stress_q_any_2	probe_stress	chatter	tense	probe	pp_stress_q_any	2	both	any	q	any	any	any	any	scared		[beeps shakily]
+pp_stress_ground_any_1	probe_stress	chatter	tense	mc	pp_stress_ground_any	1	m	any	ground	any	any	any	any		El suelo está cerca. Muy cerca.	The ground is close. Very close.
+pp_stress_ground_any_2	probe_stress	chatter	tense	probe	pp_stress_ground_any	2	both	any	ground	any	any	any	any	scared		[beeps in alarm]
+pp_stress_heat_any_1	probe_stress	chatter	tense	mc	pp_stress_heat_any	1	m	any	heat	any	any	any	any		Hace calor ahí fuera, lo sabemos.	It's hot out there, we know.
+pp_stress_heat_any_2	probe_stress	chatter	tense	probe	pp_stress_heat_any	2	both	any	heat	any	any	any	any	scared		[beeps feverishly]
+pp_stress_plasma_any_1	probe_stress	chatter	tense	mc	pp_stress_plasma_any	1	m	any	plasma	any	any	any	any		Eso brillante es plasma. Es normal.	That glow is plasma. It's normal.
+pp_stress_plasma_any_2	probe_stress	chatter	tense	probe	pp_stress_plasma_any	2	both	any	plasma	any	any	any	any	scared		[beeps nervously]
+pp_stress_fuel_any_1	probe_stress	chatter	tense	mc	pp_stress_fuel_any	1	m	any	fuel	any	any	any	any		Queda poco combustible. Lo estamos viendo.	Fuel is low. We're watching it.
+pp_stress_fuel_any_2	probe_stress	chatter	tense	probe	pp_stress_fuel_any	2	both	any	fuel	any	any	any	any	scared		[beeps worriedly]
+pp_stress_impulse_any_1	probe_stress	chatter	tense	mc	pp_stress_impulse_any	1	m	any	impulse	any	any	any	any		Eso fue un golpe fuerte. ¿Sigues ahí?	That was a hard knock. Still there?
+pp_stress_impulse_any_2	probe_stress	chatter	tense	probe	pp_stress_impulse_any	2	both	any	impulse	any	any	any	any	scared		[beeps faintly]
+pp_stress_engine_out_any_1	probe_stress	chatter	tense	mc	pp_stress_engine_out_any	1	m	any	engine_out	any	any	any	any		Perdimos un motor. Sin pánico.	We lost an engine. No panic.
+pp_stress_engine_out_any_2	probe_stress	chatter	tense	probe	pp_stress_engine_out_any	2	both	any	engine_out	any	any	any	any	scared		[beeps frantically]
+pp_stress_any_a_1	probe_stress	chatter	tense	mc	pp_stress_any_a	1	m	any	any	any	any	any	any		Tranquila, sonda. Estamos contigo.	Easy, probe. We're with you.
+pp_stress_any_a_2	probe_stress	chatter	tense	probe	pp_stress_any_a	2	both	any	any	any	any	any	any	scared		[beeps nervously]
+pp_stress_any_b_1	probe_stress	chatter	tense	probe	pp_stress_any_b	1	both	any	any	any	any	any	any	scared		[beeps urgently]
+pp_stress_any_b_2	probe_stress	chatter	tense	mc	pp_stress_any_b	2	m	any	any	any	any	any	any		Lo vemos, lo vemos.	We see it, we see it.
+pp_stress_heat_hecs_1	probe_stress	chatter	tense	probe	pp_stress_heat_hecs	1	both	any	heat	any	any	any	hecs	scared		[beeps in panic]
+pp_stress_heat_hecs_2	probe_stress	chatter	tense	mc	pp_stress_heat_hecs	2	m	any	heat	any	any	any	hecs		HECS, el escudo aguanta. Confía en él.	HECS, the shield holds. Trust it.
+pp_stress_spin_hecs_1	probe_stress	chatter	tense	probe	pp_stress_spin_hecs	1	both	any	spin	any	any	any	hecs	scared		[beeps very dizzily]
+pp_stress_spin_hecs_2	probe_stress	chatter	tense	mc	pp_stress_spin_hecs	2	m	any	spin	any	any	any	hecs		Ya paramos el giro, HECS.	We're stopping the spin, HECS.
+pp_stress_spin_stayputnik_1	probe_stress	chatter	tense	probe	pp_stress_spin_stayputnik	1	both	any	spin	any	any	any	stayputnik	scared		[beeps in circles]
+pp_stress_spin_stayputnik_2	probe_stress	chatter	tense	mc	pp_stress_spin_stayputnik	2	m	any	spin	any	any	any	stayputnik		Stayputnik, no tienes control de giro. Lo sentimos.	Stayputnik, you have no attitude control. Sorry.
+pp_stress_gforce_stayputnik_1	probe_stress	chatter	tense	mc	pp_stress_gforce_stayputnik	1	m	any	gforce	any	any	any	stayputnik		Aguanta, Stayputnik, eres más fuerte de lo que pareces.	Hold on, Stayputnik, you're tougher than you look.
+pp_stress_gforce_stayputnik_2	probe_stress	chatter	tense	probe	pp_stress_gforce_stayputnik	2	both	any	gforce	any	any	any	stayputnik	proud		[beeps bravely]
+pp_say_again_01_1	probe_say_again	chatter	calm	mc	pp_say_again_01	1	m	any	any	any	any	any	any		¿Puedes repetir? Te perdimos.	Say again? We lost you.
+pp_say_again_01_2	probe_say_again	chatter	calm	probe	pp_say_again_01	2	both	any	any	any	any	any	any	offended		[beeps again louder]
+pp_say_again_02_1	probe_say_again	chatter	calm	mc	pp_say_again_02	1	m	any	any	any	any	any	any		Sonda, se corta. Repite.	Probe, you're breaking up. Repeat.
+pp_say_again_02_2	probe_say_again	chatter	calm	probe	pp_say_again_02	2	both	any	any	any	any	any	any	offended		[beeps once more]
+pp_say_again_03_1	probe_say_again	chatter	calm	mc	pp_say_again_03	1	m	any	any	any	any	any	any		No te oímos bien. Otra vez.	We can't hear you well. Again.
+pp_say_again_03_2	probe_say_again	chatter	calm	probe	pp_say_again_03	2	both	any	any	any	any	any	any	offended		[beeps again slowly]
+pp_say_again_04_1	probe_say_again	chatter	calm	mc	pp_say_again_04	1	m	any	any	any	any	any	any		¿Qué fue eso? Repite, por favor.	What was that? Repeat, please.
+pp_say_again_04_2	probe_say_again	chatter	calm	probe	pp_say_again_04	2	both	any	any	any	any	any	any	offended		[beeps it again]
+pp_ms_day1_any_1_1	probe_milestone	chatter	calm	mc	pp_ms_day1_any_1	1	m	any	any	any	any	day1	any		Primer día completo en el espacio. Felicidades.	First full day in space. Congratulations.
+pp_ms_day1_any_1_2	probe_milestone	chatter	calm	probe	pp_ms_day1_any_1	2	both	any	any	any	any	day1	any	proud		[beeps proudly]
+pp_ms_day1_stayputnik_1_1	probe_milestone	chatter	calm	mc	pp_ms_day1_stayputnik_1	1	m	any	any	any	any	day1	stayputnik		Un día entero, Stayputnik. Nadie lo esperaba.	A whole day, Stayputnik. Nobody expected that.
+pp_ms_day1_stayputnik_1_2	probe_milestone	chatter	calm	probe	pp_ms_day1_stayputnik_1	2	both	any	any	any	any	day1	stayputnik	proud		[beeps very proudly]
+pp_ms_day1_rovemate_1_1	probe_milestone	chatter	calm	probe	pp_ms_day1_rovemate_1	1	both	any	any	any	any	day1	rovemate	happy		[beeps a birthday tune]
+pp_ms_day1_rovemate_1_2	probe_milestone	chatter	calm	mc	pp_ms_day1_rovemate_1	2	m	any	any	any	any	day1	rovemate		Sí, Rovemate, un día entero. Buen chico.	Yes, Rovemate, a whole day. Good boy.
+pp_ms_day10_any_1_1	probe_milestone	chatter	calm	mc	pp_ms_day10_any_1	1	m	any	any	any	any	day10	any		Diez días de misión. Todo en orden.	Ten days of mission. All in order.
+pp_ms_day10_any_1_2	probe_milestone	chatter	calm	probe	pp_ms_day10_any_1	2	both	any	any	any	any	day10	any	happy		[beeps contentedly]
+pp_ms_day10_okto_1_1	probe_milestone	chatter	calm	probe	pp_ms_day10_okto_1	1	both	any	any	any	any	day10	okto	proud		[beeps a statistic]
+pp_ms_day10_okto_1_2	probe_milestone	chatter	calm	mc	pp_ms_day10_okto_1	2	m	any	any	any	any	day10	okto		Sí, Okto, diez días exactos.	Yes, Okto, exactly ten days.
+pp_ms_day100_any_1_1	probe_milestone	chatter	calm	mc	pp_ms_day100_any_1	1	m	any	any	any	any	day100	any		Cien días. Eres toda una veterana.	One hundred days. You're quite the veteran.
+pp_ms_day100_any_1_2	probe_milestone	chatter	calm	probe	pp_ms_day100_any_1	2	both	any	any	any	any	day100	any	proud		[beeps with pride]
+pp_ms_day100_hecs_1_1	probe_milestone	chatter	calm	mc	pp_ms_day100_hecs_1	1	m	any	any	any	any	day100	hecs		HECS, cien días sin un solo problema.	HECS, one hundred days without a single problem.
+pp_ms_day100_hecs_1_2	probe_milestone	chatter	calm	probe	pp_ms_day100_hecs_1	2	both	any	any	any	any	day100	hecs	curious		[beeps suspiciously]
+pp_ms_day100_snob_1_1	probe_milestone	chatter	calm	probe	pp_ms_day100_snob_1	1	both	any	any	any	any	day100	snob	proud		[beeps expectantly]
+pp_ms_day100_snob_1_2	probe_milestone	chatter	calm	mc	pp_ms_day100_snob_1	2	m	any	any	any	any	day100	snob		Sí, su excelencia, cien días. Hay pastel.	Yes, your excellency, one hundred days. There's cake.
+pp_ms_day365_any_1_1	probe_milestone	chatter	calm	mc	pp_ms_day365_any_1	1	m	any	any	any	any	day365	any		Un año entero de misión. Increíble.	A whole year of mission. Incredible.
+pp_ms_day365_any_1_2	probe_milestone	chatter	calm	probe	pp_ms_day365_any_1	2	both	any	any	any	any	day365	any	proud		[beeps triumphantly]
+pp_ms_day365_generic_1_1	probe_milestone	chatter	calm	mc	pp_ms_day365_generic_1	1	m	any	any	any	any	day365	generic		Feliz aniversario, sonda.	Happy anniversary, probe.
+pp_ms_day365_generic_1_2	probe_milestone	chatter	calm	probe	pp_ms_day365_generic_1	2	both	any	any	any	any	day365	generic	happy		[beeps a celebration]
+pp_ms_orbit_any_1_1	probe_milestone	chatter	calm	probe	pp_ms_orbit_any_1	1	both	any	any	any	any	orbit	any	proud		[beeps triumphantly]
+pp_ms_orbit_any_1_2	probe_milestone	chatter	calm	mc	pp_ms_orbit_any_1	2	m	any	any	any	any	orbit	any		Órbita confirmada. Bienvenida.	Orbit confirmed. Welcome.
+pp_ms_orbit_any_2_1	probe_milestone	chatter	calm	mc	pp_ms_orbit_any_2	1	m	any	any	any	any	orbit	any		Estás en órbita. Qué vista.	You're in orbit. What a view.
+pp_ms_orbit_any_2_2	probe_milestone	chatter	calm	probe	pp_ms_orbit_any_2	2	both	any	any	any	any	orbit	any	happy		[beeps in awe]
+pp_ms_orbit_stayputnik_1_1	probe_milestone	chatter	calm	probe	pp_ms_orbit_stayputnik_1	1	both	any	any	any	any	orbit	stayputnik	proud		[beeps very proudly]
+pp_ms_orbit_stayputnik_1_2	probe_milestone	chatter	calm	mc	pp_ms_orbit_stayputnik_1	2	m	any	any	any	any	orbit	stayputnik		En órbita, Stayputnik. Como en los viejos tiempos.	In orbit, Stayputnik. Like the old days.
+pp_ms_landing_any_1_1	probe_milestone	chatter	calm	probe	pp_ms_landing_any_1	1	both	any	any	any	any	landing	any	proud		[beeps triumphantly]
+pp_ms_landing_any_1_2	probe_milestone	chatter	calm	mc	pp_ms_landing_any_1	2	m	any	any	any	any	landing	any		¡Primer aterrizaje en {body}!	First landing on {body}!
+pp_ms_landing_any_2_1	probe_milestone	chatter	calm	mc	pp_ms_landing_any_2	1	m	any	any	any	any	landing	any		Tocamos {body} por primera vez.	We touched {body} for the first time.
+pp_ms_landing_any_2_2	probe_milestone	chatter	calm	probe	pp_ms_landing_any_2	2	both	any	any	any	any	landing	any	proud		[beeps proudly]
+pp_ms_landing_rovemate_1_1	probe_milestone	chatter	calm	probe	pp_ms_landing_rovemate_1	1	both	any	any	any	any	landing	rovemate	happy		[beeps very excitedly]
+pp_ms_landing_rovemate_1_2	probe_milestone	chatter	calm	mc	pp_ms_landing_rovemate_1	2	m	any	any	any	any	landing	rovemate		Sí, Rovemate, puedes explorar. Despacio.	Yes, Rovemate, you may explore. Slowly.
+pp_rv_fast_any_1	probe_rover	chatter	calm	probe	pp_rv_fast_any	1	both	any	any	any	any	fast	any	happy		[beeps gleefully]
+pp_rv_fast_any_2	probe_rover	chatter	calm	mc	pp_rv_fast_any	2	m	any	any	any	any	fast	any		Más despacio, por favor.	Slower, please.
+pp_rv_fast_rovemate_1	probe_rover	chatter	calm	probe	pp_rv_fast_rovemate	1	both	any	any	any	any	fast	rovemate	happy		[beeps zoomingly]
+pp_rv_fast_rovemate_2	probe_rover	chatter	calm	mc	pp_rv_fast_rovemate	2	m	any	any	any	any	fast	rovemate		¡Rovemate! No es una carrera.	Rovemate! It's not a race.
+pp_rv_air_any_1	probe_rover	chatter	calm	probe	pp_rv_air_any	1	both	any	any	any	any	air	any	scared		[beeps mid air]
+pp_rv_air_any_2	probe_rover	chatter	calm	mc	pp_rv_air_any	2	m	any	any	any	any	air	any		¿Estabas volando?	Were you flying?
+pp_rv_air_rovemate_1	probe_rover	chatter	calm	probe	pp_rv_air_rovemate	1	both	any	any	any	any	air	rovemate	happy		[beeps wheee]
+pp_rv_air_rovemate_2	probe_rover	chatter	calm	mc	pp_rv_air_rovemate	2	m	any	any	any	any	air	rovemate		Las ruedas van en el suelo, Rovemate.	Wheels go on the ground, Rovemate.
+pp_rv_tilt_any_1	probe_rover	chatter	calm	probe	pp_rv_tilt_any	1	both	any	any	any	any	tilt	any	scared		[beeps nervously]
+pp_rv_tilt_any_2	probe_rover	chatter	calm	mc	pp_rv_tilt_any	2	m	any	any	any	any	tilt	any		Cuidado con esa pendiente.	Careful with that slope.
+pp_rv_tilt_rovemate_1	probe_rover	chatter	calm	probe	pp_rv_tilt_rovemate	1	both	any	any	any	any	tilt	rovemate	scared		[beeps sideways]
+pp_rv_tilt_rovemate_2	probe_rover	chatter	calm	mc	pp_rv_tilt_rovemate	2	m	any	any	any	any	tilt	rovemate		No te vuelques, Rovemate.	Don't tip over, Rovemate.
+pp_rv_idle_any_1	probe_rover	chatter	calm	probe	pp_rv_idle_any	1	both	any	any	any	any	idle	any	bored		[beeps impatiently]
+pp_rv_idle_any_2	probe_rover	chatter	calm	mc	pp_rv_idle_any	2	m	any	any	any	any	idle	any		Sí, sabemos que estás parada.	Yes, we know you're parked.
+pp_rv_idle_rovemate_1	probe_rover	chatter	calm	probe	pp_rv_idle_rovemate	1	both	any	any	any	any	idle	rovemate	bored		[beeps whiningly]
+pp_rv_idle_rovemate_2	probe_rover	chatter	calm	mc	pp_rv_idle_rovemate	2	m	any	any	any	any	idle	rovemate		Paciencia, Rovemate. Luego paseamos.	Patience, Rovemate. Walk later.
+pp_data_any_1_1	probe_data	chatter	calm	probe	pp_data_any_1	1	both	any	any	any	any	any	any	happy		[beeps a data stream]
+pp_data_any_1_2	probe_data	chatter	calm	mc	pp_data_any_1	2	m	any	any	any	any	any	any		Recibiendo datos.	Receiving data.
+pp_data_any_2_1	probe_data	chatter	calm	probe	pp_data_any_2	1	both	any	any	any	any	any	any	happy		[beeps a data stream]
+pp_data_any_2_2	probe_data	chatter	calm	mc	pp_data_any_2	2	m	any	any	any	any	any	any		Datos entrando. Gracias.	Data coming in. Thanks.
+pp_data_any_3_1	probe_data	chatter	calm	probe	pp_data_any_3	1	both	any	any	any	any	any	any	happy		[beeps a data stream]
+pp_data_any_3_2	probe_data	chatter	calm	mc	pp_data_any_3	2	m	any	any	any	any	any	any		Te leemos. Sigue enviando.	We read you. Keep sending.
+
+# Serious phases (launch, ascent, reentry, descent): MC keeps talking to the probe, short and calm. Core any.
+pp_any_serious_01_1	probe_chat	chatter	calm	mc	pp_any_serious_01	1	m	serious	any	any	any	any	any		Sonda, telemetría limpia. Sigue así.	Probe, clean telemetry. Keep it up.
+pp_any_serious_01_2	probe_chat	chatter	calm	probe	pp_any_serious_01	2	both	serious	any	any	any	any	any	happy		[beeps steadily]
+pp_any_serious_01_3	probe_chat	chatter	calm	mc	pp_any_serious_01	3	m	serious	any	any	any	any	any		Recibido.	Copy.
+pp_any_serious_02_1	probe_chat	chatter	calm	mc	pp_any_serious_02	1	m	ascent	any	any	any	any	any		¿Cómo va la subida?	How's the climb going?
+pp_any_serious_02_2	probe_chat	chatter	calm	probe	pp_any_serious_02	2	both	ascent	any	any	any	any	any	curious		[beeps busily]
+pp_any_serious_02_3	probe_chat	chatter	calm	mc	pp_any_serious_02	3	m	ascent	any	any	any	any	any		Bien. Concéntrate.	Good. Stay focused.
+pp_any_serious_03_1	probe_chat	chatter	calm	mc	pp_any_serious_03	1	m	serious	any	any	any	any	any		Mantén el rumbo, sonda.	Hold your heading, probe.
+pp_any_serious_03_2	probe_chat	chatter	calm	probe	pp_any_serious_03	2	both	serious	any	any	any	any	any	proud		[beeps confidently]
+pp_any_serious_04_1	probe_chat	chatter	calm	mc	pp_any_serious_04	1	m	serious	any	any	any	any	any		Vemos todos tus datos. Buen trabajo.	We see all your data. Good work.
+pp_any_serious_04_2	probe_chat	chatter	calm	probe	pp_any_serious_04	2	both	serious	any	any	any	any	any	proud		[beeps proudly]
+pp_any_serious_05_1	probe_chat	chatter	calm	mc	pp_any_serious_05	1	m	serious	any	any	any	any	any		Sonda, comprobación de estado.	Probe, status check.
+pp_any_serious_05_2	probe_chat	chatter	calm	probe	pp_any_serious_05	2	both	serious	any	any	any	any	any	happy		[beeps all clear]
+pp_any_serious_05_3	probe_chat	chatter	calm	mc	pp_any_serious_05	3	m	serious	any	any	any	any	any		Todo en verde. Gracias.	All green. Thanks.
+pp_any_serious_06_1	probe_chat	chatter	calm	mc	pp_any_serious_06	1	m	ascent	any	any	any	any	any		Vas muy rápido. Eso es bueno.	You're going very fast. That's good.
+pp_any_serious_06_2	probe_chat	chatter	calm	probe	pp_any_serious_06	2	both	ascent	any	any	any	any	any	curious		[beeps uncertainly]
+pp_any_serious_06_3	probe_chat	chatter	calm	mc	pp_any_serious_06	3	m	ascent	any	any	any	any	any		Sí, de verdad.	Yes, really.
+pp_any_serious_07_1	probe_chat	chatter	calm	mc	pp_any_serious_07	1	m	serious	any	any	any	any	any		Sonda, no te distraigas.	Probe, don't get distracted.
+pp_any_serious_07_2	probe_chat	chatter	calm	probe	pp_any_serious_07	2	both	serious	any	any	any	any	any	offended		[beeps indignantly]
+pp_any_serious_08_1	probe_chat	chatter	calm	mc	pp_any_serious_08	1	m	serious	any	any	any	any	any		Respira hondo. Bueno, tú no respiras.	Take a deep breath. Well, you don't breathe.
+pp_any_serious_08_2	probe_chat	chatter	calm	probe	pp_any_serious_08	2	both	serious	any	any	any	any	any	curious		[beeps in confusion]
+pp_any_serious_09_1	probe_chat	chatter	calm	mc	pp_any_serious_09	1	m	serious	any	any	any	any	any		Control a sonda. ¿Nos oyes?	Control to probe. Do you read?
+pp_any_serious_09_2	probe_chat	chatter	calm	probe	pp_any_serious_09	2	both	serious	any	any	any	any	any	happy		[beeps loud and clear]
+pp_any_serious_09_3	probe_chat	chatter	calm	mc	pp_any_serious_09	3	m	serious	any	any	any	any	any		Te oímos bien.	We hear you fine.
+pp_any_serious_10_1	probe_chat	chatter	calm	mc	pp_any_serious_10	1	m	serious	any	any	any	any	any		Todo el equipo te está mirando.	The whole team is watching you.
+pp_any_serious_10_2	probe_chat	chatter	calm	probe	pp_any_serious_10	2	both	serious	any	any	any	any	any	scared		[beeps nervously]
+pp_any_serious_10_3	probe_chat	chatter	calm	mc	pp_any_serious_10	3	m	serious	any	any	any	any	any		Lo haces bien.	You're doing fine.
+pp_any_serious_11_1	probe_chat	chatter	calm	mc	pp_any_serious_11	1	m	launch	any	any	any	any	any		Buen despegue, sonda.	Good liftoff, probe.
+pp_any_serious_11_2	probe_chat	chatter	calm	probe	pp_any_serious_11	2	both	launch	any	any	any	any	any	happy		[beeps excitedly]
+pp_any_serious_12_1	probe_chat	chatter	calm	mc	pp_any_serious_12	1	m	launch	any	any	any	any	any		Sonda, aquí Control. Te seguimos.	Probe, this is Control. We're tracking you.
+pp_any_serious_12_2	probe_chat	chatter	calm	probe	pp_any_serious_12	2	both	launch	any	any	any	any	any	happy		[beeps back]
+pp_any_serious_13_1	probe_chat	chatter	calm	mc	pp_any_serious_13	1	m	ascent	any	any	any	any	any		Ya queda menos para la órbita.	Not long to orbit now.
+pp_any_serious_13_2	probe_chat	chatter	calm	probe	pp_any_serious_13	2	both	ascent	any	any	any	any	any	happy		[beeps impatiently]
+pp_any_serious_14_1	probe_chat	chatter	calm	mc	pp_any_serious_14	1	m	reentry	any	any	any	any	any		Sonda, aguanta el calor un poco más.	Probe, hold through the heat a little longer.
+pp_any_serious_14_2	probe_chat	chatter	calm	probe	pp_any_serious_14	2	both	reentry	any	any	any	any	any	scared		[beeps anxiously]
+pp_any_serious_15_1	probe_chat	chatter	calm	mc	pp_any_serious_15	1	m	descent	any	any	any	any	any		Sonda, el suelo se acerca. Con calma.	Probe, the ground is getting closer. Easy.
+pp_any_serious_15_2	probe_chat	chatter	calm	probe	pp_any_serious_15	2	both	descent	any	any	any	any	any	scared		[beeps nervously]
+pp_any_serious_16_1	probe_chat	chatter	calm	mc	pp_any_serious_16	1	m	descent	any	any	any	any	any		Ya casi estás. Despacio.	You're almost there. Slowly.
+pp_any_serious_16_2	probe_chat	chatter	calm	probe	pp_any_serious_16	2	both	descent	any	any	any	any	any	curious		[beeps carefully]
+pp_any_serious_17_1	probe_chat	chatter	calm	mc	pp_any_serious_17	1	m	descent	any	any	any	any	any		Buena bajada hasta ahora.	Good descent so far.
+pp_any_serious_17_2	probe_chat	chatter	calm	probe	pp_any_serious_17	2	both	descent	any	any	any	any	any	proud		[beeps smugly]
+pp_any_serious_17_3	probe_chat	chatter	calm	mc	pp_any_serious_17	3	m	descent	any	any	any	any	any		No te confíes.	Don't get cocky.
+pp_any_serious_18_1	probe_chat	chatter	calm	mc	pp_any_serious_18	1	m	serious	any	any	any	any	any		Sonda, ¿todo bien por ahí?	Probe, all good out there?
+pp_any_serious_18_2	probe_chat	chatter	calm	probe	pp_any_serious_18	2	both	serious	any	any	any	any	any	happy		[beeps a short yes]

@@ -1,0 +1,289 @@
+// Pure math helpers. No Unity or KSP dependencies so the offline test harness can compile this file.
+using System;
+using System.Collections.Generic;
+
+namespace Lonapse
+{
+    public static class DcMath
+    {
+        public static float Clamp01(float x)
+        {
+            if (float.IsNaN(x)) return 0f;
+            return x < 0f ? 0f : (x > 1f ? 1f : x);
+        }
+
+        public static float Clamp(float x, float lo, float hi)
+        {
+            if (float.IsNaN(x)) return lo;
+            return x < lo ? lo : (x > hi ? hi : x);
+        }
+
+        public static float Lerp(float a, float b, float t)
+        {
+            return a + (b - a) * Clamp01(t);
+        }
+
+        /// <summary>clamp01((x - lo) / (hi - lo)), safe for hi == lo.</summary>
+        public static float Ramp(double x, double lo, double hi)
+        {
+            if (double.IsNaN(x)) return 0f;
+            double span = hi - lo;
+            if (Math.Abs(span) < 1e-12) return x >= hi ? 1f : 0f;
+            double t = (x - lo) / span;
+            return t <= 0 ? 0f : (t >= 1 ? 1f : (float)t);
+        }
+
+        /// <summary>Smoothstep of Ramp.</summary>
+        public static float Smooth(double x, double lo, double hi)
+        {
+            float t = Ramp(x, lo, hi);
+            return t * t * (3f - 2f * t);
+        }
+
+        /// <summary>Blend factor for an exponential smoother: 1 - exp(-dt/tau).</summary>
+        public static float ExpAlpha(float dt, float tau)
+        {
+            if (tau <= 1e-6f) return 1f;
+            if (dt <= 0f) return 0f;
+            return 1f - (float)Math.Exp(-dt / tau);
+        }
+
+        /// <summary>NaN or Infinity become 0.</summary>
+        public static double Finite(double x)
+        {
+            return (double.IsNaN(x) || double.IsInfinity(x)) ? 0.0 : x;
+        }
+
+        public static float Finite(float x)
+        {
+            return (float.IsNaN(x) || float.IsInfinity(x)) ? 0f : x;
+        }
+
+        /// <summary>
+        /// Scheduler mean interval: exp(lerp(ln tQuiet, ln tManic, s)) / rateMultiplier.
+        /// </summary>
+        public static float MeanInterval(float stress, float tQuiet, float tManic, float rateMultiplier)
+        {
+            if (tQuiet < 0.01f) tQuiet = 0.01f;
+            if (tManic < 0.01f) tManic = 0.01f;
+            if (rateMultiplier < 0.01f) rateMultiplier = 0.01f;
+            double lq = Math.Log(tQuiet), lm = Math.Log(tManic);
+            double s = Clamp01(stress);
+            return (float)(Math.Exp(lq + (lm - lq) * s) / rateMultiplier);
+        }
+
+        /// <summary>On-rails ("HIGH") warp above 1x silences everything. Physics ("LOW") warp does not.</summary>
+        public static bool IsRailsWarp(bool modeIsHigh, float rate)
+        {
+            return modeIsHigh && rate > 1.0001f;
+        }
+
+        /// <summary>
+        /// Mean interval between intercom chats: more frequent on stations/bases and on long quiet coasts.
+        /// Deliberately independent of the radio rate multiplier and of the crew count.
+        /// </summary>
+        public static float IntercomInterval(float baseInterval, bool station, bool quietCoast, float stationBoost, float quietBoost)
+        {
+            float div = 1f;
+            if (station) div *= Math.Max(0.1f, stationBoost);
+            if (quietCoast) div *= Math.Max(0.1f, quietBoost);
+            return Math.Max(1f, baseInterval) / div;
+        }
+
+        /// <summary>
+        /// Stress-driven intercom interval: log-linear from the low-stress interval (base with station / quiet-coast
+        /// boosts) at stress 0 down to <paramref name="minInterval"/> at <paramref name="peakStress"/>, flat above.
+        /// The stress range where chats may start is limited separately (intercomMaxStress).
+        /// </summary>
+        public static float IntercomIntervalStress(float lowStressInterval, float stress, float minInterval, float peakStress)
+        {
+            float lo = Math.Max(1f, lowStressInterval);
+            float hi = Math.Max(1f, minInterval);
+            if (hi >= lo) return lo;
+            float t = Ramp(stress, 0.0, Math.Max(0.01f, peakStress));
+            return (float)Math.Exp(Math.Log(lo) + (Math.Log(hi) - Math.Log(lo)) * t);
+        }
+
+        /// <summary>
+        /// Crew pitch: base pitch, raised by up to <paramref name="stressSemitones"/> at sk = 1, lowered up to 12% by
+        /// G strain, clamped to [0.75, maxPitch].
+        /// </summary>
+        public static float CrewPitch(float basePitch, float sk, float gStrain, float stressSemitones, float maxPitch)
+        {
+            float raise = (float)Math.Pow(2.0, Clamp01(sk) * stressSemitones / 12.0);
+            float p = basePitch * raise * (1f - 0.12f * Clamp01(gStrain));
+            return Clamp(p, 0.75f, Math.Max(0.76f, maxPitch));
+        }
+
+        /// <summary>EVA running (user test): 0 at or below the walk speed, 1 at the run speed. Unknown speeds
+        /// (0 or less, or run not above walk) fall back to 1.0 and 2.5 m/s.</summary>
+        public static float EvaRunLevel(float speed, float walkSpeed, float runSpeed)
+        {
+            if (float.IsNaN(speed)) return 0f;
+            if (!(walkSpeed > 0f) || !(runSpeed > walkSpeed)) { walkSpeed = 1.0f; runSpeed = 2.5f; }
+            return Clamp01((speed - walkSpeed) / (runSpeed - walkSpeed));
+        }
+
+        /// <summary>EVA exertion: eases toward the run level, slowly up (riseTau s) and slower down (fallTau s).</summary>
+        public static float Exertion(float cur, float target, float dt, float riseTau, float fallTau)
+        {
+            if (float.IsNaN(cur)) cur = 0f;
+            target = Clamp01(target);
+            float tau = target > cur ? riseTau : fallTau;
+            if (!(dt > 0f)) return Clamp01(cur);
+            float a = tau > 0.001f ? 1f - (float)Math.Exp(-dt / tau) : 1f;
+            return Clamp01(cur + (target - cur) * a);
+        }
+
+        /// <summary>Descent blip interval: slow at d = 0 down to fast at d = 1, never below fast.</summary>
+        public static float DescentInterval(float d, float slow, float fast)
+        {
+            return Math.Max(fast, Lerp(slow, fast, (float)Math.Pow(Clamp01(d), 0.7)));
+        }
+
+        /// <summary>Kept-length fraction for clipped lines under stress: 1 below truncStart, down to minFrac at sk = 1.</summary>
+        public static float TruncFraction(float sk, float truncStart, float minFrac)
+        {
+            if (sk <= truncStart) return 1f;
+            return Lerp(1f, minFrac, Ramp(sk, truncStart, 1.0));
+        }
+
+        /// <summary>
+        /// Intercom pair: pitch multiplier for the second voice so the two base pitches differ by at least minGap.
+        /// Returns 1 when they already differ enough.
+        /// </summary>
+        public static float PairPitchNudge(float pitchA, float pitchB, float minGap)
+        {
+            if (pitchB <= 0.01f) return 1f;
+            float diff = pitchB - pitchA;
+            if (Math.Abs(diff) >= minGap) return 1f;
+            float targetB = diff >= 0f ? pitchA + minGap : pitchA - minGap;
+            return targetB / pitchB;
+        }
+
+        /// <summary>Warp-end ping only when the previous one is at least cooldown seconds ago.</summary>
+        public static bool WarpPingAllowed(float now, float lastPing, float cooldown)
+        {
+            return now - lastPing >= cooldown;
+        }
+
+        public static float Uniform(Random rng, float lo, float hi)
+        {
+            return lo + (hi - lo) * (float)rng.NextDouble();
+        }
+    }
+
+    /// <summary>
+    /// Shuffle bag over indices 0..count-1. Never returns any of the last min(3, count-1) picks.
+    /// </summary>
+    public class ShuffleBag
+    {
+        private readonly int count;
+        private readonly List<int> remaining = new List<int>();
+        private readonly int[] recent;
+        private int recentLen;
+        private int recentHead;
+
+        public ShuffleBag(int count)
+        {
+            this.count = count < 0 ? 0 : count;
+            int r = Math.Min(3, this.count - 1);
+            recent = new int[r < 0 ? 0 : r];
+        }
+
+        public int Count { get { return count; } }
+
+        private bool IsRecent(int idx)
+        {
+            for (int i = 0; i < recentLen; i++)
+                if (recent[i] == idx) return true;
+            return false;
+        }
+
+        /// <summary>Returns -1 when empty.</summary>
+        public int Next(Random rng)
+        {
+            if (count <= 0) return -1;
+            if (count == 1) return 0;
+            if (remaining.Count == 0)
+                for (int i = 0; i < count; i++) remaining.Add(i);
+
+            // Pick randomly among remaining entries that are not recent. If all remaining are recent
+            // (possible right after a refill), refill with every non-recent index instead.
+            int eligible = 0;
+            for (int i = 0; i < remaining.Count; i++)
+                if (!IsRecent(remaining[i])) eligible++;
+            if (eligible == 0)
+            {
+                remaining.Clear();
+                for (int i = 0; i < count; i++)
+                    if (!IsRecent(i)) remaining.Add(i);
+                eligible = remaining.Count;
+                if (eligible == 0) return 0;
+            }
+
+            int k = rng.Next(eligible);
+            int chosenPos = -1;
+            for (int i = 0; i < remaining.Count; i++)
+            {
+                if (IsRecent(remaining[i])) continue;
+                if (k == 0) { chosenPos = i; break; }
+                k--;
+            }
+            int chosen = remaining[chosenPos];
+            remaining.RemoveAt(chosenPos);
+
+            if (recent.Length > 0)
+            {
+                recent[recentHead] = chosen;
+                recentHead = (recentHead + 1) % recent.Length;
+                if (recentLen < recent.Length) recentLen++;
+            }
+            return chosen;
+        }
+    }
+
+    /// <summary>
+    /// Push-to-talk click: about 25 ms of band-limited noise with a 1 ms attack and exponential decay, plus a short
+    /// low "thump". Deterministic for a given seed. Pure, tested offline.
+    /// </summary>
+    public static class ClickSynth
+    {
+        public static float[] Generate(int rate, int seed, float lengthSec = 0.025f)
+        {
+            if (rate < 8000) rate = 44100;
+            int n = Math.Max(16, (int)(rate * lengthSec));
+            float[] d = new float[n];
+            Random r = new Random(seed);
+            double dt = 1.0 / rate;
+            // one-pole high-pass (~700 Hz) then low-pass (~5 kHz) on white noise: a dry "tsk"
+            double hpA = Math.Exp(-2.0 * Math.PI * 700.0 * dt), lpA = Math.Exp(-2.0 * Math.PI * 5000.0 * dt);
+            double hpPrevIn = 0, hpPrevOut = 0, lp = 0;
+            double attack = 0.001, decay = lengthSec / 4.0;
+            float peak = 0f;
+            for (int i = 0; i < n; i++)
+            {
+                double t = i * dt;
+                double x = r.NextDouble() * 2.0 - 1.0;
+                double hp = hpA * (hpPrevOut + x - hpPrevIn);
+                hpPrevIn = x; hpPrevOut = hp;
+                lp = lp * lpA + hp * (1.0 - lpA);
+                double env = (t < attack ? t / attack : 1.0) * Math.Exp(-Math.Max(0.0, t - attack) / decay);
+                double thump = 0.35 * Math.Sin(2.0 * Math.PI * 180.0 * t) * Math.Exp(-t / 0.004);
+                float v = (float)(env * lp * 3.0 + thump * (t < attack ? t / attack : 1.0));
+                d[i] = v;
+                float a = Math.Abs(v);
+                if (a > peak) peak = a;
+            }
+            // normalize to 0.8 peak, 2 ms fade-out so the clip ends at zero
+            float g = peak > 1e-6f ? 0.8f / peak : 0f;
+            int fade = Math.Min(n, (int)(rate * 0.002));
+            for (int i = 0; i < n; i++)
+            {
+                float f = i >= n - fade ? (n - 1 - i) / (float)Math.Max(1, fade) : 1f;
+                d[i] *= g * f;
+            }
+            return d;
+        }
+    }
+}

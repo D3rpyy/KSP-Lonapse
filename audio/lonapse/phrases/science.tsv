@@ -1,0 +1,79 @@
+# Science radio after an experiment (event science, topic = experiment id or any). New keys: sc_
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
+sc_crewreport_a_1	science	chatter	calm	crew	sc_crewreport_a	1	both	any	any	any	any	crewreport	Informe: todo verde, todo raro, todo bonito.	Report: everything green, everything weird, everything pretty.
+sc_crewreport_a_2	science	chatter	calm	mc	sc_crewreport_a	2	m	any	any	any	any	crewreport	Recibido. Va a la carpeta de cosas bonitas.	Copy. Filing it under pretty things.
+sc_crewreport_b_1	science	chatter	calm	crew	sc_crewreport_b	1	both	any	any	scientist	any	crewreport	Anoto lo que veo. Mucho espacio y poca gente.	Noting what I see. Lots of space, few people.
+sc_crewreport_b_2	science	chatter	calm	mc	sc_crewreport_b	2	m	any	any	scientist	any	crewreport	Observación valiosa. La ponemos en el informe.	Valuable observation. It goes in the report.
+sc_evareport_a_1	science	chatter	calm	crew	sc_evareport_a	1	both	any	any	any	any	evareport	Informe desde fuera: el traje aguanta y la vista es enorme.	Report from outside: the suit holds and the view is huge.
+sc_evareport_a_2	science	chatter	calm	mc	sc_evareport_a	2	m	any	any	any	any	evareport	Recibido. No te alejes de la nave.	Copy. Don't wander far from the ship.
+sc_evareport_b_1	science	chatter	calm	crew	sc_evareport_b	1	both	any	any	scientist	any	evareport	Estoy fuera tomando notas. Aquí todo parece más grande.	I'm outside taking notes. Everything looks bigger out here.
+sc_evareport_b_2	science	chatter	calm	mc	sc_evareport_b	2	m	any	any	scientist	any	evareport	Buen trabajo. Escribe con letra clara.	Good work. Write neatly.
+sc_mysterygoo_a_1	science	chatter	calm	crew	sc_mysterygoo_a	1	both	any	any	scientist	any	mysterygoo	El moco ha cambiado de forma. Fascinante. Y un poco asqueroso.	The goo changed shape. Fascinating. And a little gross.
+sc_mysterygoo_a_2	science	chatter	calm	mc	sc_mysterygoo_a	2	m	any	any	scientist	any	mysterygoo	Anotado. No le pongas nombre.	Noted. Don't give it a name.
+sc_mysterygoo_b_1	science	chatter	calm	crew	sc_mysterygoo_b	1	both	any	any	any	any	mysterygoo	Control, el bote de moco hace cosas raras.	Control, the goo canister is doing weird things.
+sc_mysterygoo_b_2	science	chatter	calm	mc	sc_mysterygoo_b	2	m	any	any	any	any	mysterygoo	Normal. Por eso se llama misterioso.	Normal. That's why it's called a mystery.
+sc_surfacesample_a_1	science	chatter	calm	crew	sc_surfacesample_a	1	both	any	any	scientist	any	surfacesample	Muestra tomada. Una piedra en una bolsa. Bolsa etiquetada.	Sample taken. A rock in a bag. Bag labeled.
+sc_surfacesample_a_2	science	chatter	calm	mc	sc_surfacesample_a	2	m	any	any	scientist	any	surfacesample	Perfecto. Cuidad bien esa piedra.	Perfect. Take good care of that rock.
+sc_surfacesample_b_1	science	chatter	calm	crew	sc_surfacesample_b	1	both	any	any	any	any	surfacesample	Tengo un puñado de tierra en el bolsillo.	I have a handful of dirt in my pocket.
+sc_surfacesample_b_2	science	chatter	calm	mc	sc_surfacesample_b	2	m	any	any	any	any	surfacesample	Recibido. Mejor en la bolsa de muestras.	Copy. Better in the sample bag.
+sc_materials_a_1	science	chatter	calm	crew	sc_materials_a	1	both	any	any	any	any	mobilematerialslab	Bahía de materiales abierta. Las muestras se ven distintas.	Materials bay open. The samples look different.
+sc_materials_a_2	science	chatter	calm	mc	sc_materials_a	2	m	any	any	any	any	mobilematerialslab	Recibido. Cerradla bien al terminar.	Copy. Close it properly when you're done.
+sc_materials_b_1	science	chatter	calm	crew	sc_materials_b	1	both	any	any	scientist	any	mobilematerialslab	Las muestras de la bahía han cambiado de color.	The samples in the bay changed color.
+sc_materials_b_2	science	chatter	calm	mc	sc_materials_b	2	m	any	any	scientist	any	mobilematerialslab	Interesante. Los del laboratorio van a bailar.	Interesting. The lab folks will dance.
+sc_temperature_a_1	science	chatter	calm	crew	sc_temperature_a	1	both	any	any	any	any	temperaturescan	El termómetro dice que hace frío. O calor. No sé leerlo.	The thermometer says it's cold. Or hot. I can't read it.
+sc_temperature_a_2	science	chatter	calm	mc	sc_temperature_a	2	m	any	any	any	any	temperaturescan	Anotado. Abrigaos por si acaso.	Noted. Bundle up, just in case.
+sc_temperature_b_1	science	chatter	calm	crew	sc_temperature_b	1	both	any	any	scientist	any	temperaturescan	Temperatura medida. Hace más calor de lo esperado.	Temperature measured. Warmer than expected.
+sc_temperature_b_2	science	chatter	calm	mc	sc_temperature_b	2	m	any	any	scientist	any	temperaturescan	Recibido. Nada de tomar el sol.	Copy. No sunbathing.
+sc_barometer_a_1	science	chatter	calm	crew	sc_barometer_a	1	both	any	any	scientist	any	barometerscan	Barómetro leído. La presión aquí es muy curiosa.	Barometer read. The pressure here is very curious.
+sc_barometer_a_2	science	chatter	calm	mc	sc_barometer_a	2	m	any	any	scientist	any	barometerscan	Recibido. Anotamos la presión.	Copy. Logging the pressure.
+sc_barometer_b_1	science	chatter	calm	crew	sc_barometer_b	1	both	any	any	any	any	barometerscan	El barómetro dice que hay poca presión. Me gusta.	The barometer says low pressure. I like it.
+sc_barometer_b_2	science	chatter	calm	mc	sc_barometer_b	2	m	any	any	any	any	barometerscan	Disfrútalo. Aquí abajo la presión la ponen los jefes.	Enjoy it. Down here the pressure comes from the bosses.
+sc_seismic_a_1	science	chatter	calm	crew	sc_seismic_a	1	both	any	any	any	any	seismicscan	El sismógrafo oye ruidos. El suelo está gruñendo.	The seismometer hears rumbles. The ground is growling.
+sc_seismic_a_2	science	chatter	calm	mc	sc_seismic_a	2	m	any	any	any	any	seismicscan	Recibido. Comprueba que no sea tu estómago.	Copy. Make sure it's not your stomach.
+sc_seismic_b_1	science	chatter	calm	crew	sc_seismic_b	1	both	any	any	scientist	any	seismicscan	Registro sísmico listo. Algo se mueve muy abajo.	Seismic record done. Something is moving deep down.
+sc_seismic_b_2	science	chatter	calm	mc	sc_seismic_b	2	m	any	any	scientist	any	seismicscan	Interesante. Silencio, a ver si se repite.	Interesting. Quiet, let's see if it happens again.
+sc_gravity_a_1	science	chatter	calm	crew	sc_gravity_a	1	both	any	any	scientist	any	gravityscan	Escáner de gravedad listo. Aquí todo pesa distinto.	Gravity scan done. Everything weighs differently here.
+sc_gravity_a_2	science	chatter	calm	mc	sc_gravity_a	2	m	any	any	scientist	any	gravityscan	Recibido. Buenos datos para el mapa.	Copy. Good data for the map.
+sc_gravity_b_1	science	chatter	calm	crew	sc_gravity_b	1	both	any	any	any	any	gravityscan	El escáner de gravedad dice que he engordado.	The gravity scanner says I gained weight.
+sc_gravity_b_2	science	chatter	calm	mc	sc_gravity_b	2	m	any	any	any	any	gravityscan	Es la gravedad, no tú. Eso esperamos.	That's gravity, not you. We hope.
+sc_atmosphere_a_1	science	chatter	calm	crew	sc_atmosphere_a	1	both	any	any	any	any	atmosphereanalysis	Muestra de aire tomada. No huele a nada. Qué raro.	Air sample taken. It smells like nothing. Weird.
+sc_atmosphere_a_2	science	chatter	calm	mc	sc_atmosphere_a	2	m	any	any	any	any	atmosphereanalysis	Recibido. Deja de olerla, por favor.	Copy. Stop sniffing it, please.
+sc_atmosphere_b_1	science	chatter	calm	crew	sc_atmosphere_b	1	both	any	any	scientist	any	atmosphereanalysis	Análisis de atmósfera listo. Hay gases que no conozco.	Atmosphere analysis done. There are gases I don't know.
+sc_atmosphere_b_2	science	chatter	calm	mc	sc_atmosphere_b	2	m	any	any	scientist	any	atmosphereanalysis	Excelente. Los científicos van a estar felices.	Excellent. The scientists will be happy.
+sc_asteroid_a_1	science	chatter	calm	crew	sc_asteroid_a	1	both	any	any	scientist	any	asteroidsample	Fragmento de asteroide tomado. Esto es más viejo que Kerbin.	Asteroid fragment taken. This is older than Kerbin.
+sc_asteroid_a_2	science	chatter	calm	mc	sc_asteroid_a	2	m	any	any	scientist	any	asteroidsample	Fascinante. Que no se te caiga.	Fascinating. Don't drop it.
+sc_asteroid_b_1	science	chatter	calm	crew	sc_asteroid_b	1	both	any	any	any	any	asteroidsample	Tengo un pedazo de asteroide. ¿Me lo puedo quedar?	I've got a piece of asteroid. Can I keep it?
+sc_asteroid_b_2	science	chatter	calm	mc	sc_asteroid_b	2	m	any	any	any	any	asteroidsample	No. Es para el museo.	No. It's for the museum.
+sc_comet_a_1	science	chatter	calm	crew	sc_comet_a	1	both	any	any	any	any	cometsample	Trocito de cometa en la bolsa. Está helado.	Comet chip in the bag. It's icy.
+sc_comet_a_2	science	chatter	calm	mc	sc_comet_a	2	m	any	any	any	any	cometsample	Recibido. No lo chupes.	Copy. Don't lick it.
+sc_comet_b_1	science	chatter	calm	crew	sc_comet_b	1	both	any	any	scientist	any	cometsample	Muestra de cometa tomada. Hielo, polvo y misterio.	Comet sample taken. Ice, dust and mystery.
+sc_comet_b_2	science	chatter	calm	mc	sc_comet_b	2	m	any	any	scientist	any	cometsample	Perfecto. Guárdala lejos de la calefacción.	Perfect. Keep it away from the heater.
+sc_telescope_a_1	science	chatter	calm	crew	sc_telescope_a	1	both	any	any	scientist	any	infraredtelescope	El telescopio ve cosas que mis ojos no ven.	The telescope sees things my eyes can't.
+sc_telescope_a_2	science	chatter	calm	mc	sc_telescope_a	2	m	any	any	scientist	any	infraredtelescope	Recibido. Para eso lo pagamos.	Copy. That's what we paid for.
+sc_telescope_b_1	science	chatter	calm	crew	sc_telescope_b	1	both	any	any	any	any	infraredtelescope	Miro por el telescopio. Veo estrellas. Muchas.	Looking through the telescope. I see stars. Lots.
+sc_telescope_b_2	science	chatter	calm	mc	sc_telescope_b	2	m	any	any	any	any	infraredtelescope	Datos recibidos. Cuéntalas más tarde.	Data received. Count them later.
+sc_magnetometer_a_1	science	chatter	calm	crew	sc_magnetometer_a	1	both	any	any	any	any	magnetometer	El magnetómetro se ha vuelto loco. La brújula también.	The magnetometer went crazy. The compass too.
+sc_magnetometer_a_2	science	chatter	calm	mc	sc_magnetometer_a	2	m	any	any	any	any	magnetometer	Normal. Ahí arriba el norte es una opinión.	Normal. Up there north is just an opinion.
+sc_magnetometer_b_1	science	chatter	calm	crew	sc_magnetometer_b	1	both	any	any	scientist	any	magnetometer	Campo magnético medido. Es más fuerte de lo esperado.	Magnetic field measured. Stronger than expected.
+sc_magnetometer_b_2	science	chatter	calm	mc	sc_magnetometer_b	2	m	any	any	scientist	any	magnetometer	Recibido. Que nadie acerque la caja de herramientas.	Copy. Keep the toolbox away from it.
+sc_roc_a_1	science	chatter	calm	crew	sc_roc_a	1	both	any	any	scientist	any	roc	He encontrado una formación rocosa preciosa. La estudio ahora.	Found a beautiful rock formation. Studying it now.
+sc_roc_a_2	science	chatter	calm	mc	sc_roc_a	2	m	any	any	scientist	any	roc	Recibido. No te la lleves entera.	Copy. Don't take the whole thing.
+sc_roc_b_1	science	chatter	calm	crew	sc_roc_b	1	both	any	any	any	any	roc	Aquí hay una roca con forma rara. Parece una cara.	There's an oddly shaped rock here. It looks like a face.
+sc_roc_b_2	science	chatter	calm	mc	sc_roc_b	2	m	any	any	any	any	roc	Anotado. Hazle una foto de perfil.	Noted. Take a profile shot.
+sc_acquired_1	science	chatter	calm	crew	sc_acquired	1	both	any	any	any	any	any	¡Ciencia conseguida!	Science acquired!
+sc_acquired_2	science	chatter	calm	mc	sc_acquired	2	m	any	any	any	any	any	Bien hecho. Apuntadlo todo.	Well done. Write it all down.
+sc_write_down_1	science	chatter	calm	crew	sc_write_down	1	both	any	any	any	any	any	Control, apunta esto. Es importante.	Control, write this down. It's important.
+sc_write_down_2	science	chatter	calm	mc	sc_write_down	2	m	any	any	any	any	any	Apuntado. Bueno, casi todo.	Written down. Well, most of it.
+sc_fresh_data_1	science	chatter	calm	crew	sc_fresh_data	1	both	any	any	any	any	any	Nuevos datos en camino. Recién hechos.	New data on the way. Freshly made.
+sc_fresh_data_2	science	chatter	calm	mc	sc_fresh_data	2	m	any	any	any	any	any	Recibidos. Los científicos ya aplauden.	Received. The scientists are already clapping.
+sc_no_idea_1	science	chatter	calm	crew	sc_no_idea	1	both	any	any	any	any	any	Experimento terminado. No sé qué significa, pero es ciencia.	Experiment done. No idea what it means, but it's science.
+sc_no_idea_2	science	chatter	calm	mc	sc_no_idea	2	m	any	any	any	any	any	Tranquilos. Para eso estamos aquí abajo.	Relax. That's what we're down here for.
+sc_medal_1	science	chatter	calm	mc	sc_medal	1	m	any	any	any	any	any	Ciencia recibida. Esto vale una medalla.	Science received. That's worth a medal.
+sc_medal_2	science	chatter	calm	crew	sc_medal	2	both	any	any	any	any	any	¿De chocolate?	A chocolate one?
+sc_points_1	science	chatter	calm	crew	sc_points	1	both	any	any	any	any	any	Ciencia hecha. ¿Hay puntos extra?	Science done. Do we get bonus points?
+sc_points_2	science	chatter	calm	mc	sc_points	2	m	any	any	any	any	any	Hay puntos. Y más trabajo.	There are points. And more work.
+sc_numbers_1	science	chatter	calm	crew	sc_numbers	1	both	any	any	any	any	any	Ya salen los números. Creo que bien.	The numbers are coming in. Looking good, I think.
+sc_numbers_2	science	chatter	calm	mc	sc_numbers	2	m	any	any	any	any	any	Recibido. Los revisamos con lupa.	Copy. We'll check them with a magnifying glass.
+sc_collection_1	science	chatter	calm	crew	sc_collection	1	both	any	any	any	any	any	Otro dato para la colección.	Another data point for the collection.
+sc_collection_2	science	chatter	calm	mc	sc_collection	2	m	any	any	any	any	any	Gracias. Ya no cabe nada en el armario.	Thanks. The cupboard is already full.

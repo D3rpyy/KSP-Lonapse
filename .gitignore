@@ -1,0 +1,12 @@
+build/
+audio/work/
+audio/build/
+audio/.venv/
+audio/__pycache__/
+audio/voices/
+audio/samples/
+
+# local machine settings
+.ksp_dir
+notes/
+dist/

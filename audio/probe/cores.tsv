@@ -1,0 +1,13 @@
+# Probe core timbres for the beeps (plan v5). Read by audio/build_clips.py.
+# key: a ProbeCores.Keys value (src/ProbeCore.cs). Every key must be here once.
+# base_hz: pitch of mood note 0, 200 to 3000.
+# wave: sine, triangle, square, saw, pulse or fm.
+# rhythm: even, swing (long short), stutter (every note twice, quickly) or lazy (longer notes and gaps).
+# glide: 0 to 1, how far a note slides in from the pitch of the note before it.
+key	base_hz	wave	rhythm	glide
+stayputnik	1320	sine	even	0.0
+okto	880	triangle	swing	0.35
+hecs	700	square	stutter	0.1
+rovemate	520	saw	lazy	0.6
+snob	1050	fm	even	0.2
+generic	940	pulse	even	0.15

@@ -1,0 +1,900 @@
+// User settings and tuning constants. Persisted in GameData/Lonapse/PluginData/settings.cfg.
+using System;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+#if !DC_OFFLINE_TEST
+using UnityEngine;
+#endif
+
+namespace Lonapse
+{
+    /// <summary>
+    /// Every threshold, weight and time constant. All public float fields are saved/loaded by reflection
+    /// under the TUNING node with the same names.
+    /// </summary>
+    public class Tuning
+    {
+        // --- Stress components ---
+        // spin (user feedback 0.4.0: rolling a small ship on reaction wheels caused panic): 1 rad/s to 5 rad/s
+        public float spinLo = 1.0f, spinHi = 5.0f, wSpin = 1.00f;
+        public float gLo = 2.5f, gHi = 8.0f, gTau = 0.15f, gClamp = 20f, wG = 0.85f;
+        public float qLo = 15f, qHi = 45f, wQ = 0.60f;
+        public float groundMaxH = 5000f, groundVsLo = 6f, groundVsHi = 40f, groundTti = 25f, groundTtiSpan = 22f, wGround = 0.90f;
+        public float heatLo = 0.55f, heatHi = 0.92f, wHeat = 0.80f;
+        public float wPlasma = 0.35f;
+        public float fuelThrottle = 0.05f, fuelLow = 0.10f, wFuel = 0.40f;
+        public float impulseTau = 4f, impulseStage = 0.20f, impulseLiftoff = 0.25f, impulsePartDie = 0.40f, wImpulse = 1.00f;
+        public float warmup = 3f;
+        // attackTau: slow build-up for lasting stress (spin, G, q, heat, fuel). fastAttackTau: sudden events
+        // (impulses from staging, hits, part deaths, and an imminent ground impact) still count at once.
+        public float attackTau = 3.0f, fastAttackTau = 0.35f, decayTau = 9f, holdTime = 1.5f;
+        public float gStrainLo = 3f, gStrainHi = 9f, gStrainAttack = 0.2f, gStrainDecay = 1.0f;
+
+        // --- Gate (4.2). Any on-rails warp (TimeWarp.Modes.HIGH, rate > 1) closes the gate. ---
+        public float gateFadeTime = 0.30f, reopenDelayMin = 3f, reopenDelayMax = 8f;
+        public float warpEndPingDelay = 1.0f, warpEndHoldoff = 3.0f, warpPingCooldown = 15f;
+
+        // --- Phase 2: docking ---
+        public float dockApproachDist = 50f, dockApproachSpeed = 2f, dockApproachHold = 1.0f, dockRearmDist = 100f;
+        public float dockGuardDist = 3f, dockQuietTime = 2.0f, dockClosingRate = 0.05f, dockGuardMax = 5f;
+
+        // --- Phase 2: station and base mode ---
+        public float stationRateFactor = 0.5f, stationMcFactor = 1.0f, stationCalmBias = 0.6f, stationPingFactor = 2.0f;
+        // periodic MC-initiated "station, Houston" exchange on stations and bases
+        public float stationMcMin = 150f, stationMcMax = 300f;
+
+        // --- Phase 2: crew intercom chats ---
+        // intercom at stress 0: 300 s on ships, stations/bases x2.5, quiet coast x2. Independent of the radio rate slider.
+        // The interval shrinks log-linearly with stress down to intercomStressMin at intercomStressPeak.
+        public float intercomInterval = 300f, intercomStationBoost = 2.5f, intercomQuietBoost = 2.0f;
+        public float intercomStressMin = 25f, intercomStressPeak = 0.6f;
+        public float intercomMaxStress = 0.7f, intercomAbortStress = 0.78f, quietCoastStress = 0.1f, quietCoastTime = 60f;
+        public float intercomHp = 100f, intercomLp = 8000f, intercomClickVolume = 0.9f, intercomGapMin = 0.25f, intercomGapMax = 0.9f;
+        // small-room reverb, attenuations in millibels (applied as negative values)
+        public float intercomRoomAtten = 600f, intercomReverbAtten = 200f, intercomReflAtten = 400f, intercomDecay = 0.4f;
+        public float intercomMinPitchGap = 0.05f;
+
+        // --- Blackout (4.7) ---
+        public float plasmaTau = 0.5f, blackoutEnter = 0.35f, blackoutEnterTime = 1.0f, blackoutDeep = 0.65f;
+        public float blackoutExit = 0.20f, staticExitTime = 1.5f, blackoutExitTime = 2.0f, blackoutMinDuration = 3f;
+        public float staticMin = 2.5f, staticMax = 4f, staticRampTime = 1.5f, staticFadeOut = 0.6f;
+        public float crackleMin = 0.2f, crackleMax = 0.7f, chopMin = 0.3f, chopMax = 0.8f, staticExtraDistortion = 0.3f;
+        public float reliefHoldoff = 8f;
+
+        // --- Scheduler (4.10) ---
+        public float tQuiet = 110f, tManic = 1.0f, quietBand = 0.15f, burstBand = 0.6f;
+        // crew delivery under stress: extra pitch at stress 1 in semitones, total pitch cap, clip truncation, overlap
+        public float crewStressSemitones = 0.5f, crewPitchMax = 1.12f, truncStart = 0.85f, truncMinFrac = 0.8f, overlapMax = 0.35f;
+        public float mcTenseLo = 0.20f, mcTenseHi = 0.45f;
+
+        // --- Voice channels (4.8) ---
+        // crew RADIO lines get a mild transmit band-pass (crewHp .. crewLpCalm); the intercom is wider and has no such band
+        public float crewLpCalm = 4000f, crewLpStress = 3200f, crewLpMin = 1400f, crewHp = 300f;
+        public float controlHp = 350f, controlLp = 2800f, controlDistortion = 0.30f, controlBedVolume = 0.12f;
+
+        // --- Beeps (4.11) ---
+        public float pingOrbit = 40f, pingFlying = 25f, pingLanded = 90f, pingVolume = 0.5f;
+        // descent blips: only below descentMaxH (radar altitude) while descending, never faster than descentFast s
+        public float descentMaxH = 500f, descentVsMin = 2f, descentVsSpan = 40f, descentSlow = 5.0f, descentFast = 1.5f;
+        public float descentVolLo = 0.25f, descentVolHi = 0.5f, descentPitchHi = 1.15f;
+        public float stageCooldown = 0.4f, stageVolume = 0.8f, landingDebounce = 6f, touchdownDelay = 1.5f;
+
+        // --- docking close-approach phase ---
+        public float dockCloseDist = 30f, dockCloseExit = 40f, dockCloseMin = 8f, dockCloseMax = 15f, dockTenseClosing = 0.4f;
+        public float dockCalloutLen = 1.2f;
+
+        // --- one-word callouts (crew/callout): staging, parachutes, docking distances ---
+        public float calloutCooldown = 1.5f, chuteGroupCooldown = 5f, chuteFullMinGap = 3f, chutePollInterval = 0.25f;
+
+        // --- v2 (plan section 3). New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // req 2: chatter hold after a callout preempts it
+        public float calloutHoldPad = 0.3f;
+        // req 3: ducking of game audio
+        public float duckAttack = 0.08f, duckRelease = 0.4f;
+        // req 4: throttle callouts
+        public float throttleFullAt = 0.98f, throttleCutAt = 0.05f, throttleMinGap = 20f;
+        // req 8: pitch factor per gender
+        public float genderPitchFemale = 1.06f, genderPitchMale = 0.96f;
+        // req 10: launch cap on the panic band (0 or 1) and altitude where it stops
+        public float launchCap = 1f, launchCapAlt = 10000f;
+        // req 11: panic pacing and escalation
+        public float panicMinGap = 8f, panicCooldown = 45f, screamCooldown = 60f, speakerCooldown = 8f, talkBurst = 4f, talkPerMinute = 8f;
+        public float panicEscTau = 40f, panicEscStep = 0.04f, panicEscCap = 0.16f;
+        // req 12: EVA stress. evaSpinWeight is a factor on wSpin and wG while on EVA (0 while ragdolled).
+        public float evaSpinWeight = 0.3f, wEva = 0.4f, evaLowProp = 0.15f, evaLowEC = 0.1f, evaFarDist = 200f;
+        // req 13: rover stress component
+        public float wRover = 0.7f, roverSpeedLo = 5f, roverSpeedHi = 25f, roverRoughLo = 0.5f, roverRoughHi = 3f;
+        public float roverAirTimeLo = 0.3f, roverAirTimeHi = 1.5f, roverTiltLo = 25f, roverTiltHi = 45f;
+        // req 14: docking impulse
+        public float dockSoftSpeed = 0.2f, dockHardSpeed = 0.5f, impulseDockHard = 0.35f;
+        // req 17: CommNet signal to static level
+        public float signalStaticMax = 0.6f, signalRangeFullKm = 500f, signalRangeZeroKm = 2500f;
+        public float signalPollSec = 1.0f, signalHoldTime = 5f;
+        // req 18: maneuver node chatter
+        public float planRateSec = 90f, burnWarnSec = 60f;
+        // req 6, 16: volume of the radio key-up and key-down sound (desk click or headset squelch)
+        public float radioKeyVolume = 0.7f;
+        // ideas round: light delay (MC answers later far from Kerbin), touchdown ambience level
+        // light delay (user request: at most 10 s): about 0.9 s at the Mun, 2 s at Minmus, 8 to 10 s at Duna and beyond
+        public float lightDelayMax = 10.0f, lightDelayScale = 2.6f;
+        // master alarm during a panic: very quiet, slow in and out, so it stays in the background
+        public float alarmVolume = 0.12f, alarmFadeIn = 2.5f, alarmFadeOut = 3f, alarmHold = 4f;
+
+        // --- v3. New keys, plus mouthOpenDeg 12 -> 18 in tuning version 7. ---
+        // req 9: talking mouths. mouthAxis is the local hinge axis (0 = X, 1 = Y, 2 = Z), mouthInvert 0 or 1 flips the sign.
+        public float mouthOpenDeg = 18f, mouthAxis = 2f, mouthInvert = 0f;
+        // 1: crew portraits (7 to 10 fps) alternate wide and nearly closed per portrait frame while the voice is audible
+        public float mouthPortraitAlternate = 1f;
+        // envelope follower on the voice: gain on RMS, noise gate, attack and release in seconds
+        public float mouthGain = 6f, mouthGate = 0.02f, mouthAttack = 0.03f, mouthRelease = 0.10f;
+        // req 6: intercom during blackout. Stress cap, first chat after entry (s), gap between blackout chats (s).
+        public float blackoutIntercomMaxStress = 0.9f, blackoutIntercomFirst = 4f, blackoutIntercomGap = 30f;
+
+        // --- v4. New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // personality: how strongly the director prefers scenes that match the speaker's trait or persona (0..1)
+        public float traitPreference = 0.35f, personaPreference = 0.4f;
+        // power events: power_low below powerLowFrac, power_ok above powerOkFrac, only with at least powerMinMax EC capacity
+        public float powerLowFrac = 0.10f, powerOkFrac = 0.25f, powerMinMax = 5f;
+        // science, SOI, part loss, signal and crew loss events (seconds)
+        public float scienceCooldown = 30f, scienceTopicCooldown = 300f, soiCooldown = 60f;
+        public float partLostWindow = 1.5f, partLostCooldown = 20f;
+        public float signalHold = 3f, signalCooldown = 45f;
+        public float crewLostDelay = 3f, somberTime = 180f, eventMaxAge = 600f;
+        // faces and head turn. headTurnAxis 0 = X, 1 = Y, 2 = Z, headTurnInvert 0 or 1.
+        // faceExpressionSign is +1 or -1 (the only TUNING float allowed to be negative, see Sanitize).
+        public float headTurnMaxDeg = 25f, headTurnAxis = 1f, headTurnInvert = 0f, headTurnSpeed = 4f;
+        public float faceWeight = 0.8f, faceExpressionSign = 1f;
+
+        // --- v5: probe mode. New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // pet talk: factor on the radio chatter gap in probe mode (> 1 is quieter)
+        public float probeRateFactor = 1.5f;
+        // electric charge fractions: drowsy below probeDrowsyFrac, asleep below probeSleepFrac
+        public float probeDrowsyFrac = 0.15f, probeSleepFrac = 0.03f;
+        // cap on the beep pitch (1 + 0.25 x stress)
+        public float probeBeepPitchMax = 1.35f;
+
+        // --- v6. New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // probe hails (the probe beeps first, Mission Control answers): mean gap in s. Replaces the v5 roomInterval.
+        public float hailInterval = 360f;
+        // EVA relay: an EVA kerbal reaches Mission Control through a nearby ship. The suit link to the ship is full up
+        // to evaRelayFullKm and gone at evaRelayZeroKm (KSP unloads vessels at about 2.5 km).
+        public float evaRelayFullKm = 1.0f, evaRelayZeroKm = 2.3f;
+        // EVA fall (user test): least gap in s between two eva_fall exchanges
+        public float evaFallCooldown = 45f;
+        // EVA breathing (user test): running builds exertion over evaExertRise s and it fades over evaExertFall s.
+        // At full exertion the breath loop plays evaBreathRate times as fast and evaBreathGain times as loud.
+        public float evaExertRise = 20f, evaExertFall = 30f, evaBreathRate = 1.4f, evaBreathGain = 1.5f;
+        // probe callouts (staging, chutes, throttle): chance that Mission Control answers the beep, and the least gap
+        // in s between two MC answers (staging comes in bursts)
+        public float probeCalloutMcChance = 0.35f, probeCalloutMcGap = 20f;
+        // "say again?": only below this signal, with this chance per scene, at most once per sayAgainCooldown s
+        public float sayAgainSignal = 0.35f, sayAgainChance = 0.35f, sayAgainCooldown = 120f;
+        // rover moments: fast above roverFastSpeed m/s for roverFastSec s, air time above roverAirSec s, tilt above
+        // roverTiltDeg, idle after roverIdleSec s standing still. At most one per roverMomentCooldown s.
+        public float roverFastSpeed = 8f, roverFastSec = 5f, roverAirSec = 0.7f, roverTiltDeg = 30f, roverIdleSec = 600f;
+        public float roverMomentCooldown = 180f;
+        // data transmission: at most one data beep per dataBeepGap s while an antenna sends, dataBeepMax per send
+        public float dataBeepGap = 12f, dataBeepMax = 4f;
+        // crew portraits: 1 renders the portrait again at the end of the frame while the jaw or head is driven
+        // (PortraitRefresh), 0 leaves only the stock portrait renders
+        public float portraitRefresh = 1f;
+
+        /// <summary>TUNING floats that may hold a negative value. The generic Sanitize check skips them.</summary>
+        public static readonly string[] SignedFields = { "faceExpressionSign" };
+
+        /// <summary>Schema version of the saved TUNING node. Bump when defaults of existing fields change.</summary>
+        public const int CurrentVersion = 10;
+
+        /// <summary>
+        /// Fields whose defaults changed in version 3 (0.3.0). A file written by an older version gets these reset to
+        /// the new defaults, every other saved value is kept.
+        /// </summary>
+        public static readonly string[] ChangedInV3 =
+        {
+            "stationMcFactor", "intercomInterval", "intercomClickVolume",
+            "descentMaxH", "descentSlow", "descentFast",
+        };
+
+        /// <summary>Replace NaN, Infinity and negative values with defaults, and keep lo below hi.</summary>
+        public void Sanitize()
+        {
+            Tuning def = new Tuning();
+            FieldInfo[] fields = typeof(Tuning).GetFields(BindingFlags.Public | BindingFlags.Instance);
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i].FieldType != typeof(float)) continue;
+                float v = (float)fields[i].GetValue(this);
+                bool signed = Array.IndexOf(SignedFields, fields[i].Name) >= 0;
+                if (float.IsNaN(v) || float.IsInfinity(v) || (!signed && v < 0f) || v > 1e6f || v < -1e6f)
+                    fields[i].SetValue(this, fields[i].GetValue(def));
+            }
+            FixPair(ref spinLo, ref spinHi); FixPair(ref gLo, ref gHi); FixPair(ref qLo, ref qHi);
+            FixPair(ref groundVsLo, ref groundVsHi); FixPair(ref heatLo, ref heatHi);
+            FixPair(ref gStrainLo, ref gStrainHi); FixPair(ref staticMin, ref staticMax);
+            FixPair(ref crackleMin, ref crackleMax); FixPair(ref chopMin, ref chopMax);
+            FixPair(ref reopenDelayMin, ref reopenDelayMax); FixPair(ref mcTenseLo, ref mcTenseHi);
+            FixPair(ref intercomGapMin, ref intercomGapMax); FixPair(ref intercomMaxStress, ref intercomAbortStress);
+            FixPair(ref dockApproachDist, ref dockRearmDist);
+            FixPair(ref stationMcMin, ref stationMcMax); FixPair(ref dockCloseMin, ref dockCloseMax);
+            FixPair(ref dockCloseDist, ref dockCloseExit); FixPair(ref descentVolLo, ref descentVolHi);
+            if (stationMcMin < 20f) stationMcMin = 20f;
+            if (dockCloseMin < 3f) dockCloseMin = 3f;
+            crewStressSemitones = DcMath.Clamp(crewStressSemitones, 0f, 12f);
+            crewPitchMax = DcMath.Clamp(crewPitchMax, 0.8f, 2f);
+            truncStart = DcMath.Clamp01(truncStart);
+            truncMinFrac = DcMath.Clamp(truncMinFrac, 0.2f, 1f);
+            overlapMax = DcMath.Clamp01(overlapMax);
+            stationMcFactor = DcMath.Clamp01(stationMcFactor);
+            intercomInterval = DcMath.Clamp(intercomInterval, 10f, 3600f);
+            if (intercomRoomAtten > 10000f) intercomRoomAtten = 10000f;
+            if (intercomReverbAtten > 10000f) intercomReverbAtten = 10000f;
+            if (intercomReflAtten > 10000f) intercomReflAtten = 10000f;
+            intercomDecay = DcMath.Clamp(intercomDecay, 0.1f, 20f);
+            intercomMinPitchGap = DcMath.Clamp(intercomMinPitchGap, 0f, 0.3f);
+            intercomStressMin = DcMath.Clamp(intercomStressMin, 5f, 3600f);
+            intercomStressPeak = DcMath.Clamp(intercomStressPeak, 0.05f, 1f);
+            if (stationRateFactor < 0.05f) stationRateFactor = 0.05f;
+            if (stationPingFactor < 0.1f) stationPingFactor = 0.1f;
+            if (intercomStationBoost < 0.1f) intercomStationBoost = 0.1f;
+            if (intercomQuietBoost < 0.1f) intercomQuietBoost = 0.1f;
+            stationCalmBias = DcMath.Clamp01(stationCalmBias);
+            stationMcFactor = DcMath.Clamp01(stationMcFactor);
+            tQuiet = DcMath.Clamp(tQuiet, 5f, 1800f);
+            if (tManic < 0.2f) tManic = 0.2f;
+            if (gateFadeTime > 0.45f) gateFadeTime = 0.45f; // crew-only rule: silence within 0.5 s
+            if (crackleMin < 0.05f) crackleMin = 0.05f;
+            if (descentFast < 0.1f) descentFast = 0.1f;
+
+            // v2 ranges from plan section 3. Fields without a stated range only get the generic checks above.
+            calloutHoldPad = DcMath.Clamp(calloutHoldPad, 0f, 2f);
+            genderPitchFemale = DcMath.Clamp(genderPitchFemale, 0.8f, 1.3f);
+            genderPitchMale = DcMath.Clamp(genderPitchMale, 0.8f, 1.3f);
+            launchCap = launchCap >= 0.5f ? 1f : 0f;
+            panicMinGap = DcMath.Clamp(panicMinGap, 2f, 60f);
+            panicCooldown = DcMath.Clamp(panicCooldown, 5f, 300f);
+            screamCooldown = DcMath.Clamp(screamCooldown, 10f, 600f);
+            speakerCooldown = DcMath.Clamp(speakerCooldown, 1f, 60f);
+            talkBurst = DcMath.Clamp(talkBurst, 1f, 10f);
+            talkPerMinute = DcMath.Clamp(talkPerMinute, 1f, 30f);
+            panicEscTau = DcMath.Clamp(panicEscTau, 5f, 300f);
+            planRateSec = DcMath.Clamp(planRateSec, 20f, 600f);
+            burnWarnSec = DcMath.Clamp(burnWarnSec, 10f, 600f);
+            alarmVolume = DcMath.Clamp(alarmVolume, 0f, 0.5f);
+            lightDelayMax = DcMath.Clamp(lightDelayMax, 0f, 10f);
+            lightDelayScale = DcMath.Clamp(lightDelayScale, 0f, 10f);
+            alarmFadeIn = DcMath.Clamp(alarmFadeIn, 0.1f, 10f);
+            alarmFadeOut = DcMath.Clamp(alarmFadeOut, 0.1f, 10f);
+            alarmHold = DcMath.Clamp(alarmHold, 0f, 30f);
+            FixPair(ref dockSoftSpeed, ref dockHardSpeed);
+            FixPair(ref roverSpeedLo, ref roverSpeedHi); FixPair(ref roverRoughLo, ref roverRoughHi);
+            FixPair(ref roverAirTimeLo, ref roverAirTimeHi); FixPair(ref roverTiltLo, ref roverTiltHi);
+            FixPair(ref signalRangeFullKm, ref signalRangeZeroKm);
+
+            // v3 ranges
+            mouthOpenDeg = DcMath.Clamp(mouthOpenDeg, 0f, 45f);
+            mouthAxis = DcMath.Clamp((float)Math.Round(mouthAxis), 0f, 2f);
+            mouthInvert = mouthInvert >= 0.5f ? 1f : 0f;
+            mouthPortraitAlternate = mouthPortraitAlternate >= 0.5f ? 1f : 0f;
+            portraitRefresh = portraitRefresh >= 0.5f ? 1f : 0f;
+            mouthGain = DcMath.Clamp(mouthGain, 0f, 50f);
+            mouthGate = DcMath.Clamp(mouthGate, 0f, 0.5f);
+            mouthAttack = DcMath.Clamp(mouthAttack, 0.005f, 1f);
+            mouthRelease = DcMath.Clamp(mouthRelease, 0.005f, 2f);
+            blackoutIntercomMaxStress = DcMath.Clamp01(blackoutIntercomMaxStress);
+            blackoutIntercomFirst = DcMath.Clamp(blackoutIntercomFirst, 0f, 120f);
+            blackoutIntercomGap = DcMath.Clamp(blackoutIntercomGap, 5f, 600f);
+
+            // v4 ranges
+            traitPreference = DcMath.Clamp01(traitPreference);
+            personaPreference = DcMath.Clamp01(personaPreference);
+            powerLowFrac = DcMath.Clamp(powerLowFrac, 0f, 0.9f);
+            powerOkFrac = DcMath.Clamp(powerOkFrac, 0f, 1f);
+            FixPair(ref powerLowFrac, ref powerOkFrac);
+            powerMinMax = DcMath.Clamp(powerMinMax, 0f, 100000f);
+            scienceCooldown = DcMath.Clamp(scienceCooldown, 0f, 3600f);
+            scienceTopicCooldown = DcMath.Clamp(scienceTopicCooldown, 0f, 36000f);
+            soiCooldown = DcMath.Clamp(soiCooldown, 0f, 3600f);
+            partLostWindow = DcMath.Clamp(partLostWindow, 0.1f, 10f);
+            partLostCooldown = DcMath.Clamp(partLostCooldown, 0f, 600f);
+            signalHold = DcMath.Clamp(signalHold, 0f, 60f);
+            signalCooldown = DcMath.Clamp(signalCooldown, 0f, 3600f);
+            crewLostDelay = DcMath.Clamp(crewLostDelay, 0f, 60f);
+            somberTime = DcMath.Clamp(somberTime, 0f, 3600f);
+            eventMaxAge = DcMath.Clamp(eventMaxAge, 1f, 3600f);
+            headTurnMaxDeg = DcMath.Clamp(headTurnMaxDeg, 0f, 60f);
+            headTurnAxis = DcMath.Clamp((float)Math.Round(headTurnAxis), 0f, 2f);
+            headTurnInvert = headTurnInvert >= 0.5f ? 1f : 0f;
+            headTurnSpeed = DcMath.Clamp(headTurnSpeed, 0.1f, 30f);
+            faceWeight = DcMath.Clamp01(faceWeight);
+            faceExpressionSign = faceExpressionSign < 0f ? -1f : 1f;
+
+            // v5 ranges
+            hailInterval = DcMath.Clamp(hailInterval, 60f, 1800f);
+            evaRelayFullKm = DcMath.Clamp(evaRelayFullKm, 0.01f, 100f);
+            evaBreathRate = DcMath.Clamp(evaBreathRate, 1f, 2f);
+            evaBreathGain = DcMath.Clamp(evaBreathGain, 1f, 3f);
+            evaRelayZeroKm = DcMath.Clamp(evaRelayZeroKm, 0.02f, 100f);
+            FixPair(ref evaRelayFullKm, ref evaRelayZeroKm);
+            probeCalloutMcChance = DcMath.Clamp01(probeCalloutMcChance);
+            probeCalloutMcGap = DcMath.Clamp(probeCalloutMcGap, 0f, 600f);
+            sayAgainSignal = DcMath.Clamp01(sayAgainSignal);
+            sayAgainChance = DcMath.Clamp01(sayAgainChance);
+            sayAgainCooldown = DcMath.Clamp(sayAgainCooldown, 0f, 3600f);
+            roverFastSpeed = DcMath.Clamp(roverFastSpeed, 1f, 100f);
+            roverFastSec = DcMath.Clamp(roverFastSec, 0f, 60f);
+            roverAirSec = DcMath.Clamp(roverAirSec, 0.1f, 10f);
+            roverTiltDeg = DcMath.Clamp(roverTiltDeg, 5f, 90f);
+            roverIdleSec = DcMath.Clamp(roverIdleSec, 30f, 7200f);
+            roverMomentCooldown = DcMath.Clamp(roverMomentCooldown, 10f, 3600f);
+            dataBeepGap = DcMath.Clamp(dataBeepGap, 2f, 120f);
+            dataBeepMax = DcMath.Clamp((float)Math.Round(dataBeepMax), 1f, 20f);
+            probeRateFactor = DcMath.Clamp(probeRateFactor, 0.5f, 4f);
+            probeDrowsyFrac = DcMath.Clamp(probeDrowsyFrac, 0f, 0.5f);
+            probeSleepFrac = DcMath.Clamp(probeSleepFrac, 0f, 0.2f);
+            if (probeSleepFrac > probeDrowsyFrac) probeSleepFrac = probeDrowsyFrac;
+            probeBeepPitchMax = DcMath.Clamp(probeBeepPitchMax, 1f, 2f);
+        }
+
+        private static void FixPair(ref float lo, ref float hi)
+        {
+            if (hi <= lo) hi = lo + 0.001f;
+        }
+    }
+
+    public class Settings
+    {
+        public bool enabled = true;
+        public bool muted = false;
+        public float masterVolume = 0.8f;
+        public float crewVolume = 1.0f;
+        public float controlVolume = 0.8f;
+        public float beepVolume = 0.6f;
+        public float staticVolume = 0.5f;
+        public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old v2 level)
+        public float intercomVolume = 0.8f;
+        public bool intercomEnabled = true;
+        public bool radioEnabled = true;      // crew <-> Mission Control radio (lines, quindar, squelch, bed, blackout static)
+        public bool beepsEnabled = true;      // pings, descent blips, stage tones
+        public bool landingTones = false;     // landing/splashdown tones (off: touchdown is marked by the exchange only)
+        public bool stageTone = false;        // also play the beeps/stage tone (it is always the fallback without callout clips)
+        public int tuningVersion = Tuning.CurrentVersion;
+        public float rateMultiplier = 1.0f;
+        public bool showDebug = false;
+        public string muteKey = "Y";
+        public string muteModifier = "LeftAlt";
+        public string countdownKey = "C";           // launch countdown hotkey (start, or stop with the yell), "None" = off
+        public string countdownModifier = "LeftAlt";
+        public bool useGameVolume = true;
+        public bool useDsp = true;
+        public int maxCrewVoices = 2;
+        public bool verboseLog = false;
+        public float windowX = 200f;
+        public float windowY = 120f;
+
+        // --- v2 (plan section 3). Top-level keys. ---
+        public float calloutVolume = 1.0f;          // req 1, 0..2
+        public float voiceBoostDb = 6f;             // req 3, 0..12
+        public bool voiceCompressor = true;         // req 3
+        public string duckMode = "listener";        // req 3: listener | off
+        public float duckDepth = 0.35f;             // req 3, 0..0.8
+        public bool throttleCallouts = true;        // req 4
+        public bool roverStress = true;             // req 13
+        public string stationStyle = "auto";        // req 9: auto | check | exchange
+        public string radioProfile = "auto";        // req 16: auto | station | ship | eva
+        public bool evaRadio = true;                // req 15
+        public bool evaRelay = true;                // v6: the EVA suit radio reaches MC through a nearby ship
+        public float evaRadioVolume = 0.8f;         // req 15, 0..1
+        public bool planChatter = true;             // req 18
+        public string signalMode = "auto";          // req 17: auto | off | fixed
+        public float signalFixed = 0.7f;            // req 17, 0..1
+        public bool signalOcclusion = true;         // req 17
+        public bool subtitles = false;              // req 22
+        public bool countdownAutoStage = false;     // launch countdown: activate the next stage on liftoff
+        public bool rogerBeep = true;               // short beep when the crew lets go of the key
+        public bool lightDelay = true;              // small extra answer delay far from Kerbin (max lightDelayMax s)
+        public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
+        public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
+        // --- v3 ---
+        public bool mouthAnimation = true;          // req 9: kerbals move their jaw while they talk
+        public bool mouthDebug = false;             // req 9: log and show mouth driver details
+        // --- v4 ---
+        public bool personalityEffects = true;      // 1: courage, stupidity, badass and veteran shape lines and panic
+        public bool faceExpressions = true;         // 2: faces match the line
+        public bool headTurn = true;                // 2: listeners turn their head to the speaker
+        public bool subtitleSpeaker = true;         // 12: speaker name above the subtitle
+        public bool subtitleColors = true;          // 12: colour per speaker, MC amber
+        public bool eventSoi = true;                // 4
+        public bool eventScience = true;            // 5
+        public bool eventPartLoss = true;           // 6
+        public bool eventPower = true;              // 7
+        public bool eventSignal = true;             // 8
+        public bool eventCrewLoss = true;           // 10
+        public string subtitlePos = "above_navball"; // 12: above_navball (default, at X 0.5 / Y 0.78) | custom | top_left | bottom_left
+        public float subtitleX = 0.5f;              // custom: centre of the subtitle column, fraction of the screen width
+        public float subtitleY = 0.78f;             // custom: bottom edge of the newest subtitle, fraction of the screen height
+        public float subtitleSize = 1.0f;           // 0.7 .. 1.6, text 15 px x size
+        public float subtitleOpacity = 0.55f;       // panel opacity 0 .. 1
+        public int subtitleMaxEntries = 2;          // 1 .. 4
+        // --- v5: probe mode ---
+        public bool probeMode = true;               // uncrewed vessels with a probe core get probe chatter
+        public bool probePetTalk = true;            // MC talks to the probe, the probe answers in beeps
+        public bool probeHail = true;               // v6: the probe beeps first, Mission Control answers
+        public bool probeCallouts = true;           // v6: the probe beeps at staging, chutes and throttle
+        public bool probePlanTalk = true;           // v6: maneuver node and burn talk with the probe
+        public bool probeStressTalk = true;         // v6: Mission Control calms the probe per stress cause
+        public bool probeSayAgain = true;           // v6: "say again?" when the signal is weak
+        public bool probeMilestones = true;         // v6: mission days, first orbit, first landing per body
+        public bool probeRover = true;              // v6: rover moments (fast, air time, tilt, idle)
+        public bool probeTransmit = true;           // v6: data beeps while an antenna sends science
+        public bool probeSleep = true;              // drowsy and asleep probe on low electric charge
+        public Tuning tuning = new Tuning();
+
+        /// <summary>Allowed subtitlePos values, the first is the default. SubtitleLayout uses the same strings.</summary>
+        public static readonly string[] SubtitlePresets = { "above_navball", "custom", "top_left", "bottom_left" };
+        public const int SubtitleMaxEntriesCap = 4;
+
+        // not persisted: set when the existing file could not be parsed, so the first save backs it up first
+        [NonSerialized] public bool loadFailed;
+
+        public const string NodeName = "LONAPSE";
+        public const string LegacyNodeName = "QUINDAR";   // settings written before the rename to Lonapse
+        public const string TuningNodeName = "TUNING";
+
+        /// <summary>
+        /// Pure part of the migration: resets fields whose defaults changed since <paramref name="fromVersion"/>.
+        /// Returns the names that were reset (empty when nothing changed).
+        /// </summary>
+        public System.Collections.Generic.List<string> MigrateValues(int fromVersion)
+        {
+            System.Collections.Generic.List<string> reset = new System.Collections.Generic.List<string>();
+            if (fromVersion >= Tuning.CurrentVersion) return reset;
+            Tuning def = new Tuning();
+            if (fromVersion < 3)
+            {
+                for (int i = 0; i < Tuning.ChangedInV3.Length; i++)
+                {
+                    FieldInfo f = typeof(Tuning).GetField(Tuning.ChangedInV3[i]);
+                    if (f == null) continue;
+                    float oldV = (float)f.GetValue(tuning), newV = (float)f.GetValue(def);
+                    if (oldV != newV)
+                    {
+                        f.SetValue(tuning, newV);
+                        reset.Add(f.Name + " " + oldV.ToString(CultureInfo.InvariantCulture) + " -> " + newV.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+                // 0.3.0 limits overlapping crew voices to 2 (old default 3 was saved by every earlier version)
+                if (maxCrewVoices == 3) { maxCrewVoices = 2; reset.Add("maxCrewVoices 3 -> 2"); }
+            }
+            if (fromVersion < 4)
+            {
+                // 0.3.1: intercom 300 s and stress-driven. Only replace values that still hold an old default.
+                ResetIfOld(reset, "intercomInterval", 600f, 240f);
+                ResetIfOld(reset, "intercomMaxStress", 0.35f, 0.35f);
+                ResetIfOld(reset, "intercomAbortStress", 0.5f, 0.5f);
+            }
+            if (fromVersion < 5)
+            {
+                // 0.4.0: light delay up to 10 s (was 2 s). Only replace the old defaults.
+                ResetIfOld(reset, "lightDelayMax", 2f, 2f);
+                ResetIfOld(reset, "lightDelayScale", 0.45f, 0.45f);
+            }
+            if (fromVersion < 6)
+            {
+                // 0.4.0: stress builds slower, spin counts from 1 rad/s (user feedback). Only replace old defaults.
+                ResetIfOld(reset, "spinLo", 0.35f, 0.35f);
+                ResetIfOld(reset, "spinHi", 2.5f, 2.5f);
+                ResetIfOld(reset, "attackTau", 0.35f, 0.35f);
+            }
+            if (fromVersion < 7)
+            {
+                // 0.4.0: wider jaw so talking reads through expressions (user feedback). Only replace the old default.
+                ResetIfOld(reset, "mouthOpenDeg", 12f, 12f);
+            }
+            if (fromVersion < 8 && subtitlePos == "above_navball")
+            {
+                // 0.4.0: custom (X 0.5, Y 0.78) is the default subtitle position (user feedback). Only the old default moves.
+                subtitlePos = "custom";
+                reset.Add("subtitlePos");
+            }
+            if (fromVersion < 10)
+            {
+                // 0.5.0: less pitch under stress, panic sounded like chipmunks (user test). Only the old defaults move.
+                ResetIfOld(reset, "crewStressSemitones", 2f, 2f);
+                ResetIfOld(reset, "crewPitchMax", 1.2f, 1.2f);
+            }
+            if (fromVersion < 9 && subtitlePos == "custom" && subtitleX == 0.5f && subtitleY == 0.78f)
+            {
+                // 0.5.0: above_navball sits at the old custom default and is the default again. Custom moved by the user stays.
+                subtitlePos = "above_navball";
+                reset.Add("subtitlePos");
+            }
+            tuningVersion = Tuning.CurrentVersion;
+            return reset;
+        }
+
+        private void ResetIfOld(System.Collections.Generic.List<string> reset, string field, float old1, float old2)
+        {
+            FieldInfo f = typeof(Tuning).GetField(field);
+            if (f == null) return;
+            float cur = (float)f.GetValue(tuning);
+            if (cur != old1 && cur != old2) return; // the user changed it: keep
+            float def = (float)f.GetValue(new Tuning());
+            if (cur == def) return;
+            f.SetValue(tuning, def);
+            reset.Add(field + " " + cur.ToString(CultureInfo.InvariantCulture) + " -> " + def.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public void Clamp()
+        {
+            masterVolume = DcMath.Clamp(DcMath.Finite(masterVolume), 0f, 1f);
+            crewVolume = DcMath.Clamp(DcMath.Finite(crewVolume), 0f, 1f);
+            controlVolume = DcMath.Clamp(DcMath.Finite(controlVolume), 0f, 1f);
+            beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 1f);
+            staticVolume = DcMath.Clamp(DcMath.Finite(staticVolume), 0f, 1f);
+            weakSignalVolume = DcMath.Clamp(DcMath.Finite(weakSignalVolume), 0f, 1f);
+            intercomVolume = DcMath.Clamp(DcMath.Finite(intercomVolume), 0f, 1f);
+            if (float.IsNaN(rateMultiplier) || float.IsInfinity(rateMultiplier)) rateMultiplier = 1f;
+            rateMultiplier = DcMath.Clamp(rateMultiplier, 0.25f, 4f);
+            if (maxCrewVoices < 1) maxCrewVoices = 1;
+            if (maxCrewVoices > 3) maxCrewVoices = 3;
+            windowX = DcMath.Clamp(DcMath.Finite(windowX), 0f, 8000f);
+            windowY = DcMath.Clamp(DcMath.Finite(windowY), 0f, 8000f);
+            if (string.IsNullOrEmpty(muteKey)) muteKey = "Y";
+            if (string.IsNullOrEmpty(muteModifier)) muteModifier = "None";
+            if (string.IsNullOrEmpty(countdownKey)) countdownKey = "None";
+            if (string.IsNullOrEmpty(countdownModifier)) countdownModifier = "None";
+            calloutVolume = DcMath.Clamp(DcMath.Finite(calloutVolume), 0f, 2f);
+            voiceBoostDb = DcMath.Clamp(DcMath.Finite(voiceBoostDb), 0f, 12f);
+            duckDepth = DcMath.Clamp(DcMath.Finite(duckDepth), 0f, 0.8f);
+            evaRadioVolume = DcMath.Clamp(DcMath.Finite(evaRadioVolume), 0f, 1f);
+            signalFixed = DcMath.Clamp(DcMath.Finite(signalFixed), 0f, 1f);
+            duckMode = OneOf(duckMode, "listener", "listener", "off");
+            stationStyle = OneOf(stationStyle, "auto", "auto", "check", "exchange");
+            radioProfile = OneOf(radioProfile, "auto", "auto", "station", "ship", "eva");
+            signalMode = OneOf(signalMode, "auto", "auto", "off", "fixed");
+            subtitlePos = OneOf(subtitlePos, SubtitlePresets[0], SubtitlePresets);
+            if (float.IsNaN(subtitleX) || float.IsInfinity(subtitleX)) subtitleX = 0.5f;
+            if (float.IsNaN(subtitleY) || float.IsInfinity(subtitleY)) subtitleY = 0.78f;
+            subtitleX = DcMath.Clamp(subtitleX, 0f, 1f);
+            subtitleY = DcMath.Clamp(subtitleY, 0f, 1f);
+            if (float.IsNaN(subtitleSize) || float.IsInfinity(subtitleSize)) subtitleSize = 1f;
+            subtitleSize = DcMath.Clamp(subtitleSize, 0.7f, 1.6f);
+            if (float.IsNaN(subtitleOpacity) || float.IsInfinity(subtitleOpacity)) subtitleOpacity = 0.55f;
+            subtitleOpacity = DcMath.Clamp(subtitleOpacity, 0f, 1f);
+            if (subtitleMaxEntries < 1) subtitleMaxEntries = 1;
+            if (subtitleMaxEntries > SubtitleMaxEntriesCap) subtitleMaxEntries = SubtitleMaxEntriesCap;
+            if (tuning == null) tuning = new Tuning();
+            tuning.Sanitize();
+        }
+
+        /// <summary>Returns the trimmed, lower-case value when it is one of the allowed values, otherwise <paramref name="def"/>.</summary>
+        private static string OneOf(string value, string def, params string[] allowed)
+        {
+            if (string.IsNullOrEmpty(value)) return def;
+            string key = value.Trim().ToLowerInvariant();
+            for (int i = 0; i < allowed.Length; i++)
+                if (allowed[i] == key) return key;
+            return def;
+        }
+
+#if !DC_OFFLINE_TEST
+        public static string FilePath
+        {
+            get { return Path.Combine(Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData"), "settings.cfg"); }
+        }
+
+        public KeyCode MuteKeyCode { get { return ParseKey(muteKey, KeyCode.Y); } }
+        public KeyCode MuteModifierCode { get { return ParseKey(muteModifier, KeyCode.None); } }
+        public KeyCode CountdownKeyCode { get { return ParseKey(countdownKey, KeyCode.None); } }
+        public KeyCode CountdownModifierCode { get { return ParseKey(countdownModifier, KeyCode.None); } }
+
+        private static KeyCode ParseKey(string s, KeyCode fallback)
+        {
+            if (string.IsNullOrEmpty(s)) return fallback;
+            try { return (KeyCode)Enum.Parse(typeof(KeyCode), s.Trim(), true); }
+            catch (Exception) { Log.Warn("Unknown KeyCode '" + s + "', using " + fallback); return fallback; }
+        }
+
+        /// <summary>PluginData of the mod before it was renamed to Lonapse (GameData/Quindar).</summary>
+        public static string LegacyDir
+        {
+            get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Quindar/PluginData"); }
+        }
+
+        /// <summary>Rename to Lonapse: on the first start the old PluginData files (settings, backups, dumps) are
+        /// copied into the new folder. Nothing is overwritten and the old folder is left alone.</summary>
+        private static void AdoptLegacyFiles(string path)
+        {
+            if (File.Exists(path)) return;
+            string old = LegacyDir;
+            if (!Directory.Exists(old) || !File.Exists(Path.Combine(old, "settings.cfg"))) return;
+            try
+            {
+                string dir = Path.GetDirectoryName(path);
+                Directory.CreateDirectory(dir);
+                int n = 0;
+                foreach (string f in Directory.GetFiles(old))
+                {
+                    string to = Path.Combine(dir, Path.GetFileName(f));
+                    if (File.Exists(to)) continue;
+                    File.Copy(f, to);
+                    n++;
+                }
+                Log.Info("Rename to Lonapse: copied " + n + " file(s) from " + old + " to " + dir);
+            }
+            catch (Exception e) { Log.Warn("Rename to Lonapse: could not copy the old settings (" + e.Message + ")"); }
+        }
+
+        public static Settings Load()
+        {
+            Settings s = new Settings();
+            string path = FilePath;
+            try
+            {
+                AdoptLegacyFiles(path);
+                if (!File.Exists(path))
+                {
+                    Log.Info("No settings file at " + path + ", writing defaults");
+                    s.Clamp();
+                    s.Save();
+                    return s;
+                }
+                ConfigNode root = ConfigNode.Load(path);
+                ConfigNode n = root != null ? (root.GetNode(NodeName) ?? root.GetNode(LegacyNodeName)) : null;
+                if (n == null)
+                {
+                    Log.Warn("Settings file could not be parsed or has no " + NodeName + " node, using defaults: " + path);
+                    s.Clamp();
+                    s.loadFailed = true;
+                    return s;
+                }
+                n.TryGetValue("enabled", ref s.enabled);
+                n.TryGetValue("muted", ref s.muted);
+                n.TryGetValue("masterVolume", ref s.masterVolume);
+                n.TryGetValue("crewVolume", ref s.crewVolume);
+                n.TryGetValue("controlVolume", ref s.controlVolume);
+                n.TryGetValue("beepVolume", ref s.beepVolume);
+                n.TryGetValue("staticVolume", ref s.staticVolume);
+                n.TryGetValue("weakSignalVolume", ref s.weakSignalVolume);
+                n.TryGetValue("intercomVolume", ref s.intercomVolume);
+                n.TryGetValue("intercomEnabled", ref s.intercomEnabled);
+                n.TryGetValue("radioEnabled", ref s.radioEnabled);
+                n.TryGetValue("beepsEnabled", ref s.beepsEnabled);
+                n.TryGetValue("landingTones", ref s.landingTones);
+                n.TryGetValue("stageTone", ref s.stageTone);
+                int ver = 2; // files without the key were written by 0.1/0.2
+                n.TryGetValue("tuningVersion", ref ver);
+                s.tuningVersion = ver;
+                n.TryGetValue("rateMultiplier", ref s.rateMultiplier);
+                n.TryGetValue("showDebug", ref s.showDebug);
+                n.TryGetValue("muteKey", ref s.muteKey);
+                n.TryGetValue("countdownKey", ref s.countdownKey);
+                n.TryGetValue("countdownModifier", ref s.countdownModifier);
+                n.TryGetValue("muteModifier", ref s.muteModifier);
+                n.TryGetValue("useGameVolume", ref s.useGameVolume);
+                n.TryGetValue("useDsp", ref s.useDsp);
+                n.TryGetValue("maxCrewVoices", ref s.maxCrewVoices);
+                n.TryGetValue("verboseLog", ref s.verboseLog);
+                n.TryGetValue("windowX", ref s.windowX);
+                n.TryGetValue("windowY", ref s.windowY);
+                n.TryGetValue("calloutVolume", ref s.calloutVolume);
+                n.TryGetValue("voiceBoostDb", ref s.voiceBoostDb);
+                n.TryGetValue("voiceCompressor", ref s.voiceCompressor);
+                n.TryGetValue("duckMode", ref s.duckMode);
+                n.TryGetValue("duckDepth", ref s.duckDepth);
+                n.TryGetValue("throttleCallouts", ref s.throttleCallouts);
+                n.TryGetValue("roverStress", ref s.roverStress);
+                n.TryGetValue("stationStyle", ref s.stationStyle);
+                n.TryGetValue("radioProfile", ref s.radioProfile);
+                n.TryGetValue("evaRadio", ref s.evaRadio);
+                n.TryGetValue("evaRelay", ref s.evaRelay);
+                n.TryGetValue("evaRadioVolume", ref s.evaRadioVolume);
+                n.TryGetValue("planChatter", ref s.planChatter);
+                n.TryGetValue("signalMode", ref s.signalMode);
+                n.TryGetValue("signalFixed", ref s.signalFixed);
+                n.TryGetValue("signalOcclusion", ref s.signalOcclusion);
+                n.TryGetValue("subtitles", ref s.subtitles);
+                n.TryGetValue("countdownAutoStage", ref s.countdownAutoStage);
+                n.TryGetValue("rogerBeep", ref s.rogerBeep);
+                n.TryGetValue("lightDelay", ref s.lightDelay);
+                n.TryGetValue("signalDropouts", ref s.signalDropouts);
+                n.TryGetValue("masterAlarm", ref s.masterAlarm);
+                n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
+                n.TryGetValue("mouthDebug", ref s.mouthDebug);
+                n.TryGetValue("personalityEffects", ref s.personalityEffects);
+                n.TryGetValue("faceExpressions", ref s.faceExpressions);
+                n.TryGetValue("headTurn", ref s.headTurn);
+                n.TryGetValue("subtitleSpeaker", ref s.subtitleSpeaker);
+                n.TryGetValue("subtitleColors", ref s.subtitleColors);
+                n.TryGetValue("eventSoi", ref s.eventSoi);
+                n.TryGetValue("eventScience", ref s.eventScience);
+                n.TryGetValue("eventPartLoss", ref s.eventPartLoss);
+                n.TryGetValue("eventPower", ref s.eventPower);
+                n.TryGetValue("eventSignal", ref s.eventSignal);
+                n.TryGetValue("eventCrewLoss", ref s.eventCrewLoss);
+                n.TryGetValue("subtitlePos", ref s.subtitlePos);
+                n.TryGetValue("subtitleX", ref s.subtitleX);
+                n.TryGetValue("subtitleY", ref s.subtitleY);
+                n.TryGetValue("subtitleSize", ref s.subtitleSize);
+                n.TryGetValue("subtitleOpacity", ref s.subtitleOpacity);
+                n.TryGetValue("subtitleMaxEntries", ref s.subtitleMaxEntries);
+                n.TryGetValue("probeMode", ref s.probeMode);
+                n.TryGetValue("probePetTalk", ref s.probePetTalk);
+                n.TryGetValue("probeHail", ref s.probeHail);
+                n.TryGetValue("probeCallouts", ref s.probeCallouts);
+                n.TryGetValue("probePlanTalk", ref s.probePlanTalk);
+                n.TryGetValue("probeStressTalk", ref s.probeStressTalk);
+                n.TryGetValue("probeSayAgain", ref s.probeSayAgain);
+                n.TryGetValue("probeMilestones", ref s.probeMilestones);
+                n.TryGetValue("probeRover", ref s.probeRover);
+                n.TryGetValue("probeTransmit", ref s.probeTransmit);
+                n.TryGetValue("probeSleep", ref s.probeSleep);
+
+                ConfigNode t = n.GetNode(TuningNodeName);
+                if (t != null)
+                {
+                    FieldInfo[] fields = typeof(Tuning).GetFields(BindingFlags.Public | BindingFlags.Instance);
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        if (fields[i].FieldType != typeof(float)) continue;
+                        float v = (float)fields[i].GetValue(s.tuning);
+                        if (t.TryGetValue(fields[i].Name, ref v)) fields[i].SetValue(s.tuning, v);
+                    }
+                }
+                Log.Info("Settings loaded from " + path + " (tuning version " + s.tuningVersion + ")");
+                if (s.tuningVersion < Tuning.CurrentVersion) s.Migrate(path);
+            }
+            catch (Exception e)
+            {
+                Log.Warn("Could not parse settings (" + e.Message + "), using defaults");
+                s = new Settings();
+                s.loadFailed = true;
+            }
+            s.Clamp();
+            return s;
+        }
+
+        public bool Save()
+        {
+            string path = FilePath;
+            try
+            {
+                string dir = Path.GetDirectoryName(path);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (loadFailed)
+                {
+                    // keep the broken file instead of silently overwriting the user's edits
+                    if (File.Exists(path))
+                    {
+                        string bad = path + ".bad";
+                        File.Copy(path, bad, true);
+                        Log.Warn("Unreadable settings file backed up to " + bad + " before writing defaults");
+                    }
+                    loadFailed = false;
+                }
+                ConfigNode n = new ConfigNode(NodeName);
+                n.AddValue("enabled", enabled);
+                n.AddValue("muted", muted);
+                n.AddValue("masterVolume", F(masterVolume));
+                n.AddValue("crewVolume", F(crewVolume));
+                n.AddValue("controlVolume", F(controlVolume));
+                n.AddValue("beepVolume", F(beepVolume));
+                n.AddValue("staticVolume", F(staticVolume));
+                n.AddValue("weakSignalVolume", F(weakSignalVolume));
+                n.AddValue("intercomVolume", F(intercomVolume));
+                n.AddValue("intercomEnabled", intercomEnabled);
+                n.AddValue("radioEnabled", radioEnabled);
+                n.AddValue("beepsEnabled", beepsEnabled);
+                n.AddValue("landingTones", landingTones);
+                n.AddValue("stageTone", stageTone);
+                n.AddValue("tuningVersion", tuningVersion);
+                n.AddValue("rateMultiplier", F(rateMultiplier));
+                n.AddValue("showDebug", showDebug);
+                n.AddValue("muteKey", muteKey);
+                n.AddValue("countdownKey", countdownKey);
+                n.AddValue("countdownModifier", countdownModifier);
+                n.AddValue("muteModifier", muteModifier);
+                n.AddValue("useGameVolume", useGameVolume);
+                n.AddValue("useDsp", useDsp);
+                n.AddValue("maxCrewVoices", maxCrewVoices);
+                n.AddValue("verboseLog", verboseLog);
+                n.AddValue("windowX", F(windowX));
+                n.AddValue("windowY", F(windowY));
+                n.AddValue("calloutVolume", F(calloutVolume));
+                n.AddValue("voiceBoostDb", F(voiceBoostDb));
+                n.AddValue("voiceCompressor", voiceCompressor);
+                n.AddValue("duckMode", duckMode);
+                n.AddValue("duckDepth", F(duckDepth));
+                n.AddValue("throttleCallouts", throttleCallouts);
+                n.AddValue("roverStress", roverStress);
+                n.AddValue("stationStyle", stationStyle);
+                n.AddValue("radioProfile", radioProfile);
+                n.AddValue("evaRadio", evaRadio);
+                n.AddValue("evaRelay", evaRelay);
+                n.AddValue("evaRadioVolume", F(evaRadioVolume));
+                n.AddValue("planChatter", planChatter);
+                n.AddValue("signalMode", signalMode);
+                n.AddValue("signalFixed", F(signalFixed));
+                n.AddValue("signalOcclusion", signalOcclusion);
+                n.AddValue("subtitles", subtitles);
+                n.AddValue("countdownAutoStage", countdownAutoStage);
+                n.AddValue("rogerBeep", rogerBeep);
+                n.AddValue("lightDelay", lightDelay);
+                n.AddValue("signalDropouts", signalDropouts);
+                n.AddValue("masterAlarm", masterAlarm);
+                n.AddValue("mouthAnimation", mouthAnimation);
+                n.AddValue("mouthDebug", mouthDebug);
+                n.AddValue("personalityEffects", personalityEffects);
+                n.AddValue("faceExpressions", faceExpressions);
+                n.AddValue("headTurn", headTurn);
+                n.AddValue("subtitleSpeaker", subtitleSpeaker);
+                n.AddValue("subtitleColors", subtitleColors);
+                n.AddValue("eventSoi", eventSoi);
+                n.AddValue("eventScience", eventScience);
+                n.AddValue("eventPartLoss", eventPartLoss);
+                n.AddValue("eventPower", eventPower);
+                n.AddValue("eventSignal", eventSignal);
+                n.AddValue("eventCrewLoss", eventCrewLoss);
+                n.AddValue("subtitlePos", subtitlePos);
+                n.AddValue("subtitleX", F(subtitleX));
+                n.AddValue("subtitleY", F(subtitleY));
+                n.AddValue("subtitleSize", F(subtitleSize));
+                n.AddValue("subtitleOpacity", F(subtitleOpacity));
+                n.AddValue("subtitleMaxEntries", subtitleMaxEntries);
+                n.AddValue("probeMode", probeMode);
+                n.AddValue("probePetTalk", probePetTalk);
+                n.AddValue("probeHail", probeHail);
+                n.AddValue("probeCallouts", probeCallouts);
+                n.AddValue("probePlanTalk", probePlanTalk);
+                n.AddValue("probeStressTalk", probeStressTalk);
+                n.AddValue("probeSayAgain", probeSayAgain);
+                n.AddValue("probeMilestones", probeMilestones);
+                n.AddValue("probeRover", probeRover);
+                n.AddValue("probeTransmit", probeTransmit);
+                n.AddValue("probeSleep", probeSleep);
+                ConfigNode t = n.AddNode(TuningNodeName);
+                FieldInfo[] fields = typeof(Tuning).GetFields(BindingFlags.Public | BindingFlags.Instance);
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    if (fields[i].FieldType != typeof(float)) continue;
+                    t.AddValue(fields[i].Name, F((float)fields[i].GetValue(tuning)));
+                }
+                ConfigNode root = new ConfigNode();
+                root.AddNode(n);
+                bool ok = root.Save(path);
+                if (!ok) Log.Warn("ConfigNode.Save returned false for " + path);
+                else Log.Debug("Settings saved to " + path);
+                return ok;
+            }
+            catch (Exception e)
+            {
+                Log.Warn("Could not save settings to " + path + ": " + e.Message);
+                return false;
+            }
+        }
+
+        private void Migrate(string path)
+        {
+            int from = tuningVersion;
+            System.Collections.Generic.List<string> reset = MigrateValues(from);
+            try
+            {
+                string bak = path + ".v" + from + ".bak";
+                if (File.Exists(path) && !File.Exists(bak)) File.Copy(path, bak, false);
+                Log.Info("Settings migrated from tuning version " + from + " to " + Tuning.CurrentVersion + ", backup: " + bak);
+            }
+            catch (Exception e) { Log.Warn("Could not back up settings before migration: " + e.Message); }
+            for (int i = 0; i < reset.Count; i++) Log.Info("  reset to new default: " + reset[i]);
+            migrated = true;
+        }
+
+        [NonSerialized] public bool migrated; // saved once after load so the file gets the new keys
+
+        private static string F(float v)
+        {
+            return v.ToString("R", CultureInfo.InvariantCulture);
+        }
+#endif
+    }
+}
