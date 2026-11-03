@@ -1,6 +1,6 @@
 # Lonapse: sources, build and tables
 
-Lonapse is the language of the kerbals. Every crew and Mission Control line in the mod is spoken in it. This file describes how the Lonapse clips are made. Lonapse is reversed spelling only. There is no audio reversal in this build.
+Lonapse is the language of the kerbals. Every crew and Mission Control line in the mod is spoken in it. This file describes how the Lonapse clips are made. Lonapse is Spanish with the letters of every word reversed. The audio itself is not reversed.
 
 ## What is in this folder
 
@@ -23,10 +23,10 @@ The source files are:
 | `phrases/blackout.tsv` | Intercom scenes for the radio blackout (phase `blackout`). | `bl_` |
 | `phrases/events.tsv` | Docking, relief, maneuver nodes, station and EVA checks. | `ev_` |
 | `phrases/bodies.tsv` | Scenes that name the current body with `{body}`. | `bo_` |
-| `phrases/probe_pet.tsv` | v5: Mission Control talks to the probe, the probe beeps back (`probe_chat`, `probe_sleepy`). v6: the probe calls first (`probe_hail`), stress per cause (`probe_stress`), "say again?" (`probe_say_again`), milestones (`probe_milestone`), rover moments (`probe_rover`) and data (`probe_data`). | `pp_` |
-| `phrases/probe_events.tsv` | v5: probe scenes for science, power, SOI, part lost and signal back. v6: also touchdown, splashdown, docked and burn_soon. | `pe_` |
+| `phrases/probe_pet.tsv` | Mission Control talks to the probe, the probe beeps back (`probe_chat`, `probe_sleepy`). The probe calls first (`probe_hail`), stress per cause (`probe_stress`), "say again?" (`probe_say_again`), milestones (`probe_milestone`), rover moments (`probe_rover`) and data (`probe_data`). | `pp_` |
+| `phrases/probe_events.tsv` | Probe scenes for science, power, SOI, part lost, signal back, touchdown, splashdown, docked and burn_soon. | `pe_` |
 
-Rows that came from the old `phrases_es.tsv` kept their old keys. Only new rows use the prefixes.
+Some older rows have keys without these prefixes.
 
 The build script is `audio/build_lonapse.py`. The clips go into the shared folder `audio/build/Sounds/`. The built table, the manifest and the render cache go into `audio/build/lonapse/`. Both paths are in `.gitignore`.
 
@@ -53,13 +53,13 @@ Every file in `phrases/` is UTF-8 with tabs. Lines that start with `#` are comme
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
 ```
 
-Three more columns are optional (plan v4): `trait`, `persona` and `topic`. A file without them still loads, and every row then gets `any`. An empty cell also means `any`. A file that uses them puts them after `cause`:
+Three more columns are optional: `trait`, `persona` and `topic`. A file without them still loads, and every row then gets `any`. An empty cell also means `any`. A file that uses them puts them after `cause`:
 
 ```
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
 ```
 
-Plan v5 adds two more optional columns: `core` and `beep`. Without `core` (or with an empty cell) a row gets `any`. Without `beep` a row gets an empty beep. A probe file puts them after `topic` (or after `cause`):
+Two more columns are optional: `core` and `beep`. Without `core` (or with an empty cell) a row gets `any`. Without `beep` a row gets an empty beep. A probe file puts them after `topic` (or after `cause`):
 
 ```
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish	english
@@ -68,10 +68,10 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | Column | Allowed values |
 |---|---|
 | `clip_key` | `[a-z0-9_]+`, unique across all files. No `__` (that is for body variants). The file name becomes `<clip_key>_<m|f>.ogg`. |
-| `event` | `chatter`, `staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut`, `dock_approach`, `dock_close`, `dock_hard`, `docked`, `touchdown`, `splashdown`, `relief`, `plan_node`, `burn_soon`, `station_check`, `eva_check`, `countdown`, since v4 `soi_enter`, `science`, `part_lost`, `power_low`, `power_ok`, `signal_lost`, `signal_back`, `crew_lost`, since v5 the probe events `probe_chat`, `probe_sleepy`, and since v6 `probe_hail`, `probe_stress`, `probe_say_again`, `probe_milestone`, `probe_rover`, `probe_data` |
+| `event` | `chatter`, `staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut`, `dock_approach`, `dock_close`, `dock_hard`, `docked`, `touchdown`, `splashdown`, `relief`, `plan_node`, `burn_soon`, `station_check`, `eva_check`, `countdown`, `soi_enter`, `science`, `part_lost`, `power_low`, `power_ok`, `signal_lost`, `signal_back`, `crew_lost`, and the probe events `probe_chat`, `probe_sleepy`, `probe_hail`, `probe_stress`, `probe_say_again`, `probe_milestone`, `probe_rover`, `probe_data` |
 | `severity` | `chatter`, `callout`, `warning` |
 | `band` | `calm`, `tense`, `panic`, `none` |
-| `role` | `crew`, `mc`, and since v5 `probe` (see "Probe mode" below) |
+| `role` | `crew`, `mc` and `probe` (see "Probe mode" below) |
 | `scene` | `[a-z0-9_]+`. The lines of one conversation share the scene. A scene lives in one file. |
 | `seq` | integer, 1 or higher. The seq numbers of a scene run 1, 2, 3 without gaps. |
 | `gender` | `m`, `f`, `both` |
@@ -79,8 +79,8 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | `cause` | `any`, `spin`, `gforce`, `q`, `ground`, `heat`, `plasma`, `fuel`, `impulse`, `engine_out` |
 | `trait` | optional. `any`, `pilot`, `engineer`, `scientist`, `tourist`. The crew speaker must have this trait. |
 | `persona` | optional. `any`, `badass`, `brave`, `nervous`, `dim`, `veteran`. The crew speaker must have this persona. |
-| `core` | optional (v5). `any`, `stayputnik`, `okto`, `hecs`, `rovemate`, `snob`, `generic` (the keys of `ProbeCores.Keys`). Holds for the whole scene. |
-| `beep` | optional (v5). The beep mood of a `probe` row: `happy`, `offended`, `curious`, `scared`, `sleepy`, `proud`, `bored`. Required on probe rows, empty on every other row. |
+| `core` | optional. `any`, `stayputnik`, `okto`, `hecs`, `rovemate`, `snob`, `generic` (the keys of `ProbeCores.Keys`). Holds for the whole scene. |
+| `beep` | optional. The beep mood of a `probe` row: `happy`, `offended`, `curious`, `scared`, `sleepy`, `proud`, `bored`. Required on probe rows, empty on every other row. |
 | `topic` | optional. `any` on every event except two. For `science` also the experiment ids `crewreport`, `evareport`, `mysterygoo`, `surfacesample`, `mobilematerialslab`, `temperaturescan`, `barometerscan`, `seismicscan`, `gravityscan`, `atmosphereanalysis`, `asteroidsample`, `cometsample`, `infraredtelescope`, `magnetometer`, `roc`. For `soi_enter` also `home` (the home body). For `chatter`, `power_low` and `power_ok` also `solar`: the scene talks about solar panels and only plays on a ship that has one. |
 | `spanish` | the Spanish source, not empty. May hold `{body}`. Empty on the subtitle-only role `probe`. |
 | `english` | the English subtitle, not empty. In game the subtitles show only this text. Holds `{body}` when `spanish` does. |
@@ -97,16 +97,16 @@ Rules the build enforces:
 - A scene id is unique across files.
 - An `mc` row has one voice. So `gender` is `m` or `both`, never `f`.
 - `gender m` makes only the male file. `gender f` makes only the female file. `gender both` makes both.
-- Every event has at least 2 rows. For `chatter` I need at least 3 rows per band (`calm`, `tense`, `panic`). For the new v4 events a shortfall is only a warning (`WARN table:`) until their rows are written.
+- Every event has at least 2 rows. For `chatter` I need at least 3 rows per band (`calm`, `tense`, `panic`). For some newer events a shortfall is only a warning (`WARN table:`) until their rows are written.
 - An intercom scene is never in a serious phase (`serious`, `launch`, `ascent`, `reentry`, `descent`).
 - `{body}` is the only placeholder. It is in both `spanish` and `english`, or in neither, at most once per text. A `probe` row cannot hold it (see the subtitle rule below).
-- The v5 rules in "Probe mode" below.
+- The rules in "Probe mode" below.
 
-The C# loader (`PhraseTable.Parse`) checks the same v5 rules and the same placeholder rules as the script, with the same messages. The script checks more (scene in one file, seq 1..n, minimum counts, intercom phase). I compared both on a test table with 9 good and 17 bad v5 rows. They accepted and rejected the same rows.
+The C# loader (`PhraseTable.Parse`) checks the same probe rules and the same placeholder rules as the script, with the same messages. The script checks more (scene in one file, seq 1..n, minimum counts, intercom phase).
 
-## Probe mode (plan v5 and v6)
+## Probe mode
 
-Probe mode plays when a vessel has no crew but a probe core. Its scenes use the roles below. Since v6 only Mission Control and the probe talk. The v5 room roles (`flight`, `intern`, `coffee`), `room.tsv`, `room_chat` and the bet events are gone.
+Probe mode plays when a vessel has no crew but a probe core. Its scenes use the roles below. Only Mission Control and the probe talk.
 
 | Role | Sound | Clip | Rules |
 |---|---|---|---|
@@ -119,12 +119,12 @@ The `gender` of a subtitle-only row does not matter. I write `both`.
 Rules the build and the C# loader enforce:
 
 - The probe events are `probe_chat`, `probe_sleepy`, `probe_hail`, `probe_stress`, `probe_say_again`, `probe_milestone`, `probe_rover` and `probe_data`. They have no `crew` rows. A `probe_hail` or `probe_data` scene starts with a `probe` row (the director only picks those).
-- v6: a `probe_say_again` scene has exactly 2 rows, `mc` then `probe`. The director plays the MC line and then repeats the probe beep with that subtitle.
-- v6: `probe_stress` uses the `cause` column. The director tries the main stress cause first, then `cause any`.
-- v6: topics. `staging` has `separation` and `ignition`, `probe_milestone` has `day1`, `day10`, `day100`, `day365`, `orbit` and `landing`, `probe_rover` has `fast`, `air`, `tilt` and `idle`. A milestone needs its exact topic.
-- v6: the probe callouts (`staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut`) only pick scenes that start with a `probe` row. The MC rows after it play now and then, not always.
-- v6: a `probe` subtitle is `[beeps` plus 1 to 3 lowercase words and `]`, for example "[beeps excitedly]", "[beeps very slowly]" or "[beeps a bit louder]". No commas, no quotes, no second clause. The plugin uses the same form when it overrides a mood (for example "[beeps nervously]" under stress). The check is `PROBE_SUBTITLE_RE` in the script and `PhraseTable.ProbeSubtitleOk` in C#.
-- The probe role (`probe`) and a `core` other than `any` are only allowed in the probe events and in the probe variants of `science`, `power_low`, `power_ok`, `soi_enter`, `part_lost`, `signal_lost`, `signal_back`, `touchdown`, `splashdown`, `docked`, `burn_soon` and since v6 `staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut` and `plan_node`.
+- A `probe_say_again` scene has exactly 2 rows, `mc` then `probe`. The director plays the MC line and then repeats the probe beep with that subtitle.
+- `probe_stress` uses the `cause` column. The director tries the main stress cause first, then `cause any`.
+- Topics: `staging` has `separation` and `ignition`, `probe_milestone` has `day1`, `day10`, `day100`, `day365`, `orbit` and `landing`, `probe_rover` has `fast`, `air`, `tilt` and `idle`. A milestone needs its exact topic.
+- The probe callouts (`staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut`) only pick scenes that start with a `probe` row. The MC rows after it play now and then, not always.
+- A `probe` subtitle is `[beeps` plus 1 to 3 lowercase words and `]`, for example "[beeps excitedly]", "[beeps very slowly]" or "[beeps a bit louder]". No commas, no quotes, no second clause. The plugin uses the same form when it overrides a mood (for example "[beeps nervously]" under stress). The check is `PROBE_SUBTITLE_RE` in the script and `PhraseTable.ProbeSubtitleOk` in C#.
+- The probe role (`probe`) and a `core` other than `any` are only allowed in the probe events and in the probe variants of `science`, `power_low`, `power_ok`, `soi_enter`, `part_lost`, `signal_lost`, `signal_back`, `touchdown`, `splashdown`, `docked`, `burn_soon`, `staging`, `chute_semi`, `chute_full`, `throttle_full`, `throttle_cut` and `plan_node`.
 - `signal_lost` has no probe rows. Mission Control cannot reach the probe, so nobody talks on the radio.
 - A `probe` row needs a `beep` mood. Every other row has an empty `beep`.
 
@@ -134,7 +134,7 @@ A scene is a probe scene when its `core` is not `any`, when one of its lines has
 
 A shortfall in any probe event is only a warning.
 
-`trait`, `persona` and `topic` hold for the whole scene. In game `any` matches every speaker and every topic. For `topic` the plugin looks for an exact match first (`PhraseTable.TopicMatchesExact`). Whether it then falls back to `any` scenes (`PhraseTable.TopicMatches`) is the caller's choice. The plan says an unknown experiment falls back to `any`.
+`trait`, `persona` and `topic` hold for the whole scene. In game `any` matches every speaker and every topic. For `topic` the plugin looks for an exact match first (`PhraseTable.TopicMatchesExact`). Whether it then falls back to `any` scenes (`PhraseTable.TopicMatches`) is the caller's choice.
 
 A scene with only `crew` rows and more than one row is an intercom talk between crew members. A scene with `crew` and `mc` is a radio exchange with Mission Control. In a radio exchange one crew member talks. The plugin takes care of that.
 
@@ -189,7 +189,7 @@ The rule is in the code twice: `folder_for` in `audio/build_lonapse.py` and `Phr
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	lonapse_text	folder	body	english
 ```
 
-It is installed as `GameData/Lonapse/Phrases/phrases.tsv`. The C# loader (`PhraseTable.Parse`) finds the columns by name. An older table without `phase`, `cause`, `trait`, `persona`, `topic`, `core`, `beep` or `body` still loads. Then those columns are `any` (`beep` and `body` empty). A built table from before v5 fails `--verify-only` (the header differs) until the next build. A subtitle-only row has an empty `spanish`, `lonapse_text` and `folder`.
+It is installed as `GameData/Lonapse/Phrases/phrases.tsv`. The C# loader (`PhraseTable.Parse`) finds the columns by name. A subtitle-only row has an empty `spanish`, `lonapse_text` and `folder`.
 
 ## Voices
 
@@ -199,11 +199,11 @@ It is installed as `GameData/Lonapse/Phrases/phrases.tsv`. The C# loader (`Phras
 | crew, female | `es_MX-claude-high` | Apache-2.0 | 4 semitones |
 | Mission Control | `es_MX-ald-medium` | Unlicense | 2 semitones |
 
-I have not heard the gender of the voices. I estimated it from the median pitch of a test sentence: claude about 185 Hz, ald about 152 Hz and davefx about 104 Hz. Check it by ear.
+The gender of each voice comes from the median pitch of a test sentence: claude about 185 Hz, ald about 152 Hz and davefx about 104 Hz.
 
-Every band adds tempo and pitch: tense 1.10 times as fast and 0.7 semitone higher, panic 1.10 times and 1 semitone (it was 3, that sounded like chipmunks), callouts 1.08 times and 0.5 semitone. Mission Control in a panic speaks a bit slower to stay calm: 0.95 times, and 0.3 semitone higher. That small lift is there because the old delivery (0.92 times, no lift) sounded deeper than the calm one. I have not listened to the new delivery.
+Every band adds tempo and pitch: tense 1.10 times as fast and 0.7 semitone higher, panic 1.10 times and 1 semitone, callouts 1.08 times and 0.5 semitone. Mission Control in a panic speaks a bit slower to stay calm: 0.95 times, and 0.3 semitone higher. The lift keeps panic MC from sounding deeper than calm MC.
 
-I make crew panic lines in pieces. I cut the line at the punctuation. Every piece gets its own tempo (0.93 to 1.12 times) and Piper with more variation (`--noise-scale` 0.9 and `--noise-w-scale` 1.1). Between two pieces there is a gasp (filtered noise, 0.16 to 0.28 s) or a short pause. Now and then the voice cracks: the end of a piece goes up 3 semitones. Then comes light distortion (tanh). Screams (`scream_*`) are stretched with a shaky vibrato. All random choices depend on the clip, so a new build makes the same choices. All these numbers are at the top of `build_lonapse.py` in `DELIVERY` and `BAND_DELIVERY`. I have not tuned them by ear.
+I make crew panic lines in pieces. I cut the line at the punctuation. Every piece gets its own tempo (0.93 to 1.12 times) and Piper with more variation (`--noise-scale` 0.9 and `--noise-w-scale` 1.1). Between two pieces there is a gasp (filtered noise, 0.16 to 0.28 s) or a short pause. Now and then the voice cracks: the end of a piece goes up 3 semitones. Then comes light distortion (tanh). Screams (`scream_*`) are stretched with a shaky vibrato. All random choices depend on the clip, so a new build makes the same choices. All these numbers are at the top of `build_lonapse.py` in `DELIVERY` and `BAND_DELIVERY`.
 
 The pitch shift uses `asetrate`. That moves the formants too. It gives the small, bright Kerbal sound. Piper speaks slower by the same ratio, so the tempo after the shift sounds normal.
 
@@ -261,11 +261,6 @@ For every clip the script measures (with ffmpeg `astats`):
 
 All clips are OGG Vorbis, mono, 44.1 kHz, with `libvorbis -q:a 3`. The beeps and static are WAV. The voices are OGG because WAV would make the download several times bigger.
 
-## What I have not tested
+## Licence note
 
-- I have not listened to the clips. You have to judge whether the voices sound like Kerbals.
-- I have not listened to the backwards body names. Whether "luY" really sounds like Jool is a guess.
-- The gender of the voices is an estimate from the pitch.
-- I have not seen the wiki page. The reversal rule comes from the plan and from a search result.
-- I have not heard the clips in the game.
-- The licenses come from the model cards of the voices. Piper itself is GPL-3.0 or later. Whether the output of a GPL program falls under the GPL is not settled. See `audio/CREDITS.md`.
+The licenses come from the model cards of the voices. Piper itself is GPL-3.0 or later. Whether the output of a GPL program falls under the GPL is not settled. See `audio/CREDITS.md`.

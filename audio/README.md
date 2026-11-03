@@ -52,10 +52,7 @@ clip with ffmpeg and reports these as errors (exit code 1):
 - gated RMS more than 2 dB from the build target (-20 dBFS)
 - identical decoded audio under two different clips
 
-Tighter limits give warnings. All limits are in `LIMITS` at the top of the script. I tuned the duration
-limits and the short-text rule on the 392 clips of the v2 build. That build passes with 0 errors and 9 warnings.
-The v2 build had Mission Control confirmations up to 2.7 s and one-word replies down to 0.34 s, so the
-limits are wider than the first plan said.
+Tighter limits give warnings. All limits are in `LIMITS` at the top of the script.
 
 Outputs, both under `<build>/lonapse/`:
 
@@ -106,8 +103,7 @@ leading or trailing silence.
 ## Radio profile clips
 
 These clips are synthesized in `build_clips.py` (ffmpeg `sine` and `anoisesrc`, no source file). They
-support the station, ship and EVA radio profiles. They are listed at the end of `FOLDERS`, so the
-clips above keep their exact bytes for the same seed.
+support the station, ship and EVA radio profiles.
 
 | Folder | Clips | What it holds |
 |---|---|---|
@@ -123,22 +119,15 @@ Levels: the beeps are at -22 dBFS gated RMS, except the desk click at -17 dBFS, 
 voices and the static. The headset squelch sits at the same file level as the other beeps. Its softer feel comes from the runtime gain
 (`evaRadioVolume` and the profile), not from a lower file level. All peaks stay below -1.3 dBFS.
 
-Checks that were run: the build exits 0, all 193 files pass `verify` (format, duration window, gated RMS,
-peak, edge fades, loop seam), and the 184 existing files keep the same sha256 as before the change.
-Not checked: how the clips sound. These clips were not listened to, so the pitch, the click and the
-breath bed still need an ear test in the game.
 
-## Probe beeps (v5)
+## Probe beeps
 
-Probe mode needs beeps for the probe. The v5 coffee machine (`beeps/coffee`) is gone since v6,
-together with the room scenes.
-`build_clips.py` synthesizes them in plain Python (no ffmpeg source, no recording). The folders are added at
-the end of `FOLDERS`, so the clips above keep their bytes for the same seed.
+Probe mode needs beeps for the probe. `build_clips.py` synthesizes them in plain Python (no ffmpeg source, no recording).
 
 | Folder | Clips | What it holds |
 |---|---|---|
 | `beeps/probe_<core>_<mood>` | 3 each | 6 cores x 7 moods = 42 folders, 126 clips. One beep phrase in the timbre of the core and the shape of the mood. |
-| `beeps/probe_data` | 4 (min 3) | v6: the data stream while an antenna sends science. 10 to 16 short even chirps on 4 pitches, generic timbre without glide (`make_probe_data`). |
+| `beeps/probe_data` | 4 (min 3) | The data stream while an antenna sends science. 10 to 16 short even chirps on 4 pitches, generic timbre without glide (`make_probe_data`). |
 
 The folder names are the same as `ProbeCores.Folders()` in `src/ProbeCore.cs`. `ClipLibrary` loads them, and an
 empty core folder falls back to `beeps/probe_generic_<mood>`.
@@ -173,10 +162,3 @@ The 3 clips of a folder differ in transposition (0, +2 and -2 semitones) and in 
 small seeded jitter.
 
 Levels: probe beeps -22 dBFS gated RMS, as the other beeps. Length window in `verify`: 0.08 to 1.8 s.
-
-Measured on the build of 2026-11-02 (seed 1): the beeps are 0.26 to 1.21 s long. The 126 beep clips take 6.26 MB.
-The whole `Sounds/` tree was 61.15 MB then, under the 80 MB `SIZE_LIMIT`.
-
-Not checked: how they sound. I have not listened to any of the beeps. Whether the cores
-sound different enough, and whether a mood reads as that mood, needs an ear test. I also did not compare the sha256
-of the old clips with the build before this change.

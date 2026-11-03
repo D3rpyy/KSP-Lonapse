@@ -78,7 +78,7 @@ callouts use a short calm line.
 Only in the flight scene, and only when the active vessel has at least one crew member. An EVA kerbal has a suit radio
 to Mission Control (`evaRadio`, on by default): rare MC check-ins, a soft breathing bed and the headset squelch. It stays
 calm unless something is really wrong (low jetpack propellant while thrusting, far from any ship). The suit has no antenna
-of its own, so since v6 it relays through the best loaded ship nearby (`evaRelay`, on by default). That ship needs a
+of its own, so it relays through the best loaded ship nearby (`evaRelay`, on by default). That ship needs a
 command pod or probe core. The kerbal then gets the ship's signal, scaled by the suit range: full up to `evaRelayFullKm`
 (1 km), gone at `evaRelayZeroKm` (2.3 km). A weak ship signal gives a weak EVA radio, and a ship without a link means no
 link on EVA either. The breathing bed speeds up gradually while the kerbal runs: running builds exertion over about
@@ -105,7 +105,7 @@ Click the toolbar button (antenna icon) in flight or map view. The window has se
 - **Crew**: throttle callouts, maneuver node talk, the answer delay far from Kerbin, which events Mission Control
   reacts to, personality, facial expressions, turning to the speaker, and the EVA suit radio with its relay.
 - **Probes**: probe mode, pet talk, the probe calling on its own (with its gap at 1x radio amount) and sleepy on low power. Under
-  Reactions each v6 probe reaction has its own toggle.
+  Reactions each probe reaction has its own toggle.
 - **Subtitles**: on or off, speaker name, colour per speaker, position, text size, background, number of lines and a
   preview.
 
@@ -120,10 +120,9 @@ While the mouse is over the window, clicks and scrolling do not reach the game (
 Everything is saved in `GameData/Lonapse/PluginData/settings.cfg`. If that file cannot be read, the plugin uses
 defaults and copies the broken file to `settings.cfg.bad` before it writes a new one.
 
-When a newer version changes the default of a TUNING value, an older file is migrated on load. Only the values whose
-defaults changed are reset (logged one by one with `[Lonapse]`). Everything else you set is kept, and a copy of the old
-file is saved as `settings.cfg.v<N>.bak`. The key `tuningVersion` records the format (4 since 0.3.1). Version 4 replaces `intercomInterval`,
-`intercomMaxStress` and `intercomAbortStress` only when they still hold an old default (600 or 240, 0.35, 0.5).
+When a new version changes the default of a TUNING value, the file is migrated on load. Only the values that still
+hold the previous default are reset (logged one by one with `[Lonapse]`). Everything else you set is kept, and a copy
+of the file is saved as `settings.cfg.v<N>.bak`. The key `tuningVersion` records the format.
 
 Other keys you can edit there:
 
@@ -139,7 +138,7 @@ Other keys you can edit there:
 | `muteModifier` | `LeftAlt` | KeyCode that must be held, or `None`. Left/right variants both count |
 | `countdownKey` | `C` | KeyCode of the launch countdown hotkey (start on the pad, press again to stop), `None` = off. "Set key" in the window |
 | `countdownModifier` | `LeftAlt` | KeyCode that must be held for the countdown hotkey, or `None` |
-| `weakSignalVolume` | `0.4` | How loud the extra static, bursts and grit on Mission Control get at a weak signal, 0 to 1 (1 = the earlier v2 level) |
+| `weakSignalVolume` | `0.4` | How loud the extra static, bursts and grit on Mission Control get at a weak signal, 0 to 1 |
 | `masterAlarm` | `True` | Soft two-tone caution loop far in the background while a kerbal panics |
 | `useGameVolume` | `True` | Scale by the stock Voice volume (and Master, if KSP does not apply it already) |
 | `useDsp` | `True` | Tremolo in an audio filter. Set `False` if you hear crackle, tremolo then runs on the volume |
@@ -156,15 +155,15 @@ Other keys you can edit there:
 | `radioProfile` | `auto` | Force `station`, `ship` or `eva` keying and band-pass (debug) |
 | `evaRadio` | `True` | EVA suit radio |
 | `evaRadioVolume` | `0.8` | Volume of everything on EVA, 0 to 1 |
-| `evaRelay` | `True` | v6: the EVA suit radio reaches Mission Control through a nearby ship with a control point |
-| `probeHail` | `True` | v6 probe mode: the probe calls Mission Control on its own, about every `hailInterval` (360 s) divided by `rateMultiplier` |
-| `probeCallouts` | `True` | v6 probe mode: the probe beeps at staging, chutes and throttle, MC answers now and then (`probeCalloutMcChance` 0.35, at most once per `probeCalloutMcGap` 20 s) |
-| `probePlanTalk` | `True` | v6 probe mode: MC tells the probe about a new maneuver node and the burn warning |
-| `probeStressTalk` | `True` | v6 probe mode: under stress MC calms the probe about the main cause (heat, spin, g, fuel, ...) |
-| `probeSayAgain` | `True` | v6 probe mode: below `sayAgainSignal` (0.35) MC sometimes asks "say again?" and the probe beeps again (`sayAgainChance` 0.35, `sayAgainCooldown` 120 s) |
-| `probeMilestones` | `True` | v6 probe mode: mission day 1, 10, 100 and 365, first orbit and first landing per body. Remembered per session only |
-| `probeRover` | `True` | v6 probe mode: probe rover moments (fast, air time, tilt, idle), one per `roverMomentCooldown` (180 s) |
-| `probeTransmit` | `True` | v6 probe mode: data stream beeps while an antenna sends science (`dataBeepGap` 12 s, at most `dataBeepMax` 4 per send) |
+| `evaRelay` | `True` | The EVA suit radio reaches Mission Control through a nearby ship with a control point |
+| `probeHail` | `True` | Probe mode: the probe calls Mission Control on its own, about every `hailInterval` (360 s) divided by `rateMultiplier` |
+| `probeCallouts` | `True` | Probe mode: the probe beeps at staging, chutes and throttle, MC answers now and then (`probeCalloutMcChance` 0.35, at most once per `probeCalloutMcGap` 20 s) |
+| `probePlanTalk` | `True` | Probe mode: MC tells the probe about a new maneuver node and the burn warning |
+| `probeStressTalk` | `True` | Probe mode: under stress MC calms the probe about the main cause (heat, spin, g, fuel, ...) |
+| `probeSayAgain` | `True` | Probe mode: below `sayAgainSignal` (0.35) MC sometimes asks "say again?" and the probe beeps again (`sayAgainChance` 0.35, `sayAgainCooldown` 120 s) |
+| `probeMilestones` | `True` | Probe mode: mission day 1, 10, 100 and 365, first orbit and first landing per body. Remembered per session only |
+| `probeRover` | `True` | Probe mode: probe rover moments (fast, air time, tilt, idle), one per `roverMomentCooldown` (180 s) |
+| `probeTransmit` | `True` | Probe mode: data stream beeps while an antenna sends science (`dataBeepGap` 12 s, at most `dataBeepMax` 4 per send) |
 | `planChatter` | `True` | Pre-planning exchange after a node change, warning before a burn |
 | `signalMode` | `auto` | `auto` (CommNet, RemoteTech, distance to KSC), `off` (static ignores the signal), `fixed`. With CommNet off in the game (and no RemoteTech) the signal is full everywhere, like the game. The distance fallback only runs when CommNet is on but unreadable |
 | `signalFixed` | `0.7` | Signal value for `fixed`, 0 to 1 |
@@ -176,18 +175,11 @@ Other keys you can edit there:
 | `signalDropouts` | `True` | Weak signal: MC lines get short gaps and a bit crunch |
 | `TUNING { ... }` | | Every threshold, weight and time constant, see below |
 
-New TUNING values in v2: `calloutHoldPad`, `duckAttack`, `duckRelease`, `throttleFullAt`, `throttleCutAt`,
-`throttleMinGap`, `genderPitchFemale`, `genderPitchMale`, `launchCap`, `launchCapAlt`, `panicMinGap`, `panicCooldown`,
-`speakerCooldown`, `talkBurst`, `talkPerMinute`, `panicEscTau`, `panicEscStep`, `panicEscCap`, `evaSpinWeight`, `wEva`,
-`evaLowProp`, `evaLowEC`, `evaFarDist`, `wRover`, `roverSpeedLo/Hi`, `roverRoughLo/Hi`, `roverAirTimeLo/Hi`,
-`roverTiltLo/Hi`, `dockSoftSpeed`, `dockHardSpeed`, `impulseDockHard`, `signalStaticMax`, `signalRangeFullKm`,
-`signalRangeZeroKm`, `signalPollSec`, `signalHoldTime`, `planRateSec`, `burnWarnSec`, `radioKeyVolume`, `screamCooldown`,
-`alarmVolume`, `alarmFadeIn`, `alarmFadeOut`, `alarmHold`.
 Stress builds slowly (`attackTau` 3 s) and spin counts from `spinLo` 1 rad/s to `spinHi` 5 rad/s. Sudden events
-(impulses, an imminent ground impact) use `fastAttackTau` 0.35 s. Tuning version 6 migrates the old defaults.
+(impulses, an imminent ground impact) use `fastAttackTau` 0.35 s.
 All are starting values, not measured ones.
 
-## v2 behaviour in short
+## Behaviour in short
 
 - Callouts (staging, parachutes, full throttle, throttle cutoff, docking distances) have their own channel. Chatter that
   is playing fades out in 0.15 s and the queue waits until the callout ended (`calloutHoldPad`). Warnings (hard dock,
@@ -227,7 +219,7 @@ Every physics tick the plugin reads the vessel state and computes components bet
 
 | Component | Rises with | Weight |
 |---|---|---|
-| spin | angular velocity, 0.35 to 2.5 rad/s | 1.00 |
+| spin | angular velocity, 1 to 5 rad/s | 1.00 |
 | gforce | G load, 2.5 to 8 g | 0.85 |
 | q | dynamic pressure, 15 to 45 kPa | 0.60 |
 | ground | descending fast close to the ground (time to impact under 25 s) | 0.90 |
@@ -245,7 +237,7 @@ never counts, so a spent SRB, sepratron or escape tower does not cause fuel stre
 when every counting group is low (maximum over the groups).
 
 They combine as `1 - product(1 - weight * component)`. One strong component is enough, several medium ones add up.
-The result is smoothed: it rises fast (0.35 s), holds 1.5 s, then decays slowly (9 s). These times are real seconds,
+The result is smoothed: it rises over about 3 s (`attackTau`, 0.35 s for sudden events), holds 1.5 s, then decays slowly (9 s). These times are real seconds,
 also during physics warp.
 
 Stress drives:
@@ -254,7 +246,7 @@ Stress drives:
 - **Crew delivery**: calm, tense or panic clips. Under stress the crew gets louder and more distorted, and the pitch
   rises by at most 0.5 semitone (`crewStressSemitones`), with the total crew pitch capped at 1.12 (`crewPitchMax`).
   Lines are clipped only above personal stress 0.85, by at most 20% (`truncStart`, `truncMinFrac`). At most 2 crew
-  voices overlap (`maxCrewVoices`), and overlap is rarer than before (`overlapMax` 0.35).
+  voices overlap (`maxCrewVoices`), and overlap is limited by `overlapMax` (0.35).
 - **Mission Control**: gets calmer and slower as the crew gets more stressed.
 - **Per kerbal**: the name seeds a stable pitch, tremolo rate and timbre (Jeb always sounds like Jeb). Courage and
   stupidity change how strongly each kerbal reacts and when they move to tense or panic. Badass kerbals are steadier.
@@ -380,8 +372,8 @@ gate reason, each kerbal's personal stress and band, the time to the next call a
 
 ## What is untested
 
-The offline tests pass and the plugin compiles against the KSP 1.12.5 DLLs. I play-test in game, but not every
-feature has been tried. Not yet tried in game as of 0.5.0:
+The offline tests pass and the plugin compiles against the KSP 1.12.5 DLLs. I play-test in game, but these have
+not been tried yet:
 
 - The portrait cam talking and head turns with the end-of-frame refresh (`PortraitRefresh`).
 - The engine-out hold, the EVA fall lines, the gradual EVA breathing and the solar topic filter.

@@ -30,6 +30,3 @@ project distributes the clips with this note.
 
 The phrase text is written by the project itself, in plain Spanish, and is reversed letter by letter by the
 build script. No recorded material is used in the Lonapse clips.
-
-Not used: the MBROLA voices (`spanish-mbrola-*`), whose license was not checked, and the plain espeak-ng
-voices of the first v2 build (replaced because they sounded robotic).
