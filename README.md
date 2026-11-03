@@ -1,5 +1,5 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/lonapse-logo-dark.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/LonapseBannerV2.png">
   <img src="docs/images/lonapse-logo-light.svg" alt="Lonapse" width="100%">
 </picture>
 
