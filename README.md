@@ -38,7 +38,7 @@ know what they are saying.
 
 ## Install
 
-1. Download `Lonapse-0.5.0.zip` from the releases page.
+1. Download `Lonapse-0.5.0.zip` from the releases page. The `GameData` folder in this repo has the same files.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there.

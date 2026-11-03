@@ -20,7 +20,7 @@ Build and install from this repo. Give the game folder with `KSP_DIR` or write i
 ./build.sh --compile-only # compile only, into build/
 KSP_DIR=/path/to/KSP ./build.sh
 python3 -I audio/build_clips.py --install   # build and install the sound clips (separate pipeline)
-./package.sh              # build the release zip in dist/
+./package.sh              # refresh GameData/Lonapse in the repo and build the release zip in dist/
 ```
 
 `build.sh` compiles with `mcs` against the game's own DLLs in `KSP_Data/Managed/` and copies the DLL to
