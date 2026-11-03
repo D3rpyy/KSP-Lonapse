@@ -89,6 +89,7 @@ namespace Lonapse
         // Plan v5 roles. Subtitle-only roles only have english (spanish stays empty). Plan v6 removed the room roles
         // (flight, intern, coffee) and the diary: in probe mode only Mission Control and the probe talk.
         public const string RoleProbe = "probe";
+        public const string RoleCrew = "crew";
         public static readonly string[] SubtitleOnlyRoles = { "probe" };
         // Roles that only appear in probe mode (every role except crew and mc)
         public static readonly string[] ProbeRoles = { "probe" };

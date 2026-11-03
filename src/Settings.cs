@@ -118,8 +118,10 @@ namespace Lonapse
         // ideas round: light delay (MC answers later far from Kerbin), touchdown ambience level
         // light delay (user request: at most 10 s): about 0.9 s at the Mun, 2 s at Minmus, 8 to 10 s at Duna and beyond
         public float lightDelayMax = 10.0f, lightDelayScale = 2.6f;
-        // master alarm during a panic: very quiet, slow in and out, so it stays in the background
-        public float alarmVolume = 0.12f, alarmFadeIn = 2.5f, alarmFadeOut = 3f, alarmHold = 4f;
+        // master alarm: very quiet, slow in and out, so it stays in the background. Only at very high vessel stress.
+        public float alarmVolume = 0.12f, alarmFadeIn = 2.5f, alarmFadeOut = 3f, alarmHold = 4f, alarmStress = 0.9f;
+        // a stress cause (q, spin, heat, ...) gets its own lines at most once per this many seconds, at any radio amount
+        public float causeRepeatGap = 45f;
 
         // --- v3. New keys, plus mouthOpenDeg 12 -> 18 in tuning version 7. ---
         // req 9: talking mouths. mouthAxis is the local hinge axis (0 = X, 1 = Y, 2 = Z), mouthInvert 0 or 1 flips the sign.
@@ -266,6 +268,8 @@ namespace Lonapse
             alarmFadeIn = DcMath.Clamp(alarmFadeIn, 0.1f, 10f);
             alarmFadeOut = DcMath.Clamp(alarmFadeOut, 0.1f, 10f);
             alarmHold = DcMath.Clamp(alarmHold, 0f, 30f);
+            alarmStress = DcMath.Clamp(alarmStress, 0f, 1f);
+            causeRepeatGap = DcMath.Clamp(causeRepeatGap, 0f, 600f);
             FixPair(ref dockSoftSpeed, ref dockHardSpeed);
             FixPair(ref roverSpeedLo, ref roverSpeedHi); FixPair(ref roverRoughLo, ref roverRoughHi);
             FixPair(ref roverAirTimeLo, ref roverAirTimeHi); FixPair(ref roverTiltLo, ref roverTiltHi);

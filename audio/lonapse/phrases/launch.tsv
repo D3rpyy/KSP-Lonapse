@@ -71,7 +71,7 @@ la_lau_s3_2	chatter	chatter	calm	mc	la_lau_s3	2	m	launch	any	Recibido, alabeo en
 la_lau_s4_1	chatter	chatter	calm	crew	la_lau_s4	1	both	launch	any	Alabeo completo.	Roll complete.
 la_lau_s4_2	chatter	chatter	calm	mc	la_lau_s4	2	m	launch	any	Confirmado, rumbo correcto.	Confirmed, heading good.
 la_lau_s6_1	chatter	chatter	calm	mc	la_lau_s6	1	m	launch	any	Llegando a presión máxima.	Approaching max Q.
-la_lau_s6_2	chatter	chatter	calm	crew	la_lau_s6	2	both	launch	any	Recibido, reduciendo empuje.	Copy, throttling down.
+la_lau_s6_2	chatter	chatter	calm	crew	la_lau_s6	2	both	launch	any	Recibido, nos agarramos.	Copy, holding on.
 la_lau_s7_1	chatter	chatter	calm	crew	la_lau_s7	1	both	launch	any	Presión máxima superada.	Through max Q.
 la_lau_s7_2	chatter	chatter	calm	mc	la_lau_s7	2	m	launch	any	Recibido. Subid el empuje.	Copy. Throttle back up.
 la_lau_s8_1	chatter	chatter	calm	mc	la_lau_s8	1	m	launch	any	Buena velocidad, buena altura.	Good speed, good altitude.
@@ -85,23 +85,13 @@ la_asc_s1_1	chatter	chatter	calm	crew	la_asc_s1	1	both	ascent	any	Iniciando giro
 la_asc_s1_2	chatter	chatter	calm	mc	la_asc_s1	2	m	ascent	any	Recibido, buen perfil.	Copy, good profile.
 la_asc_s2_1	chatter	chatter	calm	mc	la_asc_s2	1	m	ascent	any	El apoapsis sube bien.	Apoapsis rising nicely.
 la_asc_s2_2	chatter	chatter	calm	crew	la_asc_s2	2	both	ascent	any	Lo vemos. Seguimos.	We see it. Continuing.
-la_asc_s3_1	chatter	chatter	calm	crew	la_asc_s3	1	both	ascent	any	Separación de propulsores.	Booster separation.
-la_asc_s3_2	chatter	chatter	calm	mc	la_asc_s3	2	m	ascent	any	Confirmado, propulsores fuera.	Confirmed, boosters clear.
-la_asc_s4_1	chatter	chatter	calm	crew	la_asc_s4	1	both	ascent	any	Carenado fuera.	Fairing away.
-la_asc_s4_2	chatter	chatter	calm	mc	la_asc_s4	2	m	ascent	any	Recibido, carenado separado.	Copy, fairing jettisoned.
-la_asc_s5_1	chatter	chatter	calm	crew	la_asc_s5	1	both	ascent	any	Apagado del motor principal.	Main engine cutoff.
-la_asc_s5_2	chatter	chatter	calm	mc	la_asc_s5	2	m	ascent	any	Recibido. Vuelo libre hasta el apoapsis.	Copy. Coasting to apoapsis.
 la_asc_s6_1	chatter	chatter	calm	mc	la_asc_s6	1	m	ascent	any	Preparad la maniobra de circularización.	Prepare the circularisation maneuver.
 la_asc_s6_2	chatter	chatter	calm	crew	la_asc_s6	2	both	ascent	any	Recibido, orientando al prógrado.	Copy, pointing prograde.
-la_asc_s7_1	chatter	chatter	calm	crew	la_asc_s7	1	both	ascent	any	Circularización completa.	Circularisation complete.
-la_asc_s7_2	chatter	chatter	calm	mc	la_asc_s7	2	m	ascent	any	Confirmado. Estáis en órbita.	Confirmed. You are in orbit.
 la_asc_s8_1	chatter	chatter	calm	mc	la_asc_s8	1	m	ascent	any	Listos para la órbita.	You are go for orbit.
 la_asc_s8_2	chatter	chatter	calm	crew	la_asc_s8	2	both	ascent	any	Recibido, seguimos hacia la órbita.	Copy, continuing to orbit.
 la_asc_s9_1	chatter	chatter	calm	mc	la_asc_s9	1	m	ascent	any	Sondeo de ascenso. ¿Estado?	Ascent poll. Status?
 la_asc_s9_2	chatter	chatter	calm	crew	la_asc_s9	2	both	ascent	any	Todo nominal a bordo.	All nominal on board.
 la_asc_s9_3	chatter	chatter	calm	mc	la_asc_s9	3	m	ascent	any	Recibido. Continuad.	Copy. Continue.
-la_asc_s11_1	chatter	chatter	calm	crew	la_asc_s11	1	both	ascent	any	Periapsis fuera de la atmósfera.	Periapsis above the atmosphere.
-la_asc_s11_2	chatter	chatter	calm	mc	la_asc_s11	2	m	ascent	any	Confirmado. Órbita estable.	Confirmed. Stable orbit.
 la_asc_s13_1	chatter	chatter	calm	mc	la_asc_s13	1	m	ascent	any	Trayectoria suborbital confirmada.	Suborbital trajectory confirmed.
 la_asc_s13_2	chatter	chatter	calm	crew	la_asc_s13	2	both	ascent	any	Recibido, mantenemos la actitud.	Copy, holding attitude.
 la_asc_01	chatter	chatter	calm	crew	la_asc_01	1	both	ascent	any	Inclinando hacia el horizonte.	Pitching toward the horizon.
@@ -109,9 +99,9 @@ la_asc_02	chatter	chatter	calm	mc	la_asc_02	1	m	ascent	any	Perfil de ascenso nom
 la_asc_03	chatter	chatter	calm	crew	la_asc_03	1	both	ascent	fuel	Combustible según lo previsto.	Fuel as expected.
 la_asc_06	chatter	chatter	calm	mc	la_asc_06	1	m	ascent	any	Os seguimos en el radar.	We have you on radar.
 la_ten_s1_1	chatter	chatter	tense	crew	la_ten_s1	1	both	launch	q	Control, mucha vibración.	Control, heavy vibration.
-la_ten_s1_2	chatter	chatter	tense	mc	la_ten_s1	2	m	launch	q	Recibido. Reducid el empuje ya.	Copy. Throttle down now.
+la_ten_s1_2	chatter	chatter	tense	mc	la_ten_s1	2	m	launch	q	Recibido. Lo vemos, aguantad.	Copy. We see it, hang in there.
 la_ten_s2_1	chatter	chatter	tense	mc	la_ten_s2	1	m	launch	q	Presión dinámica alta.	Dynamic pressure high.
-la_ten_s2_2	chatter	chatter	tense	crew	la_ten_s2	2	both	launch	q	Recibido, bajando empuje.	Copy, reducing thrust.
+la_ten_s2_2	chatter	chatter	tense	crew	la_ten_s2	2	both	launch	q	Recibido, lo notamos.	Copy, we can feel it.
 la_ten_s3_1	chatter	chatter	tense	crew	la_ten_s3	1	both	ascent	gforce	La aceleración aprieta mucho.	The g-load is heavy.
 la_ten_s3_2	chatter	chatter	tense	mc	la_ten_s3	2	m	ascent	gforce	Recibido. Bajad un poco el empuje.	Copy. Ease the throttle a little.
 la_ten_s4_1	chatter	chatter	tense	mc	la_ten_s4	1	m	ascent	fuel	Combustible justo para la órbita.	Fuel is tight for orbit.

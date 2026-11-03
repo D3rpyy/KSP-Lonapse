@@ -41,7 +41,8 @@ namespace Lonapse
         public float progress;
         public float target = 1f;
         public float holdoff;
-        public bool radioSilent;   // blackout: nothing starts
+        public bool radioSilent;   // blackout without crew (probe mode): nothing starts
+        public bool mcBlackout;    // blackout with crew: the crew keeps talking, Mission Control cannot hear or answer
         public bool staticChop;    // blackout Static state: chop voice lines, extra distortion
 
         private VoiceChannel lastChannel;
@@ -72,6 +73,8 @@ namespace Lonapse
         public readonly Escalation esc = new Escalation();
         private float lastPanic = -1e9f;
         private string lastSceneId;
+        // director clock when a cause-specific scene of each cause last played (Tuning.causeRepeatGap)
+        private readonly System.Collections.Generic.Dictionary<string, float> causeSaid = new System.Collections.Generic.Dictionary<string, float>();
         public string lastLine = "";       // audit text for the overlay
         public int panicDowngrades, bucketDenied;
 
@@ -265,6 +268,7 @@ namespace Lonapse
             lastChannel = null;
             lastEndClock = -1f;
             radioSilent = false;
+            mcBlackout = false;
             staticChop = false;
             intercomProgress = 0f;
             intercomTarget = U(0.6f, 1.4f);
@@ -283,6 +287,7 @@ namespace Lonapse
             lastPanic = -1e9f;
             esc.Decay(1f, 0f);
             lastSceneId = null;
+            causeSaid.Clear();
             classifier.Reset(); // new vessel: its own phase, no hold from the old one
             ResetEventsForVessel();
             wasProbeMode = false; // plan v5: the probe timers start fresh on the next probe-mode frame
@@ -359,6 +364,32 @@ namespace Lonapse
             return false;
         }
 
+        /// <summary>Mission Control items: its lines, quindar and squelch, its static bed and static bursts.</summary>
+        private static bool IsMcItem(UttKind k)
+        {
+            return k == UttKind.ControlLine || k == UttKind.ControlFx || k == UttKind.BedStart || k == UttKind.StaticBurst;
+        }
+
+        private bool HasMcItems()
+        {
+            for (int i = 0; i < count; i++) if (IsMcItem(queue[(head + i) % Capacity].who)) return true;
+            return false;
+        }
+
+        /// <summary>Blackout with crew: drop the Mission Control items, everything else stays in order.</summary>
+        public void DropMcItems()
+        {
+            int before = count;
+            KeepOnly(x => !IsMcItem(x.who));
+            if (before != count) Log.Debug("Blackout: " + (before - count) + " Mission Control item(s) dropped");
+        }
+
+        /// <summary>Blackout with crew: a radio scene must start with the crew. Mission Control cannot start one.</summary>
+        private bool BlackoutOk(PhraseScene sc)
+        {
+            return !mcBlackout || (sc.Lines.Count > 0 && sc.Lines[0].Role == PhraseTable.RoleCrew);
+        }
+
         private bool HasChatItems()
         {
             for (int i = 0; i < count; i++) if (IsChatItem(queue[(head + i) % Capacity].who)) return true;
@@ -426,6 +457,8 @@ namespace Lonapse
             {
                 // blackout: radio items go, intercom chat items stay (req 6)
                 if (radioSilent && HasRadioItems()) { ClearRadioQueue(); if (count == 0) return; }
+                // blackout with crew: only the Mission Control part goes, the crew keeps keying the radio
+                if (mcBlackout && HasMcItems()) { DropMcItems(); if (count == 0) return; }
                 // radio queued behind the chat goes first; the chat pauses between two turns, never inside one
                 if (AirRules.ChatShouldYield(HeadOpensTurn(), HasRadioItems()))
                 {
@@ -902,6 +935,7 @@ namespace Lonapse
             var list = PhraseClips.table.ScenesFor(ev, band, null, cause, sc => PhraseClips.Playable(sc)
                 && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
                 && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
+                && (intercom || BlackoutOk(sc))
                 && (filter == null || filter(sc)));
             PhraseScene p = PhraseTable.Pick(list, rng, lastSceneId);
             if (p != null) lastSceneId = p.Id;
@@ -915,12 +949,27 @@ namespace Lonapse
         private PhraseScene PickScene(string ev, string band, Predicate<PhraseScene> filter)
         {
             string cause = DominantCause ?? NoCause;
+            // the same cause is not talked about again within causeRepeatGap: then only cause-any scenes
+            if (cause != NoCause && !CauseFresh(cause)) cause = NoCause;
             if ((band == "tense" || band == "panic") && cause != NoCause)
             {
                 PhraseScene sc = PickCore(ev, band, cause, false, x => x.Cause == cause && (filter == null || filter(x)));
-                if (sc != null) return sc;
+                if (sc != null) { NoteCause(sc); return sc; }
             }
-            return PickCore(ev, band, cause, false, filter);
+            PhraseScene p = PickCore(ev, band, cause, false, filter);
+            NoteCause(p);
+            return p;
+        }
+
+        private bool CauseFresh(string cause)
+        {
+            float t;
+            return !causeSaid.TryGetValue(cause, out t) || clock - t >= Tu.causeRepeatGap;
+        }
+
+        private void NoteCause(PhraseScene sc)
+        {
+            if (sc != null && !string.IsNullOrEmpty(sc.Cause) && sc.Cause != "any") causeSaid[sc.Cause] = clock;
         }
 
         /// <summary>Intercom scene (crew-only, 2+ lines): funny rows only, see IntercomPhaseOk.</summary>
@@ -1549,7 +1598,7 @@ namespace Lonapse
 
             bool radioOn = host.settings.radioEnabled;
             bool checkStyle = !host.probeMode && host.stationMode && PacingRules.StationChoice(host.settings.stationStyle, s, tu.burstBand) == StationAction.Check;
-            if (radioOn && checkStyle && !radioSilent && holdoff <= 0f)
+            if (radioOn && checkStyle && !radioSilent && !mcBlackout && holdoff <= 0f)
             {
                 // stations and bases: Mission Control checks in now and then. Only this mechanism at low stress (req 9).
                 stationMcLeft -= dt;

@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.5.0";
+        public const string Version = "0.5.1";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -1087,11 +1087,11 @@ namespace Lonapse
         }
 
         /// <summary>EVA breathing bed of the radio profile (req 15). Fades out outside EVA.</summary>
-        /// <summary>Master alarm (user request): fades in slowly while someone panics, holds a few seconds, fades out slowly.</summary>
+        /// <summary>Master alarm: fades in slowly while the vessel stress is at or above alarmStress, holds a few seconds, fades out slowly.</summary>
         private void UpdateAlarm(float dt)
         {
             Tuning tu = settings.tuning;
-            bool panic = gateOpen && settings.masterAlarm && !evaMode && roster != null && roster.AnyPanic;
+            bool panic = gateOpen && settings.masterAlarm && !evaMode && stress != null && stress.stress >= tu.alarmStress;
             if (panic) alarmHoldLeft = tu.alarmHold;
             else alarmHoldLeft -= dt;
             bool want = settings.masterAlarm && gateOpen && (panic || alarmHoldLeft > 0f) && ClipLibrary.CountOf("beeps/master_alarm") > 0;

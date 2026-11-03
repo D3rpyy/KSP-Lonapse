@@ -32,8 +32,20 @@ namespace Lonapse
             enterTimer = exitTimer = stateTimer = 0f;
             blackoutDuration = 0f;
             host.director.radioSilent = false;
+            host.director.mcBlackout = false;
             host.director.staticChop = false;
         }
+
+        /// <summary>Blackout with crew: Mission Control and the telemetry beeps fade, the crew keeps its radio.</summary>
+        private void FadeOutMissionControl(float seconds)
+        {
+            host.control.FadeOut(seconds);
+            host.controlBed.FadeOut(seconds);
+            for (int i = 0; i < host.beep.Length; i++) host.beep[i].FadeOut(seconds);
+        }
+
+        /// <summary>The crew still talks in a blackout, only Mission Control cannot hear them. Without crew nothing talks.</summary>
+        private bool CrewTalks { get { return !host.probeMode; } }
 
         /// <summary>Like LonapseAddon.FadeOutRadio, but a crew channel on the intercom preset keeps playing.</summary>
         private void FadeOutRadioKeepIntercom(float seconds)
@@ -77,6 +89,7 @@ namespace Lonapse
             {
                 case BlackoutState.Clear:
                     host.director.radioSilent = false;
+                    host.director.mcBlackout = false;
                     host.director.staticChop = false;
                     if (p >= tu.blackoutEnter) enterTimer += dt; else enterTimer = 0f;
                     if (enterTimer >= tu.blackoutEnterTime)
@@ -117,22 +130,34 @@ namespace Lonapse
                         Go(BlackoutState.Blackout);
                         blackoutDuration = 0f;
                         host.director.staticChop = false;
-                        host.director.radioSilent = true;
-                        // radio goes quiet, the intercom keeps going (v3 req 6): the director then schedules
-                        // blackout intercom chats while CurrentPhase is "blackout"
-                        host.director.ClearRadioQueue();
                         host.staticCh.FadeOut(tu.staticFadeOut);
-                        FadeOutRadioKeepIntercom(0.3f);
+                        if (CrewTalks)
+                        {
+                            // the crew keeps talking (staging callouts, radio lines), Mission Control cannot answer
+                            host.director.mcBlackout = true;
+                            host.director.DropMcItems();
+                            FadeOutMissionControl(0.3f);
+                        }
+                        else
+                        {
+                            // probe: the radio goes quiet. The intercom keeps going: the director schedules
+                            // blackout intercom chats while CurrentPhase is "blackout"
+                            host.director.radioSilent = true;
+                            host.director.ClearRadioQueue();
+                            FadeOutRadioKeepIntercom(0.3f);
+                        }
                     }
                     break;
 
                 case BlackoutState.Blackout:
-                    host.director.radioSilent = true;
+                    host.director.radioSilent = !CrewTalks;
+                    host.director.mcBlackout = CrewTalks;
                     blackoutDuration += dt;
                     if (p < tu.blackoutExit) exitTimer += dt; else exitTimer = 0f;
                     if (exitTimer >= tu.blackoutExitTime)
                     {
                         host.director.radioSilent = false;
+                        host.director.mcBlackout = false;
                         if (blackoutDuration >= tu.blackoutMinDuration)
                         {
                             Go(BlackoutState.Recovering);
@@ -144,6 +169,7 @@ namespace Lonapse
 
                 case BlackoutState.Recovering:
                     host.director.radioSilent = false;
+                    host.director.mcBlackout = false;
                     // safety timeout so a missing clip can never keep us here
                     if ((stateTimer > 0.5f && host.director.Idle) || stateTimer > 30f)
                     {

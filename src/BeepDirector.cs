@@ -111,6 +111,7 @@ namespace Lonapse
         public void Update(float dt, ref FlightSample s)
         {
             if (!host.CanStartAudio || host.director.radioSilent) { pingSeqPing = pingSeqClose = -1f; return; }
+            if (host.director.mcBlackout) pingLeft = Math.Max(pingLeft, 1f); // no telemetry pings in a blackout, the rest goes on
             if (!host.settings.beepsEnabled) { descentActive = false; warpPingLeft = -1f; pingSeqPing = pingSeqClose = -1f; return; }
             Tuning tu = Tu;
             TickPingSequence(dt);
@@ -175,7 +176,7 @@ namespace Lonapse
         /// <summary>One soft telemetry ping. Returns the channel or null.</summary>
         public VoiceChannel PlayPing()
         {
-            if (!host.CanStartAudio || host.director.radioSilent || !host.settings.beepsEnabled) return null;
+            if (!host.CanStartAudio || host.director.radioSilent || host.director.mcBlackout || !host.settings.beepsEnabled) return null;
             if (ClipLibrary.CountOf("beeps/ping") == 0) return null;
             if (pingSeqPing > 0f || pingSeqClose > 0f) return null; // one keyed ping at a time
             float open = KeyClip(true);

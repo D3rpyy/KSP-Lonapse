@@ -18,8 +18,6 @@ splashdown_03	splashdown	chatter	none	crew	splashdown_03	1	both	any	any	Flotamos
 # W1 (plan v3): serious launch and return radio, procedural. Calm mostly, tense lines name their cause.
 re_orb_s1_1	chatter	chatter	calm	mc	re_orb_s1	1	m	orbit	any	Preparad la maniobra de desorbitación.	Prepare the deorbit maneuver.
 re_orb_s1_2	chatter	chatter	calm	crew	re_orb_s1	2	both	orbit	any	Recibido, orientando al retrógrado.	Copy, pointing retrograde.
-re_orb_s2_1	chatter	chatter	calm	crew	re_orb_s2	1	both	orbit	any	Desorbitación completa.	Deorbit complete.
-re_orb_s2_2	chatter	chatter	calm	mc	re_orb_s2	2	m	orbit	any	Confirmado. Periapsis dentro de la atmósfera.	Confirmed. Periapsis inside the atmosphere.
 re_ent_s3_1	chatter	chatter	calm	crew	re_ent_s3	1	both	reentry	any	Interfaz de entrada.	Entry interface.
 re_ent_s3_2	chatter	chatter	calm	mc	re_ent_s3	2	m	reentry	any	Recibido. Mantened la actitud.	Copy. Hold attitude.
 re_ent_s4_1	chatter	chatter	calm	mc	re_ent_s4	1	m	reentry	any	Escudo térmico hacia delante.	Heat shield forward.
@@ -69,24 +67,15 @@ re_des_s4_1	chatter	chatter	calm	mc	re_des_s4	1	m	descent	any	Os tenemos a la vi
 re_des_s4_2	chatter	chatter	calm	crew	re_des_s4	2	both	descent	any	Recibido, bajando suave.	Copy, coming down easy.
 re_des_s5_1	chatter	chatter	calm	mc	re_des_s5	1	m	descent	any	Equipos de rescate en camino.	Recovery teams on the way.
 re_des_s5_2	chatter	chatter	calm	crew	re_des_s5	2	both	descent	any	Recibido, aquí los esperamos.	Copy, we will wait for them here.
-re_des_s7_1	chatter	chatter	calm	mc	re_des_s7	1	m	descent	any	Mil metros.	One thousand meters.
-re_des_s7_2	chatter	chatter	calm	crew	re_des_s7	2	both	descent	any	Recibido, mil.	Copy, one thousand.
-re_des_s8_1	chatter	chatter	calm	crew	re_des_s8	1	both	descent	any	Quinientos metros.	Five hundred meters.
-re_des_s8_2	chatter	chatter	calm	mc	re_des_s8	2	m	descent	any	Recibido. Preparaos para el contacto.	Copy. Prepare for contact.
-re_des_s9_1	chatter	chatter	calm	crew	re_des_s9	1	both	descent	any	Cien metros.	One hundred meters.
-re_des_s9_2	chatter	chatter	calm	mc	re_des_s9	2	m	descent	any	Recibido, cien.	Copy, one hundred.
-re_des_s10_1	chatter	chatter	calm	mc	re_des_s10	1	m	descent	any	Soltad el escudo cuando queráis.	Drop the heat shield when ready.
-re_des_s10_2	chatter	chatter	calm	crew	re_des_s10	2	both	descent	any	Escudo fuera.	Shield away.
 re_des_s11_1	chatter	chatter	calm	crew	re_des_s11	1	both	descent	any	Fin del salto, bajando.	End of the hop, coming down.
 re_des_s11_2	chatter	chatter	calm	mc	re_des_s11	2	m	descent	any	Recibido. Buen vuelo corto.	Copy. Good short flight.
 re_des_01	chatter	chatter	calm	crew	re_des_01	1	both	descent	any	Descenso estable.	Stable descent.
 re_des_02	chatter	chatter	calm	mc	re_des_02	1	m	descent	any	Zona de aterrizaje despejada.	Landing zone clear.
 re_des_03	chatter	chatter	calm	crew	re_des_03	1	both	descent	any	Veo el suelo.	I see the ground.
 re_des_04	chatter	chatter	calm	mc	re_des_04	1	m	descent	any	Velocidad de caída nominal.	Fall rate nominal.
-re_des_07	chatter	chatter	calm	crew	re_des_07	1	both	descent	any	Agua debajo.	Water below.
 re_des_08	chatter	chatter	calm	mc	re_des_08	1	m	descent	any	El rescate os espera abajo.	Recovery is waiting below.
 re_dten_s1_1	chatter	chatter	tense	mc	re_dten_s1	1	m	descent	ground	Bajáis demasiado rápido.	You're coming down too fast.
-re_dten_s1_2	chatter	chatter	tense	crew	re_dten_s1	2	both	descent	ground	Recibido. Abriendo paracaídas ya.	Copy. Opening chutes now.
+re_dten_s1_2	chatter	chatter	tense	crew	re_dten_s1	2	both	descent	ground	¡Recibido, lo sabemos!	Copy, we know!
 re_dten_s2_1	chatter	chatter	tense	crew	re_dten_s2	1	both	descent	ground	El suelo se acerca rápido.	The ground is coming up fast.
 re_dten_s2_2	chatter	chatter	tense	mc	re_dten_s2	2	m	descent	ground	Recibido. Preparaos para el golpe.	Copy. Brace for impact.
 re_dten_s3_1	chatter	chatter	tense	crew	re_dten_s3	1	both	descent	spin	Giramos bajo los paracaídas.	We're spinning under the chutes.

@@ -434,7 +434,7 @@ namespace Lonapse
 
             Header("Effects");
             s.rogerBeep = Toggle(s.rogerBeep, "Roger beep");
-            s.masterAlarm = Toggle(s.masterAlarm, "Master alarm when a kerbal panics");
+            s.masterAlarm = Toggle(s.masterAlarm, "Master alarm at very high stress");
         }
 
         private void DrawCrew(Settings s)

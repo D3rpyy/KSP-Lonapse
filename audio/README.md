@@ -121,7 +121,7 @@ and noise.
 | `beeps/headset_close` | 2 | The squelch tail (key-down). Same noise, slightly brighter (low-pass 4.2 kHz), starts at full level and decays over the whole clip. 0.16 to 0.22 s. |
 | `static/breath_loop` | 2 | EVA helmet breathing, exactly 8.0 s, two breaths per loop. Inhale: pink noise in a narrow band near 1.9 kHz, 1.0 to 1.3 s, smooth bell envelope. A short hold. Exhale: wider band near 0.95 kHz, 1.4 to 1.8 s, quick onset and a long tail. Under it a faint suit-fan hiss (pink noise, 120 Hz to 1.4 kHz, crossfaded over 0.5 s at the seam). The mix gets a short double echo (6 and 11 ms) and a low-pass at 3 kHz, for a small closed helmet. The filters run over the loop's own tail first, so the seam has the same history as a wrap. |
 | `beeps/roger` | 2 | Roger beep when the crew lets go of the key. One 1250 Hz tone of 110 ms, or a quick rising pair (1050 then 1400 Hz). |
-| `beeps/master_alarm` | 1 | Soft caution loop for panic moments, exactly 2.0 s. 660 Hz and 880 Hz alternate every 0.5 s with 0.12 s raised-cosine crossfades, a faint second harmonic and a 4 Hz tremolo (0.6 to 1.0). Every part has a whole number of cycles in 2 s, so the seam is clean. The plugin plays it at `alarmVolume` 0.12. |
+| `beeps/master_alarm` | 1 | Soft caution loop for very high stress, exactly 2.0 s. 660 Hz and 880 Hz alternate every 0.5 s with 0.12 s raised-cosine crossfades, a faint second harmonic and a 4 Hz tremolo (0.6 to 1.0). Every part has a whole number of cycles in 2 s, so the seam is clean. The plugin plays it at `alarmVolume` 0.12. |
 
 Levels: the beeps are at -22 dBFS gated RMS, except the desk click at -17 dBFS, and the breath bed is at
 -30 dBFS. The bed is deliberately 6 dB quieter than `static/loop` (-24 dBFS), so it stays under the

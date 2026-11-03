@@ -481,7 +481,8 @@ namespace Lonapse
             if (!host.settings.radioEnabled) { why = "radio disabled"; return EvGo.Drop; }
             if (!host.CanStartAudio) { why = "gate " + host.gateReason; return EvGo.Wait; }
             if (!PhraseClips.Loaded) { why = "Lonapse table not loaded"; return EvGo.Drop; }
-            bool blackout = radioSilent || InBlackoutPhase;
+            // with crew aboard the crew still talks in a blackout (MC lines are dropped), so radio events go on
+            bool blackout = radioSilent || (InBlackoutPhase && !mcBlackout);
             // design 4: no welcome in a panic or in plasma
             if (soi && (r.band == "panic" || KerbalVoice.AnyPanic(host.roster.voices))) { why = "panic"; return EvGo.Drop; }
             if (soi && blackout) { why = "blackout"; return EvGo.Drop; }
@@ -550,7 +551,8 @@ namespace Lonapse
         {
             string phase = CurrentPhase;
             var list = PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
-                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc) && filter(sc));
+                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
+                      && (sc.IsIntercom || BlackoutOk(sc)) && filter(sc));
             PhraseScene p = PhraseTable.Pick(list, rng, lastSceneId);
             if (p != null) lastSceneId = p.Id;
             return p;

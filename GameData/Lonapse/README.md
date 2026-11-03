@@ -4,7 +4,7 @@
 </picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
-[![Version 0.5.0](https://img.shields.io/badge/version-0.5.0-green)](CHANGELOG.md)
+[![Version 0.5.1](https://img.shields.io/badge/version-0.5.1-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
 
@@ -40,7 +40,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 
 ## Install
 
-1. Download `Lonapse-0.5.0.zip` from the releases page. The `GameData` folder in this repo has the same files.
+1. Download `Lonapse-0.5.1.zip` from the releases page. The `GameData` folder in this repo has the same files.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there.

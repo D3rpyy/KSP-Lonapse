@@ -143,7 +143,7 @@ These keys are not all in the window, but you can edit them in the file:
 | `countdownKey` | `C` | KeyCode of the launch countdown hotkey (start on the pad, press again to stop), `None` = off. "Set key" in the window |
 | `countdownModifier` | `LeftAlt` | KeyCode that must be held for the countdown hotkey, or `None` |
 | `weakSignalVolume` | `0.4` | How loud the extra static, bursts and grit on Mission Control get at a weak signal, 0 to 1 |
-| `masterAlarm` | `True` | Soft two-tone caution loop far in the background while a kerbal panics |
+| `masterAlarm` | `True` | Soft two-tone caution loop far in the background when the stress reaches `alarmStress` (0.9) |
 | `useGameVolume` | `True` | Scale by the stock Voice volume (and Master, if KSP does not apply it already) |
 | `useDsp` | `True` | Tremolo in an audio filter. Set `False` if you hear crackle, tremolo then runs on the volume |
 | `maxCrewVoices` | `2` | Maximum overlapping crew voices (1 to 3) |
@@ -191,6 +191,9 @@ measured ones. If something feels off, this is where you can change it. The tuni
 - **Panic stays special.** At most one panic line every `panicMinGap` seconds, and one per kerbal per `panicCooldown`.
   Every panic line also makes the next one a little harder (`panicEscStep`). A token bucket (`talkBurst`,
   `talkPerMinute`) stops the radio from flooding.
+- **No broken record.** Once the crew has talked about a cause (like vibration, spin or heat), they don't bring up the
+  same cause again for 45 s (`causeRepeatGap`). This holds at any radio amount, so a high setting at max Q doesn't
+  turn into "this is shaking a lot" over and over.
 - **Launches are tense, not panicky.** Up to `launchCapAlt` the crew stays at tense at most, unless something is really
   wrong: heat, losing control for 2 s, or an engine flameout with fuel left.
 - **Hard docks.** Touching faster than `dockHardSpeed` gives a stress kick and a warning from Mission Control.
@@ -198,8 +201,9 @@ measured ones. If something feels off, this is where you can change it. The tuni
 - **The radio clicks.** A desk click on stations and bases, a short headset squelch in ships and on EVA.
 - **Static follows your signal.** With CommNet on and no link, Mission Control can't hear you and stays silent.
 - **Panic sounds like panic.** The crew shouts in broken pieces with gasps in between. Mission Control answers slowly
-  and calmly. Now and then someone screams, at most once a minute per kerbal (`screamCooldown`). While someone panics
-  a soft master alarm plays far in the background (`alarmVolume` 0.12).
+  and calmly. Now and then someone screams, at most once a minute per kerbal (`screamCooldown`).
+- **The master alarm is for real trouble.** A soft alarm plays far in the background only when the stress of the
+  vessel reaches 0.9 (`alarmStress`). A nervous kerbal panicking at low stress doesn't set it off.
 - **The staging callout knows what you staged.** A decoupler or fairing gives a separation line, an engine an
   ignition line, and anything else (like only parachutes) a plain "Stage!".
 - **Launch countdown.** On the pad, press "Start countdown" in the window or Alt+C. Launch control counts in loñapsE,
@@ -271,8 +275,10 @@ the pitch and volume like any other line. Callouts happen:
 Staging and parachute callouts share a 1.5 s cooldown (`calloutCooldown`), so staging that opens the chutes gives one
 word, not two.
 
-Reentry blackout: strong plasma first gives static and chopped up talk, then radio silence. When it ends (after at
-least 3 s of silence) you hear a static burst and a relieved crew.
+Reentry blackout: strong plasma first gives static and chopped up talk. Then Mission Control loses you completely.
+The crew keeps talking on the radio, and staging and other callouts still work, but Mission Control can't hear them
+and never answers. Telemetry pings stop too. When the blackout ends (after at least 3 s), you hear a static burst and a
+relieved crew. A probe has nobody on board to talk, so for probes the radio goes fully silent.
 
 ## Docking
 
