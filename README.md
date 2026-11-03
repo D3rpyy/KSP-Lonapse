@@ -8,7 +8,7 @@
 Radio chatter mod for Kerbal Space Program that reacts dynamically to your flight and EVA.
 
 Your crew talks to Mission Control and to each other about what is actually going on during the flight. A quiet coast in orbit stays
-mostly quiet. A capsule tumbling through reentry gets a crew shouting over each other while Mission Control tries to
+mostly quiet. A capsule tumbling through space gets a crew shouting over each other while Mission Control tries to
 keep them calm. Probes get their own voice too in the form of beeping noises.
 
 Each kerbal has their own voice based on their gender, and their own personality too! The personality is based on the Kerbal's stats as seen in the Astronaut Complex. For example, a Kerbal with high stupidity would make more jokes in flight, while one that has a low stupidity would make fewer jokes. The voice is generated based on a seed, and the seed stays the same even after restart. That means that the Kerbals will keep the voice that is unique to them.
