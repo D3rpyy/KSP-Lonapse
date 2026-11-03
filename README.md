@@ -82,7 +82,10 @@ for the build and [audio/README.md](audio/README.md) for the sound pipeline.
 
 Inspired by [Chatterer](https://github.com/Athlonic/Chatterer). Lonapse contains none of its code or sounds.
 
-The voices are rendered with [Piper](https://github.com/OHF-Voice/piper1-gpl) and three Spanish voice models. Their
-credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are synthesized.
+The voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine, with three
+Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are synthesized.
+
+I wrote the mod with help from Claude (an AI assistant) for code and documentation. The design, the testing in game
+and the decisions are my own.
 
 The code is MIT licensed. The sounds and the phrase text are CC BY 4.0. See [LICENSE](LICENSE).
