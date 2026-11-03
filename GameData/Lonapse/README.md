@@ -1,4 +1,7 @@
-# Lonapse
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/lonapse-logo-dark.svg">
+  <img src="docs/images/lonapse-logo-light.svg" alt="Lonapse" width="420">
+</picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
 [![Version 0.5.0](https://img.shields.io/badge/version-0.5.0-green)](CHANGELOG.md)
@@ -8,7 +11,7 @@
 Radio chatter mod for Kerbal Space Program that reacts dynamically to your flight and EVA.
 
 Your crew talks to Mission Control and to each other about what is actually going on during the flight. A quiet coast in orbit stays
-mostly quiet. A capsule tumbling through reentry gets a crew shouting over each other while Mission Control tries to
+mostly quiet. A capsule tumbling through space gets a crew shouting over each other while Mission Control tries to
 keep them calm. Probes get their own voice too in the form of beeping noises.
 
 Each kerbal has their own voice based on their gender, and their own personality too! The personality is based on the Kerbal's stats as seen in the Astronaut Complex. For example, a Kerbal with high stupidity would make more jokes in flight, while one that has a low stupidity would make fewer jokes. The voice is generated based on a seed, and the seed stays the same even after restart. That means that the Kerbals will keep the voice that is unique to them.

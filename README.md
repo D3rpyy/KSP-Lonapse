@@ -1,4 +1,7 @@
-# Lonapse
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/lonapse-logo-dark.svg">
+  <img src="docs/images/lonapse-logo-light.svg" alt="Lonapse" width="420">
+</picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
 [![Version 0.5.0](https://img.shields.io/badge/version-0.5.0-green)](CHANGELOG.md)
