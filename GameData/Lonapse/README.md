@@ -1,10 +1,10 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/lonapse-logo-dark.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/LonapseBannerV2.png">
   <img src="docs/images/lonapse-logo-light.svg" alt="Lonapse" width="100%">
 </picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
-[![Version 0.5.2](https://img.shields.io/badge/version-0.5.2-green)](CHANGELOG.md)
+[![Version 0.5.3](https://img.shields.io/badge/version-0.5.3-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
 
@@ -24,7 +24,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 - **Crew and Mission Control talk.** Each kerbal has a voice and a temperament. This is a new mechanic called stress. Stress comes from G force, spin,
   heat, fuel, a hard landing and so on, and every kerbal reacts in their own way. A brave pilot can stay calm while a
   nervous scientist panics easily.
-- **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers.
+- **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers or when they do a science experiment.
 - **Cabin intercom.** With two or more kerbals aboard they chat among themselves now and then with some jokes.
 - **The radio sounds like a radio.** Quindar tones on Mission Control, static that follows your CommNet signal (or
   RemoteTech), reentry blackout, a delay on the answers far from Kerbin and dropouts on a weak link. This way the radio is simulated in a way to your connection with the KSC.
@@ -43,7 +43,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 1. Download `Lonapse-0.5.3.zip` from the releases page. The `GameData` folder in this repo has the same files.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
-That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there.
+That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
 
 To update, delete the old `GameData/Lonapse` folder first, but keep `GameData/Lonapse/PluginData` if you want to keep
 your settings.

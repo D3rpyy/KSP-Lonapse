@@ -4,7 +4,7 @@
 </picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
-[![Version 0.5.2](https://img.shields.io/badge/version-0.5.2-green)](CHANGELOG.md)
+[![Version 0.5.3](https://img.shields.io/badge/version-0.5.3-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
 
