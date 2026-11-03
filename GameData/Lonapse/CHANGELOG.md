@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3 (2026-11-03)
+
+- Mission Control no longer keeps saying "Keep an eye on the data" while the craft spins or pulls heavy g's. Its short answer to a crew line now fits the crew line, like a spin answer to a spin line.
+- Tense and panic radio lines don't repeat within 45 s. A generic line that fits any situation plays at most once in that time. When nothing new fits, the radio stays quiet.
+- Radio and intercom now take turns. Once the crew starts a chat on the intercom, radio chatter and events wait until the chat is over instead of cutting in between two lines. A new chat doesn't start when the radio is about to talk. Urgent calls (a lost part or kerbal) still end the chat, and short callouts like staging still come in between two lines.
+
 ## 0.5.2 (2026-11-03)
 
 - On EVA, falling over or lying on the ground no longer counts as spinning. The kerbal also gets about 3 s to get up after a fall (`evaSettleTime`).

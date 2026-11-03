@@ -498,6 +498,8 @@ namespace Lonapse
                 if (airEventPrio >= r.priority) { why = "event on the air"; return EvGo.Wait; }
             }
             else if (HasRadioItems() || Holding || airEventPrio > 0) { why = "radio busy"; return EvGo.Wait; }
+            // a started intercom chat holds the air: the event waits in the pending list and plays right after it
+            else if (ChatHoldsAir) { why = "intercom chat"; return EvGo.Wait; }
             if (!host.roster.AnyoneCanSpeak() && ev != EventWatchers.CrewLost) { why = "no conscious crew"; return EvGo.Wait; }
 
             string saved = bodyOverride;

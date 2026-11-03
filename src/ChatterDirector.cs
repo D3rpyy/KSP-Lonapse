@@ -75,6 +75,8 @@ namespace Lonapse
         private string lastSceneId;
         // director clock when a cause-specific scene of each cause last played (Tuning.causeRepeatGap)
         private readonly System.Collections.Generic.Dictionary<string, float> causeSaid = new System.Collections.Generic.Dictionary<string, float>();
+        // director clock when each tense or panic radio scene was last picked (Tuning.causeRepeatGap, StressRepeatFilter)
+        private readonly System.Collections.Generic.Dictionary<string, float> stressSaid = new System.Collections.Generic.Dictionary<string, float>();
         public string lastLine = "";       // audit text for the overlay
         public int panicDowngrades, bucketDenied;
 
@@ -96,6 +98,7 @@ namespace Lonapse
         private float lastRadioClock = -1e9f;  // last frame the radio had the air (audible, holding)
         private float lastChatClock = -1e9f;   // last frame the queued chat was audible or started an item
         private bool chatStarted;              // the queued chat had its first turn: resume gap instead of start gap
+        private float intercomWaitStart = -1f; // clock when the intercom scheduler became due, -1 when it is not waiting
         private readonly Utterance[] scratch = new Utterance[Capacity];
         private static readonly Predicate<Utterance> RadioFirst = x => !IsChatItem(x.who);
         private static readonly Predicate<Utterance> ChatFirst = x => IsChatItem(x.who);
@@ -235,11 +238,23 @@ namespace Lonapse
             return k == UttKind.IntercomLine || (k == UttKind.IntercomClick && !LineFollowsHead());
         }
 
-        /// <summary>A new intercom chat may be queued now (AirRules.IntercomMayStart).</summary>
+        /// <summary>
+        /// A new intercom chat may be queued now (AirRules.IntercomMayStart): the radio is quiet, nothing radio is
+        /// queued or pending, and the radio scheduler does not fire soon (a started chat would make it wait).
+        /// </summary>
         private bool IntercomMayStartNow
         {
-            get { return AirRules.IntercomMayStart(RadioAudible, HasRadioItems(), Holding || calloutPending, clock - lastRadioClock); }
+            get
+            {
+                float due = radioSilent || !host.settings.radioEnabled ? -1f : TimeToNext;
+                float waited = intercomWaitStart < 0f ? 0f : clock - intercomWaitStart;
+                return AirRules.IntercomMayStart(RadioAudible, HasRadioItems(), Holding || calloutPending, clock - lastRadioClock,
+                                                 due, waited);
+            }
         }
+
+        /// <summary>A started intercom chat holds the air until its last item (AirRules.ChatHoldsAir): the radio queues behind it.</summary>
+        public bool ChatHoldsAir { get { return AirRules.ChatHoldsAir(chatStarted, HasChatItems(), IntercomAudible); } }
 
         public float TimeToNext
         {
@@ -271,6 +286,7 @@ namespace Lonapse
             mcBlackout = false;
             staticChop = false;
             intercomProgress = 0f;
+            intercomWaitStart = -1f;
             intercomTarget = U(0.6f, 1.4f);
             holdUntil = -1f;
             chatStarted = false;
@@ -288,6 +304,7 @@ namespace Lonapse
             esc.Decay(1f, 0f);
             lastSceneId = null;
             causeSaid.Clear();
+            stressSaid.Clear();
             classifier.Reset(); // new vessel: its own phase, no hold from the old one
             ResetEventsForVessel();
             wasProbeMode = false; // plan v5: the probe timers start fresh on the next probe-mode frame
@@ -467,20 +484,27 @@ namespace Lonapse
                 if (radioSilent && HasRadioItems()) { ClearRadioQueue(); if (count == 0) return; }
                 // blackout with crew: only the Mission Control part goes, the crew keeps keying the radio
                 if (mcBlackout && HasMcItems()) { DropMcItems(); if (count == 0) return; }
-                // radio queued behind the chat goes first; the chat pauses between two turns, never inside one
-                if (AirRules.ChatShouldYield(HeadOpensTurn(), HasRadioItems()))
+                // a started chat holds the air to its end (user report: radio cut into the chat): radio queued
+                // behind it waits. A chat that has not started yet still lets the radio go first.
+                bool chatHolds = ChatHoldsAir;
+                if (chatHolds)
+                {
+                    if (!IsChatItem(queue[head].who) && HasChatItems()) AirRules.StablePartitionRing(queue, head, count, ChatFirst, scratch);
+                }
+                else if (AirRules.ChatShouldYield(HeadOpensTurn(), HasRadioItems()))
                 {
                     AirRules.StablePartitionRing(queue, head, count, RadioFirst, scratch);
-                    Log.Debug("Intercom chat pauses for the radio");
+                    Log.Debug("Intercom chat waits for the radio");
                 }
                 Utterance u = queue[head];
                 if (IsChatItem(u.who))
                 {
-                    // a new turn needs a quiet radio (start or resume gap); the line and release click of an open turn go on
-                    if (HeadOpensTurn() && !AirRules.ChatTurnMayStart(chatStarted, RadioAudible, HasRadioItems(),
+                    // a new turn needs a quiet radio (start or resume gap); the line and release click of an open turn go on.
+                    // Radio queued behind a started chat does not stop the next turn: it waits for the chat.
+                    if (HeadOpensTurn() && !AirRules.ChatTurnMayStart(chatStarted, RadioAudible, !chatHolds && HasRadioItems(),
                                                                       calloutPending, clock - lastRadioClock)) return;
                 }
-                else if (!AirRules.RadioMayStart(IntercomTurnOpen)) return; // radio never starts inside an intercom turn
+                else if (!AirRules.RadioMayStart(IntercomTurnOpen, chatHolds)) return; // radio waits for the whole chat
                 bool prevDone = PrevDone();
                 if (prevDone && lastEndClock < 0f) lastEndClock = clock;
 
@@ -946,9 +970,51 @@ namespace Lonapse
                 && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
                 && (intercom || BlackoutOk(sc))
                 && (filter == null || filter(sc)));
+            bool stressBand = !intercom && (band == "tense" || band == "panic");
+            if (stressBand) list = StressRepeatFilter(list);
             PhraseScene p = PhraseTable.Pick(list, rng, lastSceneId);
-            if (p != null) lastSceneId = p.Id;
+            if (p != null)
+            {
+                lastSceneId = p.Id;
+                if (stressBand) stressSaid[p.Id] = clock;
+            }
             return p;
+        }
+
+        /// <summary>
+        /// Tense and panic radio picks (user report: MC said "Keep an eye on the data" over and over while the
+        /// craft was spinning). Scenes picked within causeRepeatGap s are left out. When every candidate was picked
+        /// that recently, a cause scene may repeat, a generic cause-any scene never: then nothing is picked.
+        /// </summary>
+        private System.Collections.Generic.List<PhraseScene> StressRepeatFilter(System.Collections.Generic.List<PhraseScene> list)
+        {
+            if (list == null || list.Count == 0) return list;
+            float gap = Tu.causeRepeatGap;
+            var fresh = new System.Collections.Generic.List<PhraseScene>(list.Count);
+            for (int i = 0; i < list.Count; i++)
+            {
+                float t;
+                if (!stressSaid.TryGetValue(list[i].Id, out t) || clock - t >= gap) fresh.Add(list[i]);
+            }
+            if (fresh.Count > 0) return fresh;
+            list.RemoveAll(x => x.Cause == "any");
+            return list;
+        }
+
+        /// <summary>
+        /// Short MC acknowledgement of a single crew line. It answers the cause of that line first (a spin line gets
+        /// a spin answer), in the panic band also from the calmer tense rows. Else a cause-any ack via PickScene.
+        /// </summary>
+        private PhraseScene PickMcAck(string band, string cause)
+        {
+            if (!string.IsNullOrEmpty(cause) && cause != "any")
+            {
+                Predicate<PhraseScene> same = x => x.Cause == cause && IsMcAck(x);
+                PhraseScene sc = PickCore("chatter", band, cause, false, same);
+                if (sc == null && band == "panic") sc = PickCore("chatter", "tense", cause, false, same);
+                if (sc != null) return sc;
+            }
+            return PickScene("chatter", band, IsMcAck) ?? PickScene("chatter", band == "panic" ? "tense" : band, IsMcAck);
         }
 
         /// <summary>
@@ -1126,8 +1192,8 @@ namespace Lonapse
                     if (sc.McLines == 0 && rng.NextDouble() < McP(0.5))
                     {
                         // in a panic MC answers with the slow, calm panic lines (the contrast the user asked for)
-                        PhraseScene ack = PickScene("chatter", band, IsMcAck)
-                                          ?? PickScene("chatter", band == "panic" ? "tense" : band, IsMcAck);
+                        // it answers the crew line's own cause (user report: a generic line after every spin line)
+                        PhraseScene ack = PickMcAck(band, sc.Cause);
                         PhraseEntry ae = FirstLine(ack);
                         if (ae != null) EnqueueMc(ae.Folder, ResponseDelay(s), ae);
                     }
@@ -1195,7 +1261,7 @@ namespace Lonapse
         public void EnqueueRelief()
         {
             if (host.probeMode) return; // plan v5: no crew in probe mode
-            // a blackout chat is not cut: the relief waits for its current line, the chat pauses (AirRules)
+            // a blackout chat is not cut: a started chat holds the air and the relief follows when it ends (AirRules)
             ClearRadioQueue();
             Enqueue(UttKind.StaticBurst, null, 0f, 0f, null);
             PhraseScene sc = PickScene("relief", null, null);
@@ -1608,10 +1674,13 @@ namespace Lonapse
                 intercomProgress += dt / Math.Max(1f, intercomInterval);
                 if (intercomProgress >= intercomTarget)
                 {
-                    // never while the radio plays, is queued or pending, nor within IntercomStartGap s after it
+                    if (intercomWaitStart < 0f) intercomWaitStart = clock;
+                    // never while the radio plays, is queued or pending, within IntercomStartGap s after it, nor
+                    // when the radio scheduler is about to fire (AirRules.IntercomRadioLead)
                     if (count == 0 && Idle && IntercomMayStartNow)
                     {
                         FireIntercom();
+                        intercomWaitStart = -1f;
                         intercomProgress = 0f;
                         intercomTarget = U(0.6f, 1.4f);
                         // give the chat room before the radio scheduler fires
@@ -1620,6 +1689,7 @@ namespace Lonapse
                     else intercomProgress = intercomTarget;
                 }
             }
+            else if (!intercomEligible) intercomWaitStart = -1f;
 
             bool radioOn = host.settings.radioEnabled;
             bool checkStyle = !host.probeMode && host.stationMode && PacingRules.StationChoice(host.settings.stationStyle, s, tu.burstBand) == StationAction.Check;
@@ -1650,8 +1720,10 @@ namespace Lonapse
                     progress += dt / Math.Max(0.05f, currentInterval);
                     if (progress >= target)
                     {
-                        // only a chat in the queue: the radio goes first, the chat pauses between turns
-                        if (!HasRadioItems())
+                        // a started chat holds the air: the radio fires right after it (fresh pick, nothing stale queued)
+                        if (ChatHoldsAir) progress = target;
+                        // only a chat that has not started in the queue: the radio goes first
+                        else if (!HasRadioItems())
                         {
                             if (Fire(false))
                             {

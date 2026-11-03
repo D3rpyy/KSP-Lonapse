@@ -851,6 +851,18 @@ public static class Tests
             Check(AirRules.ChatShouldYield(true, true) && !AirRules.ChatShouldYield(false, true) && !AirRules.ChatShouldYield(true, false),
                   "air: the chat yields only between turns and only when radio waits", null);
             Check(!AirRules.ChatPausedTooLong(20f) && AirRules.ChatPausedTooLong(20.1f), "air: a chat paused over 20 s is dropped", null);
+            // ---- air queue: a started chat holds the air, no chat right before the radio (user report: radio cut into a chat) ----
+            Check(AirRules.ChatHoldsAir(true, true, false) && AirRules.ChatHoldsAir(false, false, true)
+                  && !AirRules.ChatHoldsAir(false, true, false) && !AirRules.ChatHoldsAir(true, false, false),
+                  "air: a started chat with items left, or an audible line, holds the air", null);
+            Check(!AirRules.RadioMayStart(false, true) && !AirRules.RadioMayStart(true, false) && AirRules.RadioMayStart(false, false),
+                  "air: the radio waits for the whole started chat", null);
+            Check(!AirRules.IntercomMayStart(false, false, false, 99f, 14.9f, 0f) && AirRules.IntercomMayStart(false, false, false, 99f, 15f, 0f)
+                  && AirRules.IntercomMayStart(false, false, false, 99f, -1f, 0f),
+                  "air: no new chat when the radio fires within 15 s (radio off: no look ahead)", null);
+            Check(!AirRules.IntercomMayStart(false, false, false, 99f, 5f, 44.9f) && AirRules.IntercomMayStart(false, false, false, 99f, 5f, 45f)
+                  && !AirRules.IntercomMayStart(true, false, false, 99f, 99f, 99f),
+                  "air: a chat that waited 45 s for the radio starts anyway, never over the radio", null);
             Check(AirRules.CalloutRank("staging") == 2 && AirRules.CalloutRank("chute_semi") == 2 && AirRules.CalloutRank("chute_full") == 2
                   && AirRules.CalloutRank("throttle_full") == 1 && AirRules.CalloutRank(null) == 1, "air: staging and chutes outrank throttle and docking", null);
             Check(AirRules.CalloutReplacesPending("throttle_cut", "staging") && !AirRules.CalloutReplacesPending("staging", "throttle_full")

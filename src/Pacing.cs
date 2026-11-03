@@ -200,6 +200,8 @@ namespace Lonapse
         public const float ChatMaxPause = 20f;      // a chat paused longer than this is dropped
         public const float CalloutMaxDefer = 4f;    // a callout that waited this long for an intercom line is dropped
         public const float DockCalloutMaxDefer = 2f; // docking distance callouts go stale faster (the distance moved on)
+        public const float IntercomRadioLead = 15f;  // no new chat when the radio scheduler fires within this many s
+        public const float IntercomLeadMaxWait = 45f; // a chat that waited this long for the radio lead starts anyway
 
         /// <summary>
         /// Priority of a callout for the single "waits for the intercom" slot. ev is the callout event name, null for
@@ -234,6 +236,34 @@ namespace Lonapse
         public static bool IntercomMayStart(bool radioAudible, bool radioQueued, bool radioPending, float sinceRadio)
         {
             return ChatTurnMayStart(false, radioAudible, radioQueued, radioPending, sinceRadio);
+        }
+
+        /// <summary>
+        /// A new intercom chat may be queued, with a look ahead (user report: radio cut into a running chat).
+        /// radioDueIn: seconds until the radio scheduler fires, below 0 when it is off. A chat does not start when the
+        /// radio is due within IntercomRadioLead s, unless the chat already waited IntercomLeadMaxWait s for it.
+        /// </summary>
+        public static bool IntercomMayStart(bool radioAudible, bool radioQueued, bool radioPending, float sinceRadio,
+                                            float radioDueIn, float waitedFor)
+        {
+            if (!IntercomMayStart(radioAudible, radioQueued, radioPending, sinceRadio)) return false;
+            if (radioDueIn >= 0f && radioDueIn < IntercomRadioLead && waitedFor < IntercomLeadMaxWait) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// A started chat holds the air until its last item played: radio items queue behind it and wait.
+        /// started: the chat had its first turn. chatQueued: chat items are left. intercomAudible: a line or click plays.
+        /// </summary>
+        public static bool ChatHoldsAir(bool started, bool chatQueued, bool intercomAudible)
+        {
+            return intercomAudible || (started && chatQueued);
+        }
+
+        /// <summary>A radio item may start: never inside an intercom turn, and never while a started chat holds the air.</summary>
+        public static bool RadioMayStart(bool intercomTurnOpen, bool chatHoldsAir)
+        {
+            return !intercomTurnOpen && !chatHoldsAir;
         }
 
         /// <summary>A radio item may start: never inside an intercom turn (a line playing, or its click just played).</summary>

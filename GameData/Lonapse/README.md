@@ -40,7 +40,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 
 ## Install
 
-1. Download `Lonapse-0.5.2.zip` from the releases page. The `GameData` folder in this repo has the same files.
+1. Download `Lonapse-0.5.3.zip` from the releases page. The `GameData` folder in this repo has the same files.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there.
