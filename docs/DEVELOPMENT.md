@@ -363,9 +363,6 @@ warp, the intercom, the phrase table, probe mode, the subtitles and more.
 The offline tests pass and the plugin compiles against the KSP 1.12.5 DLLs. I play-test in game, but I haven't tried
 these yet:
 
-- The talking and head turns in the portrait cams.
-- The engine-out fix, the EVA fall lines, the faster breathing when running and the solar panel check.
-- Moving over from an old `GameData/Quindar/` install.
 - RemoteTech.
 
 If you try any of these, I would love to hear how it went!
