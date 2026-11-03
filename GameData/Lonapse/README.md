@@ -12,8 +12,9 @@ mostly quiet. A capsule tumbling through reentry gets a crew shouting over each 
 keep them calm. Probes get their own voice too: they beep, and Mission Control talks to them like a slightly
 worried pet owner.
 
-The kerbals speak Lonapse. That is Spanish with every word spelled backwards, rendered with a text to speech voice and
-pitched up. It sounds like a language without being one you can follow. Turn on the English subtitles if you want to
+Lonapse is the language of the kerbals, and the mod is named after it. Every kerbal and every voice at Mission Control
+speaks it. Under the hood it is Spanish with every word spelled backwards ("Separación" becomes "nóicarapeS"), rendered
+with a text to speech voice and pitched up. It sounds like a real language without being one you can follow. Turn on the English subtitles if you want to
 know what they are saying.
 
 ## What it does

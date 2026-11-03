@@ -1,6 +1,6 @@
 # Lonapse: sources, build and tables
 
-This file describes how the Lonapse clips are made. Lonapse is reversed spelling only. There is no audio reversal in this build.
+Lonapse is the language of the kerbals. Every crew and Mission Control line in the mod is spoken in it. This file describes how the Lonapse clips are made. Lonapse is reversed spelling only. There is no audio reversal in this build.
 
 ## What is in this folder
 

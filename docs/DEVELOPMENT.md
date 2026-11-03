@@ -6,7 +6,7 @@ A KSP 1.12.5 plugin that plays radio chatter (crew voices, Mission Control, beep
 happens to your active crewed vessel. A calm orbit is nearly silent. A tumbling capsule gets a loud, fast and
 overlapping crew. It is inspired by the Chatterer mod but contains none of its code or clips.
 
-The voices speak Lonapse: Spanish with the letters of every word reversed ("Separación" becomes "nóicarapeS"). The
+Lonapse is the language of the kerbals, and the mod is named after it. The voices speak Lonapse: Spanish with the letters of every word reversed ("Separación" becomes "nóicarapeS"). The
 lines are rendered offline with the Piper neural TTS and pitched up into the Kerbal register by `audio/build_lonapse.py`
 (see `audio/lonapse/README.md` and `audio/CREDITS.md`).
 
