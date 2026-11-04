@@ -7,6 +7,8 @@
 [![Version 0.5.3](https://img.shields.io/badge/version-0.5.3-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
+[![CKAN](https://img.shields.io/badge/CKAN-Indexed-green.svg)](https://github.com/KSP-CKAN/CKAN)
+[![SpaceDock](https://img.shields.io/badge/SpaceDock-Available-blue.svg)](https://spacedock.info/mod/4786/Lonapse#stats)
 
 Radio chatter mod for Kerbal Space Program that reacts dynamically to your flight and EVA.
 
@@ -43,7 +45,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 1. Download `Lonapse-0.5.3.zip` from the releases page. The `GameData` folder in this repo has the same files.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
-That's all. Lonapse has no dependencies. You can also install it with CKAN once it is listed there. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
+That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
 
 To update, delete the old `GameData/Lonapse` folder first, but keep `GameData/Lonapse/PluginData` if you want to keep
 your settings.
