@@ -57,7 +57,7 @@ namespace Lonapse
             v.Name = s.ToLowerInvariant();
             // a voice that replaces a stock voice keeps that core's name and lines unless it says otherwise
             bool stockName = Array.IndexOf(ProbeCores.Keys, v.Name) >= 0;
-            if (stockName) v.Lines = v.Name;
+            if (stockName) v.Lines = ProbeCores.DefaultLines(v.Name);
             v.DisplayName = values.TryGetValue("displayName", out s) && !string.IsNullOrEmpty(s.Trim()) ? s.Trim()
                           : stockName ? ProbeCores.DisplayName(v.Name) : "Probe";
             if (values.TryGetValue("lines", out s))
@@ -162,7 +162,7 @@ namespace Lonapse
             };
         }
 
-        /// <summary>The six stock voices, same values as audio/probe/cores.tsv.</summary>
+        /// <summary>The stock voices, one per ProbeCores.Keys value, same values as audio/probe/cores.tsv.</summary>
         public static ProbeVoiceSpec[] Stock()
         {
             return new[]
@@ -172,6 +172,10 @@ namespace Lonapse
                 Named(new ProbeVoiceSpec(ProbeCores.Hecs, 700, "square", "stutter", 0.1)),
                 Named(new ProbeVoiceSpec(ProbeCores.RoveMate, 520, "saw", "lazy", 0.6)),
                 Named(new ProbeVoiceSpec(ProbeCores.Snob, 1050, "fm", "even", 0.2)),
+                Named(new ProbeVoiceSpec(ProbeCores.Qbe, 1650, "triangle", "stutter", 0.05)),
+                Named(new ProbeVoiceSpec(ProbeCores.Mk2Drone, 1180, "saw", "swing", 0.25)),
+                Named(new ProbeVoiceSpec(ProbeCores.Mpo, 820, "sine", "swing", 0.45)),
+                Named(new ProbeVoiceSpec(ProbeCores.Mtm, 440, "square", "lazy", 0.3)),
                 Named(new ProbeVoiceSpec(ProbeCores.Generic, 940, "pulse", "even", 0.15)),
             };
         }
@@ -179,7 +183,7 @@ namespace Lonapse
         private static ProbeVoiceSpec Named(ProbeVoiceSpec v)
         {
             v.DisplayName = ProbeCores.DisplayName(v.Name);
-            v.Lines = v.Name;
+            v.Lines = ProbeCores.DefaultLines(v.Name);
             return v;
         }
     }

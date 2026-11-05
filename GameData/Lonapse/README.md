@@ -88,7 +88,7 @@ LONAPSE_PROBE_VOICE
 {
     name = myprobe          // the name parts use
     displayName = My Probe  // the subtitle name
-    lines = okto            // whose phrase table lines it gets: stayputnik okto hecs rovemate snob generic
+    lines = okto            // whose lines: stayputnik okto hecs rovemate snob qbe mk2drone mpo mtm generic
     baseHz = 760            // 200 to 3000
     wave = fm
     rhythm = swing

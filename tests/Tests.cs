@@ -1303,7 +1303,7 @@ public static class Tests
             ProbeVoiceSpec mine = new ProbeVoiceSpec("custom1", 1500, "fm", "lazy", 0.5);
             ProbeVoiceRegistry reg = ProbeVoiceRegistry.Build(new[] { cfgVoice, cfgOkto }, new[] { mine });
             Check(reg.Get("OKTO ") == cfgOkto && reg.SourceOf("okto") == ProbeVoiceSource.Config && reg.SourceOf("custom1") == ProbeVoiceSource.Settings
-                  && reg.Names.Count == 8 && reg.Names[0] == ProbeCores.Stayputnik && reg.Names[6] == "modcore" && reg.Names[7] == "custom1",
+                  && reg.Names.Count == 12 && reg.Names[0] == ProbeCores.Stayputnik && reg.Names[10] == "modcore" && reg.Names[11] == "custom1",
                   "probe voice: registry order stock, GameData, settings, a later voice replaces one with the same name", string.Join(" ", new List<string>(reg.Names).ToArray()));
             Check(!reg.UsesStockClips(cfgOkto) && reg.UsesStockClips(reg.Get("hecs")) && !reg.UsesStockClips(mine)
                   && reg.UsesStockClips(reg.Get("hecs").Clone(null)),
@@ -1395,11 +1395,11 @@ public static class Tests
     {
         string[,] stock =
         {
-            { "probeCoreSphere", "stayputnik" }, { "probeCoreSphere_v2", "stayputnik" }, { "probeCoreCube", "stayputnik" },
+            { "probeCoreSphere", "stayputnik" }, { "probeCoreSphere_v2", "stayputnik" }, { "probeCoreCube", "qbe" },
             { "probeCoreOcto", "okto" }, { "probeCoreOcto_v2", "okto" }, { "probeCoreOcto2", "okto" }, { "probeCoreOcto2_v2", "okto" },
             { "probeCoreHex", "hecs" }, { "probeCoreHex_v2", "hecs" }, { "HECS2_ProbeCore", "hecs" },
             { "roverBody", "rovemate" }, { "roverBody_v2", "rovemate" },
-            { "probeStackSmall", "snob" }, { "probeStackLarge", "snob" }, { "mk2DroneCore", "snob" }, { "MpoProbe", "snob" }, { "MtmStage", "snob" },
+            { "probeStackSmall", "snob" }, { "probeStackLarge", "snob" }, { "mk2DroneCore", "mk2drone" }, { "MpoProbe", "mpo" }, { "MtmStage", "mtm" },
         };
         string bad = "";
         for (int i = 0; i < stock.GetLength(0); i++)
@@ -1422,12 +1422,26 @@ public static class Tests
         Check(ProbeCores.Pick(new List<string> { "someModCore", null }) == "generic", "probe: Pick of only unknown cores is generic", null);
 
         string[] f = ProbeCores.Folders();
-        bool shape = f.Length == 42 && f[0] == "beeps/probe_stayputnik_happy" && f[6] == "beeps/probe_stayputnik_bored"
-                     && f[41] == "beeps/probe_generic_bored" && new HashSet<string>(f).Count == 42;
-        Check(shape && ProbeCores.Keys.Length == 6 && ProbeCores.Moods.Length == 7, "probe: Folders is 6 cores x 7 moods", f.Length + " folders");
+        bool shape = f.Length == 70 && f[0] == "beeps/probe_stayputnik_happy" && f[6] == "beeps/probe_stayputnik_bored"
+                     && f[69] == "beeps/probe_generic_bored" && new HashSet<string>(f).Count == 70;
+        Check(shape && ProbeCores.Keys.Length == 10 && ProbeCores.Moods.Length == 7, "probe: Folders is 10 cores x 7 moods", f.Length + " folders");
         Check(ProbeCores.DisplayName("okto") == "OKTO" && ProbeCores.DisplayName("hecs") == "HECS" && ProbeCores.DisplayName("rovemate") == "RoveMate"
               && ProbeCores.DisplayName("stayputnik") == "Stayputnik" && ProbeCores.DisplayName("snob") == "Probe" && ProbeCores.DisplayName("generic") == "Probe"
+              && ProbeCores.DisplayName("qbe") == "QBE" && ProbeCores.DisplayName("mk2drone") == "Drone Core"
+              && ProbeCores.DisplayName("mpo") == "MPO" && ProbeCores.DisplayName("mtm") == "MTM"
               && ProbeCores.DisplayName(null) == "Probe", "probe: display names", null);
+        Check(ProbeCores.DefaultLines("qbe") == "generic" && ProbeCores.DefaultLines("mk2drone") == "generic"
+              && ProbeCores.DefaultLines("mpo") == "generic" && ProbeCores.DefaultLines("mtm") == "generic"
+              && ProbeCores.DefaultLines("okto") == "okto" && ProbeCores.DefaultLines("snob") == "snob",
+              "probe: the new cores borrow the generic lines, the others use their own", null);
+        {
+            bool stockOk = true;
+            foreach (ProbeVoiceSpec v in ProbeVoiceSpec.Stock()) stockOk &= v.Lines == ProbeCores.DefaultLines(v.Name);
+            var vals = new Dictionary<string, string> { { "name", "qbe" }, { "baseHz", "1500" } };
+            ProbeVoiceSpec cfgQbe = ProbeVoiceSpec.FromValues(vals, new List<string>());
+            Check(stockOk && cfgQbe != null && cfgQbe.Lines == "generic" && cfgQbe.DisplayName == "QBE",
+                  "probe: stock voices and a config voice named qbe use DefaultLines and the core's display name", null);
+        }
 
         ProbeSleep sl = new ProbeSleep();
         const float dr = 0.15f, sp = 0.03f;
@@ -2714,7 +2728,11 @@ public static class Tests
             {
                 // user test: in launch and ascent Mission Control never talked to the probe (every probe_chat row was goofy)
                 List<string> noChat = new List<string>();
-                foreach (string core in ProbeCores.Keys)
+                // the lines each stock core uses (a core without own lines yet borrows generic, ProbeCores.DefaultLines)
+                var lineSets = new List<string>();
+                foreach (string key in ProbeCores.Keys)
+                    if (!lineSets.Contains(ProbeCores.DefaultLines(key))) lineSets.Add(ProbeCores.DefaultLines(key));
+                foreach (string core in lineSets)
                     foreach (string ph in FlightPhase.All)
                     {
                         if (ph == FlightPhase.Blackout) continue;

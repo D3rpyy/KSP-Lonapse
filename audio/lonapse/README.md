@@ -89,7 +89,7 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | `cause` | `any`, `spin`, `gforce`, `q`, `ground`, `heat`, `plasma`, `fuel`, `impulse`, `engine_out` |
 | `trait` | optional. `any`, `pilot`, `engineer`, `scientist`, `tourist`. The crew speaker must have this trait. |
 | `persona` | optional. `any`, `badass`, `brave`, `nervous`, `dim`, `veteran`. The crew speaker must have this persona. |
-| `core` | optional. `any`, `stayputnik`, `okto`, `hecs`, `rovemate`, `snob`, `generic` (the keys of `ProbeCores.Keys`). Holds for the whole scene. |
+| `core` | optional. `any`, `stayputnik`, `okto`, `hecs`, `rovemate`, `snob`, `qbe`, `mk2drone`, `mpo`, `mtm`, `generic` (the keys of `ProbeCores.Keys`). Holds for the whole scene. |
 | `beep` | optional. The beep mood of a `probe` row: `happy`, `offended`, `curious`, `scared`, `sleepy`, `proud`, `bored`. Required on probe rows, empty on every other row. |
 | `topic` | optional. `any` on every event except two. For `science` also the experiment ids `crewreport`, `evareport`, `mysterygoo`, `surfacesample`, `mobilematerialslab`, `temperaturescan`, `barometerscan`, `seismicscan`, `gravityscan`, `atmosphereanalysis`, `asteroidsample`, `cometsample`, `infraredtelescope`, `magnetometer`, `roc`. For `soi_enter` also `home` (the home body). For `chatter`, `power_low` and `power_ok` also `solar`: the scene talks about solar panels and only plays on a ship that has one. |
 | `spanish` | the Spanish source, not empty. May hold `{body}`. Empty on the subtitle-only role `probe`. |

@@ -9,12 +9,14 @@ namespace Lonapse
     public static class ProbeCores
     {
         public const string Stayputnik = "stayputnik", Okto = "okto", Hecs = "hecs", RoveMate = "rovemate", Snob = "snob", Generic = "generic";
+        // own cores for parts that had the stayputnik or snob character before (user request)
+        public const string Qbe = "qbe", Mk2Drone = "mk2drone", Mpo = "mpo", Mtm = "mtm";
 
         /// <summary>All core keys. Generic is last. The order matches <see cref="DisplayNames"/>.</summary>
-        public static readonly string[] Keys = { Stayputnik, Okto, Hecs, RoveMate, Snob, Generic };
+        public static readonly string[] Keys = { Stayputnik, Okto, Hecs, RoveMate, Snob, Qbe, Mk2Drone, Mpo, Mtm, Generic };
 
         /// <summary>Display names per key, same order as <see cref="Keys"/>.</summary>
-        public static readonly string[] DisplayNames = { "Stayputnik", "OKTO", "HECS", "RoveMate", "Probe", "Probe" };
+        public static readonly string[] DisplayNames = { "Stayputnik", "OKTO", "HECS", "RoveMate", "Probe", "QBE", "Drone Core", "MPO", "MTM", "Probe" };
 
         /// <summary>Beep moods. Each core has one folder per mood.</summary>
         public static readonly string[] Moods = { "happy", "offended", "curious", "scared", "sleepy", "proud", "bored" };
@@ -25,11 +27,13 @@ namespace Lonapse
         // normalised stock part names (lowercase, '.' replaced by '_') to core keys
         private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
         {
-            { "probecoresphere", Stayputnik }, { "probecoresphere_v2", Stayputnik }, { "probecorecube", Stayputnik },
+            { "probecoresphere", Stayputnik }, { "probecoresphere_v2", Stayputnik },
+            { "probecorecube", Qbe },
             { "probecoreocto", Okto }, { "probecoreocto_v2", Okto }, { "probecoreocto2", Okto }, { "probecoreocto2_v2", Okto },
             { "probecorehex", Hecs }, { "probecorehex_v2", Hecs }, { "hecs2_probecore", Hecs },
             { "roverbody", RoveMate }, { "roverbody_v2", RoveMate },
-            { "probestacksmall", Snob }, { "probestacklarge", Snob }, { "mk2dronecore", Snob }, { "mpoprobe", Snob }, { "mtmstage", Snob },
+            { "probestacksmall", Snob }, { "probestacklarge", Snob },
+            { "mk2dronecore", Mk2Drone }, { "mpoprobe", Mpo }, { "mtmstage", Mtm },
         };
 
         /// <summary>Lowercase, trimmed, '.' replaced by '_'. KSP turns '_' in a cfg name into '.' in part.name.</summary>
@@ -71,6 +75,18 @@ namespace Lonapse
             return i >= 0 ? DisplayNames[i] : "Probe";
         }
 
+        /// <summary>Cores that have their own sound and name but no lines of their own yet. Until their scenes are
+        /// written (phrase table core column) they borrow the neutral generic lines. Remove a key here once its lines
+        /// exist.</summary>
+        public static readonly string[] BorrowGenericLines = { Qbe, Mk2Drone, Mpo, Mtm };
+
+        /// <summary>The phrase table lines a stock voice uses: its own key, or generic for a core in
+        /// <see cref="BorrowGenericLines"/>.</summary>
+        public static string DefaultLines(string key)
+        {
+            return Array.IndexOf(BorrowGenericLines, key) >= 0 ? Generic : key;
+        }
+
         /// <summary>Plan v6: the data stream beep while an antenna sends (built by build_clips.py).</summary>
         public const string DataFolder = "beeps/probe_data";
 
@@ -80,7 +96,7 @@ namespace Lonapse
             return "beeps/probe_" + core + "_" + mood;
         }
 
-        /// <summary>All probe beep folders (6 cores x 7 moods, core-major).</summary>
+        /// <summary>All probe beep folders (10 cores x 7 moods, core-major).</summary>
         public static string[] Folders()
         {
             string[] r = new string[Keys.Length * Moods.Length];

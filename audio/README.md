@@ -136,7 +136,7 @@ Probes don't talk, they beep. Every stock probe core has its own beep voice, and
 
 | Folder | Clips | What it holds |
 |---|---|---|
-| `beeps/probe_<core>_<mood>` | 3 each | 6 cores x 7 moods = 42 folders, 126 clips. One beep phrase in the timbre of the core and the shape of the mood. |
+| `beeps/probe_<core>_<mood>` | 3 each | 10 cores x 7 moods = 70 folders, 210 clips. One beep phrase in the timbre of the core and the shape of the mood. |
 | `beeps/probe_data` | 4 (min 3) | The data stream while an antenna sends science. 10 to 16 short even chirps on 4 pitches, generic timbre without glide (`make_probe_data`). |
 
 The folder names are the same as `ProbeCores.Folders()` in `src/ProbeCore.cs`. `ClipLibrary` loads them, and an
@@ -146,7 +146,7 @@ The timbre per core comes from `audio/probe/cores.tsv`. The columns are `key bas
 
 | Column | Values | Meaning |
 |---|---|---|
-| `key` | `stayputnik okto hecs rovemate snob generic` | The core key from `ProbeCores.Keys`. Every key must be there once. |
+| `key` | `stayputnik okto hecs rovemate snob qbe mk2drone mpo mtm generic` | The core key from `ProbeCores.Keys`. Every key must be there once. |
 | `base_hz` | 200 to 3000 | Pitch of note 0 of a mood. |
 | `wave` | `sine triangle square saw pulse fm` | Band-limited additive waves (harmonics under 9 kHz). `pulse` has a 25 % duty cycle. `fm` is a bell-like tone (modulator at twice the carrier, index falls from 2.2 to 0.4). |
 | `rhythm` | `even swing stutter lazy` | `swing` makes the notes long, short, long. `stutter` plays every note twice quickly. `lazy` makes notes 1.2 times and gaps 1.35 times longer. The scared trill ignores the rhythm. |
