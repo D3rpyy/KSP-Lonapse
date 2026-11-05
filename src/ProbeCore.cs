@@ -78,7 +78,7 @@ namespace Lonapse
         /// <summary>Cores that have their own sound and name but no lines of their own yet. Until their scenes are
         /// written (phrase table core column) they borrow the neutral generic lines. Remove a key here once its lines
         /// exist.</summary>
-        public static readonly string[] BorrowGenericLines = { Qbe, Mk2Drone, Mpo, Mtm };
+        public static readonly string[] BorrowGenericLines = { };
 
         /// <summary>The phrase table lines a stock voice uses: its own key, or generic for a core in
         /// <see cref="BorrowGenericLines"/>.</summary>

@@ -1430,16 +1430,17 @@ public static class Tests
               && ProbeCores.DisplayName("qbe") == "QBE" && ProbeCores.DisplayName("mk2drone") == "Drone Core"
               && ProbeCores.DisplayName("mpo") == "MPO" && ProbeCores.DisplayName("mtm") == "MTM"
               && ProbeCores.DisplayName(null) == "Probe", "probe: display names", null);
-        Check(ProbeCores.DefaultLines("qbe") == "generic" && ProbeCores.DefaultLines("mk2drone") == "generic"
-              && ProbeCores.DefaultLines("mpo") == "generic" && ProbeCores.DefaultLines("mtm") == "generic"
-              && ProbeCores.DefaultLines("okto") == "okto" && ProbeCores.DefaultLines("snob") == "snob",
-              "probe: the new cores borrow the generic lines, the others use their own", null);
+        {
+            bool own = true;
+            foreach (string k in ProbeCores.Keys) own &= ProbeCores.DefaultLines(k) == k;
+            Check(own && ProbeCores.BorrowGenericLines.Length == 0, "probe: every stock core uses its own lines", null);
+        }
         {
             bool stockOk = true;
             foreach (ProbeVoiceSpec v in ProbeVoiceSpec.Stock()) stockOk &= v.Lines == ProbeCores.DefaultLines(v.Name);
             var vals = new Dictionary<string, string> { { "name", "qbe" }, { "baseHz", "1500" } };
             ProbeVoiceSpec cfgQbe = ProbeVoiceSpec.FromValues(vals, new List<string>());
-            Check(stockOk && cfgQbe != null && cfgQbe.Lines == "generic" && cfgQbe.DisplayName == "QBE",
+            Check(stockOk && cfgQbe != null && cfgQbe.Lines == "qbe" && cfgQbe.DisplayName == "QBE",
                   "probe: stock voices and a config voice named qbe use DefaultLines and the core's display name", null);
         }
 

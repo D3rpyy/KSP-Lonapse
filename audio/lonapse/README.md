@@ -35,6 +35,7 @@ The source files are:
 | `phrases/probe_crew.tsv` | 0.6.0: a crewed vessel with a probe core. The probe beeps in the cabin and a crew member answers (event `probe_crew`). | `pc_` |
 | `phrases/events_more.tsv` | 0.6.0: more crew lines for throttle, chutes, staging, power, signal, landing, docking, EVA, stations and burns. | `em_` |
 | `phrases/probe_more.tsv` | 0.6.0: more probe mode lines for throttle, chutes, data, splashdown, touchdown, docking, burns and say again. | `pm_` |
+| `phrases/probe_cores.tsv` | Own lines for the `qbe`, `mk2drone`, `mpo` and `mtm` cores, after their in-game part descriptions. | `pk_` |
 
 Some older rows have keys without these prefixes.
 
