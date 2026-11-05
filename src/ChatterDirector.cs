@@ -239,8 +239,21 @@ namespace Lonapse
                 { SubtitleSlots.Self, "a" }, { SubtitleSlots.Other, "b" } };
             Func<int, System.Collections.Generic.IDictionary<string, string>> per = null;
             if (sc.IsIntercom) per = i => names;
-            return SubtitleSlots.CanFill(PhraseClips.LinesFor(sc, Body), PhraseClips.pools, SlotFlightValues(), per, SlotConditions());
+            // flight values and conditions once per frame: a pick checks hundreds of scenes
+            if (slotCacheClock != clock || slotCacheValues == null || slotCacheDebugPhase != debugSlotPhase || slotCacheBody != Body)
+            {
+                slotCacheBody = Body;
+                slotCacheValues = SlotFlightValues();
+                slotCacheConds = SlotConditions();
+                slotCacheClock = clock;
+                slotCacheDebugPhase = debugSlotPhase;
+            }
+            return SubtitleSlots.CanFill(PhraseClips.LinesFor(sc, Body), PhraseClips.pools, slotCacheValues, per, slotCacheConds);
         }
+        private System.Collections.Generic.Dictionary<string, string> slotCacheValues;
+        private System.Collections.Generic.List<string> slotCacheConds;
+        private float slotCacheClock = -1f;
+        private string slotCacheDebugPhase, slotCacheBody;
 
         private System.Collections.Generic.Dictionary<string, string> SlotFlightValues()
         {
