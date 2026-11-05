@@ -1,0 +1,76 @@
+name: Release workflow
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Build and publish Lonapse
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mono-mcs mono-runtime rsync zip unzip curl
+
+      - name: Download KSP assemblies
+        run: |
+          curl -L --fail \
+            https://github.com/KSPModdingLibs/KSPLibs/raw/main/KSP-1.12.5.zip \
+            -o /tmp/ksp-libs.zip
+
+          mkdir -p /tmp/ksp-libs
+          unzip -q /tmp/ksp-libs.zip -d /tmp/ksp-libs
+
+          LIB_DIR="$(dirname "$(find /tmp/ksp-libs -name Assembly-CSharp.dll -print -quit)")"
+
+          if [ ! -f "$LIB_DIR/Assembly-CSharp.dll" ]; then
+            echo "KSP assemblies not found!"
+            exit 1
+          fi
+
+          mkdir -p /tmp/ksp/KSP_Data/Managed
+          cp "$LIB_DIR"/*.dll /tmp/ksp/KSP_Data/Managed/
+
+      - name: Prepare audio assets
+        run: |
+          mkdir -p audio/build/Sounds
+          cp -a GameData/Lonapse/Sounds/. audio/build/Sounds/
+
+          mkdir -p audio/build/lonapse
+          cp GameData/Lonapse/Phrases/phrases.tsv \
+             audio/build/lonapse/phrases.tsv
+
+      - name: Build and package
+        run: ./package.sh
+        env:
+          KSP_DIR: /tmp/ksp
+
+      - name: Verify release version
+        run: |
+          VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+
+          if [ "$VERSION" != "$TAG_VERSION" ]; then
+            echo "Version mismatch!"
+            echo "Source: $VERSION"
+            echo "Tag: $TAG_VERSION"
+            exit 1
+          fi
+
+      - name: Upload release ZIP
+        run: |
+          VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
+
+          gh release upload "$GITHUB_REF_NAME" \
+            "dist/Lonapse-$VERSION.zip" \
+            --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+ 
