@@ -13,7 +13,7 @@
   - After some science reactions Mission Control says the experiment, the body and the science points. A finished contract gets its funds, a failed one a short line. Turn this off with "Science points and contract funds".
   - A line that is not ready in time plays as before, without the name. Nothing waits more than a second for it.
   - You can add your own lines without rendering any audio. Put rows in `GameData/Lonapse/Phrases/Extra/*.tsv`, in the format of the tables in the repo. They are only heard with the runtime voice on.
-- Subtitles with versions. Almost every line now has several English subtitles for the same audio: 6478 new versions on 3186 of the 3849 lines. You see a new wording first, the original comes later.
+- Subtitles with versions. Most lines now have several English subtitles for the same audio: 6478 new versions on 3186 of the 3849 lines. You see a new wording first, the original comes later.
 - Subtitle slots. 29 template scenes fill in things from your flight: the mission day, the planet, the vessel, the altitude, parts of your vessel and the names of the crew in a chat. A subtitle only names parts your vessel has, and some versions only show in the right place, like on the ground or at Kerbin.
 - QBE, Mk2 Drone Core, MPO and MTM have their own probe voices and 138 scenes of their own lines.
 - `ModuleLonapse` takes a `displayName`, so a probe from a mod shows its own name in the subtitles.
