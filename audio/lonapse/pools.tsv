@@ -1,0 +1,49 @@
+# Experimental (procedural talk): values for the subtitle slots in the english column, like {thing}.
+# The audio never says these words. One pool per name, one value per row. Values are lowercase unless a name.
+# Used by audio/build_lonapse.py (validation) and the plugin (GameData/Lonapse/Phrases/pools.tsv).
+pool	english
+thing	helmet
+thing	left sock
+thing	toothbrush
+thing	lucky rock
+thing	flight manual
+thing	sandwich
+thing	good pen
+thing	rubber duck
+thing	wrench
+thing	snack bag
+thing	comb
+thing	space map
+thing	spare glove
+thing	harmonica
+spot	seat
+spot	control panel
+spot	oxygen tank
+spot	air vent
+spot	toolbox
+spot	hatch
+spot	parachute bag
+spot	snack drawer
+food	old cheese
+food	burnt toast
+food	snack paste
+food	fish soup
+food	boiled cabbage
+food	pickled mystery
+food	egg powder
+food	space beans
+part	antenna
+part	hatch handle
+part	seat belt
+part	left panel
+part	coffee machine
+part	window seal
+part	sun visor
+part	radio knob
+part	toilet lid
+creature	a giant space whale
+creature	a talking rock
+creature	three tiny moons with faces
+creature	a very polite Kraken
+creature	a goat in a spacesuit
+creature	a cloud made of cake

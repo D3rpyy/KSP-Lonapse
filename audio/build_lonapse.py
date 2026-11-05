@@ -54,8 +54,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SOURCE_DIR = ROOT / "lonapse" / "phrases"
 BODIES_FILE = ROOT / "lonapse" / "bodies.tsv"
+POOLS_FILE = ROOT / "lonapse" / "pools.tsv"   # experimental (procedural talk): subtitle slot values
 BUILD = ROOT / "build" / "lonapse"
 PHRASES_OUT = BUILD / "phrases.tsv"
+POOLS_OUT = BUILD / "pools.tsv"
 MANIFEST = BUILD / "manifest.json"
 CACHE = BUILD / "cache"
 # Bump when the render chain changes in a way the cache key does not see (filters, gasp model, trim rule).
@@ -165,6 +167,12 @@ STOCK_BODIES = ["kerbol", "moho", "eve", "gilly", "kerbin", "mun", "minmus", "du
 GENERIC_BODY = "generic"
 BODY_SEP = "__"              # variant clip_key = <clip_key>__<body key>
 PLACEHOLDER_RE = re.compile(r"\{([^{}]*)\}")
+# Experimental (procedural talk): subtitle slots in the english only, filled in game (SubtitleSlots in C#).
+# {pool} or {pool:2} from pools.tsv, a flight value, or (intercom only) a kerbal's first name.
+SLOT_RE = re.compile(r"^([a-z_]+)(?::([1-9]))?$")
+FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km"]
+PERSON_SLOTS = ["other", "self"]
+POOL_COLUMNS = ["pool", "english"]
 
 # Panic crew delivery (user request): broken pieces with a gasp or a ragged pause in between, Piper with more
 # variation (noise), light drive, and now and then a voice crack. All random choices are seeded per clip.
@@ -479,12 +487,17 @@ def validate(rows):
                 bad.append("spanish is empty")
             if not row["english"]:
                 bad.append("english is empty")
-        # placeholders: only {body}. Same rules as PhraseTable.CheckPlaceholders in C#.
+        # placeholders: the spanish only knows {body}, the english also subtitle slots. Same rules as
+        # PhraseTable.CheckPlaceholders in C#. Which slots exist is checked in check_slots.
         ph_es = PLACEHOLDER_RE.findall(row["spanish"])
         ph_en = PLACEHOLDER_RE.findall(row["english"])
-        unknown = sorted({p for p in ph_es if p != "body"} | {p for p in ph_en if p != "body"})
-        if unknown:
-            bad.append("unknown placeholder(s) %s, only {body} exists" % ", ".join("{%s}" % p for p in unknown))
+        unknown_es = sorted({p for p in ph_es if p != "body"})
+        unknown_en = sorted({p for p in ph_en if p != "body" and not is_slot(p)})
+        if unknown_es:
+            bad.append("spanish placeholder(s) %s, only {body} exists there" % ", ".join("{%s}" % p for p in unknown_es))
+        elif unknown_en:
+            bad.append("bad placeholder(s) %s, use {body} or a slot like {name} or {name:2}"
+                       % ", ".join("{%s}" % p for p in unknown_en))
         else:
             if not sub_only and (("body" in ph_es) != ("body" in ph_en)):
                 bad.append("{body} must be in both spanish and english, or in neither")
@@ -494,7 +507,7 @@ def validate(rows):
         if alt:
             if not ALT_RE.match(alt):
                 bad.append("alt must match [a-z0-9]+")
-            if ph_es or ph_en:
+            if ph_es or "body" in ph_en:
                 bad.append("an alt row cannot use {body}")
         sc = row["scene"]
         if sc in scene_file and scene_file[sc] != row["file"]:
@@ -560,6 +573,100 @@ def validate(rows):
     return good, errors
 
 
+def is_slot(p):
+    m = SLOT_RE.match(p)
+    return bool(m) and m.group(1) != "body"
+
+
+def slot_names(text):
+    """The slot names in an english text (without :n), {body} left out."""
+    out = []
+    for p in PLACEHOLDER_RE.findall(text):
+        m = SLOT_RE.match(p)
+        if m and m.group(1) != "body" and m.group(1) not in out:
+            out.append(m.group(1))
+    return out
+
+
+def load_pools(path=POOLS_FILE):
+    """Subtitle slot values (experimental, procedural talk). Returns ({pool: [values]} in file order, errors).
+    No file gives no pools. Same rules as SlotPools.Parse in C#."""
+    if not path.exists():
+        return {}, []
+    rows, errors = read_tsv(path, POOL_COLUMNS, path.name)
+    pools = {}
+    for r in rows:
+        bad = []
+        name, val = r["pool"], r["english"]
+        if not re.match(r"^[a-z_]+$", name):
+            bad.append("pool must match [a-z_]+")
+        elif name == "body" or name in FLIGHT_SLOTS or name in PERSON_SLOTS:
+            bad.append("'%s' is a reserved slot name" % name)
+        if not val or "{" in val or "}" in val:
+            bad.append("value must be non-empty text without { }")
+        if bad:
+            errors.append("%s (%s): %s" % (r["loc"], name, "; ".join(bad)))
+            continue
+        vals = pools.setdefault(name, [])
+        if val in vals:
+            errors.append("%s (%s): duplicate value '%s'" % (r["loc"], name, val))
+        else:
+            vals.append(val)
+    return pools, errors
+
+
+def check_slots(rows, pools):
+    """Every english slot is a pool, a flight slot or (in an intercom scene) a person slot. A {pool:n} needs at
+    least n values. Returns errors. Every pool should be used somewhere, an unused pool is a warning."""
+    errors, used = [], set()
+    by_scene = {}
+    for r in rows:
+        by_scene.setdefault(r["scene"], []).append(r)
+    for sc, lines in by_scene.items():
+        base = [r for r in lines if not r["alt"]]
+        intercom = len(base) >= 2 and all(r["role"] == "crew" for r in base)
+        for r in lines:
+            for p in PLACEHOLDER_RE.findall(r["english"]):
+                m = SLOT_RE.match(p)
+                if not m or m.group(1) == "body":
+                    continue
+                name, n = m.group(1), int(m.group(2) or 1)
+                if name in FLIGHT_SLOTS:
+                    if m.group(2):
+                        errors.append("%s (%s): {%s} is a flight value, it has no :n" % (r["loc"], r["clip_key"], p))
+                elif name in PERSON_SLOTS:
+                    if not intercom:
+                        errors.append("%s (%s): {%s} only works in intercom scenes (crew only, 2 or more lines)"
+                                      % (r["loc"], r["clip_key"], name))
+                    elif m.group(2):
+                        errors.append("%s (%s): {%s} has no :n" % (r["loc"], r["clip_key"], p))
+                elif name not in pools:
+                    errors.append("%s (%s): slot {%s} has no pool in %s" % (r["loc"], r["clip_key"], name,
+                                                                          POOLS_FILE.name))
+                else:
+                    used.add(name)
+                    if n > len(pools[name]):
+                        errors.append("%s (%s): {%s} needs %d values, pool %s has %d"
+                                      % (r["loc"], r["clip_key"], p, n, name, len(pools[name])))
+    for name in pools:
+        if name not in used:
+            log("WARN pools: pool '%s' is not used by any phrase" % name)
+    return errors
+
+
+def write_pools(pools):
+    BUILD.mkdir(parents=True, exist_ok=True)
+    if not pools:
+        if POOLS_OUT.exists():
+            POOLS_OUT.unlink()
+        return
+    lines = ["\t".join(POOL_COLUMNS)]
+    for name, vals in pools.items():
+        for v in vals:
+            lines.append(name + "\t" + v)
+    POOLS_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def cap_first(text, pos):
     """Upper-cases the letter at pos when it starts the text or a sentence (after . ! ? and spaces)."""
     if pos >= len(text) or not text[pos].islower():
@@ -600,6 +707,8 @@ def load_all():
     errors += berr
     good, verr = validate(rows)
     errors += verr
+    pools, perr = load_pools()
+    errors += perr + check_slots(good, pools)
     warnings = []
     errors += check_minimums(good, warnings)
     for w in warnings:
@@ -1351,6 +1460,10 @@ def build(rows, njobs):
         % (copied, removed, len(expected) - copied))
     write_phrases(rows)
     log("Wrote %s" % PHRASES_OUT)
+    pools, _ = load_pools()
+    write_pools(pools)
+    if pools:
+        log("Wrote %s" % POOLS_OUT)
     return jobs
 
 

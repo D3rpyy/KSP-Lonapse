@@ -929,6 +929,15 @@ def install():
     tdst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(table, tdst)
     log("install: %s" % tdst)
+    # experimental (procedural talk): the subtitle slot pools, next to the phrase table
+    pools = BUILD / "lonapse" / "pools.tsv"
+    pdst = gd / "Phrases" / "pools.tsv"
+    if pools.exists():
+        shutil.copy2(pools, pdst)
+        log("install: %s" % pdst)
+    elif pdst.exists():
+        pdst.unlink()
+        log("install: removed stale %s" % pdst)
 
 
 # ---------------------------------------------------------------------------

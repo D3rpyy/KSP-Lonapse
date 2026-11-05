@@ -959,6 +959,8 @@ namespace Lonapse
             // not a setting: GUILayout.Toggle, so nothing is saved. Drawn without a director too (same controls in Layout and Repaint)
             bool varOnly = GUILayout.Toggle(d != null && d.debugVariantsOnly, "Only scenes with variants (experimental)");
             if (d != null) d.debugVariantsOnly = varOnly;
+            bool slotOnly = GUILayout.Toggle(d != null && d.debugSlotsOnly, "Only scenes with slots (experimental)");
+            if (d != null) d.debugSlotsOnly = slotOnly;
             if (GUILayout.Button("Play random line"))
             {
                 if (d == null) testStatus = "no director";

@@ -155,6 +155,49 @@ namespace Lonapse
         /// </summary>
         private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc)
         {
+            return PlayLines(sc, null);
+        }
+
+        /// <summary>PlayLines, and the subtitle slots of the lines filled in (experimental, procedural talk): pool
+        /// values from the line memory, flight values, and <paramref name="perLine"/> (may be null) for {other} and
+        /// {self} per line index.</summary>
+        private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc,
+            Func<int, System.Collections.Generic.IDictionary<string, string>> perLine)
+        {
+            var lines = PlayLinesRaw(sc);
+            bool any = false;
+            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.HasSlots(lines[i].English);
+            if (!any) return lines;
+            var unresolved = new System.Collections.Generic.List<string>();
+            var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
+                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved);
+            foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
+            return filled;
+        }
+
+        private System.Collections.Generic.Dictionary<string, string> SlotFlightValues()
+        {
+            string here = null, vessel = null;
+            double alt = double.NaN;
+            bool kerbinDays = true;
+            try
+            {
+                Vessel v = FlightGlobals.ActiveVessel;
+                if (v != null)
+                {
+                    vessel = v.vesselName;
+                    alt = v.altitude;
+                    if (v.mainBody != null) here = v.mainBody.bodyName;
+                }
+                kerbinDays = GameSettings.KERBIN_TIME;
+            }
+            catch (Exception) { }
+            if (!string.IsNullOrEmpty(bodyOverride)) here = char.ToUpperInvariant(bodyOverride[0]) + bodyOverride.Substring(1);
+            return SubtitleSlots.FlightValues(host.missionTime, kerbinDays, here, vessel, alt);
+        }
+
+        private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)
+        {
             var lines = PhraseClips.LinesFor(sc, Body, opts => Mem.TakeLine(opts, rng));
             lastVariantPick = null;
             if (sc != null && sc.HasAlts)
@@ -174,6 +217,8 @@ namespace Lonapse
 
         /// <summary>Debug tab (experimental): the phrase test only picks scenes with alt rows.</summary>
         public bool debugVariantsOnly;
+        /// <summary>Debug tab (experimental, procedural talk): the phrase test only picks scenes with subtitle slots.</summary>
+        public bool debugSlotsOnly;
 
         public ChatterDirector(LonapseAddon host, System.Random rng)
         {
@@ -1677,7 +1722,10 @@ namespace Lonapse
                 if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, x => x.IsIntercom);
                 if (sc == null) sc = PickIntercomSceneFor("calm", a, x => x.IsIntercom);
             }
-            var lines = sc != null ? PlayLines(sc) : null; // {body} variants (req 5)
+            // {other} and {self}: line i is spoken by a when i is even (see the turn loop below)
+            string nameA = SubtitleSlots.FirstName(a.displayName), nameB = SubtitleSlots.FirstName(b.displayName);
+            var lines = sc != null ? PlayLines(sc, i => new System.Collections.Generic.Dictionary<string, string> {
+                { SubtitleSlots.Self, i % 2 == 0 ? nameA : nameB }, { SubtitleSlots.Other, i % 2 == 0 ? nameB : nameA } }) : null;
             if (lines != null && lines.Count == 0) { sc = null; lines = null; }
             int turns = lines != null ? lines.Count : 2 + rng.Next(3);
             // req 9: on stations and bases the intercom gets one extra turn
@@ -1927,6 +1975,7 @@ namespace Lonapse
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (sc.IsProbe) continue; // crew mode never plays a probe scene
                 if (debugVariantsOnly && !sc.HasAlts) continue;
+                if (debugSlotsOnly && !sc.HasSlots) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 // a concrete test phase must not pull in blackout rows (PhaseMatches already handles that)
                 if (!string.IsNullOrEmpty(cause) && !PhraseTable.CauseMatches(sc.Cause, cause)) continue;

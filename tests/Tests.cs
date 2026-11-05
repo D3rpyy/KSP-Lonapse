@@ -908,6 +908,7 @@ public static class Tests
               "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
         SceneMemoryTests();
         SceneVariantTests();
+        SubtitleSlotTests();
         ProbeCoreTests();
         ProbeSynthTests();
         ProbeSettingsTests();
@@ -1210,6 +1211,69 @@ public static class Tests
                   && m.TakeLine(new List<PhraseEntry> { opts[1] }, rng) == opts[1],
                   "variants: TakeLine with one option returns it, empty gives null", null);
         }
+    }
+
+    // Experimental (procedural talk): subtitle slots, filled in game. The spanish (the audio) stays general.
+    static void SubtitleSlotTests()
+    {
+        var perr = new List<string>();
+        SlotPools pools = SlotPools.Parse(new List<string> {
+            "# comment", "pool\tenglish", "thing\thelmet", "thing\tsock", "thing\thelmet", "food\tcheese",
+            "day\tmonday", "Bad\tx", "thing\t{x}" }, perr);
+        Check(pools.Count == 2 && pools.Values("thing").Count == 2 && pools.Values("food")[0] == "cheese",
+              "slots: pools parse, a duplicate value is kept once", pools.Count + " pools");
+        Check(perr.Count == 3 && !pools.Has("day"), "slots: reserved, bad and braced pool rows are rejected", string.Join(" | ", perr.ToArray()));
+
+        // the table: slots only in the english
+        const string H = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\tenglish";
+        var e1 = new List<string>();
+        PhraseTable t1 = PhraseTable.Parse(new List<string> { H,
+            "s1\tchatter\tchatter\tcalm\tcrew\tss\t1\tboth\t¿Quién ha cogido mis cosas?\tWho took my {thing}?",
+            "s2\tchatter\tchatter\tcalm\tcrew\tss\t2\tboth\tYo no.\tNot me, {other}. Ask about the {thing:2} on day {day}." }, e1);
+        Check(e1.Count == 0 && t1.Entries.Count == 2, "slots: english slots are accepted", string.Join(" | ", e1.ToArray()));
+        var e2 = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "b1\tchatter\tchatter\tcalm\tcrew\tsb\t1\tboth\tMi {thing}\tMy {thing}",
+            "b2\tchatter\tchatter\tcalm\tcrew\tsc\t1\tboth\tHola\tHi {Thing}",
+            "b3\tchatter\tchatter\tcalm\tcrew\tsd\t1\tboth\tHola\tHi {thing:0}" }, e2);
+        Check(e2.Count == 3, "slots: a slot in the spanish, a capital name or :0 is an error", e2.Count.ToString());
+
+        // Fill
+        PhraseScene sc = null;
+        foreach (PhraseScene x in t1.Scenes) if (x.Id == "ss") sc = x;
+        Check(sc != null && sc.HasSlots, "slots: the scene knows it has slots", null);
+        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, true, "Kerbin", "Lander II", 1234);
+        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, false, null, "", 25600)["alt_km"] == "26"
+              && !SubtitleSlots.FlightValues(0, false, null, "", 0).ContainsKey("vessel"),
+              "slots: flight values (mission day from 1, km, empty names left out)", flight["day"] + " " + flight["alt_km"]);
+        var pp = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\thelmet", "thing\tsock" }, null);
+        var un = new List<string>();
+        List<PhraseEntry> f = SubtitleSlots.Fill(sc.Lines, pp, flight,
+            i => new Dictionary<string, string> { { "self", i % 2 == 0 ? "Jeb" : "Bill" }, { "other", i % 2 == 0 ? "Bill" : "Jeb" } },
+            (pool, vals) => vals[0], un);
+        Check(f[0].English == "Who took my helmet?" && f[1].English == "Not me, Jeb. Ask about the sock on day 3." && un.Count == 0,
+              "slots: Fill gives pool values, {pool:2} another value, person and flight values", f[0].English + " / " + f[1].English);
+        Check(f[0].ClipKey == "s1" && f[0].Spanish == sc.Lines[0].Spanish && sc.Lines[0].English == "Who took my {thing}?",
+              "slots: Fill copies the row and keeps the clip key, the table row is unchanged", null);
+        var cap = new List<PhraseEntry> { new PhraseEntry { ClipKey = "c", English = "{thing} is gone. {thing} again! Hm, {thing}." } };
+        Check(SubtitleSlots.Fill(cap, pp, null, null, (pool, vals) => vals[1], null)[0].English == "Sock is gone. Sock again! Hm, sock.",
+              "slots: a value at the start of a sentence gets a capital", null);
+        var miss = new List<string>();
+        var m2 = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "m", English = "Hi {nobody} on {vessel}" } },
+                                    pp, new Dictionary<string, string>(), null, null, miss);
+        Check(m2[0].English == "Hi ... on ..." && miss.Count == 2, "slots: an unknown slot gives ... and is reported", m2[0].English);
+        Check(SubtitleSlots.FirstName("Jebediah Kerman") == "Jebediah" && SubtitleSlots.FirstName("Val") == "Val",
+              "slots: first name", null);
+
+        // TakeValue goes through the pool before a value comes back
+        SceneMemory mem = new SceneMemory();
+        Random rng = new Random(3);
+        var vals3 = new List<string> { "a", "b", "c" };
+        var seen = new HashSet<string>();
+        for (int i = 0; i < 3; i++) seen.Add(mem.TakeValue("p", vals3, rng));
+        string fourth = mem.TakeValue("p", vals3, rng);
+        Check(seen.Count == 3 && mem.LastSeq("slot:p:" + fourth) > 0 && mem.TakeValue("p", null, rng) == null,
+              "slots: TakeValue uses every value once before one comes back", string.Join(" ", new List<string>(seen).ToArray()));
     }
 
     // 0.6.0: the C# probe beep synth must give the same samples as audio/build_clips.py

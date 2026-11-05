@@ -15,6 +15,10 @@ namespace Lonapse
         public const string TableRel = "GameData/Lonapse/Phrases/phrases.tsv";
 
         public static PhraseTable table;
+        /// <summary>Experimental (procedural talk): subtitle slot values from pools.tsv next to phrases.tsv. Empty
+        /// when the file is missing, then a slot shows "...".</summary>
+        public static SlotPools pools = new SlotPools();
+        public const string PoolsRel = "GameData/Lonapse/Phrases/pools.tsv";
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
@@ -57,6 +61,7 @@ namespace Lonapse
             }
             for (int i = 0; i < errors.Count && i < 10; i++) Log.Warn("Lonapse table: " + errors[i]);
             if (errors.Count > 10) Log.Warn("Lonapse table: " + (errors.Count - 10) + " more error(s)");
+            LoadPools();
 
             GameDatabase db = GameDatabase.Instance;
             int missing = 0;
@@ -86,6 +91,21 @@ namespace Lonapse
             status = clipCount + " clips, " + sceneCount + " scenes (" + probeSceneCount + " probe), "
                      + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "");
             Log.Info("Lonapse: " + status);
+        }
+
+        static void LoadPools()
+        {
+            pools = new SlotPools();
+            try
+            {
+                string pp = Path.Combine(KSPUtil.ApplicationRootPath, PoolsRel);
+                if (!File.Exists(pp)) return;
+                var perr = new List<string>();
+                pools = SlotPools.Parse(new List<string>(File.ReadAllLines(pp, System.Text.Encoding.UTF8)), perr);
+                for (int i = 0; i < perr.Count && i < 10; i++) Log.Warn("Lonapse pools: " + perr[i]);
+                Log.Info("Lonapse: " + pools.Count + " subtitle slot pools");
+            }
+            catch (Exception e) { Log.Warn("Lonapse pools: read failed: " + e.Message); pools = new SlotPools(); }
         }
 
         /// <summary>Clip for a row. A crew row falls back to the other gender, so a line is never lost.

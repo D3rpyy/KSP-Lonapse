@@ -502,6 +502,7 @@ namespace Lonapse
                 if (!sc.IsProbe) continue;
                 if (PhraseTable.IsProbeCrewEvent(sc.Event)) continue; // needs crew aboard
                 if (debugVariantsOnly && !sc.HasAlts) continue;
+                if (debugSlotsOnly && !sc.HasSlots) continue;
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 if (!string.IsNullOrEmpty(topic) && !PhraseTable.TopicMatches(sc.Topic, topic)) continue;

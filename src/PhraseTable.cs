@@ -170,22 +170,45 @@ namespace Lonapse
         // ---- placeholders ----
         static readonly Regex PlaceholderRe = new Regex(@"\{([^{}]*)\}", RegexOptions.CultureInvariant);
 
-        // Placeholder rules, same as validate() in audio/build_lonapse.py. Only {body} exists. {body} at most once per text, and for a voiced row in spanish and english or in
-        // neither (a subtitle-only row has no spanish). Adds a description per problem to bad.
+        // Placeholder rules, same as validate() in audio/build_lonapse.py. The spanish only knows {body}: the audio is
+        // fixed. The english may also hold subtitle slots ({thing}, {thing:2}, {day}, see SubtitleSlots), filled in
+        // game. {body} at most once per text, and for a voiced row in spanish and english or in neither (a
+        // subtitle-only row has no spanish). Whether a pool exists, and that {other} and {self} are only in
+        // intercom scenes, is checked by the build script. Adds a description per problem to bad.
         static void CheckPlaceholders(PhraseEntry e, List<string> bad)
         {
             List<string> es = Placeholders(e.Spanish), en = Placeholders(e.English);
             List<string> unknown = new List<string>();
             foreach (string p in es) if (p != "body" && !unknown.Contains(p)) unknown.Add(p);
-            foreach (string p in en) if (p != "body" && !unknown.Contains(p)) unknown.Add(p);
             if (unknown.Count > 0)
             {
-                bad.Add("unknown placeholder(s) {" + string.Join("}, {", unknown.ToArray()) + "}, only {body} exists");
+                bad.Add("spanish placeholder(s) {" + string.Join("}, {", unknown.ToArray()) + "}, only {body} exists there");
+                return;
+            }
+            foreach (string p in en) if (p != "body" && !IsSlot(p) && !unknown.Contains(p)) unknown.Add(p);
+            if (unknown.Count > 0)
+            {
+                bad.Add("bad placeholder(s) {" + string.Join("}, {", unknown.ToArray()) + "}, use {body} or a slot like {name} or {name:2}");
                 return;
             }
             int bEs = es.FindAll(p => p == "body").Count, bEn = en.FindAll(p => p == "body").Count;
             if (!e.SubtitleOnly && (bEs > 0) != (bEn > 0)) bad.Add("{body} must be in both spanish and english, or in neither");
             else if (bEs > 1 || bEn > 1) bad.Add("{body} at most once per text");
+        }
+
+        // name or name:n with n 1..9
+        static bool IsSlot(string p)
+        {
+            string n = SlotName(p);
+            if (n == "body" || !SubtitleSlots.IsSlotName(n)) return false;
+            if (n.Length == p.Length) return true;
+            return p.Length == n.Length + 2 && p[n.Length] == ':' && p[n.Length + 1] >= '1' && p[n.Length + 1] <= '9';
+        }
+
+        static string SlotName(string p)
+        {
+            int c = p.IndexOf(':');
+            return c < 0 ? p : p.Substring(0, c);
         }
 
         static List<string> Placeholders(string text)
@@ -445,7 +468,7 @@ namespace Lonapse
                 if (e.IsAlt)
                 {
                     if (!IsAltKey(e.Alt)) bad.Add("alt '" + e.Alt + "' must match [a-z0-9]+");
-                    if (e.HasBody || Placeholders(e.Spanish).Count > 0 || Placeholders(e.English).Count > 0)
+                    if (e.HasBody || Placeholders(e.Spanish).Count > 0 || Placeholders(e.English).Contains("body"))
                         bad.Add("an alt row cannot use {body}");
                 }
                 e.Seq = seq;
@@ -818,6 +841,15 @@ namespace Lonapse
             return alts.TryGetValue(seq, out r) ? r : NoAlts;
         }
         public bool HasAlts { get { return alts.Count > 0; } }
+        /// <summary>Experimental (procedural talk): a line of the scene has a subtitle slot like {thing}.</summary>
+        public bool HasSlots
+        {
+            get
+            {
+                foreach (PhraseEntry e in AllLines) if (SubtitleSlots.HasSlots(e.English)) return true;
+                return false;
+            }
+        }
         /// <summary>How many different versions of the scene the alternatives give (the product per seq of 1 plus
         /// the alternatives of that seq). 1 for a scene without alternatives.</summary>
         public int Versions

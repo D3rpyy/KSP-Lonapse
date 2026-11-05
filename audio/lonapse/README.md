@@ -11,6 +11,7 @@ them out loud. The audio itself is not reversed, only the spelling.
 |---|---|
 | `phrases/*.tsv` | The source tables, one file per kind of event. I write these by hand. |
 | `bodies.tsv` | Body names for the `{body}` placeholder. |
+| `pools.tsv` | Experimental: values for the subtitle slots like `{thing}`. |
 | `README.md` | This file. |
 
 The source files are:
@@ -35,6 +36,7 @@ The source files are:
 | `phrases/probe_crew.tsv` | 0.6.0: a crewed vessel with a probe core. The probe beeps in the cabin and a crew member answers (event `probe_crew`). | `pc_` |
 | `phrases/events_more.tsv` | 0.6.0: more crew lines for throttle, chutes, staging, power, signal, landing, docking, EVA, stations and burns. | `em_` |
 | `phrases/probe_more.tsv` | 0.6.0: more probe mode lines for throttle, chutes, data, splashdown, touchdown, docking, burns and say again. | `pm_` |
+| `phrases/templates.tsv` | Experimental: templates with subtitle slots. | `tp_` |
 | `phrases/probe_cores.tsv` | Own lines for the `qbe`, `mk2drone`, `mpo` and `mtm` cores, after their in-game part descriptions. | `pk_` |
 
 Some older rows have keys without these prefixes.
@@ -141,6 +143,33 @@ The rules, checked by the script and by `PhraseTable.Parse`:
 - Line counts, the intercom rule and the speaker gender of a scene come from the base rows only.
 
 The game remembers heard lines in the same file as the heard scenes (`PluginData/played.txt`), as `line:<clip_key>`.
+
+## Subtitle slots (experimental)
+
+This is on the branch `experimental/procedural-talk`. It is not tested in game yet.
+
+A template is a normal row. The Spanish is a general sentence, so the clip is real loñapsE and fits every subtitle. The English has slots, and the game fills them in when the scene plays. So one clip gives many subtitles.
+
+```
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
+tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}?
+tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	Not me, {other}. Look behind the {spot}.
+```
+
+The slots:
+
+- `{pool}` is a value from `pools.tsv`. The same slot gives the same value in every line of one scene. `{pool:2}` is another value from the same pool. The game uses every value of a pool once before one comes back, and remembers that in `PluginData/played.txt` as `slot:<pool>:<value>`.
+- `{day}` (mission day, from 1), `{here}` (the current body), `{vessel}` (the vessel name) and `{alt_km}` (altitude in km) come from the flight.
+- `{other}` and `{self}` are the first names of the two kerbals in an intercom chat. They only work in intercom scenes.
+- A value at the start of a sentence gets a capital letter.
+
+The rules, checked by the script:
+
+- Slots only go in the English. The Spanish only knows `{body}`.
+- A slot name is `[a-z_]+`. A pool slot needs a pool in `pools.tsv`, and `{pool:n}` needs at least n values.
+- `body`, the flight slots and the person slots cannot be pool names.
+
+I keep the Spanish vague on purpose. "Who took my helmet?" and "Who took my sock?" both come from "¿Quién ha cogido mis cosas?". A slot that the game cannot fill shows `...` and goes to the log.
 
 ## Probe mode
 
