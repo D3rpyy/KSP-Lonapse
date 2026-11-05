@@ -3,7 +3,8 @@
 //            the partner's name
 //   bodies   a {body} line on a modded planet says that planet's name instead of "the planet"
 //   new rows rows without a clip (GameData/Lonapse/Phrases/Extra/*.tsv) are spoken at runtime
-//   reports  now and then Mission Control reads out real values: orbit, altitude, speed, fuel, mission day
+//   reports  now and then Mission Control reads out real values (runtime.tsv): orbit, speed, fuel, power, the next
+//            burn, funds and more. Also once per descent (height, speed) and after a docking approach (distance)
 //   science  after a science reaction, the experiment, the body and the science points
 //   contract a completed contract with its funds, a failed one
 // A line that has a clip falls back to it when Piper is not done in time. A line without a clip waits longer and is
@@ -258,6 +259,7 @@ namespace Lonapse
             for (int i = 0; i < host.roster.voices.Count; i++)
                 if (host.roster.voices[i] != null) WarmOnce(KindFor(host.roster.voices[i]));
             if (!host.settings.runtimeReports) return;
+            RuntimeLandCheck();
             if (nextReport < 0f) nextReport = clock + U(ReportFirstMin, ReportFirstMax);
             if (clock < nextReport || reportPending) return;
             if (count > 0 || host.stress.stress > ReportMaxStress || !host.signal.connected || radioSilent || mcBlackout
@@ -277,61 +279,160 @@ namespace Lonapse
             Voice.Warm(kind);
         }
 
-        /// <summary>A report that fits the vessel now, not one of the last few. False when none fits.</summary>
-        bool QueueReport()
+        /// <summary>Situation key of a vessel for the templates, null on the pad.</summary>
+        static string SituationOf(Vessel v)
         {
-            Vessel v = ActiveVessel;
-            if (v == null) return false;
-            string sit;
             switch (v.situation)
             {
-                case Vessel.Situations.ORBITING: sit = "orbit"; break;
-                case Vessel.Situations.FLYING: sit = "flight"; break;
-                case Vessel.Situations.SUB_ORBITAL: sit = "suborbital"; break;
+                case Vessel.Situations.ORBITING: return "orbit";
+                case Vessel.Situations.FLYING: return "flight";
+                case Vessel.Situations.SUB_ORBITAL: return "suborbital";
                 case Vessel.Situations.LANDED:
-                case Vessel.Situations.SPLASHED: sit = "landed"; break;
-                case Vessel.Situations.PRELAUNCH: return false;   // on the pad there is nothing to report yet
-                default: sit = "other"; break;
+                case Vessel.Situations.SPLASHED: return "landed";
+                case Vessel.Situations.ESCAPING: return "escape";
+                case Vessel.Situations.PRELAUNCH: return null;
+                default: return "other";
             }
-            var nums = new Dictionary<string, double>();
+        }
+
+        /// <summary>Every value a template can use, as far as KSP gives it here. A value KSP does not have (no
+        /// node, sandbox funds, no fuel tanks) is left out, so the templates that need it do not fit.</summary>
+        void CollectValues(Vessel v, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
             nums["alt_km"] = v.altitude / 1000.0;
-            nums["speed"] = sit == "orbit" ? v.obt_speed : v.srfSpeed;
-            if ((sit == "orbit" || sit == "suborbital") && v.orbit != null)
+            nums["speed"] = sit == "orbit" || sit == "escape" ? v.obt_speed : v.srfSpeed;
+            Orbit o = v.orbit;
+            if (o != null && (sit == "orbit" || sit == "suborbital" || sit == "escape"))
             {
-                nums["pe_km"] = v.orbit.PeA / 1000.0;
-                if (v.orbit.ApA > 0) nums["ap_km"] = v.orbit.ApA / 1000.0;
+                nums["pe_km"] = o.PeA / 1000.0;
+                if (o.ApA > 0) nums["ap_km"] = o.ApA / 1000.0;
+                nums["inc_deg"] = o.inclination;
+                if (sit == "orbit") { nums["period_min"] = o.period / 60.0; nums["t_pe_min"] = o.timeToPe / 60.0; }
+                if (o.ApA > 0 && o.timeToAp > 0) nums["t_ap_min"] = o.timeToAp / 60.0;
             }
-            double fuel = FuelPercent(v);
-            if (!double.IsNaN(fuel)) nums["fuel"] = fuel;
+            Put(nums, "fuel", ResourcePercent(v, "LiquidFuel"));
+            Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
+            Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
+            try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
+            try
+            {
+                if (v.patchedConicSolver != null && v.patchedConicSolver.maneuverNodes.Count > 0)
+                {
+                    ManeuverNode n = v.patchedConicSolver.maneuverNodes[0];
+                    double dt = n.UT - Planetarium.GetUniversalTime();
+                    if (dt > 0) { nums["node_min"] = dt / 60.0; nums["node_dv"] = n.DeltaV.magnitude; }
+                }
+            }
+            catch (Exception) { }
+            try { if (Funding.Instance != null) nums["funds_total"] = Funding.Instance.Funds; } catch (Exception) { }
+            try { if (ResearchAndDevelopment.Instance != null) nums["sci_total"] = ResearchAndDevelopment.Instance.Science; } catch (Exception) { }
+            try { if (Reputation.Instance != null) nums["rep"] = Reputation.CurrentRep; } catch (Exception) { }
+            try
+            {
+                if (Contracts.ContractSystem.Instance != null)
+                {
+                    int active = 0;
+                    foreach (Contracts.Contract c in Contracts.ContractSystem.Instance.Contracts)
+                        if (c != null && c.ContractState == Contracts.Contract.State.Active) active++;
+                    nums["contracts"] = active;
+                }
+            }
+            catch (Exception) { }
             string day;
             double dd;
             if (SlotFlightValues().TryGetValue("day", out day) && double.TryParse(day, System.Globalization.NumberStyles.Any,
                 System.Globalization.CultureInfo.InvariantCulture, out dd)) nums["day"] = dd;
-            var names = new Dictionary<string, string[]>();
-            string[] b = BodyNames(BodyName);
+            string[] b = BodyNames(v.mainBody != null ? v.mainBody.bodyName : null);
             if (b != null) names["body"] = b;
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
-            List<RuntimeTemplate> fit = RuntimeLines.ReportsFor(sit, nums, names);
-            fit.RemoveAll(t => recentRuntime.Contains(t.Id));
-            if (fit.Count == 0) return false;
-            RuntimeTemplate pick = fit[rng.Next(fit.Count)];
-            QueueRuntimeOnly(pick, nums, names, 0.3f, true);
-            return true;
         }
 
-        /// <summary>Liquid fuel left in percent, NaN without fuel tanks.</summary>
-        static double FuelPercent(Vessel v)
+        static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
+
+        /// <summary>A resource left in percent, NaN when the vessel has none of it.</summary>
+        static double ResourcePercent(Vessel v, string resource)
         {
             double have = 0, max = 0;
             try
             {
                 foreach (Part p in v.parts)
                     foreach (PartResource r in p.Resources)
-                        if (r.resourceName == "LiquidFuel") { have += r.amount; max += r.maxAmount; }
+                        if (r.resourceName == resource) { have += r.amount; max += r.maxAmount; }
             }
             catch (Exception) { return double.NaN; }
             return max > 0.01 ? 100.0 * have / max : double.NaN;
+        }
+
+        /// <summary>Picks a template of a kind that fits now, not one of the last few, and queues it. False when none fits.</summary>
+        bool QueueKind(string kind, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names, float delay, bool report)
+        {
+            List<RuntimeTemplate> fit = RuntimeLines.Fitting(PhraseClips.runtimeTemplates, kind, sit, nums, names);
+            List<RuntimeTemplate> fresh = fit.FindAll(t => !recentRuntime.Contains(t.Id));
+            if (fresh.Count > 0) fit = fresh;
+            else if (kind == "report") return false;   // a report can wait, an answer to an event may repeat
+            if (fit.Count == 0) return false;
+            QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, delay, report);
+            return true;
+        }
+
+        /// <summary>A report that fits the vessel now, not one of the last few. False when none fits.</summary>
+        bool QueueReport()
+        {
+            Vessel v = ActiveVessel;
+            if (v == null) return false;
+            string sit = SituationOf(v);
+            if (sit == null) return false;   // on the pad there is nothing to report yet
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            CollectValues(v, sit, nums, names);
+            return QueueKind("report", sit, nums, names, 0.3f, true);
+        }
+
+        /// <summary>After the docking approach call: distance and closing speed to the target.</summary>
+        public void RuntimeDock()
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports) return;
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            try
+            {
+                ITargetable t = v.targetObject;
+                if (t == null || t.GetTransform() == null) return;
+                Vector3d to = (Vector3d)t.GetTransform().position - (Vector3d)v.transform.position;
+                double dist = to.magnitude;
+                Vector3d rel = v.obt_velocity - t.GetObtVelocity();
+                double closing = dist > 0.1 ? Vector3d.Dot(rel, to / dist) : 0;
+                var nums = new Dictionary<string, double> { { "dist_m", dist }, { "close_ms", closing } };
+                var names = new Dictionary<string, string[]>();
+                Vessel tv = t.GetVessel();
+                string tn = tv != null ? Names.Of(tv) : null;
+                string say = tn != null && !tn.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(tn) : null;
+                if (say != null) names["target"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(tn) };
+                QueueKind("dock", SituationOf(v), nums, names, ResponseDelay(host.stress.stress) + 0.5f, false);
+            }
+            catch (Exception e) { Log.Debug("Runtime voice dock: " + e.Message); }
+        }
+
+        bool landSaid;
+
+        /// <summary>Once per descent: low over the ground and coming down, Mission Control reads height and speed.
+        /// Re-armed above 5 km or after landing.</summary>
+        void RuntimeLandCheck()
+        {
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            double h = v.heightFromTerrain;
+            if (v.LandedOrSplashed || h > 5000) { landSaid = false; return; }
+            if (landSaid || h <= 50 || h > 1500 || v.verticalSpeed > -2) return;
+            if (v.situation != Vessel.Situations.FLYING && v.situation != Vessel.Situations.SUB_ORBITAL) return;
+            landSaid = true;
+            if (rng.NextDouble() >= 0.6 || count + 7 > Capacity || radioSilent || mcBlackout || !host.signal.connected) return;
+            var nums = new Dictionary<string, double> { { "height_m", h }, { "vspeed_ms", -v.verticalSpeed } };
+            var names = new Dictionary<string, string[]>();
+            string[] b = BodyNames(v.mainBody != null ? v.mainBody.bodyName : null);
+            if (b != null) names["body"] = b;
+            QueueKind("land", SituationOf(v), nums, names, 0.2f, false);
         }
 
         /// <summary>From GameEventHub after a science reaction was sent: sometimes Mission Control follows up with the
@@ -358,12 +459,10 @@ namespace Lonapse
             var names = new Dictionary<string, string[]> { { "exp", new[] { LonapseText.ReverseText(w[0]), w[1] } } };
             string[] b = BodyNames(bodyName);
             if (b != null) names["body"] = b;
-            var fit = new List<RuntimeTemplate>();
-            foreach (RuntimeTemplate t in RuntimeLines.Science)
-                if ((t.When == "science_pts") == nums.ContainsKey("sci")) fit.Add(t);
-            if (fit.Count == 0) return;
             // after the reaction scene: it is queued first, this waits behind it
-            QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, ResponseDelay(host.stress.stress) + 0.8f, false);
+            float delay = ResponseDelay(host.stress.stress) + 0.8f;
+            if (!(nums.ContainsKey("sci") && QueueKind("science_pts", null, nums, names, delay, false)))
+                QueueKind("science", null, nums, names, delay, false);
         }
 
         /// <summary>From GameEventHub: a contract was completed (with its funds) or failed.</summary>
@@ -372,11 +471,9 @@ namespace Lonapse
             if (!RuntimeOn || !host.settings.runtimeScience) return;
             var nums = new Dictionary<string, double>();
             if (completed && funds >= 1) nums["funds"] = funds;
-            string when = !completed ? "contract_failed" : nums.Count > 0 ? "contract_funds" : "contract_done";
-            var fit = new List<RuntimeTemplate>();
-            foreach (RuntimeTemplate t in RuntimeLines.Contracts) if (t.When == when) fit.Add(t);
-            if (fit.Count == 0) return;
-            QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, null, ResponseDelay(host.stress.stress), false);
+            string kind = !completed ? "contract_failed" : nums.Count > 0 ? "contract_funds" : "contract_done";
+            if (!QueueKind(kind, null, nums, null, ResponseDelay(host.stress.stress), false) && kind == "contract_funds")
+                QueueKind("contract_done", null, nums, null, ResponseDelay(host.stress.stress), false);
         }
 
         /// <summary>

@@ -23,6 +23,8 @@ namespace Lonapse
         /// no clips, so they only play when Piper can speak them (runtimeCanSpeak).</summary>
         public const string ExtraRel = "GameData/Lonapse/Phrases/Extra";
         public static int extraFiles;
+        /// <summary>Experimental (runtime voice): the runtime-only templates from runtime.tsv, empty without the file.</summary>
+        public static List<RuntimeTemplate> runtimeTemplates = new List<RuntimeTemplate>();
         /// <summary>Set by the director: true when a row without a clip can be spoken at runtime.</summary>
         public static Func<PhraseEntry, bool> runtimeCanSpeak;
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
@@ -77,6 +79,7 @@ namespace Lonapse
             for (int i = 0; i < errors.Count && i < 10; i++) Log.Warn("Lonapse table: " + errors[i]);
             if (errors.Count > 10) Log.Warn("Lonapse table: " + (errors.Count - 10) + " more error(s)");
             LoadPools();
+            LoadRuntimeTemplates();
 
             GameDatabase db = GameDatabase.Instance;
             int missing = 0;
@@ -107,6 +110,21 @@ namespace Lonapse
                      + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "")
                      + (extraFiles > 0 ? ", " + extraFiles + " extra table(s) for the runtime voice" : "");
             Log.Info("Lonapse: " + status);
+        }
+
+        static void LoadRuntimeTemplates()
+        {
+            runtimeTemplates = new List<RuntimeTemplate>();
+            try
+            {
+                string rp = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeLines.FileRel);
+                if (!File.Exists(rp)) return;
+                var rerr = new List<string>();
+                runtimeTemplates = RuntimeLines.Parse(new List<string>(File.ReadAllLines(rp, System.Text.Encoding.UTF8)), rerr);
+                for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse " + rerr[i]);
+                Log.Info("Lonapse: " + runtimeTemplates.Count + " runtime voice templates");
+            }
+            catch (Exception e) { Log.Warn("Lonapse runtime.tsv: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
         }
 
         static void LoadPools()

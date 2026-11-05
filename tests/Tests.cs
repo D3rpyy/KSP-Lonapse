@@ -1305,13 +1305,30 @@ public static class Tests
             Check(gen > 0 && swapped == gen, "runtime voice: every generic {body} row takes a modded body name (" + swapped + " of " + gen + ")", null);
         }
 
-        // runtime-only lines
-        var vals = new Dictionary<string, double> { { "alt_km", 85.2 }, { "pe_km", 80.4 }, { "ap_km", 91.0 }, { "speed", 2281 }, { "fuel", 63 }, { "day", 3 } };
+        // runtime-only lines: GameData/Lonapse/Phrases/runtime.tsv
+        string rtPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases/runtime.tsv"));
+        var rtErr = new List<string>();
+        List<RuntimeTemplate> rtAll = RuntimeLines.Parse(new List<string>(System.IO.File.ReadAllLines(rtPath, System.Text.Encoding.UTF8)), rtErr);
+        var kindCount = new Dictionary<string, int>();
+        foreach (RuntimeTemplate t in rtAll) { int c0; kindCount.TryGetValue(t.Kind, out c0); kindCount[t.Kind] = c0 + 1; }
+        var kc = new List<string>();
+        foreach (var kv in kindCount) kc.Add(kv.Key + " " + kv.Value);
+        Check(rtErr.Count == 0 && rtAll.Count >= 40 && kindCount.Count == RuntimeLines.Kinds.Length,
+              "runtime voice: runtime.tsv parses, every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
+              string.Join(" ; ", rtErr.ToArray()));
+        var rtBadErr = new List<string>();
+        RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
+            "rt_b\tnope\t\tB.\tB.", "rt_c\treport\t\tC {fuel}.\tC.", "rt_d\treport\t\tD {nothing}.\tD {nothing}.", "x_e\treport\t\tE.\tE.",
+            "rt_f\treport\torbit fuel>=2\tF {fuel}.\tF {fuel}.", "rt_f\treport\t\tF.\tF." }, rtBadErr);
+        Check(rtBadErr.Count == 6, "runtime voice: bad template rows are reported (condition, kind, slots differ, unknown slot, id, duplicate)",
+              rtBadErr.Count + ": " + string.Join(" ; ", rtBadErr.ToArray()));
+
+        var vals = new Dictionary<string, double> { { "alt_km", 85.2 }, { "pe_km", 80.4 }, { "ap_km", 91.0 }, { "speed", 2281 }, { "fuel", 63 }, { "day", 3 },
+                                                    { "inc_deg", 0.4 }, { "ec", 95 } };
         var nms = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
-        var orbit = RuntimeLines.ReportsFor("orbit", vals, nms);
+        var orbit = RuntimeLines.Fitting(rtAll, "report", "orbit", vals, nms);
         string rs, re;
-        RuntimeTemplate t0 = null;
-        foreach (RuntimeTemplate t in orbit) if (t.Id == "rt_orbit_1") t0 = t;
+        RuntimeTemplate t0 = rtAll.Find(t => t.Id == "rt_orbit_1");
         bool filled = t0 != null && RuntimeLines.Fill(t0, vals, nms, out rs, out re)
                       && re == "Stable orbit. Periapsis 80 km, apoapsis 91 km."
                       && RuntimeSpeech.Spoken(rs) == LonapseText.ReverseText("Órbita estable. Periapsis ochenta kilómetros, apoapsis noventa y un kilómetros.");
@@ -1319,22 +1336,40 @@ public static class Tests
               t0 == null ? "no rt_orbit_1" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
         var ids = new List<string>();
         foreach (RuntimeTemplate t in orbit) ids.Add(t.Id);
-        Check(!ids.Contains("rt_flight_1") && !ids.Contains("rt_fuel_low") && ids.Contains("rt_fuel_1") && ids.Contains("rt_vessel_1")
-              && RuntimeLines.ReportsFor("landed", new Dictionary<string, double>(), new Dictionary<string, string[]>()).Count == 0
-              || false, "runtime voice: reports fit the situation and need their values", string.Join(", ", ids.ToArray()));
+        Check(!ids.Contains("rt_flight_1") && !ids.Contains("rt_fuel_low") && !ids.Contains("rt_orbit_inc") && !ids.Contains("rt_node_1")
+              && ids.Contains("rt_fuel_1") && ids.Contains("rt_vessel_1") && ids.Contains("rt_orbit_eq") && ids.Contains("rt_ec_ok")
+              && RuntimeLines.Fitting(rtAll, "report", "landed", new Dictionary<string, double>(), new Dictionary<string, string[]>()).Count == 0,
+              "runtime voice: templates fit the situation, the checks and the values there are", string.Join(", ", ids.ToArray()));
+
+        // every template fills with every value, the check bounds are respected by a value that fits them
+        var full = new Dictionary<string, double>();
+        foreach (string k in RuntimeLines.NumberSlots) full[k] = 50;
+        var fullN = new Dictionary<string, string[]>();
+        foreach (string k in RuntimeLines.NameSlots) fullN[k] = new[] { "Nombre", "Name" };
         var badT = new List<string>();
-        var allT = new List<RuntimeTemplate>(RuntimeLines.Reports);
-        allT.AddRange(RuntimeLines.Science); allT.AddRange(RuntimeLines.Contracts);
-        var full = new Dictionary<string, double>(vals) { { "sci", 12.5 }, { "funds", 43250 } };
-        var fullN = new Dictionary<string, string[]>(nms) { { "exp", new[] { "temperatura", "temperature" } } };
-        foreach (RuntimeTemplate t in allT)
+        foreach (RuntimeTemplate t in rtAll)
         {
             string a1, a2;
             if (!RuntimeLines.Fill(t, full, fullN, out a1, out a2)) badT.Add(t.Id + " does not fill");
             else if (a2.IndexOf('{') >= 0 || a1.IndexOf('{') >= 0) badT.Add(t.Id + " has a slot left");
             else if (PhraseTable.HasExplosionWord(a1) || PhraseTable.HasExplosionWord(a2)) badT.Add(t.Id + " has an explosion word");
+            else if (RuntimeSpeech.Spoken(a1).IndexOfAny(new[] { '{', '}', '⟪', '⟫' }) >= 0) badT.Add(t.Id + " spoken text has marks left");
         }
-        Check(badT.Count == 0, "runtime voice: every runtime-only template fills (" + allT.Count + ")", string.Join(" ; ", badT.ToArray()));
+        Check(badT.Count == 0, "runtime voice: every template fills and speaks cleanly (" + rtAll.Count + ")", string.Join(" ; ", badT.ToArray()));
+        // a value of 1: the noun after it is singular, in both languages ("un kilómetro", "1 minute")
+        var plural = new List<string>();
+        var pluralRe = new System.Text.RegularExpressions.Regex(@"\b(un|1) (kilómetros|metros|minutos|grados|puntos|fondos|piezas|contratos|kerbals|meters|minutes|degrees|points|funds|parts|contracts)\b");
+        foreach (RuntimeTemplate t in rtAll)
+        {
+            var one = new Dictionary<string, double>();
+            foreach (string k in RuntimeLines.NumberSlots) one[k] = 1;
+            string a1, a2;
+            if (RuntimeLines.Fill(t, one, fullN, out a1, out a2) && (pluralRe.IsMatch(a1) || pluralRe.IsMatch(a2))) plural.Add(t.Id + ": " + a1 + " / " + a2);
+        }
+        string o1, o2;
+        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_period"), new Dictionary<string, double> { { "period_min", 1.04 } }, null, out o1, out o2);
+        Check(plural.Count == 0 && o1 == "Una vuelta completa os lleva un minuto." && o2 == "One full orbit takes you 1 minute.",
+              "runtime voice: a value of 1 takes the singular noun", string.Join(" ; ", plural.ToArray()) + " | " + o1 + " / " + o2);
         Check(RuntimeLines.ExperimentId("temperatureScan@KerbinSrfLanded") == "temperatureScan"
               && RuntimeLines.ExperimentWords("cometSample_long")[1] == "comet sample" && RuntimeLines.ExperimentWords("modThing")[0] == "experimento",
               "runtime voice: experiment words from the subject id", null);

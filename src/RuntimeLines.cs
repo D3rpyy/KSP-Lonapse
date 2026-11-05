@@ -1,6 +1,6 @@
-// Experimental (runtime voice): lines that only exist at runtime, because they hold real values. Mission Control
-// reports (altitude, orbit, speed, fuel, mission day), science (experiment, body, science points) and contracts
-// (funds). Also the Spanish words for numbers and the spoken names of bodies and vessels.
+// Experimental (runtime voice): lines that only exist at runtime, because they hold real values. The templates are in
+// GameData/Lonapse/Phrases/runtime.tsv (reports, docking, landing, science, contracts). This file parses them, picks
+// the ones that fit and fills them. Also the Spanish words for numbers and the spoken names of bodies and vessels.
 // Pure: no Unity, no KSP, so the offline tests cover it. The director fills the values and sends the Spanish to Piper.
 // In the Spanish a number becomes words, and those words are reversed like every other word (loñapsE).
 // Names stay names (RuntimeSpeech.MarkName). The English subtitle shows the number in digits.
@@ -14,63 +14,127 @@ namespace Lonapse
 {
     public sealed class RuntimeTemplate
     {
-        public string Id;
-        /// <summary>When it fits: orbit, flight (flying or sub-orbital), suborbital, landed, any, science, science_pts,
-        /// contract_done, contract_funds, contract_failed.</summary>
-        public string When;
-        public string Spanish, English;
+        public string Id, Kind, Spanish, English;
+        /// <summary>Situations of the "when" column (orbit flight suborbital landed escape), empty: any.</summary>
+        public readonly List<string> Situations = new List<string>();
+        /// <summary>Checks of the "when" column: value key, operator (&lt; &lt;= &gt; &gt;= =), number.</summary>
+        public readonly List<KeyValuePair<string, KeyValuePair<string, double>>> Checks =
+            new List<KeyValuePair<string, KeyValuePair<string, double>>>();
 
-        public RuntimeTemplate(string id, string when, string spanish, string english)
+        public RuntimeTemplate(string id, string kind, string spanish, string english)
         {
-            Id = id; When = when; Spanish = spanish; English = english;
+            Id = id; Kind = kind; Spanish = spanish; English = english;
         }
     }
 
     public static class RuntimeLines
     {
-        // Slots: {alt_km} {pe_km} {ap_km} {speed} {fuel} {day} {sci} {funds} numbers, {vessel} {body} {exp} names.
-        public static readonly RuntimeTemplate[] Reports = {
-            new RuntimeTemplate("rt_orbit_1", "orbit", "Órbita estable. Periapsis {pe_km} kilómetros, apoapsis {ap_km} kilómetros.",
-                                "Stable orbit. Periapsis {pe_km} km, apoapsis {ap_km} km."),
-            new RuntimeTemplate("rt_orbit_2", "orbit", "Os vemos a {alt_km} kilómetros sobre {body}.",
-                                "We see you {alt_km} km above {body}."),
-            new RuntimeTemplate("rt_orbit_3", "orbit", "Seguimos vuestra órbita. Vais a {speed} metros por segundo. Nada mal.",
-                                "Tracking your orbit. You're doing {speed} m/s. Not bad."),
-            new RuntimeTemplate("rt_flight_1", "flight", "Altitud {alt_km} kilómetros, velocidad {speed} metros por segundo. Todo bien.",
-                                "Altitude {alt_km} km, speed {speed} m/s. All good."),
-            new RuntimeTemplate("rt_sub_1", "suborbital", "Apoapsis a {ap_km} kilómetros. Todavía no es una órbita.",
-                                "Apoapsis at {ap_km} km. Not an orbit yet."),
-            new RuntimeTemplate("rt_landed_1", "landed", "Os tenemos en la superficie de {body}. Buen sitio.",
-                                "We have you on the surface of {body}. Nice spot."),
-            new RuntimeTemplate("rt_fuel_1", "fuel", "Según nuestras pantallas os queda el {fuel} por ciento de combustible.",
-                                "Our screens say you have {fuel} percent fuel left."),
-            new RuntimeTemplate("rt_fuel_low", "fuel_low", "Ojo con el combustible. Solo queda el {fuel} por ciento.",
-                                "Watch the fuel. Only {fuel} percent left."),
-            new RuntimeTemplate("rt_day_1", "any", "Día {day} de la misión. Aquí abajo todo en orden.",
-                                "Mission day {day}. All fine down here."),
-            new RuntimeTemplate("rt_vessel_1", "any", "{vessel}, aquí Control. Os seguimos en pantalla.",
-                                "{vessel}, Control here. We have you on screen."),
-        };
+        public const string FileRel = "GameData/Lonapse/Phrases/runtime.tsv";
+        public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
+                                                  "contract_funds", "contract_done", "contract_failed" };
+        public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
+        public static readonly string[] NumberSlots = { "alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
+            "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
+            "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms" };
+        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target" };
 
-        public static readonly RuntimeTemplate[] Science = {
-            new RuntimeTemplate("rt_sci_1", "science_pts", "Datos de {exp} recibidos desde {body}. Son {sci} puntos de ciencia.",
-                                "Got the {exp} data from {body}. That's {sci} science points."),
-            new RuntimeTemplate("rt_sci_2", "science_pts", "Los científicos dan las gracias por los datos de {exp}. {sci} puntos.",
-                                "The scientists say thanks for the {exp} data. {sci} points."),
-            new RuntimeTemplate("rt_sci_3", "science", "Datos de {exp} recibidos desde {body}.",
-                                "Got the {exp} data from {body}."),
-        };
+        static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
+        static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
 
-        public static readonly RuntimeTemplate[] Contracts = {
-            new RuntimeTemplate("rt_con_1", "contract_funds", "Contrato cumplido. {funds} fondos para el programa.",
-                                "Contract complete. {funds} funds for the program."),
-            new RuntimeTemplate("rt_con_2", "contract_funds", "Buenas noticias de contabilidad: {funds} fondos más.",
-                                "Good news from accounting: {funds} more funds."),
-            new RuntimeTemplate("rt_con_3", "contract_done", "Contrato cumplido. Buen trabajo, equipo.",
-                                "Contract complete. Good work, team."),
-            new RuntimeTemplate("rt_con_fail", "contract_failed", "Hemos perdido un contrato. Contabilidad no está contenta.",
-                                "We lost a contract. Accounting is not happy."),
-        };
+        /// <summary>Parses runtime.tsv: header "id kind when spanish english", # comments. Bad rows go to errors and
+        /// are skipped.</summary>
+        public static List<RuntimeTemplate> Parse(IList<string> lines, List<string> errors)
+        {
+            var r = new List<RuntimeTemplate>();
+            var seen = new HashSet<string>();
+            bool header = false;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                string line = lines[i];
+                if (line == null || line.Trim().Length == 0 || line.TrimStart().StartsWith("#", StringComparison.Ordinal)) continue;
+                string[] f = line.Split('\t');
+                if (!header)
+                {
+                    header = true;
+                    if (f.Length != 5 || f[0] != "id" || f[1] != "kind" || f[2] != "when" || f[3] != "spanish" || f[4] != "english")
+                    {
+                        if (errors != null) errors.Add("runtime line " + (i + 1) + ": header must be id, kind, when, spanish, english");
+                        return r;
+                    }
+                    continue;
+                }
+                var bad = new List<string>();
+                if (f.Length != 5) { if (errors != null) errors.Add("runtime line " + (i + 1) + ": expected 5 columns, got " + f.Length); continue; }
+                var t = new RuntimeTemplate(f[0].Trim(), f[1].Trim(), f[3].Trim(), f[4].Trim());
+                if (!IdRe.IsMatch(t.Id)) bad.Add("id '" + t.Id + "' must match rt_[a-z0-9_]+");
+                else if (!seen.Add(t.Id)) bad.Add("duplicate id " + t.Id);
+                if (Array.IndexOf(Kinds, t.Kind) < 0) bad.Add("unknown kind '" + t.Kind + "'");
+                foreach (string tok in f[2].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (tok == "any") continue;
+                    if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
+                    Match m = Check.Match(tok);
+                    if (m.Success && Array.IndexOf(NumberSlots, m.Groups[1].Value) >= 0)
+                    {
+                        t.Checks.Add(new KeyValuePair<string, KeyValuePair<string, double>>(m.Groups[1].Value,
+                            new KeyValuePair<string, double>(m.Groups[2].Value, double.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture))));
+                        continue;
+                    }
+                    bad.Add("bad condition '" + tok + "'");
+                }
+                if (t.Spanish.Length == 0 || t.English.Length == 0) bad.Add("spanish and english must not be empty");
+                foreach (string text in new[] { t.Spanish, t.English })
+                    foreach (Match m in Slot.Matches(text))
+                        if (Array.IndexOf(NumberSlots, m.Groups[1].Value) < 0 && Array.IndexOf(NameSlots, m.Groups[1].Value) < 0)
+                            bad.Add("unknown slot {" + m.Groups[1].Value + "}");
+                if (SlotSet(t.Spanish) != SlotSet(t.English)) bad.Add("spanish and english must use the same slots");
+                if (bad.Count > 0) { if (errors != null) errors.Add("runtime line " + (i + 1) + " (" + t.Id + "): " + string.Join("; ", bad.ToArray())); continue; }
+                r.Add(t);
+            }
+            if (!header && errors != null) errors.Add("runtime: no header");
+            return r;
+        }
+
+        static string SlotSet(string text)
+        {
+            var l = new List<string>();
+            foreach (Match m in Slot.Matches(text ?? "")) if (!l.Contains(m.Groups[1].Value)) l.Add(m.Groups[1].Value);
+            l.Sort(StringComparer.Ordinal);
+            return string.Join(",", l.ToArray());
+        }
+
+        /// <summary>The templates of a kind that fit: the situation matches (or the template has none), every check
+        /// holds and every slot has a value.</summary>
+        public static List<RuntimeTemplate> Fitting(IList<RuntimeTemplate> all, string kind, string situation,
+                                                    Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            var r = new List<RuntimeTemplate>();
+            if (all == null) return r;
+            foreach (RuntimeTemplate t in all)
+            {
+                if (t.Kind != kind) continue;
+                if (t.Situations.Count > 0 && !t.Situations.Contains(situation ?? "")) continue;
+                bool ok = true;
+                foreach (var c in t.Checks)
+                {
+                    double v;
+                    if (nums == null || !nums.TryGetValue(c.Key, out v) || double.IsNaN(v)) { ok = false; break; }
+                    double rv = Rounded(c.Key, v), n = c.Value.Value;
+                    switch (c.Value.Key)
+                    {
+                        case "<": ok = rv < n; break;
+                        case "<=": ok = rv <= n; break;
+                        case ">": ok = rv > n; break;
+                        case ">=": ok = rv >= n; break;
+                        default: ok = rv == n; break;
+                    }
+                    if (!ok) break;
+                }
+                string s, e;
+                if (ok && Fill(t, nums, names, out s, out e)) r.Add(t);
+            }
+            return r;
+        }
 
         /// <summary>Stock experiment ids: Spanish words for "datos de ..." and the English for "the ... data".</summary>
         static readonly Dictionary<string, string[]> Experiments = new Dictionary<string, string[]> {
@@ -162,14 +226,18 @@ namespace Lonapse
         }
 
         /// <summary>Digits for the English subtitle and the value that is spoken, rounded the same way: one decimal below
-        /// 10 for keys with decimals (km, science points), else whole numbers. 1234 gives "1,234".</summary>
+        /// 10 for keys with decimals (km, min, deg, ms, science points), else whole numbers. 1234 gives "1,234".</summary>
         public static double Rounded(string key, double v)
         {
             if (HasDecimals(key) && Math.Abs(v) < 10) return Math.Round(v, 1, MidpointRounding.AwayFromZero);
             return Math.Round(v, 0, MidpointRounding.AwayFromZero);
         }
 
-        static bool HasDecimals(string key) { return key.EndsWith("_km", StringComparison.Ordinal) || key == "sci"; }
+        static bool HasDecimals(string key)
+        {
+            return key.EndsWith("_km", StringComparison.Ordinal) || key.EndsWith("_min", StringComparison.Ordinal)
+                   || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key == "sci";
+        }
 
         public static string Digits(string key, double v)
         {
@@ -269,7 +337,7 @@ namespace Lonapse
             spanish = null; english = null;
             if (t == null) return false;
             bool ok = true;
-            spanish = Slot.Replace(t.Spanish, m =>
+            spanish = Slot.Replace(Singular(t.Spanish, nums, SpanishPlurals), m =>
             {
                 string k = m.Groups[1].Value;
                 double v;
@@ -279,7 +347,7 @@ namespace Lonapse
                 ok = false;
                 return m.Value;
             });
-            english = Slot.Replace(t.English, m =>
+            english = Slot.Replace(Singular(t.English, nums, EnglishPlurals), m =>
             {
                 string k = m.Groups[1].Value;
                 double v;
@@ -293,28 +361,29 @@ namespace Lonapse
             return ok;
         }
 
-        /// <summary>The report templates that fit a situation (orbit, flight, suborbital, landed or other) and the values
-        /// there are. Fuel templates only with a fuel value, the low one below 25 percent.</summary>
-        public static List<RuntimeTemplate> ReportsFor(string situation, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        static readonly Dictionary<string, string> SpanishPlurals = new Dictionary<string, string> {
+            { "kilómetros", "kilómetro" }, { "metros", "metro" }, { "minutos", "minuto" }, { "grados", "grado" },
+            { "puntos", "punto" }, { "fondos", "fondo" }, { "piezas", "pieza" }, { "contratos", "contrato" }, { "kerbals", "kerbal" },
+        };
+        static readonly Dictionary<string, string> EnglishPlurals = new Dictionary<string, string> {
+            { "meters", "meter" }, { "minutes", "minute" }, { "degrees", "degree" }, { "points", "point" }, { "funds", "fund" },
+            { "parts", "part" }, { "contracts", "contract" }, { "kerbals", "kerbal" },
+        };
+        static readonly Regex SlotNoun = new Regex(@"\{([a-z_]+)\} (\p{L}+)");
+
+        /// <summary>A value that is 1 (after rounding) takes the singular noun right after its slot: "un kilómetro",
+        /// "1 minute". Applied to the template before it is filled.</summary>
+        static string Singular(string template, Dictionary<string, double> nums, Dictionary<string, string> plurals)
         {
-            var r = new List<RuntimeTemplate>();
-            double fuel = double.NaN;
-            bool hasFuel = nums != null && nums.TryGetValue("fuel", out fuel) && !double.IsNaN(fuel);
-            foreach (RuntimeTemplate t in Reports)
+            if (nums == null || string.IsNullOrEmpty(template)) return template;
+            return SlotNoun.Replace(template, m =>
             {
-                bool fits;
-                switch (t.When)
-                {
-                    case "any": fits = true; break;
-                    case "fuel": fits = hasFuel && fuel >= 25; break;
-                    case "fuel_low": fits = hasFuel && fuel < 25 && fuel > 0; break;
-                    case "flight": fits = situation == "flight" || situation == "suborbital"; break;
-                    default: fits = t.When == situation; break;
-                }
-                string s, e;
-                if (fits && Fill(t, nums, names, out s, out e)) r.Add(t);
-            }
-            return r;
+                double v;
+                string k = m.Groups[1].Value, noun = m.Groups[2].Value, one;
+                if (nums.TryGetValue(k, out v) && !double.IsNaN(v) && Math.Abs(Rounded(k, v)) == 1 && plurals.TryGetValue(noun, out one))
+                    return "{" + k + "} " + one;
+                return m.Value;
+            });
         }
     }
 }

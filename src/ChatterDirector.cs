@@ -1554,6 +1554,7 @@ namespace Lonapse
                 EnqueueMcFor("dock_approach", ResponseDelay(0.3f));
             }
             Log.Debug("Docking approach exchange queued");
+            RuntimeDock();
         }
 
         /// <summary>Close approach (within ~30 m and closing): crew calm or tense by closing speed, MC answers.</summary>

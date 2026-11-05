@@ -92,6 +92,13 @@ cp -f "$OUT" "$GD/Plugins/Lonapse.dll.tmp"
 mv -f "$GD/Plugins/Lonapse.dll.tmp" "$GD/Plugins/Lonapse.dll"
 echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll") bytes)"
 
+# runtime voice templates: a text file in the repo, no build step
+if [[ -f "$REPO/GameData/Lonapse/Phrases/runtime.tsv" ]]; then
+  mkdir -p "$GD/Phrases"
+  cp -f "$REPO/GameData/Lonapse/Phrases/runtime.tsv" "$GD/Phrases/runtime.tsv"
+  echo "Installed: $GD/Phrases/runtime.tsv"
+fi
+
 if [[ -f "$GD/PluginData/settings.cfg" ]]; then
   echo "Kept existing user settings: $GD/PluginData/settings.cfg"
 else

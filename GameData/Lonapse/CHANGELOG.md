@@ -9,7 +9,8 @@
   - Mission Control sometimes ends a line with the name of the kerbal who just spoke, or with the name of your vessel. On a probe it uses the vessel name.
   - In crew chats on the intercom, a kerbal sometimes says the other one's name.
   - On a planet from a mod, lines about "the planet" say its real name.
-  - Mission Control reports now and then with the real values: your orbit, altitude, speed, fuel or the mission day. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
+  - Mission Control reports now and then with the real values: your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, and on a docking approach the distance to the target. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
+  - These lines are templates in `GameData/Lonapse/Phrases/runtime.tsv`. Add a row and restart KSP to give Mission Control something new to say. The file explains the columns.
   - After some science reactions Mission Control says the experiment, the body and the science points. A finished contract gets its funds, a failed one a short line. Turn this off with "Science points and contract funds".
   - A line that is not ready in time plays as before, without the name. Nothing waits more than a second for it.
   - You can add your own lines without rendering any audio. Put rows in `GameData/Lonapse/Phrases/Extra/*.tsv`, in the format of the tables in the repo. They are only heard with the runtime voice on.
