@@ -1246,11 +1246,45 @@ public static class Tests
         Check(badNum.Count == 0, "runtime voice: numbers in Spanish words (apocope before a noun)", string.Join(" ; ", badNum.ToArray()));
         Check(RuntimeLines.Words("alt_km", 12.46) == "doce" && RuntimeLines.Digits("alt_km", 12.46) == "12"
               && RuntimeLines.Words("alt_km", 7.46) == "siete coma cinco" && RuntimeLines.Digits("alt_km", 7.46) == "7.5"
-              && RuntimeLines.Words("funds", 43250) == "cuarenta y tres mil doscientos cincuenta" && RuntimeLines.Digits("funds", 43250) == "43,250"
+              && RuntimeLines.Words("funds", 43250) == "cuarenta y tres mil" && RuntimeLines.Digits("funds", 43250) == "43,000"
               && RuntimeLines.Words("day", 21) == "veintiuno" && RuntimeLines.Words("speed", 2281.4) == "dos mil doscientos ochenta y un",
               "runtime voice: spoken value and subtitle digits are rounded the same way",
               RuntimeLines.Words("alt_km", 12.46) + " / " + RuntimeLines.Digits("alt_km", 12.46) + " ; " + RuntimeLines.Words("alt_km", 7.46) + " / " + RuntimeLines.Digits("alt_km", 7.46));
 
+        // big numbers stay short (user report: 15 000 000 km was a long string of words)
+        object[][] big = {
+            new object[] { "alt_km", 15000000.0, "quince millones", "15 million" },
+            new object[] { "alt_km", 15340000.0, "quince millones", "15 million" },
+            new object[] { "alt_km", 2480000.0, "dos coma cinco millones", "2.5 million" },
+            new object[] { "funds_total", 1000400.0, "un millón", "1 million" },
+            new object[] { "funds_total", 999700.0, "un millón", "1 million" },
+            new object[] { "funds_total", 21000000.0, "veintiún millones", "21 million" },
+            new object[] { "funds_total", 123456.0, "ciento veintitrés mil", "123,000" },
+            new object[] { "speed", 12345.0, "doce mil", "12,000" },
+            new object[] { "speed", 9876.0, "nueve mil ochocientos setenta y seis", "9,876" },
+            new object[] { "rep", -15000.0, "menos quince mil", "-15,000" },
+            new object[] { "alt_km", 7.46, "siete coma cinco", "7.5" },
+            new object[] { "alt_km", 2368000000.0, "dos coma cuatro mil millones", "2.4 billion" },
+            new object[] { "funds_total", 1000000000.0, "mil millones", "1 billion" },
+            new object[] { "alt_km", 13600000000.0, "catorce mil millones", "14 billion" },
+        };
+        var badBig = new List<string>();
+        foreach (object[] bg in big)
+        {
+            string w = RuntimeLines.Words((string)bg[0], (double)bg[1]), d = RuntimeLines.Digits((string)bg[0], (double)bg[1]);
+            if (w != (string)bg[2] || d != (string)bg[3]) badBig.Add(bg[1] + " -> " + w + " / " + d);
+        }
+        Check(badBig.Count == 0, "runtime voice: big numbers are rounded to thousands and millions, the same in words and digits",
+              string.Join(" ; ", badBig.ToArray()));
+        // any value from 0 to 10 billion: at most 6 words (the longest below 10 000, like "nueve mil ochocientos setenta y seis")
+        var longest = "";
+        foreach (string k in new[] { "alt_km", "speed", "funds_total", "dist_m", "sci_total" })
+            for (double xv = 0.37; xv < 1e10; xv = xv * 1.37 + 1)
+            {
+                string w = RuntimeLines.Words(k, xv);
+                if (w.Split(' ').Length > longest.Split(' ').Length) longest = w;
+            }
+        Check(longest.Split(' ').Length <= 6, "runtime voice: no value takes more than 6 words to say", longest);
         // stock body names: the same spelling as bodies.tsv (read forwards), and not changed again by Respell
         string bodiesPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../audio/lonapse/bodies.tsv"));
         var badBody = new List<string>();
@@ -1368,6 +1402,11 @@ public static class Tests
         }
         string o1, o2;
         RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_period"), new Dictionary<string, double> { { "period_min", 1.04 } }, null, out o1, out o2);
+        string m1, m2;
+        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_2"), new Dictionary<string, double> { { "alt_km", 15e6 } },
+                          new Dictionary<string, string[]> { { "body", new[] { "Kérbol", "Kerbol" } } }, out m1, out m2);
+        Check(m1 == "Os vemos a quince millones de kilómetros sobre ⟪Kérbol⟫." && m2 == "We see you 15 million km above Kerbol.",
+              "runtime voice: a value in millions: \"quince millones de kilómetros\", \"15 million km\"", m1 + " / " + m2);
         Check(plural.Count == 0 && o1 == "Una vuelta completa os lleva un minuto." && o2 == "One full orbit takes you 1 minute.",
               "runtime voice: a value of 1 takes the singular noun", string.Join(" ; ", plural.ToArray()) + " | " + o1 + " / " + o2);
         Check(RuntimeLines.ExperimentId("temperatureScan@KerbinSrfLanded") == "temperatureScan"

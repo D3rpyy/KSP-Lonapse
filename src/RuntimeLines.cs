@@ -225,12 +225,38 @@ namespace Lonapse
             return sb.ToString();
         }
 
-        /// <summary>Digits for the English subtitle and the value that is spoken, rounded the same way: one decimal below
-        /// 10 for keys with decimals (km, min, deg, ms, science points), else whole numbers. 1234 gives "1,234".</summary>
+        /// <summary>
+        /// The value that is spoken and shown, rounded so it stays short (user report: "15 000 000 km" was a long string
+        /// of words). From a billion: one decimal below 10 billion. From a million: whole millions, one decimal below
+        /// 10 million (2.5 million). From 10 000: whole thousands. Below that: one decimal below 10 for keys with decimals (km, min, deg, ms, science points),
+        /// else whole numbers. Spoken words and subtitle digits use this same value.
+        /// </summary>
         public static double Rounded(string key, double v)
         {
-            if (HasDecimals(key) && Math.Abs(v) < 10) return Math.Round(v, 1, MidpointRounding.AwayFromZero);
+            if (double.IsNaN(v) || double.IsInfinity(v)) return v;
+            double a = Math.Abs(v), sign = v < 0 ? -1 : 1;
+            if (a >= 999500000)
+            {
+                double g = a / 1e9;
+                g = g < 9.95 ? Math.Round(g, 1, MidpointRounding.AwayFromZero) : Math.Round(g, 0, MidpointRounding.AwayFromZero);
+                return sign * g * 1e9;
+            }
+            if (a >= 999500)
+            {
+                double m = a / 1000000.0;
+                m = m < 9.95 ? Math.Round(m, 1, MidpointRounding.AwayFromZero) : Math.Round(m, 0, MidpointRounding.AwayFromZero);
+                return sign * m * 1000000.0;
+            }
+            if (a >= 10000) return sign * Math.Round(a / 1000.0, 0, MidpointRounding.AwayFromZero) * 1000.0;
+            if (HasDecimals(key) && a < 10) return Math.Round(v, 1, MidpointRounding.AwayFromZero);
             return Math.Round(v, 0, MidpointRounding.AwayFromZero);
+        }
+
+        /// <summary>True when the rounded value is said in millions ("quince millones"): Spanish then needs "de"
+        /// before the noun ("quince millones de kilómetros").</summary>
+        public static bool InMillions(string key, double v)
+        {
+            return !double.IsNaN(v) && Math.Abs(Rounded(key, v)) >= 1000000.0;
         }
 
         static bool HasDecimals(string key)
@@ -239,22 +265,47 @@ namespace Lonapse
                    || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key == "sci";
         }
 
+        /// <summary>Subtitle digits: "1,234", "7.5", "15 million", "2.5 million".</summary>
         public static string Digits(string key, double v)
         {
             double r = Rounded(key, v);
+            if (Math.Abs(r) >= 1e9) return (r / 1e9).ToString("#,0.#", CultureInfo.InvariantCulture) + " billion";
+            if (Math.Abs(r) >= 1000000.0)
+                return (r / 1000000.0).ToString("0.#", CultureInfo.InvariantCulture) + " million";
             return r == Math.Floor(r) ? r.ToString("#,0", CultureInfo.InvariantCulture) : r.ToString("0.0", CultureInfo.InvariantCulture);
         }
 
-        /// <summary>The spoken Spanish of a value: 12.5 gives "doce coma cinco". The day is a count after "día", the
-        /// other values come before a noun (apocope).</summary>
+        /// <summary>The spoken Spanish of a value: 12.5 gives "doce coma cinco", 15 million "quince millones", 2.5
+        /// million "dos coma cinco millones", 1 million "un millón". The day is a count after "día", the other values
+        /// come before a noun (apocope: "veintiún kilómetros").</summary>
         public static string Words(string key, double v)
         {
             double r = Rounded(key, v);
-            bool apo = key != "day";
-            long whole = (long)Math.Floor(Math.Abs(r));
-            int tenth = (int)Math.Round((Math.Abs(r) - whole) * 10);
-            string w = Number(whole, apo && tenth == 0);
-            if (tenth > 0) w += " coma " + Units[tenth];
+            string w;
+            if (Math.Abs(r) >= 1e9)
+            {
+                // Spanish has no word for a billion: "mil millones"
+                double g = Math.Abs(r) / 1e9;
+                long whole = (long)Math.Floor(g);
+                int tenth = (int)Math.Round((g - whole) * 10);
+                w = (whole == 1 && tenth == 0 ? "" : Number(whole, true) + (tenth > 0 ? " coma " + Units[tenth] : "") + " ") + "mil millones";
+            }
+            else if (Math.Abs(r) >= 1000000.0)
+            {
+                double m = Math.Abs(r) / 1000000.0;
+                long whole = (long)Math.Floor(m);
+                int tenth = (int)Math.Round((m - whole) * 10);
+                if (whole == 1 && tenth == 0) w = "un millón";
+                else w = Number(whole, tenth == 0) + (tenth > 0 ? " coma " + Units[tenth] : "") + " millones";
+            }
+            else
+            {
+                bool apo = key != "day";
+                long whole = (long)Math.Floor(Math.Abs(r));
+                int tenth = (int)Math.Round((Math.Abs(r) - whole) * 10);
+                w = Number(whole, apo && tenth == 0);
+                if (tenth > 0) w += " coma " + Units[tenth];
+            }
             return r < 0 ? "menos " + w : w;
         }
 
@@ -372,16 +423,19 @@ namespace Lonapse
         static readonly Regex SlotNoun = new Regex(@"\{([a-z_]+)\} (\p{L}+)");
 
         /// <summary>A value that is 1 (after rounding) takes the singular noun right after its slot: "un kilómetro",
-        /// "1 minute". Applied to the template before it is filled.</summary>
+        /// "1 minute". In Spanish a value in millions gets "de" before its noun. Applied to the template before it is filled.</summary>
         static string Singular(string template, Dictionary<string, double> nums, Dictionary<string, string> plurals)
         {
             if (nums == null || string.IsNullOrEmpty(template)) return template;
+            bool spanish = plurals == SpanishPlurals;
             return SlotNoun.Replace(template, m =>
             {
                 double v;
                 string k = m.Groups[1].Value, noun = m.Groups[2].Value, one;
-                if (nums.TryGetValue(k, out v) && !double.IsNaN(v) && Math.Abs(Rounded(k, v)) == 1 && plurals.TryGetValue(noun, out one))
-                    return "{" + k + "} " + one;
+                if (!nums.TryGetValue(k, out v) || double.IsNaN(v)) return m.Value;
+                if (Math.Abs(Rounded(k, v)) == 1 && plurals.TryGetValue(noun, out one)) return "{" + k + "} " + one;
+                // "quince millones de kilómetros", not before "por ciento" or a word that is already "de"
+                if (spanish && InMillions(k, v) && noun != "de" && noun != "por") return "{" + k + "} de " + noun;
                 return m.Value;
             });
         }
