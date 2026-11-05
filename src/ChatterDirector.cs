@@ -169,9 +169,13 @@ namespace Lonapse
             for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
+            string phase = !string.IsNullOrEmpty(debugSlotPhase) ? debugSlotPhase : CurrentPhase;
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
-                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved);
+                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved,
+                                            SubtitleSlots.ConditionsFor(phase, Body));
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
+            for (int i = 0; i < filled.Count; i++)
+                if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
             return filled;
         }
 
@@ -193,6 +197,7 @@ namespace Lonapse
             }
             catch (Exception) { }
             if (!string.IsNullOrEmpty(bodyOverride)) here = char.ToUpperInvariant(bodyOverride[0]) + bodyOverride.Substring(1);
+            if (here == "Mun") here = "the Mun";   // as KSP writes it, a capital at a sentence start
             return SubtitleSlots.FlightValues(host.missionTime, kerbinDays, here, vessel, alt);
         }
 
@@ -219,6 +224,8 @@ namespace Lonapse
         public bool debugVariantsOnly;
         /// <summary>Debug tab (experimental, procedural talk): the phrase test only picks scenes with subtitle slots.</summary>
         public bool debugSlotsOnly;
+        /// <summary>Debug tab: the test phase while a test scene is filled, so [landed] versions can be tried in orbit.</summary>
+        private string debugSlotPhase;
 
         public ChatterDirector(LonapseAddon host, System.Random rng)
         {
@@ -1953,7 +1960,11 @@ namespace Lonapse
         public string DebugPlayRandom(string evt, string phase, string cause, string body, string topic = null)
         {
             lastVariantPick = null;
-            string r = DebugPlayRandomCore(evt, phase, cause, body, topic);
+            // a concrete test phase also picks the [phase] versions of the subtitles
+            debugSlotPhase = Array.IndexOf(SubtitleSlots.Conditions, phase ?? "") >= 0 ? phase : null;
+            string r;
+            try { r = DebugPlayRandomCore(evt, phase, cause, body, topic); }
+            finally { debugSlotPhase = null; }
             return lastVariantPick != null && r != null && r.StartsWith("played", StringComparison.Ordinal)
                 ? r + ". " + lastVariantPick : r;
         }

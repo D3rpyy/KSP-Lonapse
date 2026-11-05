@@ -6,6 +6,7 @@ in a scene, {pool:2} another value, pool values with slots inside, a capital at 
   python3 audio/slots.py               3 fills of every template scene
   python3 audio/slots.py tp_lost -n 8  8 fills of one scene
   python3 audio/slots.py --spanish     with the spanish under each line
+  python3 audio/slots.py --phase landed --body kerbin   the versions for that situation ([landed], [kerbin])
 """
 import argparse
 import random
@@ -31,8 +32,18 @@ def cap(v):
     return v[:1].upper() + v[1:]
 
 
-def fill_scene(lines, pools, rng):
+def pick_version(english, conditions, rng):
+    """Same rule as SubtitleSlots.PickVersion: the versions whose conditions all hold, else the plain ones."""
+    vs = [b.split_conditions(v) for v in english.split("|")]
+    match = [t for c, t in vs if c and all(x in conditions for x in c)]
+    plain = [t for c, t in vs if not c]
+    return rng.choice(match or plain)
+
+
+def fill_scene(lines, pools, rng, conditions, body):
     flight = {k: rng.choice(v) for k, v in FAKE_FLIGHT.items()}
+    if body:
+        flight["here"] = "the Mun" if body == "mun" else body.capitalize()
     a, bb = rng.sample(FAKE_CREW, 2)
     chosen, used = {}, {}
 
@@ -68,7 +79,7 @@ def fill_scene(lines, pools, rng):
     res = []
     for i, r in enumerate(lines):
         per = {"self": a if i % 2 == 0 else bb, "other": bb if i % 2 == 0 else a}
-        version = rng.choice([v.strip() for v in r["english"].split("|")])
+        version = pick_version(r["english"], conditions, rng)
         who = r["role"] if r["role"] != "crew" else per["self"]
         res.append((who, expand(version, True, per, 0), r))
     return res
@@ -80,6 +91,8 @@ def main():
     ap.add_argument("-n", type=int, default=3, help="fills per scene (default 3)")
     ap.add_argument("--seed", type=int, default=None)
     ap.add_argument("--spanish", action="store_true", help="also print the spanish of each line")
+    ap.add_argument("--phase", default="orbit", help="flight phase for [conditions] (default orbit)")
+    ap.add_argument("--body", default="kerbin", help="body key for [kerbin] and [away] (default kerbin)")
     args = ap.parse_args()
     rows, errors, _ = b.load_sources()
     good, verr = b.validate(rows)
@@ -103,7 +116,8 @@ def main():
         lines = sorted(scenes[sc], key=lambda r: r["seq"])
         print("== %s" % sc)
         for _ in range(args.n):
-            for who, text, r in fill_scene(lines, pools, rng):
+            conds = [args.phase, "kerbin" if args.body == "kerbin" else "away"]
+            for who, text, r in fill_scene(lines, pools, rng, conds, args.body):
                 print("  %-10s %s" % (who + ":", text))
                 if args.spanish:
                     print("  %-10s (%s)" % ("", r["spanish"]))

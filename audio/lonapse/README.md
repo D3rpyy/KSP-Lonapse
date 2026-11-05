@@ -168,7 +168,9 @@ Two things make the sentences less recognisable:
 - **Versions.** The English of a row can hold several versions split by `|`: `Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again.` The game picks one per play, again every version once before one comes back. Every version of a line must fit every version of the lines before and after it.
 - **Slots inside pool values.** A pool value can hold slots itself, so a pool can be a list of whole sentences. The pool `not_me` holds "Not me.", "Don't look at me.", "I was asleep." and so on, and a reply like `{not_me} Look behind the {spot}.` changes as a whole.
 
-`python3 audio/slots.py` prints random fills of every template, so I can read them before I play them. A scene name limits it to that scene, `-n 8` gives more fills, and `--spanish` adds the Spanish.
+- **Conditions.** A version can start with conditions: `[landed] You're on the ground, dummy.` The conditions are the flight phases (`prelaunch`, `orbit`, `coast`, `landed` and so on), `kerbin` (at Kerbin) and `away` (anywhere else). Several in one version must all hold: `[orbit kerbin]`. When a line has versions whose conditions hold right now, the game only picks from those. Otherwise only from the versions without conditions. So all lines of a scene switch together. "Control, how high are we?" gets "You're on the ground, dummy." and then "Oh. Right." on the ground, and a normal answer in orbit. Every line needs at least one version without conditions.
+
+`python3 audio/slots.py` prints random fills of every template, so I can read them before I play them. A scene name limits it to that scene, `-n 8` gives more fills, and `--spanish` adds the Spanish. `--phase landed --body mun` shows the versions for that situation.
 
 The rules, checked by the script:
 

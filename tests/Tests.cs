@@ -1290,6 +1290,24 @@ public static class Tests
             "q3\tchatter\tchatter\tcalm\tcrew\tst\t1\tboth\tHola\tHi | Hello {other}" }, ve);
         Check(ve.Count == 2, "slots: an empty version or {body} with versions is an error", string.Join(" | ", ve.ToArray()));
 
+        // [conditions] on versions: the matching ones when there are any, else the plain ones
+        var cl = new List<PhraseEntry> {
+            new PhraseEntry { ClipKey = "c1", English = "High up. | [landed] On the ground, dummy. | [landed kerbin] Home, dummy." } };
+        Func<ICollection<string>, string> fillC = conds => SubtitleSlots.Fill(cl, null, null, null,
+            (pool, vals) => vals[vals.Count - 1], null, conds)[0].English;
+        Check(fillC(SubtitleSlots.ConditionsFor("orbit", "kerbin")) == "High up."
+              && fillC(SubtitleSlots.ConditionsFor("landed", "mun")) == "On the ground, dummy."
+              && fillC(SubtitleSlots.ConditionsFor("landed", "kerbin")) == "Home, dummy."
+              && fillC(null) == "High up.",
+              "slots: [conditions] pick the matching versions, else the plain ones",
+              fillC(SubtitleSlots.ConditionsFor("landed", "mun")));
+        var ce = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "k1\tchatter\tchatter\tcalm\tcrew\tsk\t1\tboth\tHola\t[landed] Hi | [orbit] Ho",
+            "k2\tchatter\tchatter\tcalm\tcrew\tsl\t1\tboth\tHola\tHi | [moon] Ho",
+            "k3\tchatter\tchatter\tcalm\tcrew\tsm\t1\tboth\tHola\tHi | [landed] Ho" }, ce);
+        Check(ce.Count == 2, "slots: versions need a plain one and known conditions", string.Join(" | ", ce.ToArray()));
+
         // TakeValue goes through the pool before a value comes back
         SceneMemory mem = new SceneMemory();
         Random rng = new Random(3);

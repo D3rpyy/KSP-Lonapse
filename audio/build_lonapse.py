@@ -498,8 +498,8 @@ def validate(rows):
         elif unknown_en:
             bad.append("bad placeholder(s) %s, use {body} or a slot like {name} or {name:2}"
                        % ", ".join("{%s}" % p for p in unknown_en))
-        elif "|" in row["english"] and (any(not v.strip() for v in row["english"].split("|")) or "body" in ph_en):
-            bad.append("english versions (|) must all be non-empty and cannot use {body}")
+        elif "|" in row["english"] and version_problem(row["english"], "body" in ph_en):
+            bad.append(version_problem(row["english"], "body" in ph_en))
         else:
             if not sub_only and (("body" in ph_es) != ("body" in ph_en)):
                 bad.append("{body} must be in both spanish and english, or in neither")
@@ -573,6 +573,41 @@ def validate(rows):
             if head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES:
                 errors.append("%s: probe_crew scene '%s' is in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
     return good, errors
+
+
+# Conditions a version can start with: "[landed] You're on the ground." Same as SubtitleSlots.Conditions in C#.
+CONDITIONS = ["prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
+              "kerbin", "away"]
+COND_RE = re.compile(r"^\[([^\]]*)\]\s*(.*)$")
+
+
+def split_conditions(version):
+    """("[landed kerbin] text") gives (["landed", "kerbin"], "text"). (None, text) for a bad [ ] part."""
+    v = version.strip()
+    if not v.startswith("["):
+        return [], v
+    m = COND_RE.match(v)
+    if not m:
+        return None, v
+    conds = m.group(1).split()
+    if not conds or any(c not in CONDITIONS for c in conds):
+        return None, m.group(2)
+    return conds, m.group(2)
+
+
+def version_problem(english, has_body):
+    """Same rules as PhraseTable.CheckPlaceholders: non-empty versions, valid [conditions], one plain version."""
+    if has_body:
+        return "english versions (|) cannot use {body}"
+    plain = False
+    for v in english.split("|"):
+        if not v.strip():
+            return "english has an empty version between |"
+        conds, text = split_conditions(v)
+        if conds is None or not text:
+            return "bad version '%s': use [condition] text, conditions are %s" % (v.strip(), " ".join(CONDITIONS))
+        plain = plain or not conds
+    return None if plain else "english versions need at least one version without [ ]"
 
 
 def is_slot(p):

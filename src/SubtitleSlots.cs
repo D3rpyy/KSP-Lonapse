@@ -10,6 +10,9 @@
 // A pool value may hold slots itself ("Who took my {thing}?"), so a pool can be a list of whole sentences. And the
 // english of a row may hold versions split by |: "Who took my {thing}? | Has anyone seen my {thing}?". The game
 // picks one version per play. The audio fits every version, because the spanish is general.
+// A version can start with conditions: "[landed] You're on the ground." When a line has versions whose conditions
+// all hold right now, only those are picked. Else only the versions without conditions. So every line of a scene
+// switches together, and a line that makes no sense on the ground can become a joke there.
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
 using System.Collections.Generic;
@@ -125,6 +128,39 @@ namespace Lonapse
             return null;
         }
 
+        /// <summary>Conditions a version can have: the flight phases, kerbin (at Kerbin) and away (anywhere else).
+        /// Same list as CONDITIONS in audio/build_lonapse.py.</summary>
+        public static readonly string[] Conditions = { "prelaunch", "launch", "ascent", "orbit", "coast", "reentry",
+                                                       "descent", "landed", "blackout", "kerbin", "away" };
+
+        /// <summary>Splits "[landed kerbin] text" into its conditions and the text. A version without [ ] has no
+        /// conditions. Returns false for an unknown condition or a [ without ].</summary>
+        public static bool SplitConditions(string version, List<string> conds, out string text)
+        {
+            text = version == null ? "" : version.Trim();
+            if (text.Length == 0 || text[0] != '[') return true;
+            int close = text.IndexOf(']');
+            if (close < 0) return false;
+            bool ok = true;
+            foreach (string c in text.Substring(1, close - 1).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (Array.IndexOf(Conditions, c) < 0) ok = false;
+                if (conds != null) conds.Add(c);
+            }
+            text = text.Substring(close + 1).Trim();
+            return ok && (conds == null || conds.Count > 0);
+        }
+
+        /// <summary>The conditions that hold for a flight: the phase (when it is one of Conditions) and kerbin or
+        /// away from the body key.</summary>
+        public static List<string> ConditionsFor(string phase, string bodyKey)
+        {
+            var r = new List<string>();
+            if (!string.IsNullOrEmpty(phase) && Array.IndexOf(Conditions, phase) >= 0) r.Add(phase);
+            if (!string.IsNullOrEmpty(bodyKey)) r.Add(bodyKey == "kerbin" ? "kerbin" : "away");
+            return r;
+        }
+
         /// <summary>True when the english needs Fill: it has slots or versions split by |.</summary>
         public static bool NeedsFill(string text)
         {
@@ -154,6 +190,16 @@ namespace Lonapse
                                              Func<int, IDictionary<string, string>> lineValues,
                                              Func<string, IList<string>, string> pick, List<string> unresolved)
         {
+            return Fill(lines, pools, values, lineValues, pick, unresolved, null);
+        }
+
+        /// <summary>Fill with the <paramref name="conditions"/> that hold now (ConditionsFor), for versions like
+        /// "[landed] ...". Null means none hold.</summary>
+        public static List<PhraseEntry> Fill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
+                                             Func<int, IDictionary<string, string>> lineValues,
+                                             Func<string, IList<string>, string> pick, List<string> unresolved,
+                                             ICollection<string> conditions)
+        {
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
             var st = new FillState();
@@ -164,7 +210,7 @@ namespace Lonapse
                 if (e == null || !NeedsFill(e.English)) { r.Add(e); continue; }
                 st.per = lineValues != null ? lineValues(i) : null;
                 st.where = e.ClipKey + " (line " + i + ")";
-                string src = PickVersion(e, pick);
+                string src = PickVersion(e, pick, conditions);
                 r.Add(CopyWithEnglish(e, Expand(src, true, 0, st)));
             }
             return r;
@@ -183,16 +229,29 @@ namespace Lonapse
             public readonly Dictionary<string, List<string>> used = new Dictionary<string, List<string>>();
         }
 
-        static string PickVersion(PhraseEntry e, Func<string, IList<string>, string> pick)
+        static string PickVersion(PhraseEntry e, Func<string, IList<string>, string> pick, ICollection<string> conditions)
         {
             List<string> vs = Versions(e.English);
             if (vs.Count == 1) return vs[0];
-            var idx = new List<string>();
-            for (int k = 0; k < vs.Count; k++) idx.Add(k.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            string c = pick != null ? pick("version:" + e.ClipKey, idx) : null;
+            var texts = new string[vs.Count];
+            var matching = new List<string>();
+            var plain = new List<string>();
+            for (int k = 0; k < vs.Count; k++)
+            {
+                var conds = new List<string>();
+                SplitConditions(vs[k], conds, out texts[k]);
+                string id = k.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                if (conds.Count == 0) { plain.Add(id); continue; }
+                bool all = conditions != null;
+                foreach (string c in conds) if (all && !conditions.Contains(c)) all = false;
+                if (all) matching.Add(id);
+            }
+            List<string> idx = matching.Count > 0 ? matching : plain;
+            if (idx.Count == 0) return texts[0];   // the build script makes sure a line has a version without [ ]
+            string choice = pick != null ? pick("version:" + e.ClipKey, idx) : idx[0];
             int n;
-            if (c == null || !int.TryParse(c, out n) || n < 0 || n >= vs.Count) n = 0;
-            return vs[n];
+            if (choice == null || !int.TryParse(choice, out n) || n < 0 || n >= vs.Count) n = int.Parse(idx[0]);
+            return texts[n];
         }
 
         // Fills the slots of one text. atStart: the text itself starts a sentence (the top level, or a pool value

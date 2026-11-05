@@ -1,66 +1,67 @@
 pool	english
-thing	left sock
 thing	lucky rock
 thing	rubber duck
-thing	harmonica
-thing	half-eaten sandwich
-thing	diary
-thing	good spoon
-thing	lucky underpants
-thing	tiny umbrella
-thing	backup snacks
-thing	signed photo of Jeb
-thing	Kerbin snow globe
-thing	moustache comb
-thing	emergency cookie
-thing	pet rock
-thing	inflatable pillow
+thing	space pen
+thing	sample bag
+thing	flag
+thing	flight log
+thing	camera
+thing	toothbrush
+thing	favorite spoon
+thing	spare strut
+thing	jar of Mystery Goo
+thing	snack bar
+thing	rover key
+thing	sandwich
+thing	pillow
 thing	lucky wrench
-thing	only clean shirt
+thing	comic book
 spot	seat
 spot	control panel
-spot	toilet
+spot	snack locker
 spot	air vent
-spot	snack drawer
-spot	parachute bag
-spot	big red button
-spot	fire extinguisher
-spot	coffee machine
-spot	spare oxygen tank
-food	old cheese
-food	fish paste
-food	boiled cabbage
-food	mystery pickles
-food	tube cheese
-food	space beans
-food	freeze-dried pudding
-food	Jeb's famous chili
-food	three-week-old pizza
-food	burnt toast
-food	egg salad
-food	reheated soup
+spot	toilet
+spot	parachute
+spot	docking port
+spot	battery pack
+spot	Science Jr.
+spot	reaction wheel
+spot	fuel tank
 part	antenna
+part	solar panel
+part	landing leg
+part	ladder
 part	hatch handle
-part	seat belt
-part	coffee machine
-part	window seal
+part	strut
 part	radio knob
-part	toilet lid
-part	steering wheel
+part	reaction wheel
+part	docking port
 part	heat shield
-part	self-destruct cover
-part	fuel gauge
-part	emergency brake
+part	fuel line
+part	window seal
+part	seat belt
+part	toilet
+food	snack paste
+food	tube cheese
+food	freeze-dried noodles
+food	space beans
+food	Jeb's famous chili
+food	powdered eggs
+food	mystery stew
+food	algae bars
+food	emergency rations
+food	reheated soup
+food	dehydrated fish
+food	cold pizza
+creature	the Kraken
 creature	a giant space whale
-creature	a talking rock
-creature	a very polite Kraken
-creature	a goat in a spacesuit
-creature	a cloud made of cake
-creature	a Kraken that wanted a hug
-creature	a sandwich that could fly
+creature	a Mun made of cheese
+creature	a strut that could talk
+creature	a rover with feelings
+creature	a booster that wanted a hug
 creature	Mission Control, but they were all ducks
-creature	Gene in a tutu
-creature	my own rocket, and it was jealous
+creature	Gene, but he was a goat
+creature	a probe core that would not stop beeping
 not_me	Not me.
 not_me	Don't look at me.
 not_me	I didn't touch it.
@@ -75,5 +76,82 @@ silly_name	Jeb's Revenge
 silly_name	The Flying Pickle
 silly_name	Definitely Safe
 silly_name	Boom Mk1
-silly_name	Not Exploding Yet
 silly_name	Dave
+chore	clean the toilet
+chore	scrape the windows
+chore	count the snacks
+chore	talk to Control
+chore	check the struts
+chore	feed the Mystery Goo
+chore	untangle the parachutes
+chore	wipe the helmets
+chore	sort the rocks
+noise	clank
+noise	squeak
+noise	hiss
+noise	knock
+noise	long groan
+noise	beep
+noise	rattle
+noise	pop
+rumor	Gene sleeps under his desk.
+rumor	the intern launched a pizza last week.
+rumor	Wernher strapped a booster to his chair.
+rumor	Control lost the manual. Again.
+rumor	the new rocket is just three old rockets.
+rumor	Gene cried at the last launch.
+rumor	the snack budget is bigger than the fuel budget.
+song	the countdown song
+song	the snack song
+song	that jingle from the ads
+song	Kerbin, Sweet Kerbin
+song	the theme from the safety video
+experiment	Mystery Goo
+experiment	thermometer
+experiment	barometer
+experiment	seismic sensor
+experiment	gravity sensor
+experiment	Science Jr.
+experiment	magnetometer
+mc_excuse	Budget cuts.
+mc_excuse	Gene says no.
+mc_excuse	The intern spent it on boosters.
+mc_excuse	Maybe next year.
+mc_excuse	Fill out form 27B first.
+mc_excuse	We spent it on snacks.
+status	the snacks are holding up.
+status	nobody has cried today.
+status	the toilet works again.
+status	we only lost one glove.
+status	the Mystery Goo is looking at us.
+status	morale is high. Mostly.
+home_thing	real gravity
+home_thing	rain
+home_thing	the KSC cafeteria
+home_thing	my own bed
+home_thing	grass
+home_thing	showers
+home_thing	Mom's mystery stew
+home_thing	pizza that isn't frozen
+jeb_idea	add more boosters
+jeb_idea	do a flip
+jeb_idea	eat the Mystery Goo
+jeb_idea	go faster
+jeb_idea	lick the window
+jeb_idea	push the big red button
+cure	drinking upside down
+cure	thinking about taxes
+cure	staring at the fuel gauge
+cure	talking to the probe
+cure	holding your nose and humming
+loud_thing	Mainsail
+loud_thing	broken vacuum
+loud_thing	angry goat
+loud_thing	rusty hatch
+loud_thing	rocket on the pad
+loud_thing	kraken with a cold
+game	I spy
+game	rock paper scissors
+game	twenty questions
+game	who can float the longest
+game	guess the snack

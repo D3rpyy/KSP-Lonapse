@@ -194,8 +194,21 @@ namespace Lonapse
             if (e.English != null && e.English.IndexOf(SubtitleSlots.VersionSep) >= 0)
             {
                 // versions split by |: each one non-empty, and not together with {body} (that is one row per body)
+                bool plain = false;
                 foreach (string v in SubtitleSlots.Versions(e.English))
+                {
                     if (v.Length == 0) { bad.Add("english has an empty version between |"); return; }
+                    var conds = new List<string>();
+                    string text;
+                    if (!SubtitleSlots.SplitConditions(v, conds, out text) || text.Length == 0)
+                    {
+                        bad.Add("bad version '" + v + "': use [condition] text, conditions are "
+                                + string.Join(" ", SubtitleSlots.Conditions));
+                        return;
+                    }
+                    if (conds.Count == 0) plain = true;
+                }
+                if (!plain) { bad.Add("english versions need at least one version without [ ]"); return; }
                 if (en.Contains("body")) { bad.Add("english versions (|) cannot use {body}"); return; }
             }
             int bEs = es.FindAll(p => p == "body").Count, bEn = en.FindAll(p => p == "body").Count;
