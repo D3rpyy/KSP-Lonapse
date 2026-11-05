@@ -3,80 +3,80 @@
 # Every scene has a core or a probe-mode role, so crew mode never picks it. Explosion words only in part_lost.
 # signal_lost has no rows here: Mission Control cannot reach the probe, so nobody talks.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
-pe_sci_stayputnik_a_1	science	chatter	calm	mc	pe_sci_stayputnik_a	1	m	any	any	any	any	any	stayputnik		¡Datos nuevos del Stayputnik!	New data from the Stayputnik!
+pe_sci_stayputnik_a_1	science	chatter	calm	mc	pe_sci_stayputnik_a	1	m	any	any	any	any	any	stayputnik		¡Datos nuevos del Stayputnik!	New data from the Stayputnik! | New data from the Stayputnik! | The Stayputnik sent data!
 pe_sci_stayputnik_a_2	science	chatter	calm	probe	pe_sci_stayputnik_a	2	both	any	any	any	any	any	stayputnik	proud		[beeps proudly]
-pe_sci_stayputnik_b_1	science	chatter	calm	mc	pe_sci_stayputnik_b	1	m	any	any	any	any	any	stayputnik		Stayputnik, ¿cómo has medido eso?	Stayputnik, how did you even measure that?
+pe_sci_stayputnik_b_1	science	chatter	calm	mc	pe_sci_stayputnik_b	1	m	any	any	any	any	any	stayputnik		Stayputnik, ¿cómo has medido eso?	Stayputnik, how did you even measure that? | Stayputnik, how did you even measure that? | How did you measure that, Stayputnik?
 pe_sci_stayputnik_b_2	science	chatter	calm	probe	pe_sci_stayputnik_b	2	both	any	any	any	any	any	stayputnik	proud		[beeps mysteriously]
 pe_sci_stayputnik_c_1	science	chatter	calm	probe	pe_sci_stayputnik_c	1	both	any	any	any	any	any	stayputnik	happy		[beeps delightedly]
-pe_sci_stayputnik_c_2	science	chatter	calm	mc	pe_sci_stayputnik_c	2	m	any	any	any	any	any	stayputnik		Sí, Stayputnik, ya lo tenemos.	Yes, Stayputnik, we got it.
+pe_sci_stayputnik_c_2	science	chatter	calm	mc	pe_sci_stayputnik_c	2	m	any	any	any	any	any	stayputnik		Sí, Stayputnik, ya lo tenemos.	Yes, Stayputnik, we got it. | Yes, Stayputnik, we got it. | Got it, Stayputnik.
 pe_sci_stayputnik_c_3	science	chatter	calm	probe	pe_sci_stayputnik_c	3	both	any	any	any	any	any	stayputnik	proud		[beeps once more]
-pe_sci_okto_a_1	science	chatter	calm	mc	pe_sci_okto_a	1	m	any	any	any	any	any	okto		Excelente medición, Okto.	Excellent measurement, Okto.
+pe_sci_okto_a_1	science	chatter	calm	mc	pe_sci_okto_a	1	m	any	any	any	any	any	okto		Excelente medición, Okto.	Excellent measurement, Okto. | Excellent measurement, Okto. | Great measurement, Okto.
 pe_sci_okto_a_2	science	chatter	calm	probe	pe_sci_okto_a	2	both	any	any	any	any	any	okto	proud		[beeps smugly]
-pe_sci_okto_b_1	science	chatter	calm	mc	pe_sci_okto_b	1	m	any	any	any	any	any	okto		Okto, ¿has hecho la ciencia o la has corregido?	Okto, did you do the science or correct it?
+pe_sci_okto_b_1	science	chatter	calm	mc	pe_sci_okto_b	1	m	any	any	any	any	any	okto		Okto, ¿has hecho la ciencia o la has corregido?	Okto, did you do the science or correct it? | Okto, did you do the science or correct it? | Okto, science or corrections?
 pe_sci_okto_b_2	science	chatter	calm	probe	pe_sci_okto_b	2	both	any	any	any	any	any	okto	proud		[beeps very smugly]
-pe_sci_okto_c_1	science	chatter	calm	mc	pe_sci_okto_c	1	m	any	any	any	any	any	okto		Estos datos son demasiado buenos, Okto.	This data is too good, Okto.
+pe_sci_okto_c_1	science	chatter	calm	mc	pe_sci_okto_c	1	m	any	any	any	any	any	okto		Estos datos son demasiado buenos, Okto.	This data is too good, Okto. | This data is too good, Okto. | Too good, this data, Okto.
 pe_sci_okto_c_2	science	chatter	calm	probe	pe_sci_okto_c	2	both	any	any	any	any	any	okto	proud		[beeps casually]
-pe_sci_okto_c_3	science	chatter	calm	mc	pe_sci_okto_c	3	m	any	any	any	any	any	okto		Claro que sí.	Of course it is.
-pe_sci_hecs_a_1	science	chatter	calm	mc	pe_sci_hecs_a	1	m	any	any	any	any	any	hecs		Datos recibidos, HECS. Perfectos.	Data received, HECS. Perfect.
+pe_sci_okto_c_3	science	chatter	calm	mc	pe_sci_okto_c	3	m	any	any	any	any	any	okto		Claro que sí.	Of course it is. | Of course it is. | Naturally.
+pe_sci_hecs_a_1	science	chatter	calm	mc	pe_sci_hecs_a	1	m	any	any	any	any	any	hecs		Datos recibidos, HECS. Perfectos.	Data received, HECS. Perfect. | Data received, HECS. Perfect. | Got the data, HECS. Perfect.
 pe_sci_hecs_a_2	science	chatter	calm	probe	pe_sci_hecs_a	2	both	any	any	any	any	any	hecs	scared		[beeps anxiously]
-pe_sci_hecs_a_3	science	chatter	calm	mc	pe_sci_hecs_a	3	m	any	any	any	any	any	hecs		No hace falta repetir.	No need to redo it.
-pe_sci_hecs_b_1	science	chatter	calm	mc	pe_sci_hecs_b	1	m	any	any	any	any	any	hecs		HECS, has enviado el informe tres veces.	HECS, you sent the report three times.
+pe_sci_hecs_a_3	science	chatter	calm	mc	pe_sci_hecs_a	3	m	any	any	any	any	any	hecs		No hace falta repetir.	No need to redo it. | No need to redo it. | You don't have to do it again.
+pe_sci_hecs_b_1	science	chatter	calm	mc	pe_sci_hecs_b	1	m	any	any	any	any	any	hecs		HECS, has enviado el informe tres veces.	HECS, you sent the report three times. | HECS, you sent the report three times. | Three copies of the report, HECS?
 pe_sci_hecs_b_2	science	chatter	calm	probe	pe_sci_hecs_b	2	both	any	any	any	any	any	hecs	curious		[beeps defensively]
 pe_sci_hecs_c_1	science	chatter	calm	probe	pe_sci_hecs_c	1	both	any	any	any	any	any	hecs	curious		[beeps at length]
-pe_sci_hecs_c_2	science	chatter	calm	mc	pe_sci_hecs_c	2	m	any	any	any	any	any	hecs		HECS, ¿le has puesto notas a un termómetro?	HECS, did you add footnotes to a thermometer?
+pe_sci_hecs_c_2	science	chatter	calm	mc	pe_sci_hecs_c	2	m	any	any	any	any	any	hecs		HECS, ¿le has puesto notas a un termómetro?	HECS, did you add footnotes to a thermometer? | HECS, did you add footnotes to a thermometer? | Footnotes on a thermometer, HECS?
 pe_sci_hecs_c_3	science	chatter	calm	probe	pe_sci_hecs_c	3	both	any	any	any	any	any	hecs	proud		[beeps tidily]
-pe_sci_rovemate_a_1	science	chatter	calm	mc	pe_sci_rovemate_a	1	m	any	any	any	any	any	rovemate		¡Rovemate ha encontrado algo!	Rovemate found something!
+pe_sci_rovemate_a_1	science	chatter	calm	mc	pe_sci_rovemate_a	1	m	any	any	any	any	any	rovemate		¡Rovemate ha encontrado algo!	Rovemate found something! | Rovemate found something! | Rovemate has found something!
 pe_sci_rovemate_a_2	science	chatter	calm	probe	pe_sci_rovemate_a	2	both	any	any	any	any	any	rovemate	happy		[beeps excitedly]
-pe_sci_rovemate_a_3	science	chatter	calm	mc	pe_sci_rovemate_a	3	m	any	any	any	any	any	rovemate		Buen chico. Suéltalo.	Good boy. Drop it.
-pe_sci_rovemate_b_1	science	chatter	calm	mc	pe_sci_rovemate_b	1	m	any	any	any	any	any	rovemate		¿Has hecho ciencia o te has tumbado encima?	Did you do science, or just lie on it?
+pe_sci_rovemate_a_3	science	chatter	calm	mc	pe_sci_rovemate_a	3	m	any	any	any	any	any	rovemate		Buen chico. Suéltalo.	Good boy. Drop it. | Good boy. Drop it. | Good boy. Let go.
+pe_sci_rovemate_b_1	science	chatter	calm	mc	pe_sci_rovemate_b	1	m	any	any	any	any	any	rovemate		¿Has hecho ciencia o te has tumbado encima?	Did you do science, or just lie on it? | Did you do science, or just lie on it? | Science, or did you just lie on it?
 pe_sci_rovemate_b_2	science	chatter	calm	probe	pe_sci_rovemate_b	2	both	any	any	any	any	any	rovemate	bored		[beeps guiltily]
-pe_sci_rovemate_c_1	science	chatter	calm	mc	pe_sci_rovemate_c	1	m	any	any	any	any	any	rovemate		¿Has medido algo, Rovemate?	Did you measure something, Rovemate?
+pe_sci_rovemate_c_1	science	chatter	calm	mc	pe_sci_rovemate_c	1	m	any	any	any	any	any	rovemate		¿Has medido algo, Rovemate?	Did you measure something, Rovemate? | Did you measure something, Rovemate? | Rovemate, did you measure something?
 pe_sci_rovemate_c_2	science	chatter	calm	probe	pe_sci_rovemate_c	2	both	any	any	any	any	any	rovemate	happy		[beeps proudly]
-pe_sci_rovemate_c_3	science	chatter	calm	mc	pe_sci_rovemate_c	3	m	any	any	any	any	any	rovemate		Creo que fue sin querer. Pero cuenta.	I think it was an accident. But it counts.
-pe_sci_snob_a_1	science	chatter	calm	mc	pe_sci_snob_a	1	m	any	any	any	any	any	snob		Gracias por los datos, su excelencia.	Thank you for the data, your excellency.
+pe_sci_rovemate_c_3	science	chatter	calm	mc	pe_sci_rovemate_c	3	m	any	any	any	any	any	rovemate		Creo que fue sin querer. Pero cuenta.	I think it was an accident. But it counts. | I think it was an accident. But it counts. | An accident, I think. It still counts.
+pe_sci_snob_a_1	science	chatter	calm	mc	pe_sci_snob_a	1	m	any	any	any	any	any	snob		Gracias por los datos, su excelencia.	Thank you for the data, your excellency. | Thank you for the data, your excellency. | Thanks for the data, your excellency.
 pe_sci_snob_a_2	science	chatter	calm	probe	pe_sci_snob_a	2	both	any	any	any	any	any	snob	bored		[beeps graciously]
-pe_sci_snob_b_1	science	chatter	calm	mc	pe_sci_snob_b	1	m	any	any	any	any	any	snob		Datos de primera clase.	First-class data.
+pe_sci_snob_b_1	science	chatter	calm	mc	pe_sci_snob_b	1	m	any	any	any	any	any	snob		Datos de primera clase.	First-class data. | First-class data. | Data of the highest class.
 pe_sci_snob_b_2	science	chatter	calm	probe	pe_sci_snob_b	2	both	any	any	any	any	any	snob	proud		[beeps haughtily]
 pe_sci_snob_c_1	science	chatter	calm	probe	pe_sci_snob_c	1	both	any	any	any	any	any	snob	bored		[beeps expectantly]
-pe_sci_snob_c_2	science	chatter	calm	mc	pe_sci_snob_c	2	m	any	any	any	any	any	snob		¿Nos cobra los datos, su excelencia?	Are you charging us for the data, your excellency?
+pe_sci_snob_c_2	science	chatter	calm	mc	pe_sci_snob_c	2	m	any	any	any	any	any	snob		¿Nos cobra los datos, su excelencia?	Are you charging us for the data, your excellency? | Are you charging us for the data, your excellency? | Is there a fee for this data, your excellency?
 pe_sci_snob_c_3	science	chatter	calm	probe	pe_sci_snob_c	3	both	any	any	any	any	any	snob	offended		[beeps haughtily]
-pe_sci_generic_a_1	science	chatter	calm	mc	pe_sci_generic_a	1	m	any	any	any	any	any	generic		Ciencia recibida. Buen trabajo.	Science received. Good work.
+pe_sci_generic_a_1	science	chatter	calm	mc	pe_sci_generic_a	1	m	any	any	any	any	any	generic		Ciencia recibida. Buen trabajo.	Science received. Good work. | Science received. Good work. | Got the science. Nice work.
 pe_sci_generic_a_2	science	chatter	calm	probe	pe_sci_generic_a	2	both	any	any	any	any	any	generic	proud		[beeps proudly]
-pe_sci_generic_b_1	science	chatter	calm	mc	pe_sci_generic_b	1	m	any	any	any	any	any	generic		Datos nuevos. No sabemos qué son, pero son nuevos.	New data. No idea what it is, but it's new.
+pe_sci_generic_b_1	science	chatter	calm	mc	pe_sci_generic_b	1	m	any	any	any	any	any	generic		Datos nuevos. No sabemos qué son, pero son nuevos.	New data. No idea what it is, but it's new. | New data. No idea what it is, but it's new. | Fresh data. No clue what it is. But fresh.
 pe_sci_generic_b_2	science	chatter	calm	probe	pe_sci_generic_b	2	both	any	any	any	any	any	generic	happy		[beeps happily]
-pe_sci_generic_c_1	science	chatter	calm	mc	pe_sci_generic_c	1	m	any	any	any	any	any	generic		Una sonda normal, haciendo ciencia.	Just a normal probe, doing science.
+pe_sci_generic_c_1	science	chatter	calm	mc	pe_sci_generic_c	1	m	any	any	any	any	any	generic		Una sonda normal, haciendo ciencia.	Just a normal probe, doing science. | Just a normal probe, doing science. | A normal little probe, doing science.
 pe_sci_generic_c_2	science	chatter	calm	probe	pe_sci_generic_c	2	both	any	any	any	any	any	generic	happy		[beeps contentedly]
-pe_sci_generic_c_3	science	chatter	calm	mc	pe_sci_generic_c	3	m	any	any	any	any	any	generic		Eres mi favorita. No se lo digas a las demás.	You're my favorite. Don't tell the others.
+pe_sci_generic_c_3	science	chatter	calm	mc	pe_sci_generic_c	3	m	any	any	any	any	any	generic		Eres mi favorita. No se lo digas a las demás.	You're my favorite. Don't tell the others. | You're my favorite. Don't tell the others. | My favorite. Keep it a secret.
 pe_sci_any_a_1	science	chatter	calm	probe	pe_sci_any_a	1	both	any	any	any	any	any	any	proud		[beeps proudly]
-pe_sci_any_a_2	science	chatter	calm	mc	pe_sci_any_a	2	m	any	any	any	any	any	any		¡Ciencia! ¡Ha llegado ciencia!	Science! Science just came in!
+pe_sci_any_a_2	science	chatter	calm	mc	pe_sci_any_a	2	m	any	any	any	any	any	any		¡Ciencia! ¡Ha llegado ciencia!	Science! Science just came in! | Science! Science just came in! | Science! It's here!
 pe_sci_any_a_3	science	chatter	calm	probe	pe_sci_any_a	3	both	any	any	any	any	any	any	happy		[beeps expectantly]
-pe_sci_any_b_1	science	chatter	calm	mc	pe_sci_any_b	1	m	any	any	any	any	any	any		Sonda, esto va directo al laboratorio.	Probe, this goes straight to the lab.
+pe_sci_any_b_1	science	chatter	calm	mc	pe_sci_any_b	1	m	any	any	any	any	any	any		Sonda, esto va directo al laboratorio.	Probe, this goes straight to the lab. | Probe, this goes straight to the lab. | Straight to the lab with this, probe.
 pe_sci_any_b_2	science	chatter	calm	probe	pe_sci_any_b	2	both	any	any	any	any	any	any	proud		[beeps very proudly]
 pe_pow_low_stayputnik_1	power_low	warning	tense	probe	pe_pow_low_stayputnik	1	both	any	any	any	any	any	stayputnik	sleepy		[beeps faintly]
-pe_pow_low_stayputnik_2	power_low	warning	tense	mc	pe_pow_low_stayputnik	2	m	any	any	any	any	any	stayputnik		Hora de la siesta, veterano.	Nap time, veteran.
-pe_pow_low_okto_1	power_low	warning	tense	mc	pe_pow_low_okto	1	m	any	any	any	any	any	okto		Okto, te quedas sin batería.	Okto, your battery is running out.
+pe_pow_low_stayputnik_2	power_low	warning	tense	mc	pe_pow_low_stayputnik	2	m	any	any	any	any	any	stayputnik		Hora de la siesta, veterano.	Nap time, veteran. | Nap time, veteran. | Time to rest, veteran.
+pe_pow_low_okto_1	power_low	warning	tense	mc	pe_pow_low_okto	1	m	any	any	any	any	any	okto		Okto, te quedas sin batería.	Okto, your battery is running out. | Okto, your battery is running out. | Okto, your battery is low.
 pe_pow_low_okto_2	power_low	warning	tense	probe	pe_pow_low_okto	2	both	any	any	any	any	any	okto	sleepy		[beeps sleepily]
-pe_pow_low_okto_3	power_low	warning	tense	mc	pe_pow_low_okto	3	m	any	any	any	any	any	okto		Hora de la siesta.	Nap time.
+pe_pow_low_okto_3	power_low	warning	tense	mc	pe_pow_low_okto	3	m	any	any	any	any	any	okto		Hora de la siesta.	Nap time. | Nap time. | Time for a nap.
 pe_pow_low_hecs_1	power_low	warning	tense	probe	pe_pow_low_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps worriedly]
-pe_pow_low_hecs_2	power_low	warning	tense	mc	pe_pow_low_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS. Hora de la siesta.	Easy, HECS. Nap time.
+pe_pow_low_hecs_2	power_low	warning	tense	mc	pe_pow_low_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS. Hora de la siesta.	Easy, HECS. Nap time. | Easy, HECS. Nap time. | Calm, HECS. Time to sleep.
 pe_pow_low_rovemate_1	power_low	warning	tense	probe	pe_pow_low_rovemate	1	both	any	any	any	any	any	rovemate	sleepy		[beeps sleepily]
-pe_pow_low_rovemate_2	power_low	warning	tense	mc	pe_pow_low_rovemate	2	m	any	any	any	any	any	rovemate		Échate, Rovemate. Hora de la siesta.	Lie down, Rovemate. Nap time.
+pe_pow_low_rovemate_2	power_low	warning	tense	mc	pe_pow_low_rovemate	2	m	any	any	any	any	any	rovemate		Échate, Rovemate. Hora de la siesta.	Lie down, Rovemate. Nap time. | Lie down, Rovemate. Nap time. | Down, Rovemate. Sleepy time.
 pe_pow_low_snob_1	power_low	warning	tense	probe	pe_pow_low_snob	1	both	any	any	any	any	any	snob	offended		[beeps indignantly]
-pe_pow_low_snob_2	power_low	warning	tense	mc	pe_pow_low_snob	2	m	any	any	any	any	any	snob		Lo siento, su excelencia. Hora de la siesta.	Sorry, your excellency. Nap time.
+pe_pow_low_snob_2	power_low	warning	tense	mc	pe_pow_low_snob	2	m	any	any	any	any	any	snob		Lo siento, su excelencia. Hora de la siesta.	Sorry, your excellency. Nap time. | Sorry, your excellency. Nap time. | Apologies, your excellency. Time to rest.
 pe_pow_low_generic_1	power_low	warning	tense	probe	pe_pow_low_generic	1	both	any	any	any	any	any	generic	sleepy		[beeps sleepily]
-pe_pow_low_generic_2	power_low	warning	tense	mc	pe_pow_low_generic	2	m	any	any	any	any	any	generic		Batería baja. Hora de la siesta, sonda.	Battery low. Nap time, probe.
+pe_pow_low_generic_2	power_low	warning	tense	mc	pe_pow_low_generic	2	m	any	any	any	any	any	generic		Batería baja. Hora de la siesta, sonda.	Battery low. Nap time, probe. | Battery low. Nap time, probe. | Low battery. Sleep, probe.
 pe_pow_ok_stayputnik_1	power_ok	chatter	calm	probe	pe_pow_ok_stayputnik	1	both	any	any	any	any	any	stayputnik	happy		[beeps eagerly]
-pe_pow_ok_stayputnik_2	power_ok	chatter	calm	mc	pe_pow_ok_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Buenos días, veterano!	Good morning, veteran!
+pe_pow_ok_stayputnik_2	power_ok	chatter	calm	mc	pe_pow_ok_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Buenos días, veterano!	Good morning, veteran! | Good morning, veteran! | Morning, veteran!
 pe_pow_ok_okto_1	power_ok	chatter	calm	probe	pe_pow_ok_okto	1	both	any	any	any	any	any	okto	proud		[beeps casually]
-pe_pow_ok_okto_2	power_ok	chatter	calm	mc	pe_pow_ok_okto	2	m	any	any	any	any	any	okto		Buenos días, Okto. Sí, estabas dormido.	Good morning, Okto. Yes, you were asleep.
+pe_pow_ok_okto_2	power_ok	chatter	calm	mc	pe_pow_ok_okto	2	m	any	any	any	any	any	okto		Buenos días, Okto. Sí, estabas dormido.	Good morning, Okto. Yes, you were asleep. | Good morning, Okto. Yes, you were asleep. | Morning, Okto. Yes, you slept.
 pe_pow_ok_hecs_1	power_ok	chatter	calm	probe	pe_pow_ok_hecs	1	both	any	any	any	any	any	hecs	curious		[beeps inquisitively]
-pe_pow_ok_hecs_2	power_ok	chatter	calm	mc	pe_pow_ok_hecs	2	m	any	any	any	any	any	hecs		Buenos días. No te has perdido nada.	Good morning. You didn't miss a thing.
+pe_pow_ok_hecs_2	power_ok	chatter	calm	mc	pe_pow_ok_hecs	2	m	any	any	any	any	any	hecs		Buenos días. No te has perdido nada.	Good morning. You didn't miss a thing. | Good morning. You didn't miss a thing. | Morning. Nothing happened.
 pe_pow_ok_rovemate_1	power_ok	chatter	calm	probe	pe_pow_ok_rovemate	1	both	any	any	any	any	any	rovemate	happy		[beeps excitedly]
-pe_pow_ok_rovemate_2	power_ok	chatter	calm	mc	pe_pow_ok_rovemate	2	m	any	any	any	any	any	rovemate		¡Buenos días, chico!	Good morning, boy!
-pe_pow_ok_snob_1	power_ok	chatter	calm	mc	pe_pow_ok_snob	1	m	any	any	any	any	any	snob		Buenos días, su excelencia.	Good morning, your excellency.
+pe_pow_ok_rovemate_2	power_ok	chatter	calm	mc	pe_pow_ok_rovemate	2	m	any	any	any	any	any	rovemate		¡Buenos días, chico!	Good morning, boy! | Good morning, boy! | Morning, good boy!
+pe_pow_ok_snob_1	power_ok	chatter	calm	mc	pe_pow_ok_snob	1	m	any	any	any	any	any	snob		Buenos días, su excelencia.	Good morning, your excellency. | Good morning, your excellency. | Morning, your excellency.
 pe_pow_ok_snob_2	power_ok	chatter	calm	probe	pe_pow_ok_snob	2	both	any	any	any	any	any	snob	bored		[beeps demandingly]
 pe_pow_ok_generic_1	power_ok	chatter	calm	probe	pe_pow_ok_generic	1	both	any	any	any	any	any	generic	happy		[beeps happily]
-pe_pow_ok_generic_2	power_ok	chatter	calm	mc	pe_pow_ok_generic	2	m	any	any	any	any	any	generic		¡Buenos días!	Good morning!
+pe_pow_ok_generic_2	power_ok	chatter	calm	mc	pe_pow_ok_generic	2	m	any	any	any	any	any	generic		¡Buenos días!	Good morning! | Good morning! | Morning, probe!
 pe_soi_stayputnik_1	soi_enter	chatter	calm	mc	pe_soi_stayputnik	1	m	any	any	any	any	any	stayputnik		Stayputnik, esto es {body}.	Stayputnik, this is {body}.
 pe_soi_stayputnik_2	soi_enter	chatter	calm	probe	pe_soi_stayputnik	2	both	any	any	any	any	any	stayputnik	happy		[beeps excitedly]
 pe_soi_okto_1	soi_enter	chatter	calm	mc	pe_soi_okto	1	m	any	any	any	any	any	okto		Bienvenido. Delante tienes {body}.	Welcome. Right ahead of you is {body}.
@@ -85,164 +85,164 @@ pe_soi_hecs_1	soi_enter	chatter	calm	mc	pe_soi_hecs	1	m	any	any	any	any	any	hecs
 pe_soi_hecs_2	soi_enter	chatter	calm	probe	pe_soi_hecs	2	both	any	any	any	any	any	hecs	scared		[beeps nervously]
 pe_soi_rovemate_1	soi_enter	chatter	calm	mc	pe_soi_rovemate	1	m	any	any	any	any	any	rovemate		¡Mira, Rovemate! ¡Es {body}!	Look, Rovemate! It's {body}!
 pe_soi_rovemate_2	soi_enter	chatter	calm	probe	pe_soi_rovemate	2	both	any	any	any	any	any	rovemate	curious		[beeps curiously]
-pe_soi_rovemate_3	soi_enter	chatter	calm	mc	pe_soi_rovemate	3	m	any	any	any	any	any	rovemate		Sí, podrás explorar. Luego.	Yes, you can explore. Later.
+pe_soi_rovemate_3	soi_enter	chatter	calm	mc	pe_soi_rovemate	3	m	any	any	any	any	any	rovemate		Sí, podrás explorar. Luego.	Yes, you can explore. Later. | Yes, you can explore. Later. | Exploring later. Yes.
 pe_soi_snob_1	soi_enter	chatter	calm	mc	pe_soi_snob	1	m	any	any	any	any	any	snob		Su excelencia, {body} le espera.	Your excellency, {body} awaits you.
 pe_soi_snob_2	soi_enter	chatter	calm	probe	pe_soi_snob	2	both	any	any	any	any	any	snob	bored		[beeps dismissively]
 pe_soi_generic_1	soi_enter	chatter	calm	mc	pe_soi_generic	1	m	any	any	any	any	any	generic		Bienvenida, sonda. Esto es {body}.	Welcome, probe. This is {body}.
 pe_soi_generic_2	soi_enter	chatter	calm	probe	pe_soi_generic	2	both	any	any	any	any	any	generic	curious		[beeps curiously]
-pe_soi_home_a_1	soi_enter	chatter	calm	mc	pe_soi_home_a	1	m	any	any	any	any	home	any		Bienvenida a casa, sonda.	Welcome home, probe.
+pe_soi_home_a_1	soi_enter	chatter	calm	mc	pe_soi_home_a	1	m	any	any	any	any	home	any		Bienvenida a casa, sonda.	Welcome home, probe. | Welcome home, probe. | Welcome back home, probe.
 pe_soi_home_a_2	soi_enter	chatter	calm	probe	pe_soi_home_a	2	both	any	any	any	any	home	any	happy		[beeps joyfully]
 pe_soi_home_b_1	soi_enter	chatter	calm	probe	pe_soi_home_b	1	both	any	any	any	any	home	any	happy		[beeps very happily]
-pe_soi_home_b_2	soi_enter	chatter	calm	mc	pe_soi_home_b	2	m	any	any	any	any	home	any		Te hemos echado de menos.	We missed you.
+pe_soi_home_b_2	soi_enter	chatter	calm	mc	pe_soi_home_b	2	m	any	any	any	any	home	any		Te hemos echado de menos.	We missed you. | We missed you. | Missed you.
 pe_pl_stayputnik_1	part_lost	warning	tense	probe	pe_pl_stayputnik	1	both	any	any	any	any	any	stayputnik	scared		[beeps in alarm]
-pe_pl_stayputnik_2	part_lost	warning	tense	mc	pe_pl_stayputnik	2	m	any	any	any	any	any	stayputnik		Stayputnik, ¿eso era importante?	Stayputnik, was that important?
+pe_pl_stayputnik_2	part_lost	warning	tense	mc	pe_pl_stayputnik	2	m	any	any	any	any	any	stayputnik		Stayputnik, ¿eso era importante?	Stayputnik, was that important? | Stayputnik, was that important? | Did we need that, Stayputnik?
 pe_pl_stayputnik_3	part_lost	warning	tense	probe	pe_pl_stayputnik	3	both	any	any	any	any	any	stayputnik	scared		[beeps very nervously]
 pe_pl_okto_1	part_lost	warning	tense	probe	pe_pl_okto	1	both	any	impulse	any	any	any	okto	scared		[beeps in alarm]
-pe_pl_okto_2	part_lost	warning	tense	mc	pe_pl_okto	2	m	any	impulse	any	any	any	okto		Okto, ¿qué ha sido ese boom?	Okto, what was that boom?
+pe_pl_okto_2	part_lost	warning	tense	mc	pe_pl_okto	2	m	any	impulse	any	any	any	okto		Okto, ¿qué ha sido ese boom?	Okto, what was that boom? | Okto, what was that boom? | What exploded, Okto?
 pe_pl_okto_3	part_lost	warning	tense	probe	pe_pl_okto	3	both	any	impulse	any	any	any	okto	offended		[beeps accusingly]
 pe_pl_hecs_1	part_lost	warning	tense	probe	pe_pl_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps frantically]
-pe_pl_hecs_2	part_lost	warning	tense	mc	pe_pl_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS. Era una sola pieza.	Easy, HECS. It was one part.
+pe_pl_hecs_2	part_lost	warning	tense	mc	pe_pl_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS. Era una sola pieza.	Easy, HECS. It was one part. | Easy, HECS. It was one part. | Calm, HECS. Just one part.
 pe_pl_hecs_3	part_lost	warning	tense	probe	pe_pl_hecs	3	both	any	any	any	any	any	hecs	scared		[beeps still frantically]
 pe_pl_rovemate_1	part_lost	warning	tense	probe	pe_pl_rovemate	1	both	any	impulse	any	any	any	rovemate	scared		[beeps fearfully]
-pe_pl_rovemate_2	part_lost	warning	tense	mc	pe_pl_rovemate	2	m	any	impulse	any	any	any	rovemate		Tranquilo, chico. Solo era una pieza.	Easy, boy. It was just a part.
+pe_pl_rovemate_2	part_lost	warning	tense	mc	pe_pl_rovemate	2	m	any	impulse	any	any	any	rovemate		Tranquilo, chico. Solo era una pieza.	Easy, boy. It was just a part. | Easy, boy. It was just a part. | Calm, boy. Only a part.
 pe_pl_snob_1	part_lost	warning	tense	probe	pe_pl_snob	1	both	any	any	any	any	any	snob	offended		[beeps in outrage]
-pe_pl_snob_2	part_lost	warning	tense	mc	pe_pl_snob	2	m	any	any	any	any	any	snob		Algo ha explotado, su excelencia.	Something exploded, your excellency.
+pe_pl_snob_2	part_lost	warning	tense	mc	pe_pl_snob	2	m	any	any	any	any	any	snob		Algo ha explotado, su excelencia.	Something exploded, your excellency. | Something exploded, your excellency. | A small explosion, your excellency.
 pe_pl_snob_3	part_lost	warning	tense	probe	pe_pl_snob	3	both	any	any	any	any	any	snob	offended		[beeps indignantly]
 pe_pl_generic_1	part_lost	warning	tense	probe	pe_pl_generic	1	both	any	any	any	any	any	generic	scared		[beeps nervously]
-pe_pl_generic_2	part_lost	warning	tense	mc	pe_pl_generic	2	m	any	any	any	any	any	generic		¿Eso era importante?	Was that important?
+pe_pl_generic_2	part_lost	warning	tense	mc	pe_pl_generic	2	m	any	any	any	any	any	generic		¿Eso era importante?	Was that important? | Was that important? | Did we need that?
 pe_pl_generic_3	part_lost	warning	tense	probe	pe_pl_generic	3	both	any	any	any	any	any	generic	curious		[beeps uncertainly]
-pe_pl_any_a_1	part_lost	warning	tense	mc	pe_pl_any_a	1	m	any	any	any	any	any	any		¡Sonda! ¡Algo ha estallado!	Probe! Something blew up!
+pe_pl_any_a_1	part_lost	warning	tense	mc	pe_pl_any_a	1	m	any	any	any	any	any	any		¡Sonda! ¡Algo ha estallado!	Probe! Something blew up! | Probe! Something blew up! | Probe! Explosion!
 pe_pl_any_a_2	part_lost	warning	tense	probe	pe_pl_any_a	2	both	any	any	any	any	any	any	scared		[beeps very nervously]
-pe_pl_any_a_3	part_lost	warning	tense	mc	pe_pl_any_a	3	m	any	any	any	any	any	any		Seguimos aquí. Aguanta.	We're still here. Hang in there.
+pe_pl_any_a_3	part_lost	warning	tense	mc	pe_pl_any_a	3	m	any	any	any	any	any	any		Seguimos aquí. Aguanta.	We're still here. Hang in there. | We're still here. Hang in there. | Still with you. Hold on.
 pe_pl_any_b_1	part_lost	warning	tense	probe	pe_pl_any_b	1	both	any	impulse	any	any	any	any	scared		[beeps nervously]
-pe_pl_any_b_2	part_lost	warning	tense	mc	pe_pl_any_b	2	m	any	impulse	any	any	any	any		Calma, sonda. Seguimos contigo.	Easy, probe. We're still with you.
+pe_pl_any_b_2	part_lost	warning	tense	mc	pe_pl_any_b	2	m	any	impulse	any	any	any	any		Calma, sonda. Seguimos contigo.	Easy, probe. We're still with you. | Easy, probe. We're still with you. | Calm, probe. We're here.
 pe_sig_back_stayputnik_1	signal_back	chatter	calm	probe	pe_sig_back_stayputnik	1	both	any	any	any	any	any	stayputnik	happy		[beeps very eagerly]
-pe_sig_back_stayputnik_2	signal_back	chatter	calm	mc	pe_sig_back_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Ahí estás, veterano!	There you are, veteran!
+pe_sig_back_stayputnik_2	signal_back	chatter	calm	mc	pe_sig_back_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Ahí estás, veterano!	There you are, veteran! | There you are, veteran! | Welcome back, veteran!
 pe_sig_back_okto_1	signal_back	chatter	calm	probe	pe_sig_back_okto	1	both	any	any	any	any	any	okto	proud		[beeps casually]
-pe_sig_back_okto_2	signal_back	chatter	calm	mc	pe_sig_back_okto	2	m	any	any	any	any	any	okto		Ahí estás. Sí, te hemos echado de menos.	There you are. Yes, we missed you.
+pe_sig_back_okto_2	signal_back	chatter	calm	mc	pe_sig_back_okto	2	m	any	any	any	any	any	okto		Ahí estás. Sí, te hemos echado de menos.	There you are. Yes, we missed you. | There you are. Yes, we missed you. | Back again. Yes, we missed you.
 pe_sig_back_hecs_1	signal_back	chatter	calm	probe	pe_sig_back_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps with relief]
-pe_sig_back_hecs_2	signal_back	chatter	calm	mc	pe_sig_back_hecs	2	m	any	any	any	any	any	hecs		¡Ahí estás! Todo está bien.	There you are! Everything's fine.
+pe_sig_back_hecs_2	signal_back	chatter	calm	mc	pe_sig_back_hecs	2	m	any	any	any	any	any	hecs		¡Ahí estás! Todo está bien.	There you are! Everything's fine. | There you are! Everything's fine. | Back! All is fine.
 pe_sig_back_rovemate_1	signal_back	chatter	calm	probe	pe_sig_back_rovemate	1	both	any	any	any	any	any	rovemate	happy		[beeps joyfully]
-pe_sig_back_rovemate_2	signal_back	chatter	calm	mc	pe_sig_back_rovemate	2	m	any	any	any	any	any	rovemate		¡Ahí estás, chico!	There you are, boy!
-pe_sig_back_snob_1	signal_back	chatter	calm	mc	pe_sig_back_snob	1	m	any	any	any	any	any	snob		¡Ahí está, su excelencia!	There you are, your excellency!
+pe_sig_back_rovemate_2	signal_back	chatter	calm	mc	pe_sig_back_rovemate	2	m	any	any	any	any	any	rovemate		¡Ahí estás, chico!	There you are, boy! | There you are, boy! | Good boy! You're back!
+pe_sig_back_snob_1	signal_back	chatter	calm	mc	pe_sig_back_snob	1	m	any	any	any	any	any	snob		¡Ahí está, su excelencia!	There you are, your excellency! | There you are, your excellency! | Welcome back, your excellency!
 pe_sig_back_snob_2	signal_back	chatter	calm	probe	pe_sig_back_snob	2	both	any	any	any	any	any	snob	bored		[beeps dismissively]
 pe_sig_back_generic_1	signal_back	chatter	calm	probe	pe_sig_back_generic	1	both	any	any	any	any	any	generic	happy		[beeps happily]
-pe_sig_back_generic_2	signal_back	chatter	calm	mc	pe_sig_back_generic	2	m	any	any	any	any	any	generic		¡Ahí estás!	There you are!
+pe_sig_back_generic_2	signal_back	chatter	calm	mc	pe_sig_back_generic	2	m	any	any	any	any	any	generic		¡Ahí estás!	There you are! | There you are! | Back again!
 pe_td_stayputnik_1	touchdown	chatter	none	probe	pe_td_stayputnik	1	both	any	any	any	any	any	stayputnik	happy		[beeps bouncily]
-pe_td_stayputnik_2	touchdown	chatter	none	mc	pe_td_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Bienvenido al suelo, veterano!	Welcome to the ground, veteran!
-pe_td_okto_1	touchdown	chatter	none	mc	pe_td_okto	1	m	any	any	any	any	any	okto		Aterrizaje confirmado. Muy limpio, Okto.	Touchdown confirmed. Very clean, Okto.
+pe_td_stayputnik_2	touchdown	chatter	none	mc	pe_td_stayputnik	2	m	any	any	any	any	any	stayputnik		¡Bienvenido al suelo, veterano!	Welcome to the ground, veteran! | Welcome to the ground, veteran! | Welcome to {here}, veteran!
+pe_td_okto_1	touchdown	chatter	none	mc	pe_td_okto	1	m	any	any	any	any	any	okto		Aterrizaje confirmado. Muy limpio, Okto.	Touchdown confirmed. Very clean, Okto. | Touchdown confirmed. Very clean, Okto. | Clean landing, Okto. Confirmed.
 pe_td_okto_2	touchdown	chatter	none	probe	pe_td_okto	2	both	any	any	any	any	any	okto	proud		[beeps smugly]
 pe_td_hecs_1	touchdown	chatter	none	probe	pe_td_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps shakily]
-pe_td_hecs_2	touchdown	chatter	none	mc	pe_td_hecs	2	m	any	any	any	any	any	hecs		HECS, has aterrizado. Puedes dejar de temblar.	HECS, you landed. You can stop shaking.
+pe_td_hecs_2	touchdown	chatter	none	mc	pe_td_hecs	2	m	any	any	any	any	any	hecs		HECS, has aterrizado. Puedes dejar de temblar.	HECS, you landed. You can stop shaking. | HECS, you landed. You can stop shaking. | You're down, HECS. Stop shaking.
 pe_td_hecs_3	touchdown	chatter	none	probe	pe_td_hecs	3	both	any	any	any	any	any	hecs	happy		[beeps with relief]
 pe_td_rovemate_1	touchdown	chatter	none	probe	pe_td_rovemate	1	both	any	any	any	any	any	rovemate	happy		[beeps excitedly]
-pe_td_rovemate_2	touchdown	chatter	none	mc	pe_td_rovemate	2	m	any	any	any	any	any	rovemate		¡Quieto, Rovemate! Primero el informe.	Stay, Rovemate! Report first.
+pe_td_rovemate_2	touchdown	chatter	none	mc	pe_td_rovemate	2	m	any	any	any	any	any	rovemate		¡Quieto, Rovemate! Primero el informe.	Stay, Rovemate! Report first. | Stay, Rovemate! Report first. | Sit, Rovemate! Report first.
 pe_td_rovemate_3	touchdown	chatter	none	probe	pe_td_rovemate	3	both	any	any	any	any	any	rovemate	bored		[beeps sulkily]
-pe_td_snob_1	touchdown	chatter	none	mc	pe_td_snob	1	m	any	any	any	any	any	snob		Su excelencia ha llegado.	Your excellency has arrived.
+pe_td_snob_1	touchdown	chatter	none	mc	pe_td_snob	1	m	any	any	any	any	any	snob		Su excelencia ha llegado.	Your excellency has arrived. | Your excellency has arrived. | Your excellency has landed on {here}.
 pe_td_snob_2	touchdown	chatter	none	probe	pe_td_snob	2	both	any	any	any	any	any	snob	bored		[beeps disapprovingly]
-pe_td_generic_1	touchdown	chatter	none	mc	pe_td_generic	1	m	any	any	any	any	any	generic		Aterrizaje confirmado, sonda.	Touchdown confirmed, probe.
+pe_td_generic_1	touchdown	chatter	none	mc	pe_td_generic	1	m	any	any	any	any	any	generic		Aterrizaje confirmado, sonda.	Touchdown confirmed, probe. | Touchdown confirmed, probe. | Landing confirmed, probe.
 pe_td_generic_2	touchdown	chatter	none	probe	pe_td_generic	2	both	any	any	any	any	any	generic	happy		[beeps happily]
 pe_td_any_a_1	touchdown	chatter	none	probe	pe_td_any_a	1	both	any	any	any	any	any	any	curious		[beeps uncertainly]
-pe_td_any_a_2	touchdown	chatter	none	mc	pe_td_any_a	2	m	any	any	any	any	any	any		Cuenta. Seguimos de una pieza.	It counts. We're still in one piece.
-pe_td_any_b_1	touchdown	chatter	none	mc	pe_td_any_b	1	m	any	any	any	any	any	any		Contacto. ¿Todo bien ahí abajo?	Contact. All good down there?
+pe_td_any_a_2	touchdown	chatter	none	mc	pe_td_any_a	2	m	any	any	any	any	any	any		Cuenta. Seguimos de una pieza.	It counts. We're still in one piece. | It counts. We're still in one piece. | Counts as a landing. One piece.
+pe_td_any_b_1	touchdown	chatter	none	mc	pe_td_any_b	1	m	any	any	any	any	any	any		Contacto. ¿Todo bien ahí abajo?	Contact. All good down there? | Contact. All good down there? | Contact. Okay down there?
 pe_td_any_b_2	touchdown	chatter	none	probe	pe_td_any_b	2	both	any	any	any	any	any	any	happy		[beeps cheerfully]
-pe_td_any_b_3	touchdown	chatter	none	mc	pe_td_any_b	3	m	any	any	any	any	any	any		Eso es un sí.	That's a yes.
+pe_td_any_b_3	touchdown	chatter	none	mc	pe_td_any_b	3	m	any	any	any	any	any	any		Eso es un sí.	That's a yes. | That's a yes. | I'll take that as yes.
 pe_sd_rovemate_1	splashdown	chatter	none	probe	pe_sd_rovemate	1	both	any	any	any	any	any	rovemate	happy		[beeps delightedly]
-pe_sd_rovemate_2	splashdown	chatter	none	mc	pe_sd_rovemate	2	m	any	any	any	any	any	rovemate		Rovemate, no es hora del baño.	Rovemate, it's not bath time.
-pe_sd_any_a_1	splashdown	chatter	none	mc	pe_sd_any_a	1	m	any	any	any	any	any	any		Amerizaje confirmado.	Splashdown confirmed.
+pe_sd_rovemate_2	splashdown	chatter	none	mc	pe_sd_rovemate	2	m	any	any	any	any	any	rovemate		Rovemate, no es hora del baño.	Rovemate, it's not bath time. | Rovemate, it's not bath time. | No bath time, Rovemate.
+pe_sd_any_a_1	splashdown	chatter	none	mc	pe_sd_any_a	1	m	any	any	any	any	any	any		Amerizaje confirmado.	Splashdown confirmed. | Splashdown confirmed. | We confirm splashdown.
 pe_sd_any_a_2	splashdown	chatter	none	probe	pe_sd_any_a	2	both	any	any	any	any	any	any	curious		[beeps curiously]
 pe_sd_any_b_1	splashdown	chatter	none	probe	pe_sd_any_b	1	both	any	any	any	any	any	any	scared		[beeps worriedly]
-pe_sd_any_b_2	splashdown	chatter	none	mc	pe_sd_any_b	2	m	any	any	any	any	any	any		Tranquila, sonda. Flotas.	Easy, probe. You float.
-pe_sd_any_c_1	splashdown	chatter	none	mc	pe_sd_any_c	1	m	any	any	any	any	any	any		Bienvenida al agua.	Welcome to the water.
+pe_sd_any_b_2	splashdown	chatter	none	mc	pe_sd_any_b	2	m	any	any	any	any	any	any		Tranquila, sonda. Flotas.	Easy, probe. You float. | Easy, probe. You float. | Relax, probe. You're floating.
+pe_sd_any_c_1	splashdown	chatter	none	mc	pe_sd_any_c	1	m	any	any	any	any	any	any		Bienvenida al agua.	Welcome to the water. | Welcome to the water. | Hello, water.
 pe_sd_any_c_2	splashdown	chatter	none	probe	pe_sd_any_c	2	both	any	any	any	any	any	any	offended		[beeps soggily]
 pe_dk_okto_1	docked	chatter	none	probe	pe_dk_okto	1	both	any	any	any	any	any	okto	proud		[beeps smugly]
-pe_dk_okto_2	docked	chatter	none	mc	pe_dk_okto	2	m	any	any	any	any	any	okto		Acoplamiento perfecto, Okto. No te lo creas mucho.	Perfect docking, Okto. Don't let it go to your head.
-pe_dk_hecs_1	docked	chatter	none	mc	pe_dk_hecs	1	m	any	any	any	any	any	hecs		Acoplados. Bien hecho, HECS.	Docked. Well done, HECS.
+pe_dk_okto_2	docked	chatter	none	mc	pe_dk_okto	2	m	any	any	any	any	any	okto		Acoplamiento perfecto, Okto. No te lo creas mucho.	Perfect docking, Okto. Don't let it go to your head. | Perfect docking, Okto. Don't let it go to your head. | Perfect dock, Okto. Stay humble.
+pe_dk_hecs_1	docked	chatter	none	mc	pe_dk_hecs	1	m	any	any	any	any	any	hecs		Acoplados. Bien hecho, HECS.	Docked. Well done, HECS. | Docked. Well done, HECS. | Docked. Nice work, HECS.
 pe_dk_hecs_2	docked	chatter	none	probe	pe_dk_hecs	2	both	any	any	any	any	any	hecs	curious		[beeps anxiously]
-pe_dk_any_a_1	docked	chatter	none	mc	pe_dk_any_a	1	m	any	any	any	any	any	any		Acoplamiento confirmado.	Docking confirmed.
+pe_dk_any_a_1	docked	chatter	none	mc	pe_dk_any_a	1	m	any	any	any	any	any	any		Acoplamiento confirmado.	Docking confirmed. | Docking confirmed. | We confirm docking.
 pe_dk_any_a_2	docked	chatter	none	probe	pe_dk_any_a	2	both	any	any	any	any	any	any	happy		[beeps happily]
 pe_dk_any_b_1	docked	chatter	none	probe	pe_dk_any_b	1	both	any	any	any	any	any	any	curious		[beeps curiously]
-pe_dk_any_b_2	docked	chatter	none	mc	pe_dk_any_b	2	m	any	any	any	any	any	any		Sé amable con la vecina.	Be nice to the neighbor.
-pe_bn_hecs_1	burn_soon	warning	tense	mc	pe_bn_hecs	1	m	any	any	any	any	any	hecs		HECS, el encendido es pronto.	HECS, the burn is coming up.
+pe_dk_any_b_2	docked	chatter	none	mc	pe_dk_any_b	2	m	any	any	any	any	any	any		Sé amable con la vecina.	Be nice to the neighbor. | Be nice to the neighbor. | Be polite to the neighbor.
+pe_bn_hecs_1	burn_soon	warning	tense	mc	pe_bn_hecs	1	m	any	any	any	any	any	hecs		HECS, el encendido es pronto.	HECS, the burn is coming up. | HECS, the burn is coming up. | Burn soon, HECS.
 pe_bn_hecs_2	burn_soon	warning	tense	probe	pe_bn_hecs	2	both	any	any	any	any	any	hecs	scared		[beeps nervously]
-pe_bn_any_a_1	burn_soon	warning	tense	mc	pe_bn_any_a	1	m	any	any	any	any	any	any		Sonda, prepárate para el encendido.	Probe, get ready for the burn.
+pe_bn_any_a_1	burn_soon	warning	tense	mc	pe_bn_any_a	1	m	any	any	any	any	any	any		Sonda, prepárate para el encendido.	Probe, get ready for the burn. | Probe, get ready for the burn. | Ready for the burn, probe.
 pe_bn_any_a_2	burn_soon	warning	tense	probe	pe_bn_any_a	2	both	any	any	any	any	any	any	curious		[beeps attentively]
 pe_bn_any_b_1	burn_soon	warning	tense	probe	pe_bn_any_b	1	both	any	any	any	any	any	any	happy		[beeps eagerly]
-pe_bn_any_b_2	burn_soon	warning	tense	mc	pe_bn_any_b	2	m	any	any	any	any	any	any		Sí, ya lo vemos. Espera a la marca.	Yes, we see it. Wait for the mark.
-pe_bn_any_c_1	burn_soon	warning	tense	mc	pe_bn_any_c	1	m	any	any	any	any	any	any		Encendido en breve. Apunta bien.	Burn coming up. Point it right.
+pe_bn_any_b_2	burn_soon	warning	tense	mc	pe_bn_any_b	2	m	any	any	any	any	any	any		Sí, ya lo vemos. Espera a la marca.	Yes, we see it. Wait for the mark. | Yes, we see it. Wait for the mark. | We see it. Wait for the mark.
+pe_bn_any_c_1	burn_soon	warning	tense	mc	pe_bn_any_c	1	m	any	any	any	any	any	any		Encendido en breve. Apunta bien.	Burn coming up. Point it right. | Burn coming up. Point it right. | Burn soon. Aim well.
 pe_bn_any_c_2	burn_soon	warning	tense	probe	pe_bn_any_c	2	both	any	any	any	any	any	any	proud		[beeps confidently]
 # plan v6: callouts, plan_node, stress, say again, milestones, rover, data
 pe_stg_sep_any_a_1	staging	chatter	none	probe	pe_stg_sep_any_a	1	both	any	any	any	any	separation	any	happy		[beeps a goodbye]
-pe_stg_sep_any_a_2	staging	chatter	none	mc	pe_stg_sep_any_a	2	m	any	any	any	any	separation	any		Separación confirmada.	Separation confirmed.
+pe_stg_sep_any_a_2	staging	chatter	none	mc	pe_stg_sep_any_a	2	m	any	any	any	any	separation	any		Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation.
 pe_stg_sep_any_b_1	staging	chatter	none	probe	pe_stg_sep_any_b	1	both	any	any	any	any	separation	any	curious		[beeps lightly]
-pe_stg_sep_any_b_2	staging	chatter	none	mc	pe_stg_sep_any_b	2	m	any	any	any	any	separation	any		Un poco más ligera, ¿eh?	A bit lighter, huh?
+pe_stg_sep_any_b_2	staging	chatter	none	mc	pe_stg_sep_any_b	2	m	any	any	any	any	separation	any		Un poco más ligera, ¿eh?	A bit lighter, huh? | A bit lighter, huh? | Lighter now, huh?
 pe_stg_ign_any_a_1	staging	chatter	none	probe	pe_stg_ign_any_a	1	both	any	any	any	any	ignition	any	proud		[beeps with determination]
-pe_stg_ign_any_a_2	staging	chatter	none	mc	pe_stg_ign_any_a	2	m	any	any	any	any	ignition	any		Ignición. Buen empuje.	Ignition. Good thrust.
+pe_stg_ign_any_a_2	staging	chatter	none	mc	pe_stg_ign_any_a	2	m	any	any	any	any	ignition	any		Ignición. Buen empuje.	Ignition. Good thrust. | Ignition. Good thrust. | Ignition. Nice thrust.
 pe_stg_ign_any_b_1	staging	chatter	none	probe	pe_stg_ign_any_b	1	both	any	any	any	any	ignition	any	happy		[beeps eagerly]
-pe_stg_ign_any_b_2	staging	chatter	none	mc	pe_stg_ign_any_b	2	m	any	any	any	any	ignition	any		Motor encendido. Allá vamos.	Engine lit. Here we go.
+pe_stg_ign_any_b_2	staging	chatter	none	mc	pe_stg_ign_any_b	2	m	any	any	any	any	ignition	any		Motor encendido. Allá vamos.	Engine lit. Here we go. | Engine lit. Here we go. | Engine on. Off we go.
 pe_stg_any_a_1	staging	chatter	none	probe	pe_stg_any_a	1	both	any	any	any	any	any	any	happy		[beeps briskly]
-pe_stg_any_a_2	staging	chatter	none	mc	pe_stg_any_a	2	m	any	any	any	any	any	any		Etapa confirmada.	Stage confirmed.
+pe_stg_any_a_2	staging	chatter	none	mc	pe_stg_any_a	2	m	any	any	any	any	any	any		Etapa confirmada.	Stage confirmed. | Stage confirmed. | Staging confirmed.
 pe_stg_stayputnik_1	staging	chatter	none	probe	pe_stg_stayputnik	1	both	any	any	any	any	separation	stayputnik	happy		[beeps a farewell]
-pe_stg_stayputnik_2	staging	chatter	none	mc	pe_stg_stayputnik	2	m	any	any	any	any	separation	stayputnik		Sí, Stayputnik, esa pieza no vuelve.	Yes, Stayputnik, that piece isn't coming back.
+pe_stg_stayputnik_2	staging	chatter	none	mc	pe_stg_stayputnik	2	m	any	any	any	any	separation	stayputnik		Sí, Stayputnik, esa pieza no vuelve.	Yes, Stayputnik, that piece isn't coming back. | Yes, Stayputnik, that piece isn't coming back. | That piece is gone for good, Stayputnik.
 pe_stg_okto_1	staging	chatter	none	probe	pe_stg_okto	1	both	any	any	any	any	any	okto	proud		[beeps precisely]
-pe_stg_okto_2	staging	chatter	none	mc	pe_stg_okto	2	m	any	any	any	any	any	okto		Justo a tiempo, como siempre.	Right on time, as always.
+pe_stg_okto_2	staging	chatter	none	mc	pe_stg_okto	2	m	any	any	any	any	any	okto		Justo a tiempo, como siempre.	Right on time, as always. | Right on time, as always. | On time. As usual.
 pe_stg_hecs_1	staging	chatter	none	probe	pe_stg_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps nervously]
-pe_stg_hecs_2	staging	chatter	none	mc	pe_stg_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS, era la etapa.	Easy, HECS, that was the stage.
+pe_stg_hecs_2	staging	chatter	none	mc	pe_stg_hecs	2	m	any	any	any	any	any	hecs		Tranquilo, HECS, era la etapa.	Easy, HECS, that was the stage. | Easy, HECS, that was the stage. | Calm, HECS. Just the stage.
 pe_stg_rovemate_1	staging	chatter	none	probe	pe_stg_rovemate	1	both	any	any	any	any	separation	rovemate	happy		[beeps playfully]
-pe_stg_rovemate_2	staging	chatter	none	mc	pe_stg_rovemate	2	m	any	any	any	any	separation	rovemate		No, Rovemate, no puedes ir a buscarla.	No, Rovemate, you can't fetch it.
+pe_stg_rovemate_2	staging	chatter	none	mc	pe_stg_rovemate	2	m	any	any	any	any	separation	rovemate		No, Rovemate, no puedes ir a buscarla.	No, Rovemate, you can't fetch it. | No, Rovemate, you can't fetch it. | No fetching, Rovemate.
 pe_stg_snob_1	staging	chatter	none	probe	pe_stg_snob	1	both	any	any	any	any	separation	snob	bored		[beeps dismissively]
-pe_stg_snob_2	staging	chatter	none	mc	pe_stg_snob	2	m	any	any	any	any	separation	snob		Su excelencia ya no necesitaba esa etapa.	Your excellency no longer needed that stage.
+pe_stg_snob_2	staging	chatter	none	mc	pe_stg_snob	2	m	any	any	any	any	separation	snob		Su excelencia ya no necesitaba esa etapa.	Your excellency no longer needed that stage. | Your excellency no longer needed that stage. | That stage was beneath your excellency.
 pe_stg_generic_1	staging	chatter	none	probe	pe_stg_generic	1	both	any	any	any	any	any	generic	happy		[beeps twice]
-pe_stg_generic_2	staging	chatter	none	mc	pe_stg_generic	2	m	any	any	any	any	any	generic		Recibido. Etapa fuera.	Copy. Stage away.
+pe_stg_generic_2	staging	chatter	none	mc	pe_stg_generic	2	m	any	any	any	any	any	generic		Recibido. Etapa fuera.	Copy. Stage away. | Copy. Stage away. | Copy. Stage gone.
 pe_chs_any_a_1	chute_semi	chatter	none	probe	pe_chs_any_a	1	both	any	any	any	any	any	any	curious		[beeps attentively]
-pe_chs_any_a_2	chute_semi	chatter	none	mc	pe_chs_any_a	2	m	any	any	any	any	any	any		Paracaídas desplegados a medias.	Chutes are semi deployed.
+pe_chs_any_a_2	chute_semi	chatter	none	mc	pe_chs_any_a	2	m	any	any	any	any	any	any		Paracaídas desplegados a medias.	Chutes are semi deployed. | Chutes are semi deployed. | Chutes partly open.
 pe_chs_hecs_1	chute_semi	chatter	none	probe	pe_chs_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps hopefully]
-pe_chs_hecs_2	chute_semi	chatter	none	mc	pe_chs_hecs	2	m	any	any	any	any	any	hecs		Sí, HECS, se están abriendo.	Yes, HECS, they're opening.
+pe_chs_hecs_2	chute_semi	chatter	none	mc	pe_chs_hecs	2	m	any	any	any	any	any	hecs		Sí, HECS, se están abriendo.	Yes, HECS, they're opening. | Yes, HECS, they're opening. | They're opening, HECS.
 pe_chs_rovemate_1	chute_semi	chatter	none	probe	pe_chs_rovemate	1	both	any	any	any	any	any	rovemate	happy		[beeps excitedly]
-pe_chs_rovemate_2	chute_semi	chatter	none	mc	pe_chs_rovemate	2	m	any	any	any	any	any	rovemate		Es un paracaídas, no una cometa.	It's a parachute, not a kite.
+pe_chs_rovemate_2	chute_semi	chatter	none	mc	pe_chs_rovemate	2	m	any	any	any	any	any	rovemate		Es un paracaídas, no una cometa.	It's a parachute, not a kite. | It's a parachute, not a kite. | Parachute. Not a kite.
 pe_chf_any_a_1	chute_full	chatter	none	probe	pe_chf_any_a	1	both	any	any	any	any	any	any	happy		[beeps with relief]
-pe_chf_any_a_2	chute_full	chatter	none	mc	pe_chf_any_a	2	m	any	any	any	any	any	any		Paracaídas abiertos del todo.	Chutes are fully open.
+pe_chf_any_a_2	chute_full	chatter	none	mc	pe_chf_any_a	2	m	any	any	any	any	any	any		Paracaídas abiertos del todo.	Chutes are fully open. | Chutes are fully open. | Chutes all the way open.
 pe_chf_any_b_1	chute_full	chatter	none	probe	pe_chf_any_b	1	both	any	any	any	any	any	any	happy		[beeps gently]
-pe_chf_any_b_2	chute_full	chatter	none	mc	pe_chf_any_b	2	m	any	any	any	any	any	any		Bajando despacio. Muy bien.	Coming down slowly. Very good.
+pe_chf_any_b_2	chute_full	chatter	none	mc	pe_chf_any_b	2	m	any	any	any	any	any	any		Bajando despacio. Muy bien.	Coming down slowly. Very good. | Coming down slowly. Very good. | Slow descent. Good.
 pe_chf_snob_1	chute_full	chatter	none	probe	pe_chf_snob	1	both	any	any	any	any	any	snob	proud		[beeps gracefully]
-pe_chf_snob_2	chute_full	chatter	none	mc	pe_chf_snob	2	m	any	any	any	any	any	snob		Un descenso digno de la realeza.	A descent fit for royalty.
+pe_chf_snob_2	chute_full	chatter	none	mc	pe_chf_snob	2	m	any	any	any	any	any	snob		Un descenso digno de la realeza.	A descent fit for royalty. | A descent fit for royalty. | A royal descent.
 pe_thf_any_a_1	throttle_full	chatter	none	probe	pe_thf_any_a	1	both	any	any	any	any	any	any	proud		[beeps powerfully]
-pe_thf_any_a_2	throttle_full	chatter	none	mc	pe_thf_any_a	2	m	any	any	any	any	any	any		Potencia máxima.	Full power.
+pe_thf_any_a_2	throttle_full	chatter	none	mc	pe_thf_any_a	2	m	any	any	any	any	any	any		Potencia máxima.	Full power. | Full power. | Power to max.
 pe_thf_okto_1	throttle_full	chatter	none	probe	pe_thf_okto	1	both	any	any	any	any	any	okto	proud		[beeps smugly]
-pe_thf_okto_2	throttle_full	chatter	none	mc	pe_thf_okto	2	m	any	any	any	any	any	okto		Sí, Okto, eso es todo lo que tiene.	Yes, Okto, that's all it has.
+pe_thf_okto_2	throttle_full	chatter	none	mc	pe_thf_okto	2	m	any	any	any	any	any	okto		Sí, Okto, eso es todo lo que tiene.	Yes, Okto, that's all it has. | Yes, Okto, that's all it has. | That's everything it has, Okto.
 pe_thf_stayputnik_1	throttle_full	chatter	none	probe	pe_thf_stayputnik	1	both	any	any	any	any	any	stayputnik	happy		[beeps very bravely]
-pe_thf_stayputnik_2	throttle_full	chatter	none	mc	pe_thf_stayputnik	2	m	any	any	any	any	any	stayputnik		Agárrate, Stayputnik.	Hold on, Stayputnik.
+pe_thf_stayputnik_2	throttle_full	chatter	none	mc	pe_thf_stayputnik	2	m	any	any	any	any	any	stayputnik		Agárrate, Stayputnik.	Hold on, Stayputnik. | Hold on, Stayputnik. | Hang on, Stayputnik.
 pe_thc_any_a_1	throttle_cut	chatter	none	probe	pe_thc_any_a	1	both	any	any	any	any	any	any	curious		[beeps quietly]
-pe_thc_any_a_2	throttle_cut	chatter	none	mc	pe_thc_any_a	2	m	any	any	any	any	any	any		Motor apagado.	Engine off.
+pe_thc_any_a_2	throttle_cut	chatter	none	mc	pe_thc_any_a	2	m	any	any	any	any	any	any		Motor apagado.	Engine off. | Engine off. | Engine is off.
 pe_thc_any_b_1	throttle_cut	chatter	none	probe	pe_thc_any_b	1	both	any	any	any	any	any	any	curious		[beeps questioningly]
-pe_thc_any_b_2	throttle_cut	chatter	none	mc	pe_thc_any_b	2	m	any	any	any	any	any	any		Sí, ya está. Paramos aquí.	Yes, that's it. We stop here.
+pe_thc_any_b_2	throttle_cut	chatter	none	mc	pe_thc_any_b	2	m	any	any	any	any	any	any		Sí, ya está. Paramos aquí.	Yes, that's it. We stop here. | Yes, that's it. We stop here. | That's it. Stopping here.
 pe_thc_hecs_1	throttle_cut	chatter	none	probe	pe_thc_hecs	1	both	any	any	any	any	any	hecs	scared		[beeps anxiously]
-pe_thc_hecs_2	throttle_cut	chatter	none	mc	pe_thc_hecs	2	m	any	any	any	any	any	hecs		Lo apagamos a propósito, HECS.	We cut it on purpose, HECS.
-pe_pn_stayputnik_a_1	plan_node	chatter	none	mc	pe_pn_stayputnik_a	1	m	any	any	any	any	any	stayputnik		Stayputnik, tenemos un plan de maniobra.	Stayputnik, we have a burn plan.
+pe_thc_hecs_2	throttle_cut	chatter	none	mc	pe_thc_hecs	2	m	any	any	any	any	any	hecs		Lo apagamos a propósito, HECS.	We cut it on purpose, HECS. | We cut it on purpose, HECS. | On purpose, HECS. Relax.
+pe_pn_stayputnik_a_1	plan_node	chatter	none	mc	pe_pn_stayputnik_a	1	m	any	any	any	any	any	stayputnik		Stayputnik, tenemos un plan de maniobra.	Stayputnik, we have a burn plan. | Stayputnik, we have a burn plan. | Burn plan ready, Stayputnik.
 pe_pn_stayputnik_a_2	plan_node	chatter	none	probe	pe_pn_stayputnik_a	2	both	any	any	any	any	any	stayputnik	curious		[beeps eagerly]
-pe_pn_stayputnik_b_1	plan_node	chatter	none	mc	pe_pn_stayputnik_b	1	m	any	any	any	any	any	stayputnik		Un nodo nuevo. No te preocupes, es fácil.	A new node. Don't worry, it's easy.
+pe_pn_stayputnik_b_1	plan_node	chatter	none	mc	pe_pn_stayputnik_b	1	m	any	any	any	any	any	stayputnik		Un nodo nuevo. No te preocupes, es fácil.	A new node. Don't worry, it's easy. | A new node. Don't worry, it's easy. | New node. Easy one, don't worry.
 pe_pn_stayputnik_b_2	plan_node	chatter	none	probe	pe_pn_stayputnik_b	2	both	any	any	any	any	any	stayputnik	proud		[beeps confidently]
-pe_pn_okto_a_1	plan_node	chatter	none	mc	pe_pn_okto_a	1	m	any	any	any	any	any	okto		Okto, revisa este nodo, por favor.	Okto, check this node, please.
+pe_pn_okto_a_1	plan_node	chatter	none	mc	pe_pn_okto_a	1	m	any	any	any	any	any	okto		Okto, revisa este nodo, por favor.	Okto, check this node, please. | Okto, check this node, please. | Okto, please check this node.
 pe_pn_okto_a_2	plan_node	chatter	none	probe	pe_pn_okto_a	2	both	any	any	any	any	any	okto	proud		[beeps a correction]
-pe_pn_okto_b_1	plan_node	chatter	none	mc	pe_pn_okto_b	1	m	any	any	any	any	any	okto		Plan de maniobra listo.	Burn plan is ready.
+pe_pn_okto_b_1	plan_node	chatter	none	mc	pe_pn_okto_b	1	m	any	any	any	any	any	okto		Plan de maniobra listo.	Burn plan is ready. | Burn plan is ready. | The burn plan is ready.
 pe_pn_okto_b_2	plan_node	chatter	none	probe	pe_pn_okto_b	2	both	any	any	any	any	any	okto	bored		[beeps unimpressed]
-pe_pn_hecs_a_1	plan_node	chatter	none	mc	pe_pn_hecs_a	1	m	any	any	any	any	any	hecs		HECS, nodo nuevo. Respira hondo.	HECS, new node. Take a deep breath.
+pe_pn_hecs_a_1	plan_node	chatter	none	mc	pe_pn_hecs_a	1	m	any	any	any	any	any	hecs		HECS, nodo nuevo. Respira hondo.	HECS, new node. Take a deep breath. | HECS, new node. Take a deep breath. | New node, HECS. Breathe.
 pe_pn_hecs_a_2	plan_node	chatter	none	probe	pe_pn_hecs_a	2	both	any	any	any	any	any	hecs	scared		[beeps nervously]
-pe_pn_hecs_b_1	plan_node	chatter	none	mc	pe_pn_hecs_b	1	m	any	any	any	any	any	hecs		Es una maniobra pequeña, HECS.	It's a small burn, HECS.
+pe_pn_hecs_b_1	plan_node	chatter	none	mc	pe_pn_hecs_b	1	m	any	any	any	any	any	hecs		Es una maniobra pequeña, HECS.	It's a small burn, HECS. | It's a small burn, HECS. | Just a little burn, HECS.
 pe_pn_hecs_b_2	plan_node	chatter	none	probe	pe_pn_hecs_b	2	both	any	any	any	any	any	hecs	curious		[beeps doubtfully]
-pe_pn_rovemate_a_1	plan_node	chatter	none	mc	pe_pn_rovemate_a	1	m	any	any	any	any	any	rovemate		Rovemate, mira este nodo.	Rovemate, look at this node.
+pe_pn_rovemate_a_1	plan_node	chatter	none	mc	pe_pn_rovemate_a	1	m	any	any	any	any	any	rovemate		Rovemate, mira este nodo.	Rovemate, look at this node. | Rovemate, look at this node. | Look, Rovemate. A node.
 pe_pn_rovemate_a_2	plan_node	chatter	none	probe	pe_pn_rovemate_a	2	both	any	any	any	any	any	rovemate	happy		[beeps excitedly]
-pe_pn_rovemate_b_1	plan_node	chatter	none	mc	pe_pn_rovemate_b	1	m	any	any	any	any	any	rovemate		No, no podemos ir hacia la piedra.	No, we can't go towards the rock.
+pe_pn_rovemate_b_1	plan_node	chatter	none	mc	pe_pn_rovemate_b	1	m	any	any	any	any	any	rovemate		No, no podemos ir hacia la piedra.	No, we can't go towards the rock. | No, we can't go towards the rock. | Not toward the rock. Sorry.
 pe_pn_rovemate_b_2	plan_node	chatter	none	probe	pe_pn_rovemate_b	2	both	any	any	any	any	any	rovemate	bored		[beeps sulkily]
-pe_pn_snob_a_1	plan_node	chatter	none	mc	pe_pn_snob_a	1	m	any	any	any	any	any	snob		Su excelencia, hemos preparado una ruta.	Your excellency, we prepared a route.
+pe_pn_snob_a_1	plan_node	chatter	none	mc	pe_pn_snob_a	1	m	any	any	any	any	any	snob		Su excelencia, hemos preparado una ruta.	Your excellency, we prepared a route. | Your excellency, we prepared a route. | A route for your excellency.
 pe_pn_snob_a_2	plan_node	chatter	none	probe	pe_pn_snob_a	2	both	any	any	any	any	any	snob	bored		[beeps condescendingly]
-pe_pn_snob_b_1	plan_node	chatter	none	mc	pe_pn_snob_b	1	m	any	any	any	any	any	snob		El plan de maniobra, como pidió.	The burn plan, as you asked.
+pe_pn_snob_b_1	plan_node	chatter	none	mc	pe_pn_snob_b	1	m	any	any	any	any	any	snob		El plan de maniobra, como pidió.	The burn plan, as you asked. | The burn plan, as you asked. | Your burn plan, as requested.
 pe_pn_snob_b_2	plan_node	chatter	none	probe	pe_pn_snob_b	2	both	any	any	any	any	any	snob	proud		[beeps approvingly]
-pe_pn_generic_a_1	plan_node	chatter	none	mc	pe_pn_generic_a	1	m	any	any	any	any	any	generic		Sonda, tenemos un plan nuevo.	Probe, we have a new plan.
+pe_pn_generic_a_1	plan_node	chatter	none	mc	pe_pn_generic_a	1	m	any	any	any	any	any	generic		Sonda, tenemos un plan nuevo.	Probe, we have a new plan. | Probe, we have a new plan. | New plan, probe.
 pe_pn_generic_a_2	plan_node	chatter	none	probe	pe_pn_generic_a	2	both	any	any	any	any	any	generic	curious		[beeps curiously]
-pe_pn_generic_b_1	plan_node	chatter	none	mc	pe_pn_generic_b	1	m	any	any	any	any	any	generic		Nodo listo. Te avisamos antes.	Node ready. We'll warn you before.
+pe_pn_generic_b_1	plan_node	chatter	none	mc	pe_pn_generic_b	1	m	any	any	any	any	any	generic		Nodo listo. Te avisamos antes.	Node ready. We'll warn you before. | Node ready. We'll warn you before. | Node is ready. We'll tell you in time.
 pe_pn_generic_b_2	plan_node	chatter	none	probe	pe_pn_generic_b	2	both	any	any	any	any	any	generic	happy		[beeps okay]
-pe_pn_any_a_1	plan_node	chatter	none	mc	pe_pn_any_a	1	m	any	any	any	any	any	any		Plan de maniobra recibido.	Burn plan received.
+pe_pn_any_a_1	plan_node	chatter	none	mc	pe_pn_any_a	1	m	any	any	any	any	any	any		Plan de maniobra recibido.	Burn plan received. | Burn plan received. | Got the burn plan.
 pe_pn_any_a_2	plan_node	chatter	none	probe	pe_pn_any_a	2	both	any	any	any	any	any	any	curious		[beeps attentively]
-pe_pn_any_b_1	plan_node	chatter	none	mc	pe_pn_any_b	1	m	any	any	any	any	any	any		Hay un nodo nuevo en el mapa.	There's a new node on the map.
+pe_pn_any_b_1	plan_node	chatter	none	mc	pe_pn_any_b	1	m	any	any	any	any	any	any		Hay un nodo nuevo en el mapa.	There's a new node on the map. | There's a new node on the map. | New node on the map.
 pe_pn_any_b_2	plan_node	chatter	none	probe	pe_pn_any_b	2	both	any	any	any	any	any	any	curious		[beeps inquisitively]
