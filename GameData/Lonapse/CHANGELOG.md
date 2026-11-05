@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.7.0 (not released yet)
+
+**Kerbals now say your names.** Mission Control and the crew speak the names of your kerbals, your vessel and the planet you are at, and Mission Control reads out real numbers. The voice still speaks loñapsE. Only the names are said as they are.
+
+### New
+- Runtime voice. Lonapse now ships a small speech engine (Piper) and three voices, and speaks some lines while you play. Turn it on with "Speak names and new lines at runtime" in the Crew tab. It is off by default.
+  - Mission Control sometimes ends a line with the name of the kerbal who just spoke, or with the name of your vessel. On a probe it uses the vessel name.
+  - In crew chats on the intercom, a kerbal sometimes says the other one's name.
+  - On a planet from a mod, lines about "the planet" say its real name.
+  - Mission Control reports now and then with the real values: your orbit, altitude, speed, fuel or the mission day. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
+  - After some science reactions Mission Control says the experiment, the body and the science points. A finished contract gets its funds, a failed one a short line. Turn this off with "Science points and contract funds".
+  - A line that is not ready in time plays as before, without the name. Nothing waits more than a second for it.
+  - You can add your own lines without rendering any audio. Put rows in `GameData/Lonapse/Phrases/Extra/*.tsv`, in the format of the tables in the repo. They are only heard with the runtime voice on.
+- Subtitles with versions. Almost every line now has several English subtitles for the same audio: 6478 new versions on 3186 of the 3849 lines. You see a new wording first, the original comes later.
+- Subtitle slots. 29 template scenes fill in things from your flight: the mission day, the planet, the vessel, the altitude, parts of your vessel and the names of the crew in a chat. A subtitle only names parts your vessel has, and some versions only show in the right place, like on the ground or at Kerbin.
+- QBE, Mk2 Drone Core, MPO and MTM have their own probe voices and 138 scenes of their own lines.
+- `ModuleLonapse` takes a `displayName`, so a probe from a mod shows its own name in the subtitles.
+- "Light delay" in the Crew tab. Turn it off and Mission Control answers right away, also far from Kerbin.
+
+### Changed
+- The scene variants test from the development builds is gone. Its lines are now subtitle versions.
+
+### Notes
+- The runtime voice makes the download bigger. Piper and its voices run as a separate program next to KSP, in `GameData/Lonapse/PluginData/Runtime`. Piper is GPL-3, see the licence files in that folder.
+
 ## 0.6.0 (2026-11-05)
 
 **738 new interactions with 1514 new lines.** That is 233 radio chats with Mission Control, 76 crew chats on the intercom, 141 scenes for tense moments, launch and reentry, 121 for flight events like staging, landing, docking and EVA, 99 chats between a probe and the crew and 68 probe events. Lonapse now has 1729 interactions in total.
