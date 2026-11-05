@@ -149,9 +149,8 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// The lines to play for a scene: the {body} variants for Body, and for a scene with alternatives (experimental
-        /// alt column) one line per seq from the line memory, so a scene that comes back has another punchline or
-        /// reaction. Use this instead of PhraseClips.LinesFor(sc, Body) when the lines are really played.
+        /// The lines to play for a scene: the {body} variants for Body. Use this instead of
+        /// PhraseClips.LinesFor(sc, Body) when the lines are really played.
         /// </summary>
         private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc)
         {
@@ -279,25 +278,8 @@ namespace Lonapse
 
         private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)
         {
-            var lines = PhraseClips.LinesFor(sc, Body, opts => Mem.TakeLine(opts, rng));
-            lastVariantPick = null;
-            if (sc != null && sc.HasAlts)
-            {
-                var keys = new string[lines.Count];
-                for (int i = 0; i < lines.Count; i++)
-                    keys[i] = string.IsNullOrEmpty(lines[i].Alt) ? "-" : lines[i].Alt;
-                lastVariantPick = sc.Versions + " versions, picked " + string.Join(" ", keys);
-                Log.Debug("Scene " + sc.Id + " with variants: " + lastVariantPick);
-            }
-            return lines;
+            return PhraseClips.LinesFor(sc, Body);
         }
-
-        /// <summary>Debug tab: the alt per line of the last scene with variants that PlayLines gave ("-" is the base
-        /// line), null when that scene had none.</summary>
-        private string lastVariantPick;
-
-        /// <summary>Debug tab (experimental): the phrase test only picks scenes with alt rows.</summary>
-        public bool debugVariantsOnly;
         /// <summary>Debug tab (experimental, procedural talk): the phrase test only picks scenes with subtitle slots.</summary>
         public bool debugSlotsOnly;
         /// <summary>Debug tab: the test phase while a test scene is filled, so [landed] versions can be tried in orbit.</summary>
@@ -2035,14 +2017,10 @@ namespace Lonapse
         /// </summary>
         public string DebugPlayRandom(string evt, string phase, string cause, string body, string topic = null)
         {
-            lastVariantPick = null;
             // a concrete test phase also picks the [phase] versions of the subtitles
             debugSlotPhase = Array.IndexOf(SubtitleSlots.Conditions, phase ?? "") >= 0 ? phase : null;
-            string r;
-            try { r = DebugPlayRandomCore(evt, phase, cause, body, topic); }
+            try { return DebugPlayRandomCore(evt, phase, cause, body, topic); }
             finally { debugSlotPhase = null; }
-            return lastVariantPick != null && r != null && r.StartsWith("played", StringComparison.Ordinal)
-                ? r + ". " + lastVariantPick : r;
         }
 
         private string DebugPlayRandomCore(string evt, string phase, string cause, string body, string topic)
@@ -2061,7 +2039,6 @@ namespace Lonapse
             {
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (sc.IsProbe) continue; // crew mode never plays a probe scene
-                if (debugVariantsOnly && !sc.HasAlts) continue;
                 if (debugSlotsOnly && !sc.HasSlots) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 // a concrete test phase must not pull in blackout rows (PhaseMatches already handles that)

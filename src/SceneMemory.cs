@@ -14,46 +14,21 @@ namespace Lonapse
         private readonly Dictionary<string, long> last = new Dictionary<string, long>();
         private long seq;
 
-        /// <summary>Most scene ids kept. The oldest are forgotten first, so they count as new again. Raised from 4000
-        /// for the scene variants: the lines of a scene with alternatives are kept too (LineKey).</summary>
+        /// <summary>Most ids kept (scenes, slot values and subtitle versions). The oldest are forgotten first, so
+        /// they count as new again.</summary>
         public const int MaxEntries = 20000;
-        /// <summary>Prefix of a line id in the memory, so a clip key never mixes with a scene id.</summary>
-        public const string LinePrefix = "line:";
-
-        public static string LineKey(PhraseEntry e) { return e == null ? null : LinePrefix + e.ClipKey; }
-
-        /// <summary>
-        /// Scene variants: picks one line of the options (the base row and its alternatives for one seq) and remembers
-        /// it. A line never heard comes first (at random among those), else the line heard longest ago. So every
-        /// version of a line plays once before one comes back. Null or empty gives null.
-        /// </summary>
-        public PhraseEntry TakeLine(IList<PhraseEntry> options, Random rng)
-        {
-            if (options == null || options.Count == 0) return null;
-            PhraseEntry p = null;
-            if (options.Count == 1) p = options[0];
-            else
-            {
-                var fresh = new List<PhraseEntry>();
-                for (int i = 0; i < options.Count; i++) if (LastSeq(LineKey(options[i])) < 0) fresh.Add(options[i]);
-                if (fresh.Count > 0) p = fresh[rng != null ? rng.Next(fresh.Count) : 0];
-                else
-                {
-                    p = options[0];
-                    for (int i = 1; i < options.Count; i++)
-                        if (LastSeq(LineKey(options[i])) < LastSeq(LineKey(p))) p = options[i];
-                }
-            }
-            Stamp(LineKey(p));
-            return p;
-        }
         /// <summary>Prefix of a slot value in the memory (procedural talk): "slot:thing:helmet".</summary>
         public const string SlotPrefix = "slot:";
+        /// <summary>Pool name SubtitleSlots uses for the subtitle versions of a line: "version:&lt;clip key&gt;".
+        /// The values are version indices, "0" is the original sentence.</summary>
+        public const string VersionPool = "version:";
+        public const string OriginalVersion = "0";
 
         /// <summary>
-        /// Procedural talk: picks one value of a slot pool and remembers it, with the same rule as TakeLine (a value
-        /// never used first, else the one used longest ago). So "Who took my {thing}?" goes through the whole pool
-        /// before a thing comes back. Null or empty gives null.
+        /// Procedural talk: picks one value of a slot pool and remembers it. A value never used comes first (at
+        /// random among those), else the one used longest ago. So "Who took my {thing}?" goes through the whole pool
+        /// before a thing comes back. For the subtitle versions of a line the original sentence ("0") comes last
+        /// among the new ones, so a player sees the new wording first. Null or empty gives null.
         /// </summary>
         public string TakeValue(string pool, IList<string> values, Random rng)
         {
@@ -64,6 +39,8 @@ namespace Lonapse
             {
                 var fresh = new List<string>();
                 for (int i = 0; i < values.Count; i++) if (LastSeq(SlotPrefix + pool + ":" + values[i]) < 0) fresh.Add(values[i]);
+                if (fresh.Count > 1 && pool != null && pool.StartsWith(VersionPool, StringComparison.Ordinal))
+                    fresh.Remove(OriginalVersion);
                 if (fresh.Count > 0) p = fresh[rng != null ? rng.Next(fresh.Count) : 0];
                 else
                 {

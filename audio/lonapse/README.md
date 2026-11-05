@@ -117,33 +117,6 @@ The build checks these rules for you, so you can't break the game with a typo:
 
 The C# loader (`PhraseTable.Parse`) checks the same probe rules and the same placeholder rules as the script, with the same messages. The script checks more (scene in one file, seq 1..n, minimum counts, intercom phase).
 
-## Scene variants (experimental)
-
-This is on the branch `experimental/scene-variants`. It is not tested in game yet.
-
-A scene always played the same way. With the optional column `alt` a line can have alternatives. The row with an empty `alt` is the base line. A row with the same `scene` and `seq` and an `alt` like `b` or `c` is an alternative for it. Each time the scene plays, the game picks one line per seq. A line nobody heard yet comes first. After that, the one heard longest ago. So a scene that comes back gets another punchline or another reaction.
-
-```
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	alt	spanish	english
-bl_shield_sale_1	chatter	chatter	calm	crew	bl_shield_sale	1	both	blackout	any		¿Confías en el escudo térmico?	Do you trust the heat shield?
-bl_shield_sale_2	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any		Lo compraron en oferta.	They bought it on sale.
-bl_shield_sale_2b	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any	b	...	...
-bl_shield_sale_3	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any		No me ayudas.	You're not helping.
-bl_shield_sale_3b	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any	b	...	...
-```
-
-Every line is picked on its own, so 2 options on seq 2 and 2 on seq 3 give 4 versions. That means every alternative has to fit the lines before and after it, in every combination. `python3 audio/variants.py` prints every version of every scene with alternatives, so I can read them before I render anything. `--spanish` adds the Spanish, and a scene name limits the output to that scene.
-
-The rules, checked by the script and by `PhraseTable.Parse`:
-
-- `alt` is empty or `[a-z0-9]+`. An `alt` value is used once per scene and seq.
-- An alternative needs a base row with the same scene and seq, and the same `role`.
-- Its `gender` is `both` or the same as the base row. So a kerbal who can say the base line can say every alternative.
-- An alternative cannot use `{body}`.
-- Line counts, the intercom rule and the speaker gender of a scene come from the base rows only.
-
-The game remembers heard lines in the same file as the heard scenes (`PluginData/played.txt`), as `line:<clip_key>`.
-
 ## Subtitle slots (experimental)
 
 This is on the branch `experimental/procedural-talk`. It is not tested in game yet.
@@ -165,7 +138,7 @@ The slots:
 
 Two things make the sentences less recognisable:
 
-- **Versions.** The English of a row can hold several versions split by `|`: `Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again.` The game picks one per play, again every version once before one comes back. Every version of a line must fit every version of the lines before and after it.
+- **Versions.** The English of a row can hold several versions split by `|`: `Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again.` The game picks one per play, again every version once before one comes back. The first version is the original sentence, so it comes last: a player sees the new wording first. Every version of a line must fit every version of the lines before and after it.
 - **Slots inside pool values.** A pool value can hold slots itself, so a pool can be a list of whole sentences. The pool `not_me` holds "Not me.", "Don't look at me.", "I was asleep." and so on, and a reply like `{not_me} Look behind the {spot}.` changes as a whole.
 
 - **Conditions.** A version can start with conditions: `[landed] You're on the ground, dummy.` The conditions are the flight phases (`prelaunch`, `orbit`, `coast`, `landed` and so on), `kerbin` (at Kerbin) and `away` (anywhere else). Several in one version must all hold: `[orbit kerbin]`. When a line has versions whose conditions hold right now, the game only picks from those. Otherwise only from the versions without conditions. So all lines of a scene switch together. "Control, how high are we?" gets "You're on the ground, dummy." and then "Oh. Right." on the ground, and a normal answer in orbit. Every line needs at least one version without conditions.

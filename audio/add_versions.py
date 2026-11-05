@@ -2,7 +2,7 @@
 """Experimental (procedural talk): adds subtitle versions to existing rows of the phrase tables.
 
 The input has one line per row: "<scene> <seq> <version> | <version> ...". The versions are added after the english
-of the base row (alt empty) of that scene and seq, split by |. The spanish stays, so no audio changes. Rows with
+of the row with that scene and seq, split by |. The spanish stays, so no audio changes. Rows with
 {body}, probe rows and rows that already have versions are skipped, so running it twice changes nothing.
 
   python3 audio/add_versions.py versions.txt            show what would change
@@ -59,10 +59,7 @@ def main():
             key = (sc, int(seq)) if seq.isdigit() else None
             if key not in want:
                 continue
-            alt = cols[header["alt"]] if "alt" in header else ""
             en = cols[header["english"]]
-            if alt:
-                continue
             done.add(key)
             if "|" in en or "{body}" in en or cols[header["role"]] == "probe":
                 skipped.append("%s %s: %s" % (sc, seq, "has versions" if "|" in en else "{body} or probe row"))

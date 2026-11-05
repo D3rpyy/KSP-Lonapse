@@ -356,7 +356,7 @@ namespace Lonapse
             if (ok.Count == 1 || st.pick == null) return ok[0].Value;
             var idx = new List<string>();
             foreach (var kv in ok) idx.Add(kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            string choice = st.pick("version:" + e.ClipKey, idx);
+            string choice = st.pick(SceneMemory.VersionPool + e.ClipKey, idx);
             foreach (var kv in ok)
                 if (kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture) == choice) return kv.Value;
             return ok[0].Value;
@@ -470,7 +470,7 @@ namespace Lonapse
             {
                 ClipKey = e.ClipKey, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
                 Seq = e.Seq, Gender = e.Gender, Phase = e.Phase, Cause = e.Cause, Trait = e.Trait, Persona = e.Persona,
-                Topic = e.Topic, Core = e.Core, Beep = e.Beep, Body = e.Body, Alt = e.Alt, Spanish = e.Spanish,
+                Topic = e.Topic, Core = e.Core, Beep = e.Beep, Body = e.Body, Spanish = e.Spanish,
                 LonapseText = e.LonapseText, English = english, Folder = e.Folder
             };
         }

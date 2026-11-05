@@ -122,8 +122,7 @@ def main():
         sys.exit(1)
     scenes = {}
     for r in good:
-        if not r["alt"]:
-            scenes.setdefault(r["scene"], []).append(r)
+        scenes.setdefault(r["scene"], []).append(r)
     want = args.scenes or [s for s, ls in scenes.items()
                            if any("|" in r["english"] or b.slot_names(r["english"]) for r in ls)]
     rng = random.Random(args.seed)

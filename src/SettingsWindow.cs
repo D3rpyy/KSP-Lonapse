@@ -473,7 +473,8 @@ namespace Lonapse
             Header("Radio");
             s.throttleCallouts = Toggle(s.throttleCallouts, "Throttle callouts");
             s.planChatter = Toggle(s.planChatter, "Maneuver node talk");
-            s.lightDelay = Toggle(s.lightDelay, "Answer delay far from Kerbin");
+            s.lightDelay = Toggle(s.lightDelay, "Light delay");
+            Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -957,8 +958,6 @@ namespace Lonapse
             testBody = Cycle("Body", testBody, TestBodies);
             testTopic = Cycle("Topic", testTopic, TestTopics);
             // not a setting: GUILayout.Toggle, so nothing is saved. Drawn without a director too (same controls in Layout and Repaint)
-            bool varOnly = GUILayout.Toggle(d != null && d.debugVariantsOnly, "Only scenes with variants (experimental)");
-            if (d != null) d.debugVariantsOnly = varOnly;
             bool slotOnly = GUILayout.Toggle(d != null && d.debugSlotsOnly, "Only scenes with slots (experimental)");
             if (d != null) d.debugSlotsOnly = slotOnly;
             if (GUILayout.Button("Play random line"))

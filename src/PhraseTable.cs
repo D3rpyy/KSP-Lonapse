@@ -34,10 +34,6 @@ namespace Lonapse
         public string Beep = "";
         // Body key of a {body} variant (kerbin, mun, ..., generic). Empty for a row without {body}.
         public string Body = "";
-        // Experimental (scene variants): an alternative for the base row with the same scene and seq. Empty on the
-        // base row. When the scene plays, one row per seq is picked from the base row and its alternatives.
-        public string Alt = "";
-        public bool IsAlt { get { return !string.IsNullOrEmpty(Alt); } }
         public string Spanish;
         public string LonapseText;
         // English subtitle text (optional column "english"), empty when the table has none
@@ -293,11 +289,10 @@ namespace Lonapse
         public const string TopicColumn = "topic";
         public const string CoreColumn = "core";
         public const string BeepColumn = "beep";
-        public const string AltColumn = "alt";
         // Optional columns. A column outside Columns and Optional is ignored.
         public static readonly string[] Optional = {
             PhaseColumn, CauseColumn, LonapseColumn, FolderColumn, BodyColumn, EnglishColumn,
-            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn, AltColumn };
+            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn };
 
         // Topics allowed for an event: ScienceTopics for science, SoiTopics for soi_enter, v6 StagingTopics,
         // MilestoneTopics and RoverTopics, only "any" otherwise.
@@ -379,8 +374,6 @@ namespace Lonapse
             bool anyHeader = false;
             Dictionary<string, PhraseEntry> sceneHead = new Dictionary<string, PhraseEntry>();
             HashSet<string> seenSeq = new HashSet<string>();
-            // line number of every alt row, for DropBadAlts
-            Dictionary<PhraseEntry, int> altLine = new Dictionary<PhraseEntry, int>();
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -435,7 +428,6 @@ namespace Lonapse
                 if (col.ContainsKey(TopicColumn) && f[col[TopicColumn]].Length > 0) e.Topic = f[col[TopicColumn]];
                 if (col.ContainsKey(CoreColumn) && f[col[CoreColumn]].Length > 0) e.Core = f[col[CoreColumn]];
                 if (col.ContainsKey(BeepColumn)) e.Beep = f[col[BeepColumn]];
-                if (col.ContainsKey(AltColumn)) e.Alt = f[col[AltColumn]];
 
                 List<string> bad = new List<string>();
                 if (!IsKey(e.ClipKey)) bad.Add("clip_key '" + e.ClipKey + "' must match [a-z0-9_]+");
@@ -485,12 +477,6 @@ namespace Lonapse
                 if (e.Role == RoleProbe && !ProbeSubtitleOk(e.English))
                     bad.Add("probe subtitle must look like [beeps excitedly] (beeps and 1 to 3 lowercase words), got '" + e.English + "'");
                 CheckPlaceholders(e, bad);
-                if (e.IsAlt)
-                {
-                    if (!IsAltKey(e.Alt)) bad.Add("alt '" + e.Alt + "' must match [a-z0-9]+");
-                    if (e.HasBody || Placeholders(e.Spanish).Count > 0 || Placeholders(e.English).Contains("body"))
-                        bad.Add("an alt row cannot use {body}");
-                }
                 e.Seq = seq;
 
                 if (col.ContainsKey(LonapseColumn))
@@ -508,9 +494,8 @@ namespace Lonapse
 
                 if (table.byKey.ContainsKey(e.ClipKey)) bad.Add("duplicate clip_key '" + e.ClipKey + "'");
                 // body variants share scene and seq, one row per body
-                if (seq >= 1 && !string.IsNullOrEmpty(e.Scene) && !seenSeq.Add(e.Scene + "#" + seq + "#" + e.Body + "#" + e.Alt))
-                    bad.Add("duplicate scene/seq " + e.Scene + "/" + seq + (e.HasBody ? " for body " + e.Body : "")
-                            + (e.IsAlt ? " for alt " + e.Alt : ""));
+                if (seq >= 1 && !string.IsNullOrEmpty(e.Scene) && !seenSeq.Add(e.Scene + "#" + seq + "#" + e.Body))
+                    bad.Add("duplicate scene/seq " + e.Scene + "/" + seq + (e.HasBody ? " for body " + e.Body : ""));
 
                 PhraseEntry head;
                 if (bad.Count == 0 && sceneHead.TryGetValue(e.Scene, out head))
@@ -531,58 +516,12 @@ namespace Lonapse
                 if (!sceneHead.ContainsKey(e.Scene)) sceneHead[e.Scene] = e;
                 table.entries.Add(e);
                 table.byKey[e.ClipKey] = e;
-                if (e.IsAlt) altLine[e] = lineNo;
             }
 
-            DropBadAlts(table, altLine, errors);
             if (!anyHeader) errors.Add("no header line found");
             return table;
         }
 
-        /// <summary>
-        /// Scene variants: an alt row needs a base row (no alt) with the same scene and seq, the same role, and a
-        /// gender that covers the base gender (both, or the same), so a speaker who can say the base line can say the
-        /// alternative too. Same rule as validate() in audio/build_lonapse.py. Bad alt rows are removed.
-        /// </summary>
-        static void DropBadAlts(PhraseTable table, Dictionary<PhraseEntry, int> lines, List<string> errors)
-        {
-            if (lines.Count == 0) return;
-            var bases = new Dictionary<string, PhraseEntry>();
-            foreach (PhraseEntry e in table.entries)
-            {
-                string k = e.Scene + "#" + e.Seq;
-                if (!e.IsAlt && !bases.ContainsKey(k)) bases[k] = e;
-            }
-            var drop = new List<PhraseEntry>();
-            foreach (PhraseEntry e in table.entries)
-            {
-                if (!e.IsAlt) continue;
-                PhraseEntry b;
-                string why = null;
-                if (!bases.TryGetValue(e.Scene + "#" + e.Seq, out b)) why = "alt row without a base row for scene/seq " + e.Scene + "/" + e.Seq;
-                else if (b.Role != e.Role) why = "alt row role " + e.Role + " differs from the base row role " + b.Role;
-                else if (e.Gender != "both" && e.Gender != b.Gender) why = "alt row gender " + e.Gender + " does not cover the base row gender " + b.Gender;
-                if (why == null) continue;
-                int no;
-                lines.TryGetValue(e, out no);
-                errors.Add("line " + no + " (" + e.ClipKey + "): " + why);
-                drop.Add(e);
-            }
-            foreach (PhraseEntry e in drop)
-            {
-                table.entries.Remove(e);
-                table.byKey.Remove(e.ClipKey);
-            }
-        }
-
-        // Alt value of a scene variant row: [a-z0-9]+
-        public static bool IsAltKey(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return false;
-            foreach (char c in s)
-                if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))) return false;
-            return true;
-        }
 
         // A line that names the clip_key, scene and spanish columns is a header (a data row cannot hold all three).
         static bool IsHeaderLine(string[] f)
@@ -841,7 +780,6 @@ namespace Lonapse
                 for (; i < AllLines.Count && AllLines[i].Seq == seq; i++)
                 {
                     PhraseEntry e = AllLines[i];
-                    if (e.IsAlt) continue;   // alternatives: AltsFor, picked by PhraseClips.LinesFor with a chooser
                     if (!e.HasBody) { if (plain == null) plain = e; }
                     else if (e.Body == body) exact = e;
                     else if (e.Body == PhraseTable.GenericBody) generic = e;
@@ -853,14 +791,6 @@ namespace Lonapse
             return r;
         }
 
-        /// <summary>Scene variants: the alternative rows for one seq, in alt order. Empty when there are none. Do not
-        /// change the list.</summary>
-        public List<PhraseEntry> AltsFor(int seq)
-        {
-            List<PhraseEntry> r;
-            return alts.TryGetValue(seq, out r) ? r : NoAlts;
-        }
-        public bool HasAlts { get { return alts.Count > 0; } }
         /// <summary>Experimental (procedural talk): a line of the scene has a subtitle slot like {thing}.</summary>
         public bool HasSlots
         {
@@ -875,34 +805,15 @@ namespace Lonapse
             }
         }
         private int hasSlots = -1;
-        /// <summary>How many different versions of the scene the alternatives give (the product per seq of 1 plus
-        /// the alternatives of that seq). 1 for a scene without alternatives.</summary>
-        public int Versions
-        {
-            get
-            {
-                int n = 1;
-                foreach (PhraseEntry e in Lines) n *= 1 + AltsFor(e.Seq).Count;
-                return n;
-            }
-        }
-        readonly Dictionary<int, List<PhraseEntry>> alts = new Dictionary<int, List<PhraseEntry>>();
-        static readonly List<PhraseEntry> NoAlts = new List<PhraseEntry>();
 
         internal void Seal()
         {
             AllLines.Sort((a, b) => a.Seq != b.Seq ? a.Seq.CompareTo(b.Seq)
-                                  : a.Body != b.Body ? string.CompareOrdinal(a.Body, b.Body)
-                                  : string.CompareOrdinal(a.Alt, b.Alt));
+                                  : string.CompareOrdinal(a.Body, b.Body));
             Bodies.Clear();
-            alts.Clear();
             foreach (PhraseEntry e in AllLines)
             {
                 if (e.HasBody && !Bodies.Contains(e.Body)) Bodies.Add(e.Body);
-                if (!e.IsAlt) continue;
-                List<PhraseEntry> l;
-                if (!alts.TryGetValue(e.Seq, out l)) alts[e.Seq] = l = new List<PhraseEntry>();
-                l.Add(e);
             }
             forBody.Clear();
             Lines.Clear();
