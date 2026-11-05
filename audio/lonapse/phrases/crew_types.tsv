@@ -2,172 +2,172 @@
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 # persona and trait apply to the crew speaker. In crew-only scenes that is speaker A (odd seq).
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
-ct_bad_01_1	chatter	chatter	tense	crew	ct_bad_01	1	both	any	spin	any	badass	any	Giramos un poco. Nada que no se arregle.	We're spinning a bit. Nothing we can't fix.
-ct_bad_01_2	chatter	chatter	tense	mc	ct_bad_01	2	m	any	spin	any	badass	any	Recibido. Nos encanta esa calma.	Copy. We love that calm.
-ct_bad_02_1	chatter	chatter	tense	crew	ct_bad_02	1	both	any	q	any	badass	any	Solo un pequeño temblor. Seguimos.	Just a little shake. Continuing.
-ct_bad_02_2	chatter	chatter	tense	mc	ct_bad_02	2	m	any	q	any	badass	any	Recibido, seguid con cuidado.	Copy, carry on carefully.
-ct_bad_03_1	chatter	chatter	tense	crew	ct_bad_03	1	both	any	gforce	any	badass	any	Las fuerzas G aprietan. Sin problema.	The G-forces are squeezing. No problem.
-ct_bad_03_2	chatter	chatter	tense	mc	ct_bad_03	2	m	any	gforce	any	badass	any	Recibido. Avisad si empeora.	Copy. Tell us if it gets worse.
-ct_bad_04_1	chatter	chatter	tense	crew	ct_bad_04	1	both	any	heat	any	badass	any	La temperatura sube. Que suba, el casco aguanta.	Temperature's rising. Let it rise, the hull holds.
-ct_bad_04_2	chatter	chatter	tense	mc	ct_bad_04	2	m	any	heat	any	badass	any	Recibido, vigilamos la temperatura.	Copy, we're watching the temperature.
-ct_bad_05_1	chatter	chatter	tense	crew	ct_bad_05	1	both	reentry	plasma	any	badass	any	Qué luz tan bonita ahí fuera. Todo bajo control.	What a pretty glow out there. All under control.
-ct_bad_05_2	chatter	chatter	tense	mc	ct_bad_05	2	m	reentry	plasma	any	badass	any	Recibido. Envidiamos esa vista.	Copy. We envy that view.
-ct_bad_06_1	chatter	chatter	tense	crew	ct_bad_06	1	both	any	fuel	any	badass	any	Combustible justo. Con lo que queda me sobra.	Fuel is tight. What's left is plenty for me.
-ct_bad_06_2	chatter	chatter	tense	mc	ct_bad_06	2	m	any	fuel	any	badass	any	Recibido. Confiamos en ti.	Copy. We trust you.
-ct_bad_07_1	chatter	chatter	tense	crew	ct_bad_07	1	both	any	ground	any	badass	any	El suelo se acerca. Lo tengo.	Ground's coming up. I've got it.
-ct_bad_07_2	chatter	chatter	tense	mc	ct_bad_07	2	m	any	ground	any	badass	any	Recibido. Despacio y suave.	Copy. Nice and gentle.
-ct_bad_08_1	chatter	chatter	tense	crew	ct_bad_08	1	both	goofy	impulse	any	badass	any	Buen golpe. Ni se me ha caído el café.	Good bump. I didn't even spill my coffee.
-ct_bad_08_2	chatter	chatter	tense	mc	ct_bad_08	2	m	goofy	impulse	any	badass	any	Recibido. Revisad los daños.	Copy. Check for damage.
-ct_bad_09_1	chatter	chatter	tense	crew	ct_bad_09	1	both	any	engine_out	any	badass	any	Motor apagado. Sin prisas, tenemos un plan B.	Engine out. No rush, we have a plan B.
-ct_bad_09_2	chatter	chatter	tense	mc	ct_bad_09	2	m	any	engine_out	any	badass	any	Recibido. Seguimos con el plan B.	Copy. Going with plan B.
-ct_bad_10_1	chatter	chatter	tense	mc	ct_bad_10	1	m	goofy	spin	any	badass	any	Os vemos girando rápido.	We see you spinning fast.
-ct_bad_10_2	chatter	chatter	tense	crew	ct_bad_10	2	both	goofy	spin	any	badass	any	Lo sé. Así veo todo dos veces.	I know. This way I see everything twice.
-ct_bad_11_1	chatter	chatter	tense	mc	ct_bad_11	1	m	any	q	any	badass	any	La presión dinámica está alta.	Dynamic pressure is high.
-ct_bad_11_2	chatter	chatter	tense	crew	ct_bad_11	2	both	any	q	any	badass	any	Recibido. La nave aguanta, y yo también.	Copy. The ship holds, and so do I.
-ct_bad_12_1	chatter	chatter	tense	mc	ct_bad_12	1	m	any	gforce	any	badass	any	Lecturas de G muy altas.	Very high G readings.
-ct_bad_12_2	chatter	chatter	tense	crew	ct_bad_12	2	both	any	gforce	any	badass	any	Lo noto. Respiro hondo y sigo.	I feel it. Deep breath and carry on.
-ct_dim_01_1	chatter	chatter	calm	crew	ct_dim_01	1	both	goofy	any	any	dim	any	Control, ¿hacia dónde está arriba?	Control, which way is up again?
-ct_dim_01_2	chatter	chatter	calm	mc	ct_dim_01	2	m	goofy	any	any	dim	any	Depende. Mejor no toques nada.	It depends. Better not touch anything.
-ct_dim_02_1	chatter	chatter	calm	crew	ct_dim_02	1	both	goofy	any	any	dim	any	Control, he encontrado un botón nuevo. ¿Lo pulso?	Control, I found a new button. Should I press it?
-ct_dim_02_2	chatter	chatter	calm	mc	ct_dim_02	2	m	goofy	any	any	dim	any	¡No! Por favor, no.	No! Please, don't.
-ct_dim_03_1	chatter	chatter	calm	crew	ct_dim_03	1	both	goofy	any	any	dim	any	¿Las estrellas se mueven o somos nosotros?	Are the stars moving, or is it us?
-ct_dim_03_2	chatter	chatter	calm	mc	ct_dim_03	2	m	goofy	any	any	dim	any	Sois vosotros. Siempre sois vosotros.	It's you. It's always you.
-ct_dim_04_1	chatter	chatter	calm	crew	ct_dim_04	1	both	orbit	any	any	dim	any	Control, ¿cuánto falta para llegar al espacio?	Control, how long until we reach space?
-ct_dim_04_2	chatter	chatter	calm	mc	ct_dim_04	2	m	orbit	any	any	dim	any	Ya estáis en el espacio.	You're already in space.
-ct_dim_04_3	chatter	chatter	calm	crew	ct_dim_04	3	both	orbit	any	any	dim	any	¡Ah! Pues qué rápido.	Oh! Well, that was quick.
-ct_dim_05_1	chatter	chatter	calm	crew	ct_dim_05	1	both	goofy	any	any	dim	any	Control, la ventana no se abre. ¿Es normal?	Control, the window won't open. Is that normal?
-ct_dim_05_2	chatter	chatter	calm	mc	ct_dim_05	2	m	goofy	any	any	dim	any	Muy normal. Y muy importante.	Very normal. And very important.
-ct_dim_06_1	chatter	chatter	calm	crew	ct_dim_06	1	both	landed	any	any	dim	any	Control, ya estoy aquí abajo. ¿Ahora cómo se sube?	Control, I'm down here now. How do I get back up?
-ct_dim_06_2	chatter	chatter	calm	mc	ct_dim_06	2	m	landed	any	any	dim	any	Con el motor. Te lo explicamos otra vez.	With the engine. We'll explain it again.
-ct_dim_07_1	chatter	chatter	calm	crew	ct_dim_07	1	both	orbit	any	any	dim	any	¿Por qué flota mi cepillo de dientes?	Why is my toothbrush floating?
-ct_dim_07_2	chatter	chatter	calm	crew	ct_dim_07	2	both	orbit	any	any	dim	any	Porque estamos en órbita.	Because we're in orbit.
-ct_dim_07_3	chatter	chatter	calm	crew	ct_dim_07	3	both	orbit	any	any	dim	any	¿Desde cuándo?	Since when?
-ct_dim_08_1	chatter	chatter	calm	crew	ct_dim_08	1	both	goofy	any	any	dim	any	He contado las estrellas. Me salen tres.	I counted the stars. I got three.
-ct_dim_08_2	chatter	chatter	calm	crew	ct_dim_08	2	both	goofy	any	any	dim	any	Cuenta otra vez.	Count again.
-ct_dim_09_1	chatter	chatter	calm	crew	ct_dim_09	1	both	goofy	any	any	dim	any	¿Este cable es importante?	Is this wire important?
-ct_dim_09_2	chatter	chatter	calm	crew	ct_dim_09	2	both	goofy	any	any	dim	any	Suéltalo despacio.	Let go of it slowly.
-ct_dim_09_3	chatter	chatter	calm	crew	ct_dim_09	3	both	goofy	any	any	dim	any	Ya lo he soltado. ¿Y ahora?	I already let go. Now what?
-ct_dim_10_1	chatter	chatter	calm	crew	ct_dim_10	1	both	orbit	any	any	dim	any	Si giramos la nave, ¿abajo pasa a ser arriba?	If we turn the ship, does down become up?
-ct_dim_10_2	chatter	chatter	calm	crew	ct_dim_10	2	both	orbit	any	any	dim	any	En el espacio, sí.	In space, yes.
-ct_dim_10_3	chatter	chatter	calm	crew	ct_dim_10	3	both	orbit	any	any	dim	any	Entonces estoy del revés. Qué bien.	Then I'm upside down. Nice.
-ct_dim_11_1	chatter	chatter	calm	crew	ct_dim_11	1	both	goofy	any	any	dim	any	¿Dónde está el retrovisor de este cohete?	Where's the rear-view mirror on this rocket?
-ct_dim_11_2	chatter	chatter	calm	crew	ct_dim_11	2	both	goofy	any	any	dim	any	No tiene freno.	It doesn't have one.
-ct_dim_11_3	chatter	chatter	calm	crew	ct_dim_11	3	both	goofy	any	any	dim	any	Pues vaya diseño.	Well, what a design.
-ct_dim_12_1	chatter	chatter	calm	crew	ct_dim_12	1	both	goofy	any	any	dim	any	¿A qué huele el espacio? Aquí huele a queso.	What does space smell like? It smells like cheese in here.
-ct_dim_12_2	chatter	chatter	calm	crew	ct_dim_12	2	both	goofy	any	any	dim	any	Eso son tus botas.	That's your boots.
-ct_nerv_01_1	chatter	chatter	tense	crew	ct_nerv_01	1	both	any	spin	any	nervous	any	Control, giramos. ¿Es normal? Dime que es normal.	Control, we're spinning. Is that normal? Tell me it's normal.
-ct_nerv_01_2	chatter	chatter	tense	mc	ct_nerv_01	2	m	any	spin	any	nervous	any	Es normal. Respira.	It's normal. Breathe.
-ct_nerv_02_1	chatter	chatter	tense	crew	ct_nerv_02	1	both	any	fuel	any	nervous	any	Control, el combustible baja. ¿Por qué baja tan rápido?	Control, the fuel is dropping. Why is it dropping so fast?
-ct_nerv_02_2	chatter	chatter	tense	mc	ct_nerv_02	2	m	any	fuel	any	nervous	any	Es normal con el motor encendido. Todo va bien.	That's normal with the engine running. All good.
-ct_nerv_03_1	chatter	chatter	calm	crew	ct_nerv_03	1	both	goofy	any	any	nervous	any	Control, ¿seguro que este tornillo va aquí?	Control, are you sure this bolt goes here?
-ct_nerv_03_2	chatter	chatter	calm	mc	ct_nerv_03	2	m	goofy	any	any	nervous	any	Sí. Deja de mirarlo.	Yes. Stop looking at it.
-ct_nerv_04_1	chatter	chatter	calm	crew	ct_nerv_04	1	both	goofy	any	any	nervous	any	¿Has oído ese ruido?	Did you hear that noise?
-ct_nerv_04_2	chatter	chatter	calm	crew	ct_nerv_04	2	both	goofy	any	any	nervous	any	Era mi estómago.	That was my stomach.
-ct_nerv_04_3	chatter	chatter	calm	crew	ct_nerv_04	3	both	goofy	any	any	nervous	any	Menos mal. Casi me desmayo.	Thank goodness. I almost fainted.
-ct_nerv_05_1	chatter	chatter	calm	crew	ct_nerv_05	1	both	orbit	any	any	nervous	any	Si me duermo, ¿quién vigila las luces?	If I fall asleep, who watches the lights?
-ct_nerv_05_2	chatter	chatter	calm	crew	ct_nerv_05	2	both	orbit	any	any	nervous	any	Las luces se vigilan solas.	The lights watch themselves.
-ct_nerv_05_3	chatter	chatter	calm	crew	ct_nerv_05	3	both	orbit	any	any	nervous	any	Eso es justo lo que me preocupa.	That's exactly what worries me.
-ct_nerv_06_1	chatter	chatter	tense	crew	ct_nerv_06	1	both	any	q	any	nervous	any	Control, esto tiembla. Y yo también.	Control, this is shaking. And so am I.
-ct_nerv_06_2	chatter	chatter	tense	mc	ct_nerv_06	2	m	any	q	any	nervous	any	Recibido. Los dos vais a estar bien.	Copy. You'll both be fine.
-ct_brave_01_1	chatter	chatter	calm	crew	ct_brave_01	1	both	goofy	any	any	brave	any	Control, me ofrezco para la próxima misión. Y para la siguiente.	Control, I volunteer for the next mission. And the one after.
-ct_brave_01_2	chatter	chatter	calm	mc	ct_brave_01	2	m	goofy	any	any	brave	any	Primero termina esta, por favor.	Finish this one first, please.
-ct_brave_02_1	chatter	chatter	tense	crew	ct_brave_02	1	both	any	spin	any	brave	any	Giramos. Lo tengo, Control, ya lo freno.	We're spinning. I've got it, Control, slowing it down.
-ct_brave_02_2	chatter	chatter	tense	mc	ct_brave_02	2	m	any	spin	any	brave	any	Recibido. Con calma.	Copy. Take it easy.
-ct_brave_03_1	chatter	chatter	calm	crew	ct_brave_03	1	both	landed	any	any	brave	any	¿Quién quiere salir primero a la superficie?	Who wants to go out on the surface first?
-ct_brave_03_2	chatter	chatter	calm	crew	ct_brave_03	2	both	landed	any	any	brave	any	Tú. Siempre tú.	You. Always you.
-ct_brave_03_3	chatter	chatter	calm	crew	ct_brave_03	3	both	landed	any	any	brave	any	¡Perfecto!	Perfect!
-ct_brave_04_1	chatter	chatter	tense	crew	ct_brave_04	1	both	any	ground	any	brave	any	Suelo cerca. Agarraos, que esto lo aterrizo yo.	Ground's close. Hold on, I'm landing this.
-ct_brave_04_2	chatter	chatter	tense	mc	ct_brave_04	2	m	any	ground	any	brave	any	Recibido. Suave, por favor.	Copy. Gently, please.
-ct_brave_05_1	chatter	chatter	calm	crew	ct_brave_05	1	both	goofy	any	any	brave	any	Si nos perdemos, yo exploro primero.	If we get lost, I'll scout ahead first.
-ct_brave_05_2	chatter	chatter	calm	crew	ct_brave_05	2	both	goofy	any	any	brave	any	¿Y si hay monstruos?	And if there are monsters?
-ct_brave_05_3	chatter	chatter	calm	crew	ct_brave_05	3	both	goofy	any	any	brave	any	Pues les digo hola.	Then I'll say hi.
-ct_brave_06_1	chatter	chatter	calm	crew	ct_brave_06	1	both	goofy	any	any	brave	any	Control, ¿cuál es el sitio más lejano? Vamos allí.	Control, what's the farthest place? Let's go there.
-ct_brave_06_2	chatter	chatter	calm	mc	ct_brave_06	2	m	goofy	any	any	brave	any	Primero volved a casa, por favor.	First come home, please.
-ct_vet_01_1	chatter	chatter	tense	crew	ct_vet_01	1	both	any	heat	any	veteran	any	Sube la temperatura. He visto cosas peores. Seguimos.	Temperature's rising. I've seen worse. Carrying on.
-ct_vet_01_2	chatter	chatter	tense	mc	ct_vet_01	2	m	any	heat	any	veteran	any	Recibido. Se nota la experiencia.	Copy. Experience shows.
-ct_vet_02_1	chatter	chatter	calm	crew	ct_vet_02	1	both	orbit	any	any	veteran	any	Otra órbita, otra vista bonita. Nunca me canso.	Another orbit, another pretty view. Never gets old.
-ct_vet_02_2	chatter	chatter	calm	mc	ct_vet_02	2	m	orbit	any	any	veteran	any	Para eso estáis ahí.	That's what you're there for.
-ct_vet_03_1	chatter	chatter	calm	crew	ct_vet_03	1	both	goofy	any	any	veteran	any	La primera vez yo también lo tocaba todo.	The first time, I touched everything too.
-ct_vet_03_2	chatter	chatter	calm	crew	ct_vet_03	2	both	goofy	any	any	veteran	any	¿Y qué pasó?	And what happened?
-ct_vet_03_3	chatter	chatter	calm	crew	ct_vet_03	3	both	goofy	any	any	veteran	any	Que ahora hay más botones de emergencia.	Now there are more emergency buttons.
-ct_vet_04_1	chatter	chatter	tense	crew	ct_vet_04	1	both	any	impulse	any	veteran	any	Un golpe de nada. Los he tenido peores.	Just a small bump. I've had worse.
-ct_vet_04_2	chatter	chatter	tense	mc	ct_vet_04	2	m	any	impulse	any	veteran	any	Recibido. Revisad la estructura.	Copy. Check the structure.
-ct_pil_01_1	chatter	chatter	calm	crew	ct_pil_01	1	both	orbit	any	pilot	any	any	Control, ¿habéis visto esa maniobra? Perfecta.	Control, did you see that maneuver? Perfect.
-ct_pil_01_2	chatter	chatter	calm	mc	ct_pil_01	2	m	orbit	any	pilot	any	any	La hemos visto. Un poco torcida.	We saw it. A bit crooked.
-ct_pil_02_1	chatter	chatter	calm	crew	ct_pil_02	1	both	landed	any	pilot	any	any	Aterrizaje suave. Ni una taza en el suelo.	Smooth landing. Not a single cup on the floor.
-ct_pil_02_2	chatter	chatter	calm	mc	ct_pil_02	2	m	landed	any	pilot	any	any	Buen trabajo. Enhorabuena.	Good job. Congratulations.
-ct_pil_03_1	chatter	chatter	calm	crew	ct_pil_03	1	both	goofy	any	pilot	any	any	¿Quién ha tocado mis mandos?	Who touched my controls?
-ct_pil_03_2	chatter	chatter	calm	crew	ct_pil_03	2	both	goofy	any	pilot	any	any	Nadie. Bueno, yo. Un poquito.	Nobody. Well, me. A little.
-ct_pil_03_3	chatter	chatter	calm	crew	ct_pil_03	3	both	goofy	any	pilot	any	any	Pues no los toques. Aquí piloto yo.	Then don't touch them. I'm the pilot here.
-ct_pil_04_1	chatter	chatter	calm	crew	ct_pil_04	1	both	orbit	any	pilot	any	any	Agarraos, voy a girar la nave.	Hold on, I'm going to turn the ship.
-ct_pil_04_2	chatter	chatter	calm	crew	ct_pil_04	2	both	orbit	any	pilot	any	any	¿Otra vez?	Again?
-ct_pil_04_3	chatter	chatter	calm	crew	ct_pil_04	3	both	orbit	any	pilot	any	any	Es por la vista. Confiad en mí.	It's for the view. Trust me.
-ct_pil_05_1	chatter	chatter	calm	crew	ct_pil_05	1	both	serious	any	pilot	any	any	Rumbo estable. Mantengo la orientación.	Heading stable. Holding attitude.
+ct_bad_01_1	chatter	chatter	tense	crew	ct_bad_01	1	both	any	spin	any	badass	any	Giramos un poco. Nada que no se arregle.	We're spinning a bit. Nothing we can't fix. | We're spinning a bit. Nothing we can't fix. | A little spin. Easy fix.
+ct_bad_01_2	chatter	chatter	tense	mc	ct_bad_01	2	m	any	spin	any	badass	any	Recibido. Nos encanta esa calma.	Copy. We love that calm. | Copy. We love that calm. | Copy. Love the calm, {vessel}.
+ct_bad_02_1	chatter	chatter	tense	crew	ct_bad_02	1	both	any	q	any	badass	any	Solo un pequeño temblor. Seguimos.	Just a little shake. Continuing. | Just a little shake. Continuing. | Small shake. Carrying on.
+ct_bad_02_2	chatter	chatter	tense	mc	ct_bad_02	2	m	any	q	any	badass	any	Recibido, seguid con cuidado.	Copy, carry on carefully. | Copy, carry on carefully. | Copy. Carefully, please.
+ct_bad_03_1	chatter	chatter	tense	crew	ct_bad_03	1	both	any	gforce	any	badass	any	Las fuerzas G aprietan. Sin problema.	The G-forces are squeezing. No problem. | The G-forces are squeezing. No problem. | Lots of g's. No big deal.
+ct_bad_03_2	chatter	chatter	tense	mc	ct_bad_03	2	m	any	gforce	any	badass	any	Recibido. Avisad si empeora.	Copy. Tell us if it gets worse. | Copy. Tell us if it gets worse. | Copy. Shout if it gets worse.
+ct_bad_04_1	chatter	chatter	tense	crew	ct_bad_04	1	both	any	heat	any	badass	any	La temperatura sube. Que suba, el casco aguanta.	Temperature's rising. Let it rise, the hull holds. | Temperature's rising. Let it rise, the hull holds. | It's getting hot. The hull can take it.
+ct_bad_04_2	chatter	chatter	tense	mc	ct_bad_04	2	m	any	heat	any	badass	any	Recibido, vigilamos la temperatura.	Copy, we're watching the temperature. | Copy, we're watching the temperature. | Copy. Eyes on the temperature.
+ct_bad_05_1	chatter	chatter	tense	crew	ct_bad_05	1	both	reentry	plasma	any	badass	any	Qué luz tan bonita ahí fuera. Todo bajo control.	What a pretty glow out there. All under control. | What a pretty glow out there. All under control. | Nice glow outside. All fine.
+ct_bad_05_2	chatter	chatter	tense	mc	ct_bad_05	2	m	reentry	plasma	any	badass	any	Recibido. Envidiamos esa vista.	Copy. We envy that view. | Copy. We envy that view. | Copy. Jealous of that view.
+ct_bad_06_1	chatter	chatter	tense	crew	ct_bad_06	1	both	any	fuel	any	badass	any	Combustible justo. Con lo que queda me sobra.	Fuel is tight. What's left is plenty for me. | Fuel is tight. What's left is plenty for me. | Low fuel. Still plenty for me.
+ct_bad_06_2	chatter	chatter	tense	mc	ct_bad_06	2	m	any	fuel	any	badass	any	Recibido. Confiamos en ti.	Copy. We trust you. | Copy. We trust you. | Copy. You've got this.
+ct_bad_07_1	chatter	chatter	tense	crew	ct_bad_07	1	both	any	ground	any	badass	any	El suelo se acerca. Lo tengo.	Ground's coming up. I've got it. | Ground's coming up. I've got it. | Ground's close. I have it.
+ct_bad_07_2	chatter	chatter	tense	mc	ct_bad_07	2	m	any	ground	any	badass	any	Recibido. Despacio y suave.	Copy. Nice and gentle. | Copy. Nice and gentle. | Copy. Gently does it.
+ct_bad_08_1	chatter	chatter	tense	crew	ct_bad_08	1	both	goofy	impulse	any	badass	any	Buen golpe. Ni se me ha caído el café.	Good bump. I didn't even spill my coffee. | Good bump. I didn't even spill my coffee. | Nice bump. My {food} didn't even move.
+ct_bad_08_2	chatter	chatter	tense	mc	ct_bad_08	2	m	goofy	impulse	any	badass	any	Recibido. Revisad los daños.	Copy. Check for damage. | Copy. Check for damage. | Copy. Look for damage.
+ct_bad_09_1	chatter	chatter	tense	crew	ct_bad_09	1	both	any	engine_out	any	badass	any	Motor apagado. Sin prisas, tenemos un plan B.	Engine out. No rush, we have a plan B. | Engine out. No rush, we have a plan B. | No engine. Fine. Plan B.
+ct_bad_09_2	chatter	chatter	tense	mc	ct_bad_09	2	m	any	engine_out	any	badass	any	Recibido. Seguimos con el plan B.	Copy. Going with plan B. | Copy. Going with plan B. | Copy. Plan B it is.
+ct_bad_10_1	chatter	chatter	tense	mc	ct_bad_10	1	m	goofy	spin	any	badass	any	Os vemos girando rápido.	We see you spinning fast. | We see you spinning fast. | {vessel}, you're spinning fast.
+ct_bad_10_2	chatter	chatter	tense	crew	ct_bad_10	2	both	goofy	spin	any	badass	any	Lo sé. Así veo todo dos veces.	I know. This way I see everything twice. | I know. This way I see everything twice. | I know. More view this way.
+ct_bad_11_1	chatter	chatter	tense	mc	ct_bad_11	1	m	any	q	any	badass	any	La presión dinámica está alta.	Dynamic pressure is high. | Dynamic pressure is high. | High pressure, {vessel}.
+ct_bad_11_2	chatter	chatter	tense	crew	ct_bad_11	2	both	any	q	any	badass	any	Recibido. La nave aguanta, y yo también.	Copy. The ship holds, and so do I. | Copy. The ship holds, and so do I. | Copy. Ship holds. I hold.
+ct_bad_12_1	chatter	chatter	tense	mc	ct_bad_12	1	m	any	gforce	any	badass	any	Lecturas de G muy altas.	Very high G readings. | Very high G readings. | Big g readings here.
+ct_bad_12_2	chatter	chatter	tense	crew	ct_bad_12	2	both	any	gforce	any	badass	any	Lo noto. Respiro hondo y sigo.	I feel it. Deep breath and carry on. | I feel it. Deep breath and carry on. | Feeling it. Breathing. Continuing.
+ct_dim_01_1	chatter	chatter	calm	crew	ct_dim_01	1	both	goofy	any	any	dim	any	Control, ¿hacia dónde está arriba?	Control, which way is up again? | Control, which way is up again? | Control, remind me where up is?
+ct_dim_01_2	chatter	chatter	calm	mc	ct_dim_01	2	m	goofy	any	any	dim	any	Depende. Mejor no toques nada.	It depends. Better not touch anything. | It depends. Better not touch anything. | Depends. Don't touch anything.
+ct_dim_02_1	chatter	chatter	calm	crew	ct_dim_02	1	both	goofy	any	any	dim	any	Control, he encontrado un botón nuevo. ¿Lo pulso?	Control, I found a new button. Should I press it? | Control, I found a new button. Should I press it? | Control, there's a button I've never seen. Press it?
+ct_dim_02_2	chatter	chatter	calm	mc	ct_dim_02	2	m	goofy	any	any	dim	any	¡No! Por favor, no.	No! Please, don't. | No! Please, don't. | No! Don't you dare.
+ct_dim_03_1	chatter	chatter	calm	crew	ct_dim_03	1	both	goofy	any	any	dim	any	¿Las estrellas se mueven o somos nosotros?	Are the stars moving, or is it us? | Are the stars moving, or is it us? | Is it the stars moving, or us?
+ct_dim_03_2	chatter	chatter	calm	mc	ct_dim_03	2	m	goofy	any	any	dim	any	Sois vosotros. Siempre sois vosotros.	It's you. It's always you. | It's you. It's always you. | You. Always you.
+ct_dim_04_1	chatter	chatter	calm	crew	ct_dim_04	1	both	orbit	any	any	dim	any	Control, ¿cuánto falta para llegar al espacio?	Control, how long until we reach space? | Control, how long until we reach space? | Control, are we in space yet?
+ct_dim_04_2	chatter	chatter	calm	mc	ct_dim_04	2	m	orbit	any	any	dim	any	Ya estáis en el espacio.	You're already in space. | You're already in space. | You've been in space for a while.
+ct_dim_04_3	chatter	chatter	calm	crew	ct_dim_04	3	both	orbit	any	any	dim	any	¡Ah! Pues qué rápido.	Oh! Well, that was quick. | Oh! Well, that was quick. | Oh! Quick trip.
+ct_dim_05_1	chatter	chatter	calm	crew	ct_dim_05	1	both	goofy	any	any	dim	any	Control, la ventana no se abre. ¿Es normal?	Control, the window won't open. Is that normal? | Control, the window won't open. Is that normal? | Control, the window is stuck. Normal?
+ct_dim_05_2	chatter	chatter	calm	mc	ct_dim_05	2	m	goofy	any	any	dim	any	Muy normal. Y muy importante.	Very normal. And very important. | Very normal. And very important. | Normal. Extremely important, too.
+ct_dim_06_1	chatter	chatter	calm	crew	ct_dim_06	1	both	landed	any	any	dim	any	Control, ya estoy aquí abajo. ¿Ahora cómo se sube?	Control, I'm down here now. How do I get back up? | Control, I'm down here now. How do I get back up? | Control, I'm on {here}. How do I go back up?
+ct_dim_06_2	chatter	chatter	calm	mc	ct_dim_06	2	m	landed	any	any	dim	any	Con el motor. Te lo explicamos otra vez.	With the engine. We'll explain it again. | With the engine. We'll explain it again. | The engine. We'll explain again.
+ct_dim_07_1	chatter	chatter	calm	crew	ct_dim_07	1	both	orbit	any	any	dim	any	¿Por qué flota mi cepillo de dientes?	Why is my toothbrush floating? | Why is my toothbrush floating? | My toothbrush is floating. Why?
+ct_dim_07_2	chatter	chatter	calm	crew	ct_dim_07	2	both	orbit	any	any	dim	any	Porque estamos en órbita.	Because we're in orbit. | Because we're in orbit. | We're in orbit.
+ct_dim_07_3	chatter	chatter	calm	crew	ct_dim_07	3	both	orbit	any	any	dim	any	¿Desde cuándo?	Since when? | Since when? | Since when?!
+ct_dim_08_1	chatter	chatter	calm	crew	ct_dim_08	1	both	goofy	any	any	dim	any	He contado las estrellas. Me salen tres.	I counted the stars. I got three. | I counted the stars. I got three. | Star count: three.
+ct_dim_08_2	chatter	chatter	calm	crew	ct_dim_08	2	both	goofy	any	any	dim	any	Cuenta otra vez.	Count again. | Count again. | Try again.
+ct_dim_09_1	chatter	chatter	calm	crew	ct_dim_09	1	both	goofy	any	any	dim	any	¿Este cable es importante?	Is this wire important? | Is this wire important? | Do we need this wire?
+ct_dim_09_2	chatter	chatter	calm	crew	ct_dim_09	2	both	goofy	any	any	dim	any	Suéltalo despacio.	Let go of it slowly. | Let go of it slowly. | Slowly let go of it.
+ct_dim_09_3	chatter	chatter	calm	crew	ct_dim_09	3	both	goofy	any	any	dim	any	Ya lo he soltado. ¿Y ahora?	I already let go. Now what? | I already let go. Now what? | Already let go. Next?
+ct_dim_10_1	chatter	chatter	calm	crew	ct_dim_10	1	both	orbit	any	any	dim	any	Si giramos la nave, ¿abajo pasa a ser arriba?	If we turn the ship, does down become up? | If we turn the ship, does down become up? | Turn the ship and up is down?
+ct_dim_10_2	chatter	chatter	calm	crew	ct_dim_10	2	both	orbit	any	any	dim	any	En el espacio, sí.	In space, yes. | In space, yes. | Up here, yes.
+ct_dim_10_3	chatter	chatter	calm	crew	ct_dim_10	3	both	orbit	any	any	dim	any	Entonces estoy del revés. Qué bien.	Then I'm upside down. Nice. | Then I'm upside down. Nice. | So I'm upside down. Cool.
+ct_dim_11_1	chatter	chatter	calm	crew	ct_dim_11	1	both	goofy	any	any	dim	any	¿Dónde está el retrovisor de este cohete?	Where's the rear-view mirror on this rocket? | Where's the rear-view mirror on this rocket? | This rocket has no rear-view mirror?
+ct_dim_11_2	chatter	chatter	calm	crew	ct_dim_11	2	both	goofy	any	any	dim	any	No tiene freno.	It doesn't have one. | It doesn't have one. | None.
+ct_dim_11_3	chatter	chatter	calm	crew	ct_dim_11	3	both	goofy	any	any	dim	any	Pues vaya diseño.	Well, what a design. | Well, what a design. | Bad design.
+ct_dim_12_1	chatter	chatter	calm	crew	ct_dim_12	1	both	goofy	any	any	dim	any	¿A qué huele el espacio? Aquí huele a queso.	What does space smell like? It smells like cheese in here. | What does space smell like? It smells like cheese in here. | Is that space I smell? It smells like cheese.
+ct_dim_12_2	chatter	chatter	calm	crew	ct_dim_12	2	both	goofy	any	any	dim	any	Eso son tus botas.	That's your boots. | That's your boots. | Your boots.
+ct_nerv_01_1	chatter	chatter	tense	crew	ct_nerv_01	1	both	any	spin	any	nervous	any	Control, giramos. ¿Es normal? Dime que es normal.	Control, we're spinning. Is that normal? Tell me it's normal. | Control, we're spinning. Is that normal? Tell me it's normal. | Control, spinning. Normal? Please say normal.
+ct_nerv_01_2	chatter	chatter	tense	mc	ct_nerv_01	2	m	any	spin	any	nervous	any	Es normal. Respira.	It's normal. Breathe. | It's normal. Breathe. | Normal. Breathe.
+ct_nerv_02_1	chatter	chatter	tense	crew	ct_nerv_02	1	both	any	fuel	any	nervous	any	Control, el combustible baja. ¿Por qué baja tan rápido?	Control, the fuel is dropping. Why is it dropping so fast? | Control, the fuel is dropping. Why is it dropping so fast? | Control, why does the fuel drop so fast?
+ct_nerv_02_2	chatter	chatter	tense	mc	ct_nerv_02	2	m	any	fuel	any	nervous	any	Es normal con el motor encendido. Todo va bien.	That's normal with the engine running. All good. | That's normal with the engine running. All good. | Normal with the engine on. All fine.
+ct_nerv_03_1	chatter	chatter	calm	crew	ct_nerv_03	1	both	goofy	any	any	nervous	any	Control, ¿seguro que este tornillo va aquí?	Control, are you sure this bolt goes here? | Control, are you sure this bolt goes here? | Control, does this bolt really belong here?
+ct_nerv_03_2	chatter	chatter	calm	mc	ct_nerv_03	2	m	goofy	any	any	nervous	any	Sí. Deja de mirarlo.	Yes. Stop looking at it. | Yes. Stop looking at it. | Yes. Stop staring at it.
+ct_nerv_04_1	chatter	chatter	calm	crew	ct_nerv_04	1	both	goofy	any	any	nervous	any	¿Has oído ese ruido?	Did you hear that noise? | Did you hear that noise? | What was that noise?
+ct_nerv_04_2	chatter	chatter	calm	crew	ct_nerv_04	2	both	goofy	any	any	nervous	any	Era mi estómago.	That was my stomach. | That was my stomach. | My stomach.
+ct_nerv_04_3	chatter	chatter	calm	crew	ct_nerv_04	3	both	goofy	any	any	nervous	any	Menos mal. Casi me desmayo.	Thank goodness. I almost fainted. | Thank goodness. I almost fainted. | Phew. I nearly fainted.
+ct_nerv_05_1	chatter	chatter	calm	crew	ct_nerv_05	1	both	orbit	any	any	nervous	any	Si me duermo, ¿quién vigila las luces?	If I fall asleep, who watches the lights? | If I fall asleep, who watches the lights? | Who watches the lights when I sleep?
+ct_nerv_05_2	chatter	chatter	calm	crew	ct_nerv_05	2	both	orbit	any	any	nervous	any	Las luces se vigilan solas.	The lights watch themselves. | The lights watch themselves. | They watch themselves.
+ct_nerv_05_3	chatter	chatter	calm	crew	ct_nerv_05	3	both	orbit	any	any	nervous	any	Eso es justo lo que me preocupa.	That's exactly what worries me. | That's exactly what worries me. | That's what scares me.
+ct_nerv_06_1	chatter	chatter	tense	crew	ct_nerv_06	1	both	any	q	any	nervous	any	Control, esto tiembla. Y yo también.	Control, this is shaking. And so am I. | Control, this is shaking. And so am I. | Control, the ship shakes. Me too.
+ct_nerv_06_2	chatter	chatter	tense	mc	ct_nerv_06	2	m	any	q	any	nervous	any	Recibido. Los dos vais a estar bien.	Copy. You'll both be fine. | Copy. You'll both be fine. | Copy. You'll both survive.
+ct_brave_01_1	chatter	chatter	calm	crew	ct_brave_01	1	both	goofy	any	any	brave	any	Control, me ofrezco para la próxima misión. Y para la siguiente.	Control, I volunteer for the next mission. And the one after. | Control, I volunteer for the next mission. And the one after. | Control, sign me up for the next mission. And the next.
+ct_brave_01_2	chatter	chatter	calm	mc	ct_brave_01	2	m	goofy	any	any	brave	any	Primero termina esta, por favor.	Finish this one first, please. | Finish this one first, please. | This one first, please.
+ct_brave_02_1	chatter	chatter	tense	crew	ct_brave_02	1	both	any	spin	any	brave	any	Giramos. Lo tengo, Control, ya lo freno.	We're spinning. I've got it, Control, slowing it down. | We're spinning. I've got it, Control, slowing it down. | Spinning. I have it, Control. Slowing down.
+ct_brave_02_2	chatter	chatter	tense	mc	ct_brave_02	2	m	any	spin	any	brave	any	Recibido. Con calma.	Copy. Take it easy. | Copy. Take it easy. | Copy. Easy does it.
+ct_brave_03_1	chatter	chatter	calm	crew	ct_brave_03	1	both	landed	any	any	brave	any	¿Quién quiere salir primero a la superficie?	Who wants to go out on the surface first? | Who wants to go out on the surface first? | Who's first out onto {here}?
+ct_brave_03_2	chatter	chatter	calm	crew	ct_brave_03	2	both	landed	any	any	brave	any	Tú. Siempre tú.	You. Always you. | You. Always you. | You are. As always.
+ct_brave_03_3	chatter	chatter	calm	crew	ct_brave_03	3	both	landed	any	any	brave	any	¡Perfecto!	Perfect! | Perfect! | Great!
+ct_brave_04_1	chatter	chatter	tense	crew	ct_brave_04	1	both	any	ground	any	brave	any	Suelo cerca. Agarraos, que esto lo aterrizo yo.	Ground's close. Hold on, I'm landing this. | Ground's close. Hold on, I'm landing this. | Close to the ground. I'm landing it.
+ct_brave_04_2	chatter	chatter	tense	mc	ct_brave_04	2	m	any	ground	any	brave	any	Recibido. Suave, por favor.	Copy. Gently, please. | Copy. Gently, please. | Copy. Softly, please.
+ct_brave_05_1	chatter	chatter	calm	crew	ct_brave_05	1	both	goofy	any	any	brave	any	Si nos perdemos, yo exploro primero.	If we get lost, I'll scout ahead first. | If we get lost, I'll scout ahead first. | If we're lost, I'll go first.
+ct_brave_05_2	chatter	chatter	calm	crew	ct_brave_05	2	both	goofy	any	any	brave	any	¿Y si hay monstruos?	And if there are monsters? | And if there are monsters? | What about monsters?
+ct_brave_05_3	chatter	chatter	calm	crew	ct_brave_05	3	both	goofy	any	any	brave	any	Pues les digo hola.	Then I'll say hi. | Then I'll say hi. | I'll wave.
+ct_brave_06_1	chatter	chatter	calm	crew	ct_brave_06	1	both	goofy	any	any	brave	any	Control, ¿cuál es el sitio más lejano? Vamos allí.	Control, what's the farthest place? Let's go there. | Control, what's the farthest place? Let's go there. | Control, where's the farthest place? I want to go.
+ct_brave_06_2	chatter	chatter	calm	mc	ct_brave_06	2	m	goofy	any	any	brave	any	Primero volved a casa, por favor.	First come home, please. | First come home, please. | Home first, please.
+ct_vet_01_1	chatter	chatter	tense	crew	ct_vet_01	1	both	any	heat	any	veteran	any	Sube la temperatura. He visto cosas peores. Seguimos.	Temperature's rising. I've seen worse. Carrying on. | Temperature's rising. I've seen worse. Carrying on. | Getting hot. Seen worse. Continuing.
+ct_vet_01_2	chatter	chatter	tense	mc	ct_vet_01	2	m	any	heat	any	veteran	any	Recibido. Se nota la experiencia.	Copy. Experience shows. | Copy. Experience shows. | Copy. You can tell you've done this before.
+ct_vet_02_1	chatter	chatter	calm	crew	ct_vet_02	1	both	orbit	any	any	veteran	any	Otra órbita, otra vista bonita. Nunca me canso.	Another orbit, another pretty view. Never gets old. | Another orbit, another pretty view. Never gets old. | Another orbit of {here}. Still pretty.
+ct_vet_02_2	chatter	chatter	calm	mc	ct_vet_02	2	m	orbit	any	any	veteran	any	Para eso estáis ahí.	That's what you're there for. | That's what you're there for. | That's the job.
+ct_vet_03_1	chatter	chatter	calm	crew	ct_vet_03	1	both	goofy	any	any	veteran	any	La primera vez yo también lo tocaba todo.	The first time, I touched everything too. | The first time, I touched everything too. | My first flight, I touched everything too.
+ct_vet_03_2	chatter	chatter	calm	crew	ct_vet_03	2	both	goofy	any	any	veteran	any	¿Y qué pasó?	And what happened? | And what happened? | And then?
+ct_vet_03_3	chatter	chatter	calm	crew	ct_vet_03	3	both	goofy	any	any	veteran	any	Que ahora hay más botones de emergencia.	Now there are more emergency buttons. | Now there are more emergency buttons. | They added more emergency buttons.
+ct_vet_04_1	chatter	chatter	tense	crew	ct_vet_04	1	both	any	impulse	any	veteran	any	Un golpe de nada. Los he tenido peores.	Just a small bump. I've had worse. | Just a small bump. I've had worse. | Small bump. Had worse.
+ct_vet_04_2	chatter	chatter	tense	mc	ct_vet_04	2	m	any	impulse	any	veteran	any	Recibido. Revisad la estructura.	Copy. Check the structure. | Copy. Check the structure. | Copy. Check the structure anyway.
+ct_pil_01_1	chatter	chatter	calm	crew	ct_pil_01	1	both	orbit	any	pilot	any	any	Control, ¿habéis visto esa maniobra? Perfecta.	Control, did you see that maneuver? Perfect. | Control, did you see that maneuver? Perfect. | Control, perfect maneuver. Did you see?
+ct_pil_01_2	chatter	chatter	calm	mc	ct_pil_01	2	m	orbit	any	pilot	any	any	La hemos visto. Un poco torcida.	We saw it. A bit crooked. | We saw it. A bit crooked. | Saw it. Slightly crooked.
+ct_pil_02_1	chatter	chatter	calm	crew	ct_pil_02	1	both	landed	any	pilot	any	any	Aterrizaje suave. Ni una taza en el suelo.	Smooth landing. Not a single cup on the floor. | Smooth landing. Not a single cup on the floor. | Soft landing. Nothing fell over.
+ct_pil_02_2	chatter	chatter	calm	mc	ct_pil_02	2	m	landed	any	pilot	any	any	Buen trabajo. Enhorabuena.	Good job. Congratulations. | Good job. Congratulations. | Nice work. Congrats.
+ct_pil_03_1	chatter	chatter	calm	crew	ct_pil_03	1	both	goofy	any	pilot	any	any	¿Quién ha tocado mis mandos?	Who touched my controls? | Who touched my controls? | Has someone been touching my controls?
+ct_pil_03_2	chatter	chatter	calm	crew	ct_pil_03	2	both	goofy	any	pilot	any	any	Nadie. Bueno, yo. Un poquito.	Nobody. Well, me. A little. | Nobody. Well, me. A little. | Nobody. Okay, me. A bit.
+ct_pil_03_3	chatter	chatter	calm	crew	ct_pil_03	3	both	goofy	any	pilot	any	any	Pues no los toques. Aquí piloto yo.	Then don't touch them. I'm the pilot here. | Then don't touch them. I'm the pilot here. | Don't. I'm the pilot.
+ct_pil_04_1	chatter	chatter	calm	crew	ct_pil_04	1	both	orbit	any	pilot	any	any	Agarraos, voy a girar la nave.	Hold on, I'm going to turn the ship. | Hold on, I'm going to turn the ship. | Hang on, turning the ship.
+ct_pil_04_2	chatter	chatter	calm	crew	ct_pil_04	2	both	orbit	any	pilot	any	any	¿Otra vez?	Again? | Again? | Again?!
+ct_pil_04_3	chatter	chatter	calm	crew	ct_pil_04	3	both	orbit	any	pilot	any	any	Es por la vista. Confiad en mí.	It's for the view. Trust me. | It's for the view. Trust me. | Better view. Trust me.
+ct_pil_05_1	chatter	chatter	calm	crew	ct_pil_05	1	both	serious	any	pilot	any	any	Rumbo estable. Mantengo la orientación.	Heading stable. Holding attitude. | Heading stable. Holding attitude. | Stable heading. Attitude held.
 ct_pil_05_2	chatter	chatter	calm	mc	ct_pil_05	2	m	serious	any	pilot	any	any	Recibido.	Copy.
-ct_pil_06_1	chatter	chatter	calm	crew	ct_pil_06	1	both	orbit	any	pilot	any	any	Control, orientado a prógrado. Todo listo.	Control, pointed prograde. All set.
-ct_pil_06_2	chatter	chatter	calm	mc	ct_pil_06	2	m	orbit	any	pilot	any	any	Recibido. Orientación confirmada.	Copy. Attitude confirmed.
-ct_pil_07_1	chatter	chatter	calm	crew	ct_pil_07	1	both	orbit	any	pilot	any	any	Control, esta nave se maneja de maravilla.	Control, this ship handles like a dream.
-ct_pil_07_2	chatter	chatter	calm	mc	ct_pil_07	2	m	orbit	any	pilot	any	any	Porque la llevas tú.	Because you're the one flying it.
-ct_pil_08_1	chatter	chatter	calm	crew	ct_pil_08	1	both	landed	any	pilot	any	any	¿Habéis visto ese aterrizaje? Ni un rebote.	Did you see that landing? Not one bounce.
-ct_pil_08_2	chatter	chatter	calm	crew	ct_pil_08	2	both	landed	any	pilot	any	any	Rebotamos tres veces.	We bounced three times.
-ct_pil_08_3	chatter	chatter	calm	crew	ct_pil_08	3	both	landed	any	pilot	any	any	Esos no cuentan como rebotes.	Those don't count as bounces.
-ct_eng_01_1	chatter	chatter	calm	crew	ct_eng_01	1	both	goofy	any	engineer	any	any	Control, he ajustado los giroscopios. Creo que van mejor.	Control, I tuned the gyros. I think they're better.
-ct_eng_01_2	chatter	chatter	calm	mc	ct_eng_01	2	m	goofy	any	engineer	any	any	¿Crees?	You think?
-ct_eng_01_3	chatter	chatter	calm	crew	ct_eng_01	3	both	goofy	any	engineer	any	any	Al noventa por ciento, sí.	Ninety percent, yes.
-ct_eng_02_1	chatter	chatter	calm	crew	ct_eng_02	1	both	goofy	any	engineer	any	any	¿Quién ha usado mi cinta adhesiva?	Who used my duct tape?
-ct_eng_02_2	chatter	chatter	calm	crew	ct_eng_02	2	both	goofy	any	engineer	any	any	Arreglé la ventana.	I fixed the window.
-ct_eng_02_3	chatter	chatter	calm	crew	ct_eng_02	3	both	goofy	any	engineer	any	any	Eso no se arregla con cinta.	That doesn't get fixed with tape.
+ct_pil_06_1	chatter	chatter	calm	crew	ct_pil_06	1	both	orbit	any	pilot	any	any	Control, orientado a prógrado. Todo listo.	Control, pointed prograde. All set. | Control, pointed prograde. All set. | Control, prograde. Ready.
+ct_pil_06_2	chatter	chatter	calm	mc	ct_pil_06	2	m	orbit	any	pilot	any	any	Recibido. Orientación confirmada.	Copy. Attitude confirmed. | Copy. Attitude confirmed. | Copy. Attitude looks good.
+ct_pil_07_1	chatter	chatter	calm	crew	ct_pil_07	1	both	orbit	any	pilot	any	any	Control, esta nave se maneja de maravilla.	Control, this ship handles like a dream. | Control, this ship handles like a dream. | Control, {vessel} flies like a dream.
+ct_pil_07_2	chatter	chatter	calm	mc	ct_pil_07	2	m	orbit	any	pilot	any	any	Porque la llevas tú.	Because you're the one flying it. | Because you're the one flying it. | That's because you fly it.
+ct_pil_08_1	chatter	chatter	calm	crew	ct_pil_08	1	both	landed	any	pilot	any	any	¿Habéis visto ese aterrizaje? Ni un rebote.	Did you see that landing? Not one bounce. | Did you see that landing? Not one bounce. | That landing? Zero bounces.
+ct_pil_08_2	chatter	chatter	calm	crew	ct_pil_08	2	both	landed	any	pilot	any	any	Rebotamos tres veces.	We bounced three times. | We bounced three times. | Three bounces.
+ct_pil_08_3	chatter	chatter	calm	crew	ct_pil_08	3	both	landed	any	pilot	any	any	Esos no cuentan como rebotes.	Those don't count as bounces. | Those don't count as bounces. | Those were hops. Not bounces.
+ct_eng_01_1	chatter	chatter	calm	crew	ct_eng_01	1	both	goofy	any	engineer	any	any	Control, he ajustado los giroscopios. Creo que van mejor.	Control, I tuned the gyros. I think they're better. | Control, I tuned the gyros. I think they're better. | Control, I adjusted the gyros. Better now, I think.
+ct_eng_01_2	chatter	chatter	calm	mc	ct_eng_01	2	m	goofy	any	engineer	any	any	¿Crees?	You think? | You think? | Only think?
+ct_eng_01_3	chatter	chatter	calm	crew	ct_eng_01	3	both	goofy	any	engineer	any	any	Al noventa por ciento, sí.	Ninety percent, yes. | Ninety percent, yes. | Ninety percent sure.
+ct_eng_02_1	chatter	chatter	calm	crew	ct_eng_02	1	both	goofy	any	engineer	any	any	¿Quién ha usado mi cinta adhesiva?	Who used my duct tape? | Who used my duct tape? | Where's my duct tape?
+ct_eng_02_2	chatter	chatter	calm	crew	ct_eng_02	2	both	goofy	any	engineer	any	any	Arreglé la ventana.	I fixed the window. | I fixed the window. | Used it on the window.
+ct_eng_02_3	chatter	chatter	calm	crew	ct_eng_02	3	both	goofy	any	engineer	any	any	Eso no se arregla con cinta.	That doesn't get fixed with tape. | That doesn't get fixed with tape. | You can't tape a window.
 ct_eng_03_1	chatter	chatter	calm	crew	ct_eng_03	1	both	any	any	engineer	any	any	Control, combustible equilibrado entre los tanques.	Control, fuel balanced between the tanks.
 ct_eng_03_2	chatter	chatter	calm	mc	ct_eng_03	2	m	any	any	engineer	any	any	Recibido, gracias.	Copy, thanks.
-ct_eng_04_1	chatter	chatter	calm	crew	ct_eng_04	1	both	serious	any	engineer	any	any	Sistemas estables. Todo en verde.	Systems stable. All green.
-ct_eng_04_2	chatter	chatter	calm	mc	ct_eng_04	2	m	serious	any	engineer	any	any	Recibido. Buen informe.	Copy. Good report.
-ct_eng_05_1	chatter	chatter	calm	crew	ct_eng_05	1	both	goofy	any	engineer	any	any	Este ruido no salía en el manual.	This noise wasn't in the manual.
-ct_eng_05_2	chatter	chatter	calm	crew	ct_eng_05	2	both	goofy	any	engineer	any	any	¿Lo puedes arreglar?	Can you fix it?
-ct_eng_05_3	chatter	chatter	calm	crew	ct_eng_05	3	both	goofy	any	engineer	any	any	Claro. Primero le doy un golpecito.	Sure. First I'll give it a little tap.
-ct_eng_06_1	chatter	chatter	calm	crew	ct_eng_06	1	both	landed	any	engineer	any	any	Control, he desmontado una pieza. Sobra un tornillo.	Control, I took a part apart. There's a spare bolt.
-ct_eng_06_2	chatter	chatter	calm	mc	ct_eng_06	2	m	landed	any	engineer	any	any	Vuelve a ponerlo. Ahora.	Put it back. Now.
-ct_eng_07_1	chatter	chatter	calm	crew	ct_eng_07	1	both	orbit	any	engineer	any	any	Sumando los tanques, nos queda bastante combustible.	Adding up the tanks, we have plenty of fuel left.
-ct_eng_07_2	chatter	chatter	calm	crew	ct_eng_07	2	both	orbit	any	engineer	any	any	¿De verdad?	Really?
-ct_eng_07_3	chatter	chatter	calm	crew	ct_eng_07	3	both	orbit	any	engineer	any	any	Más o menos. Lo calculé en una servilleta.	More or less. I did the math on a napkin.
-ct_eng_08_1	chatter	chatter	calm	crew	ct_eng_08	1	both	goofy	any	engineer	any	any	Control, todo funciona. Casi me da miedo.	Control, everything works. It's almost scary.
-ct_eng_08_2	chatter	chatter	calm	mc	ct_eng_08	2	m	goofy	any	engineer	any	any	Disfrútalo mientras dure.	Enjoy it while it lasts.
-ct_sci_01_1	chatter	chatter	calm	crew	ct_sci_01	1	both	goofy	any	scientist	any	any	Control, tengo datos nuevos. Muchísimos datos.	Control, I have new data. So much data.
-ct_sci_01_2	chatter	chatter	calm	mc	ct_sci_01	2	m	goofy	any	scientist	any	any	Envíalos cuando puedas.	Send them when you can.
-ct_sci_02_1	chatter	chatter	calm	crew	ct_sci_02	1	both	landed	any	scientist	any	any	No pises esa roca. Es una muestra.	Don't step on that rock. It's a sample.
-ct_sci_02_2	chatter	chatter	calm	crew	ct_sci_02	2	both	landed	any	scientist	any	any	Para ti todas las rocas son muestras.	To you, every rock is a sample.
-ct_sci_02_3	chatter	chatter	calm	crew	ct_sci_02	3	both	landed	any	scientist	any	any	Exacto.	Exactly.
-ct_sci_03_1	chatter	chatter	calm	crew	ct_sci_03	1	both	orbit	any	scientist	any	any	¿Puedo medir cuánto roncas?	Can I measure how loud you snore?
-ct_sci_03_2	chatter	chatter	calm	crew	ct_sci_03	2	both	orbit	any	scientist	any	any	No.	No.
-ct_sci_03_3	chatter	chatter	calm	crew	ct_sci_03	3	both	orbit	any	scientist	any	any	Ya lo he medido. Es mucho.	I already measured it. It's a lot.
-ct_sci_04_1	chatter	chatter	calm	crew	ct_sci_04	1	both	goofy	any	scientist	any	any	Control, mi hipótesis es que el espacio es grande.	Control, my hypothesis is that space is big.
-ct_sci_04_2	chatter	chatter	calm	mc	ct_sci_04	2	m	goofy	any	scientist	any	any	Hipótesis confirmada.	Hypothesis confirmed.
+ct_eng_04_1	chatter	chatter	calm	crew	ct_eng_04	1	both	serious	any	engineer	any	any	Sistemas estables. Todo en verde.	Systems stable. All green. | Systems stable. All green. | All systems green.
+ct_eng_04_2	chatter	chatter	calm	mc	ct_eng_04	2	m	serious	any	engineer	any	any	Recibido. Buen informe.	Copy. Good report. | Copy. Good report. | Copy. Nice report.
+ct_eng_05_1	chatter	chatter	calm	crew	ct_eng_05	1	both	goofy	any	engineer	any	any	Este ruido no salía en el manual.	This noise wasn't in the manual. | This noise wasn't in the manual. | The manual doesn't have this noise.
+ct_eng_05_2	chatter	chatter	calm	crew	ct_eng_05	2	both	goofy	any	engineer	any	any	¿Lo puedes arreglar?	Can you fix it? | Can you fix it? | Fixable?
+ct_eng_05_3	chatter	chatter	calm	crew	ct_eng_05	3	both	goofy	any	engineer	any	any	Claro. Primero le doy un golpecito.	Sure. First I'll give it a little tap. | Sure. First I'll give it a little tap. | Sure. A little tap first.
+ct_eng_06_1	chatter	chatter	calm	crew	ct_eng_06	1	both	landed	any	engineer	any	any	Control, he desmontado una pieza. Sobra un tornillo.	Control, I took a part apart. There's a spare bolt. | Control, I took a part apart. There's a spare bolt. | Control, I took something apart. One bolt left over.
+ct_eng_06_2	chatter	chatter	calm	mc	ct_eng_06	2	m	landed	any	engineer	any	any	Vuelve a ponerlo. Ahora.	Put it back. Now. | Put it back. Now. | Put it back. Right now.
+ct_eng_07_1	chatter	chatter	calm	crew	ct_eng_07	1	both	orbit	any	engineer	any	any	Sumando los tanques, nos queda bastante combustible.	Adding up the tanks, we have plenty of fuel left. | Adding up the tanks, we have plenty of fuel left. | All tanks together, lots of fuel left.
+ct_eng_07_2	chatter	chatter	calm	crew	ct_eng_07	2	both	orbit	any	engineer	any	any	¿De verdad?	Really? | Really? | Sure?
+ct_eng_07_3	chatter	chatter	calm	crew	ct_eng_07	3	both	orbit	any	engineer	any	any	Más o menos. Lo calculé en una servilleta.	More or less. I did the math on a napkin. | More or less. I did the math on a napkin. | Roughly. Napkin math.
+ct_eng_08_1	chatter	chatter	calm	crew	ct_eng_08	1	both	goofy	any	engineer	any	any	Control, todo funciona. Casi me da miedo.	Control, everything works. It's almost scary. | Control, everything works. It's almost scary. | Control, it all works. That scares me.
+ct_eng_08_2	chatter	chatter	calm	mc	ct_eng_08	2	m	goofy	any	engineer	any	any	Disfrútalo mientras dure.	Enjoy it while it lasts. | Enjoy it while it lasts. | Enjoy it. It won't last.
+ct_sci_01_1	chatter	chatter	calm	crew	ct_sci_01	1	both	goofy	any	scientist	any	any	Control, tengo datos nuevos. Muchísimos datos.	Control, I have new data. So much data. | Control, I have new data. So much data. | Control, new data. Tons of it.
+ct_sci_01_2	chatter	chatter	calm	mc	ct_sci_01	2	m	goofy	any	scientist	any	any	Envíalos cuando puedas.	Send them when you can. | Send them when you can. | Send it when you're ready.
+ct_sci_02_1	chatter	chatter	calm	crew	ct_sci_02	1	both	landed	any	scientist	any	any	No pises esa roca. Es una muestra.	Don't step on that rock. It's a sample. | Don't step on that rock. It's a sample. | Careful. That rock is a sample.
+ct_sci_02_2	chatter	chatter	calm	crew	ct_sci_02	2	both	landed	any	scientist	any	any	Para ti todas las rocas son muestras.	To you, every rock is a sample. | To you, every rock is a sample. | Every rock is a sample to you.
+ct_sci_02_3	chatter	chatter	calm	crew	ct_sci_02	3	both	landed	any	scientist	any	any	Exacto.	Exactly. | Exactly. | Correct.
+ct_sci_03_1	chatter	chatter	calm	crew	ct_sci_03	1	both	orbit	any	scientist	any	any	¿Puedo medir cuánto roncas?	Can I measure how loud you snore? | Can I measure how loud you snore? | I want to measure your snoring.
+ct_sci_03_2	chatter	chatter	calm	crew	ct_sci_03	2	both	orbit	any	scientist	any	any	No.	No. | No. | Absolutely not.
+ct_sci_03_3	chatter	chatter	calm	crew	ct_sci_03	3	both	orbit	any	scientist	any	any	Ya lo he medido. Es mucho.	I already measured it. It's a lot. | I already measured it. It's a lot. | Too late. It's loud.
+ct_sci_04_1	chatter	chatter	calm	crew	ct_sci_04	1	both	goofy	any	scientist	any	any	Control, mi hipótesis es que el espacio es grande.	Control, my hypothesis is that space is big. | Control, my hypothesis is that space is big. | Control, new hypothesis: space is big.
+ct_sci_04_2	chatter	chatter	calm	mc	ct_sci_04	2	m	goofy	any	scientist	any	any	Hipótesis confirmada.	Hypothesis confirmed. | Hypothesis confirmed. | Confirmed.
 ct_sci_05_1	chatter	chatter	calm	crew	ct_sci_05	1	both	any	any	scientist	any	any	Control, instrumentos encendidos. Registrando datos.	Control, instruments on. Recording data.
 ct_sci_05_2	chatter	chatter	calm	mc	ct_sci_05	2	m	any	any	scientist	any	any	Recibido. Los datos ya llegan.	Copy. The data is coming in.
-ct_sci_06_1	chatter	chatter	calm	crew	ct_sci_06	1	both	goofy	any	scientist	any	any	¿Has guardado tu bocadillo en mi caja de muestras?	Did you put your sandwich in my sample box?
-ct_sci_06_2	chatter	chatter	calm	crew	ct_sci_06	2	both	goofy	any	scientist	any	any	No había otro sitio.	There was nowhere else.
-ct_sci_06_3	chatter	chatter	calm	crew	ct_sci_06	3	both	goofy	any	scientist	any	any	Pues ahora es un experimento.	Well, now it's an experiment.
-ct_sci_07_1	chatter	chatter	calm	crew	ct_sci_07	1	both	landed	any	scientist	any	any	Control, este suelo sabe a ciencia.	Control, this soil tastes like science.
-ct_sci_07_2	chatter	chatter	calm	mc	ct_sci_07	2	m	landed	any	scientist	any	any	Por favor, no lo pruebes.	Please don't taste it.
-ct_sci_08_1	chatter	chatter	calm	crew	ct_sci_08	1	both	goofy	any	scientist	any	any	Necesito a alguien para un experimento.	I need a volunteer for an experiment.
-ct_sci_08_2	chatter	chatter	calm	crew	ct_sci_08	2	both	goofy	any	scientist	any	any	¿Duele?	Does it hurt?
-ct_sci_08_3	chatter	chatter	calm	crew	ct_sci_08	3	both	goofy	any	scientist	any	any	Eso es lo que quiero averiguar.	That's what I want to find out.
-ct_tour_01_1	chatter	chatter	calm	crew	ct_tour_01	1	both	goofy	any	tourist	any	any	Control, ¿a qué hora sirven la cena?	Control, what time is dinner served?
-ct_tour_01_2	chatter	chatter	calm	mc	ct_tour_01	2	m	goofy	any	tourist	any	any	Cuando quieras. Hay puré en tubo.	Whenever you like. There's mash in a tube.
-ct_tour_02_1	chatter	chatter	calm	crew	ct_tour_02	1	both	orbit	any	tourist	any	any	¿Puedo hacer una foto por la ventana?	Can I take a photo out the window?
-ct_tour_02_2	chatter	chatter	calm	crew	ct_tour_02	2	both	orbit	any	tourist	any	any	Claro.	Sure.
-ct_tour_02_3	chatter	chatter	calm	crew	ct_tour_02	3	both	orbit	any	tourist	any	any	¿Y otra? ¿Y otras cien?	And another? And a hundred more?
-ct_tour_03_1	chatter	chatter	calm	crew	ct_tour_03	1	both	landed	any	tourist	any	any	Control, ¿dónde están los baños?	Control, where are the restrooms?
-ct_tour_03_2	chatter	chatter	calm	mc	ct_tour_03	2	m	landed	any	tourist	any	any	Buena pregunta. Aguanta un poco.	Good question. Hold it a little longer.
-ct_tour_04_1	chatter	chatter	calm	crew	ct_tour_04	1	both	goofy	any	tourist	any	any	¿Esto entra en el billete?	Is this included in the ticket?
-ct_tour_04_2	chatter	chatter	calm	crew	ct_tour_04	2	both	goofy	any	tourist	any	any	¿El qué?	What is?
-ct_tour_04_3	chatter	chatter	calm	crew	ct_tour_04	3	both	goofy	any	tourist	any	any	Todo. Las estrellas, la vista, todo.	Everything. The stars, the view, all of it.
-ct_tour_05_1	chatter	chatter	calm	crew	ct_tour_05	1	both	orbit	any	tourist	any	any	Control, ¡es precioso! ¡Es todo precioso!	Control, it's beautiful! It's all beautiful!
-ct_tour_05_2	chatter	chatter	calm	mc	ct_tour_05	2	m	orbit	any	tourist	any	any	Nos alegra oírlo. No toques nada.	Glad to hear it. Don't touch anything.
-ct_tour_06_1	chatter	chatter	calm	crew	ct_tour_06	1	both	goofy	any	tourist	any	any	¿Dónde está la tienda de regalos?	Where's the gift shop?
-ct_tour_06_2	chatter	chatter	calm	crew	ct_tour_06	2	both	goofy	any	tourist	any	any	No hay tienda de regalos.	There's no gift shop.
-ct_tour_06_3	chatter	chatter	calm	crew	ct_tour_06	3	both	goofy	any	tourist	any	any	Pues pienso dejar una reseña.	Then I'm leaving a review.
-ct_tour_07_1	chatter	chatter	calm	crew	ct_tour_07	1	both	orbit	any	tourist	any	any	¿Siempre flota así la comida?	Does food always float like this?
-ct_tour_07_2	chatter	chatter	calm	crew	ct_tour_07	2	both	orbit	any	tourist	any	any	Siempre.	Always.
-ct_tour_07_3	chatter	chatter	calm	crew	ct_tour_07	3	both	orbit	any	tourist	any	any	¡Qué maravilla! Se lo voy a contar a todos.	How wonderful! I'm telling everyone.
-ct_tour_08_1	chatter	chatter	calm	crew	ct_tour_08	1	both	landed	any	tourist	any	any	Control, ¿cuándo sale el próximo autobús a casa?	Control, when's the next bus home?
-ct_tour_08_2	chatter	chatter	calm	mc	ct_tour_08	2	m	landed	any	tourist	any	any	Pronto. Disfruta de la vista.	Soon. Enjoy the view.
+ct_sci_06_1	chatter	chatter	calm	crew	ct_sci_06	1	both	goofy	any	scientist	any	any	¿Has guardado tu bocadillo en mi caja de muestras?	Did you put your sandwich in my sample box? | Did you put your sandwich in my sample box? | Why is there a sandwich in my sample box?
+ct_sci_06_2	chatter	chatter	calm	crew	ct_sci_06	2	both	goofy	any	scientist	any	any	No había otro sitio.	There was nowhere else. | There was nowhere else. | No other space.
+ct_sci_06_3	chatter	chatter	calm	crew	ct_sci_06	3	both	goofy	any	scientist	any	any	Pues ahora es un experimento.	Well, now it's an experiment. | Well, now it's an experiment. | It's an experiment now.
+ct_sci_07_1	chatter	chatter	calm	crew	ct_sci_07	1	both	landed	any	scientist	any	any	Control, este suelo sabe a ciencia.	Control, this soil tastes like science. | Control, this soil tastes like science. | Control, the soil on {here} tastes like science.
+ct_sci_07_2	chatter	chatter	calm	mc	ct_sci_07	2	m	landed	any	scientist	any	any	Por favor, no lo pruebes.	Please don't taste it. | Please don't taste it. | Stop tasting it.
+ct_sci_08_1	chatter	chatter	calm	crew	ct_sci_08	1	both	goofy	any	scientist	any	any	Necesito a alguien para un experimento.	I need a volunteer for an experiment. | I need a volunteer for an experiment. | Any volunteers for an experiment?
+ct_sci_08_2	chatter	chatter	calm	crew	ct_sci_08	2	both	goofy	any	scientist	any	any	¿Duele?	Does it hurt? | Does it hurt? | Will it hurt?
+ct_sci_08_3	chatter	chatter	calm	crew	ct_sci_08	3	both	goofy	any	scientist	any	any	Eso es lo que quiero averiguar.	That's what I want to find out. | That's what I want to find out. | That's the experiment.
+ct_tour_01_1	chatter	chatter	calm	crew	ct_tour_01	1	both	goofy	any	tourist	any	any	Control, ¿a qué hora sirven la cena?	Control, what time is dinner served? | Control, what time is dinner served? | Control, when's dinner?
+ct_tour_01_2	chatter	chatter	calm	mc	ct_tour_01	2	m	goofy	any	tourist	any	any	Cuando quieras. Hay puré en tubo.	Whenever you like. There's mash in a tube. | Whenever you like. There's mash in a tube. | Any time. There's {food}.
+ct_tour_02_1	chatter	chatter	calm	crew	ct_tour_02	1	both	orbit	any	tourist	any	any	¿Puedo hacer una foto por la ventana?	Can I take a photo out the window? | Can I take a photo out the window? | Photo out the window?
+ct_tour_02_2	chatter	chatter	calm	crew	ct_tour_02	2	both	orbit	any	tourist	any	any	Claro.	Sure. | Sure. | Go ahead.
+ct_tour_02_3	chatter	chatter	calm	crew	ct_tour_02	3	both	orbit	any	tourist	any	any	¿Y otra? ¿Y otras cien?	And another? And a hundred more? | And another? And a hundred more? | And a hundred more?
+ct_tour_03_1	chatter	chatter	calm	crew	ct_tour_03	1	both	landed	any	tourist	any	any	Control, ¿dónde están los baños?	Control, where are the restrooms? | Control, where are the restrooms? | Control, where's the bathroom?
+ct_tour_03_2	chatter	chatter	calm	mc	ct_tour_03	2	m	landed	any	tourist	any	any	Buena pregunta. Aguanta un poco.	Good question. Hold it a little longer. | Good question. Hold it a little longer. | Great question. Hold it.
+ct_tour_04_1	chatter	chatter	calm	crew	ct_tour_04	1	both	goofy	any	tourist	any	any	¿Esto entra en el billete?	Is this included in the ticket? | Is this included in the ticket? | Was this part of the ticket?
+ct_tour_04_2	chatter	chatter	calm	crew	ct_tour_04	2	both	goofy	any	tourist	any	any	¿El qué?	What is? | What is? | What?
+ct_tour_04_3	chatter	chatter	calm	crew	ct_tour_04	3	both	goofy	any	tourist	any	any	Todo. Las estrellas, la vista, todo.	Everything. The stars, the view, all of it. | Everything. The stars, the view, all of it. | All of it. Stars and view.
+ct_tour_05_1	chatter	chatter	calm	crew	ct_tour_05	1	both	orbit	any	tourist	any	any	Control, ¡es precioso! ¡Es todo precioso!	Control, it's beautiful! It's all beautiful! | Control, it's beautiful! It's all beautiful! | Control, so beautiful!
+ct_tour_05_2	chatter	chatter	calm	mc	ct_tour_05	2	m	orbit	any	tourist	any	any	Nos alegra oírlo. No toques nada.	Glad to hear it. Don't touch anything. | Glad to hear it. Don't touch anything. | Good. Touch nothing.
+ct_tour_06_1	chatter	chatter	calm	crew	ct_tour_06	1	both	goofy	any	tourist	any	any	¿Dónde está la tienda de regalos?	Where's the gift shop? | Where's the gift shop? | Is there a gift shop?
+ct_tour_06_2	chatter	chatter	calm	crew	ct_tour_06	2	both	goofy	any	tourist	any	any	No hay tienda de regalos.	There's no gift shop. | There's no gift shop. | No gift shop.
+ct_tour_06_3	chatter	chatter	calm	crew	ct_tour_06	3	both	goofy	any	tourist	any	any	Pues pienso dejar una reseña.	Then I'm leaving a review. | Then I'm leaving a review. | One star, then.
+ct_tour_07_1	chatter	chatter	calm	crew	ct_tour_07	1	both	orbit	any	tourist	any	any	¿Siempre flota así la comida?	Does food always float like this? | Does food always float like this? | Food floats like this all the time?
+ct_tour_07_2	chatter	chatter	calm	crew	ct_tour_07	2	both	orbit	any	tourist	any	any	Siempre.	Always. | Always. | Every time.
+ct_tour_07_3	chatter	chatter	calm	crew	ct_tour_07	3	both	orbit	any	tourist	any	any	¡Qué maravilla! Se lo voy a contar a todos.	How wonderful! I'm telling everyone. | How wonderful! I'm telling everyone. | Amazing! Telling all my friends.
+ct_tour_08_1	chatter	chatter	calm	crew	ct_tour_08	1	both	landed	any	tourist	any	any	Control, ¿cuándo sale el próximo autobús a casa?	Control, when's the next bus home? | Control, when's the next bus home? | Control, when does the bus back to Kerbin leave?
+ct_tour_08_2	chatter	chatter	calm	mc	ct_tour_08	2	m	landed	any	tourist	any	any	Pronto. Disfruta de la vista.	Soon. Enjoy the view. | Soon. Enjoy the view. | Soon. Enjoy it.
