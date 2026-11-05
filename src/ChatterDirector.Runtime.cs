@@ -104,9 +104,10 @@ namespace Lonapse
         string[] VesselNames()
         {
             Vessel v = ActiveVessel;
-            string say = v != null ? RuntimeLines.VesselSpeakable(v.vesselName) : null;
+            string full = v != null ? Names.Of(v) : null;   // stock craft are named #autoLOC_...
+            string say = full != null && !full.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(full) : null;
             if (say == null) return null;
-            return new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(v.vesselName) };
+            return new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(full) };
         }
 
         // ---------------- lines from the table ----------------
@@ -460,6 +461,7 @@ namespace Lonapse
             string why = RuntimeVoice.Missing("mc");
             if (why != null) return "runtime voice: " + why;
             recentRuntime.Clear();
+            Log.Info("Runtime voice: report from the Debug tab");
             if (!QueueReport()) return "no report fits here (on the pad, or no vessel)";
             return "report requested";
         }

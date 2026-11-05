@@ -265,7 +265,7 @@ namespace Lonapse
                     job.piperMs = (float)job.sw.Elapsed.TotalMilliseconds;
                     try
                     {
-                        byte[] wav = File.ReadAllBytes(job.wavPath);
+                        byte[] wav = ReadWhenClosed(job.wavPath);
                         job.samples = RuntimeSpeech.FromPiperWav(wav, job.pitchSt);
                         if (job.samples == null) job.error = "Piper WAV had no speech";
                     }
@@ -284,6 +284,17 @@ namespace Lonapse
                     j.error = "Piper stopped" + (w.lastErr != null ? ": " + w.lastErr : "");
                     lock (gate) finished.Enqueue(j);
                 }
+        }
+
+        /// <summary>Under Wine Piper can print the path a moment before it closes the file (a sharing violation).
+        /// Tries again for up to half a second.</summary>
+        static byte[] ReadWhenClosed(string path)
+        {
+            for (int i = 0; ; i++)
+            {
+                try { return File.ReadAllBytes(path); }
+                catch (IOException) { if (i >= 25) throw; Thread.Sleep(20); }
+            }
         }
 
         void ErrLoop(Worker w)

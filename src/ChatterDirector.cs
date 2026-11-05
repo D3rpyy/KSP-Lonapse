@@ -265,7 +265,7 @@ namespace Lonapse
                 Vessel v = FlightGlobals.ActiveVessel;
                 if (v != null)
                 {
-                    vessel = v.vesselName;
+                    vessel = Names.Of(v);   // stock craft are named #autoLOC_...
                     alt = v.altitude;
                     if (v.mainBody != null) here = v.mainBody.bodyName;
                 }
@@ -561,14 +561,25 @@ namespace Lonapse
         public void DropMcItems()
         {
             int before = count;
-            KeepOnly(x => !IsMcItem(x.who));
+            // also the crew lines that call Control: nobody would answer them
+            KeepOnly(x => !IsMcItem(x.who) && !(x.who == UttKind.CrewLine && AddressesControl(x.entry)));
             if (before != count) Log.Debug("Blackout: " + (before - count) + " Mission Control item(s) dropped");
         }
 
-        /// <summary>Blackout with crew: a radio scene must start with the crew. Mission Control cannot start one.</summary>
+        /// <summary>Blackout with crew: only radio scenes without Mission Control, and nobody calls Control (user
+        /// report: the crew kept trying to reach Control). The crew knows the radio is out.</summary>
         private bool BlackoutOk(PhraseScene sc)
         {
-            return !mcBlackout || (sc.Lines.Count > 0 && sc.Lines[0].Role == PhraseTable.RoleCrew);
+            if (!mcBlackout) return true;
+            if (sc.Lines.Count == 0 || sc.McLines > 0) return false;
+            for (int i = 0; i < sc.Lines.Count; i++) if (AddressesControl(sc.Lines[i])) return false;
+            return true;
+        }
+
+        /// <summary>A line that talks to Mission Control: "Control" with a capital in any English version.</summary>
+        internal static bool AddressesControl(PhraseEntry e)
+        {
+            return e != null && e.English != null && System.Text.RegularExpressions.Regex.IsMatch(e.English, @"\bControl\b");
         }
 
         private bool HasChatItems()
