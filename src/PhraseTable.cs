@@ -191,6 +191,13 @@ namespace Lonapse
                 bad.Add("bad placeholder(s) {" + string.Join("}, {", unknown.ToArray()) + "}, use {body} or a slot like {name} or {name:2}");
                 return;
             }
+            if (e.English != null && e.English.IndexOf(SubtitleSlots.VersionSep) >= 0)
+            {
+                // versions split by |: each one non-empty, and not together with {body} (that is one row per body)
+                foreach (string v in SubtitleSlots.Versions(e.English))
+                    if (v.Length == 0) { bad.Add("english has an empty version between |"); return; }
+                if (en.Contains("body")) { bad.Add("english versions (|) cannot use {body}"); return; }
+            }
             int bEs = es.FindAll(p => p == "body").Count, bEn = en.FindAll(p => p == "body").Count;
             if (!e.SubtitleOnly && (bEs > 0) != (bEn > 0)) bad.Add("{body} must be in both spanish and english, or in neither");
             else if (bEs > 1 || bEn > 1) bad.Add("{body} at most once per text");
@@ -846,7 +853,7 @@ namespace Lonapse
         {
             get
             {
-                foreach (PhraseEntry e in AllLines) if (SubtitleSlots.HasSlots(e.English)) return true;
+                foreach (PhraseEntry e in AllLines) if (SubtitleSlots.NeedsFill(e.English)) return true;
                 return false;
             }
         }

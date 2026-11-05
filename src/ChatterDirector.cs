@@ -166,7 +166,7 @@ namespace Lonapse
         {
             var lines = PlayLinesRaw(sc);
             bool any = false;
-            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.HasSlots(lines[i].English);
+            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,

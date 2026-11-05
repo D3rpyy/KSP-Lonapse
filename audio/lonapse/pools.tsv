@@ -1,49 +1,90 @@
 # Experimental (procedural talk): values for the subtitle slots in the english column, like {thing}.
-# The audio never says these words. One pool per name, one value per row. Values are lowercase unless a name.
-# Used by audio/build_lonapse.py (validation) and the plugin (GameData/Lonapse/Phrases/pools.tsv).
+# The audio never says these words. One pool per name, one value per row. A value may hold slots itself,
+# so a pool can be a list of whole sentences. Every value must read well in every sentence that uses the
+# pool (the comment above a pool shows a few). Used by audio/build_lonapse.py and the plugin.
 pool	english
-thing	helmet
+# thing: Who took my X? / My X is gone. Again. / Found it. Next to my X.
 thing	left sock
-thing	toothbrush
 thing	lucky rock
-thing	flight manual
-thing	sandwich
-thing	good pen
 thing	rubber duck
-thing	wrench
-thing	snack bag
-thing	comb
-thing	space map
-thing	spare glove
 thing	harmonica
+thing	half-eaten sandwich
+thing	diary
+thing	good spoon
+thing	lucky underpants
+thing	tiny umbrella
+thing	backup snacks
+thing	signed photo of Jeb
+thing	Kerbin snow globe
+thing	moustache comb
+thing	emergency cookie
+thing	pet rock
+thing	inflatable pillow
+thing	lucky wrench
+thing	only clean shirt
+# spot: Look behind the X. / Try the X. / Last time it was under the X.
 spot	seat
 spot	control panel
-spot	oxygen tank
+spot	toilet
 spot	air vent
-spot	toolbox
-spot	hatch
-spot	parachute bag
 spot	snack drawer
+spot	parachute bag
+spot	big red button
+spot	fire extinguisher
+spot	coffee machine
+spot	spare oxygen tank
+# food: Is that X? / Someone ate all the X. / Eat the X. It builds character.
 food	old cheese
-food	burnt toast
-food	snack paste
-food	fish soup
+food	fish paste
 food	boiled cabbage
-food	pickled mystery
-food	egg powder
+food	mystery pickles
+food	tube cheese
 food	space beans
+food	freeze-dried pudding
+food	Jeb's famous chili
+food	three-week-old pizza
+food	burnt toast
+food	egg salad
+food	reheated soup
+# part: The X came loose again. / Is the X supposed to wobble like that? / Tape it, like the X.
 part	antenna
 part	hatch handle
 part	seat belt
-part	left panel
 part	coffee machine
 part	window seal
-part	sun visor
 part	radio knob
 part	toilet lid
+part	steering wheel
+part	heat shield
+part	self-destruct cover
+part	fuel gauge
+part	emergency brake
+# creature: Last night I dreamt about X. It knew my name.
 creature	a giant space whale
 creature	a talking rock
-creature	three tiny moons with faces
 creature	a very polite Kraken
 creature	a goat in a spacesuit
 creature	a cloud made of cake
+creature	a Kraken that wanted a hug
+creature	a sandwich that could fly
+creature	Mission Control, but they were all ducks
+creature	Gene in a tutu
+creature	my own rocket, and it was jealous
+# not_me: X Look behind the toilet. (a whole sentence)
+not_me	Not me.
+not_me	Don't look at me.
+not_me	I didn't touch it.
+not_me	Wasn't me this time.
+not_me	Why do you always ask me?
+not_me	I was asleep.
+not_me	Ask the probe.
+# silly_name: It was that or X.
+silly_name	Rocky McRocketface
+silly_name	Big Tube 2
+silly_name	Untitled Craft 3
+silly_name	Jeb's Revenge
+silly_name	The Flying Pickle
+silly_name	Definitely Safe
+silly_name	Boom Mk1
+silly_name	Not Exploding Yet
+silly_name	Dave

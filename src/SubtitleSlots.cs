@@ -7,6 +7,9 @@
 //   {pool:2}    another value from the same pool, different from {pool} in that scene.
 //   {day} ...   a flight value the director gives (FlightSlots).
 //   {other}     intercom only: the first name of the other kerbal in the chat. {self}: the speaker's own name.
+// A pool value may hold slots itself ("Who took my {thing}?"), so a pool can be a list of whole sentences. And the
+// english of a row may hold versions split by |: "Who took my {thing}? | Has anyone seen my {thing}?". The game
+// picks one version per play. The audio fits every version, because the spanish is general.
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
 using System.Collections.Generic;
@@ -51,9 +54,10 @@ namespace Lonapse
                 if (f.Length != width) { if (errors != null) errors.Add("pools line " + (i + 1) + ": expected " + width + " columns"); continue; }
                 string name = f[iPool].Trim(), val = f[iEn].Trim();
                 if (!SubtitleSlots.IsSlotName(name)) { if (errors != null) errors.Add("pools line " + (i + 1) + ": pool '" + name + "' must match [a-z_]+"); continue; }
-                if (val.Length == 0 || val.IndexOf('{') >= 0 || val.IndexOf('}') >= 0)
+                string why = SubtitleSlots.ValueProblem(val);
+                if (why != null)
                 {
-                    if (errors != null) errors.Add("pools line " + (i + 1) + ": value must be non-empty text without { }");
+                    if (errors != null) errors.Add("pools line " + (i + 1) + ": " + why);
                     continue;
                 }
                 if (SubtitleSlots.IsReserved(name)) { if (errors != null) errors.Add("pools line " + (i + 1) + ": '" + name + "' is a reserved slot name"); continue; }
@@ -104,12 +108,47 @@ namespace Lonapse
             return r;
         }
 
+        /// <summary>Most levels of pool values inside pool values. Deeper slots give "...". The build script checks
+        /// that pools do not refer to each other in a circle.</summary>
+        public const int MaxDepth = 6;
+        public const char VersionSep = '|';
+
+        /// <summary>A pool value is non-empty, has no | and only well-formed slots (no {body}). Null when it is fine.</summary>
+        public static string ValueProblem(string val)
+        {
+            if (string.IsNullOrEmpty(val) || val.Trim().Length == 0) return "value is empty";
+            if (val.IndexOf(VersionSep) >= 0) return "a value cannot hold |, give each version its own row";
+            string rest = SlotRe.Replace(val, "");
+            if (rest.IndexOf('{') >= 0 || rest.IndexOf('}') >= 0) return "value has a bad slot, use {name} or {name:2}";
+            foreach (Match m in SlotRe.Matches(val))
+                if (m.Groups[1].Value == "body") return "{body} cannot be used in a pool value";
+            return null;
+        }
+
+        /// <summary>True when the english needs Fill: it has slots or versions split by |.</summary>
+        public static bool NeedsFill(string text)
+        {
+            return !string.IsNullOrEmpty(text) && (text.IndexOf(VersionSep) >= 0 || SlotRe.IsMatch(text));
+        }
+
+        /// <summary>The versions of an english text split by |, trimmed. A text without | is one version.</summary>
+        public static List<string> Versions(string text)
+        {
+            var r = new List<string>();
+            if (text == null) return r;
+            foreach (string part in text.Split(VersionSep)) r.Add(part.Trim());
+            return r;
+        }
+
         /// <summary>
-        /// Fills the slots of one scene. Lines without slots are returned as they are, a line with slots as a copy
+        /// Fills the slots of one scene. Lines that need nothing are returned as they are, any other line as a copy
         /// with the filled English (the clip key stays, so the same clip plays and the memory works as before).
+        /// For a line with versions (|) one version is picked first, with pick("version:" + clip key, indices).
         /// <paramref name="values"/> holds the flight values. <paramref name="lineValues"/> (may be null) gives extra
         /// values per line index, for {other} and {self}. Pool values come from <paramref name="pick"/> (pool, values),
-        /// so the caller can use the line memory. A slot that cannot be filled becomes "..." and goes to unresolved.
+        /// so the caller can use the line memory. A pool value can hold slots, those are filled too. The same slot
+        /// gives the same text in every line of the scene. A slot that cannot be filled becomes "..." and goes to
+        /// unresolved.
         /// </summary>
         public static List<PhraseEntry> Fill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
                                              Func<int, IDictionary<string, string>> lineValues,
@@ -117,53 +156,88 @@ namespace Lonapse
         {
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
-            // one value per slot (and per :n) for the whole scene
-            var chosen = new Dictionary<string, string>();
+            var st = new FillState();
+            st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved;
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
-                if (e == null || !HasSlots(e.English)) { r.Add(e); continue; }
-                IDictionary<string, string> per = lineValues != null ? lineValues(i) : null;
-                string src = e.English;
-                var sb = new System.Text.StringBuilder(src.Length + 16);
-                int at = 0;
-                foreach (Match m in SlotRe.Matches(src))
-                {
-                    sb.Append(src, at, m.Index - at);
-                    string v = Resolve(m, e, i, pools, values, per, pick, chosen, unresolved);
-                    sb.Append(AtSentenceStart(src, m.Index) ? CapFirst(v) : v);
-                    at = m.Index + m.Length;
-                }
-                sb.Append(src, at, src.Length - at);
-                r.Add(CopyWithEnglish(e, sb.ToString()));
+                if (e == null || !NeedsFill(e.English)) { r.Add(e); continue; }
+                st.per = lineValues != null ? lineValues(i) : null;
+                st.where = e.ClipKey + " (line " + i + ")";
+                string src = PickVersion(e, pick);
+                r.Add(CopyWithEnglish(e, Expand(src, true, 0, st)));
             }
             return r;
         }
 
-        static string Resolve(Match m, PhraseEntry e, int line, SlotPools pools, IDictionary<string, string> values,
-                              IDictionary<string, string> per, Func<string, IList<string>, string> pick,
-                              Dictionary<string, string> chosen, List<string> unresolved)
+        sealed class FillState
+        {
+            public SlotPools pools;
+            public IDictionary<string, string> values, per;
+            public Func<string, IList<string>, string> pick;
+            public List<string> unresolved;
+            public string where;
+            // slot (name:n) to its filled text, for the whole scene
+            public readonly Dictionary<string, string> chosen = new Dictionary<string, string>();
+            // pool to the raw values taken from it in this scene, so {pool:2} gets another one
+            public readonly Dictionary<string, List<string>> used = new Dictionary<string, List<string>>();
+        }
+
+        static string PickVersion(PhraseEntry e, Func<string, IList<string>, string> pick)
+        {
+            List<string> vs = Versions(e.English);
+            if (vs.Count == 1) return vs[0];
+            var idx = new List<string>();
+            for (int k = 0; k < vs.Count; k++) idx.Add(k.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            string c = pick != null ? pick("version:" + e.ClipKey, idx) : null;
+            int n;
+            if (c == null || !int.TryParse(c, out n) || n < 0 || n >= vs.Count) n = 0;
+            return vs[n];
+        }
+
+        // Fills the slots of one text. atStart: the text itself starts a sentence (the top level, or a pool value
+        // that sits at the start of a sentence). A slot value at the start of a sentence gets a capital.
+        static string Expand(string src, bool atStart, int depth, FillState st)
+        {
+            var sb = new System.Text.StringBuilder(src.Length + 16);
+            int at = 0;
+            foreach (Match m in SlotRe.Matches(src))
+            {
+                sb.Append(src, at, m.Index - at);
+                string v = Resolve(m, depth, st);
+                sb.Append(AtSentenceStart(src, m.Index, atStart) ? CapFirst(v) : v);
+                at = m.Index + m.Length;
+            }
+            sb.Append(src, at, src.Length - at);
+            return sb.ToString();
+        }
+
+        static string Resolve(Match m, int depth, FillState st)
         {
             string name = m.Groups[1].Value, n = m.Groups[2].Success ? m.Groups[2].Value : "1";
             if (name == "body") return m.Value;   // {body} rows are expanded at build time, never here
             string v;
-            if (per != null && per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
-            if (values != null && values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
+            if (st.per != null && st.per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
+            if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
             string key = name + ":" + n;
-            if (chosen.TryGetValue(key, out v)) return v;
-            IList<string> pool = pools != null ? pools.Values(name) : null;
-            if (pool == null || pool.Count == 0)
+            if (st.chosen.TryGetValue(key, out v)) return v;
+            IList<string> pool = st.pools != null ? st.pools.Values(name) : null;
+            if (pool == null || pool.Count == 0 || depth >= MaxDepth)
             {
-                if (unresolved != null) unresolved.Add(name + " in " + e.ClipKey + " (line " + line + ")");
+                if (st.unresolved != null) st.unresolved.Add(name + " in " + st.where);
                 return "...";
             }
-            // {pool:2} differs from the values already taken from that pool in this scene
+            List<string> taken;
+            if (!st.used.TryGetValue(name, out taken)) st.used[name] = taken = new List<string>();
             var free = new List<string>();
-            foreach (string c in pool) if (!chosen.ContainsValue(c)) free.Add(c);
+            foreach (string c in pool) if (!taken.Contains(c)) free.Add(c);
             IList<string> from = free.Count > 0 ? (IList<string>)free : pool;
-            v = pick != null ? pick(name, from) : from[0];
-            if (string.IsNullOrEmpty(v)) v = from[0];
-            chosen[key] = v;
+            string raw = st.pick != null ? st.pick(name, from) : from[0];
+            if (string.IsNullOrEmpty(raw)) raw = from[0];
+            taken.Add(raw);
+            // filled as if mid-sentence, the caller adds the capital when the slot starts a sentence
+            v = HasSlots(raw) ? Expand(raw, false, depth + 1, st) : raw;
+            st.chosen[key] = v;
             return v;
         }
 
@@ -172,13 +246,19 @@ namespace Lonapse
         /// gone."). The written text itself is never changed.</summary>
         public static bool AtSentenceStart(string s, int i)
         {
+            return AtSentenceStart(s, i, true);
+        }
+
+        /// <summary>As above. textStarts: whether the start of s counts as the start of a sentence.</summary>
+        public static bool AtSentenceStart(string s, int i, bool textStarts)
+        {
             for (int k = i - 1; k >= 0; k--)
             {
                 char c = s[k];
                 if (char.IsWhiteSpace(c) || c == '"' || c == '\'') continue;
                 return c == '.' || c == '!' || c == '?';
             }
-            return true;
+            return textStarts;
         }
 
         public static string CapFirst(string v)

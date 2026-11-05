@@ -1219,10 +1219,11 @@ public static class Tests
         var perr = new List<string>();
         SlotPools pools = SlotPools.Parse(new List<string> {
             "# comment", "pool\tenglish", "thing\thelmet", "thing\tsock", "thing\thelmet", "food\tcheese",
-            "day\tmonday", "Bad\tx", "thing\t{x}" }, perr);
-        Check(pools.Count == 2 && pools.Values("thing").Count == 2 && pools.Values("food")[0] == "cheese",
+            "day\tmonday", "Bad\tx", "thing\t{X}", "thing\ta | b", "thing\tmy {body}", "line\tWhere is my {thing}?" }, perr);
+        Check(pools.Count == 3 && pools.Values("thing").Count == 2 && pools.Values("food")[0] == "cheese",
               "slots: pools parse, a duplicate value is kept once", pools.Count + " pools");
-        Check(perr.Count == 3 && !pools.Has("day"), "slots: reserved, bad and braced pool rows are rejected", string.Join(" | ", perr.ToArray()));
+        Check(perr.Count == 5 && !pools.Has("day") && pools.Values("line")[0] == "Where is my {thing}?",
+              "slots: reserved names, bad slots, | and {body} in values are rejected, a value may hold a slot", string.Join(" | ", perr.ToArray()));
 
         // the table: slots only in the english
         const string H = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\tenglish";
@@ -1264,6 +1265,30 @@ public static class Tests
         Check(m2[0].English == "Hi ... on ..." && miss.Count == 2, "slots: an unknown slot gives ... and is reported", m2[0].English);
         Check(SubtitleSlots.FirstName("Jebediah Kerman") == "Jebediah" && SubtitleSlots.FirstName("Val") == "Val",
               "slots: first name", null);
+
+        // versions split by | and pool values with slots inside
+        var np = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\tsock", "thing\thelmet",
+            "lost\t{thing} is gone", "lost\tsomeone took my {thing}", "loop\tagain {loop}" }, null);
+        var vl = new List<PhraseEntry> {
+            new PhraseEntry { ClipKey = "v1", English = "Who took my {thing}? | Has anyone seen my {thing}?" },
+            new PhraseEntry { ClipKey = "v2", English = "{lost}. Ugh. Okay, {lost}." } };
+        var picks = new List<string>();
+        List<PhraseEntry> vf = SubtitleSlots.Fill(vl, np, null, null, (pool, vals) => { picks.Add(pool); return vals[vals.Count - 1]; }, null);
+        Check(vf[0].English == "Has anyone seen my helmet?" && picks[0] == "version:v1",
+              "slots: a version is picked per line, with its own memory key", vf[0].English + " / " + picks[0]);
+        Check(vf[1].English == "Someone took my helmet. Ugh. Okay, someone took my helmet.",
+              "slots: a pool value with a slot inside is filled, same text in the scene, capital at a sentence start", vf[1].English);
+        var lu = new List<string>();
+        string lf = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "l", English = "{loop}" } },
+                                       np, null, null, null, lu)[0].English;
+        Check(lf.StartsWith("Again again", StringComparison.Ordinal) && lf.EndsWith("...", StringComparison.Ordinal) && lu.Count == 1,
+              "slots: a pool that refers to itself stops at MaxDepth", lf);
+        var ve = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "q1\tchatter\tchatter\tcalm\tcrew\tsq\t1\tboth\tHola\tHi | ",
+            "q2\tchatter\tchatter\tcalm\tcrew\tsr\t1\tboth\tEn {body}\tOn {body} | At {body}",
+            "q3\tchatter\tchatter\tcalm\tcrew\tst\t1\tboth\tHola\tHi | Hello {other}" }, ve);
+        Check(ve.Count == 2, "slots: an empty version or {body} with versions is an error", string.Join(" | ", ve.ToArray()));
 
         // TakeValue goes through the pool before a value comes back
         SceneMemory mem = new SceneMemory();

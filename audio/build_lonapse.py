@@ -498,6 +498,8 @@ def validate(rows):
         elif unknown_en:
             bad.append("bad placeholder(s) %s, use {body} or a slot like {name} or {name:2}"
                        % ", ".join("{%s}" % p for p in unknown_en))
+        elif "|" in row["english"] and (any(not v.strip() for v in row["english"].split("|")) or "body" in ph_en):
+            bad.append("english versions (|) must all be non-empty and cannot use {body}")
         else:
             if not sub_only and (("body" in ph_es) != ("body" in ph_en)):
                 bad.append("{body} must be in both spanish and english, or in neither")
@@ -588,6 +590,53 @@ def slot_names(text):
     return out
 
 
+def value_problem(val):
+    """Same as SubtitleSlots.ValueProblem in C#: non-empty, no |, only well-formed slots and no {body}."""
+    if not val.strip():
+        return "value is empty"
+    if "|" in val:
+        return "a value cannot hold |, give each version its own row"
+    if "{" in PLACEHOLDER_RE.sub("", val) or "}" in PLACEHOLDER_RE.sub("", val):
+        return "value has a bad slot, use {name} or {name:2}"
+    for p in PLACEHOLDER_RE.findall(val):
+        m = SLOT_RE.match(p)
+        if not m:
+            return "value has a bad slot {%s}, use {name} or {name:2}" % p
+        if m.group(1) == "body":
+            return "{body} cannot be used in a pool value"
+    return None
+
+
+def pool_reach(pools):
+    """Per pool: every slot name its values can lead to, through other pools. Returns (reach, errors). A pool that
+    leads back to itself is an error (the game stops at a depth of 6 and shows ...)."""
+    errors = []
+    direct = {k: set(n for v in vs for n in slot_names(v)) for k, vs in pools.items()}
+    reach = {}
+
+    def walk(k, stack):
+        if k in reach:
+            return reach[k]
+        out = set()
+        for n in direct.get(k, ()):
+            out.add(n)
+            if n in pools:
+                if n in stack:
+                    errors.append("pools: pool '%s' leads back to itself (%s)" % (n, " > ".join(stack + [n])))
+                    continue
+                out |= walk(n, stack + [n])
+        reach[k] = out
+        return out
+
+    for k in pools:
+        walk(k, [k])
+    for k, names in direct.items():
+        for n in names:
+            if n not in pools and n not in FLIGHT_SLOTS and n not in PERSON_SLOTS:
+                errors.append("pools: pool '%s' uses slot {%s}, which has no pool" % (k, n))
+    return reach, sorted(set(errors))
+
+
 def load_pools(path=POOLS_FILE):
     """Subtitle slot values (experimental, procedural talk). Returns ({pool: [values]} in file order, errors).
     No file gives no pools. Same rules as SlotPools.Parse in C#."""
@@ -602,8 +651,9 @@ def load_pools(path=POOLS_FILE):
             bad.append("pool must match [a-z_]+")
         elif name == "body" or name in FLIGHT_SLOTS or name in PERSON_SLOTS:
             bad.append("'%s' is a reserved slot name" % name)
-        if not val or "{" in val or "}" in val:
-            bad.append("value must be non-empty text without { }")
+        why = value_problem(val)
+        if why:
+            bad.append(why)
         if bad:
             errors.append("%s (%s): %s" % (r["loc"], name, "; ".join(bad)))
             continue
@@ -618,7 +668,8 @@ def load_pools(path=POOLS_FILE):
 def check_slots(rows, pools):
     """Every english slot is a pool, a flight slot or (in an intercom scene) a person slot. A {pool:n} needs at
     least n values. Returns errors. Every pool should be used somewhere, an unused pool is a warning."""
-    errors, used = [], set()
+    reach, errors = pool_reach(pools)
+    used = set()
     by_scene = {}
     for r in rows:
         by_scene.setdefault(r["scene"], []).append(r)
@@ -645,9 +696,14 @@ def check_slots(rows, pools):
                                                                           POOLS_FILE.name))
                 else:
                     used.add(name)
+                    used.update(reach.get(name, ()))
                     if n > len(pools[name]):
                         errors.append("%s (%s): {%s} needs %d values, pool %s has %d"
                                       % (r["loc"], r["clip_key"], p, n, name, len(pools[name])))
+                    inner = [x for x in reach.get(name, ()) if x in PERSON_SLOTS]
+                    if inner and not intercom:
+                        errors.append("%s (%s): {%s} can give {%s}, which only works in intercom scenes"
+                                      % (r["loc"], r["clip_key"], name, inner[0]))
     for name in pools:
         if name not in used:
             log("WARN pools: pool '%s' is not used by any phrase" % name)

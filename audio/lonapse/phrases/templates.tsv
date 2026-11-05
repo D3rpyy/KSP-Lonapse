@@ -1,25 +1,26 @@
 # Experimental (procedural talk): templates. The spanish is a general sentence, the english has slots that the
 # plugin fills in game ({thing} from pools.tsv, {day} {here} {vessel} {alt_km} from the flight, {other} and
-# {self} in intercom scenes). So one clip gives many subtitles, and it is still real loñapsE. New keys: tp_
+# {self} in intercom scenes). Versions split by | are picked per play. Every version of a line must fit every
+# version of the lines around it. So one clip gives many subtitles, and it is still real loñapsE. New keys: tp_
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}?
-tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	Not me, {other}. Look behind the {spot}.
-tp_lost_3	chatter	chatter	calm	crew	tp_lost	3	both	goofy	any	Ah. Ahí estaba.	Oh. Found it. Next to my {thing:2}.
-tp_smell_1	chatter	chatter	calm	crew	tp_smell	1	both	goofy	any	¿Qué es ese olor?	What is that smell? Is that {food}?
-tp_smell_2	chatter	chatter	calm	crew	tp_smell	2	both	goofy	any	Mejor no preguntes.	Better not ask, {other}.
-tp_name_1	chatter	chatter	calm	crew	tp_name	1	both	goofy	any	¿A quién se le ocurrió este nombre?	Who named this thing {vessel}?
-tp_name_2	chatter	chatter	calm	crew	tp_name	2	both	goofy	any	Fue idea tuya.	That was your idea, {other}.
-tp_name_3	chatter	chatter	calm	crew	tp_name	3	both	goofy	any	Pues era una idea buenísima.	Well, it was a great idea.
-tp_dream_1	chatter	chatter	calm	crew	tp_dream	1	both	orbit	any	Anoche soñé algo muy raro.	Last night I dreamt about {creature}.
-tp_dream_2	chatter	chatter	calm	crew	tp_dream	2	both	orbit	any	¿Otra vez? Ya van tres veces.	Again? That's the third time, {other}.
-tp_days_1	chatter	chatter	calm	crew	tp_days	1	both	coast	any	¿Cuántos días llevamos aquí?	How long have we been out here?
-tp_days_2	chatter	chatter	calm	crew	tp_days	2	both	coast	any	Ni idea. Demasiados.	Day {day}. Too many.
-tp_days_3	chatter	chatter	calm	crew	tp_days	3	both	coast	any	Yo creía que menos.	I thought it was fewer.
-tp_loose_1	chatter	chatter	calm	crew	tp_loose	1	both	goofy	any	Algo se ha soltado otra vez.	The {part} came loose again.
-tp_loose_2	chatter	chatter	calm	crew	tp_loose	2	both	goofy	any	Pégalo con cinta, como siempre.	Tape it, like the {part:2}.
-tp_food_1	chatter	chatter	calm	crew	tp_food	1	both	orbit	any	Control, se nos ha acabado la comida buena.	Control, we are out of {food}.
-tp_food_2	chatter	chatter	calm	mc	tp_food	2	m	orbit	any	Os queda mucha de la otra.	You still have plenty of {food:2}.
-tp_view_1	chatter	chatter	calm	crew	tp_view	1	both	orbit	any	Control, la vista desde aquí es increíble.	Control, the view of {here} from up here is amazing.
-tp_view_2	chatter	chatter	calm	mc	tp_view	2	m	orbit	any	Nos alegramos. Volved al trabajo.	Glad to hear it, {vessel}. Back to work.
-tp_height_1	chatter	chatter	calm	crew	tp_height	1	both	orbit	any	Control, ¿a qué altura estamos?	Control, how high are we?
-tp_height_2	chatter	chatter	calm	mc	tp_height	2	m	orbit	any	Bastante alto. Disfrutad la vista.	About {alt_km} kilometers. Enjoy the view.
+tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again. | Okay. Who moved my {thing}? | {other}, did you take my {thing}?
+tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	{not_me} Look behind the {spot}. | {not_me} Try the {spot}. | Check behind the {spot}, {other}. | Last time it was under the {spot}.
+tp_lost_3	chatter	chatter	calm	crew	tp_lost	3	both	goofy	any	Ah. Ahí estaba.	Oh. Found it. Next to my {thing:2}. | Found it. It was with my {thing:2}. | Oh. There it is. | Got it. Sorry, {other}.
+tp_smell_1	chatter	chatter	calm	crew	tp_smell	1	both	goofy	any	¿Qué es ese olor?	What is that smell? Is that {food}? | Does anyone else smell {food}? | Something smells like {food} in here. | {other}, did you heat up the {food} again?
+tp_smell_2	chatter	chatter	calm	crew	tp_smell	2	both	goofy	any	Mejor no preguntes.	Better not ask, {other}. | You don't want to know. | Let's just say it was {food:2}. | Don't ask. Breathe through your mouth.
+tp_name_1	chatter	chatter	calm	crew	tp_name	1	both	goofy	any	¿A quién se le ocurrió este nombre?	Who named this thing {vessel}? | {vessel}. Who picked that name? | Why is this ship called {vessel}? | I still can't believe we fly the {vessel}.
+tp_name_2	chatter	chatter	calm	crew	tp_name	2	both	goofy	any	Fue idea tuya.	That was your idea, {other}. | You picked it, {other}. | You voted for it. Twice. | It was that or {silly_name}.
+tp_name_3	chatter	chatter	calm	crew	tp_name	3	both	goofy	any	Pues era una idea buenísima.	Well, it was a great idea. | Fine. It's a good name. | Okay. Good name. | Fair enough.
+tp_dream_1	chatter	chatter	calm	crew	tp_dream	1	both	orbit	any	Anoche soñé algo muy raro.	Last night I dreamt about {creature}. | I had that dream again. With {creature}. | I dreamt about {creature}. It knew my name. | Don't laugh, but I dreamt about {creature}.
+tp_dream_2	chatter	chatter	calm	crew	tp_dream	2	both	orbit	any	¿Otra vez? Ya van tres veces.	Again? That's the third time, {other}. | Again? You need more sleep, {other}. | Third time this week. | Was I in it? | Again? Stop eating {food} before bed.
+tp_days_1	chatter	chatter	calm	crew	tp_days	1	both	coast	any	¿Cuántos días llevamos aquí?	How long have we been out here? | What day is it? | {other}, how many days has it been? | I've lost count of the days.
+tp_days_2	chatter	chatter	calm	crew	tp_days	2	both	coast	any	Ni idea. Demasiados.	Day {day}. Too many. | Day {day}, I think. | No idea. Day {day}? | Day {day}. I counted on the wall.
+tp_days_3	chatter	chatter	calm	crew	tp_days	3	both	coast	any	Yo creía que menos.	I thought it was fewer. | Feels like more. | That can't be right. | Huh. Only {day}?
+tp_loose_1	chatter	chatter	calm	crew	tp_loose	1	both	goofy	any	Algo se ha soltado otra vez.	The {part} came loose again. | {other}, the {part} is loose again. | Is the {part} supposed to wobble like that? | Something rattles. I think it's the {part}.
+tp_loose_2	chatter	chatter	calm	crew	tp_loose	2	both	goofy	any	Pégalo con cinta, como siempre.	Tape it, like the {part:2}. | Tape. Same as always. | Just use tape, {other}. | Tape it. Don't tell Control.
+tp_food_1	chatter	chatter	calm	crew	tp_food	1	both	orbit	any	Control, se nos ha acabado la comida buena.	Control, we are out of {food}. | Control, someone ate all the {food}. | Control, the {food} is gone. Send more. | Control, food report: zero {food} left.
+tp_food_2	chatter	chatter	calm	mc	tp_food	2	m	orbit	any	Os queda mucha de la otra.	You still have plenty of {food:2}. | Eat the {food:2}. | There's a full crate of {food:2}. | Try the {food:2}. It builds character.
+tp_view_1	chatter	chatter	calm	crew	tp_view	1	both	orbit	any	Control, la vista desde aquí es increíble.	Control, the view of {here} from up here is amazing. | Control, you should see {here} from here. | Control, {here} looks so small from up here. | Control, I could look at {here} all day.
+tp_view_2	chatter	chatter	calm	mc	tp_view	2	m	orbit	any	Nos alegramos. Volved al trabajo.	Glad to hear it, {vessel}. Back to work. | Nice. Now back to work, {vessel}. | Enjoy it. Then get back to work. | Take a picture. Then work.
+tp_height_1	chatter	chatter	calm	crew	tp_height	1	both	orbit	any	Control, ¿a qué altura estamos?	Control, how high are we? | Control, what's our altitude? | Control, how far up are we now? | Control, are we in space yet?
+tp_height_2	chatter	chatter	calm	mc	tp_height	2	m	orbit	any	Bastante alto. Disfrutad la vista.	About {alt_km} kilometers. Enjoy the view. | {alt_km} kilometers. Don't look down. | High enough. About {alt_km} km. | {alt_km} km, {vessel}. Enjoy it.

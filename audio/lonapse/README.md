@@ -163,11 +163,21 @@ The slots:
 - `{other}` and `{self}` are the first names of the two kerbals in an intercom chat. They only work in intercom scenes.
 - A value at the start of a sentence gets a capital letter.
 
+Two things make the sentences less recognisable:
+
+- **Versions.** The English of a row can hold several versions split by `|`: `Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again.` The game picks one per play, again every version once before one comes back. Every version of a line must fit every version of the lines before and after it.
+- **Slots inside pool values.** A pool value can hold slots itself, so a pool can be a list of whole sentences. The pool `not_me` holds "Not me.", "Don't look at me.", "I was asleep." and so on, and a reply like `{not_me} Look behind the {spot}.` changes as a whole.
+
+`python3 audio/slots.py` prints random fills of every template, so I can read them before I play them. A scene name limits it to that scene, `-n 8` gives more fills, and `--spanish` adds the Spanish.
+
 The rules, checked by the script:
 
 - Slots only go in the English. The Spanish only knows `{body}`.
 - A slot name is `[a-z_]+`. A pool slot needs a pool in `pools.tsv`, and `{pool:n}` needs at least n values.
 - `body`, the flight slots and the person slots cannot be pool names.
+- A pool value has no `|` and no `{body}`. A pool cannot lead back to itself.
+- Versions (`|`) are all non-empty and cannot be used together with `{body}`.
+- A pool that can give `{other}` or `{self}` only works in intercom scenes.
 
 I keep the Spanish vague on purpose. "Who took my helmet?" and "Who took my sock?" both come from "¿Quién ha cogido mis cosas?". A slot that the game cannot fill shows `...` and goes to the log.
 
