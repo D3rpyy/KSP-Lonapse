@@ -130,12 +130,15 @@ namespace Lonapse
     /// Gives a probe core part its Lonapse voice. Added with a Module Manager patch, for example:
     /// <code>@PART[myProbeCore]:NEEDS[Lonapse] { MODULE { name = ModuleLonapse  voice = okto  priority = 0 } }</code>
     /// voice is a stock voice or the name of a LONAPSE_PROBE_VOICE node. On a vessel with several cores the highest
-    /// priority wins. A voice the player picks in the Lonapse window wins over both.
+    /// priority wins. A voice the player picks in the Lonapse window wins over both. displayName (optional, may be a
+    /// #autoLOC tag) is the subtitle name of the part. It wins over the voice's own displayName, so several parts can
+    /// share one voice.
     /// </summary>
     public class ModuleLonapse : PartModule
     {
         [KSPField] public string voice = "";
         [KSPField] public int priority = 0;
+        [KSPField] public string displayName = "";
 
         public override string GetInfo() { return string.Empty; }   // nothing in the editor part info
         public override string GetModuleDisplayName() { return "Lonapse probe voice"; }

@@ -1333,6 +1333,24 @@ public static class Tests
             Check(g != null && g.Name == ProbeCores.Generic && at == 0 && why == ProbeVoicePick.Why.Generic
                   && ProbeVoicePick.Resolve(new List<ProbeCorePart>(), null, reg, out at, out why) == null && at == -1,
                   "probe voice: an unknown core gets generic, no core gives null", null);
+            // ModuleLonapse displayName: two parts share one voice and keep their own subtitle name
+            var named = new List<ProbeCorePart> {
+                new ProbeCorePart("nfexSTP", "modcore", 1, " STP "),
+                new ProbeCorePart("nfexPLTO", "modcore", 0, "PLTO"),
+                new ProbeCorePart("probeCoreOcto.v2", null, 0, "   ") };
+            ProbeVoiceSpec n1 = ProbeVoicePick.Resolve(named, null, reg, out at, out why);
+            Check(n1 == cfgVoice && ProbeVoicePick.ModuleName(named, at) == "STP",
+                  "probe voice: the deciding part's module displayName is the subtitle name, trimmed", ProbeVoicePick.ModuleName(named, at));
+            var plto = new List<ProbeCorePart> { named[1] };
+            Check(ProbeVoicePick.Resolve(plto, null, reg, out at, out why) == cfgVoice && ProbeVoicePick.ModuleName(plto, at) == "PLTO",
+                  "probe voice: another part with the same voice has its own name", null);
+            var plPick = new Dictionary<string, string> { { ProbeCores.Normalise("nfexPLTO"), "hecs" } };
+            Check(ProbeVoicePick.Resolve(plto, plPick, reg, out at, out why).Name == "hecs" && why == ProbeVoicePick.Why.Player
+                  && ProbeVoicePick.ModuleName(plto, at) == "PLTO",
+                  "probe voice: the part name stays when the player picks another voice", null);
+            Check(ProbeVoicePick.ModuleName(named, 2) == null && ProbeVoicePick.ModuleName(parts, 0) == null
+                  && ProbeVoicePick.ModuleName(named, -1) == null && ProbeVoicePick.ModuleName(named, 9) == null && ProbeVoicePick.ModuleName(null, 0) == null,
+                  "probe voice: no, blank or out of range module name gives null", null);
             // a voice written to the settings reads back the same
             var vals = new Dictionary<string, string>();
             foreach (var kv in mine.ToValues()) vals[kv.Key] = kv.Value;

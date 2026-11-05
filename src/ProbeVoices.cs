@@ -96,16 +96,34 @@ namespace Lonapse
         public string partName;      // part.partInfo.name
         public string moduleVoice;   // ModuleLonapse.voice, null or empty without the module
         public int priority;         // ModuleLonapse.priority, 0 without the module
+        public string displayName;   // ModuleLonapse.displayName, null or empty without one
 
         public ProbeCorePart(string partName, string moduleVoice, int priority)
+            : this(partName, moduleVoice, priority, null) { }
+
+        public ProbeCorePart(string partName, string moduleVoice, int priority, string displayName)
         {
             this.partName = partName; this.moduleVoice = moduleVoice; this.priority = priority;
+            this.displayName = displayName;
         }
     }
 
     public static class ProbeVoicePick
     {
         public enum Why { None, Player, Module, StockPart, Generic }
+
+        /// <summary>
+        /// The subtitle name a part gives itself: the ModuleLonapse displayName of the core that decided the voice
+        /// (<paramref name="coreIndex"/> from Resolve), trimmed. Null when that core has none. The name belongs to the
+        /// part, so it holds for every voice the part gets, also one the player picked. Several parts can then share
+        /// one voice and still have their own name.
+        /// </summary>
+        public static string ModuleName(IList<ProbeCorePart> cores, int coreIndex)
+        {
+            if (cores == null || coreIndex < 0 || coreIndex >= cores.Count) return null;
+            string n = cores[coreIndex].displayName;
+            return string.IsNullOrEmpty(n) || n.Trim().Length == 0 ? null : n.Trim();
+        }
 
         /// <summary>
         /// The voice of a vessel. Per core part: a voice the player gave that part in the settings, else the

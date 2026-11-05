@@ -580,11 +580,16 @@ namespace Lonapse
             GUILayout.Label("Name", GUILayout.Width(60f));
             GUI.SetNextControlName(NameField);
             // the raw name, so the field can be cleared while typing. An unknown core shows its part title.
-            string shownName = !have ? "" : host.probeVoiceWhy == ProbeVoicePick.Why.Generic ? host.ProbeDisplayName : (v.DisplayName ?? "");
+            // A part with a ModuleLonapse displayName keeps that name: the field shows it and cannot change it.
+            bool partNamed = have && !string.IsNullOrEmpty(host.probeModuleName);
+            string shownName = !have ? "" : partNamed || host.probeVoiceWhy == ProbeVoicePick.Why.Generic ? host.ProbeDisplayName : (v.DisplayName ?? "");
+            GUI.enabled = have && !partNamed;
             string typedName = GUILayout.TextField(shownName, 32);
+            GUI.enabled = have;
             GUILayout.EndHorizontal();
-            if (have && typedName != shownName) EditVoice(s).DisplayName = typedName;
-            Hint("The name in the subtitles. Empty: the name of the part.");
+            if (have && !partNamed && typedName != shownName) EditVoice(s).DisplayName = typedName;
+            Hint(partNamed ? "The name in the subtitles. This part sets its own name."
+                           : "The name in the subtitles. Empty: the name of the part.");
 
             double hz = have ? v.BaseHz : 940.0;
             // only a moved slider edits: a value off the 10 Hz or 5 % grid (from a CFG) stays as it is until then
