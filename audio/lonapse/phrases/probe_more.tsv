@@ -1,141 +1,141 @@
 # Lonapse 0.6.0: more probe mode events (probe alone, MC answers).
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
-pm_001_1	throttle_full	chatter	none	mc	pm_001	1	m	any	any	any	any	any	any		Empuje completo. Ahí vas.	Full thrust. There you go.
+pm_001_1	throttle_full	chatter	none	mc	pm_001	1	m	any	any	any	any	any	any		Empuje completo. Ahí vas.	Full thrust. There you go. | Full thrust. There you go. | Full power. Off you go.
 pm_001_2	throttle_full	chatter	none	probe	pm_001	2	both	any	any	any	any	any	any	happy		[beeps with excitement]
 pm_002_1	throttle_full	chatter	none	probe	pm_002	1	both	any	any	any	any	any	any	proud		[beeps a roar]
-pm_002_2	throttle_full	chatter	none	mc	pm_002	2	m	any	any	any	any	any	any		Sí, muy fuerte. Muy valiente.	Yes, very strong. Very brave.
-pm_003_1	throttle_full	chatter	none	mc	pm_003	1	m	any	any	any	any	any	any		¡A tope, sonda!	Full throttle, probe!
+pm_002_2	throttle_full	chatter	none	mc	pm_002	2	m	any	any	any	any	any	any		Sí, muy fuerte. Muy valiente.	Yes, very strong. Very brave. | Yes, very strong. Very brave. | Yes. So strong. So brave.
+pm_003_1	throttle_full	chatter	none	mc	pm_003	1	m	any	any	any	any	any	any		¡A tope, sonda!	Full throttle, probe! | Full throttle, probe! | Throttle up, probe!
 pm_003_2	throttle_full	chatter	none	probe	pm_003	2	both	any	any	any	any	any	any	happy		[beeps at full volume]
 pm_004_1	throttle_full	chatter	none	probe	pm_004	1	both	any	any	any	any	any	any	scared		[beeps far too fast]
-pm_004_2	throttle_full	chatter	none	mc	pm_004	2	m	any	any	any	any	any	any		Tranquila. Es solo todo el motor.	Easy. It's just all of the engine.
+pm_004_2	throttle_full	chatter	none	mc	pm_004	2	m	any	any	any	any	any	any		Tranquila. Es solo todo el motor.	Easy. It's just all of the engine. | Easy. It's just all of the engine. | Calm. That's just the whole engine.
 pm_005_1	throttle_full	chatter	none	probe	pm_005	1	both	any	any	any	any	any	okto	proud		[beeps very officially]
-pm_005_2	throttle_full	chatter	none	mc	pm_005	2	m	any	any	any	any	any	okto		Potencia máxima registrada, Okto. Lo apuntamos.	Maximum power logged, Okto. We wrote it down.
+pm_005_2	throttle_full	chatter	none	mc	pm_005	2	m	any	any	any	any	any	okto		Potencia máxima registrada, Okto. Lo apuntamos.	Maximum power logged, Okto. We wrote it down. | Maximum power logged, Okto. We wrote it down. | Max power noted, Okto. It's in the log.
 pm_006_1	throttle_full	chatter	none	probe	pm_006	1	both	any	any	any	any	any	hecs	scared		[beeps holding on tight]
-pm_006_2	throttle_full	chatter	none	mc	pm_006	2	m	any	any	any	any	any	hecs		Aguanta, HECS. Sabes hacer esto.	Hold on, HECS. You know how to do this.
+pm_006_2	throttle_full	chatter	none	mc	pm_006	2	m	any	any	any	any	any	hecs		Aguanta, HECS. Sabes hacer esto.	Hold on, HECS. You know how to do this. | Hold on, HECS. You know how to do this. | Hang on, HECS. You've done this before.
 pm_007_1	throttle_full	chatter	none	probe	pm_007	1	both	any	any	any	any	any	rovemate	happy		[beeps wildly]
-pm_007_2	throttle_full	chatter	none	mc	pm_007	2	m	any	any	any	any	any	rovemate		Rovemate, esto no es una carrera. Bueno, un poco.	Rovemate, this isn't a race. Well, a little.
+pm_007_2	throttle_full	chatter	none	mc	pm_007	2	m	any	any	any	any	any	rovemate		Rovemate, esto no es una carrera. Bueno, un poco.	Rovemate, this isn't a race. Well, a little. | Rovemate, this isn't a race. Well, a little. | Not a race, Rovemate. Okay, a small one.
 pm_008_1	throttle_full	chatter	none	probe	pm_008	1	both	any	any	any	any	any	snob	bored		[beeps very casually]
-pm_008_2	throttle_full	chatter	none	mc	pm_008	2	m	any	any	any	any	any	snob		Claro. Todo el empuje del mundo, y ni te despeinas.	Sure. All the thrust in the world, and not a hair out of place.
-pm_009_1	throttle_cut	chatter	none	mc	pm_009	1	m	any	any	any	any	any	any		Corte de motor. Bien hecho.	Engine cut. Well done.
+pm_008_2	throttle_full	chatter	none	mc	pm_008	2	m	any	any	any	any	any	snob		Claro. Todo el empuje del mundo, y ni te despeinas.	Sure. All the thrust in the world, and not a hair out of place. | Sure. All the thrust in the world, and not a hair out of place. | Of course. Full thrust, and still perfectly neat.
+pm_009_1	throttle_cut	chatter	none	mc	pm_009	1	m	any	any	any	any	any	any		Corte de motor. Bien hecho.	Engine cut. Well done. | Engine cut. Well done. | Engine off. Nice.
 pm_009_2	throttle_cut	chatter	none	probe	pm_009	2	both	any	any	any	any	any	any	proud		[beeps satisfied]
 pm_010_1	throttle_cut	chatter	none	probe	pm_010	1	both	any	any	any	any	any	any	bored		[beeps into the silence]
-pm_010_2	throttle_cut	chatter	none	mc	pm_010	2	m	any	any	any	any	any	any		Sí, ya no hace ruido. Disfruta la calma.	Yes, no more noise. Enjoy the quiet.
-pm_011_1	throttle_cut	chatter	none	mc	pm_011	1	m	any	any	any	any	any	any		Motor parado. ¿Todo bien?	Engine stopped. All good?
+pm_010_2	throttle_cut	chatter	none	mc	pm_010	2	m	any	any	any	any	any	any		Sí, ya no hace ruido. Disfruta la calma.	Yes, no more noise. Enjoy the quiet. | Yes, no more noise. Enjoy the quiet. | Quiet now. Enjoy it.
+pm_011_1	throttle_cut	chatter	none	mc	pm_011	1	m	any	any	any	any	any	any		Motor parado. ¿Todo bien?	Engine stopped. All good? | Engine stopped. All good? | Engine off. Okay?
 pm_011_2	throttle_cut	chatter	none	probe	pm_011	2	both	any	any	any	any	any	any	happy		[beeps yes]
 pm_012_1	throttle_cut	chatter	none	probe	pm_012	1	both	any	any	any	any	any	any	curious		[beeps at the engine]
-pm_012_2	throttle_cut	chatter	none	mc	pm_012	2	m	any	any	any	any	any	any		No, no está roto. Solo descansa.	No, it's not broken. It's just resting.
+pm_012_2	throttle_cut	chatter	none	mc	pm_012	2	m	any	any	any	any	any	any		No, no está roto. Solo descansa.	No, it's not broken. It's just resting. | No, it's not broken. It's just resting. | Not broken. Resting.
 pm_013_1	throttle_cut	chatter	none	probe	pm_013	1	both	any	any	any	any	any	stayputnik	curious		[beeps confused]
-pm_013_2	throttle_cut	chatter	none	mc	pm_013	2	m	any	any	any	any	any	stayputnik		Se ha parado a propósito, Stayputnik. Tranquilo.	It stopped on purpose, Stayputnik. Easy.
-pm_014_1	throttle_cut	chatter	none	mc	pm_014	1	m	any	any	any	any	any	okto		Corte perfecto, Okto. Al segundo.	Perfect cutoff, Okto. To the second.
+pm_013_2	throttle_cut	chatter	none	mc	pm_013	2	m	any	any	any	any	any	stayputnik		Se ha parado a propósito, Stayputnik. Tranquilo.	It stopped on purpose, Stayputnik. Easy. | It stopped on purpose, Stayputnik. Easy. | On purpose, Stayputnik. Relax.
+pm_014_1	throttle_cut	chatter	none	mc	pm_014	1	m	any	any	any	any	any	okto		Corte perfecto, Okto. Al segundo.	Perfect cutoff, Okto. To the second. | Perfect cutoff, Okto. To the second. | Exact cutoff, Okto. Down to the second.
 pm_014_2	throttle_cut	chatter	none	probe	pm_014	2	both	any	any	any	any	any	okto	proud		[beeps smugly]
 pm_015_1	throttle_cut	chatter	none	probe	pm_015	1	both	any	any	any	any	any	rovemate	offended		[beeps disappointed]
-pm_015_2	throttle_cut	chatter	none	mc	pm_015	2	m	any	any	any	any	any	rovemate		Lo sé. Lo divertido se acabó. Por ahora.	I know. The fun part is over. For now.
-pm_016_1	chute_semi	chatter	none	mc	pm_016	1	m	any	any	any	any	any	any		Paracaídas abriéndose. Agárrate.	Chutes opening. Hold on.
+pm_015_2	throttle_cut	chatter	none	mc	pm_015	2	m	any	any	any	any	any	rovemate		Lo sé. Lo divertido se acabó. Por ahora.	I know. The fun part is over. For now. | I know. The fun part is over. For now. | I know. Fun is over. For now.
+pm_016_1	chute_semi	chatter	none	mc	pm_016	1	m	any	any	any	any	any	any		Paracaídas abriéndose. Agárrate.	Chutes opening. Hold on. | Chutes opening. Hold on. | Chutes are opening. Hang on.
 pm_016_2	chute_semi	chatter	none	probe	pm_016	2	both	any	any	any	any	any	any	curious		[beeps upward]
 pm_017_1	chute_semi	chatter	none	probe	pm_017	1	both	any	any	any	any	any	any	scared		[beeps nervously]
-pm_017_2	chute_semi	chatter	none	mc	pm_017	2	m	any	any	any	any	any	any		Es normal que tire. Todavía no está del todo abierto.	It's normal that it pulls. It's not fully open yet.
-pm_018_1	chute_semi	chatter	none	mc	pm_018	1	m	any	any	any	any	any	any		Vemos los paracaídas. Primera fase.	We see the chutes. First stage.
+pm_017_2	chute_semi	chatter	none	mc	pm_017	2	m	any	any	any	any	any	any		Es normal que tire. Todavía no está del todo abierto.	It's normal that it pulls. It's not fully open yet. | It's normal that it pulls. It's not fully open yet. | The pull is normal. Not fully open yet.
+pm_018_1	chute_semi	chatter	none	mc	pm_018	1	m	any	any	any	any	any	any		Vemos los paracaídas. Primera fase.	We see the chutes. First stage. | We see the chutes. First stage. | Chutes in view. Stage one.
 pm_018_2	chute_semi	chatter	none	probe	pm_018	2	both	any	any	any	any	any	any	proud		[beeps a report]
 pm_019_1	chute_semi	chatter	none	probe	pm_019	1	both	any	any	any	any	any	okto	proud		[beeps exact numbers]
-pm_019_2	chute_semi	chatter	none	mc	pm_019	2	m	any	any	any	any	any	okto		Gracias, Okto. Con que se abran nos vale.	Thanks, Okto. As long as they open, we're happy.
+pm_019_2	chute_semi	chatter	none	mc	pm_019	2	m	any	any	any	any	any	okto		Gracias, Okto. Con que se abran nos vale.	Thanks, Okto. As long as they open, we're happy. | Thanks, Okto. As long as they open, we're happy. | Thanks, Okto. They open. We're happy.
 pm_020_1	chute_semi	chatter	none	probe	pm_020	1	both	any	any	any	any	any	snob	offended		[beeps at the jolt]
-pm_020_2	chute_semi	chatter	none	mc	pm_020	2	m	any	any	any	any	any	snob		Perdón por las turbulencias, su alteza.	Sorry for the turbulence, your highness.
+pm_020_2	chute_semi	chatter	none	mc	pm_020	2	m	any	any	any	any	any	snob		Perdón por las turbulencias, su alteza.	Sorry for the turbulence, your highness. | Sorry for the turbulence, your highness. | Apologies for the bumps, your highness.
 pm_021_1	chute_full	chatter	none	probe	pm_021	1	both	any	any	any	any	any	any	happy		[beeps floating softly]
-pm_021_2	chute_full	chatter	none	mc	pm_021	2	m	any	any	any	any	any	any		Paracaídas abiertos del todo. Qué bonito.	Chutes fully open. How pretty.
-pm_022_1	chute_full	chatter	none	mc	pm_022	1	m	any	any	any	any	any	any		Descenso suave. Ya puedes relajarte.	Gentle descent. You can relax now.
+pm_021_2	chute_full	chatter	none	mc	pm_021	2	m	any	any	any	any	any	any		Paracaídas abiertos del todo. Qué bonito.	Chutes fully open. How pretty. | Chutes fully open. How pretty. | Full chutes. Lovely.
+pm_022_1	chute_full	chatter	none	mc	pm_022	1	m	any	any	any	any	any	any		Descenso suave. Ya puedes relajarte.	Gentle descent. You can relax now. | Gentle descent. You can relax now. | Soft descent. Relax.
 pm_022_2	chute_full	chatter	none	probe	pm_022	2	both	any	any	any	any	any	any	sleepy		[beeps a relaxed sigh]
 pm_023_1	chute_full	chatter	none	probe	pm_023	1	both	any	any	any	any	any	any	curious		[beeps at the ground]
-pm_023_2	chute_full	chatter	none	mc	pm_023	2	m	any	any	any	any	any	any		Sí, cada vez está más cerca. Así funciona.	Yes, it's getting closer. That's how it works.
+pm_023_2	chute_full	chatter	none	mc	pm_023	2	m	any	any	any	any	any	any		Sí, cada vez está más cerca. Así funciona.	Yes, it's getting closer. That's how it works. | Yes, it's getting closer. That's how it works. | Yes, the ground gets closer. That's the idea.
 pm_024_1	chute_full	chatter	none	probe	pm_024	1	both	any	any	any	any	any	hecs	scared		[beeps holding its breath]
-pm_024_2	chute_full	chatter	none	mc	pm_024	2	m	any	any	any	any	any	hecs		Están abiertos, HECS. Respira. Bueno, ya sabes.	They're open, HECS. Breathe. Well, you know.
+pm_024_2	chute_full	chatter	none	mc	pm_024	2	m	any	any	any	any	any	hecs		Están abiertos, HECS. Respira. Bueno, ya sabes.	They're open, HECS. Breathe. Well, you know. | They're open, HECS. Breathe. Well, you know. | Open, HECS. Breathe. Sort of.
 pm_025_1	chute_full	chatter	none	probe	pm_025	1	both	any	any	any	any	any	rovemate	happy		[beeps swinging]
-pm_025_2	chute_full	chatter	none	mc	pm_025	2	m	any	any	any	any	any	rovemate		No te balancees, Rovemate.	Don't swing, Rovemate.
+pm_025_2	chute_full	chatter	none	mc	pm_025	2	m	any	any	any	any	any	rovemate		No te balancees, Rovemate.	Don't swing, Rovemate. | Don't swing, Rovemate. | No swinging, Rovemate.
 pm_025_3	chute_full	chatter	none	probe	pm_025	3	both	any	any	any	any	any	rovemate	happy		[beeps swinging more]
 pm_026_1	chute_full	chatter	none	probe	pm_026	1	both	any	any	any	any	any	stayputnik	proud		[beeps an old song]
-pm_026_2	chute_full	chatter	none	mc	pm_026	2	m	any	any	any	any	any	stayputnik		Igual que en los viejos tiempos, ¿eh?	Just like the old days, huh?
+pm_026_2	chute_full	chatter	none	mc	pm_026	2	m	any	any	any	any	any	stayputnik		Igual que en los viejos tiempos, ¿eh?	Just like the old days, huh? | Just like the old days, huh? | Like the good old days, right?
 pm_027_1	probe_data	chatter	calm	probe	pm_027	1	both	any	any	any	any	any	any	proud		[beeps a long stream]
-pm_027_2	probe_data	chatter	calm	mc	pm_027	2	m	any	any	any	any	any	any		Recibido. Qué cantidad de datos.	Copy. That's a lot of data.
+pm_027_2	probe_data	chatter	calm	mc	pm_027	2	m	any	any	any	any	any	any		Recibido. Qué cantidad de datos.	Copy. That's a lot of data. | Copy. That's a lot of data. | Copy. So much data.
 pm_028_1	probe_data	chatter	calm	probe	pm_028	1	both	any	any	any	any	any	any	happy		[beeps a data stream]
-pm_028_2	probe_data	chatter	calm	mc	pm_028	2	m	any	any	any	any	any	any		Llega todo. Los científicos están bailando.	It's all arriving. The scientists are dancing.
+pm_028_2	probe_data	chatter	calm	mc	pm_028	2	m	any	any	any	any	any	any		Llega todo. Los científicos están bailando.	It's all arriving. The scientists are dancing. | It's all arriving. The scientists are dancing. | It's all here. The lab is dancing.
 pm_029_1	probe_data	chatter	calm	probe	pm_029	1	both	any	any	any	any	any	any	curious		[beeps a data stream]
-pm_029_2	probe_data	chatter	calm	mc	pm_029	2	m	any	any	any	any	any	any		Datos entrando. No entiendo nada, pero me encanta.	Data coming in. I understand nothing, but I love it.
+pm_029_2	probe_data	chatter	calm	mc	pm_029	2	m	any	any	any	any	any	any		Datos entrando. No entiendo nada, pero me encanta.	Data coming in. I understand nothing, but I love it. | Data coming in. I understand nothing, but I love it. | Data arriving. No idea what it means. Love it.
 pm_030_1	probe_data	chatter	calm	probe	pm_030	1	both	any	any	any	any	any	any	proud		[beeps a data stream]
-pm_030_2	probe_data	chatter	calm	mc	pm_030	2	m	any	any	any	any	any	any		Te leemos. Los científicos dicen gracias.	We read you. The scientists say thanks.
+pm_030_2	probe_data	chatter	calm	mc	pm_030	2	m	any	any	any	any	any	any		Te leemos. Los científicos dicen gracias.	We read you. The scientists say thanks. | We read you. The scientists say thanks. | Loud and clear. Thanks from the lab.
 pm_030_3	probe_data	chatter	calm	probe	pm_030	3	both	any	any	any	any	any	any	happy		[beeps a welcome]
 pm_031_1	probe_data	chatter	calm	probe	pm_031	1	both	any	any	any	any	any	okto	proud		[beeps a tidy stream]
-pm_031_2	probe_data	chatter	calm	mc	pm_031	2	m	any	any	any	any	any	okto		Todo ordenado por fecha. Gracias, Okto.	All sorted by date. Thanks, Okto.
+pm_031_2	probe_data	chatter	calm	mc	pm_031	2	m	any	any	any	any	any	okto		Todo ordenado por fecha. Gracias, Okto.	All sorted by date. Thanks, Okto. | All sorted by date. Thanks, Okto. | Sorted by date. Thank you, Okto.
 pm_032_1	probe_data	chatter	calm	probe	pm_032	1	both	any	any	any	any	any	hecs	curious		[beeps very carefully]
-pm_032_2	probe_data	chatter	calm	mc	pm_032	2	m	any	any	any	any	any	hecs		Llegan bien, HECS. No hace falta enviarlo tres veces.	It's arriving fine, HECS. No need to send it three times.
+pm_032_2	probe_data	chatter	calm	mc	pm_032	2	m	any	any	any	any	any	hecs		Llegan bien, HECS. No hace falta enviarlo tres veces.	It's arriving fine, HECS. No need to send it three times. | It's arriving fine, HECS. No need to send it three times. | It's fine, HECS. Once is enough.
 pm_033_1	probe_data	chatter	calm	probe	pm_033	1	both	any	any	any	any	any	rovemate	happy		[beeps an excited stream]
-pm_033_2	probe_data	chatter	calm	mc	pm_033	2	m	any	any	any	any	any	rovemate		Más despacio, Rovemate. Se nos llena la libreta.	Slower, Rovemate. Our notebook is filling up.
+pm_033_2	probe_data	chatter	calm	mc	pm_033	2	m	any	any	any	any	any	rovemate		Más despacio, Rovemate. Se nos llena la libreta.	Slower, Rovemate. Our notebook is filling up. | Slower, Rovemate. Our notebook is filling up. | Slow down, Rovemate. The notebook is full.
 pm_034_1	probe_data	chatter	calm	probe	pm_034	1	both	any	any	any	any	any	snob	bored		[beeps a bored stream]
-pm_034_2	probe_data	chatter	calm	mc	pm_034	2	m	any	any	any	any	any	snob		Gracias por compartir, su excelencia.	Thanks for sharing, your excellency.
+pm_034_2	probe_data	chatter	calm	mc	pm_034	2	m	any	any	any	any	any	snob		Gracias por compartir, su excelencia.	Thanks for sharing, your excellency. | Thanks for sharing, your excellency. | How generous, your excellency.
 pm_035_1	probe_data	chatter	calm	probe	pm_035	1	both	any	any	any	any	any	stayputnik	happy		[beeps an old stream]
-pm_035_2	probe_data	chatter	calm	mc	pm_035	2	m	any	any	any	any	any	stayputnik		Recibido, Stayputnik. Aún funciona como el primer día.	Copy, Stayputnik. Still works like the first day.
+pm_035_2	probe_data	chatter	calm	mc	pm_035	2	m	any	any	any	any	any	stayputnik		Recibido, Stayputnik. Aún funciona como el primer día.	Copy, Stayputnik. Still works like the first day. | Copy, Stayputnik. Still works like the first day. | Copy, Stayputnik. Working like day one.
 pm_036_1	splashdown	chatter	none	probe	pm_036	1	both	any	any	any	any	any	any	scared		[beeps from the water]
-pm_036_2	splashdown	chatter	none	mc	pm_036	2	m	any	any	any	any	any	any		Flotas, sonda. Muy bien.	You're floating, probe. Very good.
-pm_037_1	splashdown	chatter	none	mc	pm_037	1	m	any	any	any	any	any	any		Amerizaje. ¿Estás bien ahí abajo?	Splashdown. You okay down there?
+pm_036_2	splashdown	chatter	none	mc	pm_036	2	m	any	any	any	any	any	any		Flotas, sonda. Muy bien.	You're floating, probe. Very good. | You're floating, probe. Very good. | Floating, probe. Good.
+pm_037_1	splashdown	chatter	none	mc	pm_037	1	m	any	any	any	any	any	any		Amerizaje. ¿Estás bien ahí abajo?	Splashdown. You okay down there? | Splashdown. You okay down there? | In the water. All okay?
 pm_037_2	splashdown	chatter	none	probe	pm_037	2	both	any	any	any	any	any	any	offended		[beeps wetly]
 pm_038_1	splashdown	chatter	none	probe	pm_038	1	both	any	any	any	any	any	any	curious		[beeps at a fish]
-pm_038_2	splashdown	chatter	none	mc	pm_038	2	m	any	any	any	any	any	any		No, no lo puedes traer.	No, you can't bring it.
-pm_039_1	splashdown	chatter	none	mc	pm_039	1	m	any	any	any	any	any	okto		Amerizaje confirmado, Okto. ¿Te ha entrado agua?	Splashdown confirmed, Okto. Did water get in?
+pm_038_2	splashdown	chatter	none	mc	pm_038	2	m	any	any	any	any	any	any		No, no lo puedes traer.	No, you can't bring it. | No, you can't bring it. | No. It stays there.
+pm_039_1	splashdown	chatter	none	mc	pm_039	1	m	any	any	any	any	any	okto		Amerizaje confirmado, Okto. ¿Te ha entrado agua?	Splashdown confirmed, Okto. Did water get in? | Splashdown confirmed, Okto. Did water get in? | Splashdown, Okto. Any leaks?
 pm_039_2	splashdown	chatter	none	probe	pm_039	2	both	any	any	any	any	any	okto	offended		[beeps very dryly]
 pm_040_1	splashdown	chatter	none	probe	pm_040	1	both	any	any	any	any	any	hecs	scared		[beeps in a panic]
-pm_040_2	splashdown	chatter	none	mc	pm_040	2	m	any	any	any	any	any	hecs		¡Calma, HECS! Los paracaídas te han dejado suave. Flotas.	Calm down, HECS! The chutes set you down gently. You float.
+pm_040_2	splashdown	chatter	none	mc	pm_040	2	m	any	any	any	any	any	hecs		¡Calma, HECS! Los paracaídas te han dejado suave. Flotas.	Calm down, HECS! The chutes set you down gently. You float. | Calm down, HECS! The chutes set you down gently. You float. | Relax, HECS! Soft landing. You're floating.
 pm_040_3	splashdown	chatter	none	probe	pm_040	3	both	any	any	any	any	any	hecs	scared		[beeps a little calmer]
 pm_041_1	splashdown	chatter	none	probe	pm_041	1	both	any	any	any	any	any	snob	offended		[beeps disgusted]
-pm_041_2	splashdown	chatter	none	mc	pm_041	2	m	any	any	any	any	any	snob		Lo sé. Agua salada. Qué horror.	I know. Salt water. How awful.
+pm_041_2	splashdown	chatter	none	mc	pm_041	2	m	any	any	any	any	any	snob		Lo sé. Agua salada. Qué horror.	I know. Salt water. How awful. | I know. Salt water. How awful. | Salt water. Terrible, I know.
 pm_042_1	splashdown	chatter	none	probe	pm_042	1	both	any	any	any	any	any	stayputnik	happy		[beeps bobbing along]
-pm_042_2	splashdown	chatter	none	mc	pm_042	2	m	any	any	any	any	any	stayputnik		Así se hace, viejo. Flota como un pato.	That's it, old timer. Floats like a duck.
+pm_042_2	splashdown	chatter	none	mc	pm_042	2	m	any	any	any	any	any	stayputnik		Así se hace, viejo. Flota como un pato.	That's it, old timer. Floats like a duck. | That's it, old timer. Floats like a duck. | There you go, old timer. Like a duck.
 pm_043_1	touchdown	chatter	none	probe	pm_043	1	both	any	any	any	any	any	any	proud		[beeps a landing report]
-pm_043_2	touchdown	chatter	none	mc	pm_043	2	m	any	any	any	any	any	any		Aterrizaje confirmado. De una pieza.	Touchdown confirmed. In one piece.
-pm_044_1	touchdown	chatter	none	mc	pm_044	1	m	any	any	any	any	any	any		¡Contacto! Aquí aplaude toda la sala.	Contact! The whole room is clapping.
+pm_043_2	touchdown	chatter	none	mc	pm_043	2	m	any	any	any	any	any	any		Aterrizaje confirmado. De una pieza.	Touchdown confirmed. In one piece. | Touchdown confirmed. In one piece. | Landed. One piece.
+pm_044_1	touchdown	chatter	none	mc	pm_044	1	m	any	any	any	any	any	any		¡Contacto! Aquí aplaude toda la sala.	Contact! The whole room is clapping. | Contact! The whole room is clapping. | Contact! Everyone here is clapping.
 pm_044_2	touchdown	chatter	none	probe	pm_044	2	both	any	any	any	any	any	any	happy		[beeps a bow]
 pm_045_1	touchdown	chatter	none	probe	pm_045	1	both	any	any	any	any	any	any	curious		[beeps at the dust]
-pm_045_2	touchdown	chatter	none	mc	pm_045	2	m	any	any	any	any	any	any		Es polvo. Bienvenida a tu nuevo hogar.	That's dust. Welcome to your new home.
+pm_045_2	touchdown	chatter	none	mc	pm_045	2	m	any	any	any	any	any	any		Es polvo. Bienvenida a tu nuevo hogar.	That's dust. Welcome to your new home. | That's dust. Welcome to your new home. | Dust. Welcome to {here}, your new home.
 pm_046_1	touchdown	chatter	none	probe	pm_046	1	both	any	any	any	any	any	rovemate	happy		[beeps very impatiently]
-pm_046_2	touchdown	chatter	none	mc	pm_046	2	m	any	any	any	any	any	rovemate		Sí, ya puedes ir a explorar. Despacio.	Yes, you can go explore now. Slowly.
+pm_046_2	touchdown	chatter	none	mc	pm_046	2	m	any	any	any	any	any	rovemate		Sí, ya puedes ir a explorar. Despacio.	Yes, you can go explore now. Slowly. | Yes, you can go explore now. Slowly. | Go explore. Slowly.
 pm_047_1	touchdown	chatter	none	probe	pm_047	1	both	any	any	any	any	any	okto	proud		[beeps exact coordinates]
-pm_047_2	touchdown	chatter	none	mc	pm_047	2	m	any	any	any	any	any	okto		Aterrizaje de libro, Okto. Te lo apuntamos.	Textbook landing, Okto. We'll note it down.
-pm_048_1	touchdown	chatter	none	mc	pm_048	1	m	any	any	any	any	any	snob		Ha llegado su excelencia. ¿Le gusta el sitio?	Your excellency has arrived. Do you like the place?
+pm_047_2	touchdown	chatter	none	mc	pm_047	2	m	any	any	any	any	any	okto		Aterrizaje de libro, Okto. Te lo apuntamos.	Textbook landing, Okto. We'll note it down. | Textbook landing, Okto. We'll note it down. | Perfect landing, Okto. Logged.
+pm_048_1	touchdown	chatter	none	mc	pm_048	1	m	any	any	any	any	any	snob		Ha llegado su excelencia. ¿Le gusta el sitio?	Your excellency has arrived. Do you like the place? | Your excellency has arrived. Do you like the place? | Welcome to {here}, your excellency. Acceptable?
 pm_048_2	touchdown	chatter	none	probe	pm_048	2	both	any	any	any	any	any	snob	bored		[beeps unimpressed]
 pm_049_1	docked	chatter	none	probe	pm_049	1	both	any	any	any	any	any	any	happy		[beeps at the neighbor]
-pm_049_2	docked	chatter	none	mc	pm_049	2	m	any	any	any	any	any	any		Acoplamiento completo. Ya tienes compañía.	Docking complete. You've got company.
-pm_050_1	docked	chatter	none	mc	pm_050	1	m	any	any	any	any	any	any		Acoplados. Suave como una pluma.	Docked. Soft as a feather.
+pm_049_2	docked	chatter	none	mc	pm_049	2	m	any	any	any	any	any	any		Acoplamiento completo. Ya tienes compañía.	Docking complete. You've got company. | Docking complete. You've got company. | Docked. Company for you.
+pm_050_1	docked	chatter	none	mc	pm_050	1	m	any	any	any	any	any	any		Acoplados. Suave como una pluma.	Docked. Soft as a feather. | Docked. Soft as a feather. | Docked. Feather soft.
 pm_050_2	docked	chatter	none	probe	pm_050	2	both	any	any	any	any	any	any	proud		[beeps proudly]
 pm_051_1	docked	chatter	none	probe	pm_051	1	both	any	any	any	any	any	any	curious		[beeps through the port]
-pm_051_2	docked	chatter	none	mc	pm_051	2	m	any	any	any	any	any	any		Sí, ahora sois una sola nave. Portaos bien.	Yes, you're one ship now. Behave.
+pm_051_2	docked	chatter	none	mc	pm_051	2	m	any	any	any	any	any	any		Sí, ahora sois una sola nave. Portaos bien.	Yes, you're one ship now. Behave. | Yes, you're one ship now. Behave. | One ship now. Be good.
 pm_052_1	docked	chatter	none	probe	pm_052	1	both	any	any	any	any	any	rovemate	happy		[beeps hello hello hello]
-pm_052_2	docked	chatter	none	mc	pm_052	2	m	any	any	any	any	any	rovemate		No hace falta saludar tanto, Rovemate.	You don't need to greet it that much, Rovemate.
+pm_052_2	docked	chatter	none	mc	pm_052	2	m	any	any	any	any	any	rovemate		No hace falta saludar tanto, Rovemate.	You don't need to greet it that much, Rovemate. | You don't need to greet it that much, Rovemate. | Not so much greeting, Rovemate.
 pm_053_1	docked	chatter	none	probe	pm_053	1	both	any	any	any	any	any	snob	offended		[beeps at the neighbor]
-pm_053_2	docked	chatter	none	mc	pm_053	2	m	any	any	any	any	any	snob		Sí, es más vieja que tú. Sé amable.	Yes, it's older than you. Be nice.
+pm_053_2	docked	chatter	none	mc	pm_053	2	m	any	any	any	any	any	snob		Sí, es más vieja que tú. Sé amable.	Yes, it's older than you. Be nice. | Yes, it's older than you. Be nice. | It's older than you. Respect.
 pm_054_1	docked	chatter	none	probe	pm_054	1	both	any	any	any	any	any	stayputnik	curious		[beeps at the port]
-pm_054_2	docked	chatter	none	mc	pm_054	2	m	any	any	any	any	any	stayputnik		Eso es un puerto de acoplamiento, Stayputnik. Te lo explico luego.	That's a docking port, Stayputnik. I'll explain later.
-pm_055_1	burn_soon	warning	tense	mc	pm_055	1	m	any	any	any	any	any	any		Encendido en un minuto. Apunta bien.	Burn in one minute. Point it right.
+pm_054_2	docked	chatter	none	mc	pm_054	2	m	any	any	any	any	any	stayputnik		Eso es un puerto de acoplamiento, Stayputnik. Te lo explico luego.	That's a docking port, Stayputnik. I'll explain later. | That's a docking port, Stayputnik. I'll explain later. | Docking port, Stayputnik. Long story.
+pm_055_1	burn_soon	warning	tense	mc	pm_055	1	m	any	any	any	any	any	any		Encendido en un minuto. Apunta bien.	Burn in one minute. Point it right. | Burn in one minute. Point it right. | One minute to the burn. Aim well.
 pm_055_2	burn_soon	warning	tense	probe	pm_055	2	both	any	any	any	any	any	any	curious		[beeps at attention]
 pm_056_1	burn_soon	warning	tense	probe	pm_056	1	both	any	any	any	any	any	any	scared		[beeps counting down]
-pm_056_2	burn_soon	warning	tense	mc	pm_056	2	m	any	any	any	any	any	any		Sí, ya casi. No te adelantes.	Yes, nearly there. Don't jump the gun.
-pm_057_1	burn_soon	warning	tense	mc	pm_057	1	m	any	any	any	any	any	any		Atenta, sonda. Se acerca la maniobra.	Heads up, probe. The maneuver is close.
+pm_056_2	burn_soon	warning	tense	mc	pm_056	2	m	any	any	any	any	any	any		Sí, ya casi. No te adelantes.	Yes, nearly there. Don't jump the gun. | Yes, nearly there. Don't jump the gun. | Almost. Don't start early.
+pm_057_1	burn_soon	warning	tense	mc	pm_057	1	m	any	any	any	any	any	any		Atenta, sonda. Se acerca la maniobra.	Heads up, probe. The maneuver is close. | Heads up, probe. The maneuver is close. | Attention, probe. Maneuver soon.
 pm_057_2	burn_soon	warning	tense	probe	pm_057	2	both	any	any	any	any	any	any	proud		[beeps ready]
 pm_058_1	burn_soon	warning	tense	probe	pm_058	1	both	any	any	any	any	any	okto	proud		[beeps a precise countdown]
-pm_058_2	burn_soon	warning	tense	mc	pm_058	2	m	any	any	any	any	any	okto		Gracias, Okto. Nosotros contamos en segundos enteros.	Thanks, Okto. We count in whole seconds.
+pm_058_2	burn_soon	warning	tense	mc	pm_058	2	m	any	any	any	any	any	okto		Gracias, Okto. Nosotros contamos en segundos enteros.	Thanks, Okto. We count in whole seconds. | Thanks, Okto. We count in whole seconds. | Thanks, Okto. Whole seconds are fine.
 pm_059_1	burn_soon	warning	tense	probe	pm_059	1	both	any	any	any	any	any	rovemate	happy		[beeps impatiently]
-pm_059_2	burn_soon	warning	tense	mc	pm_059	2	m	any	any	any	any	any	rovemate		Todavía no, Rovemate. Espera la marca.	Not yet, Rovemate. Wait for the mark.
-pm_060_1	burn_soon	warning	tense	mc	pm_060	1	m	any	any	any	any	any	stayputnik		Stayputnik, encendido pronto. ¿Estás despierto?	Stayputnik, burn soon. Are you awake?
+pm_059_2	burn_soon	warning	tense	mc	pm_059	2	m	any	any	any	any	any	rovemate		Todavía no, Rovemate. Espera la marca.	Not yet, Rovemate. Wait for the mark. | Not yet, Rovemate. Wait for the mark. | Wait, Rovemate. Not yet.
+pm_060_1	burn_soon	warning	tense	mc	pm_060	1	m	any	any	any	any	any	stayputnik		Stayputnik, encendido pronto. ¿Estás despierto?	Stayputnik, burn soon. Are you awake? | Stayputnik, burn soon. Are you awake? | Burn soon, Stayputnik. Awake?
 pm_060_2	burn_soon	warning	tense	probe	pm_060	2	both	any	any	any	any	any	stayputnik	sleepy		[beeps a startled yes]
-pm_061_1	probe_say_again	chatter	calm	mc	pm_061	1	m	any	any	any	any	any	any		Perdón, estaba comiendo. ¿Repites?	Sorry, I was eating. Say again?
+pm_061_1	probe_say_again	chatter	calm	mc	pm_061	1	m	any	any	any	any	any	any		Perdón, estaba comiendo. ¿Repites?	Sorry, I was eating. Say again? | Sorry, I was eating. Say again? | Sorry, I was eating {food}. Again?
 pm_061_2	probe_say_again	chatter	calm	probe	pm_061	2	both	any	any	any	any	any	any	offended		[beeps again annoyed]
-pm_062_1	probe_say_again	chatter	calm	mc	pm_062	1	m	any	any	any	any	any	any		Se ha cortado. Una vez más, por favor.	It cut out. Once more, please.
+pm_062_1	probe_say_again	chatter	calm	mc	pm_062	1	m	any	any	any	any	any	any		Se ha cortado. Una vez más, por favor.	It cut out. Once more, please. | It cut out. Once more, please. | You broke up. One more time.
 pm_062_2	probe_say_again	chatter	calm	probe	pm_062	2	both	any	any	any	any	any	any	bored		[beeps it again slowly]
-pm_063_1	probe_say_again	chatter	calm	mc	pm_063	1	m	any	any	any	any	any	any		¿Eso era un sí o un no?	Was that a yes or a no?
+pm_063_1	probe_say_again	chatter	calm	mc	pm_063	1	m	any	any	any	any	any	any		¿Eso era un sí o un no?	Was that a yes or a no? | Was that a yes or a no? | Yes or no?
 pm_063_2	probe_say_again	chatter	calm	probe	pm_063	2	both	any	any	any	any	any	any	offended		[beeps very clearly]
-pm_064_1	probe_say_again	chatter	calm	mc	pm_064	1	m	any	any	any	any	any	any		Hay mucho ruido. Repite más alto.	There's a lot of noise. Repeat louder.
+pm_064_1	probe_say_again	chatter	calm	mc	pm_064	1	m	any	any	any	any	any	any		Hay mucho ruido. Repite más alto.	There's a lot of noise. Repeat louder. | There's a lot of noise. Repeat louder. | Lots of noise. Louder, please.
 pm_064_2	probe_say_again	chatter	calm	probe	pm_064	2	both	any	any	any	any	any	any	offended		[beeps very loudly]
-pm_065_1	probe_say_again	chatter	calm	mc	pm_065	1	m	any	any	any	any	any	any		Te hemos perdido un momento. ¿Qué decías?	We lost you for a moment. What were you saying?
+pm_065_1	probe_say_again	chatter	calm	mc	pm_065	1	m	any	any	any	any	any	any		Te hemos perdido un momento. ¿Qué decías?	We lost you for a moment. What were you saying? | We lost you for a moment. What were you saying? | Lost you for a second. What was that?
 pm_065_2	probe_say_again	chatter	calm	probe	pm_065	2	both	any	any	any	any	any	any	curious		[beeps patiently again]
-pm_066_1	probe_say_again	chatter	calm	mc	pm_066	1	m	any	any	any	any	any	okto		Okto, repite. Más despacio esta vez.	Okto, repeat. Slower this time.
+pm_066_1	probe_say_again	chatter	calm	mc	pm_066	1	m	any	any	any	any	any	okto		Okto, repite. Más despacio esta vez.	Okto, repeat. Slower this time. | Okto, repeat. Slower this time. | Again, Okto. Slower.
 pm_066_2	probe_say_again	chatter	calm	probe	pm_066	2	both	any	any	any	any	any	okto	offended		[beeps exactly the same]
-pm_067_1	probe_say_again	chatter	calm	mc	pm_067	1	m	any	any	any	any	any	hecs		HECS, no te hemos oído. ¿Todo bien?	HECS, we didn't hear you. All good?
+pm_067_1	probe_say_again	chatter	calm	mc	pm_067	1	m	any	any	any	any	any	hecs		HECS, no te hemos oído. ¿Todo bien?	HECS, we didn't hear you. All good? | HECS, we didn't hear you. All good? | Missed that, HECS. All okay?
 pm_067_2	probe_say_again	chatter	calm	probe	pm_067	2	both	any	any	any	any	any	hecs	scared		[beeps worriedly again]
-pm_068_1	probe_say_again	chatter	calm	mc	pm_068	1	m	any	any	any	any	any	snob		Disculpe, su excelencia. ¿Puede repetir?	Excuse me, your excellency. Could you repeat?
+pm_068_1	probe_say_again	chatter	calm	mc	pm_068	1	m	any	any	any	any	any	snob		Disculpe, su excelencia. ¿Puede repetir?	Excuse me, your excellency. Could you repeat? | Excuse me, your excellency. Could you repeat? | Pardon, your excellency. Once more?
 pm_068_2	probe_say_again	chatter	calm	probe	pm_068	2	both	any	any	any	any	any	snob	offended		[beeps with great patience]

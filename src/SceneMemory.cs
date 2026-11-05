@@ -14,8 +14,45 @@ namespace Lonapse
         private readonly Dictionary<string, long> last = new Dictionary<string, long>();
         private long seq;
 
-        /// <summary>Most scene ids kept. The oldest are forgotten first, so they count as new again.</summary>
-        public const int MaxEntries = 4000;
+        /// <summary>Most ids kept (scenes, slot values and subtitle versions). The oldest are forgotten first, so
+        /// they count as new again.</summary>
+        public const int MaxEntries = 20000;
+        /// <summary>Prefix of a slot value in the memory (procedural talk): "slot:thing:helmet".</summary>
+        public const string SlotPrefix = "slot:";
+        /// <summary>Pool name SubtitleSlots uses for the subtitle versions of a line: "version:&lt;clip key&gt;".
+        /// The values are version indices, "0" is the original sentence.</summary>
+        public const string VersionPool = "version:";
+        public const string OriginalVersion = "0";
+
+        /// <summary>
+        /// Procedural talk: picks one value of a slot pool and remembers it. A value never used comes first (at
+        /// random among those), else the one used longest ago. So "Who took my {thing}?" goes through the whole pool
+        /// before a thing comes back. For the subtitle versions of a line the original sentence ("0") comes last
+        /// among the new ones, so a player sees the new wording first. Null or empty gives null.
+        /// </summary>
+        public string TakeValue(string pool, IList<string> values, Random rng)
+        {
+            if (values == null || values.Count == 0) return null;
+            string p;
+            if (values.Count == 1) p = values[0];
+            else
+            {
+                var fresh = new List<string>();
+                for (int i = 0; i < values.Count; i++) if (LastSeq(SlotPrefix + pool + ":" + values[i]) < 0) fresh.Add(values[i]);
+                if (fresh.Count > 1 && pool != null && pool.StartsWith(VersionPool, StringComparison.Ordinal))
+                    fresh.Remove(OriginalVersion);
+                if (fresh.Count > 0) p = fresh[rng != null ? rng.Next(fresh.Count) : 0];
+                else
+                {
+                    p = values[0];
+                    for (int i = 1; i < values.Count; i++)
+                        if (LastSeq(SlotPrefix + pool + ":" + values[i]) < LastSeq(SlotPrefix + pool + ":" + p)) p = values[i];
+                }
+            }
+            Stamp(SlotPrefix + pool + ":" + p);
+            return p;
+        }
+
         /// <summary>After every line was heard: pick from this share of the list, the ones heard longest ago.</summary>
         public const int OldestShareDivisor = 4;
 

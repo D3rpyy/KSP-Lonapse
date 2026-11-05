@@ -559,7 +559,7 @@ namespace Lonapse
             string phase = CurrentPhase;
             var list = PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
                 sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
-                      && (sc.IsIntercom || BlackoutOk(sc)) && filter(sc));
+                      && (sc.IsIntercom || BlackoutOk(sc)) && filter(sc) && SlotsOk(sc));
             PhraseScene p = Mem.Take(list, rng, lastSceneId);
             if (p != null) lastSceneId = p.Id;
             return p;

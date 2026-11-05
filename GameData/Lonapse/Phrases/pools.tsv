@@ -1,0 +1,173 @@
+pool	english
+thing	lucky rock
+thing	rubber duck
+thing	space pen
+thing	sample bag
+thing	flag
+thing	flight log
+thing	camera
+thing	toothbrush
+thing	favorite spoon
+thing	spare strut
+thing	[goo] jar of Mystery Goo
+thing	snack bar
+thing	rover key
+thing	sandwich
+thing	pillow
+thing	lucky wrench
+thing	comic book
+spot	seat
+spot	control panel
+spot	snack locker
+spot	air vent
+spot	toilet
+spot	headrest
+spot	cup holder
+spot	sleeping bag
+spot	storage net
+spot	first aid kit
+spot	window
+spot	life support panel
+part	hatch handle
+part	radio knob
+part	window seal
+part	seat belt
+part	toilet lid
+part	cabin light
+part	air vent cover
+part	throttle lever
+part	cup holder
+part	snack locker door
+part	headrest
+outside_part	[solar] solar panel
+outside_part	[antenna] antenna
+outside_part	[legs] landing leg
+outside_part	[ladder] ladder
+outside_part	[docking] docking port
+outside_part	[heatshield] heat shield
+outside_part	[chute] parachute
+outside_part	[engine] engine
+outside_part	[strut] strut
+beeper	fuel gauge
+beeper	life support panel
+beeper	toilet
+beeper	snack locker
+beeper	radio
+beeper	control panel
+beeper	[probe] probe core
+beeper	[goo] Mystery Goo
+beeper	[sciencejr] Science Jr.
+food	snack paste
+food	tube cheese
+food	freeze-dried noodles
+food	space beans
+food	Jeb's famous chili
+food	powdered eggs
+food	mystery stew
+food	algae bars
+food	emergency rations
+food	reheated soup
+food	dehydrated fish
+food	cold pizza
+creature	the Kraken
+creature	a giant space whale
+creature	a Mun made of cheese
+creature	a strut that could talk
+creature	a rover with feelings
+creature	a booster that wanted a hug
+creature	Mission Control, but they were all ducks
+creature	Gene, but he was a goat
+creature	a probe core that would not stop beeping
+not_me	Not me.
+not_me	Don't look at me.
+not_me	I didn't touch it.
+not_me	Wasn't me this time.
+not_me	Why do you always ask me?
+not_me	I was asleep.
+not_me	[probe] Ask the probe.
+silly_name	Rocky McRocketface
+silly_name	Big Tube 2
+silly_name	Untitled Craft 3
+silly_name	Jeb's Revenge
+silly_name	The Flying Pickle
+silly_name	Definitely Safe
+silly_name	Boom Mk1
+silly_name	Dave
+chore	clean the toilet
+chore	clean the windows
+chore	count the snacks
+chore	talk to Control
+chore	[goo] feed the Mystery Goo
+chore	wipe the helmets
+chore	sort the rocks
+chore	fix the cup holder
+chore	read the manual out loud
+noise	clank
+noise	squeak
+noise	hiss
+noise	knock
+noise	long groan
+noise	beep
+noise	rattle
+noise	pop
+rumor	Gene sleeps under his desk.
+rumor	the intern launched a pizza last week.
+rumor	Wernher strapped a booster to his chair.
+rumor	Control lost the manual. Again.
+rumor	the new rocket is just three old rockets.
+rumor	Gene cried at the last launch.
+rumor	the snack budget is bigger than the fuel budget.
+song	the countdown song
+song	the snack song
+song	that jingle from the ads
+song	Kerbin, Sweet Kerbin
+song	the theme from the safety video
+experiment	[goo] Mystery Goo
+experiment	[thermometer] thermometer
+experiment	[barometer] barometer
+experiment	[seismic] seismic sensor
+experiment	[gravity] gravity sensor
+experiment	[sciencejr] Science Jr.
+experiment	[magnetometer] magnetometer
+mc_excuse	Budget cuts.
+mc_excuse	Gene says no.
+mc_excuse	The intern spent it on boosters.
+mc_excuse	Maybe next year.
+mc_excuse	Fill out form 27B first.
+mc_excuse	We spent it on snacks.
+status	the snacks are holding up.
+status	nobody has cried today.
+status	the toilet works again.
+status	we only lost one glove.
+status	[goo] the Mystery Goo is looking at us.
+status	morale is high. Mostly.
+home_thing	real gravity
+home_thing	rain
+home_thing	the KSC cafeteria
+home_thing	my own bed
+home_thing	grass
+home_thing	showers
+home_thing	Mom's mystery stew
+home_thing	pizza that isn't frozen
+jeb_idea	add more boosters
+jeb_idea	do a flip
+jeb_idea	eat the Mystery Goo
+jeb_idea	go faster
+jeb_idea	lick the window
+jeb_idea	push the big red button
+cure	drinking upside down
+cure	thinking about taxes
+cure	staring at the fuel gauge
+cure	talking to the probe
+cure	holding your nose and humming
+loud_thing	a Mainsail
+loud_thing	a broken vacuum
+loud_thing	an angry goat
+loud_thing	a rusty hatch
+loud_thing	a rocket on the pad
+loud_thing	a Kraken with a cold
+game	I spy
+game	rock paper scissors
+game	twenty questions
+game	who can float the longest
+game	guess the snack

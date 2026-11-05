@@ -1,46 +1,46 @@
 # Lonapse 0.6.0 lines (sr_). Written as drafts, converted to this table.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
-sr_001	chatter	chatter	calm	mc	sr_001	1	m	launch	any	any	any	any	¡Despegue limpio! Aquí abajo gritan todos.	Clean liftoff! Everyone down here is cheering.
-sr_002	chatter	chatter	calm	mc	sr_002	1	m	launch	any	any	any	any	Torre despejada. Buen viaje.	Tower cleared. Have a good trip.
-sr_003	chatter	chatter	calm	crew	sr_003	1	both	launch	any	any	any	any	¡Nos vamos! ¡De verdad nos vamos!	We're going! We're really going!
-sr_004	chatter	chatter	calm	crew	sr_004	1	both	launch	any	any	any	any	Empuje bueno. Esto empuja mucho.	Good thrust. This pushes a lot.
-sr_005_1	chatter	chatter	calm	crew	sr_005	1	both	launch	any	any	any	any	Control, el cohete va hacia arriba. Como debe.	Control, the rocket is going up. As it should.
-sr_005_2	chatter	chatter	calm	mc	sr_005	2	m	launch	any	any	any	any	Confirmado. Esa es la dirección buena.	Confirmed. That's the right direction.
-sr_006_1	chatter	chatter	calm	crew	sr_006	1	both	launch	any	any	any	any	Control, ¡qué ruido!	Control, what a noise!
-sr_006_2	chatter	chatter	calm	mc	sr_006	2	m	launch	any	any	any	any	Es el sonido del dinero. Seguid.	That's the sound of money. Carry on.
-sr_007	chatter	chatter	calm	mc	sr_007	1	m	launch	any	any	any	any	Todo nominal. Disfrutad del paseo.	All nominal. Enjoy the ride.
-sr_008	chatter	chatter	calm	crew	sr_008	1	both	launch	any	any	any	any	Subiendo. Todo en verde.	Climbing. All green.
-sr_009	chatter	chatter	calm	mc	sr_009	1	m	ascent	any	any	any	any	Buena trayectoria. Seguid así.	Good trajectory. Keep it up.
-sr_010	chatter	chatter	calm	mc	sr_010	1	m	ascent	any	any	any	any	Altitud subiendo bien. Ni un susto.	Altitude rising nicely. Not a single scare.
-sr_011	chatter	chatter	calm	mc	sr_011	1	m	ascent	any	any	any	any	Ascenso limpio. Los ingenieros sonríen.	Clean ascent. The engineers are smiling.
-sr_012	chatter	chatter	calm	crew	sr_012	1	both	ascent	any	any	any	any	El cielo se pone oscuro. Qué bonito.	The sky is getting dark. How pretty.
-sr_013_1	chatter	chatter	calm	crew	sr_013	1	both	ascent	any	any	any	any	Control, ya casi no hay aire fuera.	Control, there's almost no air outside now.
-sr_013_2	chatter	chatter	calm	mc	sr_013	2	m	ascent	any	any	any	any	Correcto. No abráis la ventana.	Correct. Don't open the window.
-sr_014_1	chatter	chatter	calm	crew	sr_014	1	both	ascent	any	any	any	any	Inclinando según el plan.	Pitching over as planned.
-sr_014_2	chatter	chatter	calm	mc	sr_014	2	m	ascent	any	any	any	any	Lo vemos. Perfecto.	We see it. Perfect.
-sr_015_1	chatter	chatter	calm	crew	sr_015	1	both	ascent	any	any	any	any	Control, ¿vamos bien de velocidad?	Control, are we good on speed?
-sr_015_2	chatter	chatter	calm	mc	sr_015	2	m	ascent	any	any	any	any	Muy bien. Sin pasaros.	Very good. Don't overdo it.
-sr_016	chatter	chatter	calm	crew	sr_016	1	both	ascent	any	any	any	any	Esto es como subir en un ascensor muy grande.	It's like riding a very big elevator.
-sr_017	chatter	chatter	calm	mc	sr_017	1	m	ascent	any	any	any	any	Seguid el perfil. Lo estáis bordando.	Follow the profile. You're nailing it.
-sr_018	chatter	chatter	calm	crew	sr_018	1	both	ascent	any	any	any	any	Todo estable. Mi estómago, menos.	All stable. My stomach, less so.
-sr_019	chatter	chatter	calm	mc	sr_019	1	m	reentry	any	any	any	any	Bienvenidos de vuelta al aire.	Welcome back to the air.
-sr_020	chatter	chatter	calm	mc	sr_020	1	m	reentry	any	any	any	any	Ángulo bueno. Mantenedlo.	Good angle. Hold it.
-sr_021	chatter	chatter	calm	crew	sr_021	1	both	reentry	any	any	any	any	Empezamos a notar el aire.	We're starting to feel the air.
-sr_022_1	chatter	chatter	calm	crew	sr_022	1	both	reentry	any	any	any	any	Control, aquí empieza a brillar.	Control, it's starting to glow here.
-sr_022_2	chatter	chatter	calm	mc	sr_022	2	m	reentry	any	any	any	any	Normal. Escudo por delante.	Normal. Shield forward.
-sr_023_1	chatter	chatter	calm	crew	sr_023	1	both	reentry	any	any	any	any	Control, ¿cómo vamos?	Control, how are we doing?
-sr_023_2	chatter	chatter	calm	mc	sr_023	2	m	reentry	any	any	any	any	Muy bien. Vais a casa.	Very well. You're coming home.
-sr_024	chatter	chatter	calm	crew	sr_024	1	both	reentry	any	any	any	any	Volvemos a casa. Con algo de calor.	Heading home. With a bit of heat.
-sr_025	chatter	chatter	calm	mc	sr_025	1	m	reentry	any	any	any	any	Trayectoria de entrada correcta.	Entry trajectory looks right.
-sr_026	chatter	chatter	calm	crew	sr_026	1	both	reentry	any	any	any	any	El escudo trabaja. Nosotros, también.	The shield is working. So are we.
-sr_027	chatter	chatter	calm	mc	sr_027	1	m	descent	any	any	any	any	Ya estáis abajo del todo. Casi.	You're almost all the way down. Almost.
-sr_028	chatter	chatter	calm	mc	sr_028	1	m	descent	any	any	any	any	Velocidad bajando. Muy bien.	Speed coming down. Very good.
-sr_029_1	chatter	chatter	calm	crew	sr_029	1	both	descent	any	any	any	any	Control, ya veo el suelo. Qué bonito es.	Control, I can see the ground. It's so pretty.
-sr_029_2	chatter	chatter	calm	mc	sr_029	2	m	descent	any	any	any	any	Pronto lo pisaréis. Con calma.	You'll be standing on it soon. Easy.
-sr_030	chatter	chatter	calm	crew	sr_030	1	both	descent	any	any	any	any	Todo listo para bajar. Manos quietas.	All set for the way down. Hands still.
-sr_031	chatter	chatter	calm	crew	sr_031	1	both	descent	any	any	any	any	Bajando suave. Como una pluma gorda.	Coming down softly. Like a fat feather.
-sr_032_1	chatter	chatter	calm	crew	sr_032	1	both	descent	any	any	any	any	Control, ¿hay alguien esperando abajo?	Control, is anyone waiting down there?
-sr_032_2	chatter	chatter	calm	mc	sr_032	2	m	descent	any	any	any	any	Todo el centro espacial. Con tarta.	The whole space center. With cake.
-sr_033	chatter	chatter	calm	mc	sr_033	1	m	descent	any	any	any	any	Descenso estable. Casi en casa.	Stable descent. Almost home.
-sr_034	chatter	chatter	calm	crew	sr_034	1	both	descent	any	any	any	any	Altura bajando. Nervios subiendo.	Altitude dropping. Nerves rising.
-sr_035	chatter	chatter	calm	mc	sr_035	1	m	descent	any	any	any	any	Lo hacéis muy bien. Ya queda poco.	You're doing very well. Not long now.
+sr_001	chatter	chatter	calm	mc	sr_001	1	m	launch	any	any	any	any	¡Despegue limpio! Aquí abajo gritan todos.	Clean liftoff! Everyone down here is cheering. | Clean liftoff! Everyone down here is cheering. | Clean liftoff! The room is cheering.
+sr_002	chatter	chatter	calm	mc	sr_002	1	m	launch	any	any	any	any	Torre despejada. Buen viaje.	Tower cleared. Have a good trip. | Tower cleared. Have a good trip. | Tower clear. Good trip, {vessel}.
+sr_003	chatter	chatter	calm	crew	sr_003	1	both	launch	any	any	any	any	¡Nos vamos! ¡De verdad nos vamos!	We're going! We're really going! | We're going! We're really going! | We're flying! Really flying!
+sr_004	chatter	chatter	calm	crew	sr_004	1	both	launch	any	any	any	any	Empuje bueno. Esto empuja mucho.	Good thrust. This pushes a lot. | Good thrust. This pushes a lot. | Strong thrust. It really pushes.
+sr_005_1	chatter	chatter	calm	crew	sr_005	1	both	launch	any	any	any	any	Control, el cohete va hacia arriba. Como debe.	Control, the rocket is going up. As it should. | Control, the rocket is going up. As it should. | Control, we're going up. Like we should.
+sr_005_2	chatter	chatter	calm	mc	sr_005	2	m	launch	any	any	any	any	Confirmado. Esa es la dirección buena.	Confirmed. That's the right direction. | Confirmed. That's the right direction. | Confirmed. Up is correct.
+sr_006_1	chatter	chatter	calm	crew	sr_006	1	both	launch	any	any	any	any	Control, ¡qué ruido!	Control, what a noise! | Control, what a noise! | Control, so loud!
+sr_006_2	chatter	chatter	calm	mc	sr_006	2	m	launch	any	any	any	any	Es el sonido del dinero. Seguid.	That's the sound of money. Carry on. | That's the sound of money. Carry on. | That's money you hear. Keep going.
+sr_007	chatter	chatter	calm	mc	sr_007	1	m	launch	any	any	any	any	Todo nominal. Disfrutad del paseo.	All nominal. Enjoy the ride. | All nominal. Enjoy the ride. | Everything nominal. Enjoy it.
+sr_008	chatter	chatter	calm	crew	sr_008	1	both	launch	any	any	any	any	Subiendo. Todo en verde.	Climbing. All green. | Climbing. All green. | Going up. All green.
+sr_009	chatter	chatter	calm	mc	sr_009	1	m	ascent	any	any	any	any	Buena trayectoria. Seguid así.	Good trajectory. Keep it up. | Good trajectory. Keep it up. | Nice trajectory. Keep going.
+sr_010	chatter	chatter	calm	mc	sr_010	1	m	ascent	any	any	any	any	Altitud subiendo bien. Ni un susto.	Altitude rising nicely. Not a single scare. | Altitude rising nicely. Not a single scare. | Nice climb. No scares.
+sr_011	chatter	chatter	calm	mc	sr_011	1	m	ascent	any	any	any	any	Ascenso limpio. Los ingenieros sonríen.	Clean ascent. The engineers are smiling. | Clean ascent. The engineers are smiling. | Clean climb. Engineering is smiling.
+sr_012	chatter	chatter	calm	crew	sr_012	1	both	ascent	any	any	any	any	El cielo se pone oscuro. Qué bonito.	The sky is getting dark. How pretty. | The sky is getting dark. How pretty. | The sky goes dark. Beautiful.
+sr_013_1	chatter	chatter	calm	crew	sr_013	1	both	ascent	any	any	any	any	Control, ya casi no hay aire fuera.	Control, there's almost no air outside now. | Control, there's almost no air outside now. | Control, barely any air out there.
+sr_013_2	chatter	chatter	calm	mc	sr_013	2	m	ascent	any	any	any	any	Correcto. No abráis la ventana.	Correct. Don't open the window. | Correct. Don't open the window. | Correct. Keep the window shut.
+sr_014_1	chatter	chatter	calm	crew	sr_014	1	both	ascent	any	any	any	any	Inclinando según el plan.	Pitching over as planned. | Pitching over as planned. | Pitching over, like the plan says.
+sr_014_2	chatter	chatter	calm	mc	sr_014	2	m	ascent	any	any	any	any	Lo vemos. Perfecto.	We see it. Perfect. | We see it. Perfect. | Copy. Perfect.
+sr_015_1	chatter	chatter	calm	crew	sr_015	1	both	ascent	any	any	any	any	Control, ¿vamos bien de velocidad?	Control, are we good on speed? | Control, are we good on speed? | Control, speed okay?
+sr_015_2	chatter	chatter	calm	mc	sr_015	2	m	ascent	any	any	any	any	Muy bien. Sin pasaros.	Very good. Don't overdo it. | Very good. Don't overdo it. | Very good. Don't push it.
+sr_016	chatter	chatter	calm	crew	sr_016	1	both	ascent	any	any	any	any	Esto es como subir en un ascensor muy grande.	It's like riding a very big elevator. | It's like riding a very big elevator. | Like a giant elevator.
+sr_017	chatter	chatter	calm	mc	sr_017	1	m	ascent	any	any	any	any	Seguid el perfil. Lo estáis bordando.	Follow the profile. You're nailing it. | Follow the profile. You're nailing it. | Stay on profile. You're doing great.
+sr_018	chatter	chatter	calm	crew	sr_018	1	both	ascent	any	any	any	any	Todo estable. Mi estómago, menos.	All stable. My stomach, less so. | All stable. My stomach, less so. | Stable. My stomach isn't.
+sr_019	chatter	chatter	calm	mc	sr_019	1	m	reentry	any	any	any	any	Bienvenidos de vuelta al aire.	Welcome back to the air. | Welcome back to the air. | Back in the air again.
+sr_020	chatter	chatter	calm	mc	sr_020	1	m	reentry	any	any	any	any	Ángulo bueno. Mantenedlo.	Good angle. Hold it. | Good angle. Hold it. | Nice angle. Keep it.
+sr_021	chatter	chatter	calm	crew	sr_021	1	both	reentry	any	any	any	any	Empezamos a notar el aire.	We're starting to feel the air. | We're starting to feel the air. | The air is starting to push.
+sr_022_1	chatter	chatter	calm	crew	sr_022	1	both	reentry	any	any	any	any	Control, aquí empieza a brillar.	Control, it's starting to glow here. | Control, it's starting to glow here. | Control, things are glowing.
+sr_022_2	chatter	chatter	calm	mc	sr_022	2	m	reentry	any	any	any	any	Normal. Escudo por delante.	Normal. Shield forward. | Normal. Shield forward. | Normal. Keep the shield in front.
+sr_023_1	chatter	chatter	calm	crew	sr_023	1	both	reentry	any	any	any	any	Control, ¿cómo vamos?	Control, how are we doing? | Control, how are we doing? | Control, how's it look?
+sr_023_2	chatter	chatter	calm	mc	sr_023	2	m	reentry	any	any	any	any	Muy bien. Vais a casa.	Very well. You're coming home. | Very well. You're coming home. | Very good. You're on your way home.
+sr_024	chatter	chatter	calm	crew	sr_024	1	both	reentry	any	any	any	any	Volvemos a casa. Con algo de calor.	Heading home. With a bit of heat. | Heading home. With a bit of heat. | Going home. A bit warm.
+sr_025	chatter	chatter	calm	mc	sr_025	1	m	reentry	any	any	any	any	Trayectoria de entrada correcta.	Entry trajectory looks right. | Entry trajectory looks right. | Entry path looks correct.
+sr_026	chatter	chatter	calm	crew	sr_026	1	both	reentry	any	any	any	any	El escudo trabaja. Nosotros, también.	The shield is working. So are we. | The shield is working. So are we. | Shield works. We work too.
+sr_027	chatter	chatter	calm	mc	sr_027	1	m	descent	any	any	any	any	Ya estáis abajo del todo. Casi.	You're almost all the way down. Almost. | You're almost all the way down. Almost. | Nearly down. Nearly.
+sr_028	chatter	chatter	calm	mc	sr_028	1	m	descent	any	any	any	any	Velocidad bajando. Muy bien.	Speed coming down. Very good. | Speed coming down. Very good. | Slowing down. Good.
+sr_029_1	chatter	chatter	calm	crew	sr_029	1	both	descent	any	any	any	any	Control, ya veo el suelo. Qué bonito es.	Control, I can see the ground. It's so pretty. | Control, I can see the ground. It's so pretty. | Control, the ground is in view. So pretty.
+sr_029_2	chatter	chatter	calm	mc	sr_029	2	m	descent	any	any	any	any	Pronto lo pisaréis. Con calma.	You'll be standing on it soon. Easy. | You'll be standing on it soon. Easy. | You'll stand on it soon. Easy now.
+sr_030	chatter	chatter	calm	crew	sr_030	1	both	descent	any	any	any	any	Todo listo para bajar. Manos quietas.	All set for the way down. Hands still. | All set for the way down. Hands still. | Ready for the descent. Steady hands.
+sr_031	chatter	chatter	calm	crew	sr_031	1	both	descent	any	any	any	any	Bajando suave. Como una pluma gorda.	Coming down softly. Like a fat feather. | Coming down softly. Like a fat feather. | Floating down. A chubby feather.
+sr_032_1	chatter	chatter	calm	crew	sr_032	1	both	descent	any	any	any	any	Control, ¿hay alguien esperando abajo?	Control, is anyone waiting down there? | Control, is anyone waiting down there? | Control, anyone waiting for us?
+sr_032_2	chatter	chatter	calm	mc	sr_032	2	m	descent	any	any	any	any	Todo el centro espacial. Con tarta.	The whole space center. With cake. | The whole space center. With cake. | Everyone. With cake.
+sr_033	chatter	chatter	calm	mc	sr_033	1	m	descent	any	any	any	any	Descenso estable. Casi en casa.	Stable descent. Almost home. | Stable descent. Almost home. | Steady descent. Nearly home.
+sr_034	chatter	chatter	calm	crew	sr_034	1	both	descent	any	any	any	any	Altura bajando. Nervios subiendo.	Altitude dropping. Nerves rising. | Altitude dropping. Nerves rising. | Lower altitude. Higher nerves.
+sr_035	chatter	chatter	calm	mc	sr_035	1	m	descent	any	any	any	any	Lo hacéis muy bien. Ya queda poco.	You're doing very well. Not long now. | You're doing very well. Not long now. | Very well done. Almost there.

@@ -11,6 +11,7 @@ them out loud. The audio itself is not reversed, only the spelling.
 |---|---|
 | `phrases/*.tsv` | The source tables, one file per kind of event. I write these by hand. |
 | `bodies.tsv` | Body names for the `{body}` placeholder. |
+| `pools.tsv` | Experimental: values for the subtitle slots like `{thing}`. |
 | `README.md` | This file. |
 
 The source files are:
@@ -35,6 +36,7 @@ The source files are:
 | `phrases/probe_crew.tsv` | 0.6.0: a crewed vessel with a probe core. The probe beeps in the cabin and a crew member answers (event `probe_crew`). | `pc_` |
 | `phrases/events_more.tsv` | 0.6.0: more crew lines for throttle, chutes, staging, power, signal, landing, docking, EVA, stations and burns. | `em_` |
 | `phrases/probe_more.tsv` | 0.6.0: more probe mode lines for throttle, chutes, data, splashdown, touchdown, docking, burns and say again. | `pm_` |
+| `phrases/templates.tsv` | Experimental: templates with subtitle slots. | `tp_` |
 | `phrases/probe_cores.tsv` | Own lines for the `qbe`, `mk2drone`, `mpo` and `mtm` cores, after their in-game part descriptions. | `pk_` |
 
 Some older rows have keys without these prefixes.
@@ -114,6 +116,47 @@ The build checks these rules for you, so you can't break the game with a typo:
 - The rules in "Probe mode" below.
 
 The C# loader (`PhraseTable.Parse`) checks the same probe rules and the same placeholder rules as the script, with the same messages. The script checks more (scene in one file, seq 1..n, minimum counts, intercom phase).
+
+## Subtitle slots (experimental)
+
+This is on the branch `experimental/procedural-talk`. It is not tested in game yet.
+
+A template is a normal row. The Spanish is a general sentence, so the clip is real loñapsE and fits every subtitle. The English has slots, and the game fills them in when the scene plays. So one clip gives many subtitles.
+
+```
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
+tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}?
+tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	Not me, {other}. Look behind the {spot}.
+```
+
+The slots:
+
+- `{pool}` is a value from `pools.tsv`. The same slot gives the same value in every line of one scene. `{pool:2}` is another value from the same pool. The game uses every value of a pool once before one comes back, and remembers that in `PluginData/played.txt` as `slot:<pool>:<value>`.
+- `{day}` (mission day, from 1), `{here}` (the current body), `{vessel}` (the vessel name) and `{alt_km}` (altitude in km) come from the flight.
+- `{other}` and `{self}` are the first names of the two kerbals in an intercom chat. They only work in intercom scenes.
+- A value at the start of a sentence gets a capital letter.
+
+Two things make the sentences less recognisable:
+
+- **Versions.** The English of a row can hold several versions split by `|`: `Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again.` The game picks one per play, again every version once before one comes back. The first version is the original sentence, so it comes last: a player sees the new wording first. Every version of a line must fit every version of the lines before and after it.
+- **Slots inside pool values.** A pool value can hold slots itself, so a pool can be a list of whole sentences. The pool `not_me` holds "Not me.", "Don't look at me.", "I was asleep." and so on, and a reply like `{not_me} Look behind the {spot}.` changes as a whole.
+
+- **Conditions.** A version can start with conditions: `[landed] You're on the ground, dummy.` The conditions are the flight phases (`prelaunch`, `orbit`, `coast`, `landed` and so on), `kerbin` (at Kerbin) and `away` (anywhere else). Several in one version must all hold: `[orbit kerbin]`. When a line has versions whose conditions hold right now, the game only picks from those. Otherwise only from the versions without conditions. So all lines of a scene switch together. "Control, how high are we?" gets "You're on the ground, dummy." and then "Oh. Right." on the ground, and a normal answer in orbit. Every line needs at least one version without conditions.
+- **Parts on the vessel.** The conditions also include the parts of the active vessel: `solar`, `antenna`, `legs`, `ladder`, `docking`, `heatshield`, `chute`, `engine`, `strut`, `probe`, and the experiments `goo`, `sciencejr`, `thermometer`, `barometer`, `seismic`, `gravity` and `magnetometer`. They work on versions and on pool values: `[solar] solar panel` in a pool is only used when the vessel has a solar panel. A version is only picked when all its slots can be filled. A scene where a line cannot be filled is not played at all, so "the Mystery Goo moved" never plays without Mystery Goo aboard.
+- **What the crew can reach.** `spot` and `part` are things inside the cabin, so "tape it" and "look behind the X" make sense. `outside_part` is for things they can only see or hear, and every value there needs its part on the vessel.
+
+`python3 audio/slots.py` prints random fills of every template, so I can read them before I play them. A scene name limits it to that scene, `-n 8` gives more fills, and `--spanish` adds the Spanish. `--phase landed --body mun` shows the versions for that situation.
+
+The rules, checked by the script:
+
+- Slots only go in the English. The Spanish only knows `{body}`.
+- A slot name is `[a-z_]+`. A pool slot needs a pool in `pools.tsv`, and `{pool:n}` needs at least n values.
+- `body`, the flight slots and the person slots cannot be pool names.
+- A pool value has no `|` and no `{body}`. A pool cannot lead back to itself.
+- Versions (`|`) are all non-empty and cannot be used together with `{body}`.
+- A pool that can give `{other}` or `{self}` only works in intercom scenes.
+
+I keep the Spanish vague on purpose. "Who took my helmet?" and "Who took my sock?" both come from "¿Quién ha cogido mis cosas?". A slot that the game cannot fill shows `...` and goes to the log.
 
 ## Probe mode
 

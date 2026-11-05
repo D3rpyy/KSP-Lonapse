@@ -1,133 +1,133 @@
 # Intercom: crew-only scenes with two or more lines. Always funny, never in a serious phase. New keys: ic_
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-intercom_calm_s1_1	chatter	chatter	calm	crew	intercom_calm_s1	1	both	goofy	any	¿Has visto eso por la ventana?	Did you see that out the window?
-intercom_calm_s1_2	chatter	chatter	calm	crew	intercom_calm_s1	2	both	goofy	any	Precioso, ¿verdad?	Beautiful, isn't it?
-intercom_calm_s2_1	chatter	chatter	calm	crew	intercom_calm_s2	1	both	goofy	any	¿Queda café?	Any coffee left?
-intercom_calm_s2_2	chatter	chatter	calm	crew	intercom_calm_s2	2	both	goofy	any	Solo un poco.	Just a little.
-intercom_calm_s2_3	chatter	chatter	calm	crew	intercom_calm_s2	3	both	goofy	any	Pues a medias.	Half each, then.
-intercom_calm_s3_1	chatter	chatter	calm	crew	intercom_calm_s3	1	both	orbit	any	¿Duermes bien aquí arriba?	Do you sleep well up here?
-intercom_calm_s3_2	chatter	chatter	calm	crew	intercom_calm_s3	2	both	orbit	any	Como un bebé, flotando.	Like a baby, floating.
-intercom_tense_s1_1	chatter	chatter	tense	crew	intercom_tense_s1	1	both	goofy	spin	¿Tú también notas que giramos?	Do you feel us spinning too?
-intercom_tense_s1_2	chatter	chatter	tense	crew	intercom_tense_s1	2	both	goofy	spin	Sí. Finjamos que no.	Yes. Let's pretend we don't.
-intercom_calm_s4_1	chatter	chatter	calm	crew	intercom_calm_s4	1	both	goofy	any	¿Quién ha pulsado ese botón?	Who pressed that button?
-intercom_calm_s4_2	chatter	chatter	calm	crew	intercom_calm_s4	2	both	goofy	any	Yo no.	Not me.
-intercom_calm_s4_3	chatter	chatter	calm	crew	intercom_calm_s4	3	both	goofy	any	Yo tampoco.	Me neither.
-intercom_calm_s5_1	chatter	chatter	calm	crew	intercom_calm_s5	1	both	goofy	any	¿Has traído las galletas?	Did you bring the cookies?
-intercom_calm_s5_2	chatter	chatter	calm	crew	intercom_calm_s5	2	both	goofy	any	Se me olvidaron.	I forgot them.
-intercom_calm_s5_3	chatter	chatter	calm	crew	intercom_calm_s5	3	both	goofy	any	Esto es un desastre.	This is a disaster.
-intercom_calm_s6_1	chatter	chatter	calm	crew	intercom_calm_s6	1	both	goofy	any	Creo que alguien tocó algo otra vez.	I think someone touched something again.
-intercom_calm_s6_2	chatter	chatter	calm	crew	intercom_calm_s6	2	both	goofy	any	Como siempre.	As always.
-intercom_calm_s7_1	chatter	chatter	calm	crew	intercom_calm_s7	1	both	goofy	any	¿Cuántos cohetes se estrellaron antes de este?	How many rockets crashed before this one?
-intercom_calm_s7_2	chatter	chatter	calm	crew	intercom_calm_s7	2	both	goofy	any	Mejor no preguntes.	Better not ask.
-intercom_calm_s8_1	chatter	chatter	calm	crew	intercom_calm_s8	1	both	goofy	any	Huele raro aquí dentro.	It smells weird in here.
-intercom_calm_s8_2	chatter	chatter	calm	crew	intercom_calm_s8	2	both	goofy	any	No he sido yo.	It wasn't me.
-intercom_calm_s9_1	chatter	chatter	calm	crew	intercom_calm_s9	1	both	goofy	any	¿Sabes pilotar esto?	Do you know how to fly this?
-intercom_calm_s9_2	chatter	chatter	calm	crew	intercom_calm_s9	2	both	goofy	any	Más o menos.	More or less.
-intercom_calm_s9_3	chatter	chatter	calm	crew	intercom_calm_s9	3	both	goofy	any	Qué tranquilizador.	How reassuring.
-intercom_calm_s10_1	chatter	chatter	calm	crew	intercom_calm_s10	1	both	orbit	any	Mira, una luna.	Look, a moon.
-intercom_calm_s10_2	chatter	chatter	calm	crew	intercom_calm_s10	2	both	orbit	any	Es la Mun.	It's the Mun.
-intercom_calm_s10_3	chatter	chatter	calm	crew	intercom_calm_s10	3	both	orbit	any	Ya lo sé.	I know.
-intercom_calm_s11_1	chatter	chatter	calm	crew	intercom_calm_s11	1	both	goofy	any	Me pica la nariz.	My nose itches.
-intercom_calm_s11_2	chatter	chatter	calm	crew	intercom_calm_s11	2	both	goofy	any	Pues aguanta.	Then hold on.
-intercom_calm_s12_1	chatter	chatter	calm	crew	intercom_calm_s12	1	both	goofy	any	¿Jugamos a algo?	Shall we play something?
-intercom_calm_s12_2	chatter	chatter	calm	crew	intercom_calm_s12	2	both	goofy	any	Veo, veo.	I spy.
-intercom_calm_s12_3	chatter	chatter	calm	crew	intercom_calm_s12	3	both	goofy	any	¿Qué ves?	What do you see?
-intercom_calm_s12_4	chatter	chatter	calm	crew	intercom_calm_s12	4	both	goofy	any	Espacio.	Space.
-intercom_calm_s13_1	chatter	chatter	calm	crew	intercom_calm_s13	1	both	goofy	any	¿Has puesto los cinturones?	Did you buckle up?
-intercom_calm_s13_2	chatter	chatter	calm	crew	intercom_calm_s13	2	both	goofy	any	¿Teníamos cinturones?	We had seatbelts?
-intercom_calm_s14_1	chatter	chatter	calm	crew	intercom_calm_s14	1	both	goofy	any	El manual dice que no toquemos nada.	The manual says not to touch anything.
-intercom_calm_s14_2	chatter	chatter	calm	crew	intercom_calm_s14	2	both	goofy	any	¿Qué manual?	What manual?
-intercom_calm_s15_1	chatter	chatter	calm	crew	intercom_calm_s15	1	both	goofy	any	Cuando volvamos, quiero una pizza.	When we get back, I want a pizza.
-intercom_calm_s15_2	chatter	chatter	calm	crew	intercom_calm_s15	2	both	goofy	any	Que sean dos.	Make it two.
-intercom_tense_s2_1	chatter	chatter	tense	crew	intercom_tense_s2	1	both	goofy	impulse	¿Has oído ese golpe?	Did you hear that bang?
-intercom_tense_s2_2	chatter	chatter	tense	crew	intercom_tense_s2	2	both	goofy	impulse	No quiero saberlo.	I don't want to know.
-intercom_tense_s3_1	chatter	chatter	tense	crew	intercom_tense_s3	1	both	goofy	engine_out	¿Por qué está tan callado el motor?	Why is the engine so quiet?
-intercom_tense_s3_2	chatter	chatter	tense	crew	intercom_tense_s3	2	both	goofy	engine_out	Estará pensando.	It's probably thinking.
-intercom_tense_s4_1	chatter	chatter	tense	crew	intercom_tense_s4	1	both	goofy	fuel	No mires el indicador de combustible.	Don't look at the fuel gauge.
-intercom_tense_s4_2	chatter	chatter	tense	crew	intercom_tense_s4	2	both	goofy	fuel	¿Por qué?	Why?
-intercom_tense_s4_3	chatter	chatter	tense	crew	intercom_tense_s4	3	both	goofy	fuel	Tú no mires.	Just don't look.
-ic_cookies_1	chatter	chatter	calm	crew	ic_cookies	1	both	orbit	any	¿Quién se ha comido mis galletas?	Who ate my cookies?
-ic_cookies_2	chatter	chatter	calm	crew	ic_cookies	2	both	orbit	any	Flotaron solas hasta mi boca.	They floated into my mouth on their own.
-ic_cookies_3	chatter	chatter	calm	crew	ic_cookies	3	both	orbit	any	Qué gravedad tan curiosa.	What curious gravity.
-ic_staging_1	chatter	chatter	calm	crew	ic_staging	1	both	goofy	any	¿Quién ha tocado el botón de etapas?	Who touched the staging button?
-ic_staging_2	chatter	chatter	calm	crew	ic_staging	2	both	goofy	any	Solo quería ver si funcionaba.	I just wanted to see if it worked.
-ic_staging_3	chatter	chatter	calm	crew	ic_staging	3	both	goofy	any	Funciona.	It works.
-ic_stove_1	chatter	chatter	calm	crew	ic_stove	1	both	coast	any	Creo que me he dejado la luz encendida en casa.	I think I left the light on at home.
-ic_stove_2	chatter	chatter	calm	crew	ic_stove	2	both	coast	any	Estamos en el espacio.	We're in space.
-ic_stove_3	chatter	chatter	calm	crew	ic_stove	3	both	coast	any	Pues la factura va a ser astronómica.	Then the bill will be astronomical.
-ic_mun_joke_1	chatter	chatter	calm	crew	ic_mun_joke	1	both	goofy	any	¿Sabes por qué la Mun no tiene amigos?	Do you know why the Mun has no friends?
-ic_mun_joke_2	chatter	chatter	calm	crew	ic_mun_joke	2	both	goofy	any	¿Por qué?	Why?
-ic_mun_joke_3	chatter	chatter	calm	crew	ic_mun_joke	3	both	goofy	any	Porque siempre nos da la espalda.	Because it always turns its back on us.
-ic_philosophy_1	chatter	chatter	calm	crew	ic_philosophy	1	both	goofy	any	Si nadie nos mira, ¿seguimos girando?	If nobody watches us, are we still spinning?
-ic_philosophy_2	chatter	chatter	calm	crew	ic_philosophy	2	both	goofy	any	Eso es demasiado profundo para esta cápsula.	That's too deep for this capsule.
-ic_cheese_suit_1	chatter	chatter	calm	crew	ic_cheese_suit	1	both	goofy	any	Tu traje huele a queso viejo.	Your suit smells like old cheese.
-ic_cheese_suit_2	chatter	chatter	calm	crew	ic_cheese_suit	2	both	goofy	any	Es un traje de época.	It's a vintage suit.
-ic_cheese_suit_3	chatter	chatter	calm	crew	ic_cheese_suit	3	both	goofy	any	Es un traje de queso.	It's a cheese suit.
-ic_sing_1	chatter	chatter	calm	crew	ic_sing	1	both	goofy	any	Vamos a cantar algo.	Let's sing something.
-ic_sing_2	chatter	chatter	calm	crew	ic_sing	2	both	goofy	any	Por favor, no.	Please, no.
-ic_sing_3	chatter	chatter	calm	crew	ic_sing	3	both	goofy	any	¡Tres, dos, uno, la la la!	Three, two, one, la la la!
-ic_seat_swap_1	chatter	chatter	calm	crew	ic_seat_swap	1	both	goofy	any	¿Me cambias el asiento?	Will you swap seats with me?
-ic_seat_swap_2	chatter	chatter	calm	crew	ic_seat_swap	2	both	goofy	any	Estamos atados.	We're strapped in.
-ic_seat_swap_3	chatter	chatter	calm	crew	ic_seat_swap	3	both	goofy	any	Por eso lo pregunto con educación.	That's why I'm asking politely.
-ic_buttons_1	chatter	chatter	calm	crew	ic_buttons	1	both	goofy	any	He contado los botones. Hay ciento doce.	I counted the buttons. There are a hundred and twelve.
-ic_buttons_2	chatter	chatter	calm	crew	ic_buttons	2	both	goofy	any	Ayer había ciento once.	Yesterday there were a hundred and eleven.
-ic_buttons_3	chatter	chatter	calm	crew	ic_buttons	3	both	goofy	any	¿Quién ha puesto uno nuevo?	Who added a new one?
-ic_sandwich_1	chatter	chatter	calm	crew	ic_sandwich	1	both	goofy	any	¿Me das un poco de tu sándwich?	Can I have some of your sandwich?
-ic_sandwich_2	chatter	chatter	calm	crew	ic_sandwich	2	both	goofy	any	Es un sándwich individual.	It's a single-serving sandwich.
-ic_sandwich_3	chatter	chatter	calm	crew	ic_sandwich	3	both	goofy	any	Qué egoísta.	How selfish.
-ic_rocket_joke_1	chatter	chatter	calm	crew	ic_rocket_joke	1	both	goofy	any	¿Qué le dijo un cohete a otro cohete?	What did one rocket say to the other rocket?
-ic_rocket_joke_2	chatter	chatter	calm	crew	ic_rocket_joke	2	both	goofy	any	¿Qué?	What?
-ic_rocket_joke_3	chatter	chatter	calm	crew	ic_rocket_joke	3	both	goofy	any	Nada. Los cohetes no hablan.	Nothing. Rockets don't talk.
-ic_prints_1	chatter	chatter	calm	crew	ic_prints	1	both	goofy	any	Has dejado la ventana llena de huellas.	You left fingerprints all over the window.
-ic_prints_2	chatter	chatter	calm	crew	ic_prints	2	both	goofy	any	Son huellas científicas.	They're scientific prints.
-ic_office_1	chatter	chatter	calm	crew	ic_office	1	both	goofy	any	Mi madre cree que trabajo en una oficina.	My mom thinks I work in an office.
-ic_office_2	chatter	chatter	calm	crew	ic_office	2	both	goofy	any	Técnicamente, esto es una oficina muy alta.	Technically, this is a very high office.
-ic_snore_1	chatter	chatter	calm	crew	ic_snore	1	both	goofy	any	Anoche roncabas como un motor.	Last night you snored like an engine.
-ic_snore_2	chatter	chatter	calm	crew	ic_snore	2	both	goofy	any	Era el motor.	That was the engine.
-ic_snore_3	chatter	chatter	calm	crew	ic_snore	3	both	goofy	any	El motor estaba apagado.	The engine was off.
-ic_sock_1	chatter	chatter	calm	crew	ic_sock	1	both	goofy	any	Me falta un calcetín.	One of my socks is missing.
-ic_sock_2	chatter	chatter	calm	crew	ic_sock	2	both	goofy	any	Está pegado a tu asiento.	It's stuck to your seat.
-ic_sock_3	chatter	chatter	calm	crew	ic_sock	3	both	goofy	any	Ah, por eso huele así.	Ah, that's why it smells like that.
-ic_life_1	chatter	chatter	calm	crew	ic_life	1	both	goofy	any	¿Crees que hay vida en otros planetas?	Do you think there's life on other planets?
-ic_life_2	chatter	chatter	calm	crew	ic_life	2	both	goofy	any	Ahora sí. Nosotros.	There is now. Us.
-ic_snacks_1	chatter	chatter	calm	crew	ic_snacks	1	both	goofy	any	¿Dónde están los aperitivos?	Where are the snacks?
-ic_snacks_2	chatter	chatter	calm	crew	ic_snacks	2	both	goofy	any	En el compartimento de emergencia.	In the emergency compartment.
-ic_snacks_3	chatter	chatter	calm	crew	ic_snacks	3	both	goofy	any	Pues yo me declaro una emergencia.	Then I declare myself an emergency.
-ic_brakes_1	chatter	chatter	calm	crew	ic_brakes	1	both	goofy	any	El piloto dice que el manual es opcional.	The pilot says the manual is optional.
-ic_brakes_2	chatter	chatter	calm	crew	ic_brakes	2	both	goofy	any	El piloto también dice que los frenos son opcionales.	The pilot also says brakes are optional.
-ic_jellyfish_1	chatter	chatter	calm	crew	ic_jellyfish	1	both	orbit	any	Mi pelo flota como una medusa.	My hair floats like a jellyfish.
-ic_jellyfish_2	chatter	chatter	calm	crew	ic_jellyfish	2	both	orbit	any	Tú no tienes pelo.	You don't have hair.
-ic_jellyfish_3	chatter	chatter	calm	crew	ic_jellyfish	3	both	orbit	any	Por eso es tan triste.	That's why it's so sad.
-ic_rock_1	chatter	chatter	calm	crew	ic_rock	1	both	goofy	any	He traído una piedra de Kerbin como recuerdo.	I brought a rock from Kerbin as a souvenir.
-ic_rock_2	chatter	chatter	calm	crew	ic_rock	2	both	goofy	any	¿Por qué? Vivimos allí.	Why? We live there.
-ic_rock_3	chatter	chatter	calm	crew	ic_rock	3	both	goofy	any	Por si la echo de menos.	In case I miss it.
-ic_mustard_1	chatter	chatter	calm	crew	ic_mustard	1	both	coast	any	¿Alguien ha visto la mostaza?	Has anyone seen the mustard?
-ic_mustard_2	chatter	chatter	calm	crew	ic_mustard	2	both	coast	any	Mira el techo.	Look at the ceiling.
-ic_mustard_3	chatter	chatter	calm	crew	ic_mustard	3	both	coast	any	Ah, ahí está. Y mi bocadillo.	Ah, there it is. And my sandwich.
-ic_lake_1	chatter	chatter	calm	crew	ic_lake	1	both	goofy	any	Déjame pilotar un rato.	Let me fly for a while.
-ic_lake_2	chatter	chatter	calm	crew	ic_lake	2	both	goofy	any	La última vez aterrizaste en un lago.	Last time you landed in a lake.
-ic_lake_3	chatter	chatter	calm	crew	ic_lake	3	both	goofy	any	Fue un amerizaje planeado.	It was a planned splashdown.
-ic_whistle_1	chatter	chatter	calm	crew	ic_whistle	1	both	goofy	any	Deja de silbar.	Stop whistling.
-ic_whistle_2	chatter	chatter	calm	crew	ic_whistle	2	both	goofy	any	No silbo. Es la ventilación.	I'm not whistling. It's the vents.
-ic_whistle_3	chatter	chatter	calm	crew	ic_whistle	3	both	goofy	any	La ventilación no sabe esa canción.	The vents don't know that song.
-ic_ship_name_1	chatter	chatter	calm	crew	ic_ship_name	1	both	goofy	any	Le he puesto nombre a la nave.	I gave the ship a name.
-ic_ship_name_2	chatter	chatter	calm	crew	ic_ship_name	2	both	goofy	any	¿Cuál?	What name?
-ic_ship_name_3	chatter	chatter	calm	crew	ic_ship_name	3	both	goofy	any	Señora Brillitos.	Mrs. Sparkles.
-ic_math_1	chatter	chatter	calm	crew	ic_math	1	both	goofy	any	¿Cuánto es dos más dos?	What's two plus two?
-ic_math_2	chatter	chatter	calm	crew	ic_math	2	both	goofy	any	Depende del combustible.	Depends on the fuel.
-ic_dream_1	chatter	chatter	calm	crew	ic_dream	1	both	goofy	any	Soñé que éramos ingenieros.	I dreamed we were engineers.
-ic_dream_2	chatter	chatter	calm	crew	ic_dream	2	both	goofy	any	Qué pesadilla.	What a nightmare.
-ic_tea_1	chatter	chatter	calm	crew	ic_tea	1	both	coast	any	Mi té está flotando en bolitas.	My tea is floating in little balls.
-ic_tea_2	chatter	chatter	calm	crew	ic_tea	2	both	coast	any	Pues cómetelo.	Then eat it.
-ic_tea_3	chatter	chatter	calm	crew	ic_tea	3	both	coast	any	Té masticable. Qué innovación.	Chewable tea. What an innovation.
-ic_weird_light_1	chatter	chatter	calm	crew	ic_weird_light	1	both	goofy	any	He visto una luz rara.	I saw a weird light.
-ic_weird_light_2	chatter	chatter	calm	crew	ic_weird_light	2	both	goofy	any	Era tu linterna en el cristal.	It was your flashlight on the glass.
-ic_weird_light_3	chatter	chatter	calm	crew	ic_weird_light	3	both	goofy	any	Una luz rara, como te digo.	A weird light, like I said.
-ic_lunch_1	chatter	chatter	calm	crew	ic_lunch	1	both	goofy	any	¿Qué hay de comer hoy?	What's for lunch today?
-ic_lunch_2	chatter	chatter	calm	crew	ic_lunch	2	both	goofy	any	Pasta en tubo.	Pasta in a tube.
-ic_lunch_3	chatter	chatter	calm	crew	ic_lunch	3	both	goofy	any	¿Y ayer?	And yesterday?
-ic_lunch_4	chatter	chatter	calm	crew	ic_lunch	4	both	goofy	any	Pasta en tubo.	Pasta in a tube.
-ic_ceiling_1	chatter	chatter	calm	crew	ic_ceiling	1	both	coast	any	Te apuesto a que no tocas el techo.	I bet you can't touch the ceiling.
-ic_ceiling_2	chatter	chatter	calm	crew	ic_ceiling	2	both	coast	any	Ya lo estoy tocando.	I'm already touching it.
-ic_ceiling_3	chatter	chatter	calm	crew	ic_ceiling	3	both	coast	any	¿Con la cabeza?	With your head?
+intercom_calm_s1_1	chatter	chatter	calm	crew	intercom_calm_s1	1	both	goofy	any	¿Has visto eso por la ventana?	Did you see that out the window? | Did you see that out the window, {other}? | Look out the window. Did you see that?
+intercom_calm_s1_2	chatter	chatter	calm	crew	intercom_calm_s1	2	both	goofy	any	Precioso, ¿verdad?	Beautiful, isn't it? | Pretty, isn't it? | Gorgeous, right?
+intercom_calm_s2_1	chatter	chatter	calm	crew	intercom_calm_s2	1	both	goofy	any	¿Queda café?	Any coffee left? | Is there any coffee left? | {other}, any coffee left?
+intercom_calm_s2_2	chatter	chatter	calm	crew	intercom_calm_s2	2	both	goofy	any	Solo un poco.	Just a little. | A little bit. | Barely a drop.
+intercom_calm_s2_3	chatter	chatter	calm	crew	intercom_calm_s2	3	both	goofy	any	Pues a medias.	Half each, then. | Then we split it. | Half for you, half for me.
+intercom_calm_s3_1	chatter	chatter	calm	crew	intercom_calm_s3	1	both	orbit	any	¿Duermes bien aquí arriba?	Do you sleep well up here? | Can you sleep up here? | {other}, do you sleep okay up here?
+intercom_calm_s3_2	chatter	chatter	calm	crew	intercom_calm_s3	2	both	orbit	any	Como un bebé, flotando.	Like a baby, floating. | Like a floating baby. | Like a baby. A floating one.
+intercom_tense_s1_1	chatter	chatter	tense	crew	intercom_tense_s1	1	both	goofy	spin	¿Tú también notas que giramos?	Do you feel us spinning too? | Are we spinning, or is it just me? | {other}, do you feel that spin too?
+intercom_tense_s1_2	chatter	chatter	tense	crew	intercom_tense_s1	2	both	goofy	spin	Sí. Finjamos que no.	Yes. Let's pretend we don't. | Yes. Let's ignore it. | Yep. We pretend it isn't happening.
+intercom_calm_s4_1	chatter	chatter	calm	crew	intercom_calm_s4	1	both	goofy	any	¿Quién ha pulsado ese botón?	Who pressed that button? | Who pressed that button? | Who touched that button?
+intercom_calm_s4_2	chatter	chatter	calm	crew	intercom_calm_s4	2	both	goofy	any	Yo no.	Not me. | Wasn't me. | Not me, {other}.
+intercom_calm_s4_3	chatter	chatter	calm	crew	intercom_calm_s4	3	both	goofy	any	Yo tampoco.	Me neither. | Not me either. | Me neither. Must be the ship. | Then it was the ship. | Great. Nobody. Again.
+intercom_calm_s5_1	chatter	chatter	calm	crew	intercom_calm_s5	1	both	goofy	any	¿Has traído las galletas?	Did you bring the cookies? | Did you pack the cookies? | {other}, you brought the cookies, right?
+intercom_calm_s5_2	chatter	chatter	calm	crew	intercom_calm_s5	2	both	goofy	any	Se me olvidaron.	I forgot them. | I forgot the cookies. | Oops. I forgot them.
+intercom_calm_s5_3	chatter	chatter	calm	crew	intercom_calm_s5	3	both	goofy	any	Esto es un desastre.	This is a disaster. | This is a catastrophe. | This mission is ruined.
+intercom_calm_s6_1	chatter	chatter	calm	crew	intercom_calm_s6	1	both	goofy	any	Creo que alguien tocó algo otra vez.	I think someone touched something again. | Someone touched something again. | I think somebody pressed something again.
+intercom_calm_s6_2	chatter	chatter	calm	crew	intercom_calm_s6	2	both	goofy	any	Como siempre.	As always. | Like always. | As usual.
+intercom_calm_s7_1	chatter	chatter	calm	crew	intercom_calm_s7	1	both	goofy	any	¿Cuántos cohetes se estrellaron antes de este?	How many rockets crashed before this one? | How many rockets crashed before ours? | {other}, how many of these crashed before?
+intercom_calm_s7_2	chatter	chatter	calm	crew	intercom_calm_s7	2	both	goofy	any	Mejor no preguntes.	Better not ask. | Don't ask. | You don't want to know.
+intercom_calm_s8_1	chatter	chatter	calm	crew	intercom_calm_s8	1	both	goofy	any	Huele raro aquí dentro.	It smells weird in here. | Something smells weird in here. | It smells funny in here.
+intercom_calm_s8_2	chatter	chatter	calm	crew	intercom_calm_s8	2	both	goofy	any	No he sido yo.	It wasn't me. | Wasn't me. | Don't look at me.
+intercom_calm_s9_1	chatter	chatter	calm	crew	intercom_calm_s9	1	both	goofy	any	¿Sabes pilotar esto?	Do you know how to fly this? | Do you actually know how to fly this? | {other}, can you fly this thing?
+intercom_calm_s9_2	chatter	chatter	calm	crew	intercom_calm_s9	2	both	goofy	any	Más o menos.	More or less. | Sort of. | Mostly. | I read the manual. The first page. | I've played the simulator.
+intercom_calm_s9_3	chatter	chatter	calm	crew	intercom_calm_s9	3	both	goofy	any	Qué tranquilizador.	How reassuring. | Very reassuring. | That's comforting. | I'm getting off here.
+intercom_calm_s10_1	chatter	chatter	calm	crew	intercom_calm_s10	1	both	orbit	any	Mira, una luna.	Look, a moon. | Look, a moon! | Hey, a moon.
+intercom_calm_s10_2	chatter	chatter	calm	crew	intercom_calm_s10	2	both	orbit	any	Es la Mun.	It's the Mun. | That's the Mun. | It's called the Mun.
+intercom_calm_s10_3	chatter	chatter	calm	crew	intercom_calm_s10	3	both	orbit	any	Ya lo sé.	I know. | I know that. | Yes, I know.
+intercom_calm_s11_1	chatter	chatter	calm	crew	intercom_calm_s11	1	both	goofy	any	Me pica la nariz.	My nose itches. | My nose is itching. | Ugh, my nose itches.
+intercom_calm_s11_2	chatter	chatter	calm	crew	intercom_calm_s11	2	both	goofy	any	Pues aguanta.	Then hold on. | Hold on, then. | Then suffer.
+intercom_calm_s12_1	chatter	chatter	calm	crew	intercom_calm_s12	1	both	goofy	any	¿Jugamos a algo?	Shall we play something? | Want to play a game? | {other}, shall we play something?
+intercom_calm_s12_2	chatter	chatter	calm	crew	intercom_calm_s12	2	both	goofy	any	Veo, veo.	I spy. | I spy. | Let's do I spy.
+intercom_calm_s12_3	chatter	chatter	calm	crew	intercom_calm_s12	3	both	goofy	any	¿Qué ves?	What do you see? | What do you spy? | Okay. What do you see?
+intercom_calm_s12_4	chatter	chatter	calm	crew	intercom_calm_s12	4	both	goofy	any	Espacio.	Space. | Space. | Space. Again.
+intercom_calm_s13_1	chatter	chatter	calm	crew	intercom_calm_s13	1	both	goofy	any	¿Has puesto los cinturones?	Did you buckle up? | Are you buckled in? | {other}, did you put your belt on?
+intercom_calm_s13_2	chatter	chatter	calm	crew	intercom_calm_s13	2	both	goofy	any	¿Teníamos cinturones?	We had seatbelts? | There are seatbelts? | We have seatbelts?
+intercom_calm_s14_1	chatter	chatter	calm	crew	intercom_calm_s14	1	both	goofy	any	El manual dice que no toquemos nada.	The manual says not to touch anything. | The manual says don't touch anything. | According to the manual, we touch nothing.
+intercom_calm_s14_2	chatter	chatter	calm	crew	intercom_calm_s14	2	both	goofy	any	¿Qué manual?	What manual? | There's a manual? | Which manual?
+intercom_calm_s15_1	chatter	chatter	calm	crew	intercom_calm_s15	1	both	goofy	any	Cuando volvamos, quiero una pizza.	When we get back, I want a pizza. | When we're back, I want pizza. | First thing at home: pizza.
+intercom_calm_s15_2	chatter	chatter	calm	crew	intercom_calm_s15	2	both	goofy	any	Que sean dos.	Make it two. | Two for me. | Order me one too.
+intercom_tense_s2_1	chatter	chatter	tense	crew	intercom_tense_s2	1	both	goofy	impulse	¿Has oído ese golpe?	Did you hear that bang? | Did you hear that bang? | {other}, what was that bang?
+intercom_tense_s2_2	chatter	chatter	tense	crew	intercom_tense_s2	2	both	goofy	impulse	No quiero saberlo.	I don't want to know. | I'd rather not know. | Don't tell me.
+intercom_tense_s3_1	chatter	chatter	tense	crew	intercom_tense_s3	1	both	goofy	engine_out	¿Por qué está tan callado el motor?	Why is the engine so quiet? | Why is the engine so quiet? | The engine is very quiet. Why?
+intercom_tense_s3_2	chatter	chatter	tense	crew	intercom_tense_s3	2	both	goofy	engine_out	Estará pensando.	It's probably thinking. | It's thinking, probably. | Maybe it's resting.
+intercom_tense_s4_1	chatter	chatter	tense	crew	intercom_tense_s4	1	both	goofy	fuel	No mires el indicador de combustible.	Don't look at the fuel gauge. | Don't look at the fuel gauge. | Whatever you do, don't check the fuel.
+intercom_tense_s4_2	chatter	chatter	tense	crew	intercom_tense_s4	2	both	goofy	fuel	¿Por qué?	Why? | Why not? | What? Why?
+intercom_tense_s4_3	chatter	chatter	tense	crew	intercom_tense_s4	3	both	goofy	fuel	Tú no mires.	Just don't look. | Just don't. | Trust me. Don't look.
+ic_cookies_1	chatter	chatter	calm	crew	ic_cookies	1	both	orbit	any	¿Quién se ha comido mis galletas?	Who ate my cookies? | Who ate my cookies? | {other}, where are my cookies?
+ic_cookies_2	chatter	chatter	calm	crew	ic_cookies	2	both	orbit	any	Flotaron solas hasta mi boca.	They floated into my mouth on their own. | They floated into my mouth. All by themselves. | They drifted into my mouth. Not my fault.
+ic_cookies_3	chatter	chatter	calm	crew	ic_cookies	3	both	orbit	any	Qué gravedad tan curiosa.	What curious gravity. | Funny gravity. | Strange gravity up here.
+ic_staging_1	chatter	chatter	calm	crew	ic_staging	1	both	goofy	any	¿Quién ha tocado el botón de etapas?	Who touched the staging button? | Who pressed the staging button? | {other}, did you touch the staging button?
+ic_staging_2	chatter	chatter	calm	crew	ic_staging	2	both	goofy	any	Solo quería ver si funcionaba.	I just wanted to see if it worked. | I wanted to see if it works. | I was just checking it.
+ic_staging_3	chatter	chatter	calm	crew	ic_staging	3	both	goofy	any	Funciona.	It works. | It does. | Well, it works.
+ic_stove_1	chatter	chatter	calm	crew	ic_stove	1	both	coast	any	Creo que me he dejado la luz encendida en casa.	I think I left the light on at home. | I think I left the lights on at home. | Did I leave the light on at home?
+ic_stove_2	chatter	chatter	calm	crew	ic_stove	2	both	coast	any	Estamos en el espacio.	We're in space. | We're in space. | We're in space, {other}.
+ic_stove_3	chatter	chatter	calm	crew	ic_stove	3	both	coast	any	Pues la factura va a ser astronómica.	Then the bill will be astronomical. | So the bill will be astronomical. | Then that's an astronomical bill.
+ic_mun_joke_1	chatter	chatter	calm	crew	ic_mun_joke	1	both	goofy	any	¿Sabes por qué la Mun no tiene amigos?	Do you know why the Mun has no friends? | Why doesn't the Mun have friends? | {other}, know why the Mun has no friends?
+ic_mun_joke_2	chatter	chatter	calm	crew	ic_mun_joke	2	both	goofy	any	¿Por qué?	Why? | Why? | No. Why?
+ic_mun_joke_3	chatter	chatter	calm	crew	ic_mun_joke	3	both	goofy	any	Porque siempre nos da la espalda.	Because it always turns its back on us. | It always turns its back on us. | Because it never faces us. Just its back. | Because it's always going through a phase. | Because Minmus is nicer.
+ic_philosophy_1	chatter	chatter	calm	crew	ic_philosophy	1	both	goofy	any	Si nadie nos mira, ¿seguimos girando?	If nobody watches us, are we still spinning? | If no one is watching, are we still spinning? | Do we spin if nobody watches us?
+ic_philosophy_2	chatter	chatter	calm	crew	ic_philosophy	2	both	goofy	any	Eso es demasiado profundo para esta cápsula.	That's too deep for this capsule. | Too deep for this capsule. | That's too much thinking for this tin can.
+ic_cheese_suit_1	chatter	chatter	calm	crew	ic_cheese_suit	1	both	goofy	any	Tu traje huele a queso viejo.	Your suit smells like old cheese. | Your suit smells like old cheese. | {other}, your suit smells of cheese.
+ic_cheese_suit_2	chatter	chatter	calm	crew	ic_cheese_suit	2	both	goofy	any	Es un traje de época.	It's a vintage suit. | It's vintage. | It's a classic suit.
+ic_cheese_suit_3	chatter	chatter	calm	crew	ic_cheese_suit	3	both	goofy	any	Es un traje de queso.	It's a cheese suit. | It's cheese. | It's a cheese suit now.
+ic_sing_1	chatter	chatter	calm	crew	ic_sing	1	both	goofy	any	Vamos a cantar algo.	Let's sing something. | Let's sing! | Sing with me, {other}.
+ic_sing_2	chatter	chatter	calm	crew	ic_sing	2	both	goofy	any	Por favor, no.	Please, no. | Please don't. | No. Please.
+ic_sing_3	chatter	chatter	calm	crew	ic_sing	3	both	goofy	any	¡Tres, dos, uno, la la la!	Three, two, one, la la la! | Three, two, one, la la la! | And a one, and a two, la la la!
+ic_seat_swap_1	chatter	chatter	calm	crew	ic_seat_swap	1	both	goofy	any	¿Me cambias el asiento?	Will you swap seats with me? | Can we swap seats? | {other}, trade seats with me?
+ic_seat_swap_2	chatter	chatter	calm	crew	ic_seat_swap	2	both	goofy	any	Estamos atados.	We're strapped in. | We're strapped in. | We're buckled in.
+ic_seat_swap_3	chatter	chatter	calm	crew	ic_seat_swap	3	both	goofy	any	Por eso lo pregunto con educación.	That's why I'm asking politely. | That's why I'm asking nicely. | So I'm asking very politely.
+ic_buttons_1	chatter	chatter	calm	crew	ic_buttons	1	both	goofy	any	He contado los botones. Hay ciento doce.	I counted the buttons. There are a hundred and twelve. | I counted the buttons. A hundred and twelve. | A hundred and twelve buttons. I counted.
+ic_buttons_2	chatter	chatter	calm	crew	ic_buttons	2	both	goofy	any	Ayer había ciento once.	Yesterday there were a hundred and eleven. | Yesterday it was a hundred and eleven. | There were a hundred and eleven yesterday.
+ic_buttons_3	chatter	chatter	calm	crew	ic_buttons	3	both	goofy	any	¿Quién ha puesto uno nuevo?	Who added a new one? | Who added one? | Where did the new one come from?
+ic_sandwich_1	chatter	chatter	calm	crew	ic_sandwich	1	both	goofy	any	¿Me das un poco de tu sándwich?	Can I have some of your sandwich? | Can I have a bit of your sandwich? | {other}, share your sandwich?
+ic_sandwich_2	chatter	chatter	calm	crew	ic_sandwich	2	both	goofy	any	Es un sándwich individual.	It's a single-serving sandwich. | It's a one-person sandwich. | Sorry. Single serving.
+ic_sandwich_3	chatter	chatter	calm	crew	ic_sandwich	3	both	goofy	any	Qué egoísta.	How selfish. | So selfish. | Wow. Selfish.
+ic_rocket_joke_1	chatter	chatter	calm	crew	ic_rocket_joke	1	both	goofy	any	¿Qué le dijo un cohete a otro cohete?	What did one rocket say to the other rocket? | What did one rocket say to the other? | {other}, what did the rocket say to the other rocket?
+ic_rocket_joke_2	chatter	chatter	calm	crew	ic_rocket_joke	2	both	goofy	any	¿Qué?	What? | What? | I don't know. What?
+ic_rocket_joke_3	chatter	chatter	calm	crew	ic_rocket_joke	3	both	goofy	any	Nada. Los cohetes no hablan.	Nothing. Rockets don't talk. | Nothing. Rockets can't talk. | Nothing. They're rockets. | See you at the next stage. | Stop staring at my nozzle.
+ic_prints_1	chatter	chatter	calm	crew	ic_prints	1	both	goofy	any	Has dejado la ventana llena de huellas.	You left fingerprints all over the window. | Your fingerprints are all over the window. | {other}, you smudged the whole window.
+ic_prints_2	chatter	chatter	calm	crew	ic_prints	2	both	goofy	any	Son huellas científicas.	They're scientific prints. | Those are science prints. | Scientific fingerprints. Very important.
+ic_office_1	chatter	chatter	calm	crew	ic_office	1	both	goofy	any	Mi madre cree que trabajo en una oficina.	My mom thinks I work in an office. | My mom thinks I have an office job. | Mom thinks I work at a desk.
+ic_office_2	chatter	chatter	calm	crew	ic_office	2	both	goofy	any	Técnicamente, esto es una oficina muy alta.	Technically, this is a very high office. | Well, this is a very high office. | Technically, it's an office. A high one.
+ic_snore_1	chatter	chatter	calm	crew	ic_snore	1	both	goofy	any	Anoche roncabas como un motor.	Last night you snored like an engine. | Last night you snored like an engine. | {other}, you snored like a rocket last night.
+ic_snore_2	chatter	chatter	calm	crew	ic_snore	2	both	goofy	any	Era el motor.	That was the engine. | That was the engine. | No, that was the engine.
+ic_snore_3	chatter	chatter	calm	crew	ic_snore	3	both	goofy	any	El motor estaba apagado.	The engine was off. | The engine was off. | We had the engine off.
+ic_sock_1	chatter	chatter	calm	crew	ic_sock	1	both	goofy	any	Me falta un calcetín.	One of my socks is missing. | I lost a sock. | {other}, have you seen my sock?
+ic_sock_2	chatter	chatter	calm	crew	ic_sock	2	both	goofy	any	Está pegado a tu asiento.	It's stuck to your seat. | It's stuck to your seat. | It's on your seat.
+ic_sock_3	chatter	chatter	calm	crew	ic_sock	3	both	goofy	any	Ah, por eso huele así.	Ah, that's why it smells like that. | Ah. That explains the smell. | So that's the smell.
+ic_life_1	chatter	chatter	calm	crew	ic_life	1	both	goofy	any	¿Crees que hay vida en otros planetas?	Do you think there's life on other planets? | Is there life on other planets? | {other}, do you think anyone lives out there?
+ic_life_2	chatter	chatter	calm	crew	ic_life	2	both	goofy	any	Ahora sí. Nosotros.	There is now. Us. | There is now. Us. | Yes. We're there now.
+ic_snacks_1	chatter	chatter	calm	crew	ic_snacks	1	both	goofy	any	¿Dónde están los aperitivos?	Where are the snacks? | Where did the snacks go? | {other}, where are the snacks?
+ic_snacks_2	chatter	chatter	calm	crew	ic_snacks	2	both	goofy	any	En el compartimento de emergencia.	In the emergency compartment. | Emergency compartment. | In the emergency box.
+ic_snacks_3	chatter	chatter	calm	crew	ic_snacks	3	both	goofy	any	Pues yo me declaro una emergencia.	Then I declare myself an emergency. | Then this is an emergency. | I declare an emergency.
+ic_brakes_1	chatter	chatter	calm	crew	ic_brakes	1	both	goofy	any	El piloto dice que el manual es opcional.	The pilot says the manual is optional. | The pilot says manuals are optional. | According to the pilot, the manual is optional.
+ic_brakes_2	chatter	chatter	calm	crew	ic_brakes	2	both	goofy	any	El piloto también dice que los frenos son opcionales.	The pilot also says brakes are optional. | The pilot says brakes are optional too. | The pilot thinks brakes are optional too.
+ic_jellyfish_1	chatter	chatter	calm	crew	ic_jellyfish	1	both	orbit	any	Mi pelo flota como una medusa.	My hair floats like a jellyfish. | My hair floats like a jellyfish. | Look, my hair floats like a jellyfish.
+ic_jellyfish_2	chatter	chatter	calm	crew	ic_jellyfish	2	both	orbit	any	Tú no tienes pelo.	You don't have hair. | You have no hair. | You're bald, {other}.
+ic_jellyfish_3	chatter	chatter	calm	crew	ic_jellyfish	3	both	orbit	any	Por eso es tan triste.	That's why it's so sad. | Which makes it extra sad. | That's what makes it sad.
+ic_rock_1	chatter	chatter	calm	crew	ic_rock	1	both	goofy	any	He traído una piedra de Kerbin como recuerdo.	I brought a rock from Kerbin as a souvenir. | I took a rock from Kerbin as a souvenir. | I brought a Kerbin rock. Souvenir.
+ic_rock_2	chatter	chatter	calm	crew	ic_rock	2	both	goofy	any	¿Por qué? Vivimos allí.	Why? We live there. | Why? We live there. | We live on Kerbin, {other}.
+ic_rock_3	chatter	chatter	calm	crew	ic_rock	3	both	goofy	any	Por si la echo de menos.	In case I miss it. | In case I get homesick. | In case I miss it.
+ic_mustard_1	chatter	chatter	calm	crew	ic_mustard	1	both	coast	any	¿Alguien ha visto la mostaza?	Has anyone seen the mustard? | Who has seen the mustard? | {other}, where's the mustard?
+ic_mustard_2	chatter	chatter	calm	crew	ic_mustard	2	both	coast	any	Mira el techo.	Look at the ceiling. | Check the ceiling. | Look up.
+ic_mustard_3	chatter	chatter	calm	crew	ic_mustard	3	both	coast	any	Ah, ahí está. Y mi bocadillo.	Ah, there it is. And my sandwich. | There it is. With my sandwich. | Oh. And my sandwich too.
+ic_lake_1	chatter	chatter	calm	crew	ic_lake	1	both	goofy	any	Déjame pilotar un rato.	Let me fly for a while. | Can I fly for a bit? | {other}, let me fly.
+ic_lake_2	chatter	chatter	calm	crew	ic_lake	2	both	goofy	any	La última vez aterrizaste en un lago.	Last time you landed in a lake. | Last time you put us in a lake. | You landed in a lake last time.
+ic_lake_3	chatter	chatter	calm	crew	ic_lake	3	both	goofy	any	Fue un amerizaje planeado.	It was a planned splashdown. | That was a planned splashdown. | The lake was the plan.
+ic_whistle_1	chatter	chatter	calm	crew	ic_whistle	1	both	goofy	any	Deja de silbar.	Stop whistling. | Stop whistling. | {other}, quit whistling.
+ic_whistle_2	chatter	chatter	calm	crew	ic_whistle	2	both	goofy	any	No silbo. Es la ventilación.	I'm not whistling. It's the vents. | It's not me. It's the vents. | That's the air vents, not me.
+ic_whistle_3	chatter	chatter	calm	crew	ic_whistle	3	both	goofy	any	La ventilación no sabe esa canción.	The vents don't know that song. | Vents don't know that song. | Since when do vents know songs?
+ic_ship_name_1	chatter	chatter	calm	crew	ic_ship_name	1	both	goofy	any	Le he puesto nombre a la nave.	I gave the ship a name. | I named the ship. | The ship has a name now.
+ic_ship_name_2	chatter	chatter	calm	crew	ic_ship_name	2	both	goofy	any	¿Cuál?	What name? | What's its name? | What did you call it?
+ic_ship_name_3	chatter	chatter	calm	crew	ic_ship_name	3	both	goofy	any	Señora Brillitos.	Mrs. Sparkles. | Steve. | Not again. | Big Bertha.
+ic_math_1	chatter	chatter	calm	crew	ic_math	1	both	goofy	any	¿Cuánto es dos más dos?	What's two plus two? | Two plus two? | {other}, what's two plus two?
+ic_math_2	chatter	chatter	calm	crew	ic_math	2	both	goofy	any	Depende del combustible.	Depends on the fuel. | Depends on the fuel. | Depends how much fuel we have.
+ic_dream_1	chatter	chatter	calm	crew	ic_dream	1	both	goofy	any	Soñé que éramos ingenieros.	I dreamed we were engineers. | I dreamt we were engineers. | I had a dream we were engineers.
+ic_dream_2	chatter	chatter	calm	crew	ic_dream	2	both	goofy	any	Qué pesadilla.	What a nightmare. | A nightmare, then. | Sounds like a nightmare.
+ic_tea_1	chatter	chatter	calm	crew	ic_tea	1	both	coast	any	Mi té está flotando en bolitas.	My tea is floating in little balls. | My tea is floating in little balls. | {other}, my tea turned into floating balls.
+ic_tea_2	chatter	chatter	calm	crew	ic_tea	2	both	coast	any	Pues cómetelo.	Then eat it. | Eat it, then. | Then bite it.
+ic_tea_3	chatter	chatter	calm	crew	ic_tea	3	both	coast	any	Té masticable. Qué innovación.	Chewable tea. What an innovation. | Chewable tea. Brilliant. | Tea you can chew. Innovation.
+ic_weird_light_1	chatter	chatter	calm	crew	ic_weird_light	1	both	goofy	any	He visto una luz rara.	I saw a weird light. | I saw a strange light. | {other}, there was a weird light.
+ic_weird_light_2	chatter	chatter	calm	crew	ic_weird_light	2	both	goofy	any	Era tu linterna en el cristal.	It was your flashlight on the glass. | That was your flashlight on the glass. | Your flashlight. On the window.
+ic_weird_light_3	chatter	chatter	calm	crew	ic_weird_light	3	both	goofy	any	Una luz rara, como te digo.	A weird light, like I said. | A strange light. Like I said. | So, a weird light.
+ic_lunch_1	chatter	chatter	calm	crew	ic_lunch	1	both	goofy	any	¿Qué hay de comer hoy?	What's for lunch today? | What's lunch today? | {other}, what's for lunch?
+ic_lunch_2	chatter	chatter	calm	crew	ic_lunch	2	both	goofy	any	Pasta en tubo.	Pasta in a tube. | Tube pasta. | Pasta. In a tube.
+ic_lunch_3	chatter	chatter	calm	crew	ic_lunch	3	both	goofy	any	¿Y ayer?	And yesterday? | And yesterday? | What about yesterday?
+ic_lunch_4	chatter	chatter	calm	crew	ic_lunch	4	both	goofy	any	Pasta en tubo.	Pasta in a tube. | Tube pasta. | Pasta. In a tube.
+ic_ceiling_1	chatter	chatter	calm	crew	ic_ceiling	1	both	coast	any	Te apuesto a que no tocas el techo.	I bet you can't touch the ceiling. | Bet you can't touch the ceiling. | I bet you can't reach the ceiling.
+ic_ceiling_2	chatter	chatter	calm	crew	ic_ceiling	2	both	coast	any	Ya lo estoy tocando.	I'm already touching it. | Already touching it. | I'm touching it right now.
+ic_ceiling_3	chatter	chatter	calm	crew	ic_ceiling	3	both	coast	any	¿Con la cabeza?	With your head? | With your head? | Is that your head?

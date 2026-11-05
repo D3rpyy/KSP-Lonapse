@@ -79,7 +79,7 @@ FOLDERS["beeps/probe_data"] = dict(min=3, count=4, lo=0.3, hi=1.4, rms=-22.0, ki
 PEAK_LIMIT_DB = -1.3       # limiter ceiling, contract requires <= -1 dBFS
 RMS_TOL = 1.0              # +- dB
 MAX_SILENCE = 0.050        # leading / trailing silence
-SIZE_LIMIT = 120 * 1024 * 1024  # 40 MB, 80 MB in v4 (about 2500 clips), 110 MB in 0.6.0 (about 4600 clips plus the effects), 120 MB for the qbe, mk2drone, mpo and mtm beeps
+SIZE_LIMIT = 200 * 1024 * 1024  # 40 MB, 80 MB in v4 (about 2500 clips), 110 MB in 0.6.0 (about 4600 clips plus the effects), 120 MB for the qbe, mk2drone, mpo and mtm beeps, 200 MB for more templates and subtitle versions
 SILENCE_DB = -50.0
 NAME_RE = re.compile(r"^[a-z0-9_]+_[0-9]{3}\.wav$")
 
@@ -929,6 +929,15 @@ def install():
     tdst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(table, tdst)
     log("install: %s" % tdst)
+    # experimental (procedural talk): the subtitle slot pools, next to the phrase table
+    pools = BUILD / "lonapse" / "pools.tsv"
+    pdst = gd / "Phrases" / "pools.tsv"
+    if pools.exists():
+        shutil.copy2(pools, pdst)
+        log("install: %s" % pdst)
+    elif pdst.exists():
+        pdst.unlink()
+        log("install: removed stale %s" % pdst)
 
 
 # ---------------------------------------------------------------------------

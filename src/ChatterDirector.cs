@@ -148,6 +148,143 @@ namespace Lonapse
             }
         }
 
+        /// <summary>
+        /// The lines to play for a scene: the {body} variants for Body. Use this instead of
+        /// PhraseClips.LinesFor(sc, Body) when the lines are really played.
+        /// </summary>
+        private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc)
+        {
+            return PlayLines(sc, null);
+        }
+
+        /// <summary>PlayLines, and the subtitle slots of the lines filled in (experimental, procedural talk): pool
+        /// values from the line memory, flight values, and <paramref name="perLine"/> (may be null) for {other} and
+        /// {self} per line index.</summary>
+        private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc,
+            Func<int, System.Collections.Generic.IDictionary<string, string>> perLine)
+        {
+            var lines = PlayLinesRaw(sc);
+            bool any = false;
+            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
+            if (!any) return lines;
+            var unresolved = new System.Collections.Generic.List<string>();
+            var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
+                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions());
+            foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
+            for (int i = 0; i < filled.Count; i++)
+                if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
+            return filled;
+        }
+
+        /// <summary>The conditions for [ ] versions and pool values now: phase, kerbin or away, and the vessel parts.</summary>
+        private System.Collections.Generic.List<string> SlotConditions()
+        {
+            string phase = !string.IsNullOrEmpty(debugSlotPhase) ? debugSlotPhase : CurrentPhase;
+            var c = SubtitleSlots.ConditionsFor(phase, Body);
+            c.AddRange(VesselConditions());
+            return c;
+        }
+
+        private System.Collections.Generic.List<string> vesselConds;
+        private float vesselCondsAt = -100f;
+        private Guid vesselCondsId;
+
+        /// <summary>Parts of the active vessel as slot conditions (solar, antenna, legs, ...), so a subtitle only
+        /// names a part that is there. Worked out at most every 5 s per vessel.</summary>
+        private System.Collections.Generic.List<string> VesselConditions()
+        {
+            Vessel v = null;
+            try { v = FlightGlobals.ActiveVessel; } catch (Exception) { }
+            if (vesselConds != null && v != null && v.id == vesselCondsId && clock - vesselCondsAt < 5f) return vesselConds;
+            var r = new System.Collections.Generic.List<string>();
+            try
+            {
+                if (v != null)
+                    foreach (Part p in v.parts)
+                    {
+                        if (p == null) continue;
+                        foreach (PartModule m in p.Modules)
+                        {
+                            string tag = null;
+                            if (m is ModuleDeployableSolarPanel) tag = "solar";
+                            else if (m is ModuleDataTransmitter) { if (((ModuleDataTransmitter)m).antennaType != AntennaType.INTERNAL) tag = "antenna"; }
+                            else if (m is ModuleWheelBase) { if (((ModuleWheelBase)m).wheelType == WheelType.LEG) tag = "legs"; }
+                            else if (m is RetractableLadder) tag = "ladder";
+                            else if (m is ModuleDockingNode) tag = "docking";
+                            else if (m is ModuleAblator) tag = "heatshield";
+                            else if (m is ModuleParachute) tag = "chute";
+                            else if (m is ModuleEngines) tag = "engine";
+                            else if (m is CompoundParts.CModuleStrut) tag = "strut";
+                            else if (m is ModuleCommand) { if (((ModuleCommand)m).minimumCrew == 0) tag = "probe"; }
+                            else if (m is ModuleScienceExperiment) tag = SubtitleSlots.ExperimentCondition(((ModuleScienceExperiment)m).experimentID);
+                            if (tag != null && !r.Contains(tag)) r.Add(tag);
+                        }
+                    }
+            }
+            catch (Exception e) { Log.Exception("Slot vessel conditions", e); }
+            vesselConds = r;
+            vesselCondsAt = clock;
+            vesselCondsId = v != null ? v.id : Guid.Empty;
+            return r;
+        }
+
+        /// <summary>A scene with slots or versions can be played only when every line can be filled now
+        /// (SubtitleSlots.CanFill): no subtitle about a solar panel on a ship without one. Intercom scenes get
+        /// names for {other} and {self}, other scenes none.</summary>
+        private bool SlotsOk(PhraseScene sc)
+        {
+            if (sc == null || !sc.HasSlots) return true;
+            System.Collections.Generic.IDictionary<string, string> names = new System.Collections.Generic.Dictionary<string, string> {
+                { SubtitleSlots.Self, "a" }, { SubtitleSlots.Other, "b" } };
+            Func<int, System.Collections.Generic.IDictionary<string, string>> per = null;
+            if (sc.IsIntercom) per = i => names;
+            // flight values and conditions once per frame: a pick checks hundreds of scenes
+            if (slotCacheClock != clock || slotCacheValues == null || slotCacheDebugPhase != debugSlotPhase || slotCacheBody != Body)
+            {
+                slotCacheBody = Body;
+                slotCacheValues = SlotFlightValues();
+                slotCacheConds = SlotConditions();
+                slotCacheClock = clock;
+                slotCacheDebugPhase = debugSlotPhase;
+            }
+            return SubtitleSlots.CanFill(PhraseClips.LinesFor(sc, Body), PhraseClips.pools, slotCacheValues, per, slotCacheConds);
+        }
+        private System.Collections.Generic.Dictionary<string, string> slotCacheValues;
+        private System.Collections.Generic.List<string> slotCacheConds;
+        private float slotCacheClock = -1f;
+        private string slotCacheDebugPhase, slotCacheBody;
+
+        private System.Collections.Generic.Dictionary<string, string> SlotFlightValues()
+        {
+            string here = null, vessel = null;
+            double alt = double.NaN;
+            bool kerbinDays = true;
+            try
+            {
+                Vessel v = FlightGlobals.ActiveVessel;
+                if (v != null)
+                {
+                    vessel = v.vesselName;
+                    alt = v.altitude;
+                    if (v.mainBody != null) here = v.mainBody.bodyName;
+                }
+                kerbinDays = GameSettings.KERBIN_TIME;
+            }
+            catch (Exception) { }
+            if (!string.IsNullOrEmpty(bodyOverride)) here = char.ToUpperInvariant(bodyOverride[0]) + bodyOverride.Substring(1);
+            if (here == "Mun") here = "the Mun";   // as KSP writes it, a capital at a sentence start
+            return SubtitleSlots.FlightValues(host.missionTime, kerbinDays, here, vessel, alt);
+        }
+
+        private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)
+        {
+            return PhraseClips.LinesFor(sc, Body);
+        }
+        /// <summary>Debug tab (experimental, procedural talk): the phrase test only picks scenes with subtitle slots.</summary>
+        public bool debugSlotsOnly;
+        /// <summary>Debug tab: the test phase while a test scene is filled, so [landed] versions can be tried in orbit.</summary>
+        private string debugSlotPhase;
+
         public ChatterDirector(LonapseAddon host, System.Random rng)
         {
             this.host = host;
@@ -1009,7 +1146,7 @@ namespace Lonapse
                 && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
                 && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
                 && (intercom || BlackoutOk(sc))
-                && (filter == null || filter(sc)));
+                && (filter == null || filter(sc)) && SlotsOk(sc));
             bool stressBand = !intercom && (band == "tense" || band == "panic");
             if (stressBand) list = StressRepeatFilter(list);
             else if (ev == "chatter") list = CalmRepeatFilter(list);
@@ -1120,7 +1257,7 @@ namespace Lonapse
         private PhraseEntry FirstLine(PhraseScene sc)
         {
             if (sc == null) return null;
-            var lines = PhraseClips.LinesFor(sc, Body);
+            var lines = PlayLines(sc);
             return lines.Count > 0 ? lines[0] : null;
         }
 
@@ -1128,7 +1265,7 @@ namespace Lonapse
         private bool EnqueueRadioScene(PhraseScene sc, KerbalVoice sp, float delay)
         {
             if (sc == null) return false;
-            var lines = PhraseClips.LinesFor(sc, Body); // {body} variants (req 5)
+            var lines = PlayLines(sc); // {body} variants (req 5)
             if (lines.Count == 0) return false;
             int need = 0;
             for (int i = 0; i < lines.Count; i++) need += lines[i].Role == "mc" ? 7 : 4;
@@ -1576,7 +1713,7 @@ namespace Lonapse
             if (sc == null && ev != null) sc = PickScene(ev, null, x => x.Lines.Count > 0 && x.Lines[0].Role == "crew" && FitsSpeaker(x, sp));
             AudioClip clip = null;
             string folder = null;
-            var scLines = sc != null ? PhraseClips.LinesFor(sc, Body) : null; // {body} variants (req 5)
+            var scLines = sc != null ? PlayLines(sc) : null; // {body} variants (req 5)
             if (scLines != null && scLines.Count > 0) clip = PhraseClips.Clip(scLines[0], sp.isFemale);
             // with the table only a real line: a folder clip has no subtitle and could say anything
             if (clip == null && PhraseClips.Loaded) return "no fitting line in the phrase table";
@@ -1650,7 +1787,10 @@ namespace Lonapse
                 if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, x => x.IsIntercom);
                 if (sc == null) sc = PickIntercomSceneFor("calm", a, x => x.IsIntercom);
             }
-            var lines = sc != null ? PhraseClips.LinesFor(sc, Body) : null; // {body} variants (req 5)
+            // {other} and {self}: line i is spoken by a when i is even (see the turn loop below)
+            string nameA = SubtitleSlots.FirstName(a.displayName), nameB = SubtitleSlots.FirstName(b.displayName);
+            var lines = sc != null ? PlayLines(sc, i => new System.Collections.Generic.Dictionary<string, string> {
+                { SubtitleSlots.Self, i % 2 == 0 ? nameA : nameB }, { SubtitleSlots.Other, i % 2 == 0 ? nameB : nameA } }) : null;
             if (lines != null && lines.Count == 0) { sc = null; lines = null; }
             int turns = lines != null ? lines.Count : 2 + rng.Next(3);
             // req 9: on stations and bases the intercom gets one extra turn
@@ -1877,6 +2017,14 @@ namespace Lonapse
         /// </summary>
         public string DebugPlayRandom(string evt, string phase, string cause, string body, string topic = null)
         {
+            // a concrete test phase also picks the [phase] versions of the subtitles
+            debugSlotPhase = Array.IndexOf(SubtitleSlots.Conditions, phase ?? "") >= 0 ? phase : null;
+            try { return DebugPlayRandomCore(evt, phase, cause, body, topic); }
+            finally { debugSlotPhase = null; }
+        }
+
+        private string DebugPlayRandomCore(string evt, string phase, string cause, string body, string topic)
+        {
             string want = (string.IsNullOrEmpty(evt) ? "any" : evt) + "/" + (string.IsNullOrEmpty(phase) ? "any" : phase) + "/"
                           + (string.IsNullOrEmpty(cause) ? "any" : cause) + "/" + (string.IsNullOrEmpty(body) ? "current" : body)
                           + (string.IsNullOrEmpty(topic) ? "" : "/topic " + topic);
@@ -1891,12 +2039,14 @@ namespace Lonapse
             {
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (sc.IsProbe) continue; // crew mode never plays a probe scene
+                if (debugSlotsOnly && !sc.HasSlots) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 // a concrete test phase must not pull in blackout rows (PhaseMatches already handles that)
                 if (!string.IsNullOrEmpty(cause) && !PhraseTable.CauseMatches(sc.Cause, cause)) continue;
                 // v4 topic (science experiment, home for soi_enter): topic-any rows fit too, like the events do
                 if (!string.IsNullOrEmpty(topic) && !PhraseTable.TopicMatches(sc.Topic, topic)) continue;
                 if (!PhraseClips.Playable(sc)) continue;
+                if (!SlotsOk(sc)) continue;
                 all.Add(sc);
                 // preferred: the exact cause, the exact topic, and a {body} scene when a body was chosen
                 bool causeExact = string.IsNullOrEmpty(cause) || sc.Cause == cause;

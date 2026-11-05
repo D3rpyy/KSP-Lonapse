@@ -60,7 +60,7 @@ namespace Lonapse
         {
             if (!PhraseClips.Loaded) return null;
             List<PhraseScene> list = PhraseClips.table.ProbeScenesFor(ev, Core, CurrentPhase, false,
-                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)));
+                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)) && SlotsOk(sc));
             if (list.Count == 0) return null;
             if (!IsAnyKey(topic))
             {
@@ -91,7 +91,7 @@ namespace Lonapse
         private bool EnqueueProbeScene(PhraseScene sc, float delay, bool mcOnly = false, bool firstOnly = false)
         {
             if (sc == null) return false;
-            List<PhraseEntry> lines = PhraseClips.LinesFor(sc, Body);
+            List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0) return false;
             ProbeShape shape = ProbeRules.ShapeOf(lines);
             if (shape.crew > 0) return false;
@@ -501,6 +501,7 @@ namespace Lonapse
             {
                 if (!sc.IsProbe) continue;
                 if (PhraseTable.IsProbeCrewEvent(sc.Event)) continue; // needs crew aboard
+                if (debugSlotsOnly && !sc.HasSlots) continue;
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 if (!string.IsNullOrEmpty(topic) && !PhraseTable.TopicMatches(sc.Topic, topic)) continue;
@@ -567,7 +568,7 @@ namespace Lonapse
             PhraseScene sc = PreferFor(a, band, pick(band), null);
             if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), null);
             if (sc == null) return false;
-            List<PhraseEntry> lines = PhraseClips.LinesFor(sc, Body);
+            List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0 || count + 2 * lines.Count + 1 > Capacity) return false;
             chatA = a;
             chatB = a;

@@ -907,6 +907,7 @@ public static class Tests
               && LaunchCountdown.ClipKey(LaunchCountdown.Liftoff, true) == "countdown_liftoff" && LaunchCountdown.ClipKey(0, true) == null,
               "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
         SceneMemoryTests();
+        SubtitleSlotTests();
         ProbeCoreTests();
         ProbeSynthTests();
         ProbeSettingsTests();
@@ -1130,6 +1131,158 @@ public static class Tests
             for (int i = 0; i < SceneMemory.MaxEntries + 10; i++) big.Stamp("id" + i);
             Check(big.Count <= SceneMemory.MaxEntries && big.LastSeq("id" + (SceneMemory.MaxEntries + 9)) > 0 && big.LastSeq("id0") < 0,
                   "line memory: past the cap the oldest scenes are forgotten", big.Count.ToString());
+        }
+    }
+
+    // Experimental (procedural talk): subtitle slots, filled in game. The spanish (the audio) stays general.
+    static void SubtitleSlotTests()
+    {
+        var perr = new List<string>();
+        SlotPools pools = SlotPools.Parse(new List<string> {
+            "# comment", "pool\tenglish", "thing\thelmet", "thing\tsock", "thing\thelmet", "food\tcheese",
+            "day\tmonday", "Bad\tx", "thing\t{X}", "thing\ta | b", "thing\tmy {body}", "line\tWhere is my {thing}?" }, perr);
+        Check(pools.Count == 3 && pools.Values("thing").Count == 2 && pools.Values("food")[0] == "cheese",
+              "slots: pools parse, a duplicate value is kept once", pools.Count + " pools");
+        Check(perr.Count == 5 && !pools.Has("day") && pools.Values("line")[0] == "Where is my {thing}?",
+              "slots: reserved names, bad slots, | and {body} in values are rejected, a value may hold a slot", string.Join(" | ", perr.ToArray()));
+
+        // the table: slots only in the english
+        const string H = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\tenglish";
+        var e1 = new List<string>();
+        PhraseTable t1 = PhraseTable.Parse(new List<string> { H,
+            "s1\tchatter\tchatter\tcalm\tcrew\tss\t1\tboth\t¿Quién ha cogido mis cosas?\tWho took my {thing}?",
+            "s2\tchatter\tchatter\tcalm\tcrew\tss\t2\tboth\tYo no.\tNot me, {other}. Ask about the {thing:2} on day {day}." }, e1);
+        Check(e1.Count == 0 && t1.Entries.Count == 2, "slots: english slots are accepted", string.Join(" | ", e1.ToArray()));
+        var e2 = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "b1\tchatter\tchatter\tcalm\tcrew\tsb\t1\tboth\tMi {thing}\tMy {thing}",
+            "b2\tchatter\tchatter\tcalm\tcrew\tsc\t1\tboth\tHola\tHi {Thing}",
+            "b3\tchatter\tchatter\tcalm\tcrew\tsd\t1\tboth\tHola\tHi {thing:0}" }, e2);
+        Check(e2.Count == 3, "slots: a slot in the spanish, a capital name or :0 is an error", e2.Count.ToString());
+
+        // Fill
+        PhraseScene sc = null;
+        foreach (PhraseScene x in t1.Scenes) if (x.Id == "ss") sc = x;
+        Check(sc != null && sc.HasSlots, "slots: the scene knows it has slots", null);
+        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, true, "Kerbin", "Lander II", 1234);
+        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, false, null, "", 25600)["alt_km"] == "26"
+              && !SubtitleSlots.FlightValues(0, false, null, "", 0).ContainsKey("vessel"),
+              "slots: flight values (mission day from 1, km, empty names left out)", flight["day"] + " " + flight["alt_km"]);
+        var pp = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\thelmet", "thing\tsock" }, null);
+        var un = new List<string>();
+        List<PhraseEntry> f = SubtitleSlots.Fill(sc.Lines, pp, flight,
+            i => new Dictionary<string, string> { { "self", i % 2 == 0 ? "Jeb" : "Bill" }, { "other", i % 2 == 0 ? "Bill" : "Jeb" } },
+            (pool, vals) => vals[0], un);
+        Check(f[0].English == "Who took my helmet?" && f[1].English == "Not me, Jeb. Ask about the sock on day 3." && un.Count == 0,
+              "slots: Fill gives pool values, {pool:2} another value, person and flight values", f[0].English + " / " + f[1].English);
+        Check(f[0].ClipKey == "s1" && f[0].Spanish == sc.Lines[0].Spanish && sc.Lines[0].English == "Who took my {thing}?",
+              "slots: Fill copies the row and keeps the clip key, the table row is unchanged", null);
+        var cap = new List<PhraseEntry> { new PhraseEntry { ClipKey = "c", English = "{thing} is gone. {thing} again! Hm, {thing}." } };
+        Check(SubtitleSlots.Fill(cap, pp, null, null, (pool, vals) => vals[1], null)[0].English == "Sock is gone. Sock again! Hm, sock.",
+              "slots: a value at the start of a sentence gets a capital", null);
+        var miss = new List<string>();
+        var m2 = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "m", English = "Hi {nobody} on {vessel}" } },
+                                    pp, new Dictionary<string, string>(), null, null, miss);
+        Check(m2[0].English == "Hi ... on ..." && miss.Count == 2, "slots: an unknown slot gives ... and is reported", m2[0].English);
+        Check(SubtitleSlots.FirstName("Jebediah Kerman") == "Jebediah" && SubtitleSlots.FirstName("Val") == "Val",
+              "slots: first name", null);
+
+        // versions split by | and pool values with slots inside
+        var np = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\tsock", "thing\thelmet",
+            "lost\t{thing} is gone", "lost\tsomeone took my {thing}", "loop\tagain {loop}" }, null);
+        var vl = new List<PhraseEntry> {
+            new PhraseEntry { ClipKey = "v1", English = "Who took my {thing}? | Has anyone seen my {thing}?" },
+            new PhraseEntry { ClipKey = "v2", English = "{lost}. Ugh. Okay, {lost}." } };
+        var picks = new List<string>();
+        List<PhraseEntry> vf = SubtitleSlots.Fill(vl, np, null, null, (pool, vals) => { picks.Add(pool); return vals[vals.Count - 1]; }, null);
+        Check(vf[0].English == "Has anyone seen my helmet?" && picks[0] == "version:v1",
+              "slots: a version is picked per line, with its own memory key", vf[0].English + " / " + picks[0]);
+        Check(vf[1].English == "Someone took my helmet. Ugh. Okay, someone took my helmet.",
+              "slots: a pool value with a slot inside is filled, same text in the scene, capital at a sentence start", vf[1].English);
+        var lu = new List<string>();
+        string lf = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "l", English = "{loop}" } },
+                                       np, null, null, null, lu)[0].English;
+        Check(lf == "..." && lu.Count == 1, "slots: a pool that refers to itself has no usable value", lf);
+        var ve = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "q1\tchatter\tchatter\tcalm\tcrew\tsq\t1\tboth\tHola\tHi | ",
+            "q2\tchatter\tchatter\tcalm\tcrew\tsr\t1\tboth\tEn {body}\tOn {body} | At {body}",
+            "q3\tchatter\tchatter\tcalm\tcrew\tst\t1\tboth\tHola\tHi | Hello {other}" }, ve);
+        Check(ve.Count == 2, "slots: an empty version or {body} with versions is an error", string.Join(" | ", ve.ToArray()));
+
+        // [conditions] on versions: the matching ones when there are any, else the plain ones
+        var cl = new List<PhraseEntry> {
+            new PhraseEntry { ClipKey = "c1", English = "High up. | [landed] On the ground, dummy. | [landed kerbin] Home, dummy." } };
+        Func<ICollection<string>, string> fillC = conds => SubtitleSlots.Fill(cl, null, null, null,
+            (pool, vals) => vals[vals.Count - 1], null, conds)[0].English;
+        Check(fillC(SubtitleSlots.ConditionsFor("orbit", "kerbin")) == "High up."
+              && fillC(SubtitleSlots.ConditionsFor("landed", "mun")) == "On the ground, dummy."
+              && fillC(SubtitleSlots.ConditionsFor("landed", "kerbin")) == "Home, dummy."
+              && fillC(null) == "High up.",
+              "slots: [conditions] pick the matching versions, else the plain ones",
+              fillC(SubtitleSlots.ConditionsFor("landed", "mun")));
+        var ce = new List<string>();
+        PhraseTable.Parse(new List<string> { H,
+            "k1\tchatter\tchatter\tcalm\tcrew\tsk\t1\tboth\tHola\t[landed] Hi | [orbit] Ho",
+            "k2\tchatter\tchatter\tcalm\tcrew\tsl\t1\tboth\tHola\tHi | [moon] Ho",
+            "k3\tchatter\tchatter\tcalm\tcrew\tsm\t1\tboth\tHola\tHi | [landed] Ho" }, ce);
+        Check(ce.Count == 2, "slots: versions need a plain one and known conditions", string.Join(" | ", ce.ToArray()));
+
+        // vessel conditions on pool values, and scenes that cannot be filled
+        var vp = SlotPools.Parse(new List<string> { "pool\tenglish", "outside\t[solar] solar panel", "outside\t[legs] landing leg",
+            "exp\t[goo] Mystery Goo" }, null);
+        var vl2 = new List<PhraseEntry> { new PhraseEntry { ClipKey = "w1", English = "The {outside} wobbles. | Something wobbles." } };
+        var onlyLegs = new List<string> { "legs" };
+        Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, onlyLegs)[0].English == "The landing leg wobbles."
+              || SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, onlyLegs)[0].English == "Something wobbles.",
+              "slots: a pool value with [legs] is used only when the vessel has legs", null);
+        bool neverSolar = true;
+        for (int i = 0; i < 20; i++)
+            neverSolar &= SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[i % vals.Count], null, onlyLegs)[0].English != "The solar panel wobbles.";
+        Check(neverSolar, "slots: a part the vessel does not have is never named", null);
+        Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, new List<string>())[0].English == "Something wobbles.",
+              "slots: a version whose pool has no usable value is skipped", null);
+        var ex = new List<PhraseEntry> { new PhraseEntry { ClipKey = "x1", English = "The {exp} glows. | The {exp} hums." } };
+        Check(!SubtitleSlots.CanFill(ex, vp, null, null, new List<string>()) && SubtitleSlots.CanFill(ex, vp, null, null, new List<string> { "goo" }),
+              "slots: CanFill is false when no version can be filled (no Mystery Goo aboard)", null);
+        var px = new List<PhraseEntry> { new PhraseEntry { ClipKey = "p1", English = "Hi {other}. | Hi there {other}." } };
+        Check(!SubtitleSlots.CanFill(px, vp, null, null, null)
+              && SubtitleSlots.CanFill(px, vp, null, i => new Dictionary<string, string> { { "other", "Bob" } }, null),
+              "slots: {other} needs a person, so it only fills in a chat", null);
+        var pe = new List<string>();
+        SlotPools.Parse(new List<string> { "pool\tenglish", "a\t[moon] x", "a\t[solar]" }, pe);
+        Check(pe.Count == 2, "slots: a pool value with an unknown condition or no text is rejected", string.Join(" | ", pe.ToArray()));
+
+        // TakeValue goes through the pool before a value comes back
+        SceneMemory mem = new SceneMemory();
+        Random rng = new Random(3);
+        var vals3 = new List<string> { "a", "b", "c" };
+        var seen = new HashSet<string>();
+        for (int i = 0; i < 3; i++) seen.Add(mem.TakeValue("p", vals3, rng));
+        string fourth = mem.TakeValue("p", vals3, rng);
+        Check(seen.Count == 3 && mem.LastSeq("slot:p:" + fourth) > 0 && mem.TakeValue("p", null, rng) == null,
+              "slots: TakeValue uses every value once before one comes back", string.Join(" ", new List<string>(seen).ToArray()));
+        {
+            // subtitle versions: the original sentence ("0") comes after the new versions, then the oldest again
+            bool origLast = true;
+            for (int seed = 0; seed < 20; seed++)
+            {
+                var vm = new SceneMemory();
+                var vr = new Random(seed);
+                var order = new List<string>();
+                var idx = new List<string> { "0", "1", "2" };
+                for (int i = 0; i < 3; i++) order.Add(vm.TakeValue(SceneMemory.VersionPool + "k", idx, vr));
+                if (order[2] != "0" || order[0] == order[1]) origLast = false;
+                if (vm.TakeValue(SceneMemory.VersionPool + "k", idx, vr) != order[0]) origLast = false;
+            }
+            var pm = new SceneMemory();
+            var pr = new Random(1);
+            bool poolsKeep0 = false;
+            for (int seed = 0; seed < 20 && !poolsKeep0; seed++)
+                poolsKeep0 = new SceneMemory().TakeValue("p", new List<string> { "0", "1" }, new Random(seed)) == "0";
+            var only0 = new List<string> { "0" };
+            Check(origLast && poolsKeep0 && pm.TakeValue(SceneMemory.VersionPool + "k", only0, pr) == "0",
+                  "versions: the original sentence comes after the new versions (other pools are unchanged)", null);
         }
     }
 

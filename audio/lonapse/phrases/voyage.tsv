@@ -2,28 +2,28 @@
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
 vo_welcome_1	soi_enter	chatter	calm	mc	vo_welcome	1	m	any	any	any	any	any	Bienvenidos. Esto es {body}.	Welcome. This is {body}.
-vo_welcome_2	soi_enter	chatter	calm	crew	vo_welcome	2	both	any	any	any	any	any	Gracias. ¿Dónde dejamos las maletas?	Thanks. Where do we leave the luggage?
+vo_welcome_2	soi_enter	chatter	calm	crew	vo_welcome	2	both	any	any	any	any	any	Gracias. ¿Dónde dejamos las maletas?	Thanks. Where do we leave the luggage? | Thanks. Where do we leave the luggage? | Thanks. Where does the luggage go?
 vo_sign_1	soi_enter	chatter	calm	mc	vo_sign	1	m	any	any	any	any	any	Tripulación, {body} os da la bienvenida.	Crew, {body} welcomes you.
-vo_sign_2	soi_enter	chatter	calm	crew	vo_sign	2	both	any	any	any	any	any	Qué amable. Pero no he visto ningún cartel.	How kind. But I didn't see a sign.
-vo_map_1	soi_enter	chatter	calm	crew	vo_map	1	both	any	any	any	any	any	Control, ¿dónde estamos ahora?	Control, where are we now?
+vo_sign_2	soi_enter	chatter	calm	crew	vo_sign	2	both	any	any	any	any	any	Qué amable. Pero no he visto ningún cartel.	How kind. But I didn't see a sign. | How kind. But I didn't see a sign. | Nice. I missed the sign, though.
+vo_map_1	soi_enter	chatter	calm	crew	vo_map	1	both	any	any	any	any	any	Control, ¿dónde estamos ahora?	Control, where are we now? | Control, where are we now? | Control, where are we?
 vo_map_2	soi_enter	chatter	calm	mc	vo_map	2	m	any	any	any	any	any	Según el mapa, eso de ahí es {body}.	According to the map, that over there is {body}.
 vo_passport_1	soi_enter	chatter	calm	mc	vo_passport	1	m	any	any	any	any	any	Tenéis {body} delante. Preparad los pasaportes.	{body} is right ahead. Get your passports ready.
-vo_passport_2	soi_enter	chatter	calm	crew	vo_passport	2	both	any	any	any	any	any	Mi pasaporte se quedó en la plataforma.	My passport stayed on the launchpad.
+vo_passport_2	soi_enter	chatter	calm	crew	vo_passport	2	both	any	any	any	any	any	Mi pasaporte se quedó en la plataforma.	My passport stayed on the launchpad. | My passport stayed on the launchpad. | I left my passport on the launchpad.
 vo_behave_1	soi_enter	chatter	calm	mc	vo_behave	1	m	any	any	any	any	any	Atención: {body} os saluda. Portaos bien.	Attention: {body} says hello. Behave yourselves.
-vo_behave_2	soi_enter	chatter	calm	crew	vo_behave	2	both	any	any	any	any	any	Siempre nos portamos bien. Casi siempre.	We always behave. Almost always.
+vo_behave_2	soi_enter	chatter	calm	crew	vo_behave	2	both	any	any	any	any	any	Siempre nos portamos bien. Casi siempre.	We always behave. Almost always. | We always behave. Almost always. | We behave. Mostly.
 vo_in_charge_1	soi_enter	chatter	calm	mc	vo_in_charge	1	m	any	any	any	any	any	Llegada confirmada. Ahora manda {body}.	Arrival confirmed. {body} is in charge now.
-vo_in_charge_2	soi_enter	chatter	calm	crew	vo_in_charge	2	both	any	any	any	any	any	Entendido. Saludaremos a la nueva gravedad.	Understood. We'll say hi to the new gravity.
+vo_in_charge_2	soi_enter	chatter	calm	crew	vo_in_charge	2	both	any	any	any	any	any	Entendido. Saludaremos a la nueva gravedad.	Understood. We'll say hi to the new gravity. | Understood. We'll say hi to the new gravity. | Copy. Hello, new gravity.
 vo_guidebook_1	soi_enter	chatter	calm	mc	vo_guidebook	1	m	any	any	any	any	any	La guía dice que en esta época {body} merece la pena.	The guidebook says {body} is worth it this time of year.
-vo_guidebook_2	soi_enter	chatter	calm	crew	vo_guidebook	2	both	any	any	any	any	any	¿Y quién escribió la guía? Nadie ha venido nunca.	And who wrote the guidebook? Nobody has ever been here.
+vo_guidebook_2	soi_enter	chatter	calm	crew	vo_guidebook	2	both	any	any	any	any	any	¿Y quién escribió la guía? Nadie ha venido nunca.	And who wrote the guidebook? Nobody has ever been here. | And who wrote the guidebook? Nobody has ever been here. | Who wrote the guidebook? Nobody's been here.
 vo_postcard_1	soi_enter	chatter	calm	mc	vo_postcard	1	m	any	any	any	any	any	Haced muchas fotos de {body}.	Take lots of photos of {body}.
-vo_postcard_2	soi_enter	chatter	calm	crew	vo_postcard	2	both	any	any	any	any	any	Vale. Pero todas van a salir movidas.	Okay. But they'll all come out blurry.
-vo_doorbell_1	soi_enter	chatter	calm	crew	vo_doorbell	1	both	any	any	any	any	any	¡Hola! ¿Hay alguien en casa?	Hello! Anybody home?
+vo_postcard_2	soi_enter	chatter	calm	crew	vo_postcard	2	both	any	any	any	any	any	Vale. Pero todas van a salir movidas.	Okay. But they'll all come out blurry. | Okay. But they'll all come out blurry. | Fine. They'll all be blurry.
+vo_doorbell_1	soi_enter	chatter	calm	crew	vo_doorbell	1	both	any	any	any	any	any	¡Hola! ¿Hay alguien en casa?	Hello! Anybody home? | Hello! Anybody home? | Hello! Is anyone home?
 vo_doorbell_2	soi_enter	chatter	calm	mc	vo_doorbell	2	m	any	any	any	any	any	{body} no contesta. Dejad un mensaje.	{body} isn't answering. Leave a message.
 vo_neighbor_1	soi_enter	chatter	calm	mc	vo_neighbor	1	m	any	any	any	any	any	Nuevo vecino a la vista: {body}.	New neighbor in sight: {body}.
-vo_neighbor_2	soi_enter	chatter	calm	crew	vo_neighbor	2	both	any	any	any	any	any	Voy a saludar con las dos manos.	I'm going to wave with both hands.
-vo_home_crew_1	soi_enter	chatter	calm	mc	vo_home_crew	1	m	any	any	any	any	home	Bienvenidos a casa, tripulación.	Welcome home, crew.
-vo_home_crew_2	soi_enter	chatter	calm	crew	vo_home_crew	2	both	any	any	any	any	home	Por fin. Huele a césped desde aquí.	Finally. I can smell the grass from here.
-vo_home_soup_1	soi_enter	chatter	calm	crew	vo_home_soup	1	both	any	any	any	any	home	Control, ya vemos nuestra casa.	Control, we can see home.
-vo_home_soup_2	soi_enter	chatter	calm	mc	vo_home_soup	2	m	any	any	any	any	home	Bienvenidos. Hay sopa caliente esperando.	Welcome back. There's hot soup waiting.
-vo_home_gifts_1	soi_enter	chatter	calm	mc	vo_home_gifts	1	m	any	any	any	any	home	Bienvenidos a casa. ¿Habéis traído algo?	Welcome home. Did you bring anything?
-vo_home_gifts_2	soi_enter	chatter	calm	crew	vo_home_gifts	2	both	any	any	any	any	home	Datos, fotos y un poco de polvo en las botas.	Data, photos and some dust on our boots.
+vo_neighbor_2	soi_enter	chatter	calm	crew	vo_neighbor	2	both	any	any	any	any	any	Voy a saludar con las dos manos.	I'm going to wave with both hands. | I'm going to wave with both hands. | Waving with both hands.
+vo_home_crew_1	soi_enter	chatter	calm	mc	vo_home_crew	1	m	any	any	any	any	home	Bienvenidos a casa, tripulación.	Welcome home, crew. | Welcome home, crew. | Welcome back home, crew.
+vo_home_crew_2	soi_enter	chatter	calm	crew	vo_home_crew	2	both	any	any	any	any	home	Por fin. Huele a césped desde aquí.	Finally. I can smell the grass from here. | Finally. I can smell the grass from here. | At last. I can smell the grass.
+vo_home_soup_1	soi_enter	chatter	calm	crew	vo_home_soup	1	both	any	any	any	any	home	Control, ya vemos nuestra casa.	Control, we can see home. | Control, we can see home. | Control, home is in sight.
+vo_home_soup_2	soi_enter	chatter	calm	mc	vo_home_soup	2	m	any	any	any	any	home	Bienvenidos. Hay sopa caliente esperando.	Welcome back. There's hot soup waiting. | Welcome back. There's hot soup waiting. | Welcome back. Hot soup is waiting.
+vo_home_gifts_1	soi_enter	chatter	calm	mc	vo_home_gifts	1	m	any	any	any	any	home	Bienvenidos a casa. ¿Habéis traído algo?	Welcome home. Did you bring anything? | Welcome home. Did you bring anything? | Welcome back. Souvenirs?
+vo_home_gifts_2	soi_enter	chatter	calm	crew	vo_home_gifts	2	both	any	any	any	any	home	Datos, fotos y un poco de polvo en las botas.	Data, photos and some dust on our boots. | Data, photos and some dust on our boots. | Data, photos and dusty boots.
