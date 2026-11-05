@@ -310,7 +310,7 @@ namespace Lonapse
                 if (sit == "orbit") { nums["period_min"] = o.period / 60.0; nums["t_pe_min"] = o.timeToPe / 60.0; }
                 if (o.ApA > 0 && o.timeToAp > 0) nums["t_ap_min"] = o.timeToAp / 60.0;
             }
-            Put(nums, "fuel", ResourcePercent(v, "LiquidFuel"));
+            Put(nums, "fuel", StageFuelPercent(v));
             Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
             Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
             try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
@@ -349,6 +349,43 @@ namespace Lonapse
         }
 
         static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
+
+        /// <summary>
+        /// Liquid fuel left in percent for the stage that burns: the tanks that feed a running engine (its crossfeed
+        /// set), like the stage view of the KSP resource panel (user report: 73 % was said with 530 of 1125 in the
+        /// stage, the full upper stage tanks were counted too). No running engine: the whole vessel.
+        /// </summary>
+        static double StageFuelPercent(Vessel v)
+        {
+            var feed = new HashSet<Part>();
+            try
+            {
+                foreach (Part p in v.parts)
+                    foreach (PartModule m in p.Modules)
+                    {
+                        var e = m as ModuleEngines;
+                        if (e == null || !e.EngineIgnited || e.flameout) continue;
+                        bool liquid = false;
+                        foreach (Propellant pr in e.propellants) if (pr.name == "LiquidFuel") liquid = true;
+                        if (!liquid) continue;
+                        if (p.crossfeedPartSet != null) foreach (Part q in p.crossfeedPartSet.GetParts()) feed.Add(q);
+                        else feed.Add(p);
+                    }
+            }
+            catch (Exception) { feed.Clear(); }
+            double have = 0, max = 0;
+            foreach (Part p in feed)
+                foreach (PartResource r in p.Resources)
+                    if (r.resourceName == "LiquidFuel") { have += r.amount; max += r.maxAmount; }
+            if (max > 0.01)
+            {
+                Log.Info("Runtime voice: fuel " + have.ToString("0") + " / " + max.ToString("0") + " in the burning stage (" + feed.Count + " parts)");
+                return 100.0 * have / max;
+            }
+            double all = ResourcePercent(v, "LiquidFuel");
+            if (!double.IsNaN(all)) Log.Info("Runtime voice: fuel " + all.ToString("0") + " % of the whole vessel (no engine running)");
+            return all;
+        }
 
         /// <summary>A resource left in percent, NaN when the vessel has none of it.</summary>
         static double ResourcePercent(Vessel v, string resource)
