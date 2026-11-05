@@ -248,7 +248,7 @@ namespace Lonapse
                 Job j;
                 lock (gate) { if (finished.Count == 0) return; j = finished.Dequeue(); }
                 var r = new Result { error = j.error, spoken = j.spoken, piperMs = j.piperMs };
-                if (j.error == null && j.samples != null)
+                if (j.error == null && j.samples != null && j.done != null) // no clip for a warm-up line
                 {
                     r.clip = AudioClip.Create(j.id, j.samples.Length, 1, RuntimeSpeech.OutRate, false);
                     r.clip.SetData(j.samples, 0);

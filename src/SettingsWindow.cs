@@ -476,6 +476,12 @@ namespace Lonapse
             s.planChatter = Toggle(s.planChatter, "Maneuver node talk");
             s.lightDelay = Toggle(s.lightDelay, "Light delay");
             Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
+            s.runtimeNames = Toggle(s.runtimeNames, "Mission Control says crew names (experimental)");
+            {
+                string why = s.runtimeNames ? RuntimeVoice.Missing("mc") : null;
+                Hint(why != null ? "Not available: " + why
+                     : "Some Mission Control lines end with the name of a kerbal aboard, spoken at runtime. When the name is not ready in time, the normal line plays.");
+            }
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -983,6 +989,7 @@ namespace Lonapse
             // the director updates its status when the clip is ready
             string rts = d != null && !string.IsNullOrEmpty(d.runtimeStatus) ? d.runtimeStatus : runtimeTestStatus;
             GUILayout.Label(string.IsNullOrEmpty(rts) ? " " : rts);   // always drawn: keeps the control count stable
+            GUILayout.Label("MC lines with a crew name: " + (d != null ? d.RuntimeNameStats : "-"));
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));
             if (d != null)

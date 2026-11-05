@@ -22,10 +22,11 @@ namespace Lonapse
         public float overlapAt;       // > 0: may start at this fraction of the previous crew line
         public float pitchMul = 1f;   // intercom pair pitch nudge
         public PhraseEntry entry;     // Lonapse row, null for folder clips
+        public ChatterDirector.RuntimeLine rt; // experimental: the same MC line with a crew name, rendered at runtime
 
         public void Set(UttKind k, string f, float delay, float overlap, KerbalVoice sp)
         {
-            who = k; folder = f; startDelay = delay; overlapAt = overlap; speaker = sp; pitchMul = 1f; entry = null;
+            who = k; folder = f; startDelay = delay; overlapAt = overlap; speaker = sp; pitchMul = 1f; entry = null; rt = null;
         }
     }
 
@@ -779,6 +780,7 @@ namespace Lonapse
                     KerbalVoice sp = u.speaker;
                     if (sp == null || sp.outDueToG || !host.roster.voices.Contains(sp)) sp = host.roster.PickSpeaker(rng);
                     if (sp == null) return StartResult.Skip;
+                    NoteCrewSpeaker(sp);
                     AudioClip clip;
                     string what;
                     bool panic;
@@ -918,7 +920,11 @@ namespace Lonapse
                     VoiceChannel c = host.control;
                     if (c.Busy) return StartResult.Wait;
                     if (!host.signal.connected) { Log.Debug("control line skipped: no signal"); return StartResult.Skip; }
-                    AudioClip clip = u.entry != null ? PhraseClips.Clip(u.entry, false) : ClipLibrary.Next(u.folder ?? "control/calm", rng);
+                    AudioClip rtClip;
+                    PhraseEntry rtEntry;
+                    if (!RuntimeTurn(u, out rtClip, out rtEntry)) return StartResult.Wait;
+                    PhraseEntry shown = rtEntry ?? u.entry;
+                    AudioClip clip = rtClip ?? (u.entry != null ? PhraseClips.Clip(u.entry, false) : ClipLibrary.Next(u.folder ?? "control/calm", rng));
                     if (clip == null) return StartResult.Skip;
                     // v3 req 7: no runtime pitch drop under stress, the panic delivery sounds like the calm one.
                     // 0.6.0: one controller, like a real CAPCOM. The livelier sound is in the clips.
@@ -929,12 +935,12 @@ namespace Lonapse
                     c.Play(clip, vol, pitch, false, 0f);
                     c.boost = VoiceBoost;
                     c.compressor = cfg.voiceCompressor;
-                    c.phraseKey = u.entry != null ? u.entry.ClipKey : null;
+                    c.phraseKey = u.entry != null ? u.entry.ClipKey : null; // the table row (FaceDriver), also for a named line
                     c.baseDistortion = Math.Max(tu.controlDistortion, p.Distortion) + 0.3f * host.StaticLevel * host.settings.weakSignalVolume;
                     c.dropout = host.Dropout;
                     if (staticChop) c.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
-                    ShowSubtitle(u.entry, "MC", c.duration);
-                    lastLine = "MC: " + (u.entry != null ? u.entry.ClipKey : u.folder);
+                    ShowSubtitle(shown, "MC", c.duration);
+                    lastLine = "MC: " + (shown != null ? shown.ClipKey : u.folder);
                     Audit.Add(lastLine + " s " + s.ToString("0.00"));
                     Log.Debug("control " + (u.entry != null ? u.entry.ClipKey : u.folder) + " " + c.clipName + " pitch " + pitch.ToString("0.00") + " vol " + vol.ToString("0.00"));
                     ch = c;
@@ -1044,7 +1050,7 @@ namespace Lonapse
             Enqueue(UttKind.BedStart, null, delay, 0f, null);
             Enqueue(UttKind.ControlFx, "beeps/quindar_in", 0f, 0f, null);
             Utterance u = Enqueue(UttKind.ControlLine, folder, 0.05f, 0f, null);
-            if (u != null) u.entry = e;
+            if (u != null) { u.entry = e; u.rt = MaybeAddressed(e); }
             Enqueue(UttKind.ControlFx, "beeps/quindar_out", 0.03f, 0f, null);
             Enqueue(UttKind.BedStop, null, 0f, 0f, null);
             Enqueue(UttKind.ControlFx, "static/squelch", 0.02f, 0f, null);

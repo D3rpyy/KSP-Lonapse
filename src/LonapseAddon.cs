@@ -30,7 +30,8 @@ namespace Lonapse
         public VoiceChannel[] allChannels = new VoiceChannel[0];
 
         public ChatterDirector director;
-        public RuntimeVoice runtimeVoice;  // experimental: lines spoken at runtime by Piper (Debug tab test)
+        public RuntimeVoice runtimeVoice;
+        private bool runtimeWarmed;  // experimental: lines spoken at runtime by Piper (Debug tab test)
         public BeepDirector beeps;
         public BlackoutMachine blackout;
         private SettingsWindow window;
@@ -287,6 +288,18 @@ namespace Lonapse
                 started = false;
                 Log.Error("Start failed, plugin stays silent: " + e);
             }
+        }
+
+        /// <summary>Experimental (runtime voice): once in flight with "Mission Control says crew names" on, start Piper and
+        /// speak one short line it throws away, so the model is loaded before the first real line.</summary>
+        private void WarmRuntimeVoice()
+        {
+            if (runtimeWarmed || !settings.runtimeNames || !HighLogic.LoadedSceneIsFlight) return;
+            runtimeWarmed = true;
+            string why = RuntimeVoice.Missing("mc");
+            if (why != null) { Log.Warn("Runtime voice off: " + why); return; }
+            if (runtimeVoice == null) runtimeVoice = new RuntimeVoice();
+            runtimeVoice.Request("mc", "Hola.", null);
         }
 
         private void OnDestroy()
@@ -652,6 +665,7 @@ namespace Lonapse
                 float dt = Math.Min(rawDt, 0.1f);
                 railsWarp = ReadRailsWarp(); // every frame, for the gate and the overlay
                 HandleHotkey();
+                WarmRuntimeVoice();
                 if (runtimeVoice != null) runtimeVoice.Tick();
                 if (window != null && (!window.Visible || uiHidden)) window.ReleaseLock();
 

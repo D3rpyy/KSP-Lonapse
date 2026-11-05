@@ -409,6 +409,7 @@ namespace Lonapse
         public bool countdownDown = false;          // 0.6.0: count 10 .. 1 instead of 1 .. 10
         public bool rogerBeep = true;               // short beep when the crew lets go of the key
         public bool lightDelay = true;              // small extra answer delay far from Kerbin (max lightDelayMax s)
+        public bool runtimeNames = false;           // experimental: MC says crew names, spoken at runtime by Piper
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
         public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
         // --- v3 ---
@@ -753,6 +754,7 @@ namespace Lonapse
                 n.TryGetValue("countdownDown", ref s.countdownDown);
                 n.TryGetValue("rogerBeep", ref s.rogerBeep);
                 n.TryGetValue("lightDelay", ref s.lightDelay);
+                n.TryGetValue("runtimeNames", ref s.runtimeNames);
                 n.TryGetValue("signalDropouts", ref s.signalDropouts);
                 n.TryGetValue("masterAlarm", ref s.masterAlarm);
                 n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
@@ -895,6 +897,7 @@ namespace Lonapse
                 n.AddValue("countdownDown", countdownDown);
                 n.AddValue("rogerBeep", rogerBeep);
                 n.AddValue("lightDelay", lightDelay);
+                n.AddValue("runtimeNames", runtimeNames);
                 n.AddValue("signalDropouts", signalDropouts);
                 n.AddValue("masterAlarm", masterAlarm);
                 n.AddValue("mouthAnimation", mouthAnimation);

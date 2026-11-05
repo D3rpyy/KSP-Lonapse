@@ -1182,6 +1182,50 @@ public static class Tests
         double hz = zc / 2.0 / 0.5;
         Check(Math.Abs(hz - 220 * ratio) < 6, "runtime voice: the shift raises the pitch by the ratio (220 Hz +3 st = 262 Hz)",
               hz.ToString("0.0") + " Hz");
+        // crew names at the end of an MC line
+        string[][] adds = {
+            new[] { "Good work.", "Good work, Bob." }, new[] { "¿Todo bien?", "¿Todo bien, Bob?" },
+            new[] { "Copy. Stand by!", "Copy. Stand by, Bob!" }, new[] { "Well...", "Well, Bob..." },
+            new[] { "Hold on", "Hold on, Bob" }, new[] { "Copy, over.", null }, new[] { "Recibido. Cambio.", null },
+            new[] { "Say \"cheese\".", null }, new[] { "Fuel at 5%.", null }, new[] { "Go {thing}.", null },
+            new[] { "A | B", null }, new[] { "Bob, go.", null }, new[] { "", null }, new[] { "...", null },
+        };
+        var badAdd = new List<string>();
+        foreach (string[] ad in adds) if (RuntimeSpeech.AddName(ad[0], "Bob") != ad[1]) badAdd.Add(ad[0] + " -> " + (RuntimeSpeech.AddName(ad[0], "Bob") ?? "null"));
+        Check(badAdd.Count == 0, "runtime voice: a name goes at the end of the last sentence, not after a radio word or symbol",
+              string.Join(" ; ", badAdd.ToArray()));
+        Check(RuntimeSpeech.AddName("Bien hecho.", RuntimeSpeech.MarkName("Bob")) == "Bien hecho, ‹Bob›."
+              && RuntimeSpeech.Spoken("Bien hecho, ‹Bob›.") == "neiB ohceh, Bob.", "runtime voice: a marked name in Spanish, spoken",
+              RuntimeSpeech.Spoken("Bien hecho, ‹Bob›."));
+
+        // every MC row of the built table: the runtime text is the pre-rendered loñapsE with the name added
+        string here = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string builtPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../audio/build/lonapse/phrases.tsv"));
+        if (System.IO.File.Exists(builtPath))
+        {
+            PhraseTable built = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(builtPath, System.Text.Encoding.UTF8)), new List<string>());
+            int mc = 0, named = 0, versionsNamed = 0, versionsAll = 0;
+            var off = new List<string>();
+            foreach (PhraseEntry pe in built.Entries)
+            {
+                if (pe.Role != "mc") continue;
+                mc++;
+                string sp2 = RuntimeSpeech.AddName(pe.Spanish, RuntimeSpeech.MarkName("Bob"));
+                bool anyEn = false;
+                foreach (string v in SubtitleSlots.Versions(pe.English))
+                {
+                    versionsAll++;
+                    if (RuntimeSpeech.AddName(v, "Bob") != null || SubtitleSlots.NeedsFill(v)) { versionsNamed++; anyEn = true; }
+                }
+                if (sp2 == null || !anyEn) continue;
+                named++;
+                string wantSp = RuntimeSpeech.AddName(pe.LonapseText, "Bob");
+                if (RuntimeSpeech.Spoken(sp2) != wantSp && off.Count < 5) off.Add(pe.ClipKey + ": " + RuntimeSpeech.Spoken(sp2) + " / " + wantSp);
+            }
+            Check(off.Count == 0 && named * 2 > mc, "runtime voice: " + named + " of " + mc + " MC lines take a name ("
+                  + versionsNamed + " of " + versionsAll + " subtitle versions), spoken text = lonapse_text + name",
+                  string.Join(" ; ", off.ToArray()));
+        }
         Check(RuntimeDelivery.For("mc").Voice == "es_MX-ald-medium" && Math.Abs(RuntimeDelivery.For("m").LengthScale - Math.Pow(2, 5 / 12.0)) < 1e-9
               && RuntimeDelivery.For("x") == null, "runtime voice: delivery per kind like the build (voice, length scale)", null);
     }

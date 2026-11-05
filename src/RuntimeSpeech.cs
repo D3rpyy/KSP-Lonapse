@@ -95,6 +95,32 @@ namespace Lonapse
             return o.ToString();
         }
 
+        // a line that already ends on a radio word gets no name after it ("Copy, over, Jebediah.")
+        static readonly string[] EndWords = { "over", "out", "cambio", "corto", "fuera" };
+
+        /// <summary>
+        /// The line with a name added at the end of its last sentence: "Good work." becomes "Good work, Jebediah.",
+        /// "¿Todo bien?" becomes "¿Todo bien, Jebediah?". At the end, so no capital has to change. Null when the line
+        /// does not take a name: empty, a slot, versions or quotes left, it ends on a symbol or a radio word, or the
+        /// name is already in it.
+        /// </summary>
+        public static string AddName(string text, string name)
+        {
+            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(name)) return null;
+            string t = text.TrimEnd();
+            if (t.IndexOfAny(new[] { '"', '{', '}', '|', '“', '”', '«', '»' }) >= 0) return null;
+            string bare = name.Trim(NameOpen, NameClose);
+            if (bare.Length > 0 && t.IndexOf(bare, StringComparison.OrdinalIgnoreCase) >= 0) return null;
+            int end = t.Length;
+            while (end > 0 && ".!?…".IndexOf(t[end - 1]) >= 0) end--;
+            if (end == 0 || !char.IsLetterOrDigit(t[end - 1])) return null;
+            int w = end;
+            while (w > 0 && char.IsLetter(t[w - 1])) w--;
+            string last = t.Substring(w, end - w).ToLowerInvariant();
+            if (Array.IndexOf(EndWords, last) >= 0) return null;
+            return t.Substring(0, end) + ", " + name + t.Substring(end);
+        }
+
         /// <summary>JSON string literal for Piper's --json-input (quotes, backslashes and control characters).</summary>
         public static string Json(string s)
         {
