@@ -148,6 +148,23 @@ namespace Lonapse
             }
         }
 
+        /// <summary>
+        /// The lines to play for a scene: the {body} variants for Body, and for a scene with alternatives (experimental
+        /// alt column) one line per seq from the line memory, so a scene that comes back has another punchline or
+        /// reaction. Use this instead of PhraseClips.LinesFor(sc, Body) when the lines are really played.
+        /// </summary>
+        private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc)
+        {
+            var lines = PhraseClips.LinesFor(sc, Body, opts => Mem.TakeLine(opts, rng));
+            if (sc != null && sc.HasAlts)
+            {
+                var keys = new string[lines.Count];
+                for (int i = 0; i < lines.Count; i++) keys[i] = lines[i].ClipKey;
+                Log.Debug("Scene " + sc.Id + " with variants (" + sc.Versions + " versions): " + string.Join(" ", keys));
+            }
+            return lines;
+        }
+
         public ChatterDirector(LonapseAddon host, System.Random rng)
         {
             this.host = host;
@@ -1120,7 +1137,7 @@ namespace Lonapse
         private PhraseEntry FirstLine(PhraseScene sc)
         {
             if (sc == null) return null;
-            var lines = PhraseClips.LinesFor(sc, Body);
+            var lines = PlayLines(sc);
             return lines.Count > 0 ? lines[0] : null;
         }
 
@@ -1128,7 +1145,7 @@ namespace Lonapse
         private bool EnqueueRadioScene(PhraseScene sc, KerbalVoice sp, float delay)
         {
             if (sc == null) return false;
-            var lines = PhraseClips.LinesFor(sc, Body); // {body} variants (req 5)
+            var lines = PlayLines(sc); // {body} variants (req 5)
             if (lines.Count == 0) return false;
             int need = 0;
             for (int i = 0; i < lines.Count; i++) need += lines[i].Role == "mc" ? 7 : 4;
@@ -1576,7 +1593,7 @@ namespace Lonapse
             if (sc == null && ev != null) sc = PickScene(ev, null, x => x.Lines.Count > 0 && x.Lines[0].Role == "crew" && FitsSpeaker(x, sp));
             AudioClip clip = null;
             string folder = null;
-            var scLines = sc != null ? PhraseClips.LinesFor(sc, Body) : null; // {body} variants (req 5)
+            var scLines = sc != null ? PlayLines(sc) : null; // {body} variants (req 5)
             if (scLines != null && scLines.Count > 0) clip = PhraseClips.Clip(scLines[0], sp.isFemale);
             // with the table only a real line: a folder clip has no subtitle and could say anything
             if (clip == null && PhraseClips.Loaded) return "no fitting line in the phrase table";
@@ -1650,7 +1667,7 @@ namespace Lonapse
                 if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, x => x.IsIntercom);
                 if (sc == null) sc = PickIntercomSceneFor("calm", a, x => x.IsIntercom);
             }
-            var lines = sc != null ? PhraseClips.LinesFor(sc, Body) : null; // {body} variants (req 5)
+            var lines = sc != null ? PlayLines(sc) : null; // {body} variants (req 5)
             if (lines != null && lines.Count == 0) { sc = null; lines = null; }
             int turns = lines != null ? lines.Count : 2 + rng.Next(3);
             // req 9: on stations and bases the intercom gets one extra turn

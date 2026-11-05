@@ -14,8 +14,39 @@ namespace Lonapse
         private readonly Dictionary<string, long> last = new Dictionary<string, long>();
         private long seq;
 
-        /// <summary>Most scene ids kept. The oldest are forgotten first, so they count as new again.</summary>
-        public const int MaxEntries = 4000;
+        /// <summary>Most scene ids kept. The oldest are forgotten first, so they count as new again. Raised from 4000
+        /// for the scene variants: the lines of a scene with alternatives are kept too (LineKey).</summary>
+        public const int MaxEntries = 8000;
+        /// <summary>Prefix of a line id in the memory, so a clip key never mixes with a scene id.</summary>
+        public const string LinePrefix = "line:";
+
+        public static string LineKey(PhraseEntry e) { return e == null ? null : LinePrefix + e.ClipKey; }
+
+        /// <summary>
+        /// Scene variants: picks one line of the options (the base row and its alternatives for one seq) and remembers
+        /// it. A line never heard comes first (at random among those), else the line heard longest ago. So every
+        /// version of a line plays once before one comes back. Null or empty gives null.
+        /// </summary>
+        public PhraseEntry TakeLine(IList<PhraseEntry> options, Random rng)
+        {
+            if (options == null || options.Count == 0) return null;
+            PhraseEntry p = null;
+            if (options.Count == 1) p = options[0];
+            else
+            {
+                var fresh = new List<PhraseEntry>();
+                for (int i = 0; i < options.Count; i++) if (LastSeq(LineKey(options[i])) < 0) fresh.Add(options[i]);
+                if (fresh.Count > 0) p = fresh[rng != null ? rng.Next(fresh.Count) : 0];
+                else
+                {
+                    p = options[0];
+                    for (int i = 1; i < options.Count; i++)
+                        if (LastSeq(LineKey(options[i])) < LastSeq(LineKey(p))) p = options[i];
+                }
+            }
+            Stamp(LineKey(p));
+            return p;
+        }
         /// <summary>After every line was heard: pick from this share of the list, the ones heard longest ago.</summary>
         public const int OldestShareDivisor = 4;
 

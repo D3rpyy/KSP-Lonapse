@@ -147,9 +147,12 @@ OGG_QUALITY = "3"            # libvorbis -q:a 3, mono (neural voices have more a
 ENGLISH_COLUMN = "english"   # subtitle text
 SOURCE_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq", "gender", "phase", "cause",
                   "spanish", ENGLISH_COLUMN]
-SOURCE_OPTIONAL = {"trait": "any", "persona": "any", "topic": "any", "core": "any", "beep": ""}
+# alt (experimental, scene variants): empty on a base row, [a-z0-9]+ on an alternative for the base row with the
+# same scene and seq. Same as PhraseTable.AltColumn in C#.
+SOURCE_OPTIONAL = {"trait": "any", "persona": "any", "topic": "any", "core": "any", "beep": "", "alt": ""}
 BUILT_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq", "gender", "phase", "cause",
-                 "trait", "persona", "topic", "core", "beep", "spanish", "lonapse_text", "folder", "body", ENGLISH_COLUMN]
+                 "trait", "persona", "topic", "core", "beep", "spanish", "lonapse_text", "folder", "body", "alt",
+                 ENGLISH_COLUMN]
 BODY_COLUMNS = ["key", "spanish", "english"]
 PHASES = ["any", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
           "serious", "goofy"]
@@ -246,6 +249,7 @@ MIN_CHATTER_PER_BAND = 3
 CHATTER_BANDS = ["calm", "tense", "panic"]
 
 KEY_RE = re.compile(r"^[a-z0-9_]+$")
+ALT_RE = re.compile(r"^[a-z0-9]+$")
 
 
 class BuildError(Exception):
@@ -385,13 +389,18 @@ def validate(rows):
     """Checks every source row and the rules across all files. Returns (good rows, errors).
     Rows of a scene must share event, severity, band, phase, cause, trait, persona, topic and core, and the scene must live
     in one file. topic is any except on science and soi_enter. Explosion words only in part_lost.
-    seq numbers of a scene run 1..n. {body} is the only placeholder, and it is in both spanish and english."""
+    seq numbers of a scene run 1..n. {body} is the only placeholder, and it is in both spanish and english.
+    Scene variants: an alt row needs a base row (alt empty) with the same scene and seq, the same role and a gender
+    that covers the base gender, and it cannot use {body}. Same rules as PhraseTable.Parse in C#."""
     errors = []
     good = []
     first_key = {}
     scene_file = {}
     scene_head = {}
     scene_seqs = {}
+    alt_seen = {}
+    alt_rows = []
+    base_row = {}
     for row in rows:
         bad = []
         key = row["clip_key"]
@@ -481,10 +490,19 @@ def validate(rows):
                 bad.append("{body} must be in both spanish and english, or in neither")
             elif ph_es.count("body") > 1 or ph_en.count("body") > 1:
                 bad.append("{body} at most once per text")
+        alt = row["alt"]
+        if alt:
+            if not ALT_RE.match(alt):
+                bad.append("alt must match [a-z0-9]+")
+            if ph_es or ph_en:
+                bad.append("an alt row cannot use {body}")
         sc = row["scene"]
         if sc in scene_file and scene_file[sc] != row["file"]:
             bad.append("scene '%s' is also in %s, a scene lives in one file" % (sc, scene_file[sc]))
-        if seq >= 1 and seq in scene_seqs.get(sc, {}):
+        if alt:
+            if seq >= 1 and (sc, seq, alt) in alt_seen:
+                bad.append("duplicate scene/seq/alt %s/%d/%s, first at %s" % (sc, seq, alt, alt_seen[(sc, seq, alt)]))
+        elif seq >= 1 and seq in scene_seqs.get(sc, {}):
             bad.append("duplicate scene/seq %s/%d, first at %s" % (sc, seq, scene_seqs[sc][seq]))
         if not bad and sc in scene_head:
             head = scene_head[sc]
@@ -500,8 +518,25 @@ def validate(rows):
         row["has_body"] = "body" in ph_en
         scene_file.setdefault(sc, row["file"])
         scene_head.setdefault(sc, row)
-        scene_seqs.setdefault(sc, {})[seq] = loc
+        if alt:
+            alt_seen[(sc, seq, alt)] = loc
+            alt_rows.append(row)
+        else:
+            scene_seqs.setdefault(sc, {})[seq] = loc
+            base_row[(sc, seq)] = row
         good.append(row)
+    for row in alt_rows:
+        b = base_row.get((row["scene"], row["seq"]))
+        why = None
+        if b is None:
+            why = "alt row without a base row for scene/seq %s/%d" % (row["scene"], row["seq"])
+        elif b["role"] != row["role"]:
+            why = "alt row role %s differs from the base row role %s (%s)" % (row["role"], b["role"], b["loc"])
+        elif row["gender"] != "both" and row["gender"] != b["gender"]:
+            why = "alt row gender %s does not cover the base row gender %s (%s)" % (row["gender"], b["gender"], b["loc"])
+        if why:
+            errors.append("%s (%s): %s" % (row["loc"], row["clip_key"], why))
+            good.remove(row)
     for sc, seqs in scene_seqs.items():
         if sorted(seqs) != list(range(1, len(seqs) + 1)):
             errors.append("%s: scene '%s' seq numbers %s, must run 1..%d" % (scene_head[sc]["loc"], sc,
@@ -512,7 +547,8 @@ def validate(rows):
         by_scene.setdefault(r["scene"], []).append(r)
     for sc, lines in by_scene.items():
         head = scene_head[sc]
-        intercom = len(lines) >= 2 and all(r["role"] == "crew" for r in lines)
+        base = [r for r in lines if not r["alt"]]
+        intercom = len(base) >= 2 and all(r["role"] == "crew" for r in base)
         if intercom and (head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES):
             errors.append("%s: scene '%s' is an intercom scene in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
         if head["event"] == PROBE_CREW_EVENT:
@@ -620,6 +656,9 @@ def summary(src_rows, rows, files):
         by_scene.setdefault(r["scene"], []).append(r)
     probe_scenes = sum(1 for sc in by_scene.values() if is_probe_scene(sc))
     sub_rows = sum(1 for r in src_rows if r["role"] in SUBTITLE_ONLY_ROLES)
+    alt_rows = [r for r in src_rows if r["alt"]]
+    if alt_rows:
+        lines.append("Scene variants: %d alt rows in %d scenes" % (len(alt_rows), len({r["scene"] for r in alt_rows})))
     lines.append("Scenes: %d (%d with {body}, %d probe scenes). Source rows: %d (%d subtitle only). "
                  "Built rows after {body}: %d. Clips: %d"
                  % (len(scenes), len(body_scenes), probe_scenes, len(src_rows), sub_rows, len(rows),

@@ -91,7 +91,7 @@ namespace Lonapse
         private bool EnqueueProbeScene(PhraseScene sc, float delay, bool mcOnly = false, bool firstOnly = false)
         {
             if (sc == null) return false;
-            List<PhraseEntry> lines = PhraseClips.LinesFor(sc, Body);
+            List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0) return false;
             ProbeShape shape = ProbeRules.ShapeOf(lines);
             if (shape.crew > 0) return false;
@@ -567,7 +567,7 @@ namespace Lonapse
             PhraseScene sc = PreferFor(a, band, pick(band), null);
             if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), null);
             if (sc == null) return false;
-            List<PhraseEntry> lines = PhraseClips.LinesFor(sc, Body);
+            List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0 || count + 2 * lines.Count + 1 > Capacity) return false;
             chatA = a;
             chatB = a;

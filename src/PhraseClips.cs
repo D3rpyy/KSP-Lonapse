@@ -135,6 +135,14 @@ namespace Lonapse
         /// seq. Use this instead of sc.Lines when playing a scene. A new list, safe to keep.</summary>
         public static List<PhraseEntry> LinesFor(PhraseScene sc, string body)
         {
+            return LinesFor(sc, body, null);
+        }
+
+        /// <summary>The same, and for a scene with alternatives (alt column) one line per seq is chosen by
+        /// <paramref name="choose"/> from the line LinesFor gives plus the alternatives of that seq that have a clip.
+        /// A null chooser, or a chooser that returns null, keeps the base line.</summary>
+        public static List<PhraseEntry> LinesFor(PhraseScene sc, string body, Func<IList<PhraseEntry>, PhraseEntry> choose)
+        {
             List<PhraseEntry> r = new List<PhraseEntry>();
             if (sc == null) return r;
             List<PhraseEntry> want = sc.LinesFor(body);
@@ -145,6 +153,14 @@ namespace Lonapse
                 {
                     for (int k = 0; k < sc.Lines.Count; k++)
                         if (sc.Lines[k].Seq == e.Seq) { e = sc.Lines[k]; break; }
+                }
+                List<PhraseEntry> alts = sc.AltsFor(e.Seq);
+                if (choose != null && alts.Count > 0)
+                {
+                    var options = new List<PhraseEntry>(alts.Count + 1) { e };
+                    foreach (PhraseEntry a in alts)
+                        if (a.SubtitleOnly || Clip(a, false) != null) options.Add(a);
+                    e = choose(options) ?? e;
                 }
                 r.Add(e);
             }

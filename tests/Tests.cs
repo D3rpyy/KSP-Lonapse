@@ -907,6 +907,7 @@ public static class Tests
               && LaunchCountdown.ClipKey(LaunchCountdown.Liftoff, true) == "countdown_liftoff" && LaunchCountdown.ClipKey(0, true) == null,
               "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
         SceneMemoryTests();
+        SceneVariantTests();
         ProbeCoreTests();
         ProbeSynthTests();
         ProbeSettingsTests();
@@ -1130,6 +1131,84 @@ public static class Tests
             for (int i = 0; i < SceneMemory.MaxEntries + 10; i++) big.Stamp("id" + i);
             Check(big.Count <= SceneMemory.MaxEntries && big.LastSeq("id" + (SceneMemory.MaxEntries + 9)) > 0 && big.LastSeq("id0") < 0,
                   "line memory: past the cap the oldest scenes are forgotten", big.Count.ToString());
+        }
+    }
+
+    // Experimental: scene variants (alt column). One line per seq from the base row and its alternatives.
+    static void SceneVariantTests()
+    {
+        const string head = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tspanish\talt\tenglish";
+        Func<string, string, string, string, string, string> row = (key, seq, gender, alt, en) =>
+            key + "\tchatter\tchatter\tcalm\tcrew\tsv\t" + seq + "\t" + gender + "\tgoofy\tHola\t" + alt + "\t" + en;
+        {
+            var errs = new List<string>();
+            PhraseTable t = PhraseTable.Parse(new List<string> {
+                head,
+                row("v2b", "2", "both", "b", "Punch B"),       // an alt row before its base row is fine
+                row("v1", "1", "both", "", "Setup"),
+                row("v2", "2", "both", "", "Punch A"),
+                row("v2c", "2", "both", "c", "Punch C"),
+                row("v3", "3", "m", "", "React A"),
+                row("v3b", "3", "m", "b", "React B") }, errs);
+            PhraseScene sc = t.Scenes.Count == 1 ? t.Scenes[0] : null;
+            Check(errs.Count == 0 && sc != null, "variants: a scene with alt rows parses", errs.Count + " errors");
+            if (sc != null)
+            {
+                Check(sc.Lines.Count == 3 && sc.Lines[1].ClipKey == "v2" && !sc.Lines[2].IsAlt,
+                      "variants: Lines is the base version, one row per seq", sc.Lines.Count.ToString());
+                Check(sc.IsIntercom && sc.CrewLines == 3 && sc.MaleOk && !sc.FemaleOk,
+                      "variants: intercom, line counts and gender come from the base rows", null);
+                Check(sc.HasAlts && sc.AltsFor(2).Count == 2 && sc.AltsFor(2)[0].ClipKey == "v2b" && sc.AltsFor(1).Count == 0,
+                      "variants: AltsFor gives the alternatives of a seq in alt order", null);
+                Check(sc.Versions == 6, "variants: 1 x 3 x 2 gives 6 versions", sc.Versions.ToString());
+            }
+        }
+        // bad alt rows are dropped with an error, the rest of the scene stays
+        {
+            var errs = new List<string>();
+            PhraseTable t = PhraseTable.Parse(new List<string> {
+                head,
+                row("w1", "1", "both", "", "Setup"),
+                row("w2", "2", "m", "", "Punch"),
+                row("w2f", "2", "f", "b", "Gender does not cover the base"),
+                row("w3b", "3", "both", "b", "No base row"),
+                row("w2x", "2", "both", "B", "Bad alt value"),
+                row("w2d", "2", "both", "c", "First c"),
+                row("w2e", "2", "both", "c", "Second c") }, errs);
+            Check(errs.Count == 4 && t.Count == 3 && t.Get("w2f") == null && t.Get("w3b") == null && t.Get("w2d") != null,
+                  "variants: alt rows without a base row, with a narrower gender, a bad value or twice the same alt are rejected",
+                  errs.Count + " errors: " + string.Join(" | ", errs.ToArray()));
+            var e2 = new List<string>();
+            PhraseTable.Parse(new List<string> {
+                "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\talt\tenglish",
+                "x1\tchatter\tchatter\tcalm\tcrew\tsx\t1\tboth\tHola\t\tHi",
+                "x1b\tchatter\tchatter\tcalm\tcrew\tsx\t1\tboth\tEn {body}\tb\tOn {body}" }, e2);
+            Check(e2.Count == 1, "variants: an alt row cannot use {body}", e2.Count.ToString());
+            var e3 = new List<string>();
+            PhraseTable.Parse(new List<string> {
+                "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\talt\tenglish",
+                "y1\tchatter\tchatter\tcalm\tcrew\tsy\t1\tboth\tHola\t\tHi",
+                "y1b\tchatter\tchatter\tcalm\tmc\tsy\t1\tm\tHola\tb\tHi" }, e3);
+            Check(e3.Count == 1, "variants: an alt row must have the role of its base row", e3.Count.ToString());
+        }
+        // TakeLine: every option plays once before one comes back, then the one heard longest ago
+        {
+            var opts = new List<PhraseEntry>();
+            foreach (string k in new[] { "p_a", "p_b", "p_c" }) opts.Add(new PhraseEntry { ClipKey = k, Scene = "p", Seq = 2 });
+            SceneMemory m = new SceneMemory();
+            Random rng = new Random(5);
+            var first = new HashSet<string>();
+            for (int i = 0; i < 3; i++) first.Add(m.TakeLine(opts, rng).ClipKey);
+            var order = new List<string>();
+            for (int i = 0; i < 9; i++) order.Add(m.TakeLine(opts, rng).ClipKey);
+            bool rotates = true;
+            for (int i = 3; i < order.Count; i++) rotates &= order[i] == order[i - 3];
+            Check(first.Count == 3 && rotates && order[0] != order[1] && order[1] != order[2],
+                  "variants: TakeLine plays every option once, then rotates", string.Join(" ", order.ToArray()));
+            Check(m.LastSeq("line:p_a") > 0 && m.LastSeq("p_a") < 0, "variants: lines are kept under the line: prefix", null);
+            Check(m.TakeLine(new List<PhraseEntry>(), rng) == null && m.TakeLine(null, rng) == null
+                  && m.TakeLine(new List<PhraseEntry> { opts[1] }, rng) == opts[1],
+                  "variants: TakeLine with one option returns it, empty gives null", null);
         }
     }
 

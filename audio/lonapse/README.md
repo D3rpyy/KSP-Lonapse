@@ -114,6 +114,33 @@ The build checks these rules for you, so you can't break the game with a typo:
 
 The C# loader (`PhraseTable.Parse`) checks the same probe rules and the same placeholder rules as the script, with the same messages. The script checks more (scene in one file, seq 1..n, minimum counts, intercom phase).
 
+## Scene variants (experimental)
+
+This is on the branch `experimental/scene-variants`. It is not tested in game yet.
+
+A scene always played the same way. With the optional column `alt` a line can have alternatives. The row with an empty `alt` is the base line. A row with the same `scene` and `seq` and an `alt` like `b` or `c` is an alternative for it. Each time the scene plays, the game picks one line per seq. A line nobody heard yet comes first. After that, the one heard longest ago. So a scene that comes back gets another punchline or another reaction.
+
+```
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	alt	spanish	english
+bl_shield_sale_1	chatter	chatter	calm	crew	bl_shield_sale	1	both	blackout	any		¿Confías en el escudo térmico?	Do you trust the heat shield?
+bl_shield_sale_2	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any		Lo compraron en oferta.	They bought it on sale.
+bl_shield_sale_2b	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any	b	...	...
+bl_shield_sale_3	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any		No me ayudas.	You're not helping.
+bl_shield_sale_3b	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any	b	...	...
+```
+
+Every line is picked on its own, so 2 options on seq 2 and 2 on seq 3 give 4 versions. That means every alternative has to fit the lines before and after it, in every combination. `python3 audio/variants.py` prints every version of every scene with alternatives, so I can read them before I render anything. `--spanish` adds the Spanish, and a scene name limits the output to that scene.
+
+The rules, checked by the script and by `PhraseTable.Parse`:
+
+- `alt` is empty or `[a-z0-9]+`. An `alt` value is used once per scene and seq.
+- An alternative needs a base row with the same scene and seq, and the same `role`.
+- Its `gender` is `both` or the same as the base row. So a kerbal who can say the base line can say every alternative.
+- An alternative cannot use `{body}`.
+- Line counts, the intercom rule and the speaker gender of a scene come from the base rows only.
+
+The game remembers heard lines in the same file as the heard scenes (`PluginData/played.txt`), as `line:<clip_key>`.
+
 ## Probe mode
 
 Probe mode plays when a vessel has no crew but does have a probe core. Then only Mission Control and the probe talk. The probe has no voice clips, it beeps, and the subtitle tells you what the beep means.
