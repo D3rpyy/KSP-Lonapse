@@ -1390,6 +1390,40 @@ public static class Tests
             else if (RuntimeSpeech.Spoken(a1).IndexOfAny(new[] { '{', '}', '⟪', '⟫' }) >= 0) badT.Add(t.Id + " spoken text has marks left");
         }
         Check(badT.Count == 0, "runtime voice: every template fills and speaks cleanly (" + rtAll.Count + ")", string.Join(" ; ", badT.ToArray()));
+        // runtime chats: rt_chat_<name>_<seq>, two kerbals take turns, self and other per speaker
+        var chats = RuntimeLines.Chats(rtAll);
+        var nA = new Dictionary<string, string[]>(fullN);
+        nA["self"] = new[] { "Bil", "Bill" }; nA["other"] = new[] { "Bob", "Bob" };
+        var nB = new Dictionary<string, string[]>(fullN);
+        nB["self"] = new[] { "Bob", "Bob" }; nB["other"] = new[] { "Bil", "Bill" };
+        var badChat = new List<string>();
+        foreach (var c in chats)
+        {
+            if (c.Count < 2) badChat.Add(c[0].Id + " has one line");
+            string sit = c[0].Situations.Count > 0 ? c[0].Situations[0] : "orbit";
+            // a value that meets each check of line 1
+            var cv = new Dictionary<string, double>(full);
+            foreach (var ck in c[0].Checks)
+            {
+                double n = ck.Value.Value;
+                if (ck.Value.Key == "<" || ck.Value.Key == "<=") cv[ck.Key] = Math.Min(cv[ck.Key], n - 1 > 0 ? n - 1 : n / 2);
+                else if (ck.Value.Key == ">" || ck.Value.Key == ">=") cv[ck.Key] = Math.Max(cv[ck.Key], n + 1);
+                else cv[ck.Key] = n;
+            }
+            if (!RuntimeLines.ChatFits(c, sit, cv, nA, nB)) badChat.Add(c[0].Id + " does not fit with values that meet its checks");
+        }
+        string c1, c2;
+        var dayChat = chats.Find(c => c[0].Id == "rt_chat_day_1");
+        bool dayOk = dayChat != null && RuntimeLines.Fill(dayChat[2], new Dictionary<string, double> { { "day", 4 } }, nA, out c1, out c2)
+                     && c2 == "That's the ship's paint, Bob." && RuntimeSpeech.Spoken(c1).EndsWith(", Bob.");
+        Check(chats.Count >= 12 && badChat.Count == 0 && dayOk,
+              "runtime voice: " + chats.Count + " runtime chats, each fits and fills with the names of its speakers", string.Join(" ; ", badChat.ToArray()));
+        var chatErr = new List<string>();
+        var badChats = RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
+            "rt_chat_a_1\tchat\t\tA.\tA.", "rt_chat_b_1\tchat\t\tB.\tB.", "rt_chat_b_3\tchat\t\tB.\tB.",
+            "rt_chat_c_1\tchat\t\tC.\tC.", "rt_chat_c_2\tchat\torbit\tC.\tC.", "rt_chat_ok_1\tchat\t\tD.\tD.", "rt_chat_ok_2\tchat\t\tD.\tD." }, chatErr);
+        Check(chatErr.Count == 3 && RuntimeLines.Chats(badChats).Count == 1, "runtime voice: a bad chat is dropped (one line, a gap, a when after line 1)",
+              string.Join(" ; ", chatErr.ToArray()));
         // a value of 1: the noun after it is singular, in both languages ("un kilómetro", "1 minute")
         var plural = new List<string>();
         var pluralRe = new System.Text.RegularExpressions.Regex(@"\b(un|1) (kilómetros|metros|minutos|grados|puntos|fondos|piezas|contratos|kerbals|meters|minutes|degrees|points|funds|parts|contracts)\b");

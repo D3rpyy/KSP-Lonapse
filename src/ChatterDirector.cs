@@ -1811,6 +1811,8 @@ namespace Lonapse
             KerbalVoice a, b;
             if (!PickChatPair(forced, out a, out b)) return false;
             float s = host.stress.stress;
+            // experimental runtime voice: sometimes a chat with real values, spoken in game (it queues itself when ready)
+            if (forced == null && !blackoutFirst && TryRuntimeChat(a, b)) return true;
             PhraseScene sc = forced;
             if (sc == null && PhraseClips.Loaded)
             {
@@ -1838,10 +1840,20 @@ namespace Lonapse
                 }
                 else turns++;
             }
+            if (!QueueChatTurns(a, b, lines, turns, extraLine, forced != null)) return false;
+            Log.Debug("Intercom chat queued: " + a.displayName + " and " + b.displayName + ", " + turns + " turns" + (sc != null ? ", scene " + sc.Id : "") + ", s " + s.ToString("0.00"));
+            return true;
+        }
+
+        /// <summary>Queues the turns of an intercom chat between a and b: a click and a line per turn, a release click
+        /// at the end. lines null: folder clips. False when the queue has no room.</summary>
+        private bool QueueChatTurns(KerbalVoice a, KerbalVoice b, System.Collections.Generic.List<PhraseEntry> lines, int turns,
+                                    PhraseEntry extraLine, bool forced)
+        {
             if (count + 2 * turns + 1 > Capacity) return false;
             chatA = a;
             chatB = b;
-            chatForced = forced != null;
+            chatForced = forced;
             chatStarted = false;
             lastChatClock = clock;
             chatLimit = IntercomAbortLimit;   // a blackout chat keeps the blackout limit after the blackout ends
@@ -1859,7 +1871,6 @@ namespace Lonapse
                 if (u.entry != null) u.rt = PlanIntercom(u.entry, second ? b : a, second ? a : b);
             }
             Enqueue(UttKind.IntercomClick, null, 0.1f, 0f, null); // release click after the last line
-            Log.Debug("Intercom chat queued: " + a.displayName + " and " + b.displayName + ", " + turns + " turns" + (sc != null ? ", scene " + sc.Id : "") + ", s " + s.ToString("0.00"));
             return true;
         }
 

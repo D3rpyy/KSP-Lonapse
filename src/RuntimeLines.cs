@@ -31,12 +31,14 @@ namespace Lonapse
     {
         public const string FileRel = "GameData/Lonapse/Phrases/runtime.tsv";
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         public static readonly string[] NumberSlots = { "alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
             "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
             "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms" };
-        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target" };
+        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target", "self", "other" };
+        /// <summary>A chat line: rt_chat_&lt;name&gt;_&lt;seq&gt;. The lines of one name form one chat, seq from 1.</summary>
+        static readonly Regex ChatId = new Regex(@"^(rt_chat_[a-z0-9_]+?)_([0-9]+)$");
 
         static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
@@ -92,7 +94,78 @@ namespace Lonapse
                 r.Add(t);
             }
             if (!header && errors != null) errors.Add("runtime: no header");
+            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only
+            var groups = new Dictionary<string, List<RuntimeTemplate>>();
+            foreach (RuntimeTemplate t in r)
+            {
+                if (t.Kind != "chat") continue;
+                Match m = ChatId.Match(t.Id);
+                if (!m.Success) { if (errors != null) errors.Add("runtime (" + t.Id + "): a chat id is rt_chat_<name>_<seq>"); continue; }
+                List<RuntimeTemplate> g;
+                if (!groups.TryGetValue(m.Groups[1].Value, out g)) groups[m.Groups[1].Value] = g = new List<RuntimeTemplate>();
+                g.Add(t);
+            }
+            var drop = new HashSet<RuntimeTemplate>();
+            foreach (var kv in groups)
+            {
+                kv.Value.Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y)));
+                string why = null;
+                if (kv.Value.Count < 2) why = "a chat needs at least 2 lines";
+                for (int i = 0; i < kv.Value.Count && why == null; i++)
+                {
+                    if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
+                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0)) why = "only line 1 has a when";
+                }
+                if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
+            }
+            foreach (RuntimeTemplate t in r)
+                if (t.Kind == "chat" && !ChatId.IsMatch(t.Id)) drop.Add(t);
+            r.RemoveAll(t => drop.Contains(t));
             return r;
+        }
+
+        static int ChatSeq(RuntimeTemplate t)
+        {
+            Match m = ChatId.Match(t.Id);
+            return m.Success ? int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture) : 0;
+        }
+
+        /// <summary>The chats of the templates: lists of lines in seq order. Line 1 holds the when.</summary>
+        public static List<List<RuntimeTemplate>> Chats(IList<RuntimeTemplate> all)
+        {
+            var map = new Dictionary<string, List<RuntimeTemplate>>();
+            var order = new List<string>();
+            if (all != null)
+                foreach (RuntimeTemplate t in all)
+                {
+                    if (t.Kind != "chat") continue;
+                    Match m = ChatId.Match(t.Id);
+                    if (!m.Success) continue;
+                    List<RuntimeTemplate> g;
+                    if (!map.TryGetValue(m.Groups[1].Value, out g)) { map[m.Groups[1].Value] = g = new List<RuntimeTemplate>(); order.Add(m.Groups[1].Value); }
+                    g.Add(t);
+                }
+            var r = new List<List<RuntimeTemplate>>();
+            foreach (string k in order) { map[k].Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y))); r.Add(map[k]); }
+            return r;
+        }
+
+        /// <summary>Line 1 of a chat fits (situation and checks), and every line fills with the names of its speaker:
+        /// line i is spoken by A when i is even. namesA and namesB hold self and other for each speaker.</summary>
+        public static bool ChatFits(List<RuntimeTemplate> chat, string situation, Dictionary<string, double> nums,
+                                    Dictionary<string, string[]> namesA, Dictionary<string, string[]> namesB)
+        {
+            if (chat == null || chat.Count == 0) return false;
+            var head = new List<RuntimeTemplate> { new RuntimeTemplate(chat[0].Id, "chat", chat[0].Spanish, chat[0].English) };
+            head[0].Situations.AddRange(chat[0].Situations);
+            head[0].Checks.AddRange(chat[0].Checks);
+            if (Fitting(head, "chat", situation, nums, namesA).Count == 0) return false;
+            for (int i = 1; i < chat.Count; i++)
+            {
+                string s, e;
+                if (!Fill(chat[i], nums, i % 2 == 0 ? namesA : namesB, out s, out e)) return false;
+            }
+            return true;
         }
 
         static string SlotSet(string text)

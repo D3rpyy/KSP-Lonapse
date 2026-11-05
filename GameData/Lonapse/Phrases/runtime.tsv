@@ -4,6 +4,8 @@
 # id       a-z 0-9 _, starts with rt_, unique
 # kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),
 #          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed
+#          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
+#          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
 #          or node_min>=2. Several situations: one must match. Every check must hold.
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
@@ -13,7 +15,7 @@
 # Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
 #   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
 #   (km, min, deg, ms and sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body exp target
+# Name slots: vessel body exp target, and in a chat self (the speaker) and other (the one spoken to)
 # Avoid a plural noun after a value that can be 1: use a check like node_min>=2.
 id	kind	when	spanish	english
 rt_orbit_1	report	orbit	Órbita estable. Periapsis {pe_km} kilómetros, apoapsis {ap_km} kilómetros.	Stable orbit. Periapsis {pe_km} km, apoapsis {ap_km} km.
@@ -62,3 +64,41 @@ rt_con_2	contract_funds		Buenas noticias de contabilidad: {funds} fondos más.	G
 rt_con_4	contract_funds	funds>=100000	{funds} fondos. Contabilidad no se lo cree.	{funds} funds. Accounting can't believe it.
 rt_con_3	contract_done		Contrato cumplido. Buen trabajo, equipo.	Contract complete. Good work, team.
 rt_con_fail	contract_failed		Hemos perdido un contrato. Contabilidad no está contenta.	We lost a contract. Accounting is not happy.
+rt_chat_fuel_1	chat	fuel>=25	{other}, nos queda el {fuel} por ciento de combustible.	{other}, we have {fuel} percent fuel left.
+rt_chat_fuel_2	chat		¿Y eso es mucho o poco?	Is that a lot or a little?
+rt_chat_fuel_3	chat		Depende de a quién preguntes.	Depends on who you ask.
+rt_chat_fuellow_1	chat	fuel>0 fuel<25	Solo queda el {fuel} por ciento de combustible.	Only {fuel} percent fuel left.
+rt_chat_fuellow_2	chat		Pues no lo gastes todo de golpe, {other}.	Then don't spend it all at once, {other}.
+rt_chat_day_1	chat	day>=2	{other}, ¿sabes qué día es hoy?	{other}, do you know what day it is?
+rt_chat_day_2	chat		Día {day}. Lo voy apuntando en la pared.	Day {day}. I'm marking it on the wall.
+rt_chat_day_3	chat		Eso es la pintura de la nave, {other}.	That's the ship's paint, {other}.
+rt_chat_alt_1	chat	orbit	Estamos a {alt_km} kilómetros de altura.	We're {alt_km} km up.
+rt_chat_alt_2	chat		No mires abajo, {other}.	Don't look down, {other}.
+rt_chat_alt_3	chat		Ya he mirado. Ha sido un error.	I already did. Big mistake.
+rt_chat_speed_1	chat	orbit	¿Sabías que vamos a {speed} metros por segundo?	Did you know we're doing {speed} m/s?
+rt_chat_speed_2	chat		Por eso no abro la ventana.	That's why I don't open the window.
+rt_chat_body_1	chat	orbit	{other}, mira por la ventana. Eso es {body}.	{other}, look out the window. That's {body}.
+rt_chat_body_2	chat		Pensaba que sería más grande.	I thought it would be bigger.
+rt_chat_landed_1	chat	landed	Bueno, {other}. Ya estamos en {body}.	Well, {other}. We're on {body}.
+rt_chat_landed_2	chat		¿Quién sale primero?	Who goes out first?
+rt_chat_landed_3	chat		Tú. Siempre tú.	You. Always you.
+rt_chat_vessel_1	chat		¿Quién le puso {vessel} a esta nave?	Who named this ship {vessel}?
+rt_chat_vessel_2	chat		Fuiste tú, {other}.	You did, {other}.
+rt_chat_vessel_3	chat		Ah. Pues es un nombre precioso.	Oh. Well, it's a lovely name.
+rt_chat_parts_1	chat	parts>=30	Esta nave tiene {parts} piezas.	This ship has {parts} parts.
+rt_chat_parts_2	chat		¿Y cuántas sobran?	And how many are extra?
+rt_chat_parts_3	chat		Eso lo sabremos pronto.	We'll find out soon.
+rt_chat_ec_1	chat	ec<30	{other}, la batería está al {ec} por ciento.	{other}, the battery is at {ec} percent.
+rt_chat_ec_2	chat		Vale. Apago la música.	Okay. I'll turn off the music.
+rt_chat_node_1	chat	node_min>=2	La próxima maniobra es dentro de {node_min} minutos.	The next burn is in {node_min} minutes.
+rt_chat_node_2	chat		Me da tiempo a comer un bocadillo.	I have time for a sandwich.
+rt_chat_node_3	chat		No te da tiempo, {other}.	You don't, {other}.
+rt_chat_period_1	chat	orbit period_min>=2	Una vuelta entera dura {period_min} minutos.	One full orbit takes {period_min} minutes.
+rt_chat_period_2	chat		Entonces hoy ya he visto amanecer tres veces.	Then I've seen three sunrises today already.
+rt_chat_sci_1	chat	sci_total>=2	En casa tienen {sci_total} puntos de ciencia.	Back home they have {sci_total} science points.
+rt_chat_sci_2	chat		¿Y cuántos son nuestros, {other}?	And how many are ours, {other}?
+rt_chat_sci_3	chat		Todos. Evidentemente.	All of them. Obviously.
+rt_chat_crew_1	chat	crew>=3	Somos {crew} aquí dentro. Hace calor.	There are {crew} of us in here. It's hot.
+rt_chat_crew_2	chat		Eres tú, {other}. Siempre eres tú.	It's you, {other}. It's always you.
+rt_chat_funds_1	chat	funds_total>=2	¿Sabes cuánto dinero le queda a la agencia? {funds_total} fondos.	Know how much money the agency has left? {funds_total} funds.
+rt_chat_funds_2	chat		Entonces no rompas nada, {other}.	Then don't break anything, {other}.

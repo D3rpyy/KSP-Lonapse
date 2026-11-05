@@ -451,6 +451,92 @@ namespace Lonapse
             catch (Exception e) { Log.Debug("Runtime voice dock: " + e.Message); }
         }
 
+        /// <summary>Share of intercom chats that are a runtime chat (real values), when one fits.</summary>
+        const double RuntimeChatChance = 0.25;
+        bool runtimeChatPending;
+
+        static string[] FirstNames(KerbalVoice k)
+        {
+            string first = k != null ? RuntimeLines.CleanName(SubtitleSlots.FirstName(k.displayName)) : null;
+            return string.IsNullOrEmpty(first) ? null : new[] { RuntimeSpeech.Respell(first), first };
+        }
+
+        /// <summary>
+        /// Sometimes an intercom chat from runtime.tsv instead of the table: every line rendered in the voice of its
+        /// kerbal, queued as one chat once all lines are ready. True when one was started (the caller queues nothing).
+        /// </summary>
+        bool TryRuntimeChat(KerbalVoice a, KerbalVoice b)
+        {
+            if (!RuntimeOn || runtimeChatPending || a == null || b == null || rng.NextDouble() >= RuntimeChatChance) return false;
+            if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
+            Vessel v = ActiveVessel;
+            if (v == null) return false;
+            string sit = SituationOf(v) ?? "other";
+            var nums = new Dictionary<string, double>();
+            var common = new Dictionary<string, string[]>();
+            CollectValues(v, sit, nums, common);
+            string[] na = FirstNames(a), nb = FirstNames(b);
+            if (na == null || nb == null) return false;
+            var namesA = new Dictionary<string, string[]>(common) { { "self", na }, { "other", nb } };
+            var namesB = new Dictionary<string, string[]>(common) { { "self", nb }, { "other", na } };
+            var fit = new List<List<RuntimeTemplate>>();
+            foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
+                if (!recentRuntime.Contains(c[0].Id) && RuntimeLines.ChatFits(c, sit, nums, namesA, namesB)) fit.Add(c);
+            if (fit.Count == 0) return false;
+            List<RuntimeTemplate> chat = fit[rng.Next(fit.Count)];
+            recentRuntime.Enqueue(chat[0].Id);
+            while (recentRuntime.Count > 6) recentRuntime.Dequeue();
+
+            var entries = new List<PhraseEntry>();
+            var spanish = new List<string>();
+            for (int i = 0; i < chat.Count; i++)
+            {
+                string sp, en;
+                if (!RuntimeLines.Fill(chat[i], nums, i % 2 == 0 ? namesA : namesB, out sp, out en)) return false;
+                var e = new PhraseEntry
+                {
+                    ClipKey = chat[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
+                    Scene = chat[0].Id, Seq = i + 1, Gender = "both", Phase = "any", Cause = "any",
+                    Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
+                };
+                e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
+                entries.Add(e);
+                spanish.Add(sp);
+            }
+            runtimeChatPending = true;
+            int left = entries.Count;
+            bool failed = false;
+            var clips = new UnityEngine.AudioClip[entries.Count];
+            for (int i = 0; i < entries.Count; i++)
+            {
+                int idx = i;
+                Voice.Request(KindFor(i % 2 == 0 ? a : b), spanish[i], r =>
+                {
+                    if (r.clip == null) failed = true;
+                    clips[idx] = r.clip;
+                    if (--left > 0) return;
+                    runtimeChatPending = false;
+                    bool ok = !failed && CanChat(a) && CanChat(b) && host.settings.intercomEnabled && !Somber;
+                    if (ok)
+                    {
+                        for (int k = 0; k < entries.Count; k++) PhraseClips.SetRuntimeClip(entries[k], clips[k]);
+                        ok = QueueChatTurns(a, b, entries, entries.Count, null, false);
+                    }
+                    if (!ok)
+                    {
+                        if (failed) runtimeFailed++;
+                        foreach (var c in clips) if (c != null) UnityEngine.Object.Destroy(c);
+                        Log.Info("Runtime voice: chat " + chat[0].Id + " dropped (" + (failed ? "Piper failed" : "the chat cannot start now") + ")");
+                        return;
+                    }
+                    runtimeOnly++;
+                    Log.Info("Runtime voice: chat " + chat[0].Id + " (" + a.displayName + ", " + b.displayName + ") ready in "
+                             + r.queueToReadyMs.ToString("0") + " ms");
+                });
+            }
+            return true;
+        }
+
         bool landSaid;
 
         /// <summary>Once per descent: low over the ground and coming down, Mission Control reads height and speed.
