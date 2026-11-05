@@ -1,45 +1,45 @@
 # Blackout intercom: crew-only scenes for the radio blackout (phase blackout). New keys: bl_
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-bl_privacy_1	chatter	chatter	calm	crew	bl_privacy	1	both	blackout	any	¿Hola? ¿Control de Misión?	Hello? Mission Control?
-bl_privacy_2	chatter	chatter	calm	crew	bl_privacy	2	both	blackout	any	No nos oyen. Es el apagón de radio.	They can't hear us. It's the radio blackout.
-bl_privacy_3	chatter	chatter	calm	crew	bl_privacy	3	both	blackout	any	Por fin un poco de intimidad.	Finally some privacy.
-bl_confess_1	chatter	chatter	calm	crew	bl_confess	1	both	blackout	any	Control no nos oye. Es el momento de confesar.	Control can't hear us. Now's the time to confess.
-bl_confess_2	chatter	chatter	calm	crew	bl_confess	2	both	blackout	any	Vale. Me comí tu sándwich.	Okay. I ate your sandwich.
-bl_confess_3	chatter	chatter	calm	crew	bl_confess	3	both	blackout	any	Lo sabía.	I knew it.
-bl_pink_window_1	chatter	chatter	tense	crew	bl_pink_window	1	both	blackout	plasma	La ventana se ha puesto rosa.	The window turned pink.
-bl_pink_window_2	chatter	chatter	tense	crew	bl_pink_window	2	both	blackout	plasma	Es plasma. Es normal.	It's plasma. It's normal.
-bl_pink_window_3	chatter	chatter	tense	crew	bl_pink_window	3	both	blackout	plasma	Es precioso y me da miedo.	It's beautiful and it scares me.
-bl_shield_sale_1	chatter	chatter	calm	crew	bl_shield_sale	1	both	blackout	any	¿Confías en el escudo térmico?	Do you trust the heat shield?
+bl_privacy_1	chatter	chatter	calm	crew	bl_privacy	1	both	blackout	any	¿Hola? ¿Control de Misión?	Hello? Mission Control? | Control? Hello? | Mission Control, do you read?
+bl_privacy_2	chatter	chatter	calm	crew	bl_privacy	2	both	blackout	any	No nos oyen. Es el apagón de radio.	They can't hear us. It's the radio blackout. | Radio blackout. They can't hear us. | They can't hear anything right now, {other}.
+bl_privacy_3	chatter	chatter	calm	crew	bl_privacy	3	both	blackout	any	Por fin un poco de intimidad.	Finally some privacy. | Privacy, at last. | Finally, some alone time.
+bl_confess_1	chatter	chatter	calm	crew	bl_confess	1	both	blackout	any	Control no nos oye. Es el momento de confesar.	Control can't hear us. Now's the time to confess. | Control can't hear us. Time to confess. | {other}, nobody's listening. Confess.
+bl_confess_2	chatter	chatter	calm	crew	bl_confess	2	both	blackout	any	Vale. Me comí tu sándwich.	Okay. I ate your sandwich. | Fine. I ate your sandwich. | Okay. It was me. The sandwich.
+bl_confess_3	chatter	chatter	calm	crew	bl_confess	3	both	blackout	any	Lo sabía.	I knew it. | I knew it! | I knew it was you.
+bl_pink_window_1	chatter	chatter	tense	crew	bl_pink_window	1	both	blackout	plasma	La ventana se ha puesto rosa.	The window turned pink. | The window is pink now. | {other}, why is the window pink?
+bl_pink_window_2	chatter	chatter	tense	crew	bl_pink_window	2	both	blackout	plasma	Es plasma. Es normal.	It's plasma. It's normal. | Plasma. Totally normal. | That's plasma. It's fine.
+bl_pink_window_3	chatter	chatter	tense	crew	bl_pink_window	3	both	blackout	plasma	Es precioso y me da miedo.	It's beautiful and it scares me. | Beautiful. And terrifying. | It's lovely and I hate it.
+bl_shield_sale_1	chatter	chatter	calm	crew	bl_shield_sale	1	both	blackout	any	¿Confías en el escudo térmico?	Do you trust the heat shield? | Do you trust the heat shield, {other}? | Is the heat shield any good?
 bl_shield_sale_2	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any	Lo compraron en oferta.	They bought it on sale.
 bl_shield_sale_3	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any	No me ayudas.	You're not helping.
-bl_say_something_1	chatter	chatter	calm	crew	bl_say_something	1	both	blackout	any	Di algo, para saber si funciona el intercomunicador.	Say something so I know the intercom works.
-bl_say_something_2	chatter	chatter	calm	crew	bl_say_something	2	both	blackout	any	Algo.	Something.
-bl_say_something_3	chatter	chatter	calm	crew	bl_say_something	3	both	blackout	any	Gracias. Muy útil.	Thanks. Very helpful.
-bl_count_1	chatter	chatter	calm	crew	bl_count	1	both	blackout	any	¿Cuánto falta para recuperar la señal?	How long until the signal comes back?
-bl_count_2	chatter	chatter	calm	crew	bl_count	2	both	blackout	any	Cuento hasta cien. Uno, dos...	I'll count to a hundred. One, two...
-bl_count_3	chatter	chatter	calm	crew	bl_count	3	both	blackout	any	Cuenta más rápido.	Count faster.
-bl_snacks_seat_1	chatter	chatter	calm	crew	bl_snacks_seat	1	both	blackout	any	Si no lo logramos, los aperitivos están bajo mi asiento.	If we don't make it, the snacks are under my seat.
-bl_snacks_seat_2	chatter	chatter	calm	crew	bl_snacks_seat	2	both	blackout	any	Si no lo logramos, no los necesitaré.	If we don't make it, I won't need them.
-bl_snacks_seat_3	chatter	chatter	calm	crew	bl_snacks_seat	3	both	blackout	any	Pues cómelos ahora.	Then eat them now.
-bl_hot_1	chatter	chatter	tense	crew	bl_hot	1	both	blackout	heat	¿Tú también tienes calor?	Are you hot too?
-bl_hot_2	chatter	chatter	tense	crew	bl_hot	2	both	blackout	heat	Fuera hace muchísimo más.	It's much hotter outside.
-bl_hot_3	chatter	chatter	tense	crew	bl_hot	3	both	blackout	heat	Eso no me consuela.	That doesn't comfort me.
-bl_manual_1	chatter	chatter	calm	crew	bl_manual	1	both	blackout	any	Ya que nadie nos escucha...	Since nobody is listening...
-bl_manual_2	chatter	chatter	calm	crew	bl_manual	2	both	blackout	any	¿Sí?	Yes?
-bl_manual_3	chatter	chatter	calm	crew	bl_manual	3	both	blackout	any	Nunca leí el manual.	I never read the manual.
-bl_manual_4	chatter	chatter	calm	crew	bl_manual	4	both	blackout	any	Nadie lo leyó.	Nobody did.
-bl_washer_1	chatter	chatter	calm	crew	bl_washer	1	both	blackout	any	Esto vibra como una lavadora.	This shakes like a washing machine.
-bl_washer_2	chatter	chatter	calm	crew	bl_washer	2	both	blackout	any	Una lavadora muy cara.	A very expensive washing machine.
-bl_wave_1	chatter	chatter	calm	crew	bl_wave	1	both	blackout	any	Saluda al plasma.	Wave at the plasma.
-bl_wave_2	chatter	chatter	calm	crew	bl_wave	2	both	blackout	any	Hola, plasma.	Hello, plasma.
-bl_wave_3	chatter	chatter	calm	crew	bl_wave	3	both	blackout	any	No te devuelve el saludo.	It's not waving back.
-bl_song_1	chatter	chatter	calm	crew	bl_song	1	both	blackout	any	Canta algo para calmarnos.	Sing something to calm us down.
-bl_song_2	chatter	chatter	calm	crew	bl_song	2	both	blackout	any	La la la, no nos vamos a derretir...	La la la, we're not going to melt...
-bl_song_3	chatter	chatter	calm	crew	bl_song	3	both	blackout	any	Para. Para ya.	Stop. Just stop.
-bl_rocks_will_1	chatter	chatter	calm	crew	bl_rocks_will	1	both	blackout	any	Si pasa algo, te dejo mi colección de piedras.	If something happens, you get my rock collection.
-bl_rocks_will_2	chatter	chatter	calm	crew	bl_rocks_will	2	both	blackout	any	Son piedras normales.	They're ordinary rocks.
-bl_rocks_will_3	chatter	chatter	calm	crew	bl_rocks_will	3	both	blackout	any	Son piedras con cariño.	They're rocks with love.
-bl_cake_1	chatter	chatter	calm	crew	bl_cake	1	both	blackout	any	¿Crees que Control está preocupado?	Do you think Control is worried?
-bl_cake_2	chatter	chatter	calm	crew	bl_cake	2	both	blackout	any	Seguro que están comiendo pastel.	They're probably eating cake.
-bl_cake_3	chatter	chatter	calm	crew	bl_cake	3	both	blackout	any	Sin nosotros. Qué injusto.	Without us. How unfair.
+bl_say_something_1	chatter	chatter	calm	crew	bl_say_something	1	both	blackout	any	Di algo, para saber si funciona el intercomunicador.	Say something so I know the intercom works. | Say something. I want to know the intercom works. | {other}, talk. Testing the intercom.
+bl_say_something_2	chatter	chatter	calm	crew	bl_say_something	2	both	blackout	any	Algo.	Something. | Something. | Words. There.
+bl_say_something_3	chatter	chatter	calm	crew	bl_say_something	3	both	blackout	any	Gracias. Muy útil.	Thanks. Very helpful. | Thanks. Super helpful. | Wow. Very useful.
+bl_count_1	chatter	chatter	calm	crew	bl_count	1	both	blackout	any	¿Cuánto falta para recuperar la señal?	How long until the signal comes back? | When does the signal come back? | {other}, how long till we have signal?
+bl_count_2	chatter	chatter	calm	crew	bl_count	2	both	blackout	any	Cuento hasta cien. Uno, dos...	I'll count to a hundred. One, two... | I'll count to a hundred. One, two... | Let me count. One, two, three...
+bl_count_3	chatter	chatter	calm	crew	bl_count	3	both	blackout	any	Cuenta más rápido.	Count faster. | Faster. | Count quicker, please.
+bl_snacks_seat_1	chatter	chatter	calm	crew	bl_snacks_seat	1	both	blackout	any	Si no lo logramos, los aperitivos están bajo mi asiento.	If we don't make it, the snacks are under my seat. | If we don't make it, the snacks are under my seat. | {other}, if this goes wrong, snacks are under my seat.
+bl_snacks_seat_2	chatter	chatter	calm	crew	bl_snacks_seat	2	both	blackout	any	Si no lo logramos, no los necesitaré.	If we don't make it, I won't need them. | If we don't make it, I won't need snacks. | If it goes wrong, snacks won't matter.
+bl_snacks_seat_3	chatter	chatter	calm	crew	bl_snacks_seat	3	both	blackout	any	Pues cómelos ahora.	Then eat them now. | Then eat them now. | So eat them now.
+bl_hot_1	chatter	chatter	tense	crew	bl_hot	1	both	blackout	heat	¿Tú también tienes calor?	Are you hot too? | Hot in here, or is it me? | {other}, are you hot too?
+bl_hot_2	chatter	chatter	tense	crew	bl_hot	2	both	blackout	heat	Fuera hace muchísimo más.	It's much hotter outside. | It's way hotter outside. | Outside is much hotter.
+bl_hot_3	chatter	chatter	tense	crew	bl_hot	3	both	blackout	heat	Eso no me consuela.	That doesn't comfort me. | Not comforting. | That doesn't help.
+bl_manual_1	chatter	chatter	calm	crew	bl_manual	1	both	blackout	any	Ya que nadie nos escucha...	Since nobody is listening... | Since nobody's listening... | {other}, since Control can't hear us...
+bl_manual_2	chatter	chatter	calm	crew	bl_manual	2	both	blackout	any	¿Sí?	Yes? | Yes? | Go on.
+bl_manual_3	chatter	chatter	calm	crew	bl_manual	3	both	blackout	any	Nunca leí el manual.	I never read the manual. | I never read the manual. | I didn't read the manual. Ever.
+bl_manual_4	chatter	chatter	calm	crew	bl_manual	4	both	blackout	any	Nadie lo leyó.	Nobody did. | No one did. | Nobody ever does.
+bl_washer_1	chatter	chatter	calm	crew	bl_washer	1	both	blackout	any	Esto vibra como una lavadora.	This shakes like a washing machine. | It shakes like a washing machine. | We're in a washing machine.
+bl_washer_2	chatter	chatter	calm	crew	bl_washer	2	both	blackout	any	Una lavadora muy cara.	A very expensive washing machine. | A very pricey washing machine. | A really expensive one.
+bl_wave_1	chatter	chatter	calm	crew	bl_wave	1	both	blackout	any	Saluda al plasma.	Wave at the plasma. | Wave at the plasma. | {other}, say hi to the plasma.
+bl_wave_2	chatter	chatter	calm	crew	bl_wave	2	both	blackout	any	Hola, plasma.	Hello, plasma. | Hi, plasma. | Hello there, plasma.
+bl_wave_3	chatter	chatter	calm	crew	bl_wave	3	both	blackout	any	No te devuelve el saludo.	It's not waving back. | It isn't waving back. | Rude. No wave back.
+bl_song_1	chatter	chatter	calm	crew	bl_song	1	both	blackout	any	Canta algo para calmarnos.	Sing something to calm us down. | Sing something calming. | {other}, sing. Calm us down.
+bl_song_2	chatter	chatter	calm	crew	bl_song	2	both	blackout	any	La la la, no nos vamos a derretir...	La la la, we're not going to melt... | La la la, we won't melt today... | La la la, we are not melting...
+bl_song_3	chatter	chatter	calm	crew	bl_song	3	both	blackout	any	Para. Para ya.	Stop. Just stop. | Stop. Please stop. | No. Stop singing.
+bl_rocks_will_1	chatter	chatter	calm	crew	bl_rocks_will	1	both	blackout	any	Si pasa algo, te dejo mi colección de piedras.	If something happens, you get my rock collection. | If anything happens, my rock collection is yours. | {other}, you can have my rocks if this goes wrong.
+bl_rocks_will_2	chatter	chatter	calm	crew	bl_rocks_will	2	both	blackout	any	Son piedras normales.	They're ordinary rocks. | They're just rocks. | Those are normal rocks.
+bl_rocks_will_3	chatter	chatter	calm	crew	bl_rocks_will	3	both	blackout	any	Son piedras con cariño.	They're rocks with love. | Rocks with love. | Rocks with feelings.
+bl_cake_1	chatter	chatter	calm	crew	bl_cake	1	both	blackout	any	¿Crees que Control está preocupado?	Do you think Control is worried? | Is Control worried, do you think? | {other}, is Control worried about us?
+bl_cake_2	chatter	chatter	calm	crew	bl_cake	2	both	blackout	any	Seguro que están comiendo pastel.	They're probably eating cake. | They're eating cake, probably. | I bet they're having cake.
+bl_cake_3	chatter	chatter	calm	crew	bl_cake	3	both	blackout	any	Sin nosotros. Qué injusto.	Without us. How unfair. | Without us. Unfair. | Cake without us. Rude.
