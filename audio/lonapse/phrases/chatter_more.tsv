@@ -1,0 +1,509 @@
+# Lonapse 0.6.0 lines (cm_). Written as drafts, converted to this table.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
+cm_001_1	chatter	chatter	calm	crew	cm_001	1	both	orbit	any	any	any	any	Control, los bocadillos vuelven a flotar.	Control, the snacks are floating again.
+cm_001_2	chatter	chatter	calm	mc	cm_001	2	m	orbit	any	any	any	any	Cogedlos. Salen del presupuesto.	Catch them. They come out of the budget.
+cm_002_1	chatter	chatter	calm	crew	cm_002	1	both	goofy	any	any	any	any	Control, ¿qué tal el becario?	Control, how's the intern?
+cm_002_2	chatter	chatter	calm	mc	cm_002	2	m	goofy	any	any	any	any	Ha pintado el aparcamiento. A propósito, dice.	He painted the parking lot. On purpose, he says.
+cm_003_1	chatter	chatter	calm	crew	cm_003	1	both	goofy	any	any	any	any	¿Podemos volver ya a casa?	Can we go home now?
+cm_003_2	chatter	chatter	calm	mc	cm_003	2	m	goofy	any	any	any	any	Los científicos dicen que una órbita más.	The scientists say one more orbit.
+cm_003_3	chatter	chatter	calm	crew	cm_003	3	both	goofy	any	any	any	any	Siempre dicen una órbita más.	They always say one more orbit.
+cm_004_1	chatter	chatter	calm	crew	cm_004	1	both	goofy	any	any	any	any	¿Ese tornillo tiene que moverse así?	Is that bolt supposed to wiggle like that?
+cm_004_2	chatter	chatter	calm	mc	cm_004	2	m	goofy	any	any	any	any	Define tiene que.	Define supposed.
+cm_005_1	chatter	chatter	calm	crew	cm_005	1	both	goofy	any	any	any	any	Si vamos más rápido, ¿llegamos antes?	If we go faster, do we get there sooner?
+cm_005_2	chatter	chatter	calm	mc	cm_005	2	m	goofy	any	any	any	any	Normalmente, sí.	Usually, yes.
+cm_005_3	chatter	chatter	calm	crew	cm_005	3	both	goofy	any	any	any	any	Brillante.	Brilliant.
+cm_006_1	chatter	chatter	calm	crew	cm_006	1	both	goofy	any	any	any	any	Control, ¿alguna vez nos miráis desde abajo?	Control, do you ever look up at us?
+cm_006_2	chatter	chatter	calm	mc	cm_006	2	m	goofy	any	any	any	any	Cada cinco minutos. Es nuestro trabajo.	Every five minutes. It's the job.
+cm_007_1	chatter	chatter	calm	crew	cm_007	1	both	goofy	any	any	any	any	Veo el centro espacial desde aquí. Creo que saluda.	I can see the space center from here. I think it's waving.
+cm_007_2	chatter	chatter	calm	mc	cm_007	2	m	goofy	any	any	any	any	Es el becario. Lleva así toda la mañana.	That's the intern. He's been at it all morning.
+cm_008_1	chatter	chatter	calm	crew	cm_008	1	both	goofy	any	any	any	any	Control, he encontrado un botón nuevo.	Control, I found a new button.
+cm_008_2	chatter	chatter	calm	mc	cm_008	2	m	goofy	any	any	any	any	No lo pulses.	Don't press it.
+cm_008_3	chatter	chatter	calm	crew	cm_008	3	both	goofy	any	any	any	any	Demasiado tarde.	Too late.
+cm_008_4	chatter	chatter	calm	mc	cm_008	4	m	goofy	any	any	any	any	¿Y qué ha pasado?	And what happened?
+cm_008_5	chatter	chatter	calm	crew	cm_008	5	both	goofy	any	any	any	any	Nada. Qué decepción.	Nothing. How disappointing.
+cm_009_1	chatter	chatter	calm	mc	cm_009	1	m	goofy	any	any	any	any	¡Bien hecho, equipo! Aquí abajo aplauden todos.	Well done, team! Everyone down here is clapping.
+cm_009_2	chatter	chatter	calm	crew	cm_009	2	both	goofy	any	any	any	any	¿Hasta el director?	Even the director?
+cm_009_3	chatter	chatter	calm	mc	cm_009	3	m	goofy	any	any	any	any	Con una mano. Con la otra come.	With one hand. He's eating with the other.
+cm_010_1	chatter	chatter	calm	crew	cm_010	1	both	goofy	any	any	any	any	Control, ¿cuánto cuesta un cohete?	Control, how much does a rocket cost?
+cm_010_2	chatter	chatter	calm	mc	cm_010	2	m	goofy	any	any	any	any	Mejor no preguntes.	Better not ask.
+cm_010_3	chatter	chatter	calm	crew	cm_010	3	both	goofy	any	any	any	any	¿Más que un coche?	More than a car?
+cm_010_4	chatter	chatter	calm	mc	cm_010	4	m	goofy	any	any	any	any	Más que todos los coches.	More than all the cars.
+cm_011_1	chatter	chatter	calm	mc	cm_011	1	m	goofy	any	any	any	any	¡Uy! Perdón, botón equivocado. Nada, nada.	Oops! Sorry, wrong button. Nothing, nothing.
+cm_011_2	chatter	chatter	calm	crew	cm_011	2	both	goofy	any	any	any	any	Control, ¿qué ha sido eso?	Control, what was that?
+cm_011_3	chatter	chatter	calm	mc	cm_011	3	m	goofy	any	any	any	any	Las luces del baño. Seguid.	The bathroom lights. Carry on.
+cm_012_1	chatter	chatter	calm	crew	cm_012	1	both	goofy	any	any	any	any	Control, aquí huele a calcetines.	Control, it smells like socks up here.
+cm_012_2	chatter	chatter	calm	mc	cm_012	2	m	goofy	any	any	any	any	Eso no lo podemos arreglar desde abajo.	We can't fix that from down here.
+cm_013_1	chatter	chatter	calm	crew	cm_013	1	both	goofy	any	any	any	any	Control, ¿me oís bien?	Control, do you hear me well?
+cm_013_2	chatter	chatter	calm	mc	cm_013	2	m	goofy	any	any	any	any	Alto y claro. Demasiado claro, a veces.	Loud and clear. Too clear, sometimes.
+cm_014_1	chatter	chatter	calm	crew	cm_014	1	both	goofy	any	any	any	any	Control, ¿quién ganó el partido?	Control, who won the match?
+cm_014_2	chatter	chatter	calm	mc	cm_014	2	m	goofy	any	any	any	any	Nadie. Se perdió el balón en el cráter.	Nobody. The ball got lost in the crater.
+cm_015_1	chatter	chatter	calm	mc	cm_015	1	m	goofy	any	any	any	any	El director pregunta si estáis contentos.	The director asks if you're happy.
+cm_015_2	chatter	chatter	calm	crew	cm_015	2	both	goofy	any	any	any	any	Dile que sí. Y que queremos más galletas.	Tell him yes. And that we want more cookies.
+cm_015_3	chatter	chatter	calm	mc	cm_015	3	m	goofy	any	any	any	any	Le diré lo primero.	I'll tell him the first part.
+cm_016_1	chatter	chatter	calm	crew	cm_016	1	both	goofy	any	any	any	any	Control, he contado las estrellas.	Control, I counted the stars.
+cm_016_2	chatter	chatter	calm	mc	cm_016	2	m	goofy	any	any	any	any	¿Y cuántas hay?	And how many are there?
+cm_016_3	chatter	chatter	calm	crew	cm_016	3	both	goofy	any	any	any	any	Muchas. Perdí la cuenta en siete.	Lots. I lost count at seven.
+cm_017_1	chatter	chatter	calm	crew	cm_017	1	both	coast	any	any	any	any	¿Alguien ha visto mi otro guante?	Has anyone seen my other glove?
+cm_017_2	chatter	chatter	calm	mc	cm_017	2	m	coast	any	any	any	any	Sale en nuestra pantalla. Está flotando detrás de ti.	It's on our screen. It's floating behind you.
+cm_018_1	chatter	chatter	calm	crew	cm_018	1	both	goofy	any	any	any	any	Control, ¿podemos poner música?	Control, can we put on some music?
+cm_018_2	chatter	chatter	calm	mc	cm_018	2	m	goofy	any	any	any	any	Solo si no es la del otro día.	Only if it's not the one from the other day.
+cm_018_3	chatter	chatter	calm	crew	cm_018	3	both	goofy	any	any	any	any	Era muy buena.	It was very good.
+cm_018_4	chatter	chatter	calm	mc	cm_018	4	m	goofy	any	any	any	any	Era una alarma.	It was an alarm.
+cm_019_1	chatter	chatter	calm	crew	cm_019	1	both	goofy	any	any	any	any	Control, hemos hecho una apuesta aquí arriba.	Control, we made a bet up here.
+cm_019_2	chatter	chatter	calm	mc	cm_019	2	m	goofy	any	any	any	any	¿Sobre qué?	About what?
+cm_019_3	chatter	chatter	calm	crew	cm_019	3	both	goofy	any	any	any	any	Sobre si contestaríais. Acabo de perder.	About whether you'd answer. I just lost.
+cm_020_1	chatter	chatter	calm	mc	cm_020	1	m	goofy	any	any	any	any	Os recordamos que no se juega con la escotilla.	A reminder that the hatch is not a toy.
+cm_020_2	chatter	chatter	calm	crew	cm_020	2	both	goofy	any	any	any	any	Solo la estábamos mirando.	We were only looking at it.
+cm_020_3	chatter	chatter	calm	mc	cm_020	3	m	goofy	any	any	any	any	Con cariño, ya lo vimos.	Lovingly, we saw that.
+cm_021_1	chatter	chatter	calm	crew	cm_021	1	both	goofy	any	any	any	any	Control, aquí arriba no hay que fregar platos.	Control, there are no dishes to wash up here.
+cm_021_2	chatter	chatter	calm	mc	cm_021	2	m	goofy	any	any	any	any	Por eso nadie quiere volver.	That's why nobody wants to come back.
+cm_022_1	chatter	chatter	calm	crew	cm_022	1	both	goofy	any	any	any	any	Control, ¿el café de abajo sigue igual de malo?	Control, is the coffee down there still that bad?
+cm_022_2	chatter	chatter	calm	mc	cm_022	2	m	goofy	any	any	any	any	Peor. Alguien le ha echado sal.	Worse. Someone put salt in it.
+cm_022_3	chatter	chatter	calm	crew	cm_022	3	both	goofy	any	any	any	any	Ah, el becario.	Ah, the intern.
+cm_023_1	chatter	chatter	calm	crew	cm_023	1	both	goofy	any	any	any	any	Control, he hecho un dibujo de la nave.	Control, I made a drawing of the ship.
+cm_023_2	chatter	chatter	calm	mc	cm_023	2	m	goofy	any	any	any	any	¿Se parece?	Does it look like it?
+cm_023_3	chatter	chatter	calm	crew	cm_023	3	both	goofy	any	any	any	any	Tiene más alas. Y una cara.	It has more wings. And a face.
+cm_023_4	chatter	chatter	calm	mc	cm_023	4	m	goofy	any	any	any	any	Mejor que la original.	Better than the real one.
+cm_024_1	chatter	chatter	calm	mc	cm_024	1	m	goofy	any	any	any	any	Mensaje de las familias: os quieren mucho.	Message from the families: they love you very much.
+cm_024_2	chatter	chatter	calm	crew	cm_024	2	both	goofy	any	any	any	any	¡Nosotros también! ¡Y al perro!	We love them too! And the dog!
+cm_025_1	chatter	chatter	calm	crew	cm_025	1	both	goofy	any	any	any	any	Control, ¿cuándo llega el correo?	Control, when does the mail arrive?
+cm_025_2	chatter	chatter	calm	mc	cm_025	2	m	goofy	any	any	any	any	Nunca. Estáis en el espacio.	Never. You're in space.
+cm_025_3	chatter	chatter	calm	crew	cm_025	3	both	goofy	any	any	any	any	Vaya. Esperaba una carta.	Oh well. I was hoping for a letter.
+cm_026_1	chatter	chatter	calm	crew	cm_026	1	both	goofy	any	any	any	any	Control, ¿podéis subir la calefacción?	Control, can you turn up the heating?
+cm_026_2	chatter	chatter	calm	mc	cm_026	2	m	goofy	any	any	any	any	Ponte otro jersey.	Put on another sweater.
+cm_026_3	chatter	chatter	calm	crew	cm_026	3	both	goofy	any	any	any	any	Suenas como mi madre.	You sound like my mother.
+cm_026_4	chatter	chatter	calm	mc	cm_026	4	m	goofy	any	any	any	any	Tu madre está aquí al lado. Te saluda.	Your mother is right here. She says hi.
+cm_027_1	chatter	chatter	calm	crew	cm_027	1	both	goofy	any	any	any	any	Control, hemos visto una luz rara.	Control, we saw a strange light.
+cm_027_2	chatter	chatter	calm	mc	cm_027	2	m	goofy	any	any	any	any	Era el sol.	That was the sun.
+cm_027_3	chatter	chatter	calm	crew	cm_027	3	both	goofy	any	any	any	any	Ah. Qué grande.	Oh. It's so big.
+cm_028_1	chatter	chatter	calm	mc	cm_028	1	m	goofy	any	any	any	any	Aquí abajo hemos hecho una porra. ¿Cuántos días aguantáis sin quejaros?	We have a pool going down here. How many days can you go without complaining?
+cm_028_2	chatter	chatter	calm	crew	cm_028	2	both	goofy	any	any	any	any	¿Quién va ganando?	Who's winning?
+cm_028_3	chatter	chatter	calm	mc	cm_028	3	m	goofy	any	any	any	any	El que dijo cero.	The one who said zero.
+cm_029_1	chatter	chatter	calm	crew	cm_029	1	both	goofy	any	any	any	any	Control, este traje me hace gordo.	Control, this suit makes me look fat.
+cm_029_2	chatter	chatter	calm	mc	cm_029	2	m	goofy	any	any	any	any	Es el traje. Seguro.	It's the suit. Definitely.
+cm_030_1	chatter	chatter	calm	crew	cm_030	1	both	goofy	any	any	any	any	Control, he puesto nombre a la nave.	Control, I gave the ship a name.
+cm_030_2	chatter	chatter	calm	mc	cm_030	2	m	goofy	any	any	any	any	¿Cuál?	What is it?
+cm_030_3	chatter	chatter	calm	crew	cm_030	3	both	goofy	any	any	any	any	Señora Bonita.	Mrs Pretty.
+cm_030_4	chatter	chatter	calm	mc	cm_030	4	m	goofy	any	any	any	any	Lo apuntamos en el registro. Con miedo.	We'll put it in the log. With fear.
+cm_031_1	chatter	chatter	calm	crew	cm_031	1	both	goofy	any	any	any	any	Control, ¿os parece si hacemos fotos?	Control, mind if we take some photos?
+cm_031_2	chatter	chatter	calm	mc	cm_031	2	m	goofy	any	any	any	any	Adelante. Y no salgáis con los ojos cerrados.	Go ahead. And keep your eyes open this time.
+cm_032_1	chatter	chatter	calm	mc	cm_032	1	m	goofy	any	any	any	any	¿Alguien ha tocado la radio? Se oyen silbidos.	Has anyone touched the radio? We hear whistling.
+cm_032_2	chatter	chatter	calm	crew	cm_032	2	both	goofy	any	any	any	any	Soy yo. Estoy contento.	That's me. I'm happy.
+cm_032_3	chatter	chatter	calm	mc	cm_032	3	m	goofy	any	any	any	any	Silba más bajo, por favor.	Whistle quieter, please.
+cm_033_1	chatter	chatter	calm	crew	cm_033	1	both	goofy	any	any	any	any	Control, aquí todo va tan bien que me aburro.	Control, it's going so well up here that I'm bored.
+cm_033_2	chatter	chatter	calm	mc	cm_033	2	m	goofy	any	any	any	any	Eso es lo que queremos. Aburrido es perfecto.	That's what we want. Boring is perfect.
+cm_034_1	chatter	chatter	calm	crew	cm_034	1	both	goofy	any	any	any	any	Control, tengo una pregunta científica.	Control, I have a scientific question.
+cm_034_2	chatter	chatter	calm	mc	cm_034	2	m	goofy	any	any	any	any	Dispara.	Go ahead.
+cm_034_3	chatter	chatter	calm	crew	cm_034	3	both	goofy	any	any	any	any	¿Las estrellas hacen ruido?	Do stars make a sound?
+cm_034_4	chatter	chatter	calm	mc	cm_034	4	m	goofy	any	any	any	any	Te mandamos un libro.	We'll send you a book.
+cm_035_1	chatter	chatter	calm	crew	cm_035	1	both	goofy	any	any	any	any	Control, ¿cómo se llama esta palanca?	Control, what's this lever called?
+cm_035_2	chatter	chatter	calm	mc	cm_035	2	m	goofy	any	any	any	any	Esa no tiene nombre. No la toques.	That one has no name. Don't touch it.
+cm_035_3	chatter	chatter	calm	crew	cm_035	3	both	goofy	any	any	any	any	La llamaré Pepe.	I'll call it Pepe.
+cm_036_1	chatter	chatter	calm	mc	cm_036	1	m	goofy	any	any	any	any	Atención: el director ha perdido sus gafas. ¿Las tenéis vosotros?	Attention: the director lost his glasses. Do you have them?
+cm_036_2	chatter	chatter	calm	crew	cm_036	2	both	goofy	any	any	any	any	¿Cómo íbamos a tenerlas?	How would we have them?
+cm_036_3	chatter	chatter	calm	mc	cm_036	3	m	goofy	any	any	any	any	Nunca se sabe con vosotros.	You never know with you lot.
+cm_037_1	chatter	chatter	calm	crew	cm_037	1	both	orbit	any	any	any	any	Control, he aprendido a dormir boca abajo.	Control, I learned to sleep upside down.
+cm_037_2	chatter	chatter	calm	mc	cm_037	2	m	orbit	any	any	any	any	Aquí abajo eso se llama caerse de la cama.	Down here we call that falling out of bed.
+cm_038_1	chatter	chatter	calm	crew	cm_038	1	both	goofy	any	any	any	any	Control, ¿podemos quedarnos un día más?	Control, can we stay one more day?
+cm_038_2	chatter	chatter	calm	mc	cm_038	2	m	goofy	any	any	any	any	Pregunta al combustible.	Ask the fuel.
+cm_038_3	chatter	chatter	calm	crew	cm_038	3	both	goofy	any	any	any	any	Dice que quizá.	It says maybe.
+cm_039_1	chatter	chatter	calm	crew	cm_039	1	both	goofy	any	any	any	any	Control, he encontrado una galleta en mi bolsillo.	Control, I found a cookie in my pocket.
+cm_039_2	chatter	chatter	calm	mc	cm_039	2	m	goofy	any	any	any	any	¿De cuándo es?	How old is it?
+cm_039_3	chatter	chatter	calm	crew	cm_039	3	both	goofy	any	any	any	any	Del entrenamiento.	From training.
+cm_039_4	chatter	chatter	calm	mc	cm_039	4	m	goofy	any	any	any	any	Eso fue hace meses.	That was months ago.
+cm_039_5	chatter	chatter	calm	crew	cm_039	5	both	goofy	any	any	any	any	Sabe a victoria.	It tastes like victory.
+cm_040_1	chatter	chatter	calm	mc	cm_040	1	m	goofy	any	any	any	any	Buenas noticias: las encuestas dicen que sois los favoritos.	Good news: the polls say you're the favorites.
+cm_040_2	chatter	chatter	calm	crew	cm_040	2	both	goofy	any	any	any	any	¿Favoritos de qué?	Favorites for what?
+cm_040_3	chatter	chatter	calm	mc	cm_040	3	m	goofy	any	any	any	any	No lo sabemos. Pero sois los favoritos.	We don't know. But you're the favorites.
+cm_041_1	chatter	chatter	calm	crew	cm_041	1	both	goofy	any	any	any	any	Control, ¿seguro que esto es una nave y no una lata?	Control, are you sure this is a ship and not a can?
+cm_041_2	chatter	chatter	calm	mc	cm_041	2	m	goofy	any	any	any	any	Es una lata muy cara.	It's a very expensive can.
+cm_042_1	chatter	chatter	calm	crew	cm_042	1	both	goofy	any	any	any	any	Control, ¿quién diseñó los asientos?	Control, who designed the seats?
+cm_042_2	chatter	chatter	calm	mc	cm_042	2	m	goofy	any	any	any	any	Un comité.	A committee.
+cm_042_3	chatter	chatter	calm	crew	cm_042	3	both	goofy	any	any	any	any	Se nota.	You can tell.
+cm_043_1	chatter	chatter	calm	mc	cm_043	1	m	goofy	any	any	any	any	Mandamos saludos de parte de la cafetería.	Greetings from the cafeteria.
+cm_043_2	chatter	chatter	calm	crew	cm_043	2	both	goofy	any	any	any	any	¿Han hecho la tarta de queso?	Did they make the cheesecake?
+cm_043_3	chatter	chatter	calm	mc	cm_043	3	m	goofy	any	any	any	any	Sí. Y nos la estamos comiendo. Lo siento.	Yes. And we're eating it. Sorry.
+cm_044_1	chatter	chatter	calm	crew	cm_044	1	both	goofy	any	any	any	any	Control, si me quedo muy quieto, ¿cuento como satélite?	Control, if I stay very still, do I count as a satellite?
+cm_044_2	chatter	chatter	calm	mc	cm_044	2	m	goofy	any	any	any	any	Técnicamente, ya lo eres.	Technically, you already are.
+cm_044_3	chatter	chatter	calm	crew	cm_044	3	both	goofy	any	any	any	any	¡Lo sabía!	I knew it!
+cm_045_1	chatter	chatter	calm	crew	cm_045	1	both	goofy	any	any	any	any	Control, he mirado por la ventana diez veces.	Control, I looked out the window ten times.
+cm_045_2	chatter	chatter	calm	mc	cm_045	2	m	goofy	any	any	any	any	¿Y?	And?
+cm_045_3	chatter	chatter	calm	crew	cm_045	3	both	goofy	any	any	any	any	Sigue ahí. Todo.	It's still there. All of it.
+cm_046_1	chatter	chatter	calm	mc	cm_046	1	m	goofy	any	any	any	any	Recordatorio: mañana hay revisión médica.	Reminder: medical check tomorrow.
+cm_046_2	chatter	chatter	calm	crew	cm_046	2	both	goofy	any	any	any	any	¿Otra vez la de la lengua?	The tongue one again?
+cm_046_3	chatter	chatter	calm	mc	cm_046	3	m	goofy	any	any	any	any	La de la lengua.	The tongue one.
+cm_047_1	chatter	chatter	calm	crew	cm_047	1	both	goofy	any	any	any	any	Control, el piloto canta en la ducha.	Control, the pilot sings in the shower.
+cm_047_2	chatter	chatter	calm	mc	cm_047	2	m	goofy	any	any	any	any	Aquí no hay ducha.	There is no shower up there.
+cm_047_3	chatter	chatter	calm	crew	cm_047	3	both	goofy	any	any	any	any	Pues canta igual.	He sings anyway.
+cm_048_1	chatter	chatter	calm	crew	cm_048	1	both	goofy	any	any	any	any	Control, ¿podéis repetir el último mensaje?	Control, can you repeat the last message?
+cm_048_2	chatter	chatter	calm	mc	cm_048	2	m	goofy	any	any	any	any	Era: nada que repetir.	It was: nothing to repeat.
+cm_048_3	chatter	chatter	calm	crew	cm_048	3	both	goofy	any	any	any	any	Recibido. Gracias.	Copy. Thanks.
+cm_049_1	chatter	chatter	calm	crew	cm_049	1	both	goofy	any	any	any	any	Control, hoy me siento con suerte.	Control, I feel lucky today.
+cm_049_2	chatter	chatter	calm	mc	cm_049	2	m	goofy	any	any	any	any	No toques nada con esa suerte.	Don't touch anything with that luck.
+cm_050	chatter	chatter	calm	crew	cm_050	1	both	goofy	any	any	any	any	Me encanta este trabajo.	I love this job.
+cm_051	chatter	chatter	calm	crew	cm_051	1	both	goofy	any	any	any	any	Si mi madre me viera ahora.	If my mother could see me now.
+cm_052	chatter	chatter	calm	crew	cm_052	1	both	goofy	any	any	any	any	Creo que me he dejado el horno encendido.	I think I left the oven on.
+cm_053	chatter	chatter	calm	crew	cm_053	1	both	orbit	any	any	any	any	Hoy flotar me sale mejor.	I'm better at floating today.
+cm_054	chatter	chatter	calm	crew	cm_054	1	both	goofy	any	any	any	any	Mis calcetines se han ido a explorar.	My socks went off exploring.
+cm_055	chatter	chatter	calm	crew	cm_055	1	both	goofy	any	any	any	any	Todo en orden. Y la vista, preciosa.	All in order. And the view is lovely.
+cm_056	chatter	chatter	calm	crew	cm_056	1	both	goofy	any	any	any	any	He saludado a una estrella. No ha contestado.	I waved at a star. It didn't wave back.
+cm_057	chatter	chatter	calm	crew	cm_057	1	both	goofy	any	any	any	any	Aquí arriba el silencio es enorme.	The silence up here is huge.
+cm_058	chatter	chatter	calm	crew	cm_058	1	both	goofy	any	any	any	any	Tengo hambre otra vez.	I'm hungry again.
+cm_059	chatter	chatter	calm	crew	cm_059	1	both	goofy	any	any	any	any	Esto es mejor que las montañas rusas.	This beats roller coasters.
+cm_060	chatter	chatter	calm	crew	cm_060	1	both	goofy	any	any	any	any	Las luces del panel parecen un árbol de fiesta.	The panel lights look like a party tree.
+cm_061	chatter	chatter	calm	crew	cm_061	1	both	goofy	any	any	any	any	He perdido el lápiz. Otra vez.	I lost the pencil. Again.
+cm_062	chatter	chatter	calm	crew	cm_062	1	both	goofy	any	any	any	any	Si alguien pregunta, yo no he tocado nada.	If anyone asks, I didn't touch anything.
+cm_063	chatter	chatter	calm	crew	cm_063	1	both	goofy	any	any	any	any	Creo que ya sé para qué sirve este botón.	I think I know what this button does now.
+cm_064	chatter	chatter	calm	crew	cm_064	1	both	goofy	any	any	any	any	El sándwich de hoy tiene forma de planeta.	Today's sandwich is shaped like a planet.
+cm_065	chatter	chatter	calm	crew	cm_065	1	both	goofy	any	any	any	any	Estoy haciendo ejercicio. Más o menos.	I'm exercising. Sort of.
+cm_066	chatter	chatter	calm	crew	cm_066	1	both	goofy	any	any	any	any	Me he peinado para la cámara.	I combed my hair for the camera.
+cm_067	chatter	chatter	calm	crew	cm_067	1	both	goofy	any	any	any	any	Desde aquí todo parece pequeñito.	Everything looks tiny from here.
+cm_068	chatter	chatter	calm	crew	cm_068	1	both	goofy	any	any	any	any	Aquí todo bien. Bueno, casi todo. El café no.	All good up here. Well, almost all. Not the coffee.
+cm_069	chatter	chatter	calm	crew	cm_069	1	both	goofy	any	any	any	any	Escribo en mi diario: hoy, todo en verde.	Writing in my diary: today, all green.
+cm_070	chatter	chatter	calm	crew	cm_070	1	both	goofy	any	any	any	any	Ojalá pudiera mandar una postal.	I wish I could send a postcard.
+cm_071	chatter	chatter	calm	crew	cm_071	1	both	goofy	any	any	any	any	Esto es lo más bonito que he visto. Después de las galletas.	This is the prettiest thing I've seen. After cookies.
+cm_072	chatter	chatter	calm	crew	cm_072	1	both	coast	any	any	any	any	Me he dado cuenta de que no sé silbar sin gravedad.	I just found out I can't whistle without gravity.
+cm_073	chatter	chatter	calm	crew	cm_073	1	both	goofy	any	any	any	any	Seguimos aquí. Seguimos guapos.	Still here. Still handsome.
+cm_074	chatter	chatter	calm	crew	cm_074	1	both	goofy	any	any	any	any	Hoy voy a batir un récord. Aún no sé de qué.	I'm breaking a record today. Not sure what yet.
+cm_075	chatter	chatter	calm	mc	cm_075	1	m	goofy	any	any	any	any	Aquí abajo sonríen todos.	Everyone down here is smiling.
+cm_076	chatter	chatter	calm	mc	cm_076	1	m	goofy	any	any	any	any	Recibido. Lo apuntamos en la pizarra.	Copy. We put it on the whiteboard.
+cm_077	chatter	chatter	calm	mc	cm_077	1	m	goofy	any	any	any	any	Seguid así, lo hacéis genial.	Keep it up, you're doing great.
+cm_078	chatter	chatter	calm	mc	cm_078	1	m	goofy	any	any	any	any	El becario dice hola.	The intern says hi.
+cm_079	chatter	chatter	calm	mc	cm_079	1	m	goofy	any	any	any	any	Copiado. Nos encanta oíros.	Copied. We love hearing from you.
+cm_080	chatter	chatter	calm	mc	cm_080	1	m	goofy	any	any	any	any	Recibido. Qué envidia nos dais.	Copy. We're so jealous.
+cm_081	chatter	chatter	calm	mc	cm_081	1	m	goofy	any	any	any	any	Todo verde por aquí también.	All green down here too.
+cm_082	chatter	chatter	calm	mc	cm_082	1	m	goofy	any	any	any	any	El director ha hecho un pulgar arriba.	The director gave a thumbs up.
+cm_083	chatter	chatter	calm	mc	cm_083	1	m	goofy	any	any	any	any	Os mandamos un abrazo enorme.	Sending you a huge hug.
+cm_084	chatter	chatter	calm	mc	cm_084	1	m	goofy	any	any	any	any	Copiado. Eso va al álbum de recuerdos.	Copied. That's going in the scrapbook.
+cm_085	chatter	chatter	calm	mc	cm_085	1	m	goofy	any	any	any	any	Aquí alguien ha aplaudido.	Someone down here just clapped.
+cm_086	chatter	chatter	calm	mc	cm_086	1	m	goofy	any	any	any	any	Entendido. No toquéis nada que brille.	Understood. Don't touch anything shiny.
+cm_087	chatter	chatter	calm	mc	cm_087	1	m	goofy	any	any	any	any	Sois nuestros favoritos. No se lo digáis a los otros.	You're our favorites. Don't tell the others.
+cm_088	chatter	chatter	calm	mc	cm_088	1	m	goofy	any	any	any	any	Copiado. Lo hemos oído todos. Todos.	Copied. We all heard that. All of us.
+cm_089	chatter	chatter	calm	mc	cm_089	1	m	goofy	any	any	any	any	Recibido. Muy profesional. Casi.	Copy. Very professional. Almost.
+cm_090	chatter	chatter	calm	mc	cm_090	1	m	goofy	any	any	any	any	Hemos subido el volumen para oíros mejor.	We turned up the volume to hear you better.
+cm_091	chatter	chatter	calm	mc	cm_091	1	m	goofy	any	any	any	any	Seguid con la fiesta. Con cuidado.	Carry on with the party. Carefully.
+cm_092	chatter	chatter	calm	mc	cm_092	1	m	goofy	any	any	any	any	Os seguimos en la pantalla grande.	You're on the big screen down here.
+cm_093	chatter	chatter	calm	mc	cm_093	1	m	goofy	any	any	any	any	Copiado. Eso ha sonado muy heroico.	Copied. That sounded very heroic.
+cm_094	chatter	chatter	calm	mc	cm_094	1	m	goofy	any	any	any	any	La cafetería os dedica una canción.	The cafeteria dedicates a song to you.
+cm_095	chatter	chatter	calm	mc	cm_095	1	m	goofy	any	any	any	any	Si necesitáis algo, estamos aquí. Comiendo.	If you need anything, we're here. Eating.
+cm_096	chatter	chatter	calm	mc	cm_096	1	m	goofy	any	any	any	any	¡Hola, nave! Solo llamábamos para decir hola.	Hello, ship! Just calling to say hello.
+cm_097	chatter	chatter	calm	mc	cm_097	1	m	goofy	any	any	any	any	Aquí Control. Os echamos de menos. Un poco.	Control here. We miss you. A little.
+cm_098	chatter	chatter	calm	mc	cm_098	1	m	goofy	any	any	any	any	Control a nave. Las plantas del despacho siguen vivas.	Control to ship. The office plants are still alive.
+cm_099	chatter	chatter	calm	mc	cm_099	1	m	goofy	any	any	any	any	Informe del tiempo: soleado aquí, espacio ahí.	Weather report: sunny here, space up there.
+cm_100	chatter	chatter	calm	mc	cm_100	1	m	goofy	any	any	any	any	Atención, nave: hoy es martes. Por si acaso.	Attention, ship: today is Tuesday. Just in case.
+cm_101	chatter	chatter	calm	mc	cm_101	1	m	goofy	any	any	any	any	Novedades del centro: alguien ha roto la fotocopiadora. Otra vez.	News from the center: someone broke the copier. Again.
+cm_102	chatter	chatter	calm	mc	cm_102	1	m	goofy	any	any	any	any	Aquí abajo hemos puesto vuestra foto en la pared.	We put your photo on the wall down here.
+cm_103	chatter	chatter	calm	mc	cm_103	1	m	goofy	any	any	any	any	Seguimos aquí, por si os sentís solos.	We're still here, in case you feel lonely.
+cm_104	chatter	chatter	calm	mc	cm_104	1	m	goofy	any	any	any	any	El becario ha preguntado si podéis traer una piedra.	The intern asked if you can bring back a rock.
+cm_105_1	chatter	chatter	calm	crew	cm_105	1	both	prelaunch	any	any	any	any	Control, el asiento está un poco frío.	Control, the seat is a bit cold.
+cm_105_2	chatter	chatter	calm	mc	cm_105	2	m	prelaunch	any	any	any	any	Se calentará enseguida. Muy enseguida.	It'll warm up soon. Very soon.
+cm_106_1	chatter	chatter	calm	crew	cm_106	1	both	prelaunch	any	any	any	any	Control, ¿cuánto falta?	Control, how long now?
+cm_106_2	chatter	chatter	calm	mc	cm_106	2	m	prelaunch	any	any	any	any	Poco. No te vayas al baño.	Not long. Don't go to the bathroom.
+cm_107_1	chatter	chatter	calm	crew	cm_107	1	both	prelaunch	any	any	any	any	Control, ¿alguien ha revisado los tornillos?	Control, has anyone checked the bolts?
+cm_107_2	chatter	chatter	calm	mc	cm_107	2	m	prelaunch	any	any	any	any	Todos. Dos veces. El becario, tres.	All of them. Twice. The intern, three times.
+cm_107_3	chatter	chatter	calm	crew	cm_107	3	both	prelaunch	any	any	any	any	Eso me preocupa más.	That worries me more.
+cm_108_1	chatter	chatter	calm	crew	cm_108	1	both	prelaunch	any	any	any	any	Control, ¿puedo cambiar de asiento?	Control, can I change seats?
+cm_108_2	chatter	chatter	calm	mc	cm_108	2	m	prelaunch	any	any	any	any	No. Todos los asientos son iguales.	No. All the seats are the same.
+cm_108_3	chatter	chatter	calm	crew	cm_108	3	both	prelaunch	any	any	any	any	El de la ventana parece mejor.	The window one looks better.
+cm_109_1	chatter	chatter	calm	mc	cm_109	1	m	prelaunch	any	any	any	any	Equipo, último aviso: ¿alguien necesita ir al baño?	Team, last call: does anyone need the bathroom?
+cm_109_2	chatter	chatter	calm	crew	cm_109	2	both	prelaunch	any	any	any	any	Ahora que lo dices...	Now that you mention it...
+cm_109_3	chatter	chatter	calm	mc	cm_109	3	m	prelaunch	any	any	any	any	Demasiado tarde.	Too late.
+cm_110_1	chatter	chatter	calm	crew	cm_110	1	both	prelaunch	any	any	any	any	Control, aquí huele a pintura fresca.	Control, it smells like fresh paint in here.
+cm_110_2	chatter	chatter	calm	mc	cm_110	2	m	prelaunch	any	any	any	any	Es pintura fresca. La pusimos esta mañana.	It is fresh paint. We put it on this morning.
+cm_111_1	chatter	chatter	calm	crew	cm_111	1	both	prelaunch	any	any	any	any	Control, he hecho una lista de lo que quiero ver.	Control, I made a list of what I want to see.
+cm_111_2	chatter	chatter	calm	mc	cm_111	2	m	prelaunch	any	any	any	any	¿Qué hay en la lista?	What's on the list?
+cm_111_3	chatter	chatter	calm	crew	cm_111	3	both	prelaunch	any	any	any	any	Todo.	Everything.
+cm_112_1	chatter	chatter	calm	mc	cm_112	1	m	prelaunch	any	any	any	any	El público está contando con vosotros. Literalmente. Ya cuentan hacia atrás.	The crowd is counting on you. Literally. They're already counting down.
+cm_112_2	chatter	chatter	calm	crew	cm_112	2	both	prelaunch	any	any	any	any	¡Hola, público!	Hello, crowd!
+cm_113_1	chatter	chatter	calm	crew	cm_113	1	both	prelaunch	any	any	any	any	Control, ¿el cohete tiene marcha atrás?	Control, does the rocket have reverse?
+cm_113_2	chatter	chatter	calm	mc	cm_113	2	m	prelaunch	any	any	any	any	No.	No.
+cm_113_3	chatter	chatter	calm	crew	cm_113	3	both	prelaunch	any	any	any	any	Vale. Solo preguntaba.	Okay. Just asking.
+cm_114	chatter	chatter	calm	crew	cm_114	1	both	prelaunch	any	any	any	any	Estoy listo. Creo. Casi seguro.	I'm ready. I think. Pretty sure.
+cm_115	chatter	chatter	calm	crew	cm_115	1	both	prelaunch	any	any	any	any	Dicen que el primer viaje no se olvida.	They say you never forget your first trip.
+cm_116	chatter	chatter	calm	crew	cm_116	1	both	prelaunch	any	any	any	any	Me he atado el cinturón dos veces. Por si acaso.	I buckled up twice. Just in case.
+cm_117	chatter	chatter	calm	mc	cm_117	1	m	prelaunch	any	any	any	any	Los ingenieros os desean suerte. Mucha suerte.	The engineers wish you luck. Lots of luck.
+cm_118	chatter	chatter	calm	mc	cm_118	1	m	prelaunch	any	any	any	any	La prensa pregunta si estáis nerviosos. Les hemos dicho que no.	The press asks if you're nervous. We told them no.
+cm_119_1	chatter	chatter	calm	crew	cm_119	1	both	orbit	any	any	any	any	Control, damos vueltas y vueltas.	Control, we go round and round.
+cm_119_2	chatter	chatter	calm	mc	cm_119	2	m	orbit	any	any	any	any	Esa es la idea.	That's the idea.
+cm_119_3	chatter	chatter	calm	crew	cm_119	3	both	orbit	any	any	any	any	Ah. Pensaba que nos habíamos perdido.	Oh. I thought we were lost.
+cm_120_1	chatter	chatter	calm	crew	cm_120	1	both	orbit	any	any	any	any	Control, he visto el amanecer cuatro veces hoy.	Control, I saw the sunrise four times today.
+cm_120_2	chatter	chatter	calm	mc	cm_120	2	m	orbit	any	any	any	any	Presumido.	Show-off.
+cm_121_1	chatter	chatter	calm	crew	cm_121	1	both	orbit	any	any	any	any	Control, ¿desde aquí se ve mi casa?	Control, can you see my house from here?
+cm_121_2	chatter	chatter	calm	mc	cm_121	2	m	orbit	any	any	any	any	Si entrecierras los ojos, sí.	If you squint, yes.
+cm_121_3	chatter	chatter	calm	crew	cm_121	3	both	orbit	any	any	any	any	¡La veo! Creo.	I see it! I think.
+cm_122_1	chatter	chatter	calm	crew	cm_122	1	both	orbit	any	any	any	any	Control, aquí arriba no hay arriba.	Control, there's no up up here.
+cm_122_2	chatter	chatter	calm	mc	cm_122	2	m	orbit	any	any	any	any	Ni abajo. Por eso os mareáis.	Or down. That's why you get dizzy.
+cm_123_1	chatter	chatter	calm	crew	cm_123	1	both	orbit	any	any	any	any	Control, hemos dejado de caer. ¿O seguimos?	Control, did we stop falling? Or are we still?
+cm_123_2	chatter	chatter	calm	mc	cm_123	2	m	orbit	any	any	any	any	Seguís cayendo. Pero de lado.	Still falling. Sideways.
+cm_123_3	chatter	chatter	calm	crew	cm_123	3	both	orbit	any	any	any	any	Qué elegante.	How elegant.
+cm_124_1	chatter	chatter	calm	mc	cm_124	1	m	orbit	any	any	any	any	Os vemos pasar por encima. Os estamos saludando.	We see you pass overhead. We're waving.
+cm_124_2	chatter	chatter	calm	crew	cm_124	2	both	orbit	any	any	any	any	¡Os hemos visto! ¡Bueno, no! ¡Pero hola!	We saw you! Well, no! But hello!
+cm_125	chatter	chatter	calm	crew	cm_125	1	both	orbit	any	any	any	any	La órbita es como un columpio que no para.	Orbit is like a swing that never stops.
+cm_126	chatter	chatter	calm	crew	cm_126	1	both	orbit	any	any	any	any	Una vuelta más y me sé el camino de memoria.	One more lap and I'll know the way by heart.
+cm_127	chatter	chatter	calm	mc	cm_127	1	m	orbit	any	any	any	any	Órbita estable. Ahora sí podéis comer.	Stable orbit. Now you may eat.
+cm_128_1	chatter	chatter	calm	crew	cm_128	1	both	coast	any	any	any	any	Control, ¿cuánto queda de viaje?	Control, how much longer is the trip?
+cm_128_2	chatter	chatter	calm	mc	cm_128	2	m	coast	any	any	any	any	Bastante. ¿Habéis traído juegos?	Quite a while. Did you bring games?
+cm_128_3	chatter	chatter	calm	crew	cm_128	3	both	coast	any	any	any	any	Una baraja. Le faltan cartas.	A deck of cards. Some are missing.
+cm_129_1	chatter	chatter	calm	crew	cm_129	1	both	coast	any	any	any	any	Control, aquí no pasa nada de nada.	Control, nothing at all is happening here.
+cm_129_2	chatter	chatter	calm	mc	cm_129	2	m	coast	any	any	any	any	Mejor así. Sin noticias, buenas noticias.	Better that way. No news is good news.
+cm_130_1	chatter	chatter	calm	crew	cm_130	1	both	coast	any	any	any	any	Control, he leído el manual entero.	Control, I read the whole manual.
+cm_130_2	chatter	chatter	calm	mc	cm_130	2	m	coast	any	any	any	any	¿Y?	And?
+cm_130_3	chatter	chatter	calm	crew	cm_130	3	both	coast	any	any	any	any	El final es muy triste.	The ending is very sad.
+cm_131_1	chatter	chatter	calm	crew	cm_131	1	both	coast	any	any	any	any	Control, ¿podemos parar a tomar algo?	Control, can we stop for a drink?
+cm_131_2	chatter	chatter	calm	mc	cm_131	2	m	coast	any	any	any	any	No hay bares en el espacio.	There are no bars in space.
+cm_131_3	chatter	chatter	calm	crew	cm_131	3	both	coast	any	any	any	any	Todavía.	Yet.
+cm_132_1	chatter	chatter	calm	mc	cm_132	1	m	coast	any	any	any	any	Informe del viaje: vais muy bien. Y muy lejos.	Trip report: you're doing very well. And very far.
+cm_132_2	chatter	chatter	calm	crew	cm_132	2	both	coast	any	any	any	any	¿Muy, muy lejos?	Very, very far?
+cm_132_3	chatter	chatter	calm	mc	cm_132	3	m	coast	any	any	any	any	Muy, muy lejos.	Very, very far.
+cm_133	chatter	chatter	calm	crew	cm_133	1	both	coast	any	any	any	any	El espacio es grande. Mucho más grande que en los dibujos.	Space is big. Much bigger than in the drawings.
+cm_134	chatter	chatter	calm	crew	cm_134	1	both	coast	any	any	any	any	He empezado a contar los días. Ya voy por muchos.	I started counting the days. I'm at lots.
+cm_135	chatter	chatter	calm	mc	cm_135	1	m	coast	any	any	any	any	Seguimos con vosotros. Aunque tardéis en contestar.	We're still with you. Even if you're slow to answer.
+cm_136_1	chatter	chatter	calm	crew	cm_136	1	both	landed	any	any	any	any	Control, ¡hemos llegado! ¿Y ahora qué?	Control, we made it! Now what?
+cm_136_2	chatter	chatter	calm	mc	cm_136	2	m	landed	any	any	any	any	Ahora disfrutad. Y no os comáis las piedras.	Now enjoy it. And don't eat the rocks.
+cm_137_1	chatter	chatter	calm	crew	cm_137	1	both	landed	any	any	any	any	Control, el suelo es muy suelo.	Control, the ground is very ground.
+cm_137_2	chatter	chatter	calm	mc	cm_137	2	m	landed	any	any	any	any	Gran observación científica.	Great scientific observation.
+cm_138_1	chatter	chatter	calm	crew	cm_138	1	both	landed	any	any	any	any	Control, he dejado una huella preciosa.	Control, I left a beautiful footprint.
+cm_138_2	chatter	chatter	calm	mc	cm_138	2	m	landed	any	any	any	any	Hazle una foto. Para el museo.	Take a photo. For the museum.
+cm_139_1	chatter	chatter	calm	crew	cm_139	1	both	landed	any	any	any	any	Control, aquí no hay nadie.	Control, there's nobody here.
+cm_139_2	chatter	chatter	calm	mc	cm_139	2	m	landed	any	any	any	any	Ahora estáis vosotros.	Now there's you.
+cm_139_3	chatter	chatter	calm	crew	cm_139	3	both	landed	any	any	any	any	Qué bonito.	That's nice.
+cm_140_1	chatter	chatter	calm	crew	cm_140	1	both	landed	any	any	any	any	Control, ¿podemos quedarnos a vivir?	Control, can we live here?
+cm_140_2	chatter	chatter	calm	mc	cm_140	2	m	landed	any	any	any	any	Primero rellenad el formulario.	Fill in the form first.
+cm_141	chatter	chatter	calm	mc	cm_141	1	m	landed	any	any	any	any	Bienvenidos al suelo. Por favor, no pisoteéis la ciencia.	Welcome to the ground. Please don't trample the science.
+cm_142	chatter	chatter	calm	crew	cm_142	1	both	landed	any	any	any	any	Qué bien se está quieto.	It's so nice to stand still.
+cm_143	chatter	chatter	calm	crew	cm_143	1	both	landed	any	any	any	any	Ya he recogido tres piedras. Una se parece a ti, Control.	I picked up three rocks. One looks like you, Control.
+cm_144_1	chatter	chatter	calm	crew	cm_144	1	both	orbit	any	pilot	any	any	Control, ¿puedo hacer una voltereta? Una pequeñita.	Control, can I do a flip? A tiny one.
+cm_144_2	chatter	chatter	calm	mc	cm_144	2	m	orbit	any	pilot	any	any	No.	No.
+cm_144_3	chatter	chatter	calm	crew	cm_144	3	both	orbit	any	pilot	any	any	¿Media?	Half of one?
+cm_144_4	chatter	chatter	calm	mc	cm_144	4	m	orbit	any	pilot	any	any	Tampoco.	Not that either.
+cm_145_1	chatter	chatter	calm	crew	cm_145	1	both	goofy	any	pilot	any	any	Control, esta nave vuela sola. Casi me ofende.	Control, this ship flies itself. I'm almost offended.
+cm_145_2	chatter	chatter	calm	mc	cm_145	2	m	goofy	any	pilot	any	any	Pues déjala. Así no tocas nada.	Then let it. That way you touch nothing.
+cm_146_1	chatter	chatter	calm	crew	cm_146	1	both	goofy	any	pilot	any	any	Control, ¿me dais nota de ese último giro?	Control, can you score that last turn?
+cm_146_2	chatter	chatter	calm	mc	cm_146	2	m	goofy	any	pilot	any	any	Un siete. Por el estilo.	A seven. For style.
+cm_146_3	chatter	chatter	calm	crew	cm_146	3	both	goofy	any	pilot	any	any	¿Solo un siete?	Only a seven?
+cm_147	chatter	chatter	calm	crew	cm_147	1	both	goofy	any	pilot	any	any	He aparcado esta nave mejor que mi coche.	I parked this ship better than my car.
+cm_148_1	chatter	chatter	calm	crew	cm_148	1	both	goofy	any	engineer	any	any	Control, he arreglado una cosa.	Control, I fixed a thing.
+cm_148_2	chatter	chatter	calm	mc	cm_148	2	m	goofy	any	engineer	any	any	¿Estaba rota?	Was it broken?
+cm_148_3	chatter	chatter	calm	crew	cm_148	3	both	goofy	any	engineer	any	any	Ahora no.	Not anymore.
+cm_148_4	chatter	chatter	calm	mc	cm_148	4	m	goofy	any	engineer	any	any	Eso no responde a la pregunta.	That doesn't answer the question.
+cm_149_1	chatter	chatter	calm	crew	cm_149	1	both	goofy	any	engineer	any	any	Control, me sobran dos tornillos.	Control, I have two bolts left over.
+cm_149_2	chatter	chatter	calm	mc	cm_149	2	m	goofy	any	engineer	any	any	¿De dónde?	From where?
+cm_149_3	chatter	chatter	calm	crew	cm_149	3	both	goofy	any	engineer	any	any	Esa es la gran pregunta.	That's the big question.
+cm_150_1	chatter	chatter	calm	crew	cm_150	1	both	goofy	any	engineer	any	any	Control, he mejorado la cafetera con cinta.	Control, I upgraded the coffee machine with tape.
+cm_150_2	chatter	chatter	calm	mc	cm_150	2	m	goofy	any	engineer	any	any	¿Funciona?	Does it work?
+cm_150_3	chatter	chatter	calm	crew	cm_150	3	both	goofy	any	engineer	any	any	Hace café. Y un ruido.	It makes coffee. And a noise.
+cm_151	chatter	chatter	calm	crew	cm_151	1	both	goofy	any	engineer	any	any	Si algo se rompe, tengo cinta. Mucha cinta.	If something breaks, I have tape. Lots of tape.
+cm_152_1	chatter	chatter	calm	crew	cm_152	1	both	coast	any	scientist	any	any	Control, tengo una teoría nueva.	Control, I have a new theory.
+cm_152_2	chatter	chatter	calm	mc	cm_152	2	m	coast	any	scientist	any	any	¿Sobre qué?	About what?
+cm_152_3	chatter	chatter	calm	crew	cm_152	3	both	coast	any	scientist	any	any	Sobre por qué las galletas flotan mejor que el pan.	About why cookies float better than bread.
+cm_152_4	chatter	chatter	calm	mc	cm_152	4	m	coast	any	scientist	any	any	Mándanos los datos. Y una galleta.	Send us the data. And a cookie.
+cm_153_1	chatter	chatter	calm	crew	cm_153	1	both	goofy	any	scientist	any	any	Control, he medido el silencio. Es muy silencioso.	Control, I measured the silence. It's very silent.
+cm_153_2	chatter	chatter	calm	mc	cm_153	2	m	goofy	any	scientist	any	any	Lo apuntamos. Gran descubrimiento.	We'll note that. Big discovery.
+cm_154_1	chatter	chatter	calm	crew	cm_154	1	both	goofy	any	scientist	any	any	Control, he llenado otro cuaderno.	Control, I filled another notebook.
+cm_154_2	chatter	chatter	calm	mc	cm_154	2	m	goofy	any	scientist	any	any	¿De datos?	With data?
+cm_154_3	chatter	chatter	calm	crew	cm_154	3	both	goofy	any	scientist	any	any	De datos. Y de dibujos de nubes.	With data. And drawings of clouds.
+cm_155	chatter	chatter	calm	crew	cm_155	1	both	goofy	any	scientist	any	any	Todo es ciencia si lo miras de cerca.	Everything is science if you look closely.
+cm_156_1	chatter	chatter	calm	crew	cm_156	1	both	goofy	any	tourist	any	any	Control, ¿esto incluye desayuno?	Control, does this include breakfast?
+cm_156_2	chatter	chatter	calm	mc	cm_156	2	m	goofy	any	tourist	any	any	Hay bolsitas.	There are pouches.
+cm_156_3	chatter	chatter	calm	crew	cm_156	3	both	goofy	any	tourist	any	any	Pondré una reseña.	I'll leave a review.
+cm_157_1	chatter	chatter	calm	crew	cm_157	1	both	goofy	any	tourist	any	any	Control, ¿dónde está la tienda de recuerdos?	Control, where's the gift shop?
+cm_157_2	chatter	chatter	calm	mc	cm_157	2	m	goofy	any	tourist	any	any	Abajo. Cuando volváis.	Down here. When you get back.
+cm_158_1	chatter	chatter	calm	crew	cm_158	1	both	goofy	any	tourist	any	any	Control, he hecho cien fotos. Todas de mi cara.	Control, I took a hundred photos. All of my face.
+cm_158_2	chatter	chatter	calm	mc	cm_158	2	m	goofy	any	tourist	any	any	Haz una de la ventana. Por variar.	Take one of the window. For a change.
+cm_159	chatter	chatter	calm	crew	cm_159	1	both	goofy	any	tourist	any	any	Es el mejor viaje de mi vida. Bueno, el único.	Best trip of my life. Well, the only one.
+cm_160_1	chatter	chatter	calm	crew	cm_160	1	both	goofy	any	any	dim	any	Control, ¿la Mun es de queso?	Control, is the Mun made of cheese?
+cm_160_2	chatter	chatter	calm	mc	cm_160	2	m	goofy	any	any	dim	any	No.	No.
+cm_160_3	chatter	chatter	calm	crew	cm_160	3	both	goofy	any	any	dim	any	¿Seguro? Huele raro.	Sure? It smells funny.
+cm_160_4	chatter	chatter	calm	mc	cm_160	4	m	goofy	any	any	dim	any	Eso es la nave.	That's the ship.
+cm_161_1	chatter	chatter	calm	crew	cm_161	1	both	goofy	any	any	dim	any	Control, he encontrado el botón de pausa.	Control, I found the pause button.
+cm_161_2	chatter	chatter	calm	mc	cm_161	2	m	goofy	any	any	dim	any	No hay botón de pausa.	There is no pause button.
+cm_161_3	chatter	chatter	calm	crew	cm_161	3	both	goofy	any	any	dim	any	Entonces, ¿qué he pulsado?	Then what did I press?
+cm_162_1	chatter	chatter	calm	crew	cm_162	1	both	goofy	any	any	dim	any	Control, ¿por qué el sol no se apaga por la noche?	Control, why doesn't the sun turn off at night?
+cm_162_2	chatter	chatter	calm	mc	cm_162	2	m	goofy	any	any	dim	any	Te lo explicamos cuando vuelvas. Con dibujos.	We'll explain when you're back. With pictures.
+cm_163_1	chatter	chatter	calm	crew	cm_163	1	both	goofy	any	any	badass	any	Control, esto está demasiado tranquilo. Me gusta el riesgo.	Control, this is too quiet. I like danger.
+cm_163_2	chatter	chatter	calm	mc	cm_163	2	m	goofy	any	any	badass	any	Aquí no. Aquí nos gusta tranquilo.	Not here. Here we like quiet.
+cm_164_1	chatter	chatter	calm	crew	cm_164	1	both	goofy	any	any	badass	any	Control, sin problemas. Nunca hay problemas.	Control, no problems. There are never problems.
+cm_164_2	chatter	chatter	calm	mc	cm_164	2	m	goofy	any	any	badass	any	Eso dices siempre.	You always say that.
+cm_164_3	chatter	chatter	calm	crew	cm_164	3	both	goofy	any	any	badass	any	Y siempre tengo razón.	And I'm always right.
+cm_165_1	chatter	chatter	calm	crew	cm_165	1	both	goofy	any	any	nervous	any	Control, ¿ese ruido es normal?	Control, is that noise normal?
+cm_165_2	chatter	chatter	calm	mc	cm_165	2	m	goofy	any	any	nervous	any	¿Qué ruido?	What noise?
+cm_165_3	chatter	chatter	calm	crew	cm_165	3	both	goofy	any	any	nervous	any	El mío. Estoy temblando.	Mine. I'm shaking.
+cm_165_4	chatter	chatter	calm	mc	cm_165	4	m	goofy	any	any	nervous	any	Respira. Todo va bien.	Breathe. Everything's fine.
+cm_166_1	chatter	chatter	calm	crew	cm_166	1	both	goofy	any	any	nervous	any	Control, ¿podéis decirme otra vez que todo va bien?	Control, can you tell me again that everything's fine?
+cm_166_2	chatter	chatter	calm	mc	cm_166	2	m	goofy	any	any	nervous	any	Todo va bien.	Everything's fine.
+cm_166_3	chatter	chatter	calm	crew	cm_166	3	both	goofy	any	any	nervous	any	Gracias. Otra vez dentro de un minuto.	Thanks. Again in a minute, please.
+cm_167_1	chatter	chatter	calm	crew	cm_167	1	both	goofy	any	any	veteran	any	Control, en mis tiempos los cohetes eran de madera.	Control, in my day rockets were made of wood.
+cm_167_2	chatter	chatter	calm	mc	cm_167	2	m	goofy	any	any	veteran	any	No es verdad.	That's not true.
+cm_167_3	chatter	chatter	calm	crew	cm_167	3	both	goofy	any	any	veteran	any	Bueno, de cartón.	Well, cardboard.
+cm_168_1	chatter	chatter	calm	crew	cm_168	1	both	goofy	any	any	veteran	any	Control, he visto muchas vistas. Esta sigue siendo la mejor.	Control, I've seen a lot of views. This one is still the best.
+cm_168_2	chatter	chatter	calm	mc	cm_168	2	m	goofy	any	any	veteran	any	Nos alegra oír eso de ti.	We're glad to hear that from you.
+cm_169_1	chatter	chatter	calm	mc	cm_169	1	m	orbit	any	any	any	any	Nave, ¿alguien ha cogido el bolígrafo del director?	Ship, did someone take the director's pen?
+cm_169_2	chatter	chatter	calm	crew	cm_169	2	both	orbit	any	any	any	any	Está aquí. Flota muy bien.	It's here. It floats very well.
+cm_169_3	chatter	chatter	calm	mc	cm_169	3	m	orbit	any	any	any	any	Lo quiere de vuelta.	He wants it back.
+cm_169_4	chatter	chatter	calm	crew	cm_169	4	both	orbit	any	any	any	any	Que venga a por él.	He can come and get it.
+cm_170_1	chatter	chatter	calm	crew	cm_170	1	both	goofy	any	any	any	any	Control, ¿me ponéis con la cafetería?	Control, can you put me through to the cafeteria?
+cm_170_2	chatter	chatter	calm	mc	cm_170	2	m	goofy	any	any	any	any	Esto no es una centralita.	This isn't a switchboard.
+cm_170_3	chatter	chatter	calm	crew	cm_170	3	both	goofy	any	any	any	any	Quería pedir una pizza.	I wanted to order a pizza.
+cm_171_1	chatter	chatter	calm	mc	cm_171	1	m	goofy	any	any	any	any	Equipo, os mandamos un chiste. ¿Listos?	Team, we're sending you a joke. Ready?
+cm_171_2	chatter	chatter	calm	crew	cm_171	2	both	goofy	any	any	any	any	¡Listos!	Ready!
+cm_171_3	chatter	chatter	calm	mc	cm_171	3	m	goofy	any	any	any	any	¿Qué hace un cohete en el sofá?	What does a rocket do on the sofa?
+cm_171_4	chatter	chatter	calm	crew	cm_171	4	both	goofy	any	any	any	any	¿Qué?	What?
+cm_171_5	chatter	chatter	calm	mc	cm_171	5	m	goofy	any	any	any	any	Despegar la siesta. Perdón.	Takes off for a nap. Sorry.
+cm_172_1	chatter	chatter	calm	crew	cm_172	1	both	goofy	any	any	any	any	Control, he intentado beber agua y me ha atacado.	Control, I tried to drink water and it attacked me.
+cm_172_2	chatter	chatter	calm	mc	cm_172	2	m	goofy	any	any	any	any	Las burbujas de agua son traicioneras.	Water bubbles are treacherous.
+cm_173_1	chatter	chatter	calm	crew	cm_173	1	both	goofy	any	any	any	any	Control, ¿los planetas tienen nombre o se lo ponemos nosotros?	Control, do planets have names or do we name them?
+cm_173_2	chatter	chatter	calm	mc	cm_173	2	m	goofy	any	any	any	any	Ya tienen nombre.	They already have names.
+cm_173_3	chatter	chatter	calm	crew	cm_173	3	both	goofy	any	any	any	any	Lástima. Tenía uno buenísimo.	Shame. I had a great one.
+cm_174_1	chatter	chatter	calm	mc	cm_174	1	m	goofy	any	any	any	any	Os informamos de que el becario ha ascendido.	We're informing you that the intern got promoted.
+cm_174_2	chatter	chatter	calm	crew	cm_174	2	both	goofy	any	any	any	any	¿A qué?	To what?
+cm_174_3	chatter	chatter	calm	mc	cm_174	3	m	goofy	any	any	any	any	A becario jefe.	Head intern.
+cm_175_1	chatter	chatter	calm	crew	cm_175	1	both	goofy	any	any	any	any	Control, ¿cuántos botones hay en este panel?	Control, how many buttons are on this panel?
+cm_175_2	chatter	chatter	calm	mc	cm_175	2	m	goofy	any	any	any	any	Cuarenta y dos.	Forty-two.
+cm_175_3	chatter	chatter	calm	crew	cm_175	3	both	goofy	any	any	any	any	Yo cuento cuarenta y tres.	I count forty-three.
+cm_175_4	chatter	chatter	calm	mc	cm_175	4	m	goofy	any	any	any	any	Ese no lo pulses.	Don't press that one.
+cm_176_1	chatter	chatter	calm	crew	cm_176	1	both	goofy	any	any	any	any	Control, he soñado que me quedaba sin galletas.	Control, I dreamt I ran out of cookies.
+cm_176_2	chatter	chatter	calm	mc	cm_176	2	m	goofy	any	any	any	any	Fue un sueño. Quedan muchas.	It was a dream. There are plenty left.
+cm_176_3	chatter	chatter	calm	crew	cm_176	3	both	goofy	any	any	any	any	¿Cuántas?	How many?
+cm_176_4	chatter	chatter	calm	mc	cm_176	4	m	goofy	any	any	any	any	No te lo vamos a decir.	We're not telling you.
+cm_177_1	chatter	chatter	calm	crew	cm_177	1	both	goofy	any	any	any	any	Control, ¿quién decide el menú?	Control, who decides the menu?
+cm_177_2	chatter	chatter	calm	mc	cm_177	2	m	goofy	any	any	any	any	Un ordenador.	A computer.
+cm_177_3	chatter	chatter	calm	crew	cm_177	3	both	goofy	any	any	any	any	Ya decía yo.	I thought so.
+cm_178_1	chatter	chatter	calm	mc	cm_178	1	m	goofy	any	any	any	any	Nave, ¿podéis repetir eso más despacio? El becario toma notas.	Ship, can you repeat that slower? The intern is taking notes.
+cm_178_2	chatter	chatter	calm	crew	cm_178	2	both	goofy	any	any	any	any	Todo. Va. Bien.	Everything. Is. Fine.
+cm_178_3	chatter	chatter	calm	mc	cm_178	3	m	goofy	any	any	any	any	Gracias. Lo ha escrito mal.	Thanks. He spelled it wrong.
+cm_179_1	chatter	chatter	calm	crew	cm_179	1	both	goofy	any	any	any	any	Control, ¿hacéis algo divertido ahí abajo?	Control, are you doing anything fun down there?
+cm_179_2	chatter	chatter	calm	mc	cm_179	2	m	goofy	any	any	any	any	Miramos pantallas.	We watch screens.
+cm_179_3	chatter	chatter	calm	crew	cm_179	3	both	goofy	any	any	any	any	¿Y qué sale en las pantallas?	And what's on the screens?
+cm_179_4	chatter	chatter	calm	mc	cm_179	4	m	goofy	any	any	any	any	Vosotros. Sois lo mejor de la tele.	You. You're the best thing on TV.
+cm_180_1	chatter	chatter	calm	crew	cm_180	1	both	goofy	any	any	any	any	Control, ¿cuánta gente nos escucha?	Control, how many people are listening to us?
+cm_180_2	chatter	chatter	calm	mc	cm_180	2	m	goofy	any	any	any	any	Ahora mismo, todos.	Right now, everyone.
+cm_180_3	chatter	chatter	calm	crew	cm_180	3	both	goofy	any	any	any	any	Hola a todos. Me peiné para esto.	Hello everyone. I combed my hair for this.
+cm_181_1	chatter	chatter	calm	crew	cm_181	1	both	goofy	any	any	any	any	Control, alguien ha dibujado una cara en la ventana.	Control, someone drew a face on the window.
+cm_181_2	chatter	chatter	calm	mc	cm_181	2	m	goofy	any	any	any	any	¿Sonríe?	Is it smiling?
+cm_181_3	chatter	chatter	calm	crew	cm_181	3	both	goofy	any	any	any	any	Sí.	Yes.
+cm_181_4	chatter	chatter	calm	mc	cm_181	4	m	goofy	any	any	any	any	Entonces déjala.	Then leave it.
+cm_182_1	chatter	chatter	calm	mc	cm_182	1	m	goofy	any	any	any	any	El jefe de vuelo quiere saber quién se comió su yogur antes del lanzamiento.	The flight director wants to know who ate his yogurt before launch.
+cm_182_2	chatter	chatter	calm	crew	cm_182	2	both	goofy	any	any	any	any	No sé de qué me habla.	I don't know what he's talking about.
+cm_182_3	chatter	chatter	calm	mc	cm_182	3	m	goofy	any	any	any	any	Tienes yogur en el bigote.	You have yogurt in your mustache.
+cm_183_1	chatter	chatter	calm	crew	cm_183	1	both	goofy	any	any	any	any	Control, ¿podéis apagar el sol un rato? Quiero dormir.	Control, can you switch off the sun for a bit? I want to sleep.
+cm_183_2	chatter	chatter	calm	mc	cm_183	2	m	goofy	any	any	any	any	Lo intentamos. No nos hace caso.	We tried. It doesn't listen.
+cm_184_1	chatter	chatter	calm	crew	cm_184	1	both	goofy	any	any	any	any	Control, he hablado con una planta del laboratorio.	Control, I talked to a plant in the lab.
+cm_184_2	chatter	chatter	calm	mc	cm_184	2	m	goofy	any	any	any	any	¿Y qué ha dicho?	And what did it say?
+cm_184_3	chatter	chatter	calm	crew	cm_184	3	both	goofy	any	any	any	any	Nada. Pero me ha escuchado.	Nothing. But it listened.
+cm_185_1	chatter	chatter	calm	mc	cm_185	1	m	goofy	any	any	any	any	Pregunta del público: ¿dónde guardáis los calcetines?	Question from the public: where do you keep your socks?
+cm_185_2	chatter	chatter	calm	crew	cm_185	2	both	goofy	any	any	any	any	En todas partes.	Everywhere.
+cm_185_3	chatter	chatter	calm	mc	cm_185	3	m	goofy	any	any	any	any	Respuesta perfecta.	Perfect answer.
+cm_186_1	chatter	chatter	calm	crew	cm_186	1	both	goofy	any	any	any	any	Control, ¿cuánto falta para la merienda?	Control, how long until snack time?
+cm_186_2	chatter	chatter	calm	mc	cm_186	2	m	goofy	any	any	any	any	Acabáis de comer.	You just ate.
+cm_186_3	chatter	chatter	calm	crew	cm_186	3	both	goofy	any	any	any	any	Eso no responde a la pregunta.	That doesn't answer the question.
+cm_187_1	chatter	chatter	calm	crew	cm_187	1	both	goofy	any	any	any	any	Control, he escrito un poema.	Control, I wrote a poem.
+cm_187_2	chatter	chatter	calm	mc	cm_187	2	m	goofy	any	any	any	any	Adelante.	Go ahead.
+cm_187_3	chatter	chatter	calm	crew	cm_187	3	both	goofy	any	any	any	any	Espacio, espacio, qué grande eres. Fin.	Space, space, how big you are. The end.
+cm_187_4	chatter	chatter	calm	mc	cm_187	4	m	goofy	any	any	any	any	Precioso. Corto. Precioso.	Beautiful. Short. Beautiful.
+cm_188_1	chatter	chatter	calm	crew	cm_188	1	both	goofy	any	any	any	any	Control, ¿podéis mandarme la receta de la sopa?	Control, can you send me the soup recipe?
+cm_188_2	chatter	chatter	calm	mc	cm_188	2	m	goofy	any	any	any	any	Es agua con sal.	It's salty water.
+cm_188_3	chatter	chatter	calm	crew	cm_188	3	both	goofy	any	any	any	any	Pues está riquísima.	Well, it's delicious.
+cm_189_1	chatter	chatter	calm	mc	cm_189	1	m	goofy	any	any	any	any	Atención, nave: la cafetería ha cambiado de horario.	Attention, ship: the cafeteria changed its hours.
+cm_189_2	chatter	chatter	calm	crew	cm_189	2	both	goofy	any	any	any	any	Eso no nos afecta.	That doesn't affect us.
+cm_189_3	chatter	chatter	calm	mc	cm_189	3	m	goofy	any	any	any	any	Lo sabemos. Queríamos compartir el dolor.	We know. We wanted to share the pain.
+cm_190_1	chatter	chatter	calm	crew	cm_190	1	both	coast	any	any	any	any	Control, he flotado hasta el techo. ¿Cómo bajo?	Control, I floated to the ceiling. How do I get down?
+cm_190_2	chatter	chatter	calm	mc	cm_190	2	m	coast	any	any	any	any	No hay techo. Todo es suelo.	There is no ceiling. Everything is floor.
+cm_190_3	chatter	chatter	calm	crew	cm_190	3	both	coast	any	any	any	any	Qué filosófico.	How philosophical.
+cm_191_1	chatter	chatter	calm	crew	cm_191	1	both	goofy	any	any	any	any	Control, ¿tenemos permiso para cantar?	Control, do we have permission to sing?
+cm_191_2	chatter	chatter	calm	mc	cm_191	2	m	goofy	any	any	any	any	Permiso concedido. Volumen bajo.	Permission granted. Low volume.
+cm_191_3	chatter	chatter	calm	crew	cm_191	3	both	goofy	any	any	any	any	¡Lalalá!	La la la!
+cm_191_4	chatter	chatter	calm	mc	cm_191	4	m	goofy	any	any	any	any	Más bajo.	Lower.
+cm_192_1	chatter	chatter	calm	crew	cm_192	1	both	goofy	any	any	any	any	Control, he puesto mi foto en la pared de la nave.	Control, I put my photo on the ship's wall.
+cm_192_2	chatter	chatter	calm	mc	cm_192	2	m	goofy	any	any	any	any	¿Por qué?	Why?
+cm_192_3	chatter	chatter	calm	crew	cm_192	3	both	goofy	any	any	any	any	Para no echarme de menos.	So I don't miss myself.
+cm_193_1	chatter	chatter	calm	mc	cm_193	1	m	goofy	any	any	any	any	Nave, el director dice que sois un ejemplo para todos.	Ship, the director says you're an example for everyone.
+cm_193_2	chatter	chatter	calm	crew	cm_193	2	both	goofy	any	any	any	any	¿Un buen ejemplo?	A good example?
+cm_193_3	chatter	chatter	calm	mc	cm_193	3	m	goofy	any	any	any	any	Un ejemplo.	An example.
+cm_194_1	chatter	chatter	calm	crew	cm_194	1	both	goofy	any	any	any	any	Control, ¿en el espacio hay cumpleaños?	Control, are there birthdays in space?
+cm_194_2	chatter	chatter	calm	mc	cm_194	2	m	goofy	any	any	any	any	Claro. ¿De quién es?	Of course. Whose is it?
+cm_194_3	chatter	chatter	calm	crew	cm_194	3	both	goofy	any	any	any	any	De nadie. Pero quería tarta.	Nobody's. But I wanted cake.
+cm_195_1	chatter	chatter	calm	crew	cm_195	1	both	goofy	any	any	any	any	Control, este viaje necesita más ventanas.	Control, this trip needs more windows.
+cm_195_2	chatter	chatter	calm	mc	cm_195	2	m	goofy	any	any	any	any	Lo diremos a los diseñadores.	We'll tell the designers.
+cm_195_3	chatter	chatter	calm	crew	cm_195	3	both	goofy	any	any	any	any	Y un sofá.	And a sofa.
+cm_195_4	chatter	chatter	calm	mc	cm_195	4	m	goofy	any	any	any	any	Eso ya no.	Not that.
+cm_196_1	chatter	chatter	calm	crew	cm_196	1	both	goofy	any	any	any	any	Control, ¿si estornudo, cambio de rumbo?	Control, if I sneeze, do we change course?
+cm_196_2	chatter	chatter	calm	mc	cm_196	2	m	goofy	any	any	any	any	Un poquito. No lo hagas.	A tiny bit. Don't do it.
+cm_196_3	chatter	chatter	calm	crew	cm_196	3	both	goofy	any	any	any	any	Ya es tarde. ¡Achís!	Too late. Achoo!
+cm_196_4	chatter	chatter	calm	mc	cm_196	4	m	goofy	any	any	any	any	Corrigiendo rumbo.	Correcting course.
+cm_197_1	chatter	chatter	calm	mc	cm_197	1	m	goofy	any	any	any	any	El becario ha preguntado si el espacio huele a algo.	The intern asked if space smells like anything.
+cm_197_2	chatter	chatter	calm	crew	cm_197	2	both	goofy	any	any	any	any	A metal. Y a calcetines.	Like metal. And socks.
+cm_197_3	chatter	chatter	calm	mc	cm_197	3	m	goofy	any	any	any	any	Le diremos solo lo del metal.	We'll only tell him the metal part.
+cm_198_1	chatter	chatter	calm	crew	cm_198	1	both	orbit	any	any	any	any	Control, he aprendido a dar volteretas sin manos.	Control, I learned to do flips with no hands.
+cm_198_2	chatter	chatter	calm	mc	cm_198	2	m	orbit	any	any	any	any	Muy bien. Ahora aprende a parar.	Very good. Now learn to stop.
+cm_199_1	chatter	chatter	calm	crew	cm_199	1	both	goofy	any	any	any	any	Control, ¿me podéis contar un cuento?	Control, can you tell me a story?
+cm_199_2	chatter	chatter	calm	mc	cm_199	2	m	goofy	any	any	any	any	Érase una vez un kerbal que no tocaba nada.	Once upon a time there was a kerbal who touched nothing.
+cm_199_3	chatter	chatter	calm	crew	cm_199	3	both	goofy	any	any	any	any	¿Y qué pasó?	And what happened?
+cm_199_4	chatter	chatter	calm	mc	cm_199	4	m	goofy	any	any	any	any	Nada. Fue feliz. Fin.	Nothing. He was happy. The end.
+cm_200	chatter	chatter	calm	mc	cm_200	1	m	goofy	any	any	any	any	¡Yuju! Digo... recibido. Muy bien.	Woohoo! I mean... copy. Very good.
+cm_201	chatter	chatter	calm	mc	cm_201	1	m	goofy	any	any	any	any	¡Qué bonito! Perdón. Datos correctos.	So pretty! Sorry. Data looks correct.
+cm_202	chatter	chatter	calm	mc	cm_202	1	m	goofy	any	any	any	any	Aquí Control. Esperad, que se me ha caído el bocadillo.	Control here. Hold on, I dropped my sandwich.
+cm_203	chatter	chatter	calm	mc	cm_203	1	m	goofy	any	any	any	any	¡Lo sabía! Sabía que funcionaría. Más o menos.	I knew it! I knew it would work. More or less.
+cm_204	chatter	chatter	calm	mc	cm_204	1	m	goofy	any	any	any	any	Toda la sala está aplaudiendo. Uno llora un poco.	The whole room is clapping. One of them is crying a bit.
+cm_205	chatter	chatter	calm	mc	cm_205	1	m	goofy	any	any	any	any	Os mando un saludo. No, espera, ese era el botón del café.	Sending you a greeting. No, wait, that was the coffee button.
+cm_206	chatter	chatter	calm	mc	cm_206	1	m	goofy	any	any	any	any	Control a nave. ¡Ay, perdón, me he sentado en el micro!	Control to ship. Oops, sorry, I sat on the mic!
+cm_207	chatter	chatter	calm	mc	cm_207	1	m	goofy	any	any	any	any	¡Bravo! El director ha hecho un bailecito.	Bravo! The director did a little dance.
+cm_208	chatter	chatter	calm	mc	cm_208	1	m	goofy	any	any	any	any	Recibido. ¿Ha sonado muy serio? Estoy practicando.	Copy. Did that sound very serious? I'm practicing.
+cm_209	chatter	chatter	calm	mc	cm_209	1	m	goofy	any	any	any	any	Hola, nave. Soy el del turno de noche. Me he traído galletas.	Hello, ship. I'm the night shift. I brought cookies.
+cm_210	chatter	chatter	calm	mc	cm_210	1	m	goofy	any	any	any	any	¡Cambio de turno! Os paso con alguien más simpático.	Shift change! I'm handing you to someone nicer.
+cm_211	chatter	chatter	calm	mc	cm_211	1	m	goofy	any	any	any	any	Atención. Ha entrado una mosca en la sala. Seguimos informando.	Attention. A fly got into the room. We'll keep you posted.
+cm_212	chatter	chatter	calm	mc	cm_212	1	m	goofy	any	any	any	any	¡Nos hemos ganado una pizza! Gracias a vosotros.	We earned a pizza! Thanks to you.
+cm_213	chatter	chatter	calm	mc	cm_213	1	m	goofy	any	any	any	any	Uy, he leído la hoja al revés. Todo bien. Mejor que bien.	Oops, I read the sheet upside down. All good. Better than good.
+cm_214_1	chatter	chatter	calm	crew	cm_214	1	both	goofy	any	any	any	any	Control, sonáis contentos hoy.	Control, you sound happy today.
+cm_214_2	chatter	chatter	calm	mc	cm_214	2	m	goofy	any	any	any	any	¡Hay tarta! Y vosotros vais genial. Pero sobre todo, hay tarta.	There's cake! And you're doing great. But mostly, there's cake.
+cm_215_1	chatter	chatter	calm	crew	cm_215	1	both	goofy	any	any	any	any	Control, ¿quién está en la radio hoy?	Control, who's on the radio today?
+cm_215_2	chatter	chatter	calm	mc	cm_215	2	m	goofy	any	any	any	any	Yo. El de las gafas. El guapo.	Me. The one with glasses. The handsome one.
+cm_215_3	chatter	chatter	calm	crew	cm_215	3	both	goofy	any	any	any	any	No sabemos quién es ese.	We don't know who that is.
+cm_216_1	chatter	chatter	calm	crew	cm_216	1	both	goofy	any	any	any	any	Control, ¿estáis bien? Se oyen gritos.	Control, are you okay? We hear shouting.
+cm_216_2	chatter	chatter	calm	mc	cm_216	2	m	goofy	any	any	any	any	¡Gritos de alegría! Ha ganado nuestro equipo.	Shouts of joy! Our team won.
+cm_216_3	chatter	chatter	calm	crew	cm_216	3	both	goofy	any	any	any	any	¿Qué equipo?	What team?
+cm_216_4	chatter	chatter	calm	mc	cm_216	4	m	goofy	any	any	any	any	El de la oficina. A los dardos.	The office team. At darts.
+cm_217_1	chatter	chatter	calm	crew	cm_217	1	both	goofy	any	any	any	any	Control, os oigo comer.	Control, I can hear you eating.
+cm_217_2	chatter	chatter	calm	mc	cm_217	2	m	goofy	any	any	any	any	No es verdad.	That's not true.
+cm_217_3	chatter	chatter	calm	crew	cm_217	3	both	goofy	any	any	any	any	Os oigo masticar.	I can hear you chewing.
+cm_217_4	chatter	chatter	calm	mc	cm_217	4	m	goofy	any	any	any	any	Es una galleta muy pequeña.	It's a very small cookie.
+cm_218_1	chatter	chatter	calm	mc	cm_218	1	m	goofy	any	any	any	any	¡Nave! ¡Nave! Tenemos una noticia.	Ship! Ship! We have news.
+cm_218_2	chatter	chatter	calm	crew	cm_218	2	both	goofy	any	any	any	any	¿Qué pasa?	What is it?
+cm_218_3	chatter	chatter	calm	mc	cm_218	3	m	goofy	any	any	any	any	El becario ha aprendido a hacer café.	The intern learned to make coffee.
+cm_218_4	chatter	chatter	calm	crew	cm_218	4	both	goofy	any	any	any	any	¡Por fin!	Finally!
+cm_219_1	chatter	chatter	calm	mc	cm_219	1	m	goofy	any	any	any	any	Una pregunta muy científica: ¿qué tal se está ahí?	A very scientific question: how is it up there?
+cm_219_2	chatter	chatter	calm	crew	cm_219	2	both	goofy	any	any	any	any	Muy bien. Un poco solo.	Very good. A bit lonely.
+cm_219_3	chatter	chatter	calm	mc	cm_219	3	m	goofy	any	any	any	any	Os mandamos más radio. Más charla.	Then we'll send more radio. More chatting.
+cm_220_1	chatter	chatter	calm	mc	cm_220	1	m	goofy	any	any	any	any	Aquí Control. Perdón por el silencio. Estábamos discutiendo.	Control here. Sorry for the silence. We were arguing.
+cm_220_2	chatter	chatter	calm	crew	cm_220	2	both	goofy	any	any	any	any	¿Sobre qué?	About what?
+cm_220_3	chatter	chatter	calm	mc	cm_220	3	m	goofy	any	any	any	any	Sobre quién os hablaba primero. He ganado yo.	About who talks to you first. I won.
+cm_221_1	chatter	chatter	calm	crew	cm_221	1	both	goofy	any	any	any	any	Control, ¿por qué hay otra voz en la radio?	Control, why is there another voice on the radio?
+cm_221_2	chatter	chatter	calm	mc	cm_221	2	m	goofy	any	any	any	any	Es mi compañero. Saluda.	That's my colleague. Say hi.
+cm_221_3	chatter	chatter	calm	crew	cm_221	3	both	goofy	any	any	any	any	Hola, compañero.	Hello, colleague.
+cm_221_4	chatter	chatter	calm	mc	cm_221	4	m	goofy	any	any	any	any	Dice que sois sus favoritos. Yo no lo dije.	He says you're his favorites. I didn't say that.
+cm_222_1	chatter	chatter	calm	crew	cm_222	1	both	goofy	any	any	any	any	Control, nos habéis llamado tres veces sin decir nada.	Control, you called us three times without saying anything.
+cm_222_2	chatter	chatter	calm	mc	cm_222	2	m	goofy	any	any	any	any	Lo siento. Me gusta el sonido del botón.	Sorry. I like the sound of the button.
+cm_223_1	chatter	chatter	calm	mc	cm_223	1	m	goofy	any	any	any	any	¡Oh! ¡Oh! ¡Sale en la pantalla grande! ¡Os vemos!	Oh! Oh! You're on the big screen! We can see you!
+cm_223_2	chatter	chatter	calm	crew	cm_223	2	both	goofy	any	any	any	any	¡Hola, pantalla!	Hello, screen!
+cm_224_1	chatter	chatter	calm	mc	cm_224	1	m	goofy	any	any	any	any	Os informamos de que todo va bien. Muy bien. Increíblemente bien.	Letting you know everything is fine. Very fine. Amazingly fine.
+cm_224_2	chatter	chatter	calm	crew	cm_224	2	both	goofy	any	any	any	any	Eso me preocupa.	That worries me.
+cm_225_1	chatter	chatter	calm	crew	cm_225	1	both	goofy	any	any	any	any	Control, ¿os aburrís sin nosotros?	Control, are you bored without us?
+cm_225_2	chatter	chatter	calm	mc	cm_225	2	m	goofy	any	any	any	any	Muchísimo. Hemos ordenado los lápices por colores.	Very much. We sorted the pencils by color.
+cm_226_1	chatter	chatter	calm	mc	cm_226	1	m	goofy	any	any	any	any	Nave, os leo un mensaje de los niños del colegio.	Ship, I'm reading you a message from the school kids.
+cm_226_2	chatter	chatter	calm	crew	cm_226	2	both	goofy	any	any	any	any	Adelante.	Go ahead.
+cm_226_3	chatter	chatter	calm	mc	cm_226	3	m	goofy	any	any	any	any	Dicen: ¿hay helado en el espacio?	They say: is there ice cream in space?
+cm_226_4	chatter	chatter	calm	crew	cm_226	4	both	goofy	any	any	any	any	Diles que todavía no. Pero que lo estamos pidiendo.	Tell them not yet. But we're asking for it.
+cm_227_1	chatter	chatter	calm	mc	cm_227	1	m	goofy	any	any	any	any	¡Recibido! Uy, perdón, era para otra nave.	Copy! Oops, sorry, that was for another ship.
+cm_227_2	chatter	chatter	calm	crew	cm_227	2	both	goofy	any	any	any	any	¿Hay otra nave?	There's another ship?
+cm_227_3	chatter	chatter	calm	mc	cm_227	3	m	goofy	any	any	any	any	No. Me he confundido conmigo mismo.	No. I confused myself.
+cm_228_1	chatter	chatter	calm	mc	cm_228	1	m	goofy	any	any	any	any	Control a nave: el jefe pregunta quién ha cambiado su silla.	Control to ship: the boss asks who switched his chair.
+cm_228_2	chatter	chatter	calm	crew	cm_228	2	both	goofy	any	any	any	any	Estamos en el espacio.	We're in space.
+cm_228_3	chatter	chatter	calm	mc	cm_228	3	m	goofy	any	any	any	any	Eso le hemos dicho. No nos cree.	That's what we told him. He doesn't believe us.
+cm_229_1	chatter	chatter	calm	crew	cm_229	1	both	goofy	any	any	any	any	Control, ¿podéis hablar más alegres?	Control, can you sound more cheerful?
+cm_229_2	chatter	chatter	calm	mc	cm_229	2	m	goofy	any	any	any	any	¡Claro! ¡Hola! ¡Qué bien! ¡Bien!	Sure! Hello! How nice! Nice!
+cm_229_3	chatter	chatter	calm	crew	cm_229	3	both	goofy	any	any	any	any	Vale. Un poco menos.	Okay. A bit less.
+cm_230	chatter	chatter	calm	mc	cm_230	1	m	goofy	any	any	any	any	Os pongo con el jefe de vuelo. Bueno, está comiendo. Os pongo conmigo otra vez.	Putting you through to the flight director. Well, he's eating. Putting you through to me again.
+cm_231	chatter	chatter	calm	mc	cm_231	1	m	goofy	any	any	any	any	Pequeño problema aquí abajo: se ha acabado el azúcar. Os mantenemos informados.	Small problem down here: the sugar ran out. We'll keep you informed.
+cm_232	chatter	chatter	calm	mc	cm_232	1	m	goofy	any	any	any	any	¡Cuidado con...! No, nada. Era una mancha en la pantalla.	Watch out for...! No, nothing. It was a smudge on the screen.
+cm_233_1	chatter	chatter	calm	mc	cm_233	1	m	goofy	any	any	any	any	Aquí Control. Hoy estoy muy contento. Pedid lo que queráis.	Control here. I'm very cheerful today. Ask for anything.
+cm_233_2	chatter	chatter	calm	crew	cm_233	2	both	goofy	any	any	any	any	¿Más galletas?	More cookies?
+cm_233_3	chatter	chatter	calm	mc	cm_233	3	m	goofy	any	any	any	any	Eso no. Otra cosa.	Not that. Something else.

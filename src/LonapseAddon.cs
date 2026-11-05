@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.5.3";
+        public const string Version = "0.6.0";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -25,6 +25,7 @@ namespace Lonapse
 
         public VoiceChannel[] crew = new VoiceChannel[0];
         public VoiceChannel control, controlBed, staticCh;
+        public VoiceChannel crewBed;   // 0.6.0: static loop under crew radio lines (radioStatic)
         public VoiceChannel[] beep = new VoiceChannel[0];
         public VoiceChannel[] allChannels = new VoiceChannel[0];
 
@@ -96,6 +97,55 @@ namespace Lonapse
         public bool kerbinTime = true;    // GameSettings.KERBIN_TIME (6 h days)
         private readonly List<ModuleCommand> probeCmds = new List<ModuleCommand>();
         private readonly List<string> probeNames = new List<string>();
+        // 0.6.0 probe voices: every core part root first, the voices that exist, and the result of the pick
+        private readonly List<ProbeCorePart> probeCoreParts = new List<ProbeCorePart>();
+        private static List<ProbeVoiceSpec> configVoices;   // LONAPSE_PROBE_VOICE nodes, read once per game session
+        public ProbeVoiceRegistry probeVoices = new ProbeVoiceRegistry();
+
+        // 0.6.0 line memory: one for the game session, read from and written to PluginData/played.txt
+        private static SceneMemory lineMemory;
+        public static SceneMemory LineMemory { get { return lineMemory ?? (lineMemory = LoadLineMemory()); } }
+
+        private static string LineMemoryPath
+        {
+            get { return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Settings.FilePath), "played.txt"); }
+        }
+
+        private static SceneMemory LoadLineMemory()
+        {
+            try
+            {
+                string p = LineMemoryPath;
+                if (System.IO.File.Exists(p))
+                {
+                    SceneMemory m = SceneMemory.Parse(System.IO.File.ReadAllLines(p));
+                    Log.Info("Line memory: " + m.Count + " scenes from " + p);
+                    return m;
+                }
+            }
+            catch (Exception e) { Log.Warn("Line memory could not be read, starting fresh: " + e.Message); }
+            return new SceneMemory();
+        }
+
+        public static void SaveLineMemory()
+        {
+            if (lineMemory == null) return;
+            try
+            {
+                string p = LineMemoryPath;
+                System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(p));
+                string tmp = p + ".tmp";
+                System.IO.File.WriteAllLines(tmp, lineMemory.Serialize().ToArray());
+                if (System.IO.File.Exists(p)) System.IO.File.Delete(p);
+                System.IO.File.Move(tmp, p);
+            }
+            catch (Exception e) { Log.Warn("Line memory could not be saved: " + e.Message); }
+        }
+        public ProbeVoiceSpec probeVoice;                    // voice of the active probe, null without a core
+        public string probeVoicePart;                        // part name of the core that decided it
+        public ProbeVoicePick.Why probeVoiceWhy;
+        public string probeDefaultVoice;                     // what the pick gives without the player's own picks
+        public ProbeVoicePick.Why probeDefaultWhy;
         private readonly List<int> probeStates = new List<int>();
         private readonly List<bool> probeHib = new List<bool>();
         private Vessel probeScanVessel;
@@ -197,6 +247,7 @@ namespace Lonapse
                 Log.Info("Lonapse " + Version + " starting, settings: " + Settings.FilePath);
                 ClipLibrary.Build();
                 PhraseClips.Build();
+                RebuildProbeVoices();
 
                 stress = new StressModel(settings.tuning);
                 ReadPhysicsGlobals();
@@ -251,6 +302,7 @@ namespace Lonapse
             try { if (window != null) { window.ReleaseLock(); window.RemoveButton(); } } catch (Exception e) { Log.Exception("OnDestroy.button", e); }
             try { InputLockManager.RemoveControlLock("Lonapse_window"); } catch (Exception) { }
             try { if (settingsDirty && settings != null) settings.Save(); } catch (Exception e) { Log.Exception("OnDestroy.save", e); }
+            try { SaveLineMemory(); } catch (Exception e) { Log.Exception("OnDestroy.lineMemory", e); }
         }
 
         private void CreateChannels()
@@ -266,13 +318,14 @@ namespace Lonapse
             for (int i = 0; i < 2; i++)
                 beep[i] = new VoiceChannel(t, "beep" + i, ChannelKind.Beep, 100, 250f, 6000f, 0.08f, false);
             staticCh = new VoiceChannel(t, "static", ChannelKind.Static, 100, 200f, 5000f, 0.4f, false);
+            crewBed = new VoiceChannel(t, "crewBed", ChannelKind.Static, 100, 300f, 3500f, 0.2f, false);
             // dedicated intercom click source, so a click is never skipped when crew channels are busy
             clickCh = new VoiceChannel(t, "intercomClick", ChannelKind.IntercomClick, 90, 150f, 9000f, 0f, false);
             calloutCh = new VoiceChannel(t, "callout", ChannelKind.Crew, 40, tu.crewHp, tu.crewLpCalm, 0f, true);
             keyCh = new VoiceChannel(t, "radioKey", ChannelKind.Static, 70, 200f, 8000f, 0f, false);
             breathCh = new VoiceChannel(t, "breath", ChannelKind.Breath, 110, 100f, 4000f, 0f, false);
             alarmCh = new VoiceChannel(t, "alarm", ChannelKind.Breath, 125, 300f, 3500f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, clickCh, calloutCh, keyCh, breathCh, alarmCh };
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -602,6 +655,7 @@ namespace Lonapse
                 if (!ReferenceEquals(v, lastVessel))
                 {
                     vesselChanged = true;
+                    bool evaHop = IsEvaHop(lastVessel, v);
                     lastVessel = v;
                     docking.Reset();
                     dockGeo.dirty = true;
@@ -610,7 +664,7 @@ namespace Lonapse
                     stress.ResetAll();
                     stress.StartWarmup();
                     roster.dirty = true;
-                    director.ResetPacing();
+                    director.ResetPacing(evaHop);
                     if (throttle != null) throttle.Reset();
                     if (countdown != null) countdown.Abort("vessel change");
                     plan.Reset();
@@ -806,6 +860,8 @@ namespace Lonapse
                 ScanProbeCores(v);
                 if (before != probeCoreKey)
                     Log.Info(probeCoreKey == null ? "No probe core" : "Probe core: " + probeCoreKey + " (" + string.Join(", ", probeNames.ToArray()) + ")");
+                if (probeVoice != null)
+                    Log.Debug("Probe voice " + probeVoice.Name + " from " + probeVoiceWhy + " (" + (probeVoicePart ?? "-") + ")");
                 probePollLeft = 0f;
             }
             probePollLeft -= dt;
@@ -846,7 +902,11 @@ namespace Lonapse
         {
             probeCmds.Clear();
             probeNames.Clear();
+            probeCoreParts.Clear();
             probeCoreKey = null;
+            probeVoice = null;
+            probeVoicePart = null;
+            probeVoiceWhy = ProbeVoicePick.Why.None;
             if (v == null) return;
             try
             {
@@ -872,8 +932,77 @@ namespace Lonapse
                         if (v.parts[i] != null && seen.Add(v.parts[i])) AddProbeCores(v.parts[i]);
             }
             catch (Exception e) { Log.Exception("ScanProbeCores", e); }
-            probeCoreKey = ProbeCores.Pick(probeNames);
+            int at;
+            probeVoice = ProbeVoicePick.Resolve(probeCoreParts, settings.probeParts, probeVoices, out at, out probeVoiceWhy);
+            probeVoicePart = at >= 0 && at < probeCoreParts.Count ? probeCoreParts[at].partName : null;
+            int dat;
+            ProbeVoiceSpec def = ProbeVoicePick.Resolve(probeCoreParts, null, probeVoices, out dat, out probeDefaultWhy);
+            probeDefaultVoice = def != null ? def.Name : null;
+            // the phrase table's core column: a custom voice uses the lines of the stock core it names
+            probeCoreKey = probeVoice != null ? probeVoice.Lines : null;
         }
+
+        /// <summary>
+        /// Subtitle name of the probe: the voice's display name. The unchanged generic voice (a core Lonapse does not
+        /// know) and a voice without a name use the part's own title, like "Probodobodyne OKTO" or a mod's name.
+        /// </summary>
+        public string ProbeDisplayName
+        {
+            get
+            {
+                if (probeVoice == null) return ProbeCores.DisplayName(probeCoreKey);
+                bool plainGeneric = probeVoice.Name == ProbeCores.Generic && probeVoices.SourceOf(ProbeCores.Generic) == ProbeVoiceSource.Stock;
+                if ((plainGeneric || string.IsNullOrEmpty(probeVoice.DisplayName)) && !string.IsNullOrEmpty(probeVoicePart))
+                    return PartTitle(probeVoicePart);
+                return string.IsNullOrEmpty(probeVoice.DisplayName) ? "Probe" : probeVoice.DisplayName;
+            }
+        }
+
+        /// <summary>The title of a part in the game ("Probodobodyne OKTO"), the part name when there is none.</summary>
+        public static string PartTitle(string partName)
+        {
+            try
+            {
+                AvailablePart ap = PartLoader.getPartInfoByName(partName);
+                if (ap != null && !string.IsNullOrEmpty(ap.title)) return ap.title;
+            }
+            catch (Exception) { }
+            return partName;
+        }
+
+        /// <summary>
+        /// Voices from stock, GameData (LONAPSE_PROBE_VOICE) and the settings, then a new pick for the vessel.
+        /// Call after a voice was added or removed in the settings. A changed value needs no rebuild: the registry
+        /// holds the same object the window edits.
+        /// </summary>
+        public void RebuildProbeVoices()
+        {
+            if (configVoices == null)
+            {
+                configVoices = new List<ProbeVoiceSpec>();
+                try
+                {
+                    if (GameDatabase.Instance != null)
+                        foreach (ConfigNode n in GameDatabase.Instance.GetConfigNodes("LONAPSE_PROBE_VOICE"))
+                        {
+                            var errs = new List<string>();
+                            ProbeVoiceSpec v = ProbeVoiceNodes.FromNode(n, errs);
+                            foreach (string e in errs) Log.Warn("LONAPSE_PROBE_VOICE: " + e);
+                            if (v != null) configVoices.Add(v);
+                        }
+                    if (configVoices.Count > 0) Log.Info("Probe voices from GameData: " + configVoices.Count);
+                }
+                catch (Exception e) { Log.Exception("LONAPSE_PROBE_VOICE", e); }
+            }
+            probeVoices = ProbeVoiceRegistry.Build(configVoices, settings != null ? settings.probeVoices : null);
+            probeDirty = true;
+        }
+
+        /// <summary>LONAPSE_PROBE_VOICE voices from GameData (empty before the first RebuildProbeVoices).</summary>
+        public IList<ProbeVoiceSpec> ConfigVoices { get { return configVoices ?? new List<ProbeVoiceSpec>(); } }
+
+        /// <summary>The probe voice changed (window): pick again on the next frame.</summary>
+        public void RefreshProbeVoice() { probeDirty = true; }
 
         private void AddProbeCores(Part p)
         {
@@ -883,7 +1012,19 @@ namespace Lonapse
                 ModuleCommand c = p.Modules[m] as ModuleCommand;
                 if (c == null || c.minimumCrew != 0) continue;
                 probeCmds.Add(c);
-                probeNames.Add(p.partInfo != null && !string.IsNullOrEmpty(p.partInfo.name) ? p.partInfo.name : p.name);
+                string partName = p.partInfo != null && !string.IsNullOrEmpty(p.partInfo.name) ? p.partInfo.name : p.name;
+                probeNames.Add(partName);
+                string mv = null;
+                int prio = 0;
+                for (int k = 0; k < p.Modules.Count; k++)
+                {
+                    ModuleLonapse ml = p.Modules[k] as ModuleLonapse;
+                    if (ml == null) continue;
+                    mv = ml.voice;
+                    prio = ml.priority;
+                    break;
+                }
+                probeCoreParts.Add(new ProbeCorePart(partName, mv, prio));
                 return; // one entry per part
             }
         }
@@ -1218,6 +1359,21 @@ namespace Lonapse
             return uo == null;                           // Unity's overloaded == is true for destroyed objects
         }
 
+        /// <summary>
+        /// 0.6.0 (user test: a crew report was lost on EVA): true when the switch is a kerbal going out on EVA or
+        /// coming back, or between a kerbal and a ship close by. Waiting science lines then stay.
+        /// </summary>
+        private static bool IsEvaHop(Vessel from, Vessel to)
+        {
+            try
+            {
+                if (from == null || to == null || (!from.isEVA && !to.isEVA)) return false;
+                return Vector3d.Distance(from.GetWorldPos3D(), to.GetWorldPos3D()) < EvaHopDistance;
+            }
+            catch (Exception) { return false; }
+        }
+        private const double EvaHopDistance = 2500.0;   // m, about the physics range around the active vessel
+
         private static int SafeStage(Vessel v)
         {
             try { return v != null ? v.currentStage : int.MinValue; } catch (Exception) { return int.MinValue; }
@@ -1324,6 +1480,7 @@ namespace Lonapse
                 control.FadeOutOnce(0.3f);
                 controlBed.FadeOutOnce(0.3f);
                 staticCh.FadeOutOnce(0.3f);
+                crewBed.FadeOutOnce(0.3f);
                 calloutCh.FadeOutOnce(0.3f);
                 keyCh.FadeOutOnce(0.1f);
                 breathCh.FadeOutOnce(0.3f);
@@ -1344,6 +1501,7 @@ namespace Lonapse
             for (int i = 0; i < crew.Length; i++) crew[i].FadeOut(seconds);
             control.FadeOut(seconds);
             controlBed.FadeOut(seconds);
+            crewBed.FadeOut(seconds);
             calloutCh.FadeOut(seconds);
             keyCh.FadeOut(seconds);
             for (int i = 0; i < beep.Length; i++) beep[i].FadeOut(seconds);
@@ -1400,6 +1558,7 @@ namespace Lonapse
             settings.Clamp();
             Log.verbose = settings.verboseLog;
             if (settings.Save()) settingsDirty = false;
+            SaveLineMemory();   // also when the window closes, so a crash loses little
         }
 
         public void ResetTuning()

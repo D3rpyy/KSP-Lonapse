@@ -1,0 +1,177 @@
+# Lonapse 0.6.0: more lines for the flight events (callouts, power, signal, landing, docking, EVA, stations).
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
+em_001	throttle_full	callout	none	crew	em_001	1	both	any	any	any	any	any	any		¡A tope!	Full throttle!
+em_002	throttle_full	callout	none	crew	em_002	1	both	any	any	any	any	any	any		Todo el empuje.	All the thrust.
+em_003	throttle_full	callout	none	crew	em_003	1	both	any	any	any	any	any	any		¡Potencia máxima!	Maximum power!
+em_004	throttle_full	callout	none	crew	em_004	1	both	any	any	any	any	any	any		Acelerador al máximo.	Throttle to max.
+em_005	throttle_full	callout	none	crew	em_005	1	both	any	any	any	any	any	any		¡Vamos allá!	Here we go!
+em_006	throttle_full	callout	none	crew	em_006	1	both	any	any	any	any	any	any		¡Dale caña!	Punch it!
+em_007	throttle_full	callout	none	crew	em_007	1	both	any	any	any	any	any	any		Empuje completo.	Full thrust.
+em_008	throttle_full	callout	none	crew	em_008	1	both	any	any	any	any	any	any		¡Fuerza total!	Full force!
+em_009_1	throttle_full	callout	none	crew	em_009	1	both	any	any	any	any	any	any		Motores a tope.	Engines at full.
+em_009_2	throttle_full	callout	none	mc	em_009	2	m	any	any	any	any	any	any		Recibido, empuje completo.	Copy, full thrust.
+em_010_1	throttle_full	callout	none	crew	em_010	1	both	any	any	any	any	any	any		¡A todo gas!	Full speed ahead!
+em_010_2	throttle_full	callout	none	mc	em_010	2	m	any	any	any	any	any	any		Copiado. Agarraos bien.	Copied. Hold on tight.
+em_011	throttle_cut	callout	none	crew	em_011	1	both	any	any	any	any	any	any		Motor parado.	Engine stopped.
+em_012	throttle_cut	callout	none	crew	em_012	1	both	any	any	any	any	any	any		Corte de empuje.	Thrust cut.
+em_013	throttle_cut	callout	none	crew	em_013	1	both	any	any	any	any	any	any		Acelerador a cero.	Throttle to zero.
+em_014	throttle_cut	callout	none	crew	em_014	1	both	any	any	any	any	any	any		Apagando motores.	Shutting down engines.
+em_015	throttle_cut	callout	none	crew	em_015	1	both	any	any	any	any	any	any		Sin empuje.	No thrust.
+em_016	throttle_cut	callout	none	crew	em_016	1	both	any	any	any	any	any	any		Y... parado.	And... stopped.
+em_017	throttle_cut	callout	none	crew	em_017	1	both	any	any	any	any	any	any		Motor en silencio.	Engine quiet.
+em_018	throttle_cut	callout	none	crew	em_018	1	both	any	any	any	any	any	any		Corte confirmado.	Cutoff confirmed.
+em_019_1	throttle_cut	callout	none	crew	em_019	1	both	any	any	any	any	any	any		Motores apagados.	Engines off.
+em_019_2	throttle_cut	callout	none	mc	em_019	2	m	any	any	any	any	any	any		Recibido. Buen corte.	Copy. Good cutoff.
+em_020_1	throttle_cut	callout	none	crew	em_020	1	both	any	any	any	any	any	any		Fin del encendido.	End of burn.
+em_020_2	throttle_cut	callout	none	mc	em_020	2	m	any	any	any	any	any	any		Copiado. Motores en reposo.	Copied. Engines at rest.
+em_021	chute_semi	callout	none	crew	em_021	1	both	any	any	any	any	any	any		Paracaídas abriéndose.	Chutes opening.
+em_022	chute_semi	callout	none	crew	em_022	1	both	any	any	any	any	any	any		Paracaídas fuera.	Chutes out.
+em_023	chute_semi	callout	none	crew	em_023	1	both	any	any	any	any	any	any		¡Se abren!	They're opening!
+em_024	chute_semi	callout	none	crew	em_024	1	both	any	any	any	any	any	any		Primera apertura.	First opening.
+em_025	chute_semi	callout	none	crew	em_025	1	both	any	any	any	any	any	any		Paracaídas desplegándose.	Chutes deploying.
+em_026	chute_semi	callout	none	crew	em_026	1	both	any	any	any	any	any	any		Paracaídas a medias.	Chutes half open.
+em_027_1	chute_semi	callout	none	crew	em_027	1	both	any	any	any	any	any	any		Ahí van los paracaídas.	There go the chutes.
+em_027_2	chute_semi	callout	none	mc	em_027	2	m	any	any	any	any	any	any		Recibido. Paracaídas en apertura.	Copy. Chutes opening.
+em_028	chute_semi	callout	none	crew	em_028	1	both	any	any	any	any	any	any		Frenando un poco.	Slowing a little.
+em_029	chute_full	callout	none	crew	em_029	1	both	any	any	any	any	any	any		Paracaídas abiertos del todo.	Chutes fully open.
+em_030	chute_full	callout	none	crew	em_030	1	both	any	any	any	any	any	any		¡Abiertos!	Open!
+em_031	chute_full	callout	none	crew	em_031	1	both	any	any	any	any	any	any		Bajamos despacio.	Coming down slowly.
+em_032	chute_full	callout	none	crew	em_032	1	both	any	any	any	any	any	any		Paracaídas completos.	Chutes complete.
+em_033	chute_full	callout	none	crew	em_033	1	both	any	any	any	any	any	any		Qué tirón. Bien abiertos.	What a jolt. Fully open.
+em_034	chute_full	callout	none	crew	em_034	1	both	any	any	any	any	any	any		Ya flotamos.	We're floating now.
+em_035_1	chute_full	callout	none	crew	em_035	1	both	any	any	any	any	any	any		Paracaídas a tope.	Chutes at full.
+em_035_2	chute_full	callout	none	mc	em_035	2	m	any	any	any	any	any	any		Recibido. Descenso suave.	Copy. Gentle descent.
+em_036	chute_full	callout	none	crew	em_036	1	both	any	any	any	any	any	any		Velocidad bajando.	Speed dropping.
+em_037	staging	callout	none	crew	em_037	1	both	any	any	any	any	any	any		¡Etapa!	Stage!
+em_038	staging	callout	none	crew	em_038	1	both	any	any	any	any	any	any		Siguiente.	Next one.
+em_039	staging	callout	none	crew	em_039	1	both	any	any	any	any	any	any		¡Fuera!	Off it goes!
+em_040	staging	callout	none	crew	em_040	1	both	any	any	any	any	any	any		Cambio de etapa.	Stage change.
+em_041	staging	callout	none	crew	em_041	1	both	any	any	any	any	any	any		Etapa activada.	Stage activated.
+em_042	staging	callout	none	crew	em_042	1	both	any	any	any	any	any	any		¡Y otra más!	And another one!
+em_043	staging	callout	none	crew	em_043	1	both	any	any	any	any	separation	any		¡Separación limpia!	Clean separation!
+em_044	staging	callout	none	crew	em_044	1	both	any	any	any	any	separation	any		Etapa soltada.	Stage released.
+em_045	staging	callout	none	crew	em_045	1	both	any	any	any	any	separation	any		Adiós, etapa.	Bye, stage.
+em_046	staging	callout	none	crew	em_046	1	both	any	any	any	any	separation	any		Desacoplado.	Decoupled.
+em_047	staging	callout	none	crew	em_047	1	both	any	any	any	any	ignition	any		¡Encendido!	Ignition!
+em_048	staging	callout	none	crew	em_048	1	both	any	any	any	any	ignition	any		Motor encendido.	Engine lit.
+em_049	staging	callout	none	crew	em_049	1	both	any	any	any	any	ignition	any		¡Tenemos empuje!	We have thrust!
+em_050	staging	callout	none	crew	em_050	1	both	any	any	any	any	ignition	any		Ignición confirmada.	Ignition confirmed.
+em_051_1	power_ok	chatter	calm	crew	em_051	1	both	any	any	any	any	any	any		Las baterías se recuperan.	The batteries are recovering.
+em_051_2	power_ok	chatter	calm	mc	em_051	2	m	any	any	any	any	any	any		Bien. Ya podéis encender la radio entera.	Good. You can turn the whole radio back on.
+em_052_1	power_ok	chatter	calm	crew	em_052	1	both	any	any	any	any	any	any		Vuelve la luz.	The light is back.
+em_052_2	power_ok	chatter	calm	mc	em_052	2	m	any	any	any	any	any	any		Recibido. Carga subiendo.	Copy. Charge rising.
+em_053_1	power_ok	chatter	calm	mc	em_053	1	m	any	any	any	any	any	any		Vemos la carga subir. Buen trabajo.	We see the charge going up. Good work.
+em_053_2	power_ok	chatter	calm	crew	em_053	2	both	any	any	any	any	any	any		Gracias. Ya no tengo frío.	Thanks. I'm not cold anymore.
+em_054_1	power_ok	chatter	calm	crew	em_054	1	both	any	any	any	any	any	any		Energía estable. Por fin.	Power stable. Finally.
+em_054_2	power_ok	chatter	calm	mc	em_054	2	m	any	any	any	any	any	any		Copiado. Nada de tostadoras, por favor.	Copied. No toasters, please.
+em_055_1	power_ok	chatter	calm	crew	em_055	1	both	any	any	any	any	any	any		Todo vuelve a funcionar.	Everything works again.
+em_055_2	power_ok	chatter	calm	mc	em_055	2	m	any	any	any	any	any	any		Perfecto. Respirad.	Perfect. Breathe.
+em_056_1	power_ok	chatter	calm	crew	em_056	1	both	any	any	any	any	any	any		La carga vuelve a estar bien.	The charge is good again.
+em_056_2	power_ok	chatter	calm	mc	em_056	2	m	any	any	any	any	any	any		Recibido. Os oímos mejor.	Copy. We hear you better.
+em_057_1	power_low	warning	tense	crew	em_057	1	both	any	any	any	any	any	any		Las baterías bajan rápido.	The batteries are dropping fast.
+em_057_2	power_low	warning	tense	mc	em_057	2	m	any	any	any	any	any	any		Recibido. Apagad lo que no haga falta.	Copy. Turn off what you don't need.
+em_058_1	power_low	warning	tense	crew	em_058	1	both	any	any	any	any	any	any		Poca energía. Apago las luces.	Low power. Turning off the lights.
+em_058_2	power_low	warning	tense	mc	em_058	2	m	any	any	any	any	any	any		Buena idea. La radio, encendida.	Good idea. Keep the radio on.
+em_059_1	power_low	warning	tense	mc	em_059	1	m	any	any	any	any	any	any		Os quedáis sin carga. Ahorrad.	You're running out of charge. Save it.
+em_059_2	power_low	warning	tense	crew	em_059	2	both	any	any	any	any	any	any		Recibido. Nada de café.	Copy. No coffee.
+em_060_1	power_low	warning	tense	crew	em_060	1	both	any	any	any	any	any	any		Control, se me apagan las pantallas.	Control, my screens are going dark.
+em_060_2	power_low	warning	tense	mc	em_060	2	m	any	any	any	any	any	any		Es la batería. Ahorrad energía.	It's the battery. Save power.
+em_061_1	power_low	warning	tense	crew	em_061	1	both	any	any	any	any	solar	any		Poca carga. Hay que buscar el sol.	Low charge. We need to find the sun.
+em_061_2	power_low	warning	tense	mc	em_061	2	m	any	any	any	any	solar	any		Recibido. Orientad los paneles.	Copy. Point the panels.
+em_062_1	signal_back	chatter	calm	crew	em_062	1	both	any	any	any	any	any	any		¿Control? ¿Hola?	Control? Hello?
+em_062_2	signal_back	chatter	calm	mc	em_062	2	m	any	any	any	any	any	any		¡Hola! Os volvemos a oír.	Hello! We can hear you again.
+em_063_1	signal_back	chatter	calm	crew	em_063	1	both	any	any	any	any	any	any		¡Volvemos a tener radio!	We have radio again!
+em_063_2	signal_back	chatter	calm	mc	em_063	2	m	any	any	any	any	any	any		Recibido. Qué alegría oíros.	Copy. So good to hear you.
+em_064_1	signal_back	chatter	calm	mc	em_064	1	m	any	any	any	any	any	any		Señal recuperada. ¿Todo bien ahí?	Signal back. All good there?
+em_064_2	signal_back	chatter	calm	crew	em_064	2	both	any	any	any	any	any	any		Todo bien. Os echábamos de menos.	All good. We missed you.
+em_065_1	signal_back	chatter	calm	crew	em_065	1	both	any	any	any	any	any	any		Control, ¿nos habéis echado de menos?	Control, did you miss us?
+em_065_2	signal_back	chatter	calm	mc	em_065	2	m	any	any	any	any	any	any		Un poquito. No se lo digáis al jefe.	A little bit. Don't tell the boss.
+em_066_1	signal_back	chatter	calm	crew	em_066	1	both	any	any	any	any	any	any		Ya hay señal.	There's signal again.
+em_066_2	signal_back	chatter	calm	mc	em_066	2	m	any	any	any	any	any	any		Copiado. Bienvenidos de vuelta.	Copied. Welcome back.
+em_067	signal_lost	warning	tense	crew	em_067	1	both	any	any	any	any	any	any		¿Control? ¿Me oís?	Control? Can you hear me?
+em_068	signal_lost	warning	tense	crew	em_068	1	both	any	any	any	any	any	any		Se ha ido la señal.	The signal is gone.
+em_069	signal_lost	warning	tense	crew	em_069	1	both	any	any	any	any	any	any		Solo se oye ruido.	Just noise now.
+em_070	signal_lost	warning	tense	crew	em_070	1	both	any	any	any	any	any	any		Estamos solos. Por ahora.	We're alone. For now.
+em_071	signal_lost	warning	tense	crew	em_071	1	both	any	any	any	any	any	any		La radio no contesta.	The radio doesn't answer.
+em_072	touchdown	chatter	none	crew	em_072	1	both	any	any	any	any	any	any		¡Tocamos suelo!	Ground contact!
+em_073_1	touchdown	chatter	none	crew	em_073	1	both	any	any	any	any	any	any		En el suelo. Todos bien.	On the ground. All fine.
+em_073_2	touchdown	chatter	none	mc	em_073	2	m	any	any	any	any	any	any		Recibido. Bienvenidos.	Copy. Welcome.
+em_074_1	touchdown	chatter	none	crew	em_074	1	both	any	any	any	any	any	any		Aterrizaje completado.	Landing complete.
+em_074_2	touchdown	chatter	none	mc	em_074	2	m	any	any	any	any	any	any		Confirmado. Buen trabajo.	Confirmed. Good work.
+em_075_1	touchdown	chatter	none	mc	em_075	1	m	any	any	any	any	any	any		¡Aterrizaje confirmado! Aquí aplauden todos.	Landing confirmed! Everyone here is clapping.
+em_075_2	touchdown	chatter	none	crew	em_075	2	both	any	any	any	any	any	any		Que sigan. Nos lo hemos ganado.	Let them. We earned it.
+em_076_1	touchdown	chatter	none	crew	em_076	1	both	any	any	any	any	any	any		Estamos parados. Creo.	We've stopped. I think.
+em_076_2	touchdown	chatter	none	mc	em_076	2	m	any	any	any	any	any	any		Parados del todo. Bien hecho.	Fully stopped. Well done.
+em_077	touchdown	chatter	none	crew	em_077	1	both	any	any	any	any	any	any		Qué bien se está en tierra firme.	Solid ground feels so good.
+em_078	splashdown	chatter	none	crew	em_078	1	both	any	any	any	any	any	any		¡Al agua!	Into the water!
+em_079_1	splashdown	chatter	none	crew	em_079	1	both	any	any	any	any	any	any		Amerizaje. Todos bien.	Splashdown. All fine.
+em_079_2	splashdown	chatter	none	mc	em_079	2	m	any	any	any	any	any	any		Recibido. Ya va el barco.	Copy. The boat is on its way.
+em_080_1	splashdown	chatter	none	mc	em_080	1	m	any	any	any	any	any	any		Amerizaje confirmado. ¿Flotáis?	Splashdown confirmed. Are you floating?
+em_080_2	splashdown	chatter	none	crew	em_080	2	both	any	any	any	any	any	any		Flotamos. Y nos mareamos un poco.	We're floating. And a bit seasick.
+em_081_1	splashdown	chatter	none	crew	em_081	1	both	any	any	any	any	any	any		Qué chapuzón.	What a splash.
+em_081_2	splashdown	chatter	none	mc	em_081	2	m	any	any	any	any	any	any		Recibido. Bienvenidos a casa.	Copy. Welcome home.
+em_082	splashdown	chatter	none	crew	em_082	1	both	any	any	any	any	any	any		Agua por todas partes.	Water everywhere.
+em_083_1	splashdown	chatter	none	crew	em_083	1	both	any	any	any	any	any	any		¡Plof! Estamos en el agua.	Splash! We're in the water.
+em_083_2	splashdown	chatter	none	mc	em_083	2	m	any	any	any	any	any	any		Confirmado. No abráis la escotilla todavía.	Confirmed. Don't open the hatch yet.
+em_084_1	dock_close	chatter	tense	crew	em_084	1	both	any	any	any	any	any	any		Casi tocamos.	Almost touching.
+em_084_2	dock_close	chatter	tense	mc	em_084	2	m	any	any	any	any	any	any		Despacio. Muy bien.	Slowly. Very good.
+em_085_1	dock_close	chatter	tense	crew	em_085	1	both	any	any	any	any	any	any		Dos metros.	Two meters.
+em_085_2	dock_close	chatter	tense	mc	em_085	2	m	any	any	any	any	any	any		Mantened la línea.	Hold the line.
+em_086_1	dock_close	chatter	tense	crew	em_086	1	both	any	any	any	any	any	any		Muy cerca. Manos quietas.	Very close. Hands still.
+em_086_2	dock_close	chatter	tense	mc	em_086	2	m	any	any	any	any	any	any		Recibido. Así, así.	Copy. Like that, like that.
+em_087_1	dock_close	chatter	tense	crew	em_087	1	both	any	any	any	any	any	any		Un poco más.	A little more.
+em_087_2	dock_close	chatter	tense	mc	em_087	2	m	any	any	any	any	any	any		Suave. Ya casi.	Gently. Nearly there.
+em_088_1	dock_hard	warning	tense	crew	em_088	1	both	any	any	any	any	any	any		¡Uy! Golpe fuerte.	Oops! Hard hit.
+em_088_2	dock_hard	warning	tense	mc	em_088	2	m	any	any	any	any	any	any		Recibido. Revisad el puerto.	Copy. Check the port.
+em_089_1	dock_hard	warning	tense	crew	em_089	1	both	any	any	any	any	any	any		Eso ha sonado mal.	That sounded bad.
+em_089_2	dock_hard	warning	tense	mc	em_089	2	m	any	any	any	any	any	any		Mirad que todo siga unido.	Check that it's all still attached.
+em_090_1	dock_hard	warning	tense	mc	em_090	1	m	any	any	any	any	any	any		Ese contacto ha sido brusco. ¿Estáis bien?	That contact was rough. Are you okay?
+em_090_2	dock_hard	warning	tense	crew	em_090	2	both	any	any	any	any	any	any		Bien. Algo despeinados.	Fine. A bit ruffled.
+em_091_1	dock_hard	warning	tense	crew	em_091	1	both	any	any	any	any	any	any		Hemos rebotado. Un poco.	We bounced. A little.
+em_091_2	dock_hard	warning	tense	mc	em_091	2	m	any	any	any	any	any	any		Copiado. Más despacio la próxima vez.	Copied. Slower next time.
+em_092	docked	chatter	none	crew	em_092	1	both	any	any	any	any	any	any		¡Acoplados!	Docked!
+em_093_1	docked	chatter	none	crew	em_093	1	both	any	any	any	any	any	any		Unidos. Buen trabajo.	Joined. Good work.
+em_093_2	docked	chatter	none	mc	em_093	2	m	any	any	any	any	any	any		Confirmado. Acoplamiento completo.	Confirmed. Docking complete.
+em_094_1	docked	chatter	none	mc	em_094	1	m	any	any	any	any	any	any		¡Acoplamiento confirmado! Bien hecho.	Docking confirmed! Well done.
+em_094_2	docked	chatter	none	crew	em_094	2	both	any	any	any	any	any	any		Gracias. Ha sido suave.	Thanks. It was smooth.
+em_095	docked	chatter	none	crew	em_095	1	both	any	any	any	any	any	any		Ya estamos enganchados.	We're hooked up.
+em_096_1	dock_approach	chatter	calm	crew	em_096	1	both	any	any	any	any	any	any		Nos acercamos al puerto.	Approaching the port.
+em_096_2	dock_approach	chatter	calm	mc	em_096	2	m	any	any	any	any	any	any		Recibido. Buena velocidad.	Copy. Good speed.
+em_097_1	dock_approach	chatter	calm	crew	em_097	1	both	any	any	any	any	any	any		Puerto a la vista.	Port in sight.
+em_097_2	dock_approach	chatter	calm	mc	em_097	2	m	any	any	any	any	any	any		Despacio y recto.	Slow and straight.
+em_098_1	eva_fall	chatter	calm	crew	em_098	1	both	any	any	any	any	any	any		¡Ay! Estoy bien.	Ouch! I'm fine.
+em_098_2	eva_fall	chatter	calm	mc	em_098	2	m	any	any	any	any	any	any		Lo hemos visto. Cuidado.	We saw that. Careful.
+em_099	eva_fall	chatter	calm	crew	em_099	1	both	any	any	any	any	any	any		El suelo me ha atacado.	The ground attacked me.
+em_100_1	eva_fall	chatter	calm	crew	em_100	1	both	any	any	any	any	any	any		Nadie ha visto eso.	Nobody saw that.
+em_100_2	eva_fall	chatter	calm	mc	em_100	2	m	any	any	any	any	any	any		Lo hemos visto todos.	We all saw that.
+em_101	eva_fall	chatter	calm	crew	em_101	1	both	any	any	any	any	any	any		Me he caído. Con estilo.	I fell. With style.
+em_102_1	eva_fall	chatter	calm	crew	em_102	1	both	any	any	any	any	any	any		¡Uf! Este suelo es traicionero.	Oof! This ground is treacherous.
+em_102_2	eva_fall	chatter	calm	mc	em_102	2	m	any	any	any	any	any	any		Despacio. Paso a paso.	Slowly. Step by step.
+em_103_1	station_check	chatter	calm	mc	em_103	1	m	any	any	any	any	any	any		Aquí Control. ¿Qué tal la estación?	Control here. How's the station?
+em_103_2	station_check	chatter	calm	crew	em_103	2	both	any	any	any	any	any	any		Todo en orden. Y limpio. Casi.	All in order. And clean. Almost.
+em_104_1	station_check	chatter	calm	mc	em_104	1	m	any	any	any	any	any	any		Revisión de rutina. ¿Todo bien a bordo?	Routine check. All good aboard?
+em_104_2	station_check	chatter	calm	crew	em_104	2	both	any	any	any	any	any	any		Todo bien. Seguimos aquí.	All good. Still here.
+em_105_1	station_check	chatter	calm	crew	em_105	1	both	any	any	any	any	any	any		Control, informe de la estación: todo verde.	Control, station report: all green.
+em_105_2	station_check	chatter	calm	mc	em_105	2	m	any	any	any	any	any	any		Recibido. Gracias.	Copy. Thanks.
+em_106_1	station_check	chatter	calm	mc	em_106	1	m	any	any	any	any	any	any		Hola, estación. ¿Necesitáis algo?	Hello, station. Do you need anything?
+em_106_2	station_check	chatter	calm	crew	em_106	2	both	any	any	any	any	any	any		Más galletas. Siempre más galletas.	More cookies. Always more cookies.
+em_107_1	station_check	chatter	calm	mc	em_107	1	m	any	any	any	any	any	any		Control a estación. Os llamamos para saludar.	Control to station. Just calling to say hi.
+em_107_2	station_check	chatter	calm	crew	em_107	2	both	any	any	any	any	any	any		¡Hola, Control!	Hello, Control!
+em_108	relief	chatter	none	crew	em_108	1	both	any	any	any	any	any	any		Uf. Ya pasó.	Phew. It's over.
+em_109	relief	chatter	none	crew	em_109	1	both	any	any	any	any	any	any		Menos mal.	Thank goodness.
+em_110	relief	chatter	none	crew	em_110	1	both	any	any	any	any	any	any		Vale. Ya respiro.	Okay. I can breathe now.
+em_111	relief	chatter	none	crew	em_111	1	both	any	any	any	any	any	any		Eso ha estado cerca.	That was close.
+em_112	relief	chatter	none	crew	em_112	1	both	any	any	any	any	any	any		Bien. Todo bajo control.	Good. All under control.
+em_113	relief	chatter	none	crew	em_113	1	both	any	any	any	any	any	any		No quiero repetir eso.	I don't want to do that again.
+em_114	burn_soon	warning	tense	mc	em_114	1	m	any	any	any	any	any	any		Encendido en un minuto. Preparaos.	Burn in one minute. Get ready.
+em_115_1	burn_soon	warning	tense	mc	em_115	1	m	any	any	any	any	any	any		Atentos, que toca encender.	Heads up, burn time is coming.
+em_115_2	burn_soon	warning	tense	crew	em_115	2	both	any	any	any	any	any	any		Listos. Manos en los mandos.	Ready. Hands on the controls.
+em_116	burn_soon	warning	tense	crew	em_116	1	both	any	any	any	any	any	any		Nos orientamos para el encendido.	Pointing for the burn.
+em_117_1	burn_soon	warning	tense	mc	em_117	1	m	any	any	any	any	any	any		Falta poco para el encendido.	The burn is close.
+em_117_2	burn_soon	warning	tense	crew	em_117	2	both	any	any	any	any	any	any		Recibido. Estamos listos.	Copy. We're ready.
+em_118	plan_node	chatter	calm	mc	em_118	1	m	any	any	any	any	any	any		Vemos la maniobra nueva. Buena pinta.	We see the new maneuver. Looks good.
+em_119_1	plan_node	chatter	calm	crew	em_119	1	both	any	any	any	any	any	any		Control, maniobra planeada.	Control, maneuver planned.
+em_119_2	plan_node	chatter	calm	mc	em_119	2	m	any	any	any	any	any	any		Recibido. La revisamos.	Copy. We'll check it.
+em_120	plan_node	chatter	calm	mc	em_120	1	m	any	any	any	any	any	any		Interesante maniobra. Ojalá funcione.	Interesting maneuver. Hope it works.
+em_121_1	plan_node	chatter	calm	crew	em_121	1	both	any	any	any	any	any	any		He dibujado una ruta nueva.	I drew a new route.
+em_121_2	plan_node	chatter	calm	mc	em_121	2	m	any	any	any	any	any	any		La vemos. Es valiente.	We see it. It's brave.

@@ -115,6 +115,15 @@ namespace Lonapse
             return Clamp(p, 0.75f, Math.Max(0.76f, maxPitch));
         }
 
+        /// <summary>
+        /// Radio static slider (0..1) to a level (0..1). Loudness is heard on a log scale, so a straight line was only
+        /// audible near 100 % (user test 0.6.0). The square root makes 25 % half the full level.
+        /// </summary>
+        public static float StaticCurve(float amount)
+        {
+            return (float)Math.Sqrt(Clamp01(amount));
+        }
+
         /// <summary>EVA running (user test): 0 at or below the walk speed, 1 at the run speed. Unknown speeds
         /// (0 or less, or run not above walk) fall back to 1.0 and 2.5 m/s.</summary>
         public static float EvaRunLevel(float speed, float walkSpeed, float runSpeed)

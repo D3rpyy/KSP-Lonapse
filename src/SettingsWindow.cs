@@ -95,6 +95,11 @@ namespace Lonapse
         public void ReleaseLock()
         {
             if (locked) SetLock(false);
+            if (typingLock)
+            {
+                try { InputLockManager.RemoveControlLock(TypeLockId); } catch (Exception) { }
+                typingLock = false;
+            }
         }
 
         private static void Noop() { }
@@ -152,7 +157,7 @@ namespace Lonapse
         public void Draw()
         {
             if (host.subtitles != null && host.subtitles.settings != host.settings) host.subtitles.settings = host.settings;
-            if (!visible) { capturing = false; return; }
+            if (!visible) { capturing = false; if (typingLock) ReleaseLock(); return; }
             if (capturing) CaptureKey();
             if (okStyle == null)
             {
@@ -160,6 +165,9 @@ namespace Lonapse
                 headerStyle = new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold };
                 headerStyle.normal.textColor = new Color(0.95f, 0.78f, 0.35f);
                 valueStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight };
+                hintStyle = new GUIStyle(GUI.skin.label) { wordWrap = true, fontSize = 11 };
+                hintStyle.normal.textColor = new Color(0.68f, 0.72f, 0.78f);
+                hintStyle.margin = new RectOffset(4, 4, 0, 4);
                 lowStyle = new GUIStyle(GUI.skin.label);
                 lowStyle.normal.textColor = new Color(1f, 0.35f, 0.3f);
             }
@@ -216,7 +224,13 @@ namespace Lonapse
             return c.text;
         }
 
-        private GUIStyle headerStyle, valueStyle;
+        private GUIStyle headerStyle, valueStyle, hintStyle;
+
+        /// <summary>Small grey line under a control that says what it does.</summary>
+        private void Hint(string text)
+        {
+            GUILayout.Label(text, hintStyle);
+        }
 
         private void Header(string text)
         {
@@ -294,6 +308,8 @@ namespace Lonapse
             "chute_semi", "chute_full",
             // v4 game events
             "soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
+            // 0.6.0: probe and crew in the cabin (a crewed vessel with a probe core)
+            "probe_crew",
             // v5 probe events
             "probe_chat", "probe_sleepy",
             // v6 probe events
@@ -319,6 +335,7 @@ namespace Lonapse
             "tylo", "bop", "pol", "eeloo", "generic",
         };
         private static readonly string[] AxisNames = { "X", "Y", "Z" };
+        private static readonly string[] CountDirections = { "Up (1 to 10)", "Down (10 to 1)" };
         private string testEvent = "", testPhase = "", testCause = "", testBody = "", testTopic = "";
         private string testStatus = "";
 
@@ -383,6 +400,7 @@ namespace Lonapse
                 }
             }
             catch (Exception e) { Log.Exception("SettingsWindow", e); }
+            UpdateTypingLock();
             GUI.DragWindow();
         }
 
@@ -398,10 +416,12 @@ namespace Lonapse
             s.intercomEnabled = Toggle(s.intercomEnabled, "Intercom between kerbals");
             s.beepsEnabled = Toggle(s.beepsEnabled, "Telemetry beeps");
             s.rateMultiplier = Mathf.Round(Row("Radio amount", s.rateMultiplier, 0.25f, 4f, s.rateMultiplier, "0.0#'x'") * 20f) / 20f;
+            Hint("How often the crew and Mission Control talk. 2x is twice as often.");
             Tuning tu = s.tuning;
             // TUNING/intercomInterval in seconds, shown in minutes
-            float g = Row("Intercom gap", tu.intercomInterval, 30f, 1800f, tu.intercomInterval / 60f, "0.#' min'");
+            float g = Row("Intercom gap", tu.intercomInterval, 30f, 900f, tu.intercomInterval / 60f, "0.#' min'");
             tu.intercomInterval = Mathf.Round(g / 10f) * 10f;
+            Hint("Average time between two crew chats on a calm flight. Stress makes it shorter.");
 
             Header("Launch countdown");
             GUILayout.BeginHorizontal();
@@ -417,6 +437,12 @@ namespace Lonapse
             GUILayout.Label(capturing ? "Press a key" : "Key: " + host.CountdownKeyText);
             if (GUILayout.Button(capturing ? "Cancel" : "Change", GUILayout.Width(70f))) capturing = !capturing;
             GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Count", GUILayout.Width(60f));
+            int dir = Choice(s.countdownDown ? 1 : 0, CountDirections);
+            GUILayout.EndHorizontal();
+            if ((dir == 1) != s.countdownDown) { s.countdownDown = dir == 1; host.settingsDirty = true; pendingSave = true; }
+            Hint("Up: 1 to 10, the Lonapse way. Down: from 10 to 1, like a real launch. Both end with liftoff.");
             s.countdownAutoStage = Toggle(s.countdownAutoStage, "Stage on liftoff");
         }
 
@@ -431,8 +457,13 @@ namespace Lonapse
             s.staticVolume = Volume("Static", s.staticVolume);
             s.evaRadioVolume = Volume("EVA radio", s.evaRadioVolume);
             s.duckDepth = Row("Lower game audio", s.duckDepth, 0f, 0.8f, Mathf.Round(s.duckDepth * 100f), "0'%'");
+            Hint("Static: bursts, crackle and radio clicks. Lower game audio: how much the game gets quieter while someone talks.");
 
             Header("Effects");
+            s.radioStatic = Mathf.Round(Volume("Radio static", s.radioStatic) * 20f) / 20f;
+            Hint("Static under every radio line, also with a full signal. A weak signal still adds its own noise on top.");
+            s.intercomRadioFx = Toggle(s.intercomRadioFx, "Radio sound effects on the intercom");
+            Hint("Crew-to-crew chats sound like the radio instead of a voice in the cabin.");
             s.rogerBeep = Toggle(s.rogerBeep, "Roger beep");
             s.masterAlarm = Toggle(s.masterAlarm, "Master alarm at very high stress");
         }
@@ -472,6 +503,7 @@ namespace Lonapse
             s.probeSleep = Toggle(s.probeSleep, "Sleepy on low power");
             float h = Row("Call gap", tu.hailInterval, 60f, 1800f, tu.hailInterval / 60f, "0.#' min'");
             tu.hailInterval = Mathf.Round(h / 10f) * 10f;
+            Hint("Average time between two calls from the probe to Mission Control.");
 
             Header("Reactions");
             s.probeCallouts = Toggle(s.probeCallouts, "Staging, chutes and throttle");
@@ -481,6 +513,265 @@ namespace Lonapse
             s.probeRover = Toggle(s.probeRover, "Rover driving");
             s.probeTransmit = Toggle(s.probeTransmit, "Sending science");
             s.probeSayAgain = Toggle(s.probeSayAgain, "\"Say again?\" on a weak signal");
+
+            Header("With crew aboard");
+            s.probeCrewChats = Toggle(s.probeCrewChats, "Probe talks with the crew");
+            Hint("A crewed vessel with a probe core: the probe beeps in the cabin and the crew answers. Uses the intercom, so the intercom must be on.");
+
+            DrawProbeVoice(s);
+        }
+
+        // ------------------------------------------------ probe voice (0.6.0)
+
+        private int previewMood;
+        private string voiceStatus = "";
+        private string newVoiceName = "";
+        private const string NameField = "lonapse_voice_name", NewNameField = "lonapse_new_voice";
+        private const string TypeLockId = "Lonapse_typing";
+        private bool typingLock;
+
+        /// <summary>While a name field has the keyboard, the game gets no keys (no staging on space, no hotkeys).</summary>
+        private void UpdateTypingLock()
+        {
+            string f = GUI.GetNameOfFocusedControl();
+            bool typing = visible && (f == NameField || f == NewNameField);
+            if (typing == typingLock) return;
+            try
+            {
+                if (typing) InputLockManager.SetControlLock(ControlTypes.All, TypeLockId);
+                else InputLockManager.RemoveControlLock(TypeLockId);
+                typingLock = typing;
+            }
+            catch (Exception e) { Log.Exception("SettingsWindow.TypingLock", e); }
+        }
+
+        /// <summary>
+        /// Voice of the active probe: pick another voice for its core part, change the sound, try it.
+        /// Every control is always drawn (disabled without a probe), so Layout and Repaint see the same controls.
+        /// </summary>
+        private void DrawProbeVoice(Settings s)
+        {
+            Header("Voice");
+            ProbeVoiceSpec v = host.probeVoice;
+            string part = host.probeVoicePart;
+            bool have = v != null && !string.IsNullOrEmpty(part);
+            ProbeVoiceRegistry reg = host.probeVoices;
+
+            string status = !have ? "No probe core on this vessel."
+                : PartTitle(part) + ": voice " + v.Name + " (" + WhyText(host.probeVoiceWhy, reg.SourceOf(v.Name)) + ")";
+            // a pick of the player's own wins over a mod's ModuleLonapse: say what Default would give
+            if (have && host.probeVoiceWhy == ProbeVoicePick.Why.Player && host.probeDefaultVoice != null)
+                status += ". Default: " + host.probeDefaultVoice + " (" + WhyText(host.probeDefaultWhy, reg.SourceOf(host.probeDefaultVoice)) + ")";
+            GUILayout.Label(status);
+            GUI.enabled = have;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Voice", GUILayout.Width(60f));
+            if (GUILayout.Button("<", GUILayout.Width(26f)) && have) AssignVoice(s, part, reg.Cycle(v.Name, -1));
+            GUILayout.Label(have ? v.Name : "-", valueStyle);
+            if (GUILayout.Button(">", GUILayout.Width(26f)) && have) AssignVoice(s, part, reg.Cycle(v.Name, 1));
+            bool assigned = have && s.probeParts.ContainsKey(ProbeCores.Normalise(part));
+            GUI.enabled = assigned;
+            if (GUILayout.Button("Default", GUILayout.Width(64f)) && assigned) AssignVoice(s, part, null);
+            GUI.enabled = have;
+            GUILayout.EndHorizontal();
+            Hint("The voice for every probe core of this part. Default: the voice the part or its mod gives it.");
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Name", GUILayout.Width(60f));
+            GUI.SetNextControlName(NameField);
+            // the raw name, so the field can be cleared while typing. An unknown core shows its part title.
+            string shownName = !have ? "" : host.probeVoiceWhy == ProbeVoicePick.Why.Generic ? host.ProbeDisplayName : (v.DisplayName ?? "");
+            string typedName = GUILayout.TextField(shownName, 32);
+            GUILayout.EndHorizontal();
+            if (have && typedName != shownName) EditVoice(s).DisplayName = typedName;
+            Hint("The name in the subtitles. Empty: the name of the part.");
+
+            double hz = have ? v.BaseHz : 940.0;
+            // only a moved slider edits: a value off the 10 Hz or 5 % grid (from a CFG) stays as it is until then
+            float rh = Row("Pitch", (float)hz, (float)ProbeVoiceSpec.MinHz, (float)ProbeVoiceSpec.MaxHz, Mathf.Round((float)hz), "0' Hz'");
+            if (have && rh != (float)hz) EditVoice(s).BaseHz = Mathf.Round(rh / 10f) * 10f;
+            double gl = have ? v.Glide : 0.0;
+            float rg = Row("Glide", (float)gl, 0f, 1f, Mathf.Round((float)gl * 100f), "0'%'");
+            if (have && rg != (float)gl) EditVoice(s).Glide = Mathf.Round(rg * 20f) / 20f;
+            // 0.6.0 extras
+            double sp = have ? v.Speed : 1.0;
+            float rs = Row("Speed", (float)sp, (float)ProbeVoiceSpec.MinSpeed, (float)ProbeVoiceSpec.MaxSpeed, (float)sp, "0.0#'x'");
+            if (have && rs != (float)sp) EditVoice(s).Speed = Mathf.Round(rs * 20f) / 20f;
+            double jp = have ? v.Spread : 1.0;
+            float rj = Row("Note jumps", (float)jp, (float)ProbeVoiceSpec.MinSpread, (float)ProbeVoiceSpec.MaxSpread, (float)jp, "0.0#'x'");
+            if (have && rj != (float)jp) EditVoice(s).Spread = Mathf.Round(rj * 20f) / 20f;
+            double vb = have ? v.Vibrato : 0.0;
+            float rv = Row("Vibrato", (float)vb, 0f, (float)ProbeVoiceSpec.MaxVibrato, Mathf.Round((float)vb * 100f), "0'%'");
+            if (have && rv != (float)vb) EditVoice(s).Vibrato = Mathf.Round(rv * 20f) / 20f;
+            double bz = have ? v.Buzz : 0.0;
+            float rb = Row("Grit", (float)bz, 0f, (float)ProbeVoiceSpec.MaxBuzz, Mathf.Round((float)bz * 100f), "0'%'");
+            if (have && rb != (float)bz) EditVoice(s).Buzz = Mathf.Round(rb * 20f) / 20f;
+            Hint("Speed: how fast the notes go. Note jumps: how far the pitch jumps between notes. Vibrato: a wobble on every note. Grit: a rough, buzzing edge.");
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Wave", GUILayout.Width(60f));
+            if (GUILayout.Button(have ? v.Wave : "-") && have) EditVoice(s).Wave = Next(ProbeVoiceSpec.Waves, v.Wave);
+            GUILayout.Label("Rhythm", GUILayout.Width(52f));
+            if (GUILayout.Button(have ? v.Rhythm : "-") && have) EditVoice(s).Rhythm = Next(ProbeVoiceSpec.Rhythms, v.Rhythm);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Lines of", GUILayout.Width(60f));
+            if (GUILayout.Button(have ? ProbeCores.DisplayName(v.Lines) + " (" + v.Lines + ")" : "-") && have)
+                EditVoice(s).Lines = Next(ProbeCores.Keys, v.Lines);
+            GUILayout.EndHorizontal();
+            Hint("Wave and rhythm shape the sound, glide slides from note to note. Lines of: whose phrase table lines the probe gets.");
+            GUILayout.Label(have && v.Moods.Count > 0 ? "Own moods (from a config): " + string.Join(", ", new List<string>(v.Moods.Keys).ToArray())
+                                                      : "Moods: stock patterns");   // always drawn
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(ProbeCores.Moods[previewMood % ProbeCores.Moods.Length])) previewMood = (previewMood + 1) % ProbeCores.Moods.Length;
+            if (GUILayout.Button("Play", GUILayout.Width(60f)) && have && host.director != null)
+            {
+                try { voiceStatus = host.director.PreviewProbeVoice(v, ProbeCores.Moods[previewMood % ProbeCores.Moods.Length]); }
+                catch (Exception e) { voiceStatus = "error: " + e.Message; Log.Exception("PreviewProbeVoice", e); }
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUI.SetNextControlName(NewNameField);
+            newVoiceName = GUILayout.TextField(newVoiceName ?? "", 32);
+            if (GUILayout.Button("New voice", GUILayout.Width(80f)) && have)
+            {
+                string key = VoiceKey(newVoiceName);
+                if (key.Length == 0) key = VoiceKey(PartTitle(part));
+                if (key.Length == 0 || reg.Get(key) != null) key = reg.FreeName(key.Length == 0 ? "custom" : key + "_");
+                ProbeVoiceSpec copy = v.Clone(key);
+                string shown = (newVoiceName ?? "").Trim();
+                copy.DisplayName = shown.Length > 0 ? shown : PartTitle(part);
+                s.probeVoices.Add(copy);
+                host.RebuildProbeVoices();
+                AssignVoice(s, part, copy.Name);
+                voiceStatus = "Made " + copy.Name + " (\"" + copy.DisplayName + "\") for this part";
+                newVoiceName = "";
+                GUI.FocusControl(null);
+            }
+            GUILayout.EndHorizontal();
+            Hint("Type a name and press New voice for a copy of this voice that only this part uses. Without a name it is named after the part.");
+            GUILayout.BeginHorizontal();
+            bool own = have && s.SettingsVoice(v.Name) != null;
+            GUI.enabled = own;
+            bool onlyMine = own && !reg.IsStockName(v.Name) && !ConfigHas(v.Name);
+            if (GUILayout.Button(onlyMine ? "Delete voice" : "Reset voice") && own)
+                ResetVoice(s, v.Name);
+            GUI.enabled = true;
+            GUILayout.EndHorizontal();
+            GUILayout.Label(string.IsNullOrEmpty(voiceStatus) ? " " : voiceStatus);   // always drawn
+            Hint("A change to a stock or mod voice is saved in your settings and changes every probe with that voice. New voice makes a copy for this part only. Reset voice brings back the original.");
+        }
+
+        private static string Next(string[] list, string cur)
+        {
+            int i = Array.IndexOf(list, cur);
+            return list[(i + 1) % list.Length];
+        }
+
+        private static string PartTitle(string partName) { return LonapseAddon.PartTitle(partName); }
+
+        /// <summary>Internal voice name from what the player typed: lower case, a-z 0-9 and _, at most 24 characters.</summary>
+        private static string VoiceKey(string typed)
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (char ch in (typed ?? "").Trim().ToLowerInvariant())
+            {
+                if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) sb.Append(ch);
+                else if ((ch == ' ' || ch == '_' || ch == '-') && sb.Length > 0 && sb[sb.Length - 1] != '_') sb.Append('_');
+                if (sb.Length >= 24) break;
+            }
+            return sb.ToString().Trim('_');
+        }
+
+        private static string WhyText(ProbeVoicePick.Why why, ProbeVoiceSource src)
+        {
+            string w;
+            switch (why)
+            {
+                case ProbeVoicePick.Why.Player: w = "your pick"; break;
+                case ProbeVoicePick.Why.Module: w = "from the part"; break;
+                case ProbeVoicePick.Why.StockPart: w = "stock"; break;
+                default: w = "unknown core, generic"; break;
+            }
+            if (src == ProbeVoiceSource.Settings) w += ", changed";
+            else if (src == ProbeVoiceSource.Config) w += ", mod voice";
+            return w;
+        }
+
+        private bool ConfigHas(string name)
+        {
+            // a settings voice that replaces a GameData voice is reset, not deleted
+            foreach (ProbeVoiceSpec c in host.ConfigVoices) if (c.Name == name) return true;
+            return false;
+        }
+
+        /// <summary>The voice of this part (null: back to the default). Saved at once.</summary>
+        private void AssignVoice(Settings s, string part, string voice)
+        {
+            string key = ProbeCores.Normalise(part);
+            if (voice == null) s.probeParts.Remove(key);
+            else s.probeParts[key] = voice;
+            host.RefreshProbeVoice();
+            host.settingsDirty = true;
+            pendingSave = true;
+            voiceStatus = voice == null ? "Default voice for this part" : "Voice " + voice + " for this part";
+        }
+
+        /// <summary>
+        /// The settings copy of the active voice, made on the first change. The registry is rebuilt so the probe uses
+        /// the copy. The caller changes one value on the copy.
+        /// </summary>
+        private ProbeVoiceSpec EditVoice(Settings s)
+        {
+            ProbeVoiceSpec v = host.probeVoice;
+            if (host.probeVoiceWhy == ProbeVoicePick.Why.Generic && !string.IsNullOrEmpty(host.probeVoicePart))
+            {
+                // a core Lonapse does not know shares the generic voice with every other unknown core: the first
+                // change gives this part a voice of its own, named after the part, so the others stay as they are
+                string title = PartTitle(host.probeVoicePart);
+                string key = VoiceKey(title);
+                if (key.Length == 0 || host.probeVoices.Get(key) != null) key = host.probeVoices.FreeName(key.Length == 0 ? "custom" : key + "_");
+                ProbeVoiceSpec mine = v.Clone(key);
+                mine.DisplayName = title;
+                s.probeVoices.Add(mine);
+                host.RebuildProbeVoices();
+                AssignVoice(s, host.probeVoicePart, key);
+                host.probeVoice = mine;
+                host.probeVoiceWhy = ProbeVoicePick.Why.Player;
+                voiceStatus = "Made " + key + " for this part";
+                return mine;
+            }
+            ProbeVoiceSpec own = s.SettingsVoice(v.Name);
+            if (own == null)
+            {
+                own = v.Clone(v.Name);
+                s.probeVoices.Add(own);
+                host.RebuildProbeVoices();
+                host.probeVoice = own;   // the new pick on the next frame gives the same object
+            }
+            host.settingsDirty = true;
+            pendingSave = true;
+            return own;
+        }
+
+        private void ResetVoice(Settings s, string name)
+        {
+            s.probeVoices.RemoveAll(x => x.Name == name);
+            host.RebuildProbeVoices();
+            if (host.probeVoices.Get(name) == null)
+            {
+                // a voice only the settings had: parts that used it go back to their default
+                var drop = new List<string>();
+                foreach (var kv in s.probeParts) if (kv.Value == name) drop.Add(kv.Key);
+                foreach (string k in drop) s.probeParts.Remove(k);
+                voiceStatus = "Deleted " + name;
+            }
+            else voiceStatus = "Reset " + name;
+            host.RefreshProbeVoice();
+            host.settingsDirty = true;
+            pendingSave = true;
         }
 
         private void DrawSubtitles(Settings s)
@@ -502,11 +793,15 @@ namespace Lonapse
             }
 
             s.subtitleSize = Mathf.Round(Row("Text size", s.subtitleSize, 0.7f, 1.6f, Mathf.Round(s.subtitleSize * 100f), "0'%'") * 20f) / 20f;
+            s.subtitleWidth = Mathf.Round(Row("Width", s.subtitleWidth, SubtitleLayout.MinWidthScale, SubtitleLayout.MaxWidthScale,
+                                              Mathf.Round(s.subtitleWidth * 100f), "0'%'") * 20f) / 20f;
+            Hint("Width of the subtitle box. It never covers the navball, the portraits or the staging list, so it can stop growing.");
             s.subtitleOpacity = Mathf.Round(Row("Background", s.subtitleOpacity, 0f, 1f, Mathf.Round(s.subtitleOpacity * 100f), "0'%'") * 20f) / 20f;
             int max = (int)Math.Round(Row("Lines", s.subtitleMaxEntries, 1f, Settings.SubtitleMaxEntriesCap, Mathf.Round(s.subtitleMaxEntries), "0"));
             if (max < 1) max = 1;
             if (max > Settings.SubtitleMaxEntriesCap) max = Settings.SubtitleMaxEntriesCap;
             s.subtitleMaxEntries = max;
+            Hint("Background: how dark the box behind the text is. Lines: how many subtitles show at once.");
 
             GUILayout.Space(6f);
             if (GUILayout.Button("Preview") && host.subtitles != null)
@@ -527,8 +822,11 @@ namespace Lonapse
             s.landingTones = Toggle(s.landingTones, "Landing and splashdown tones");
             s.stageTone = Toggle(s.stageTone, "Stage tone");
             s.voiceBoostDb = Mathf.Round(Row("Voice boost", s.voiceBoostDb, 0f, 12f, Mathf.Round(s.voiceBoostDb), "0' dB'"));
+            Hint("Makes all voices louder. Use it when the voices are too quiet next to the game, even at full volume.");
             s.weakSignalVolume = Volume("Weak signal noise", s.weakSignalVolume);
+            Hint("Extra static, crackle and grit on Mission Control when the signal gets weak. 0% keeps a weak signal clean.");
             s.signalDropouts = Toggle(s.signalDropouts, "Dropouts on a weak signal");
+            Hint("Mission Control lines cut out for a moment when the signal is weak.");
 
             Header("Signal");
             GUILayout.BeginHorizontal();
@@ -542,12 +840,17 @@ namespace Lonapse
             }
             GUILayout.EndHorizontal();
             if (s.signalMode == "fixed") s.signalFixed = Volume("Fixed signal", s.signalFixed);
+            Hint("auto: the signal comes from CommNet or RemoteTech. off: always a perfect signal. fixed: the signal stays at the level you set.");
 
             Header("Timing");
             // calm gap: TUNING/tQuiet, the mean interval at stress 0 before the rate multiplier
             float q = Row("Calm radio gap", tu.tQuiet, 20f, 600f, Mathf.Round(tu.tQuiet), "0' s'");
             tu.tQuiet = Mathf.Round(q / 5f) * 5f;
+            Hint("Average time between radio transmissions on a calm flight, before Radio amount. Stress makes it shorter.");
             tu.probeRateFactor = Mathf.Round(Row("Probe talk gap", tu.probeRateFactor, 0.5f, 4f, tu.probeRateFactor, "0.0#'x'") * 20f) / 20f;
+            tu.probeCrewShare = Mathf.Round(Volume("Probe and crew chats", tu.probeCrewShare) * 20f) / 20f;
+            Hint("With 2 or more crew and a probe core: the share of intercom chats where the probe joins in.");
+            Hint("The radio gap is this many times longer on a probe. 2x means half as much talk.");
             GUILayout.Label(d != null ? "Radio gap now: " + Label("radio now", Mathf.Round(d.currentInterval), "0' s'") : "Radio gap now: -");
             if (d != null)
             {
@@ -559,12 +862,18 @@ namespace Lonapse
             Header("Line choice");
             tu.traitPreference = Mathf.Round(Row("Fit the job", tu.traitPreference, 0f, 1f, Mathf.Round(tu.traitPreference * 100f), "0'%'") * 20f) / 20f;
             tu.personaPreference = Mathf.Round(Row("Fit the character", tu.personaPreference, 0f, 1f, Mathf.Round(tu.personaPreference * 100f), "0'%'") * 20f) / 20f;
+            Hint("Fit the job: chance that a kerbal says a line for their job (pilot, engineer, scientist). Fit the character: chance of a line for their personality (brave, dim, badass). Higher values make lines repeat sooner.");
 
             Header("Probe");
             tu.probeDrowsyFrac = Mathf.Round(Row("Drowsy below", tu.probeDrowsyFrac, 0f, 0.5f, Mathf.Round(tu.probeDrowsyFrac * 100f), "0'%'") * 100f) / 100f;
             tu.probeSleepFrac = Mathf.Round(Row("Asleep below", tu.probeSleepFrac, 0f, 0.2f, Mathf.Round(tu.probeSleepFrac * 100f), "0'%'") * 100f) / 100f;
             if (tu.probeSleepFrac > tu.probeDrowsyFrac) tu.probeSleepFrac = tu.probeDrowsyFrac;
-            tu.probeBeepPitchMax = Mathf.Round(Row("Max beep pitch", tu.probeBeepPitchMax, 1f, 2f, tu.probeBeepPitchMax, "0.0#'x'") * 20f) / 20f;
+            Hint("Electric charge left (of the full battery) where the probe gets drowsy and then falls asleep. Needs \"Sleepy on low power\".");
+            // ProbeRules.BeepPitch never goes above 1.25x, so a higher maximum would do nothing
+            float shownPitch = Math.Min(tu.probeBeepPitchMax, 1.25f);
+            float np = Mathf.Round(Row("Max beep pitch", shownPitch, 1f, 1.25f, shownPitch, "0.0#'x'") * 20f) / 20f;
+            if (np != shownPitch) tu.probeBeepPitchMax = np;   // only a moved slider writes, the saved default stays as it is
+            Hint("Stressed probes beep higher. This is the highest pitch they reach.");
 
             GUILayout.Space(8f);
             if (GUILayout.Button("Reset timing to defaults")) host.ResetTuning();
@@ -597,6 +906,10 @@ namespace Lonapse
             }
             GUILayout.EndHorizontal();
             GUILayout.Label("Lonapse: " + PhraseClips.status);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Line memory: " + LonapseAddon.LineMemory.Count + " scenes heard");
+            if (GUILayout.Button("Forget", GUILayout.Width(70f))) { LonapseAddon.LineMemory.Clear(); LonapseAddon.SaveLineMemory(); }
+            GUILayout.EndHorizontal();
 
             // --- talking mouths ---
             Header("Mouth");

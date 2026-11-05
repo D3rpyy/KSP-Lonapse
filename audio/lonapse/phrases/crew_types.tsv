@@ -47,9 +47,9 @@ ct_dim_08_2	chatter	chatter	calm	crew	ct_dim_08	2	both	goofy	any	any	dim	any	Cue
 ct_dim_09_1	chatter	chatter	calm	crew	ct_dim_09	1	both	goofy	any	any	dim	any	¿Este cable es importante?	Is this wire important?
 ct_dim_09_2	chatter	chatter	calm	crew	ct_dim_09	2	both	goofy	any	any	dim	any	Suéltalo despacio.	Let go of it slowly.
 ct_dim_09_3	chatter	chatter	calm	crew	ct_dim_09	3	both	goofy	any	any	dim	any	Ya lo he soltado. ¿Y ahora?	I already let go. Now what?
-ct_dim_10_1	chatter	chatter	calm	crew	ct_dim_10	1	both	goofy	any	any	dim	any	Si giramos la nave, ¿abajo pasa a ser arriba?	If we turn the ship, does down become up?
-ct_dim_10_2	chatter	chatter	calm	crew	ct_dim_10	2	both	goofy	any	any	dim	any	En el espacio, sí.	In space, yes.
-ct_dim_10_3	chatter	chatter	calm	crew	ct_dim_10	3	both	goofy	any	any	dim	any	Entonces estoy del revés. Qué bien.	Then I'm upside down. Nice.
+ct_dim_10_1	chatter	chatter	calm	crew	ct_dim_10	1	both	orbit	any	any	dim	any	Si giramos la nave, ¿abajo pasa a ser arriba?	If we turn the ship, does down become up?
+ct_dim_10_2	chatter	chatter	calm	crew	ct_dim_10	2	both	orbit	any	any	dim	any	En el espacio, sí.	In space, yes.
+ct_dim_10_3	chatter	chatter	calm	crew	ct_dim_10	3	both	orbit	any	any	dim	any	Entonces estoy del revés. Qué bien.	Then I'm upside down. Nice.
 ct_dim_11_1	chatter	chatter	calm	crew	ct_dim_11	1	both	goofy	any	any	dim	any	¿Dónde está el retrovisor de este cohete?	Where's the rear-view mirror on this rocket?
 ct_dim_11_2	chatter	chatter	calm	crew	ct_dim_11	2	both	goofy	any	any	dim	any	No tiene freno.	It doesn't have one.
 ct_dim_11_3	chatter	chatter	calm	crew	ct_dim_11	3	both	goofy	any	any	dim	any	Pues vaya diseño.	Well, what a design.
@@ -92,8 +92,8 @@ ct_vet_03_2	chatter	chatter	calm	crew	ct_vet_03	2	both	goofy	any	any	veteran	any
 ct_vet_03_3	chatter	chatter	calm	crew	ct_vet_03	3	both	goofy	any	any	veteran	any	Que ahora hay más botones de emergencia.	Now there are more emergency buttons.
 ct_vet_04_1	chatter	chatter	tense	crew	ct_vet_04	1	both	any	impulse	any	veteran	any	Un golpe de nada. Los he tenido peores.	Just a small bump. I've had worse.
 ct_vet_04_2	chatter	chatter	tense	mc	ct_vet_04	2	m	any	impulse	any	veteran	any	Recibido. Revisad la estructura.	Copy. Check the structure.
-ct_pil_01_1	chatter	chatter	calm	crew	ct_pil_01	1	both	goofy	any	pilot	any	any	Control, ¿habéis visto esa maniobra? Perfecta.	Control, did you see that maneuver? Perfect.
-ct_pil_01_2	chatter	chatter	calm	mc	ct_pil_01	2	m	goofy	any	pilot	any	any	La hemos visto. Un poco torcida.	We saw it. A bit crooked.
+ct_pil_01_1	chatter	chatter	calm	crew	ct_pil_01	1	both	orbit	any	pilot	any	any	Control, ¿habéis visto esa maniobra? Perfecta.	Control, did you see that maneuver? Perfect.
+ct_pil_01_2	chatter	chatter	calm	mc	ct_pil_01	2	m	orbit	any	pilot	any	any	La hemos visto. Un poco torcida.	We saw it. A bit crooked.
 ct_pil_02_1	chatter	chatter	calm	crew	ct_pil_02	1	both	landed	any	pilot	any	any	Aterrizaje suave. Ni una taza en el suelo.	Smooth landing. Not a single cup on the floor.
 ct_pil_02_2	chatter	chatter	calm	mc	ct_pil_02	2	m	landed	any	pilot	any	any	Buen trabajo. Enhorabuena.	Good job. Congratulations.
 ct_pil_03_1	chatter	chatter	calm	crew	ct_pil_03	1	both	goofy	any	pilot	any	any	¿Quién ha tocado mis mandos?	Who touched my controls?
@@ -166,8 +166,8 @@ ct_tour_05_2	chatter	chatter	calm	mc	ct_tour_05	2	m	orbit	any	tourist	any	any	No
 ct_tour_06_1	chatter	chatter	calm	crew	ct_tour_06	1	both	goofy	any	tourist	any	any	¿Dónde está la tienda de regalos?	Where's the gift shop?
 ct_tour_06_2	chatter	chatter	calm	crew	ct_tour_06	2	both	goofy	any	tourist	any	any	No hay tienda de regalos.	There's no gift shop.
 ct_tour_06_3	chatter	chatter	calm	crew	ct_tour_06	3	both	goofy	any	tourist	any	any	Pues pienso dejar una reseña.	Then I'm leaving a review.
-ct_tour_07_1	chatter	chatter	calm	crew	ct_tour_07	1	both	goofy	any	tourist	any	any	¿Siempre flota así la comida?	Does food always float like this?
-ct_tour_07_2	chatter	chatter	calm	crew	ct_tour_07	2	both	goofy	any	tourist	any	any	Siempre.	Always.
-ct_tour_07_3	chatter	chatter	calm	crew	ct_tour_07	3	both	goofy	any	tourist	any	any	¡Qué maravilla! Se lo voy a contar a todos.	How wonderful! I'm telling everyone.
+ct_tour_07_1	chatter	chatter	calm	crew	ct_tour_07	1	both	orbit	any	tourist	any	any	¿Siempre flota así la comida?	Does food always float like this?
+ct_tour_07_2	chatter	chatter	calm	crew	ct_tour_07	2	both	orbit	any	tourist	any	any	Siempre.	Always.
+ct_tour_07_3	chatter	chatter	calm	crew	ct_tour_07	3	both	orbit	any	tourist	any	any	¡Qué maravilla! Se lo voy a contar a todos.	How wonderful! I'm telling everyone.
 ct_tour_08_1	chatter	chatter	calm	crew	ct_tour_08	1	both	landed	any	tourist	any	any	Control, ¿cuándo sale el próximo autobús a casa?	Control, when's the next bus home?
 ct_tour_08_2	chatter	chatter	calm	mc	ct_tour_08	2	m	landed	any	tourist	any	any	Pronto. Disfruta de la vista.	Soon. Enjoy the view.

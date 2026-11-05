@@ -25,7 +25,10 @@ namespace Lonapse
         /// <summary>The radio link to the probe works: signal, no blackout.</summary>
         private bool ProbeLink { get { return host.signal.connected && !radioSilent && !InBlackoutPhase; } }
 
-        private static bool IsIntercomItem(UttKind k) { return k == UttKind.IntercomLine || k == UttKind.IntercomClick; }
+        private static bool IsIntercomItem(UttKind k)
+        {
+            return k == UttKind.IntercomLine || k == UttKind.IntercomClick || k == UttKind.CabinBeep;
+        }
 
         /// <summary>Overlay line, for example "okto awake, hail in 120 s".</summary>
         public string ProbeStatus
@@ -64,8 +67,9 @@ namespace Lonapse
                 List<PhraseScene> exact = list.FindAll(x => x.Topic == topic);
                 list = exact.Count > 0 ? exact : list.FindAll(x => IsAnyKey(x.Topic));
             }
-            PhraseScene p = ProbeRules.PickWeighted(list, Core, rng, lastSceneId);
-            if (p != null) lastSceneId = p.Id;
+            // line memory first (the freshest scenes), then the core weighting among those
+            PhraseScene p = ProbeRules.PickWeighted(Mem.Freshest(list), Core, rng, lastSceneId);
+            if (p != null) { lastSceneId = p.Id; Mem.Stamp(p.Id); }
             return p;
         }
 
@@ -176,10 +180,10 @@ namespace Lonapse
                     string mood = data ? "happy" : ProbeRules.BeepMood(rowMood, ProbeTense);
                     string text = data ? (e != null ? PhraseClips.Subtitle(e) : ProbeRules.DataSubtitle)
                                 : (e != null && mood == rowMood) ? PhraseClips.Subtitle(e) : ProbeRules.BeepSubtitle(mood);
-                    string who = ProbeCores.DisplayName(Core);
+                    string who = host.ProbeDisplayName;
                     AudioClip clip = null;
                     if (cfg.beepsEnabled && data) clip = ClipLibrary.Next(ProbeCores.DataFolder, rng);
-                    if (cfg.beepsEnabled && clip == null) clip = ClipLibrary.Next(ProbeCores.Folder(Core, mood), rng);
+                    if (cfg.beepsEnabled && clip == null) clip = VoiceClip(host.probeVoice, mood);
                     if (clip == null)
                     {
                         // beeps off or no clip: the subtitle still tells what the probe said
@@ -201,6 +205,36 @@ namespace Lonapse
                 }
             }
             return StartResult.Skip;
+        }
+
+        /// <summary>
+        /// A beep of the voice in that mood: the prebuilt WAV clips for an unchanged stock voice, clips made in game
+        /// (ProbeVoiceBank) for every other voice. Falls back to the stock clips of the voice's lines core.
+        /// </summary>
+        private AudioClip VoiceClip(ProbeVoiceSpec v, string mood)
+        {
+            if (v == null) return ClipLibrary.Next(ProbeCores.Folder(Core, mood), rng);
+            if (host.probeVoices.UsesStockClips(v)) return ClipLibrary.Next(ProbeCores.Folder(v.Name, mood), rng);
+            return ProbeVoiceBank.Next(v, mood, rng) ?? ClipLibrary.Next(ProbeCores.Folder(v.Lines, mood), rng);
+        }
+
+        /// <summary>Settings window: play one beep of the voice now, on the probe beep channel.</summary>
+        public string PreviewProbeVoice(ProbeVoiceSpec v, string mood)
+        {
+            AudioClip clip = VoiceClip(v, mood);
+            if (clip == null) return "no clip";
+            VoiceChannel b = host.beep[1];
+            if (b.Busy) b.Stop();
+            RadioProfile p = Profile;
+            b.SetBand(p.HighPassHz, p.LowPassHz);
+            b.Play(clip, 0.7f, 1f, false, 0f);
+            b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion);
+            b.dropout = 0f;
+            // label for the player: nothing for an unchanged stock voice, "changed" for an edited stock voice,
+            // "custom" for a new voice or one from a config
+            string tag = v == null || host.probeVoices.UsesStockClips(v) ? ""
+                       : host.probeVoices.IsStockName(v.Name) ? " (changed)" : " (custom)";
+            return (v != null ? v.Name : Core) + " " + mood + tag;
         }
 
         // ---------------- scheduled talk ----------------
@@ -466,6 +500,7 @@ namespace Lonapse
             foreach (PhraseScene sc in PhraseClips.table.Scenes)
             {
                 if (!sc.IsProbe) continue;
+                if (PhraseTable.IsProbeCrewEvent(sc.Event)) continue; // needs crew aboard
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 if (!string.IsNullOrEmpty(topic) && !PhraseTable.TopicMatches(sc.Topic, topic)) continue;
@@ -485,6 +520,148 @@ namespace Lonapse
             Log.Info("Debug play " + tag + " for " + want);
             return "played " + tag + (ProbeAsleep && shape.probe > 0 ? " (probe asleep: no beeps)" : "")
                    + (!host.signal.connected && shape.NeedsSignal ? " (no signal: radio lines skipped)" : "");
+        }
+
+        // ---------------- probe and crew on one vessel (0.6.0) ----------------
+
+        // cabin sound of the probe: a wide band and no grit (the radio band only with intercomRadioFx)
+        private const float CabinBeepHighPass = 180f, CabinBeepLowPass = 9000f, CabinBeepVolume = 0.6f;
+        private VoiceChannel cabinBeepCh;   // set while a cabin beep plays, so the radio waits for it (IntercomAudible)
+
+        /// <summary>
+        /// A probe and crew chat can happen: the setting is on, the vessel has crew and an awake probe core, and the
+        /// phrase table is loaded. The intercom scheduler then also runs with only one kerbal aboard.
+        /// </summary>
+        private bool ProbeCrewPossible
+        {
+            get
+            {
+                return host.settings.probeCrewChats && !host.probeMode && host.probeCoreKey != null && !ProbeAsleep
+                       && PhraseClips.Loaded;
+            }
+        }
+
+        /// <summary>
+        /// The intercom scheduler fired. With one kerbal it is always a probe and crew chat. With more crew it is one
+        /// with chance probeCrewShare, else (or when no scene fits) a normal crew chat.
+        /// </summary>
+        private void FireChat(bool probeCrew, int speakable)
+        {
+            if (probeCrew && (speakable < 2 || rng.NextDouble() < Tu.probeCrewShare) && FireProbeCrew()) return;
+            if (speakable >= 2) FireIntercom();
+        }
+
+        /// <summary>
+        /// Queues a probe_crew scene: the probe beeps in the cabin (CabinBeep), one crew member speaks the crew rows
+        /// on the intercom. The scene is picked for that kerbal (persona and trait tiers) in its band, else calm.
+        /// It runs as an intercom chat with the kerbal as both partners, so the abort rules stay the same.
+        /// </summary>
+        private bool FireProbeCrew()
+        {
+            List<KerbalVoice> list = host.roster.voices;
+            KerbalVoice a = Effects ? host.roster.PickIntercomA(rng, null, null) : KerbalVoice.Pick(list, null, rng, null);
+            if (a == null) return false;
+            string band = KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)];
+            Func<string, Func<Predicate<PhraseScene>, PhraseScene>> pick = b =>
+                f => PickProbe(PhraseTable.ProbeCrewEvent, x => x.Band == b && f(x));
+            PhraseScene sc = PreferFor(a, band, pick(band), null);
+            if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), null);
+            if (sc == null) return false;
+            List<PhraseEntry> lines = PhraseClips.LinesFor(sc, Body);
+            if (lines.Count == 0 || count + 2 * lines.Count + 1 > Capacity) return false;
+            chatA = a;
+            chatB = a;
+            chatForced = false;
+            chatStarted = false;
+            lastChatClock = clock;
+            chatLimit = IntercomAbortLimit;
+            Tuning tu = Tu;
+            string prev = null;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                PhraseEntry e = lines[i];
+                float d = i == 0 ? U(0f, 0.3f) : U(tu.intercomGapMin, tu.intercomGapMax);
+                Utterance u;
+                if (e.Role == PhraseTable.RoleProbe)
+                {
+                    // the probe is not on the intercom: no click before its beep
+                    u = Enqueue(UttKind.CabinBeep, null, d, 0f, null);
+                }
+                else
+                {
+                    Enqueue(UttKind.IntercomClick, null, d, 0f, null);
+                    u = Enqueue(UttKind.IntercomLine, null, 0.04f, 0f, a);
+                }
+                if (u != null) u.entry = e;
+                prev = e.Role;
+            }
+            if (prev == PhraseTable.RoleCrew) Enqueue(UttKind.IntercomClick, null, 0.1f, 0f, null); // release click
+            Log.Debug("Probe and crew chat queued: " + ProbeDisplayNameSafe + " and " + a.displayName + ", scene " + sc.Id
+                      + " (" + sc.Band + ")");
+            return true;
+        }
+
+        /// <summary>Debug tab, event probe_crew on a crewed vessel: a probe and crew chat now.</summary>
+        private string DebugPlayProbeCrew()
+        {
+            if (host.probeCoreKey == null) return "not played: no probe core on this vessel";
+            if (!host.settings.intercomEnabled) return "not played: the intercom is off";
+            if (ProbeAsleep) return "not played: the probe is asleep (no power)";
+            if (host.roster.SpeakableCount() < 1) return "not played: nobody aboard can talk";
+            // a queued or playing chat stays: FireProbeCrew would take over its speakers (chatA, chatB)
+            if (HasChatItems() || IntercomAudible) return "not played: a chat is queued or playing, try again after it";
+            PreemptChatter(true);   // fades the radio, keeps the intercom
+            holdUntil = -1f;
+            return FireProbeCrew() ? "played a probe and crew chat (see KSP.log for the scene)" : "not played: no probe_crew scene fits this phase";
+        }
+
+        private string ProbeDisplayNameSafe { get { try { return host.ProbeDisplayName; } catch (Exception) { return Core; } } }
+
+        /// <summary>Start of a cabin beep: the probe's own voice and mood, the cabin sound, its subtitle.</summary>
+        private StartResult StartCabinBeep(Utterance u, out VoiceChannel ch)
+        {
+            ch = null;
+            Settings cfg = host.settings;
+            PhraseEntry e = u.entry;
+            // the same abort rules as an intercom line, and the probe must still be there and awake
+            if ((!chatForced && host.stress.stress > chatLimit) || !CanChat(chatA) || host.probeMode
+                || host.probeCoreKey == null || ProbeAsleep)
+            {
+                abortChat = true;
+                return StartResult.Skip;
+            }
+            VoiceChannel b = host.beep[1];
+            if (b.Busy) return StartResult.Wait;
+            string mood = e != null && !string.IsNullOrEmpty(e.Beep) ? e.Beep : "curious";
+            string text = e != null ? PhraseClips.Subtitle(e) : ProbeRules.BeepSubtitle(mood);
+            string who = ProbeDisplayNameSafe;
+            AudioClip clip = cfg.beepsEnabled ? VoiceClip(host.probeVoice, mood) : null;
+            if (clip == null)
+            {
+                // beeps off or no clip: the subtitle still tells what the probe said
+                ShowProbeSubtitle(who, text, 2.5f);
+                return StartResult.Instant;
+            }
+            if (cfg.intercomRadioFx)
+            {
+                RadioProfile p = Profile;
+                b.SetBand(p.HighPassHz, p.LowPassHz);
+                b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion);
+            }
+            else
+            {
+                b.SetBand(CabinBeepHighPass, CabinBeepLowPass);
+                b.baseDistortion = 0f;
+            }
+            b.Play(clip, CabinBeepVolume, ProbeDrowsy ? 0.9f : 1f, false, 0f);
+            b.dropout = 0f;   // same cabin: no signal dropouts
+            ShowProbeSubtitle(who, text, Math.Max(2.5f, b.duration + 1f));
+            cabinBeepCh = b;
+            lastLine = "cabin " + who + ": " + mood + " beeps (" + b.clipName + ")";
+            Audit.Add(lastLine);
+            Log.Debug("cabin beep " + who + " " + mood + " " + b.clipName);
+            ch = b;
+            return StartResult.Started;
         }
     }
 }

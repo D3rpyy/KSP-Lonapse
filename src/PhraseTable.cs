@@ -71,7 +71,15 @@ namespace Lonapse
             "probe_chat", "probe_sleepy",
             // plan v6 (probe mode): the probe calls Mission Control first, stress per cause, "say again?" on a weak
             // signal, milestones, rover driving, data transmission
-            "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data" };
+            "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data",
+            // 0.6.0: the probe and the crew on one vessel talk in the cabin
+            ProbeCrewEvent };
+        /// <summary>
+        /// 0.6.0 (user request): a crewed vessel with a probe core. The probe beeps in the cabin and a crew member
+        /// answers, or the other way around. Probe and crew rows, no MC rows, never in a serious phase. Not a probe
+        /// mode event: it only plays with crew aboard. Same as PROBE_CREW_EVENT in audio/build_lonapse.py.
+        /// </summary>
+        public const string ProbeCrewEvent = "probe_crew";
         // Plan v5 and v6: events that only play in probe mode. Same as PROBE_EVENTS in audio/build_lonapse.py.
         public static readonly string[] ProbeEvents = {
             "probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover",
@@ -112,6 +120,7 @@ namespace Lonapse
         public static bool IsProbeRole(string role) { return Array.IndexOf(ProbeRoles, role) >= 0; }
         public static bool IsProbeEvent(string ev) { return Array.IndexOf(ProbeEvents, ev) >= 0; }
         public static bool IsProbeVariantEvent(string ev) { return Array.IndexOf(ProbeVariantEvents, ev) >= 0; }
+        public static bool IsProbeCrewEvent(string ev) { return ev == ProbeCrewEvent; }
 
         /// <summary>The one clip gender a role has: "m" for mc, null for crew (both possible) and for the
         /// subtitle-only roles (no clip).</summary>
@@ -417,7 +426,8 @@ namespace Lonapse
                         bad.Add("probe row needs a beep mood (" + string.Join(" ", Moods) + "), got '" + e.Beep + "'");
                 }
                 else if (e.Beep.Length > 0) bad.Add("beep is only allowed on probe rows");
-                bool probeEv = IsProbeEvent(e.Event), probeOk = probeEv || IsProbeVariantEvent(e.Event);
+                bool probeEv = IsProbeEvent(e.Event), probeOk = probeEv || IsProbeVariantEvent(e.Event) || IsProbeCrewEvent(e.Event);
+                if (IsProbeCrewEvent(e.Event) && e.Role == "mc") bad.Add("probe_crew is in the cabin, it cannot have mc rows");
                 if (e.Core != Any && !probeOk) bad.Add("core '" + e.Core + "' outside a probe event");
                 if (IsProbeRole(e.Role) && !probeOk) bad.Add("role " + e.Role + " outside a probe event");
                 if (probeEv && e.Role == "crew") bad.Add("probe event '" + e.Event + "' cannot have crew rows");

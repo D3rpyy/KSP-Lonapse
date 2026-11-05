@@ -90,6 +90,11 @@ namespace Lonapse
                 lastPlasma = s.valid && s.inPlasmaStock;
 
                 EventRequest r;
+                if (science.Tick(now, tu.scienceCooldown, out r))
+                {
+                    Log.Info("Event science (from the queue): topic " + r.topic);
+                    if (Enabled && cfg.eventScience) Send(r);
+                }
                 if (partLoss.Tick(now, tu.partLostWindow, tu.partLostCooldown, lastPanic, out r))
                 {
                     Log.Info("Event part_lost: " + partLoss.lastCount + " parts");
@@ -187,7 +192,7 @@ namespace Lonapse
                     Log.Info("Event science: " + data.subjectID + " -> topic " + r.topic);
                     Send(r);
                 }
-                else Log.Debug("Science " + data.subjectID + " skipped (cooldown)");
+                else Log.Debug("Science " + data.subjectID + (science.QueuedCount > 0 ? " queued or skipped (" + science.QueuedCount + " waiting)" : " skipped (cooldown)"));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnExperimentDeployed", e); }
         }

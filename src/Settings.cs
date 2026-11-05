@@ -45,9 +45,10 @@ namespace Lonapse
         public float stationMcMin = 150f, stationMcMax = 300f;
 
         // --- Phase 2: crew intercom chats ---
-        // intercom at stress 0: 300 s on ships, stations/bases x2.5, quiet coast x2. Independent of the radio rate slider.
+        // intercom at stress 0: 60 s everywhere (0.6.0). The station and quiet coast boosts are 1 now, they were for the
+        // old 300 s gap and multiply (a station is nearly always a quiet coast). Independent of the radio rate slider.
         // The interval shrinks log-linearly with stress down to intercomStressMin at intercomStressPeak.
-        public float intercomInterval = 300f, intercomStationBoost = 2.5f, intercomQuietBoost = 2.0f;
+        public float intercomInterval = 60f, intercomStationBoost = 1f, intercomQuietBoost = 1f;
         public float intercomStressMin = 25f, intercomStressPeak = 0.6f;
         public float intercomMaxStress = 0.7f, intercomAbortStress = 0.78f, quietCoastStress = 0.1f, quietCoastTime = 60f;
         public float intercomHp = 100f, intercomLp = 8000f, intercomClickVolume = 0.9f, intercomGapMin = 0.25f, intercomGapMax = 0.9f;
@@ -93,7 +94,7 @@ namespace Lonapse
         // req 3: ducking of game audio
         public float duckAttack = 0.08f, duckRelease = 0.4f;
         // req 4: throttle callouts
-        public float throttleFullAt = 0.98f, throttleCutAt = 0.05f, throttleMinGap = 20f;
+        public float throttleFullAt = 0.98f, throttleCutAt = 0.05f, throttleMinGap = 5f;
         // req 8: pitch factor per gender
         public float genderPitchFemale = 1.06f, genderPitchMale = 0.96f;
         // req 10: launch cap on the panic band (0 or 1) and altitude where it stops
@@ -124,6 +125,8 @@ namespace Lonapse
         public float alarmVolume = 0.12f, alarmFadeIn = 2.5f, alarmFadeOut = 3f, alarmHold = 4f, alarmStress = 0.9f;
         // a stress cause (q, spin, heat, ...) gets its own lines at most once per this many seconds, at any radio amount
         public float causeRepeatGap = 45f;
+        // 0.6.0: a calm chatter exchange or chat (2+ lines) does not come back within this many seconds. New key only.
+        public float calmRepeatGap = 600f;
 
         // --- v3. New keys, plus mouthOpenDeg 12 -> 18 in tuning version 7. ---
         // req 9: talking mouths. mouthAxis is the local hinge axis (0 = X, 1 = Y, 2 = Z), mouthInvert 0 or 1 flips the sign.
@@ -141,7 +144,7 @@ namespace Lonapse
         // power events: power_low below powerLowFrac, power_ok above powerOkFrac, only with at least powerMinMax EC capacity
         public float powerLowFrac = 0.10f, powerOkFrac = 0.25f, powerMinMax = 5f;
         // science, SOI, part loss, signal and crew loss events (seconds)
-        public float scienceCooldown = 30f, scienceTopicCooldown = 300f, soiCooldown = 60f;
+        public float scienceCooldown = 30f, scienceTopicCooldown = 60f, soiCooldown = 60f;
         public float partLostWindow = 1.5f, partLostCooldown = 20f;
         public float signalHold = 3f, signalCooldown = 45f;
         public float crewLostDelay = 3f, somberTime = 180f, eventMaxAge = 600f;
@@ -152,7 +155,10 @@ namespace Lonapse
 
         // --- v5: probe mode. New keys only: no existing default changed, so no CurrentVersion bump. ---
         // pet talk: factor on the radio chatter gap in probe mode (> 1 is quieter)
-        public float probeRateFactor = 1.5f;
+        public float probeRateFactor = 1.0f;   // 0.6.0: was 1.5 (user feedback: probes too quiet)
+        // 0.6.0: probe and crew on one vessel. With 2 or more crew, this share of the intercom chats is a probe and
+        // crew scene instead. With 1 crew member every intercom chat is one (there is nobody else to talk to).
+        public float probeCrewShare = 0.35f;
         // electric charge fractions: drowsy below probeDrowsyFrac, asleep below probeSleepFrac
         public float probeDrowsyFrac = 0.15f, probeSleepFrac = 0.03f;
         // cap on the beep pitch (1 + 0.25 x stress)
@@ -188,7 +194,7 @@ namespace Lonapse
         public static readonly string[] SignedFields = { "faceExpressionSign" };
 
         /// <summary>Schema version of the saved TUNING node. Bump when defaults of existing fields change.</summary>
-        public const int CurrentVersion = 10;
+        public const int CurrentVersion = 11;
 
         /// <summary>
         /// Fields whose defaults changed in version 3 (0.3.0). A file written by an older version gets these reset to
@@ -272,6 +278,7 @@ namespace Lonapse
             alarmHold = DcMath.Clamp(alarmHold, 0f, 30f);
             alarmStress = DcMath.Clamp(alarmStress, 0f, 1f);
             causeRepeatGap = DcMath.Clamp(causeRepeatGap, 0f, 600f);
+            calmRepeatGap = DcMath.Clamp(calmRepeatGap, 0f, 3600f);
             evaSettleTime = DcMath.Clamp(evaSettleTime, 0f, 30f);
             FixPair(ref dockSoftSpeed, ref dockHardSpeed);
             FixPair(ref roverSpeedLo, ref roverSpeedHi); FixPair(ref roverRoughLo, ref roverRoughHi);
@@ -337,6 +344,7 @@ namespace Lonapse
             dataBeepGap = DcMath.Clamp(dataBeepGap, 2f, 120f);
             dataBeepMax = DcMath.Clamp((float)Math.Round(dataBeepMax), 1f, 20f);
             probeRateFactor = DcMath.Clamp(probeRateFactor, 0.5f, 4f);
+            probeCrewShare = DcMath.Clamp01(probeCrewShare);
             probeDrowsyFrac = DcMath.Clamp(probeDrowsyFrac, 0f, 0.5f);
             probeSleepFrac = DcMath.Clamp(probeSleepFrac, 0f, 0.2f);
             if (probeSleepFrac > probeDrowsyFrac) probeSleepFrac = probeDrowsyFrac;
@@ -396,8 +404,9 @@ namespace Lonapse
         public string signalMode = "auto";          // req 17: auto | off | fixed
         public float signalFixed = 0.7f;            // req 17, 0..1
         public bool signalOcclusion = true;         // req 17
-        public bool subtitles = false;              // req 22
+        public bool subtitles = true;               // req 22. 0.6.0: on by default
         public bool countdownAutoStage = false;     // launch countdown: activate the next stage on liftoff
+        public bool countdownDown = false;          // 0.6.0: count 10 .. 1 instead of 1 .. 10
         public bool rogerBeep = true;               // short beep when the crew lets go of the key
         public bool lightDelay = true;              // small extra answer delay far from Kerbin (max lightDelayMax s)
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
@@ -423,6 +432,9 @@ namespace Lonapse
         public float subtitleSize = 1.0f;           // 0.7 .. 1.6, text 15 px x size
         public float subtitleOpacity = 0.55f;       // panel opacity 0 .. 1
         public int subtitleMaxEntries = 2;          // 1 .. 4
+        public float subtitleWidth = 1.0f;          // 0.6.0: 0.5 .. 1.6, times the width of the position preset
+        public float radioStatic = 0.5f;            // 0.6.0: 0..1, static under every radio line at any signal (DcMath.StaticCurve)
+        public bool intercomRadioFx = false;        // 0.6.0: crew-to-crew lines get the radio sound, not the cabin sound
         // --- v5: probe mode ---
         public bool probeMode = true;               // uncrewed vessels with a probe core get probe chatter
         public bool probePetTalk = true;            // MC talks to the probe, the probe answers in beeps
@@ -431,11 +443,24 @@ namespace Lonapse
         public bool probePlanTalk = true;           // v6: maneuver node and burn talk with the probe
         public bool probeStressTalk = true;         // v6: Mission Control calms the probe per stress cause
         public bool probeSayAgain = true;           // v6: "say again?" when the signal is weak
+        public bool probeCrewChats = true;          // 0.6.0: a probe core on a crewed vessel beeps and the crew answers
         public bool probeMilestones = true;         // v6: mission days, first orbit, first landing per body
         public bool probeRover = true;              // v6: rover moments (fast, air time, tilt, idle)
         public bool probeTransmit = true;           // v6: data beeps while an antenna sends science
         public bool probeSleep = true;              // drowsy and asleep probe on low electric charge
         public Tuning tuning = new Tuning();
+        // --- 0.6.0: probe voices made or changed in the window (PROBE_VOICE nodes), and the voice per core part
+        // (PROBE_PART nodes, key = ProbeCores.Normalise(part name)). Both win over GameData and stock.
+        public System.Collections.Generic.List<ProbeVoiceSpec> probeVoices = new System.Collections.Generic.List<ProbeVoiceSpec>();
+        public System.Collections.Generic.Dictionary<string, string> probeParts = new System.Collections.Generic.Dictionary<string, string>();
+        public const string ProbeVoiceNodeName = "PROBE_VOICE", ProbePartNodeName = "PROBE_PART";
+
+        /// <summary>The settings voice of that name, null when there is none.</summary>
+        public ProbeVoiceSpec SettingsVoice(string name)
+        {
+            for (int i = 0; i < probeVoices.Count; i++) if (probeVoices[i].Name == name) return probeVoices[i];
+            return null;
+        }
 
         /// <summary>Allowed subtitlePos values, the first is the default. SubtitleLayout uses the same strings.</summary>
         public static readonly string[] SubtitlePresets = { "above_navball", "custom", "top_left", "bottom_left" };
@@ -516,6 +541,19 @@ namespace Lonapse
                 subtitlePos = "above_navball";
                 reset.Add("subtitlePos");
             }
+            if (fromVersion < 11)
+            {
+                // 0.6.0: crew chats every 60 s (was 300), probes talk as often as crews (was 1.5x the gap) and
+                // subtitles are on by default (user feedback). Only the old defaults move. Subtitles were off by
+                // default before, so an old file with them off gets them on. Players can turn them off again.
+                ResetIfOld(reset, "intercomInterval", 300f, 300f);
+                ResetIfOld(reset, "probeRateFactor", 1.5f, 1.5f);
+                ResetIfOld(reset, "scienceTopicCooldown", 300f, 300f);
+                ResetIfOld(reset, "throttleMinGap", 20f, 20f);
+                ResetIfOld(reset, "intercomStationBoost", 2.5f, 2.5f);  // 0.6.0: 1, the 60 s gap is lively enough
+                ResetIfOld(reset, "intercomQuietBoost", 2f, 2f);          // 0.6.0: 5 s, quick throttle changes get callouts   // 0.6.0: 60 s, a new biome gets its line
+                if (!subtitles) { subtitles = true; reset.Add("subtitles off -> on"); }
+            }
             tuningVersion = Tuning.CurrentVersion;
             return reset;
         }
@@ -569,10 +607,19 @@ namespace Lonapse
             subtitleSize = DcMath.Clamp(subtitleSize, 0.7f, 1.6f);
             if (float.IsNaN(subtitleOpacity) || float.IsInfinity(subtitleOpacity)) subtitleOpacity = 0.55f;
             subtitleOpacity = DcMath.Clamp(subtitleOpacity, 0f, 1f);
+            if (float.IsNaN(subtitleWidth) || float.IsInfinity(subtitleWidth)) subtitleWidth = 1f;
+            subtitleWidth = DcMath.Clamp(subtitleWidth, SubtitleLayout.MinWidthScale, SubtitleLayout.MaxWidthScale);
+            radioStatic = DcMath.Clamp(DcMath.Finite(radioStatic), 0f, 1f);
             if (subtitleMaxEntries < 1) subtitleMaxEntries = 1;
             if (subtitleMaxEntries > SubtitleMaxEntriesCap) subtitleMaxEntries = SubtitleMaxEntriesCap;
             if (tuning == null) tuning = new Tuning();
             tuning.Sanitize();
+            if (probeVoices == null) probeVoices = new System.Collections.Generic.List<ProbeVoiceSpec>();
+            if (probeParts == null) probeParts = new System.Collections.Generic.Dictionary<string, string>();
+            // one entry per name, the last one wins (as when the file is read)
+            var seenVoice = new System.Collections.Generic.HashSet<string>();
+            for (int i = probeVoices.Count - 1; i >= 0; i--)
+                if (probeVoices[i] == null || string.IsNullOrEmpty(probeVoices[i].Name) || !seenVoice.Add(probeVoices[i].Name)) probeVoices.RemoveAt(i);
         }
 
         /// <summary>Returns the trimmed, lower-case value when it is one of the allowed values, otherwise <paramref name="def"/>.</summary>
@@ -703,6 +750,7 @@ namespace Lonapse
                 n.TryGetValue("signalOcclusion", ref s.signalOcclusion);
                 n.TryGetValue("subtitles", ref s.subtitles);
                 n.TryGetValue("countdownAutoStage", ref s.countdownAutoStage);
+                n.TryGetValue("countdownDown", ref s.countdownDown);
                 n.TryGetValue("rogerBeep", ref s.rogerBeep);
                 n.TryGetValue("lightDelay", ref s.lightDelay);
                 n.TryGetValue("signalDropouts", ref s.signalDropouts);
@@ -726,6 +774,9 @@ namespace Lonapse
                 n.TryGetValue("subtitleSize", ref s.subtitleSize);
                 n.TryGetValue("subtitleOpacity", ref s.subtitleOpacity);
                 n.TryGetValue("subtitleMaxEntries", ref s.subtitleMaxEntries);
+                n.TryGetValue("subtitleWidth", ref s.subtitleWidth);
+                n.TryGetValue("radioStatic", ref s.radioStatic);
+                n.TryGetValue("intercomRadioFx", ref s.intercomRadioFx);
                 n.TryGetValue("probeMode", ref s.probeMode);
                 n.TryGetValue("probePetTalk", ref s.probePetTalk);
                 n.TryGetValue("probeHail", ref s.probeHail);
@@ -733,10 +784,25 @@ namespace Lonapse
                 n.TryGetValue("probePlanTalk", ref s.probePlanTalk);
                 n.TryGetValue("probeStressTalk", ref s.probeStressTalk);
                 n.TryGetValue("probeSayAgain", ref s.probeSayAgain);
+                n.TryGetValue("probeCrewChats", ref s.probeCrewChats);
                 n.TryGetValue("probeMilestones", ref s.probeMilestones);
                 n.TryGetValue("probeRover", ref s.probeRover);
                 n.TryGetValue("probeTransmit", ref s.probeTransmit);
                 n.TryGetValue("probeSleep", ref s.probeSleep);
+
+                foreach (ConfigNode pv in n.GetNodes(ProbeVoiceNodeName))
+                {
+                    var errs = new System.Collections.Generic.List<string>();
+                    ProbeVoiceSpec spec = ProbeVoiceNodes.FromNode(pv, errs);
+                    foreach (string er in errs) Log.Warn("settings.cfg " + ProbeVoiceNodeName + ": " + er);
+                    if (spec != null) s.probeVoices.Add(spec);
+                }
+                foreach (ConfigNode pp in n.GetNodes(ProbePartNodeName))
+                {
+                    string part = pp.GetValue("part"), voice = pp.GetValue("voice");
+                    if (!string.IsNullOrEmpty(part) && !string.IsNullOrEmpty(voice))
+                        s.probeParts[ProbeCores.Normalise(part)] = voice.Trim().ToLowerInvariant();
+                }
 
                 ConfigNode t = n.GetNode(TuningNodeName);
                 if (t != null)
@@ -826,6 +892,7 @@ namespace Lonapse
                 n.AddValue("signalOcclusion", signalOcclusion);
                 n.AddValue("subtitles", subtitles);
                 n.AddValue("countdownAutoStage", countdownAutoStage);
+                n.AddValue("countdownDown", countdownDown);
                 n.AddValue("rogerBeep", rogerBeep);
                 n.AddValue("lightDelay", lightDelay);
                 n.AddValue("signalDropouts", signalDropouts);
@@ -849,6 +916,9 @@ namespace Lonapse
                 n.AddValue("subtitleSize", F(subtitleSize));
                 n.AddValue("subtitleOpacity", F(subtitleOpacity));
                 n.AddValue("subtitleMaxEntries", subtitleMaxEntries);
+                n.AddValue("subtitleWidth", F(subtitleWidth));
+                n.AddValue("radioStatic", F(radioStatic));
+                n.AddValue("intercomRadioFx", intercomRadioFx);
                 n.AddValue("probeMode", probeMode);
                 n.AddValue("probePetTalk", probePetTalk);
                 n.AddValue("probeHail", probeHail);
@@ -856,10 +926,18 @@ namespace Lonapse
                 n.AddValue("probePlanTalk", probePlanTalk);
                 n.AddValue("probeStressTalk", probeStressTalk);
                 n.AddValue("probeSayAgain", probeSayAgain);
+                n.AddValue("probeCrewChats", probeCrewChats);
                 n.AddValue("probeMilestones", probeMilestones);
                 n.AddValue("probeRover", probeRover);
                 n.AddValue("probeTransmit", probeTransmit);
                 n.AddValue("probeSleep", probeSleep);
+                foreach (ProbeVoiceSpec pv in probeVoices) n.AddNode(ProbeVoiceNodes.ToNode(pv, ProbeVoiceNodeName));
+                foreach (var kv in probeParts)
+                {
+                    ConfigNode pn = n.AddNode(ProbePartNodeName);
+                    pn.AddValue("part", kv.Key);
+                    pn.AddValue("voice", kv.Value);
+                }
                 ConfigNode t = n.AddNode(TuningNodeName);
                 FieldInfo[] fields = typeof(Tuning).GetFields(BindingFlags.Public | BindingFlags.Instance);
                 for (int i = 0; i < fields.Length; i++)

@@ -1,76 +1,79 @@
 name: Release workflow
 
+# Packs the committed GameData/Lonapse into Lonapse-<version>.zip and attaches it to the release.
+# The DLL, sounds and phrase table are built locally with ./package.sh and committed. This workflow builds nothing,
+# it only checks that the committed files belong to the release version.
+
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to package and upload (for example v0.6.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   release:
-    name: Build and publish Lonapse
+    name: Package and publish Lonapse
     runs-on: ubuntu-24.04
+    env:
+      TAG: ${{ inputs.tag || github.event.release.tag_name }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
-      - name: Install dependencies
+      - name: Check versions
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mono-mcs mono-runtime rsync zip unzip curl
+          TAG_VERSION="${TAG#v}"
+          SRC_VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
+          AVC_VERSION="$(python3 -c 'import json,sys;v=json.load(open(sys.argv[1]))["VERSION"];print("%d.%d.%d"%(v["MAJOR"],v["MINOR"],v["PATCH"]))' GameData/Lonapse/Lonapse.version)"
+          # the Version constant is stored in the DLL as a UTF-16 string, so a DLL built from older source shows here
+          DLL_VERSION="$(strings -e l GameData/Lonapse/Plugins/Lonapse.dll | grep -xE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)"
 
-      - name: Download KSP assemblies
-        run: |
-          curl -L --fail \
-            https://github.com/KSPModdingLibs/KSPLibs/raw/main/KSP-1.12.5.zip \
-            -o /tmp/ksp-libs.zip
+          echo "Tag:            $TAG_VERSION"
+          echo "Source:         $SRC_VERSION"
+          echo "Lonapse.version $AVC_VERSION"
+          echo "DLL:            $DLL_VERSION"
 
-          mkdir -p /tmp/ksp-libs
-          unzip -q /tmp/ksp-libs.zip -d /tmp/ksp-libs
-
-          LIB_DIR="$(dirname "$(find /tmp/ksp-libs -name Assembly-CSharp.dll -print -quit)")"
-
-          if [ ! -f "$LIB_DIR/Assembly-CSharp.dll" ]; then
-            echo "KSP assemblies not found!"
+          if [ -z "$TAG_VERSION" ] || [ "$SRC_VERSION" != "$TAG_VERSION" ] || [ "$AVC_VERSION" != "$TAG_VERSION" ] || [ "$DLL_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Version mismatch. Run ./package.sh locally and commit GameData/Lonapse."
             exit 1
           fi
+          grep -q "^## $TAG_VERSION" CHANGELOG.md || { echo "::error::CHANGELOG.md has no entry for $TAG_VERSION"; exit 1; }
 
-          mkdir -p /tmp/ksp/KSP_Data/Managed
-          cp "$LIB_DIR"/*.dll /tmp/ksp/KSP_Data/Managed/
+          echo "VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
 
-      - name: Prepare audio assets
+      - name: Check that GameData is up to date
         run: |
-          mkdir -p audio/build/Sounds
-          cp -a GameData/Lonapse/Sounds/. audio/build/Sounds/
+          # package.sh copies these into GameData/Lonapse. A difference means it was not run before the commit.
+          fail=0
+          for pair in "README.md:README.md" "CHANGELOG.md:CHANGELOG.md" "LICENSE:LICENSE.txt" "audio/CREDITS.md:CREDITS.md"; do
+            src="${pair%%:*}"; dst="GameData/Lonapse/${pair##*:}"
+            if ! cmp -s "$src" "$dst"; then
+              echo "::error::$dst differs from $src. Run ./package.sh locally and commit GameData/Lonapse."
+              fail=1
+            fi
+          done
+          exit $fail
 
-          mkdir -p audio/build/lonapse
-          cp GameData/Lonapse/Phrases/phrases.tsv \
-             audio/build/lonapse/phrases.tsv
-
-      - name: Build and package
-        run: ./package.sh
-        env:
-          KSP_DIR: /tmp/ksp
-
-      - name: Verify release version
+      - name: Pack ZIP
         run: |
-          VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-
-          if [ "$VERSION" != "$TAG_VERSION" ]; then
-            echo "Version mismatch!"
-            echo "Source: $VERSION"
-            echo "Tag: $TAG_VERSION"
-            exit 1
-          fi
+          mkdir -p dist
+          ZIP="dist/Lonapse-$VERSION.zip"
+          zip -qr -X "$ZIP" GameData/Lonapse -x 'GameData/Lonapse/PluginData/*'
+          n=$(unzip -l "$ZIP" | grep -cE '\.(wav|ogg)$')
+          echo "Packed $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files)"
+          unzip -l "$ZIP" | grep -q 'GameData/Lonapse/Plugins/Lonapse.dll' || { echo "::error::Lonapse.dll is missing from the ZIP"; exit 1; }
 
       - name: Upload release ZIP
-        run: |
-          VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
-
-          gh release upload "$GITHUB_REF_NAME" \
-            "dist/Lonapse-$VERSION.zip" \
-            --clobber
+        run: gh release upload "$TAG" "dist/Lonapse-$VERSION.zip" --clobber
         env:
           GH_TOKEN: ${{ github.token }}
- 

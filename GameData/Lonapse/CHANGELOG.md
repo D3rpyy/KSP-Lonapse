@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.6.0 (2026-11-05)
+
+**738 new interactions with 1514 new lines.** That is 233 radio chats with Mission Control, 76 crew chats on the intercom, 141 scenes for tense moments, launch and reentry, 121 for flight events like staging, landing, docking and EVA, 99 chats between a probe and the crew and 68 probe events. Lonapse now has 1729 interactions in total.
+
+### New
+- Probes and crew together. A crewed vessel with a probe core now gets small cabin chats. The probe beeps and a kerbal answers, often in their own way. This also works with only one kerbal aboard. Turn it off with "Probe talks with the crew" in the Probes tab.
+- Probe voices you can change. Fly a probe, open the Probes tab, pick another voice for that core part, change its sound with the sliders and press Play to hear a mood. This is saved in `settings.cfg` and needs no config files.
+- Mods can add probe voices. A voice is only text: a few values like pitch, wave and rhythm. Lonapse makes the sound in the game, so a mod ships one `.cfg` file and no audio. The voice borrows the lines and subtitles of a stock core or of the generic probe (`lines = okto`).
+  - A `LONAPSE_PROBE_VOICE` block in any `.cfg` in GameData adds a voice. A block named after a stock core (like `okto`) replaces that core's voice.
+  - To give a part a voice, add `ModuleLonapse` to it. A part author can put it in the part's own config. Module Manager is only needed to add it to a part from another mod, or to add it only when Lonapse is installed (`:NEEDS[Lonapse]`).
+  - See Probe voices in the readme for an example.
+- Mission Control sounds livelier. The voice is a bit higher, calm lines are a bit faster and less flat, and there are many more excited and silly Mission Control lines.
+- Lines remember when they were last played, also between game sessions (`PluginData/played.txt`). A scene doesn't come back until most of the other scenes that fit have played. Delete the file to start fresh.
+- A real countdown from 10 if you want one. Pick Down in the General tab.
+- Radio static under every radio transmission, also with a full signal. It is on by default at 50 %. Set it with the Radio static slider in the Sound tab, 0 % turns it off.
+- "Radio sound effects on the intercom" makes the crew chats sound like the radio instead of a voice in the cabin.
+- Subtitle width slider.
+
+### Changed
+- Subtitles are on by default.
+- The crew chats on the intercom more often: about every minute on a calm flight instead of every 5. Stations and quiet coasts no longer get extra chats on top, so it is about a minute everywhere.
+- Full throttle and throttle cut callouts can come 5 s apart instead of 20 s.
+- The Intercom gap slider goes up to 15 minutes instead of 30.
+- Probes talk as often as crews. Before, the gap between probe calls was 1.5 times as long.
+- When you update, these settings move to the new defaults only if you never changed them. Your own values are kept. Subtitles were off by default before, so they get turned on. You can turn them off again in the window.
+
+### Fixed
+- Science experiments run right after each other no longer lose their lines. They wait in a short queue (up to 3) and the crew talks about them one by one, 30 s apart. The same experiment type gets a new line after 60 s instead of 5 minutes, so a crew report in a new biome is mentioned.
+- A science line during launch, ascent, reentry or descent now waits until things calm down (up to 10 minutes) instead of being dropped after 90 s.
+- A waiting science line is no longer lost when a kerbal goes out on EVA or climbs back in.
+- A calm chat with two or more lines doesn't come back within 10 minutes.
+- A generic tense line no longer repeats as often when nothing else fits.
+- Removed lines where kerbals talk about their helmet inside the cabin. Kerbals don't wear one in IVA.
+- Lines about floating around the cabin now only play in orbit or while coasting, not on the pad or after landing.
+
 ## 0.5.3 (2026-11-03)
 
 - Mission Control no longer keeps saying "Keep an eye on the data" while the craft spins or pulls heavy g's. Its short answer to a crew line now fits the crew line, like a spin answer to a spin line.

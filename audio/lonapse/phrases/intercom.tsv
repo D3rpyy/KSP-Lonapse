@@ -87,7 +87,7 @@ ic_snore_1	chatter	chatter	calm	crew	ic_snore	1	both	goofy	any	Anoche roncabas c
 ic_snore_2	chatter	chatter	calm	crew	ic_snore	2	both	goofy	any	Era el motor.	That was the engine.
 ic_snore_3	chatter	chatter	calm	crew	ic_snore	3	both	goofy	any	El motor estaba apagado.	The engine was off.
 ic_sock_1	chatter	chatter	calm	crew	ic_sock	1	both	goofy	any	Me falta un calcetín.	One of my socks is missing.
-ic_sock_2	chatter	chatter	calm	crew	ic_sock	2	both	goofy	any	Está pegado a tu casco.	It's stuck to your helmet.
+ic_sock_2	chatter	chatter	calm	crew	ic_sock	2	both	goofy	any	Está pegado a tu asiento.	It's stuck to your seat.
 ic_sock_3	chatter	chatter	calm	crew	ic_sock	3	both	goofy	any	Ah, por eso huele así.	Ah, that's why it smells like that.
 ic_life_1	chatter	chatter	calm	crew	ic_life	1	both	goofy	any	¿Crees que hay vida en otros planetas?	Do you think there's life on other planets?
 ic_life_2	chatter	chatter	calm	crew	ic_life	2	both	goofy	any	Ahora sí. Nosotros.	There is now. Us.
@@ -102,9 +102,9 @@ ic_jellyfish_3	chatter	chatter	calm	crew	ic_jellyfish	3	both	orbit	any	Por eso e
 ic_rock_1	chatter	chatter	calm	crew	ic_rock	1	both	goofy	any	He traído una piedra de Kerbin como recuerdo.	I brought a rock from Kerbin as a souvenir.
 ic_rock_2	chatter	chatter	calm	crew	ic_rock	2	both	goofy	any	¿Por qué? Vivimos allí.	Why? We live there.
 ic_rock_3	chatter	chatter	calm	crew	ic_rock	3	both	goofy	any	Por si la echo de menos.	In case I miss it.
-ic_mustard_1	chatter	chatter	calm	crew	ic_mustard	1	both	goofy	any	¿Alguien ha visto la mostaza?	Has anyone seen the mustard?
-ic_mustard_2	chatter	chatter	calm	crew	ic_mustard	2	both	goofy	any	Mira el techo.	Look at the ceiling.
-ic_mustard_3	chatter	chatter	calm	crew	ic_mustard	3	both	goofy	any	Ah, ahí está. Y mi bocadillo.	Ah, there it is. And my sandwich.
+ic_mustard_1	chatter	chatter	calm	crew	ic_mustard	1	both	coast	any	¿Alguien ha visto la mostaza?	Has anyone seen the mustard?
+ic_mustard_2	chatter	chatter	calm	crew	ic_mustard	2	both	coast	any	Mira el techo.	Look at the ceiling.
+ic_mustard_3	chatter	chatter	calm	crew	ic_mustard	3	both	coast	any	Ah, ahí está. Y mi bocadillo.	Ah, there it is. And my sandwich.
 ic_lake_1	chatter	chatter	calm	crew	ic_lake	1	both	goofy	any	Déjame pilotar un rato.	Let me fly for a while.
 ic_lake_2	chatter	chatter	calm	crew	ic_lake	2	both	goofy	any	La última vez aterrizaste en un lago.	Last time you landed in a lake.
 ic_lake_3	chatter	chatter	calm	crew	ic_lake	3	both	goofy	any	Fue un amerizaje planeado.	It was a planned splashdown.
@@ -118,9 +118,6 @@ ic_math_1	chatter	chatter	calm	crew	ic_math	1	both	goofy	any	¿Cuánto es dos m�
 ic_math_2	chatter	chatter	calm	crew	ic_math	2	both	goofy	any	Depende del combustible.	Depends on the fuel.
 ic_dream_1	chatter	chatter	calm	crew	ic_dream	1	both	goofy	any	Soñé que éramos ingenieros.	I dreamed we were engineers.
 ic_dream_2	chatter	chatter	calm	crew	ic_dream	2	both	goofy	any	Qué pesadilla.	What a nightmare.
-ic_photo_1	chatter	chatter	calm	crew	ic_photo	1	both	goofy	any	Sonríe, que te hago una foto.	Smile, I'm taking a photo.
-ic_photo_2	chatter	chatter	calm	crew	ic_photo	2	both	goofy	any	Llevo el casco puesto.	I'm wearing my helmet.
-ic_photo_3	chatter	chatter	calm	crew	ic_photo	3	both	goofy	any	Pues sonríe con el casco.	Then smile with the helmet.
 ic_tea_1	chatter	chatter	calm	crew	ic_tea	1	both	coast	any	Mi té está flotando en bolitas.	My tea is floating in little balls.
 ic_tea_2	chatter	chatter	calm	crew	ic_tea	2	both	coast	any	Pues cómetelo.	Then eat it.
 ic_tea_3	chatter	chatter	calm	crew	ic_tea	3	both	coast	any	Té masticable. Qué innovación.	Chewable tea. What an innovation.

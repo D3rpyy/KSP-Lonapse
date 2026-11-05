@@ -48,7 +48,7 @@ la_pre_s1_1	chatter	chatter	calm	mc	la_pre_s1	1	m	prelaunch	any	Tripulación, co
 la_pre_s1_2	chatter	chatter	calm	crew	la_pre_s1	2	both	prelaunch	any	Todos listos en cabina.	All set in the cockpit.
 la_pre_s1_3	chatter	chatter	calm	mc	la_pre_s1	3	m	prelaunch	any	Recibido. Buen trabajo.	Copy. Good work.
 la_pre_s2_1	chatter	chatter	calm	crew	la_pre_s2	1	both	prelaunch	any	Control, cinturones abrochados.	Control, belts fastened.
-la_pre_s2_2	chatter	chatter	calm	mc	la_pre_s2	2	m	prelaunch	any	Recibido, cerrad los visores.	Copy, close your visors.
+la_pre_s2_2	chatter	chatter	calm	mc	la_pre_s2	2	m	prelaunch	any	Recibido, cerrad la escotilla.	Copy, close the hatch.
 la_pre_s3_1	chatter	chatter	calm	mc	la_pre_s3	1	m	prelaunch	any	Sondeo de lanzamiento. ¿Propulsión?	Launch poll. Propulsion?
 la_pre_s3_2	chatter	chatter	calm	crew	la_pre_s3	2	both	prelaunch	any	Propulsión lista.	Propulsion is go.
 la_pre_s3_3	chatter	chatter	calm	mc	la_pre_s3	3	m	prelaunch	any	Guiado listo. Todo en verde.	Guidance is go. All green.

@@ -89,10 +89,17 @@ VOICES = {
 DELIVERY = {
     "m":  dict(voice="es_ES-davefx-medium", pitch_st=5.0),   # male crew
     "f":  dict(voice="es_MX-claude-high", pitch_st=4.0),     # female crew
-    "mc": dict(voice="es_MX-ald-medium", pitch_st=2.0),      # Mission Control
+    "mc": dict(voice="es_MX-ald-medium", pitch_st=3.0),      # Mission Control (0.6.0: was 2.0, sounded flat)
 }
 # Delivery kinds that speak with a fixed voice like Mission Control (calm in a panic, see mc_panic)
 MC_LIKE_KINDS = ("mc",)
+# Mission Control outside a panic and the countdown (0.6.0, user report: MC sounds flat). Extra tempo and Piper
+# variation (noise scale and noise width, None keeps the Piper default 0.667 and 0.8). The plugin adds the
+# controllers on shift (DcMath.McPitch). Picked by ear (0.6.0) from four test renders: +3 st, tempo 1.04 and
+# noise 0.80 / 0.90 ("mild"). Stronger settings went toward the crew sound.
+MC_LIVELY_TEMPO = 1.04
+MC_LIVELY_NOISE_SCALE = 0.80
+MC_LIVELY_NOISE_W = 0.90
 # Per band (and for callouts): tempo factor (>1 faster) and extra pitch in semitones.
 BAND_DELIVERY = {
     "calm":    dict(tempo=1.00, pitch_st=0.0),
@@ -198,12 +205,14 @@ EVENTS = ["chatter", "staging", "chute_semi", "chute_full", "throttle_full", "th
           # plan v5 (probe mode)
           "probe_chat", "probe_sleepy",
           # plan v6 (probe mode): the probe calls Mission Control first
-          "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data"]
+          "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data",
+          # 0.6.0: probe and crew on one vessel, in the cabin
+          "probe_crew"]
 # New v4 and v5 events: allowed, but not yet held to MIN_PER_EVENT (the writers add them in phase 2). A shortfall is
 # a warning.
 NEW_EVENTS = ["soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
               "probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone",
-              "probe_rover", "probe_data"]
+              "probe_rover", "probe_data", "probe_crew"]
 # Optional events: no minimum at all, not even a warning.
 OPTIONAL_EVENTS = []
 # Plan v5. Same as PhraseTable.ProbeEvents and PhraseTable.ProbeVariantEvents in C#. Probe events only play in probe
@@ -211,6 +220,9 @@ OPTIONAL_EVENTS = []
 # role (is_probe_scene).
 PROBE_EVENTS = ["probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone",
                 "probe_rover", "probe_data"]
+# 0.6.0: a crewed vessel with a probe core. Probe and crew rows, no mc rows, never in a serious phase. Same as
+# PhraseTable.ProbeCrewEvent in C#.
+PROBE_CREW_EVENT = "probe_crew"
 PROBE_VARIANT_EVENTS = ["science", "power_low", "power_ok", "soi_enter", "part_lost", "signal_lost", "signal_back",
                         "touchdown", "splashdown", "docked", "burn_soon", "staging", "chute_semi", "chute_full",
                         "throttle_full", "throttle_cut", "plan_node"]
@@ -427,7 +439,9 @@ def validate(rows):
         elif row["beep"]:
             bad.append("beep is only allowed on probe rows")
         probe_ev = row["event"] in PROBE_EVENTS
-        probe_ok = probe_ev or row["event"] in PROBE_VARIANT_EVENTS
+        probe_ok = probe_ev or row["event"] in PROBE_VARIANT_EVENTS or row["event"] == PROBE_CREW_EVENT
+        if row["event"] == PROBE_CREW_EVENT and row["role"] == "mc":
+            bad.append("probe_crew is in the cabin, it cannot have mc rows")
         if row["core"] != "any" and not probe_ok:
             bad.append("core '%s' outside a probe event" % row["core"])
         if row["role"] in PROBE_ROLES and not probe_ok:
@@ -501,6 +515,12 @@ def validate(rows):
         intercom = len(lines) >= 2 and all(r["role"] == "crew" for r in lines)
         if intercom and (head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES):
             errors.append("%s: scene '%s' is an intercom scene in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
+        if head["event"] == PROBE_CREW_EVENT:
+            roles = {r["role"] for r in lines}
+            if "probe" not in roles or "crew" not in roles:
+                errors.append("%s: probe_crew scene '%s' needs a probe row and a crew row" % (head["loc"], sc))
+            if head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES:
+                errors.append("%s: probe_crew scene '%s' is in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
     return good, errors
 
 
@@ -744,7 +764,24 @@ def delivery(row, kind):
     else:
         band = row["band"]
     b = BAND_DELIVERY[band]
-    return d["voice"], d["pitch_st"] + b["pitch_st"], b["tempo"] * d.get("tempo", 1.0)
+    tempo = b["tempo"] * d.get("tempo", 1.0)
+    if is_mc_lively(row, kind):
+        tempo *= MC_LIVELY_TEMPO
+    return d["voice"], d["pitch_st"] + b["pitch_st"], tempo
+
+
+def is_mc_lively(row, kind):
+    return kind in MC_LIKE_KINDS and row["band"] != "panic" and not is_countdown(row)
+
+
+def mc_noise():
+    """Piper noise flags for a lively MC line, empty when both stay at the Piper default."""
+    out = []
+    if MC_LIVELY_NOISE_SCALE is not None:
+        out += ["--noise-scale", "%.2f" % MC_LIVELY_NOISE_SCALE]
+    if MC_LIVELY_NOISE_W is not None:
+        out += ["--noise-w-scale", "%.2f" % MC_LIVELY_NOISE_W]
+    return out
 
 
 def is_panic_crew(row, kind):
@@ -765,6 +802,8 @@ def piper_speech(text, kind, row, tempo_jitter=1.0, noisy=False):
         cmd += ["--noise-scale", "%.2f" % PANIC_NOISE_SCALE, "--noise-w-scale", "%.2f" % PANIC_NOISE_W]
     elif is_countdown(row):
         cmd += ["--noise-scale", "%.2f" % COUNTDOWN_NOISE_SCALE, "--noise-w-scale", "%.2f" % COUNTDOWN_NOISE_W]
+    elif is_mc_lively(row, kind):
+        cmd += mc_noise()
     raw = run(cmd, text.encode("utf-8")).stdout
     if len(raw) < PIPER_SR // 10 * 2:
         raise BuildError("Piper returned %d bytes for '%s'" % (len(raw), text))
@@ -1124,6 +1163,8 @@ def render_key(row, g, kind):
                       PANIC_GASP_CHANCE, row["clip_key"].startswith("scream")]
     if is_countdown(row):
         k["countdown"] = [COUNTDOWN_NOISE_SCALE, COUNTDOWN_NOISE_W]
+    if is_mc_lively(row, kind) and mc_noise():
+        k["mc_noise"] = [MC_LIVELY_NOISE_SCALE, MC_LIVELY_NOISE_W]
     return hashlib.sha256(json.dumps(k, sort_keys=True).encode("utf-8")).hexdigest()[:32]
 
 

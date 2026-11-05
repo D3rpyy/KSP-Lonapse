@@ -142,7 +142,7 @@ namespace Lonapse
 
             int step = count.Update(dt);
             if (step == 0) return;
-            Play(LaunchCountdown.ClipKey(step), 0.85f);
+            Play(LaunchCountdown.ClipKey(step, host.settings.countdownDown), 0.85f);
             if (step == LaunchCountdown.Liftoff)
             {
                 quindarOutLeft = 2.5f;

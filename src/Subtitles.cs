@@ -127,7 +127,8 @@ namespace Lonapse
 
             EnsureStyles(SubtitleLayout.FontSize(size), SubtitleLayout.LabelFontSize(size));
 
-            SubColumn col = SubtitleLayout.Column(pos, Screen.width, Screen.height, ReadScales(), cx, cy);
+            float widthScale = s != null ? s.subtitleWidth : 1f;
+            SubColumn col = SubtitleLayout.Column(pos, Screen.width, Screen.height, ReadScales(), cx, cy, widthScale);
             bool stripe = colors && !showSpeaker;
             float textW = Math.Max(20f, col.w - 2f * SubtitleLayout.PadX - (stripe ? 6f : 0f));
             float maxTextH = textStyle.lineHeight * SubtitleLayout.MaxLines + 1f;

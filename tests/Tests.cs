@@ -477,7 +477,7 @@ public static class Tests
             old.tuning.descentFast = 0.25f; old.tuning.spinHi = 1.8f; old.maxCrewVoices = 3;
             old.rateMultiplier = 4f; old.crewVolume = 0.83f;
             List<string> reset = old.MigrateValues(2);
-            Check(old.tuning.intercomInterval == 300f && old.tuning.stationMcFactor == 1f && old.tuning.descentMaxH == 500f
+            Check(old.tuning.intercomInterval == 60f && old.tuning.stationMcFactor == 1f && old.tuning.descentMaxH == 500f
                   && old.tuning.descentFast == 1.5f && old.maxCrewVoices == 2,
                   "migration: changed defaults reset for a 0.2 file", reset.Count + " value(s) reset");
             Check(old.tuning.spinHi == 1.8f && old.rateMultiplier == 4f && old.crewVolume == 0.83f && old.tuningVersion == Tuning.CurrentVersion,
@@ -491,17 +491,17 @@ public static class Tests
         {
             Tuning t = new Tuning();
             float lo = DcMath.IntercomInterval(t.intercomInterval, false, false, t.intercomStationBoost, t.intercomQuietBoost);
-            Near(lo, 300.0, 1e-3, "intercom: 300 s on ordinary ships at stress 0");
-            Near(DcMath.IntercomIntervalStress(lo, 0f, t.intercomStressMin, t.intercomStressPeak), 300.0, 1e-2, "intercom: stress 0 keeps the base interval");
-            Near(DcMath.IntercomIntervalStress(lo, 0.3f, t.intercomStressMin, t.intercomStressPeak), Math.Sqrt(300.0 * 25.0), 0.05, "intercom: stress 0.3 is the log midpoint (~87 s)");
+            Near(lo, 60.0, 1e-3, "intercom: 60 s on ordinary ships at stress 0");
+            Near(DcMath.IntercomIntervalStress(lo, 0f, t.intercomStressMin, t.intercomStressPeak), 60.0, 1e-2, "intercom: stress 0 keeps the base interval");
+            Near(DcMath.IntercomIntervalStress(lo, 0.3f, t.intercomStressMin, t.intercomStressPeak), Math.Sqrt(60.0 * 25.0), 0.05, "intercom: stress 0.3 is the log midpoint (~39 s)");
             Near(DcMath.IntercomIntervalStress(lo, 0.6f, t.intercomStressMin, t.intercomStressPeak), 25.0, 1e-3, "intercom: 25 s at stress 0.6");
             Near(DcMath.IntercomIntervalStress(lo, 0.68f, t.intercomStressMin, t.intercomStressPeak), 25.0, 1e-3, "intercom: flat above the peak");
             bool mono = true; float prev = float.MaxValue;
             for (int i = 0; i <= 70; i++) { float v = DcMath.IntercomIntervalStress(lo, i / 100f, 25f, 0.6f); if (v > prev + 1e-4f) mono = false; prev = v; }
             Check(mono, "intercom: interval never grows with stress", null);
             float st = DcMath.IntercomInterval(t.intercomInterval, true, false, t.intercomStationBoost, t.intercomQuietBoost);
-            Near(DcMath.IntercomIntervalStress(st, 0f, 25f, 0.6f), 120.0, 1e-2, "intercom: station boost still applies at low stress (120 s)");
-            Near(DcMath.IntercomInterval(t.intercomInterval, false, true, t.intercomStationBoost, t.intercomQuietBoost), 150.0, 1e-3, "intercom: quiet coast boost (150 s)");
+            Near(DcMath.IntercomIntervalStress(st, 0f, 25f, 0.6f), 60.0, 1e-2, "intercom: stations get the same 60 s by default (boost 1)");
+            Near(DcMath.IntercomInterval(t.intercomInterval, false, true, t.intercomStationBoost, t.intercomQuietBoost), 60.0, 1e-3, "intercom: quiet coasts get the same 60 s by default (boost 1)");
             Check(t.intercomMaxStress == 0.7f && t.intercomAbortStress > t.intercomMaxStress, "intercom: chats start below 0.7, abort slightly above", null);
 
             // delivery band follows each speaker's personal band
@@ -517,11 +517,18 @@ public static class Tests
             // migration to version 4
             Settings m3 = new Settings(); m3.tuning.intercomInterval = 600f; m3.tuning.intercomMaxStress = 0.35f; m3.tuning.intercomAbortStress = 0.5f;
             m3.MigrateValues(3);
-            Check(m3.tuning.intercomInterval == 300f && m3.tuning.intercomMaxStress == 0.7f && m3.tuning.intercomAbortStress == 0.78f,
+            Check(m3.tuning.intercomInterval == 60f && m3.tuning.intercomMaxStress == 0.7f && m3.tuning.intercomAbortStress == 0.78f,
                   "migration v4: old intercom defaults replaced", null);
             Settings mu = new Settings(); mu.tuning.intercomInterval = 450f;
             mu.MigrateValues(3);
             Check(mu.tuning.intercomInterval == 450f, "migration v4: a user-set intercom interval is kept", null);
+            Settings m10 = new Settings(); m10.tuning.intercomInterval = 300f; m10.tuning.probeRateFactor = 1.5f; m10.subtitles = false;
+            m10.MigrateValues(10);
+            Check(m10.tuning.intercomInterval == 60f && m10.tuning.probeRateFactor == 1f && m10.subtitles,
+                  "migration v11: old intercom, probe rate and subtitle defaults move", null);
+            Settings m10u = new Settings(); m10u.tuning.intercomInterval = 450f; m10u.tuning.probeRateFactor = 2f;
+            m10u.MigrateValues(10);
+            Check(m10u.tuning.intercomInterval == 450f && m10u.tuning.probeRateFactor == 2f, "migration v11: user-set values are kept", null);
             Settings m4 = new Settings(); m4.tuning.lightDelayMax = 2f; m4.tuning.lightDelayScale = 0.45f;
             m4.MigrateValues(4);
             Check(m4.tuning.lightDelayMax == 10f && m4.tuning.lightDelayScale == 2.6f, "migration v5: light delay up to 10 s replaces the old defaults", null);
@@ -895,7 +902,13 @@ public static class Tests
             Check(ev1.band == Band.Tense, "escalation: an offset of 0.16 holds a stress of 0.8 at tense", ev1.band.ToString());
         }
 
+        Check(LaunchCountdown.ClipKey(1, false) == "countdown_01" && LaunchCountdown.ClipKey(10, false) == "countdown_10"
+              && LaunchCountdown.ClipKey(1, true) == "countdown_10" && LaunchCountdown.ClipKey(10, true) == "countdown_01"
+              && LaunchCountdown.ClipKey(LaunchCountdown.Liftoff, true) == "countdown_liftoff" && LaunchCountdown.ClipKey(0, true) == null,
+              "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
+        SceneMemoryTests();
         ProbeCoreTests();
+        ProbeSynthTests();
         ProbeSettingsTests();
         ProbeRulesTests();
         ReviewFixTests();
@@ -978,6 +991,26 @@ public static class Tests
             "dy_a_1\tprobe_chat\tchatter\tcalm\tdiary\tdy_a\t1\tboth\tany\tany\tany\t\t\tDay 3.",
             "lb_a_1\tprobe_chat\tchatter\tcalm\tprobe\tlb_a\t1\tboth\tany\tany\tany\thappy\t\t[beeps excitedly, then a song]" }, badErrs);
         Check(badErrs.Count == 2, "probe rules v6: diary role and long probe subtitle rejected", string.Join(" | ", badErrs.ToArray()));
+
+        // 0.6.0: probe and crew in the cabin (probe_crew). Probe and crew rows, never MC. A probe scene, so the crew
+        // pickers skip it, and it is found by its event like the probe events.
+        List<string> pcErr = new List<string>();
+        PhraseTable pct = PhraseTable.Parse(new List<string> { rows[0],
+            "pc_a_1\tprobe_crew\tchatter\tcalm\tprobe\tpc_a\t1\tboth\tgoofy\tany\tany\tproud\t\t[beeps with a report]",
+            "pc_a_2\tprobe_crew\tchatter\tcalm\tcrew\tpc_a\t2\tboth\tgoofy\tany\tany\t\tBuenos datos\tGood data." }, pcErr);
+        PhraseScene pcs = pcErr.Count == 0 && pct.Scenes.Count == 1 ? pct.Scenes[0] : null;
+        Check(pcs != null && pcs.IsProbe && pcs.CrewLines == 1 && !pcs.IsIntercom,
+              "0.6.0 probe_crew: probe plus crew parses, is a probe scene, not an intercom scene", string.Join(" | ", pcErr.ToArray()));
+        Check(pcs != null && pct.ProbeScenesFor("probe_crew", "okto", "orbit", false, null).Count == 1
+              && pct.ProbeScenesFor("probe_crew", "okto", "ascent", false, null).Count == 0,
+              "0.6.0 probe_crew: found by its event, only in its phase", null);
+        List<string> pcBad = new List<string>();
+        PhraseTable.Parse(new List<string> { rows[0],
+            "pc_b_1\tprobe_crew\tchatter\tcalm\tmc\tpc_b\t1\tm\tgoofy\tany\tany\t\tHola\tHello." }, pcBad);
+        Check(pcBad.Count == 1 && pcBad[0].Contains("cannot have mc rows"), "0.6.0 probe_crew: an mc row is rejected",
+              string.Join(" | ", pcBad.ToArray()));
+        Check(!PhraseTable.IsProbeEvent("probe_crew") && PhraseTable.IsProbeCrewEvent("probe_crew"),
+              "0.6.0 probe_crew: not a probe mode event", null);
         List<string> errs = new List<string>();
         PhraseTable t = PhraseTable.Parse(rows, errs);
         Check(errs.Count == 0, "probe rules: test probe table parses", string.Join(" | ", errs.ToArray()));
@@ -1020,6 +1053,326 @@ public static class Tests
 
     // ==== v4 review fixes: event max ages, debug topic cycle, expression override check, badass with effects ====
     // ---- plan v5: probe cores, sleep hysteresis ----
+    // 0.6.0 line memory: a shuffle bag over the changing scene lists
+
+    static void SceneMemoryTests()
+    {
+        var pool = new List<PhraseScene>();
+        for (int i = 0; i < 20; i++) pool.Add(new PhraseScene("s" + i, "chatter", "calm", "chatter"));
+        Random rng = new Random(3);
+
+        // a fixed list of 20: all 20 before the first repeat, then never one of the last 15 again
+        {
+            SceneMemory m = new SceneMemory();
+            var seen = new HashSet<string>();
+            bool firstRound = true;
+            for (int i = 0; i < 20; i++) firstRound &= seen.Add(m.Take(pool, rng, null).Id);
+            var recent = new List<string>();
+            int tooSoon = 0;
+            for (int i = 0; i < 500; i++)
+            {
+                string id = m.Take(pool, rng, null).Id;
+                int at = recent.LastIndexOf(id);
+                if (at >= 0 && recent.Count - at < 15) tooSoon++;
+                recent.Add(id);
+            }
+            Check(firstRound && tooSoon == 0, "line memory: 20 lines all play once before a repeat, then a line waits at least 15 picks", tooSoon + " too soon");
+        }
+        // plain random from the same list repeats much sooner (for comparison, informational)
+        {
+            int firstRepeat = 0, runs = 200;
+            for (int r = 0; r < runs; r++)
+            {
+                var seen = new HashSet<string>();
+                int n = 0;
+                while (seen.Add(pool[rng.Next(pool.Count)].Id)) n++;
+                firstRepeat += n + 1;
+            }
+            Check(true, "line memory: plain random from 20 lines repeats after this many picks on average", (firstRepeat / (double)runs).ToString("0.0"));
+        }
+        // a changing list: a new scene that joins the list comes first, the list order does not matter
+        {
+            SceneMemory m = new SceneMemory();
+            foreach (PhraseScene sc in pool) m.Stamp(sc.Id);
+            var grown = new List<PhraseScene>(pool) { new PhraseScene("new", "chatter", "calm", "chatter") };
+            Check(m.Take(grown, rng, null).Id == "new", "line memory: a scene never heard comes first", null);
+            List<PhraseScene> fresh = m.Freshest(pool);
+            Check(fresh.Count == 5 && fresh.TrueForAll(x => m.LastSeq(x.Id) <= m.LastSeq("s4")), "line memory: after a full round, the oldest quarter is the choice", fresh.Count.ToString());
+        }
+        // avoid the last scene, a single scene, empty lists
+        {
+            SceneMemory m = new SceneMemory();
+            var two = new List<PhraseScene> { pool[0], pool[1] };
+            m.Stamp("s0"); m.Stamp("s1");
+            bool avoided = true;
+            for (int i = 0; i < 20; i++) avoided &= m.Take(two, rng, "s1").Id == "s0" && m.Take(two, rng, "s0").Id == "s1";
+            Check(avoided, "line memory: with two scenes they take turns", null);
+            var one = new List<PhraseScene> { pool[2] };
+            Check(m.Take(one, rng, "s2") == pool[2] && m.Take(new List<PhraseScene>(), rng, null) == null && m.Take(null, rng, null) == null,
+                  "line memory: one scene is returned as it is, empty gives null", null);
+            SceneMemory a = new SceneMemory();
+            a.Stamp("x"); a.Stamp("y");
+            string pick = a.Take(new List<PhraseScene> { new PhraseScene("x", "chatter", "calm", "chatter"), new PhraseScene("y", "chatter", "calm", "chatter") }, rng, "x").Id;
+            Check(pick == "y", "line memory: the last scene is left out when there is another choice", pick);
+        }
+        // file round trip and bad lines
+        {
+            SceneMemory m = new SceneMemory();
+            m.Stamp("ct_pil_01"); m.Stamp("mj some id"); m.Stamp("ct_pil_01");
+            SceneMemory back = SceneMemory.Parse(m.Serialize());
+            Check(back.Count == 2 && back.LastSeq("ct_pil_01") == 3 && back.LastSeq("mj some id") == 2 && back.Sequence == 3,
+                  "line memory: file round trip keeps ids (spaces too) and the counter", back.Count + " " + back.Sequence);
+            back.Stamp("z");
+            SceneMemory junk = SceneMemory.Parse(new[] { "# x", "", "noseq", "a -4", "b 12", " c 7 " });
+            Check(back.LastSeq("z") == 4 && junk.Count == 2 && junk.LastSeq("b") == 12 && junk.LastSeq("c") == 7 && junk.Sequence == 12,
+                  "line memory: the counter continues, bad lines are skipped", junk.Count.ToString());
+            SceneMemory big = new SceneMemory();
+            for (int i = 0; i < SceneMemory.MaxEntries + 10; i++) big.Stamp("id" + i);
+            Check(big.Count <= SceneMemory.MaxEntries && big.LastSeq("id" + (SceneMemory.MaxEntries + 9)) > 0 && big.LastSeq("id0") < 0,
+                  "line memory: past the cap the oldest scenes are forgotten", big.Count.ToString());
+        }
+    }
+
+    // 0.6.0: the C# probe beep synth must give the same samples as audio/build_clips.py
+    static void ProbeSynthTests()
+    {
+        string here = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string refPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../tests/probe_reference.tsv"));
+        string coresPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../audio/probe/cores.tsv"));
+        Dictionary<string, ProbeVoiceSpec> stock = new Dictionary<string, ProbeVoiceSpec>();
+        foreach (ProbeVoiceSpec v in ProbeVoiceSpec.Stock()) stock[v.Name] = v;
+
+        // the stock voices in C# hold the same values as audio/probe/cores.tsv
+        {
+            int same = 0, rows = 0;
+            string bad = null;
+            foreach (string raw in System.IO.File.ReadAllLines(coresPath))
+            {
+                if (raw.Trim().Length == 0 || raw.TrimStart().StartsWith("#") || raw.StartsWith("key\t")) continue;
+                string[] f = raw.Split('\t');
+                rows++;
+                ProbeVoiceSpec v;
+                if (f.Length == 5 && stock.TryGetValue(f[0].Trim(), out v)
+                    && Math.Abs(v.BaseHz - double.Parse(f[1], System.Globalization.CultureInfo.InvariantCulture)) < 1e-9
+                    && v.Wave == f[2].Trim() && v.Rhythm == f[3].Trim()
+                    && Math.Abs(v.Glide - double.Parse(f[4], System.Globalization.CultureInfo.InvariantCulture)) < 1e-9) same++;
+                else if (bad == null) bad = raw;
+            }
+            Check(rows == ProbeCores.Keys.Length && same == rows && stock.Count == rows,
+                  "probe synth: ProbeVoiceSpec.Stock matches audio/probe/cores.tsv", bad ?? (same + "/" + rows));
+        }
+
+        // every stock clip against the Python fingerprint (midpoint jitter on both sides)
+        {
+            int clips = 0, lenOk = 0, ptsOk = 0;
+            double worst = 0.0, worstRms = 0.0;
+            string first = null;
+            foreach (string raw in System.IO.File.ReadAllLines(refPath))
+            {
+                if (raw.StartsWith("#") || raw.Trim().Length == 0) continue;
+                string[] f = raw.Split('\t');
+                clips++;
+                ProbeVoiceSpec v = stock[f[0]];
+                int variant = int.Parse(f[2]);
+                int n = int.Parse(f[3]);
+                double rms = double.Parse(f[4], System.Globalization.CultureInfo.InvariantCulture);
+                double[] y = ProbeSynth.Normalize(ProbeSynth.Beep(v, f[1], variant, null), ProbeSynth.TargetRmsDb);
+                if (y.Length != n) { if (first == null) first = f[0] + "/" + f[1] + "/" + variant + " length " + y.Length + " vs " + n; continue; }
+                lenOk++;
+                int pts = f.Length - 5;
+                double clipWorst = 0.0;
+                for (int k = 0; k < pts; k++)
+                {
+                    double want = double.Parse(f[5 + k], System.Globalization.CultureInfo.InvariantCulture);
+                    double got = y[(long)k * (n - 1) / (pts - 1)];
+                    clipWorst = Math.Max(clipWorst, Math.Abs(got - want));
+                }
+                worst = Math.Max(worst, clipWorst);
+                worstRms = Math.Max(worstRms, Math.Abs(ProbeSynth.GatedRmsDb(y) - rms));
+                if (clipWorst < 1e-6) ptsOk++;
+                else if (first == null) first = f[0] + "/" + f[1] + "/" + variant + " off by " + clipWorst.ToString("E2");
+            }
+            Check(clips == ProbeCores.Keys.Length * ProbeCores.Moods.Length * ProbeSynth.VariantsPerMood && lenOk == clips && ptsOk == clips && worstRms < 1e-4,
+                  "probe synth: all " + clips + " stock clips match build_clips.py (length, 48 samples within 1e-6, gated RMS)",
+                  first ?? ("max sample error " + worst.ToString("E2") + ", RMS " + worstRms.ToString("E2") + " dB"));
+        }
+
+        // with a real random jitter: loudness and peak stay in the build contract, the length stays near the reference
+        {
+            Random rng = new Random(7);
+            ProbeSynth.Uniform u = (a, b) => a + (b - a) * rng.NextDouble();
+            ProbeVoiceSpec custom = new ProbeVoiceSpec("test", 1600, "fm", "stutter", 0.8);
+            int bad = 0, total = 0;
+            double peakMax = 0.0;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            foreach (string mood in ProbeCores.Moods)
+                for (int i = 0; i < ProbeSynth.VariantsPerMood; i++)
+                {
+                    float[] y = ProbeSynth.Render(custom, mood, i, u);
+                    double[] d = new double[y.Length];
+                    double pk = 0.0;
+                    for (int k = 0; k < y.Length; k++) { d[k] = y[k]; pk = Math.Max(pk, Math.Abs(y[k])); }
+                    peakMax = Math.Max(peakMax, pk);
+                    total++;
+                    double sec = y.Length / (double)ProbeSynth.SampleRate;
+                    if (Math.Abs(ProbeSynth.GatedRmsDb(d) - ProbeSynth.TargetRmsDb) > 1.0 || 20 * Math.Log10(pk) > -1.0 || sec < 0.08 || sec > 1.8) bad++;
+                }
+            sw.Stop();
+            Check(bad == 0 && total == 21, "probe synth: a custom voice with real jitter gives 21 clips at -22 dB RMS +-1, peak under -1 dBFS, 0.08 to 1.8 s",
+                  bad + " bad, peak " + (20 * Math.Log10(peakMax)).ToString("0.00") + " dBFS");
+            // informational: how long one voice takes here (not the game's Mono)
+            Check(true, "probe synth: 21 clips of one voice rendered", sw.ElapsedMilliseconds + " ms on this machine");
+        }
+
+        // extras and mood patterns of a voice's own (0.6.0)
+        {
+            ProbeVoiceSpec baseV = ProbeVoiceSpec.Stock()[1];   // okto: triangle, swing
+            int baseLen = ProbeSynth.Beep(baseV, "happy", 0, null).Length;
+            ProbeVoiceSpec fast = baseV.Clone("fast"); fast.Speed = 2.0;
+            ProbeVoiceSpec slow = baseV.Clone("slow"); slow.Speed = 0.5;
+            int fastLen = ProbeSynth.Beep(fast, "happy", 0, null).Length, slowLen = ProbeSynth.Beep(slow, "happy", 0, null).Length;
+            Check(Math.Abs(fastLen - baseLen / 2.0) < 20 && Math.Abs(slowLen - baseLen * 2.0) < 20,
+                  "probe voice: speed 2 halves the phrase, 0.5 doubles it", baseLen + " / " + fastLen + " / " + slowLen);
+            bool allDiffer = true;
+            string which = null;
+            ProbeVoiceSpec[] extras = { baseV.Clone("a"), baseV.Clone("b"), baseV.Clone("c") };
+            extras[0].Spread = 1.5; extras[1].Vibrato = 0.5; extras[2].Buzz = 0.8;
+            double[] plain = ProbeSynth.Beep(baseV, "curious", 0, null);
+            for (int k = 0; k < extras.Length; k++)
+            {
+                double[] y = ProbeSynth.Beep(extras[k], "curious", 0, null);
+                double diff = 0.0;
+                for (int i = 0; i < Math.Min(y.Length, plain.Length); i++) diff = Math.Max(diff, Math.Abs(y[i] - plain[i]));
+                if (diff < 0.05) { allDiffer = false; which = "extra " + k; }
+                if (extras[k].Signature() == baseV.Signature()) { allDiffer = false; which = "signature " + k; }
+            }
+            Check(allDiffer, "probe voice: note jumps, vibrato and grit each change the sound and the signature", which);
+
+            List<string> e = new List<string>();
+            ProbeMoodSpec m = ProbeMoodSpec.FromValues(new Dictionary<string, string> { { "name", "Happy" }, { "length", "0.05" }, { "gap", "0.02" }, { "rhythm", "false" } },
+                                                       new List<string> { "0>3 5 rest:0.1 7>12:0.2@0.8" }, "t", e);
+            Check(e.Count == 0 && m != null && m.Name == "happy" && !m.UseRhythm && m.Variants.Count == 1 && m.Variants[0].Count == 3
+                  && m.Variants[0][0].st1 == 3.0 && m.Variants[0][1].st0 == 5.0 && m.Variants[0][1].st1 == 5.0
+                  && Math.Abs(m.Variants[0][1].gap - 0.12) < 1e-9 && m.Variants[0][2].dur == 0.2 && m.Variants[0][2].amp == 0.8
+                  && m.Variants[0][0].dur == 0.05,
+                  "probe mood: notes parse (glide, flat note, rest, length, level, mood defaults)", string.Join("; ", e.ToArray()));
+            List<ProbeNote> v1 = m.NotesFor(1), v2 = m.NotesFor(2);
+            Check(v1[0].st0 == 2.0 && v2[0].st0 == -2.0 && v1[v1.Count - 1].gap == 0.0, "probe mood: one notes line gives variants at 0, +2 and -2, no pause after the last note", null);
+            ProbeMoodSpec m3 = ProbeMoodSpec.FromValues(new Dictionary<string, string> { { "name", "scared" } }, new List<string> { "0 1", "5 6 7", "-3" }, "t", null);
+            Check(m3 != null && m3.NotesFor(0).Count == 2 && m3.NotesFor(1).Count == 3 && m3.NotesFor(2)[0].st0 == -3.0,
+                  "probe mood: three notes lines are three variants, not transposed", null);
+            List<string> eb = new List<string>();
+            ProbeMoodSpec bad = ProbeMoodSpec.FromValues(new Dictionary<string, string> { { "name", "happy" } }, new List<string> { "0 x 99 1:5 2@3 rest:0.1x" }, "t", eb);
+            Check(bad != null && bad.Variants[0].Count == 1 && eb.Count == 5, "probe mood: each bad note is reported and left out", eb.Count + ": " + string.Join("; ", eb.ToArray()));
+            List<string> en = new List<string>();
+            Check(ProbeMoodSpec.FromValues(new Dictionary<string, string> { { "name", "angry" } }, new List<string> { "0" }, "t", en) == null && en.Count == 1
+                  && ProbeMoodSpec.FromValues(new Dictionary<string, string> { { "name", "happy" } }, new List<string> { "x" }, "t", en) == null,
+                  "probe mood: an unknown mood or a mood without notes is rejected", null);
+
+            ProbeVoiceSpec own = baseV.Clone("own");
+            own.SetMood(m);
+            double[] ownHappy = ProbeSynth.Beep(own, "happy", 0, null), ownSad = ProbeSynth.Beep(own, "sleepy", 0, null);
+            double[] stockSad = ProbeSynth.Beep(baseV, "sleepy", 0, null);
+            bool sadSame = ownSad.Length == stockSad.Length;
+            for (int i = 0; sadSame && i < ownSad.Length; i++) sadSame = ownSad[i] == stockSad[i];
+            int expect = (int)(0.05 * ProbeSynth.SampleRate) + (int)Math.Round(0.12 * ProbeSynth.SampleRate) + (int)(0.05 * ProbeSynth.SampleRate)
+                         + (int)Math.Round(0.02 * ProbeSynth.SampleRate) + (int)(0.2 * ProbeSynth.SampleRate);
+            Check(Math.Abs(ownHappy.Length - expect) <= 3 && sadSame && own.Signature() != baseV.Signature() && own.Clone("x").Moods.Count == 1,
+                  "probe mood: an own mood replaces only that mood, it is in the signature and copies keep it", ownHappy.Length + " vs " + expect);
+            float[] r = ProbeSynth.Render(own, "happy", 0, null);
+            double pk = 0.0;
+            foreach (float f in r) pk = Math.Max(pk, Math.Abs(f));
+            Check(r.Length > 0 && 20 * Math.Log10(pk) <= -1.0, "probe mood: an own mood renders under the peak limit", (20 * Math.Log10(pk)).ToString("0.00"));
+            var ev = new Dictionary<string, string>();
+            foreach (var kv in own.ToValues()) ev[kv.Key] = kv.Value;
+            ProbeVoiceSpec rt = ProbeVoiceSpec.FromValues(ev, null);
+            var mv = new Dictionary<string, string>();
+            foreach (var kv in m.ToValues()) mv[kv.Key] = kv.Value;
+            rt.SetMood(ProbeMoodSpec.FromValues(mv, m.Notes, rt.Name, null));
+            ProbeVoiceSpec ex = baseV.Clone("ex"); ex.Speed = 1.35; ex.Vibrato = 0.2; ex.Buzz = 0.1; ex.Spread = 0.75;
+            var xv = new Dictionary<string, string>();
+            foreach (var kv in ex.ToValues()) xv[kv.Key] = kv.Value;
+            Check(rt.SameSound(own) && ProbeVoiceSpec.FromValues(xv, null).SameSound(ex),
+                  "probe voice: extras and moods survive the settings round trip", null);
+        }
+
+        // registry and the pick per vessel (0.6.0)
+        {
+            ProbeVoiceSpec cfgVoice = new ProbeVoiceSpec("modcore", 610, "saw", "even", 0.2);
+            ProbeVoiceSpec cfgOkto = new ProbeVoiceSpec("okto", 900, "triangle", "swing", 0.35);   // a mod changes OKTO
+            ProbeVoiceSpec mine = new ProbeVoiceSpec("custom1", 1500, "fm", "lazy", 0.5);
+            ProbeVoiceRegistry reg = ProbeVoiceRegistry.Build(new[] { cfgVoice, cfgOkto }, new[] { mine });
+            Check(reg.Get("OKTO ") == cfgOkto && reg.SourceOf("okto") == ProbeVoiceSource.Config && reg.SourceOf("custom1") == ProbeVoiceSource.Settings
+                  && reg.Names.Count == 8 && reg.Names[0] == ProbeCores.Stayputnik && reg.Names[6] == "modcore" && reg.Names[7] == "custom1",
+                  "probe voice: registry order stock, GameData, settings, a later voice replaces one with the same name", string.Join(" ", new List<string>(reg.Names).ToArray()));
+            Check(!reg.UsesStockClips(cfgOkto) && reg.UsesStockClips(reg.Get("hecs")) && !reg.UsesStockClips(mine)
+                  && reg.UsesStockClips(reg.Get("hecs").Clone(null)),
+                  "probe voice: only a voice that sounds like its stock voice uses the prebuilt clips", null);
+            Check(reg.FreeName("custom") == "custom2" && reg.Cycle("custom1", 1) == ProbeCores.Stayputnik && reg.Cycle(ProbeCores.Stayputnik, -1) == "custom1",
+                  "probe voice: free name and cycling wrap around", null);
+
+            ProbeVoicePick.Why why;
+            int at;
+            var parts = new List<ProbeCorePart> {
+                new ProbeCorePart("probeCoreOcto.v2", null, 0),
+                new ProbeCorePart("modProbe", "modcore", 0),
+                new ProbeCorePart("otherMod", "custom1", 5),
+                new ProbeCorePart("probeCoreHex.v2", null, 0) };
+            ProbeVoiceSpec r1 = ProbeVoicePick.Resolve(parts, null, reg, out at, out why);
+            Check(r1 == mine && at == 2 && why == ProbeVoicePick.Why.Module, "probe voice: the module voice with the highest priority wins over stock parts", r1 != null ? r1.Name : "null");
+            var player = new Dictionary<string, string> { { ProbeCores.Normalise("probeCoreHex.v2"), "modcore" } };
+            ProbeVoiceSpec r2 = ProbeVoicePick.Resolve(parts, player, reg, out at, out why);
+            Check(r2 == cfgVoice && at == 3 && why == ProbeVoicePick.Why.Player, "probe voice: a voice the player gave a part wins over modules", r2 != null ? r2.Name : "null");
+            var tie = new List<ProbeCorePart> { new ProbeCorePart("a", "modcore", 1), new ProbeCorePart("b", "custom1", 1) };
+            Check(ProbeVoicePick.Resolve(tie, null, reg, out at, out why) == cfgVoice && at == 0, "probe voice: equal priority, the root-most core wins", null);
+            var stockOnly = new List<ProbeCorePart> { new ProbeCorePart("someModCore", "nosuchvoice", 9), new ProbeCorePart("probeCoreOcto.v2", null, 0) };
+            Check(ProbeVoicePick.Resolve(stockOnly, new Dictionary<string, string> { { "someModCore".ToLowerInvariant(), "missing" } }, reg, out at, out why) == cfgOkto
+                  && at == 1 && why == ProbeVoicePick.Why.StockPart,
+                  "probe voice: unknown voice names are skipped, then the first stock part decides", null);
+            ProbeVoiceSpec g = ProbeVoicePick.Resolve(new List<ProbeCorePart> { new ProbeCorePart("x", null, 0) }, null, reg, out at, out why);
+            Check(g != null && g.Name == ProbeCores.Generic && at == 0 && why == ProbeVoicePick.Why.Generic
+                  && ProbeVoicePick.Resolve(new List<ProbeCorePart>(), null, reg, out at, out why) == null && at == -1,
+                  "probe voice: an unknown core gets generic, no core gives null", null);
+            // a voice written to the settings reads back the same
+            var vals = new Dictionary<string, string>();
+            foreach (var kv in mine.ToValues()) vals[kv.Key] = kv.Value;
+            List<string> er = new List<string>();
+            ProbeVoiceSpec back = ProbeVoiceSpec.FromValues(vals, er);
+            Check(er.Count == 0 && back != null && back.SameSound(mine) && back.Name == mine.Name && back.Lines == mine.Lines && back.DisplayName == mine.DisplayName,
+                  "probe voice: ToValues and FromValues round trip", string.Join("; ", er.ToArray()));
+            Settings st = new Settings();
+            st.probeVoices.Add(new ProbeVoiceSpec("dup", 500, "sine", "even", 0));
+            ProbeVoiceSpec last = new ProbeVoiceSpec("dup", 700, "sine", "even", 0);
+            st.probeVoices.Add(last);
+            st.probeVoices.Add(null);
+            st.Clamp();
+            Check(st.probeVoices.Count == 1 && st.probeVoices[0] == last && st.SettingsVoice("dup") == last, "probe voice: Settings.Clamp keeps the last voice per name", st.probeVoices.Count.ToString());
+        }
+
+        // voice values from a config node or the settings
+        {
+            List<string> e = new List<string>();
+            ProbeVoiceSpec v = ProbeVoiceSpec.FromValues(new Dictionary<string, string> {
+                { "name", " MyProbe " }, { "displayName", "Kerbalism Core" }, { "lines", "OKTO" },
+                { "baseHz", "760.5" }, { "wave", "FM" }, { "rhythm", "swing" }, { "glide", "0.4" } }, e);
+            Check(e.Count == 0 && v != null && v.Name == "myprobe" && v.DisplayName == "Kerbalism Core" && v.Lines == "okto"
+                  && Math.Abs(v.BaseHz - 760.5) < 1e-9 && v.Wave == "fm" && v.Rhythm == "swing" && Math.Abs(v.Glide - 0.4) < 1e-9,
+                  "probe voice: values parse, case and spaces ignored, invariant decimal point", string.Join("; ", e.ToArray()));
+            List<string> e2 = new List<string>();
+            ProbeVoiceSpec w = ProbeVoiceSpec.FromValues(new Dictionary<string, string> {
+                { "name", "bad" }, { "lines", "mycore" }, { "baseHz", "90" }, { "wave", "noise" }, { "rhythm", "fast" }, { "glide", "2" } }, e2);
+            ProbeVoiceSpec def = new ProbeVoiceSpec();
+            Check(e2.Count == 5 && w != null && w.Lines == ProbeCores.Generic && w.BaseHz == def.BaseHz && w.Wave == def.Wave
+                  && w.Rhythm == def.Rhythm && w.Glide == def.Glide,
+                  "probe voice: each bad value is reported and keeps its default", e2.Count + " errors");
+            ProbeVoiceSpec okt = ProbeVoiceSpec.FromValues(new Dictionary<string, string> { { "name", "okto" }, { "baseHz", "900" } }, null);
+            Check(okt != null && okt.Lines == "okto" && okt.DisplayName == "OKTO", "probe voice: a voice named after a stock core keeps its lines and name", okt != null ? okt.Lines : "null");
+            List<string> e3 = new List<string>();
+            Check(ProbeVoiceSpec.FromValues(new Dictionary<string, string> { { "wave", "sine" } }, e3) == null && e3.Count == 1,
+                  "probe voice: a voice without a name is rejected", null);
+        }
+    }
+
     static void ProbeCoreTests()
     {
         string[,] stock =
@@ -1089,10 +1442,10 @@ public static class Tests
         Tuning t = d.tuning;
         Check(d.probeMode && d.probePetTalk && d.probeHail && d.probeSleep,
               "settings v5: probe bools default true", null);
-        Check(t.hailInterval == 360f && t.probeRateFactor == 1.5f
+        Check(t.hailInterval == 360f && t.probeRateFactor == 1.0f
               && t.probeDrowsyFrac == 0.15f && t.probeSleepFrac == 0.03f && t.probeBeepPitchMax == 1.35f, "settings v5: TUNING defaults of the plan", null);
         Tuning t0 = new Tuning(); t0.Sanitize();
-        Check(t0.hailInterval == 360f && t0.probeRateFactor == 1.5f
+        Check(t0.hailInterval == 360f && t0.probeRateFactor == 1.0f
               && t0.probeDrowsyFrac == 0.15f && t0.probeSleepFrac == 0.03f && t0.probeBeepPitchMax == 1.35f, "settings v5: Sanitize keeps the defaults", null);
 
         // round trip of the TUNING node: Save and Load copy every public float by reflection under its own name
@@ -1117,17 +1470,22 @@ public static class Tests
         Tuning bt = new Tuning();
         bt.hailInterval = 1e5f; bt.probeRateFactor = float.NaN; bt.probeDrowsyFrac = 0.05f; bt.probeSleepFrac = 0.1f;
         bt.probeBeepPitchMax = 0.5f; bt.Sanitize();
-        Check(bt.hailInterval == 1800f && bt.probeRateFactor == 1.5f && bt.probeSleepFrac == 0.05f && bt.probeBeepPitchMax == 1f,
+        Check(bt.hailInterval == 1800f && bt.probeRateFactor == 1.0f && bt.probeSleepFrac == 0.05f && bt.probeBeepPitchMax == 1f,
               "settings v5: Sanitize clamps probe tuning and keeps sleep at or below drowsy", bt.probeSleepFrac.ToString());
+        Near(DcMath.StaticCurve(0f), 0.0, 1e-6, "radio static: 0 % is silent");
+        Near(DcMath.StaticCurve(0.25f), 0.5, 1e-6, "radio static: 25 % is half the full level");
+        Near(DcMath.StaticCurve(1f), 1.0, 1e-6, "radio static: 100 % is the full level");
+        Near(DcMath.StaticCurve(float.NaN), 0.0, 1e-6, "radio static: NaN is silent");
+        Check(new Settings().radioStatic == 0.5f, "radio static: on by default (50 %)", null);
         Settings old = new Settings(); old.tuningVersion = Tuning.CurrentVersion;
-        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 10, "settings v5: no migration needed at the current version (10 since the stress pitch)", null);
+        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 11, "settings v5: no migration needed at the current version (11 since the 0.6.0 defaults)", null);
     }
 
     static void ReviewFixTests()
     {
-        // event max age: science 90 s, soi 120 s at most, crew_lost keeps eventMaxAge
-        Check(EventWatchers.MaxAgeFor(EventWatchers.Science, 600f, 600f) == 90f && EventWatchers.MaxAgeFor(EventWatchers.Science, 0f, 600f) == 90f,
-              "events: science max age capped at 90 s", null);
+        // event max age: science 600 s, soi 120 s at most, crew_lost keeps eventMaxAge
+        Check(EventWatchers.MaxAgeFor(EventWatchers.Science, 600f, 600f) == 600f && EventWatchers.MaxAgeFor(EventWatchers.Science, 0f, 900f) == 600f,
+              "events: science max age capped at 600 s", null);
         Check(EventWatchers.MaxAgeFor(EventWatchers.SoiEnter, 600f, 600f) == 120f && EventWatchers.MaxAgeFor(EventWatchers.SoiEnter, -1f, 600f) == 120f,
               "events: soi_enter max age capped at 120 s", null);
         Check(EventWatchers.MaxAgeFor(EventWatchers.Science, 30f, 600f) == 30f && EventWatchers.MaxAgeFor(EventWatchers.SoiEnter, 60f, 30f) == 60f,
@@ -1180,7 +1538,7 @@ public static class Tests
         ScienceWatcher w = new ScienceWatcher();
         EventRequest r;
         bool ok = w.OnExperiment(0.0, "crewReport@KerbinSrfLanded", "kerbin", 30.0, 300.0, EventWatchers.MaxAgeFor(EventWatchers.Science, 600f, 600f), out r);
-        Check(ok && r.maxAge == 90f, "events: science request carries the 90 s max age", ok ? r.maxAge.ToString() : "no request");
+        Check(ok && r.maxAge == 600f, "events: science request carries the 600 s max age", ok ? r.maxAge.ToString() : "no request");
     }
 
     // ==== v2 T1: pure core modules (Pacing, MixMath, SignalMath, RadioProfile, DescentSequence, ThrottleWatch, Audit) ====
@@ -1817,13 +2175,25 @@ public static class Tests
             ScienceWatcher sc = new ScienceWatcher();
             Check(sc.OnExperiment(0, "crewReport@a", "kerbin", 30, 300, 600, out r) && r.ev == "science" && r.topic == "crewreport" && r.body == "kerbin"
                   && r.priority == EventPriority.Science, "events: science crew report", r.ToString());
-            Check(!sc.OnExperiment(10, "mysteryGoo@a", "kerbin", 30, 300, 600, out r), "events: science overall cooldown blocks a second topic", null);
-            Check(sc.OnExperiment(31, "mysteryGoo@a", "kerbin", 30, 300, 600, out r) && r.topic == "mysterygoo", "events: science after the overall cooldown", null);
-            Check(!sc.OnExperiment(70, "crewReport@b", "mun", 30, 300, 600, out r), "events: science per-topic cooldown", null);
-            Check(sc.OnExperiment(301, "crewReport@b", "mun", 30, 300, 600, out r), "events: science topic again after scienceTopicCooldown", null);
+            Check(!sc.OnExperiment(10, "mysteryGoo@a", "kerbin", 30, 60, 600, out r) && sc.QueuedCount == 1, "events: science during the overall cooldown is queued", null);
+            Check(!sc.OnExperiment(12, "mysteryGoo@b", "kerbin", 30, 60, 600, out r) && sc.QueuedCount == 1, "events: science topic already queued is not queued twice", null);
+            Check(!sc.Tick(20, 30, out r), "events: science queue waits for the overall cooldown", null);
+            Check(sc.Tick(31, 30, out r) && r.topic == "mysterygoo" && r.body == "kerbin" && sc.QueuedCount == 0, "events: science queue releases after the overall cooldown", null);
+            Check(!sc.OnExperiment(40, "crewReport@b", "mun", 0, 60, 600, out r) && sc.QueuedCount == 0, "events: science per-topic cooldown (60 s)", null);
+            Check(sc.OnExperiment(70, "crewReport@b", "mun", 30, 60, 600, out r), "events: science topic again after scienceTopicCooldown", null);
+            // a burst of experiments: one now, the rest one per cooldown, at most MaxQueued wait
+            ScienceWatcher bu = new ScienceWatcher();
+            string[] sciIds = { "crewReport@x", "temperatureScan@x", "barometerScan@x", "mysteryGoo@x", "mobileMaterialsLab@x" };
+            int now0 = 0, fired = 0; bool firstNow = bu.OnExperiment(0, sciIds[0], "kerbin", 30, 60, 600, out r);
+            for (int k = 1; k < sciIds.Length; k++) bu.OnExperiment(k, sciIds[k], "kerbin", 30, 60, 600, out r);
+            Check(firstNow && bu.QueuedCount == ScienceWatcher.MaxQueued, "events: science burst plays one and queues up to MaxQueued", bu.QueuedCount.ToString());
+            for (int s2 = 1; s2 <= 200; s2++) if (bu.Tick(now0 + s2, 30, out r)) fired++;
+            Check(fired == ScienceWatcher.MaxQueued, "events: science burst queue plays one per 30 s", fired.ToString());
+            ScienceWatcher ol = new ScienceWatcher(); ol.OnExperiment(0, "crewReport@x", "kerbin", 1000, 60, 600, out r); ol.OnExperiment(1, "mysteryGoo@x", "kerbin", 1000, 60, 600, out r);
+            Check(!ol.Tick(200, 1000, out r) && ol.QueuedCount == 0, "events: science queued too long is dropped", null);
             Check(sc.OnExperiment(400, "foo@b", "kerbin", 30, 300, 600, out r) && r.topic == "any", "events: unknown experiment uses the any rows", null);
-            Check(!sc.OnExperiment(450, "bar@b", "kerbin", 30, 300, 600, out r), "events: unknown experiments share the topic cooldown", null);
-            Check(sc.OnExperiment(460, null, "kerbin", 30, 0, 600, out r) && r.topic == "any", "events: null subject gives topic any", null);
+            Check(!sc.OnExperiment(450, "bar@b", "kerbin", 0, 300, 600, out r), "events: unknown experiments share the topic cooldown", null);
+            Check(sc.OnExperiment(460, null, "kerbin", 0, 0, 600, out r) && r.topic == "any", "events: null subject gives topic any", null);
             sc.Reset();
             Check(sc.OnExperiment(461, "mysteryGoo@a", "kerbin", 30, 300, 600, out r), "events: science Reset clears the cooldowns", null);
 
@@ -2035,6 +2405,30 @@ public static class Tests
                       "subtitle: custom position from subtitleX/Y, clamped on screen", null);
                 SubColumn bad = SubtitleLayout.Column("bogus", float.NaN, 0f, new HudScales(float.NaN, 0f, -1f, 99f, 1f), float.NaN, float.NaN);
                 Check(!float.IsNaN(bad.x) && !float.IsNaN(bad.anchorY) && bad.w >= 1f, "subtitle: Column survives NaN and zero input", null);
+                // 0.6.0 subtitleWidth: a factor on the preset width, never past the HUD, the position stays
+                bool widthOk = true;
+                string widthBad = null;
+                string[] wpos = { SubtitleLayout.AboveNavball, SubtitleLayout.Custom, SubtitleLayout.TopLeft, SubtitleLayout.BottomLeft };
+                for (int pi = 0; pi < wpos.Length; pi++)
+                {
+                    SubColumn w1 = SubtitleLayout.Column(wpos[pi], 1920, 1080, HudScales.One, 0.5f, 0.78f, 1f);
+                    SubColumn w0 = SubtitleLayout.Column(wpos[pi], 1920, 1080, HudScales.One, 0.5f, 0.78f);
+                    SubColumn wn = SubtitleLayout.Column(wpos[pi], 1920, 1080, HudScales.One, 0.5f, 0.78f, 0.5f);
+                    SubColumn ww = SubtitleLayout.Column(wpos[pi], 1920, 1080, HudScales.One, 0.5f, 0.78f, 1.6f);
+                    SubColumn wx = SubtitleLayout.Column(wpos[pi], 1920, 1080, HudScales.One, 0.5f, 0.78f, 99f);
+                    bool ok = Math.Abs(w1.w - w0.w) < 0.01f && Math.Abs(w1.x - w0.x) < 0.01f
+                              && wn.w < w1.w - 1f && ww.w >= w1.w - 0.01f && Math.Abs(wx.w - ww.w) < 0.01f
+                              && Math.Abs(wn.anchorY - w1.anchorY) < 0.01f && Math.Abs(ww.anchorY - w1.anchorY) < 0.01f
+                              && ww.x >= 0f && ww.x + ww.w <= 1920f;
+                    if (!ok) { widthOk = false; widthBad = wpos[pi] + ": " + wn.w + " / " + w1.w + " / " + ww.w; }
+                }
+                Check(widthOk, "subtitle: width scale 0.5 makes every preset narrower, 1.6 wider or the same, same anchor, clamped to 1.6", widthBad);
+                SubColumn wc = SubtitleLayout.Column(SubtitleLayout.Custom, 1920, 1080, HudScales.One, 0.5f, 0.78f, 1.6f);
+                SubColumn wa = SubtitleLayout.Column(SubtitleLayout.AboveNavball, 1920, 1080, HudScales.One, 0.5f, 0.78f, 1.6f);
+                Check(Math.Abs(wc.w - 1024f) < 0.01f && Math.Abs(wc.x + wc.w * 0.5f - 960f) < 0.01f && wa.w <= 1920f - 2f * SubtitleLayout.Margin,
+                      "subtitle: custom at 1.6 is 1024 px wide and centred, above_navball stays on screen", wc.w + " " + wa.w);
+                SubColumn wNaN = SubtitleLayout.Column(SubtitleLayout.Custom, 1920, 1080, HudScales.One, 0.5f, 0.78f, float.NaN);
+                Check(Math.Abs(wNaN.w - 640f) < 0.01f, "subtitle: width scale NaN counts as 1", null);
                 HudScales hs = new HudScales(float.NaN, 0f, -1f, 99f, 0.1f).Sanitized();
                 Check(hs.ui == 1f && hs.navball == 1f && hs.staging == 1f && hs.time == 3f && hs.crew == 0.3f, "subtitle: HudScales.Sanitized", null);
             }
@@ -2142,7 +2536,7 @@ public static class Tests
             Check(d.subtitlePos == "above_navball" && d.subtitleX == 0.5f && d.subtitleY == 0.78f && d.subtitleSize == 1f && d.subtitleOpacity == 0.55f
                   && d.subtitleMaxEntries == 2, "settings v4: subtitle defaults", null);
             Check(t.traitPreference == 0.35f && t.personaPreference == 0.4f && t.powerLowFrac == 0.10f && t.powerOkFrac == 0.25f && t.powerMinMax == 5f
-                  && t.scienceCooldown == 30f && t.scienceTopicCooldown == 300f && t.soiCooldown == 60f && t.partLostWindow == 1.5f && t.partLostCooldown == 20f
+                  && t.scienceCooldown == 30f && t.scienceTopicCooldown == 60f && t.soiCooldown == 60f && t.partLostWindow == 1.5f && t.partLostCooldown == 20f
                   && t.signalHold == 3f && t.signalCooldown == 45f && t.crewLostDelay == 3f && t.somberTime == 180f && t.eventMaxAge == 600f
                   && t.headTurnMaxDeg == 25f && t.headTurnAxis == 1f && t.headTurnInvert == 0f && t.headTurnSpeed == 4f && t.faceWeight == 0.8f
                   && t.faceExpressionSign == 1f, "settings v4: TUNING defaults of the plan", null);
@@ -2392,13 +2786,38 @@ public static class Tests
             Check(shortList.Count == 0, "v3 tables: rows per cause >= " + MinPerCause,
                   shortList.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortList.ToArray()));
 
-            // stress lines name their cause
+            // panic lines name their cause. 0.6.0: tense crew lines may be generic (cause any). With only one generic
+            // tense scene (an MC line) that scene played every time the cause had just been talked about.
             List<string> noCause = new List<string>();
             foreach (SrcRow r in rows)
-                if (r["role"] == "crew" && r["event"] == "chatter" && (r["band"] == "tense" || r["band"] == "panic")
+                if (r["role"] == "crew" && r["event"] == "chatter" && r["band"] == "panic"
                     && r["cause"] == "any" && !NonVerbal(r))
                     noCause.Add(r["clip_key"]);
-            Check(noCause.Count == 0, "v3 tables: crew tense and panic chatter has a cause (screams and interjections excepted)", Short(noCause, 8));
+            Check(noCause.Count == 0, "v3 tables: crew panic chatter has a cause (screams and interjections excepted)", Short(noCause, 8));
+            // 0.6.0 probe_crew scenes: a probe row and a crew row, no MC, never in a serious phase
+            var pcScenes = new Dictionary<string, List<SrcRow>>();
+            foreach (SrcRow r in rows)
+                if (r["event"] == "probe_crew")
+                {
+                    List<SrcRow> l;
+                    if (!pcScenes.TryGetValue(r["scene"], out l)) pcScenes[r["scene"]] = l = new List<SrcRow>();
+                    l.Add(r);
+                }
+            List<string> pcBadScenes = new List<string>();
+            foreach (var kv in pcScenes)
+            {
+                bool probe = false, crew = false, mc = false;
+                foreach (SrcRow r in kv.Value) { probe |= r["role"] == "probe"; crew |= r["role"] == "crew"; mc |= r["role"] == "mc"; }
+                string ph = kv.Value[0]["phase"];
+                if (!probe || !crew || mc || ph == "serious" || ph == "launch" || ph == "ascent" || ph == "reentry" || ph == "descent")
+                    pcBadScenes.Add(kv.Key);
+            }
+            Check(pcScenes.Count >= 20 && pcBadScenes.Count == 0, "0.6.0 tables: probe_crew scenes have probe and crew rows, no MC, no serious phase",
+                  pcScenes.Count + " scenes" + (pcBadScenes.Count > 0 ? ", bad: " + Short(pcBadScenes, 6) : ""));
+            int genericTense = 0;
+            foreach (SrcRow r in rows)
+                if (r["event"] == "chatter" && r["band"] == "tense" && r["cause"] == "any" && r["seq"] == "1") genericTense++;
+            Check(genericTense >= 30, "0.6.0 tables: at least 30 generic (cause any) tense scenes", genericTense.ToString());
 
             // no fire outside fire-related contexts (the game measures heat, not fire)
             List<string> fire = new List<string>();

@@ -156,6 +156,12 @@ The values I chose: stayputnik is a clean sine at 1320 Hz with no glide. Okto is
 swing. HECS is a square at 700 Hz that stutters. RoveMate is a saw at 520 Hz, lazy, with a lot of glide.
 Snob is the FM bell at 1050 Hz. Generic is a pulse at 940 Hz. The build stops when the file is wrong.
 
+`src/ProbeSynth.cs` is a C# copy of this synth (0.6.0), so probe voices can also be made in the game.
+`ProbeVoiceSpec.Stock()` holds the same values as `cores.tsv`, and the offline tests check that. After a change
+to the beep synth or to `cores.tsv`, update the C# side and run `python3 -I audio/probe_reference.py`. It writes
+`tests/probe_reference.tsv` with a fingerprint of every probe clip (random timing replaced by its midpoint), and
+`tests/run.sh` compares the C# output against it.
+
 The moods (`probe_mood_notes` in the script, offsets in semitones from `base_hz`):
 
 | Mood | Shape |

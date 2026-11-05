@@ -100,6 +100,7 @@ namespace Lonapse
 
             // plan v5 probe mode
             sb.Append("probe: ").Append(host.probeMode ? "on" : "off").Append("  core ").Append(host.probeCoreKey ?? "-")
+              .Append("  voice ").Append(host.probeVoice != null ? host.probeVoice.Name + " (" + host.probeVoiceWhy + ")" : "-")
               .Append("  sleep ").Append(host.probeSleepState).Append("  EC ").Append((s.ecFrac * 100.0).ToString("0", Inv)).Append('%')
               .Append("  asleep flag ").Append(s.probeAsleep).Append('\n');
             if (host.probeMode) sb.Append("  ").Append(cd.ProbeStatus).Append('\n');

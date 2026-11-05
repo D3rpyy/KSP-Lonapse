@@ -9,7 +9,9 @@ namespace Lonapse
 {
     public enum UttKind { CrewLine, ControlLine, ControlFx, BedStart, BedStop, StaticBurst, PingPattern, IntercomLine, IntercomClick, RadioOpen, RadioClose, RogerBeep,
         // plan v5 probe mode: probe beep on beep[1] (radio)
-        ProbeBeep }
+        ProbeBeep,
+        // 0.6.0: a probe core on a crewed vessel beeps in the cabin (beep[1], intercom sound), part of a chat
+        CabinBeep }
 
     public class Utterance
     {
@@ -73,10 +75,14 @@ namespace Lonapse
         public readonly Escalation esc = new Escalation();
         private float lastPanic = -1e9f;
         private string lastSceneId;
+        /// <summary>Line memory (shuffle bag), shared by every flight scene and kept between sessions.</summary>
+        private static SceneMemory Mem { get { return LonapseAddon.LineMemory; } }
         // director clock when a cause-specific scene of each cause last played (Tuning.causeRepeatGap)
         private readonly System.Collections.Generic.Dictionary<string, float> causeSaid = new System.Collections.Generic.Dictionary<string, float>();
         // director clock when each tense or panic radio scene was last picked (Tuning.causeRepeatGap, StressRepeatFilter)
         private readonly System.Collections.Generic.Dictionary<string, float> stressSaid = new System.Collections.Generic.Dictionary<string, float>();
+        // director clock when each calm chatter scene with 2+ lines was last picked (Tuning.calmRepeatGap, CalmRepeatFilter)
+        private readonly System.Collections.Generic.Dictionary<string, float> calmSaid = new System.Collections.Generic.Dictionary<string, float>();
         public string lastLine = "";       // audit text for the overlay
         public int panicDowngrades, bucketDenied;
 
@@ -208,6 +214,11 @@ namespace Lonapse
             {
                 if (host.clickCh != null && host.clickCh.Busy) return true;
                 for (int i = 0; i < host.crew.Length; i++) if (host.crew[i].Busy && host.crew[i].intercom) return true;
+                if (cabinBeepCh != null)
+                {
+                    if (cabinBeepCh.Busy) return true;
+                    cabinBeepCh = null;   // done: a later stage tone on the same channel is not intercom
+                }
                 return false;
             }
         }
@@ -220,7 +231,11 @@ namespace Lonapse
 
         private bool LineFollowsHead()
         {
-            for (int i = 1; i < count; i++) if (queue[(head + i) % Capacity].who == UttKind.IntercomLine) return true;
+            for (int i = 1; i < count; i++)
+            {
+                UttKind k = queue[(head + i) % Capacity].who;
+                if (k == UttKind.IntercomLine || k == UttKind.CabinBeep) return true;
+            }
             return false;
         }
 
@@ -235,7 +250,7 @@ namespace Lonapse
         {
             if (count == 0) return false;
             UttKind k = queue[head].who;
-            return k == UttKind.IntercomLine || (k == UttKind.IntercomClick && !LineFollowsHead());
+            return k == UttKind.IntercomLine || k == UttKind.CabinBeep || (k == UttKind.IntercomClick && !LineFollowsHead());
         }
 
         /// <summary>
@@ -295,8 +310,9 @@ namespace Lonapse
             ResetFinalCall();
         }
 
-        /// <summary>Vessel switch: cooldowns, the token bucket and the escalation start fresh (plan 4.3).</summary>
-        public void ResetPacing()
+        /// <summary>Vessel switch: cooldowns, the token bucket and the escalation start fresh (plan 4.3).
+        /// <paramref name="evaHop"/>: a kerbal goes out on EVA or comes back, a waiting science line stays.</summary>
+        public void ResetPacing(bool evaHop = false)
         {
             cool.Clear();
             bucket = null;
@@ -305,8 +321,9 @@ namespace Lonapse
             lastSceneId = null;
             causeSaid.Clear();
             stressSaid.Clear();
+            calmSaid.Clear();
             classifier.Reset(); // new vessel: its own phase, no hold from the old one
-            ResetEventsForVessel();
+            ResetEventsForVessel(evaHop);
             wasProbeMode = false; // plan v5: the probe timers start fresh on the next probe-mode frame
         }
 
@@ -332,6 +349,7 @@ namespace Lonapse
             chatForced = false;
             chatStarted = false;
             if (host.controlBed != null) host.controlBed.FadeOutOnce(0.25f); // its BedStop may have been dropped
+            if (host.crewBed != null) host.crewBed.FadeOutOnce(0.25f);
             DropPendingCallout("queue cleared"); // the countdown (or a debug play) takes the air
         }
 
@@ -654,6 +672,7 @@ namespace Lonapse
                     c.tremRate = sp.tremRate;
                     c.SetCrewFilters(sk, sp.timbre, gs, tu);
                     ApplyProfile(c);
+                    StartCrewBed();
                     float keep = DcMath.TruncFraction(sk, tu.truncStart, tu.truncMinFrac);
                     if (keep < 1f) c.TruncateAt(clip.length * keep);
                     if (staticChop) c.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
@@ -685,14 +704,17 @@ namespace Lonapse
                     float sk = sp.sk, gs = host.stress.gStrain;
                     float pitch = DcMath.CrewPitch(sp.basePitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
-                    c.SetPreset(true, tu);
+                    c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);
                     c.speaker = sp;
                     c.boost = VoiceBoost;
                     c.compressor = cfg.voiceCompressor;
                     c.phraseKey = u.entry != null ? u.entry.ClipKey : null;
                     c.tremRate = sp.tremRate;
-                    c.SetIntercomFilters(sp.timbre, gs, tu);
+                    // radio sound on the intercom: the crew radio band, the radio profile band and grit, and the static
+                    // bed. No signal dropouts: the crew is in the same cabin, not on CommNet.
+                    if (c.radioFx) { RadioFxFilters(c, sp, gs, tu); StartCrewBed(); }
+                    else c.SetIntercomFilters(sp.timbre, gs, tu);
                     StampLine(sp, false);
                     ShowSubtitle(u.entry, sp.displayName, c.duration);
                     lastLine = "intercom " + sp.displayName + ": " + (u.entry != null ? u.entry.ClipKey : c.clipName);
@@ -709,11 +731,22 @@ namespace Lonapse
                         return StartResult.Skip;
                     }
                     AudioClip clip = ClipLibrary.Click;
+                    float clickVol = tu.intercomClickVolume;
+                    if (cfg.intercomRadioFx)
+                    {
+                        // radio keying instead of the cabin click: squelch when the first speaker keys up, a roger
+                        // beep (or the squelch tail) when a speaker lets go. Always on the click channel, so the
+                        // radio rules never see the chat as radio traffic.
+                        RadioProfile rp = Profile;
+                        string f = !chatStarted ? rp.OpenClip : (cfg.rogerBeep ? "beeps/roger" : rp.CloseClip);
+                        AudioClip key = ClipLibrary.CountOf(f) > 0 ? ClipLibrary.Next(f, rng) : null;
+                        if (key != null) { clip = key; clickVol = f == "beeps/roger" ? tu.radioKeyVolume * 0.75f : tu.radioKeyVolume; }
+                    }
                     if (clip == null) return StartResult.Skip;
                     // dedicated source: a click is never skipped because crew channels are busy
                     VoiceChannel c = host.clickCh;
                     if (c.Busy) c.Stop();
-                    c.Play(clip, tu.intercomClickVolume, 1f, false, 0f);
+                    c.Play(clip, clickVol, 1f, false, 0f);
                     ch = c;
                     return StartResult.Started;
                 }
@@ -750,7 +783,8 @@ namespace Lonapse
                     if (!host.signal.connected) { Log.Debug("control line skipped: no signal"); return StartResult.Skip; }
                     AudioClip clip = u.entry != null ? PhraseClips.Clip(u.entry, false) : ClipLibrary.Next(u.folder ?? "control/calm", rng);
                     if (clip == null) return StartResult.Skip;
-                    // v3 req 7: no runtime pitch drop under stress, the panic delivery sounds like the calm one
+                    // v3 req 7: no runtime pitch drop under stress, the panic delivery sounds like the calm one.
+                    // 0.6.0: one controller, like a real CAPCOM. The livelier sound is in the clips.
                     float pitch = 1f;
                     float vol = DcMath.Lerp(0.80f, 0.60f, s);
                     RadioProfile p = Profile;
@@ -791,7 +825,9 @@ namespace Lonapse
                     {
                         AudioClip clip = ClipLibrary.Next("static/loop", rng);
                         // weaker signal, louder bed (req 17)
-                        if (clip != null) b.Play(clip, DcMath.Clamp01(tu.controlBedVolume + host.StaticLevel * host.settings.weakSignalVolume), 1f, true, 0.12f);
+                        // radioStatic (0.6.0): extra static at any signal, on top of the weak-signal part
+                        if (clip != null) b.Play(clip, DcMath.Clamp01(tu.controlBedVolume + DcMath.StaticCurve(cfg.radioStatic) * RadioStaticMcBed
+                                                                     + host.StaticLevel * host.settings.weakSignalVolume), 1f, true, 0.12f);
                     }
                     return StartResult.Instant;
                 }
@@ -811,6 +847,8 @@ namespace Lonapse
                 }
                 case UttKind.ProbeBeep:
                     return StartProbe(u, out ch);
+                case UttKind.CabinBeep:
+                    return StartCabinBeep(u, out ch);
                 case UttKind.PingPattern:
                 {
                     VoiceChannel b = host.beeps.PlayPing();
@@ -863,7 +901,9 @@ namespace Lonapse
             if (count + 7 > Capacity) return;
             // a weak signal sometimes cracks before the transmission (req 17)
             // far away the delayed answer arrives with a short crackle first
-            if (rng.NextDouble() < host.StaticLevel || host.LightDelay > 0.5f) Enqueue(UttKind.StaticBurst, null, delay, 0f, null);
+            // radioStatic (0.6.0) also gives an occasional crackle at a full signal
+            double crackle = Math.Max(host.StaticLevel, RadioStaticBurstChance * host.settings.radioStatic);
+            if (rng.NextDouble() < crackle || host.LightDelay > 0.5f) Enqueue(UttKind.StaticBurst, null, delay, 0f, null);
             Enqueue(UttKind.BedStart, null, delay, 0f, null);
             Enqueue(UttKind.ControlFx, "beeps/quindar_in", 0f, 0f, null);
             Utterance u = Enqueue(UttKind.ControlLine, folder, 0.05f, 0f, null);
@@ -972,29 +1012,53 @@ namespace Lonapse
                 && (filter == null || filter(sc)));
             bool stressBand = !intercom && (band == "tense" || band == "panic");
             if (stressBand) list = StressRepeatFilter(list);
-            PhraseScene p = PhraseTable.Pick(list, rng, lastSceneId);
+            else if (ev == "chatter") list = CalmRepeatFilter(list);
+            PhraseScene p = Mem.Take(list, rng, lastSceneId);
             if (p != null)
             {
                 lastSceneId = p.Id;
                 if (stressBand) stressSaid[p.Id] = clock;
+                else if (ev == "chatter" && p.Lines.Count >= 2) calmSaid[p.Id] = clock;
             }
             return p;
+        }
+
+        /// <summary>
+        /// Calm chatter (user report 0.5.3: "Did you see that maneuver? Perfect." / "We saw it. A bit crooked." in a
+        /// loop on the pad). A pilot on the pad had one trait scene left, and Pick returns a single candidate even when
+        /// it was the last scene. Exchanges and chats (2+ lines) picked within calmRepeatGap s are left out, so the
+        /// trait and persona tiers fall through to the next tier instead of repeating. Single lines (MC acks) stay.
+        /// </summary>
+        private System.Collections.Generic.List<PhraseScene> CalmRepeatFilter(System.Collections.Generic.List<PhraseScene> list)
+        {
+            if (list == null || list.Count == 0 || calmSaid.Count == 0) return list;
+            float gap = Tu.calmRepeatGap;
+            list.RemoveAll(x =>
+            {
+                float t;
+                return x.Lines.Count >= 2 && calmSaid.TryGetValue(x.Id, out t) && clock - t < gap;
+            });
+            return list;
         }
 
         /// <summary>
         /// Tense and panic radio picks (user report: MC said "Keep an eye on the data" over and over while the
         /// craft was spinning). Scenes picked within causeRepeatGap s are left out. When every candidate was picked
         /// that recently, a cause scene may repeat, a generic cause-any scene never: then nothing is picked.
+        /// 0.6.0 (user report: still "Keep an eye on the data" a lot): a cause-any scene is left out for the longer
+        /// calmRepeatGap. Those scenes play whenever the cause was just talked about, so they came back every minute.
         /// </summary>
         private System.Collections.Generic.List<PhraseScene> StressRepeatFilter(System.Collections.Generic.List<PhraseScene> list)
         {
             if (list == null || list.Count == 0) return list;
             float gap = Tu.causeRepeatGap;
+            float anyGap = Math.Max(gap, Tu.calmRepeatGap);
             var fresh = new System.Collections.Generic.List<PhraseScene>(list.Count);
             for (int i = 0; i < list.Count; i++)
             {
                 float t;
-                if (!stressSaid.TryGetValue(list[i].Id, out t) || clock - t >= gap) fresh.Add(list[i]);
+                float g = list[i].Cause == "any" ? anyGap : gap;
+                if (!stressSaid.TryGetValue(list[i].Id, out t) || clock - t >= g) fresh.Add(list[i]);
             }
             if (fresh.Count > 0) return fresh;
             list.RemoveAll(x => x.Cause == "any");
@@ -1545,6 +1609,7 @@ namespace Lonapse
             c.tremRate = sp.tremRate;
             c.SetCrewFilters(sk, sp.timbre, gs, tu);
             ApplyProfile(c);
+            StartCrewBed();
             if (maxLen > 0f && clip.length / pitch > maxLen) c.TruncateAt(maxLen * pitch);
             if (staticChop) c.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
             // short key-up noise under the first syllable
@@ -1663,8 +1728,11 @@ namespace Lonapse
             // intercom scheduler: only with >= 2 conscious crew and low stress. The intercom is not radio, so
             // static and blackout do not stop it (req 6). In blackout the blackout timer below takes over.
             // plan v4 design 10: no intercom banter while the crew mourns (Somber)
+            // 0.6.0: with a probe core aboard one kerbal is enough, the probe is the other partner
+            bool probeCrew = ProbeCrewPossible;
+            int speakable = host.roster.SpeakableCount();
             intercomEligible = host.settings.intercomEnabled && !blackoutPhase && !host.evaMode && !Somber
-                               && s < tu.intercomMaxStress && host.roster.SpeakableCount() >= 2;
+                               && s < tu.intercomMaxStress && (speakable >= 2 || (probeCrew && speakable >= 1));
             float lowStressInterval = DcMath.IntercomInterval(tu.intercomInterval, host.stationMode, QuietCoast,
                                                               tu.intercomStationBoost, tu.intercomQuietBoost);
             // more crew stress -> more intercom talk, until radio takes over above intercomMaxStress
@@ -1679,7 +1747,7 @@ namespace Lonapse
                     // when the radio scheduler is about to fire (AirRules.IntercomRadioLead)
                     if (count == 0 && Idle && IntercomMayStartNow)
                     {
-                        FireIntercom();
+                        FireChat(probeCrew, speakable);
                         intercomWaitStart = -1f;
                         intercomProgress = 0f;
                         intercomTarget = U(0.6f, 1.4f);
@@ -1815,6 +1883,7 @@ namespace Lonapse
             if (!host.CanStartAudio) return "not played: gate " + host.gateReason;
             if (!PhraseClips.Loaded) return "not played: Lonapse table not loaded (" + PhraseClips.status + ")";
             if (host.probeMode) return DebugPlayProbe(evt, phase, topic); // plan v5: probe scenes only
+            if (PhraseTable.IsProbeCrewEvent(evt)) return DebugPlayProbeCrew();
 
             var all = new System.Collections.Generic.List<PhraseScene>();
             var exact = new System.Collections.Generic.List<PhraseScene>();
@@ -1890,7 +1959,8 @@ namespace Lonapse
                 KerbalVoice sp = c.speaker;
                 if (c.intercom)
                 {
-                    c.SetIntercomFilters(sp.timbre, gs, tu);
+                    if (c.radioFx) RadioFxFilters(c, sp, gs, tu);
+                    else c.SetIntercomFilters(sp.timbre, gs, tu);
                     c.tremRate = sp.tremRate;
                     continue;
                 }
@@ -1901,6 +1971,42 @@ namespace Lonapse
                 c.tremRate = gDominant ? sp.tremRate : 9f;
             }
             if (host.control.Busy) host.control.extraDistortion = extra;
+            UpdateCrewBed();
+        }
+
+        // radioStatic (0.6.0): static bed levels. At 100 % the crew bed sits a bit above the MC bed at a full signal.
+        private const float RadioStaticMcBed = 0.30f, RadioStaticCrewBed = 0.6f, RadioStaticBurstChance = 0.35f;
+
+        /// <summary>
+        /// Intercom line with radio sound effects: the crew radio filters, the radio profile band (300 to 3600 Hz on a
+        /// ship) and at least half the profile grit, so it sounds like a radio even at zero stress.
+        /// </summary>
+        private void RadioFxFilters(VoiceChannel c, KerbalVoice sp, float gs, Tuning tu)
+        {
+            c.SetCrewFilters(sp.sk, sp.timbre, gs, tu);
+            ApplyProfile(c);
+            c.baseDistortion = Math.Max(c.baseDistortion, 0.5f * Profile.Distortion);
+        }
+
+        /// <summary>Static loop under a crew radio line, only with radioStatic above 0. UpdateCrewBed ends it.</summary>
+        private void StartCrewBed()
+        {
+            VoiceChannel b = host.crewBed;
+            float amount = host.settings.radioStatic;
+            if (b == null || amount <= 0f || b.Busy || ClipLibrary.CountOf("static/loop") == 0) return;
+            AudioClip clip = ClipLibrary.Next("static/loop", rng);
+            if (clip != null) b.Play(clip, DcMath.Clamp01(RadioStaticCrewBed * DcMath.StaticCurve(amount)), 1f, true, 0.08f);
+        }
+
+        /// <summary>The crew bed only runs while a crew radio line plays. Following the lines (no queue item) means
+        /// a cleared queue or a skipped line can never leave the loop running.</summary>
+        private void UpdateCrewBed()
+        {
+            VoiceChannel b = host.crewBed;
+            if (b == null || !b.Busy) return;
+            bool line = host.calloutCh != null && host.calloutCh.Busy;
+            for (int i = 0; i < host.crew.Length && !line; i++) line = host.crew[i].Busy && (!host.crew[i].intercom || host.crew[i].radioFx);
+            if (!line || host.settings.radioStatic <= 0f) b.FadeOutOnce(0.2f);
         }
     }
 }

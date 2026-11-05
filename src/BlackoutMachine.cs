@@ -54,6 +54,7 @@ namespace Lonapse
                 if (!host.crew[i].intercom) host.crew[i].FadeOut(seconds);
             host.control.FadeOut(seconds);
             host.controlBed.FadeOut(seconds);
+            host.crewBed.FadeOut(seconds);
             host.calloutCh.FadeOut(seconds);
             host.keyCh.FadeOut(seconds);
             for (int i = 0; i < host.beep.Length; i++) host.beep[i].FadeOut(seconds);

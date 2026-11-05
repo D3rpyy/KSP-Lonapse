@@ -28,6 +28,13 @@ The source files are:
 | `phrases/bodies.tsv` | Scenes that name the current body with `{body}`. | `bo_` |
 | `phrases/probe_pet.tsv` | Mission Control talks to the probe, the probe beeps back (`probe_chat`, `probe_sleepy`). The probe calls first (`probe_hail`), stress per cause (`probe_stress`), "say again?" (`probe_say_again`), milestones (`probe_milestone`), rover moments (`probe_rover`) and data (`probe_data`). | `pp_` |
 | `phrases/probe_events.tsv` | Probe scenes for science, power, SOI, part lost, signal back, touchdown, splashdown, docked and burn_soon. | `pe_` |
+| `phrases/chatter_more.tsv` | 0.6.0: calm radio with Mission Control, mostly jokes. Goofy phases, some per trait and persona. | `cm_` |
+| `phrases/intercom_more.tsv` | 0.6.0: more crew-only chats. Always funny. | `im_` |
+| `phrases/tense_more.tsv` | 0.6.0: tense radio. Many `cause any` scenes, so a generic line no longer repeats. | `tm_` |
+| `phrases/serious_more.tsv` | 0.6.0: calm radio in launch, ascent, reentry and descent. Short and mostly procedural. | `sr_` |
+| `phrases/probe_crew.tsv` | 0.6.0: a crewed vessel with a probe core. The probe beeps in the cabin and a crew member answers (event `probe_crew`). | `pc_` |
+| `phrases/events_more.tsv` | 0.6.0: more crew lines for throttle, chutes, staging, power, signal, landing, docking, EVA, stations and burns. | `em_` |
+| `phrases/probe_more.tsv` | 0.6.0: more probe mode lines for throttle, chutes, data, splashdown, touchdown, docking, burns and say again. | `pm_` |
 
 Some older rows have keys without these prefixes.
 
@@ -131,6 +138,18 @@ Rules the build and the C# loader enforce:
 - `signal_lost` has no probe rows. Mission Control cannot reach the probe, so nobody talks on the radio.
 - A `probe` row needs a `beep` mood. Every other row has an empty `beep`.
 
+### Probe and crew in the cabin (0.6.0)
+
+The event `probe_crew` is for a crewed vessel with a probe core. It is not a probe mode event, it only plays with crew
+aboard. The probe beeps in the cabin (no radio, no signal needed) and one crew member speaks the `crew` rows on the
+intercom. The director runs it through the intercom timer, so it also plays with only one kerbal aboard. The rules:
+
+- A `probe_crew` scene has at least one `probe` row and at least one `crew` row, in any order.
+- No `mc` rows. Mission Control is not in the cabin.
+- Never in a serious phase (`serious`, `launch`, `ascent`, `reentry`, `descent`), like the intercom.
+- `trait` and `persona` work as on other crew scenes: they choose which kerbal answers.
+- The probe rows follow the usual probe rules (empty `spanish`, a `beep` mood, a short `[beeps ...]` subtitle).
+
 A scene is a probe scene when its `core` is not `any`, when one of its lines has a probe role, or when its event is a probe event. The helper is `PhraseTable.IsProbeScene` in C# and `is_probe_scene` in the script. Crew mode never picks a probe scene. Probe mode only picks probe scenes. So a probe version of `science` or `power_ok` needs a `core` or a probe role. A scene with only `mc` rows and `core any` is a crew scene.
 
 `core any` fits every probe core. A scene with a core only plays for that core. `PhraseTable.ProbeScenesFor(event, core, phase, coreExact, filter)` gives the scenes. With `coreExact` it only gives the scenes of exactly that core, so the director can try the core first and then fall back to `any`.
@@ -157,7 +176,7 @@ In game a body scene counts as one scene. `PhraseScene.LinesFor(body)` gives the
 
 Want to give the kerbals something new to say? It doesn't need any code.
 
-1. Pick the file by event family (table above). Use its key prefix: `la_`, `re_`, `pa_`, `sp_`, `mj_`, `ic_`, `bl_`, `ev_`, `bo_`.
+1. Pick the file by event family (table above). Use its key prefix: `la_`, `re_`, `pa_`, `sp_`, `mj_`, `ic_`, `bl_`, `ev_`, `bo_`, `cm_`, `im_`, `tm_`, `sr_`, `pc_`, `em_`, `pm_`.
 2. Give the lines of one exchange the same `scene` and number them with `seq` from 1.
 3. Fill `phase` and `cause`. Serious work (launch, ascent, reentry, descent) is short and procedural. Orbit, coast and landed are goofy. Intercom is always goofy or `blackout`.
 4. Check the tables without rendering:

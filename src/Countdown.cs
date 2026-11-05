@@ -45,7 +45,17 @@ namespace Lonapse
             return Said;
         }
 
-        /// <summary>Clip key in the phrase table for a step.</summary>
+        /// <summary>
+        /// Clip key for a step, counting up (1 .. 10, the Lonapse joke: reversed Spanish "counts up") or down
+        /// (10 .. 1, 0.6.0 option countdownDown). Liftoff stays liftoff.
+        /// </summary>
+        public static string ClipKey(int stepNo, bool down)
+        {
+            if (down && stepNo >= 1 && stepNo <= Numbers) stepNo = Numbers + 1 - stepNo;
+            return ClipKey(stepNo);
+        }
+
+        /// <summary>Clip key in the phrase table for a number (1 .. 10) or Liftoff.</summary>
         public static string ClipKey(int stepNo)
         {
             if (stepNo == Liftoff) return "countdown_liftoff";

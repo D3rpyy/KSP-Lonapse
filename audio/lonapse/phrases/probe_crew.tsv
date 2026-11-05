@@ -1,0 +1,239 @@
+# Lonapse 0.6.0: probe and crew in the cabin (event probe_crew). The probe beeps, a crew member answers.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
+pc_001_1	probe_crew	chatter	calm	probe	pc_001	1	both	goofy	any	any	any	any	any	proud		[beeps with a report]
+pc_001_2	probe_crew	chatter	calm	crew	pc_001	2	both	goofy	any	any	any	any	any		Mm. Buenos datos.	Hmm. Good data.
+pc_002_1	probe_crew	chatter	calm	probe	pc_002	1	both	goofy	any	any	any	any	any	curious		[beeps a question]
+pc_002_2	probe_crew	chatter	calm	crew	pc_002	2	both	goofy	any	any	any	any	any		No, no sé qué es eso. Yo tampoco.	No, I don't know what that is. Me neither.
+pc_003_1	probe_crew	chatter	calm	probe	pc_003	1	both	goofy	any	any	any	any	any	happy		[beeps happily]
+pc_003_2	probe_crew	chatter	calm	crew	pc_003	2	both	goofy	any	any	any	any	any		Yo también me alegro de verte, amiguito.	Happy to see you too, little buddy.
+pc_004_1	probe_crew	chatter	calm	probe	pc_004	1	both	goofy	any	any	any	any	any	bored		[beeps very slowly]
+pc_004_2	probe_crew	chatter	calm	crew	pc_004	2	both	goofy	any	any	any	any	any		Lo sé. A mí también me aburre esto.	I know. I'm bored too.
+pc_005_1	probe_crew	chatter	calm	crew	pc_005	1	both	goofy	any	any	any	any	any		¿Todo bien por ahí, cerebrito?	All good in there, little brain?
+pc_005_2	probe_crew	chatter	calm	probe	pc_005	2	both	goofy	any	any	any	any	any	proud		[beeps confidently]
+pc_005_3	probe_crew	chatter	calm	crew	pc_005	3	both	goofy	any	any	any	any	any		Eso pensaba.	That's what I thought.
+pc_006_1	probe_crew	chatter	calm	crew	pc_006	1	both	goofy	any	any	any	any	any		Oye, ¿tú duermes?	Hey, do you sleep?
+pc_006_2	probe_crew	chatter	calm	probe	pc_006	2	both	goofy	any	any	any	any	any	sleepy		[beeps sleepily]
+pc_006_3	probe_crew	chatter	calm	crew	pc_006	3	both	goofy	any	any	any	any	any		Ya veo que sí.	I see you do.
+pc_007_1	probe_crew	chatter	calm	probe	pc_007	1	both	goofy	any	any	any	any	any	offended		[beeps indignantly]
+pc_007_2	probe_crew	chatter	calm	crew	pc_007	2	both	goofy	any	any	any	any	any		Perdona, no quería apoyarme en ti.	Sorry, I didn't mean to lean on you.
+pc_008_1	probe_crew	chatter	calm	crew	pc_008	1	both	goofy	any	any	any	any	any		Te he puesto un nombre. Bip.	I gave you a name. Beep.
+pc_008_2	probe_crew	chatter	calm	probe	pc_008	2	both	goofy	any	any	any	any	any	offended		[beeps in protest]
+pc_008_3	probe_crew	chatter	calm	crew	pc_008	3	both	goofy	any	any	any	any	any		Vale, vale. Señor Bip.	Okay, okay. Mister Beep.
+pc_009_1	probe_crew	chatter	calm	probe	pc_009	1	both	goofy	any	any	any	any	any	curious		[beeps at the window]
+pc_009_2	probe_crew	chatter	calm	crew	pc_009	2	both	goofy	any	any	any	any	any		Sí, eso es el espacio. Mucho, ¿verdad?	Yes, that's space. A lot of it, right?
+pc_010_1	probe_crew	chatter	calm	probe	pc_010	1	both	goofy	any	any	any	any	any	scared		[beeps nervously]
+pc_010_2	probe_crew	chatter	calm	crew	pc_010	2	both	goofy	any	any	any	any	any		Tranquilo. Ese ruido era yo.	Easy. That noise was me.
+pc_011_1	probe_crew	chatter	calm	crew	pc_011	1	both	goofy	any	any	any	any	any		¿Quieres oír un chiste?	Want to hear a joke?
+pc_011_2	probe_crew	chatter	calm	probe	pc_011	2	both	goofy	any	any	any	any	any	bored		[beeps flatly]
+pc_011_3	probe_crew	chatter	calm	crew	pc_011	3	both	goofy	any	any	any	any	any		Ya veo. Te lo has oído.	I see. You've heard it.
+pc_012_1	probe_crew	chatter	calm	probe	pc_012	1	both	goofy	any	any	any	any	any	proud		[beeps a long report]
+pc_012_2	probe_crew	chatter	calm	crew	pc_012	2	both	goofy	any	any	any	any	any		Más despacio, que tomo notas.	Slower, I'm taking notes.
+pc_012_3	probe_crew	chatter	calm	probe	pc_012	3	both	goofy	any	any	any	any	any	offended		[beeps even faster]
+pc_013_1	probe_crew	chatter	calm	crew	pc_013	1	both	goofy	any	any	any	any	any		¿Tú qué opinas de la comida?	What do you think of the food?
+pc_013_2	probe_crew	chatter	calm	probe	pc_013	2	both	goofy	any	any	any	any	any	happy		[beeps cheerfully]
+pc_013_3	probe_crew	chatter	calm	crew	pc_013	3	both	goofy	any	any	any	any	any		Claro, tú no la tienes que comer.	Sure, you don't have to eat it.
+pc_014_1	probe_crew	chatter	calm	probe	pc_014	1	both	goofy	any	any	any	any	any	curious		[beeps at the snacks]
+pc_014_2	probe_crew	chatter	calm	crew	pc_014	2	both	goofy	any	any	any	any	any		No. Esto es mío. Tú comes electricidad.	No. This is mine. You eat electricity.
+pc_015_1	probe_crew	chatter	calm	crew	pc_015	1	both	goofy	any	any	any	any	any		Buenos días, compañero.	Good morning, buddy.
+pc_015_2	probe_crew	chatter	calm	probe	pc_015	2	both	goofy	any	any	any	any	any	sleepy		[beeps a yawn]
+pc_015_3	probe_crew	chatter	calm	crew	pc_015	3	both	goofy	any	any	any	any	any		Igual que yo.	Same here.
+pc_016_1	probe_crew	chatter	calm	probe	pc_016	1	both	goofy	any	any	any	any	any	happy		[beeps a little tune]
+pc_016_2	probe_crew	chatter	calm	crew	pc_016	2	both	goofy	any	any	any	any	any		¡Qué bonito! Otra vez.	How pretty! Again.
+pc_016_3	probe_crew	chatter	calm	probe	pc_016	3	both	goofy	any	any	any	any	any	proud		[beeps the tune again]
+pc_017_1	probe_crew	chatter	calm	crew	pc_017	1	both	goofy	any	any	any	any	any		¿Me ayudas con la navegación?	Will you help me with navigation?
+pc_017_2	probe_crew	chatter	calm	probe	pc_017	2	both	goofy	any	any	any	any	any	proud		[beeps very helpfully]
+pc_017_3	probe_crew	chatter	calm	crew	pc_017	3	both	goofy	any	any	any	any	any		Gracias. No he entendido nada, pero gracias.	Thanks. I understood nothing, but thanks.
+pc_018_1	probe_crew	chatter	calm	probe	pc_018	1	both	goofy	any	any	any	any	any	offended		[beeps at the crew]
+pc_018_2	probe_crew	chatter	calm	crew	pc_018	2	both	goofy	any	any	any	any	any		¡Fue sin querer! Solo toqué un cable.	It was an accident! I only touched a cable.
+pc_019_1	probe_crew	chatter	calm	crew	pc_019	1	both	goofy	any	any	any	any	any		A veces creo que eres el más listo de aquí.	Sometimes I think you're the smartest one here.
+pc_019_2	probe_crew	chatter	calm	probe	pc_019	2	both	goofy	any	any	any	any	any	proud		[beeps smugly]
+pc_019_3	probe_crew	chatter	calm	crew	pc_019	3	both	goofy	any	any	any	any	any		No hacía falta estar de acuerdo.	You didn't have to agree.
+pc_020_1	probe_crew	chatter	calm	probe	pc_020	1	both	goofy	any	any	any	any	any	curious		[beeps softly]
+pc_020_2	probe_crew	chatter	calm	crew	pc_020	2	both	goofy	any	any	any	any	any		¿Tú también echas de menos casa?	Do you miss home too?
+pc_020_3	probe_crew	chatter	calm	probe	pc_020	3	both	goofy	any	any	any	any	any	happy		[beeps warmly]
+pc_021_1	probe_crew	chatter	calm	crew	pc_021	1	both	goofy	any	any	any	any	any		Si te portas bien, te limpio el panel.	If you behave, I'll clean your panel.
+pc_021_2	probe_crew	chatter	calm	probe	pc_021	2	both	goofy	any	any	any	any	any	happy		[beeps excitedly]
+pc_022_1	probe_crew	chatter	calm	probe	pc_022	1	both	goofy	any	any	any	any	any	bored		[beeps a sigh]
+pc_022_2	probe_crew	chatter	calm	crew	pc_022	2	both	goofy	any	any	any	any	any		Ya queda poco. Creo.	Not long now. I think.
+pc_023_1	probe_crew	chatter	calm	crew	pc_023	1	both	goofy	any	any	any	any	any		¿Contamos estrellas juntos?	Shall we count stars together?
+pc_023_2	probe_crew	chatter	calm	probe	pc_023	2	both	goofy	any	any	any	any	any	proud		[beeps a big number]
+pc_023_3	probe_crew	chatter	calm	crew	pc_023	3	both	goofy	any	any	any	any	any		Presumido.	Show-off.
+pc_024_1	probe_crew	chatter	calm	probe	pc_024	1	both	goofy	any	any	any	any	any	scared		[beeps a warning]
+pc_024_2	probe_crew	chatter	calm	crew	pc_024	2	both	goofy	any	any	any	any	any		Lo sé, lo sé. Lo estoy mirando.	I know, I know. I'm looking at it.
+pc_025_1	probe_crew	chatter	calm	crew	pc_025	1	both	goofy	any	any	any	any	any		Eres un buen compañero de viaje. Callado, pero bueno.	You're a good travel buddy. Quiet, but good.
+pc_025_2	probe_crew	chatter	calm	probe	pc_025	2	both	goofy	any	any	any	any	any	offended		[beeps loudly]
+pc_025_3	probe_crew	chatter	calm	crew	pc_025	3	both	goofy	any	any	any	any	any		Bueno. No tan callado.	Well. Not that quiet.
+pc_026_1	probe_crew	chatter	calm	probe	pc_026	1	both	orbit	any	any	any	any	any	curious		[beeps at the planet]
+pc_026_2	probe_crew	chatter	calm	crew	pc_026	2	both	orbit	any	any	any	any	any		Sí, es enorme. Y damos vueltas a su alrededor.	Yes, it's huge. And we go round and round it.
+pc_027_1	probe_crew	chatter	calm	crew	pc_027	1	both	orbit	any	any	any	any	any		Otra vuelta más, compañero.	Another lap, buddy.
+pc_027_2	probe_crew	chatter	calm	probe	pc_027	2	both	orbit	any	any	any	any	any	bored		[beeps very slowly]
+pc_028_1	probe_crew	chatter	calm	probe	pc_028	1	both	coast	any	any	any	any	any	bored		[beeps a long sigh]
+pc_028_2	probe_crew	chatter	calm	crew	pc_028	2	both	coast	any	any	any	any	any		Lo sé. El viaje es largo. Yo también lo noto.	I know. The trip is long. I feel it too.
+pc_029_1	probe_crew	chatter	calm	probe	pc_029	1	both	landed	any	any	any	any	any	happy		[beeps with joy]
+pc_029_2	probe_crew	chatter	calm	crew	pc_029	2	both	landed	any	any	any	any	any		¡Sí! ¡Hemos llegado! ¡Lo hemos hecho juntos!	Yes! We made it! We did it together!
+pc_030_1	probe_crew	chatter	calm	probe	pc_030	1	both	landed	any	any	any	any	any	curious		[beeps at the ground]
+pc_030_2	probe_crew	chatter	calm	crew	pc_030	2	both	landed	any	any	any	any	any		Es roca. Mucha roca. Bienvenido.	It's rock. Lots of rock. Welcome.
+pc_031_1	probe_crew	chatter	calm	probe	pc_031	1	both	goofy	any	engineer	any	any	any	proud		[beeps a status report]
+pc_031_2	probe_crew	chatter	calm	crew	pc_031	2	both	goofy	any	engineer	any	any	any		Voltaje bien, temperatura bien. Buen trabajo.	Voltage good, temperature good. Good job.
+pc_032_1	probe_crew	chatter	calm	probe	pc_032	1	both	goofy	any	engineer	any	any	any	offended		[beeps an error]
+pc_032_2	probe_crew	chatter	calm	crew	pc_032	2	both	goofy	any	engineer	any	any	any		Déjame ver. Ah, un tornillo flojo. Ya está.	Let me see. Ah, a loose bolt. There.
+pc_032_3	probe_crew	chatter	calm	probe	pc_032	3	both	goofy	any	engineer	any	any	any	happy		[beeps gratefully]
+pc_033_1	probe_crew	chatter	calm	crew	pc_033	1	both	goofy	any	engineer	any	any	any		Te he ajustado el cableado. ¿Mejor?	I adjusted your wiring. Better?
+pc_033_2	probe_crew	chatter	calm	probe	pc_033	2	both	goofy	any	engineer	any	any	any	happy		[beeps much better]
+pc_034_1	probe_crew	chatter	calm	probe	pc_034	1	both	goofy	any	scientist	any	any	any	proud		[beeps with fresh data]
+pc_034_2	probe_crew	chatter	calm	crew	pc_034	2	both	goofy	any	scientist	any	any	any		¡Fascinante! ¿Lo puedes repetir?	Fascinating! Can you repeat that?
+pc_034_3	probe_crew	chatter	calm	probe	pc_034	3	both	goofy	any	scientist	any	any	any	proud		[beeps it again]
+pc_034_4	probe_crew	chatter	calm	crew	pc_034	4	both	goofy	any	scientist	any	any	any		Sigue siendo fascinante.	Still fascinating.
+pc_035_1	probe_crew	chatter	calm	probe	pc_035	1	both	goofy	any	scientist	any	any	any	curious		[beeps a hypothesis]
+pc_035_2	probe_crew	chatter	calm	crew	pc_035	2	both	goofy	any	scientist	any	any	any		Interesante teoría. Necesitamos más datos.	Interesting theory. We need more data.
+pc_036_1	probe_crew	chatter	calm	crew	pc_036	1	both	goofy	any	scientist	any	any	any		Compañero, hoy vamos a hacer ciencia.	Buddy, today we do science.
+pc_036_2	probe_crew	chatter	calm	probe	pc_036	2	both	goofy	any	scientist	any	any	any	happy		[beeps excitedly]
+pc_037_1	probe_crew	chatter	calm	probe	pc_037	1	both	goofy	any	pilot	any	any	any	offended		[beeps at the pilot]
+pc_037_2	probe_crew	chatter	calm	crew	pc_037	2	both	goofy	any	pilot	any	any	any		Sí, ese giro fue un poco brusco. Perdón.	Yes, that turn was a bit rough. Sorry.
+pc_038_1	probe_crew	chatter	calm	crew	pc_038	1	both	goofy	any	pilot	any	any	any		Tú calculas y yo piloto. Trato hecho.	You calculate and I fly. Deal.
+pc_038_2	probe_crew	chatter	calm	probe	pc_038	2	both	goofy	any	pilot	any	any	any	proud		[beeps in agreement]
+pc_039_1	probe_crew	chatter	calm	probe	pc_039	1	both	goofy	any	tourist	any	any	any	curious		[beeps at the tourist]
+pc_039_2	probe_crew	chatter	calm	crew	pc_039	2	both	goofy	any	tourist	any	any	any		¡Hola! ¿Tú también has pagado el billete?	Hello! Did you pay for a ticket too?
+pc_039_3	probe_crew	chatter	calm	probe	pc_039	3	both	goofy	any	tourist	any	any	any	offended		[beeps a firm no]
+pc_040_1	probe_crew	chatter	calm	crew	pc_040	1	both	goofy	any	tourist	any	any	any		¿Me haces una foto con la ventana?	Will you take a photo of me with the window?
+pc_040_2	probe_crew	chatter	calm	probe	pc_040	2	both	goofy	any	tourist	any	any	any	bored		[beeps reluctantly]
+pc_041_1	probe_crew	chatter	calm	probe	pc_041	1	both	goofy	any	any	dim	any	any	curious		[beeps a question]
+pc_041_2	probe_crew	chatter	calm	crew	pc_041	2	both	goofy	any	any	dim	any	any		No te entiendo, pero creo que tienes razón.	I don't understand you, but I think you're right.
+pc_042_1	probe_crew	chatter	calm	crew	pc_042	1	both	goofy	any	any	dim	any	any		¿Tú también eres un kerbal?	Are you a kerbal too?
+pc_042_2	probe_crew	chatter	calm	probe	pc_042	2	both	goofy	any	any	dim	any	any	offended		[beeps very firmly]
+pc_043_1	probe_crew	chatter	calm	probe	pc_043	1	both	goofy	any	any	nervous	any	any	scared		[beeps nervously]
+pc_043_2	probe_crew	chatter	calm	crew	pc_043	2	both	goofy	any	any	nervous	any	any		¿Por qué estás nervioso? ¡Ahora yo estoy nervioso!	Why are you nervous? Now I'm nervous!
+pc_044_1	probe_crew	chatter	calm	probe	pc_044	1	both	goofy	any	any	badass	any	any	scared		[beeps a warning]
+pc_044_2	probe_crew	chatter	calm	crew	pc_044	2	both	goofy	any	any	badass	any	any		Tranquilo, pequeño. Lo tengo todo controlado.	Relax, little one. I've got it all under control.
+pc_045_1	probe_crew	chatter	calm	probe	pc_045	1	both	goofy	any	any	veteran	any	any	proud		[beeps with a report]
+pc_045_2	probe_crew	chatter	calm	crew	pc_045	2	both	goofy	any	any	veteran	any	any		Buen chico. Me recuerdas a mi primera sonda.	Good kid. You remind me of my first probe.
+pc_046_1	probe_crew	chatter	calm	probe	pc_046	1	both	goofy	any	any	any	any	any	curious		[beeps at the crew]
+pc_046_2	probe_crew	chatter	calm	crew	pc_046	2	both	goofy	any	any	any	any	any		¿Qué? ¿Tengo algo en la cara?	What? Do I have something on my face?
+pc_046_3	probe_crew	chatter	calm	probe	pc_046	3	both	goofy	any	any	any	any	any	happy		[beeps yes]
+pc_047_1	probe_crew	chatter	calm	crew	pc_047	1	both	goofy	any	any	any	any	any		Si te pregunto algo, ¿me dices la verdad?	If I ask you something, will you tell me the truth?
+pc_047_2	probe_crew	chatter	calm	probe	pc_047	2	both	goofy	any	any	any	any	any	curious		[beeps cautiously]
+pc_047_3	probe_crew	chatter	calm	crew	pc_047	3	both	goofy	any	any	any	any	any		¿Mi peinado está bien?	Is my hair okay?
+pc_047_4	probe_crew	chatter	calm	probe	pc_047	4	both	goofy	any	any	any	any	any	bored		[beeps very diplomatically]
+pc_048_1	probe_crew	chatter	calm	probe	pc_048	1	both	goofy	any	any	any	any	any	proud		[beeps a tiny fanfare]
+pc_048_2	probe_crew	chatter	calm	crew	pc_048	2	both	goofy	any	any	any	any	any		¿Y eso por qué?	What was that for?
+pc_048_3	probe_crew	chatter	calm	probe	pc_048	3	both	goofy	any	any	any	any	any	proud		[beeps proudly]
+pc_048_4	probe_crew	chatter	calm	crew	pc_048	4	both	goofy	any	any	any	any	any		Ah, has terminado los cálculos. Bien hecho.	Ah, you finished the calculations. Well done.
+pc_049_1	probe_crew	chatter	calm	crew	pc_049	1	both	goofy	any	any	any	any	any		Oye, cerebrito, ¿cuánto combustible nos queda?	Hey, little brain, how much fuel do we have?
+pc_049_2	probe_crew	chatter	calm	probe	pc_049	2	both	goofy	any	any	any	any	any	proud		[beeps a precise number]
+pc_049_3	probe_crew	chatter	calm	crew	pc_049	3	both	goofy	any	any	any	any	any		Con un sí o un no me valía.	A yes or no was fine.
+pc_050_1	probe_crew	chatter	calm	probe	pc_050	1	both	goofy	any	any	any	any	any	offended		[beeps at the snacks]
+pc_050_2	probe_crew	chatter	calm	crew	pc_050	2	both	goofy	any	any	any	any	any		Las migas no te van a hacer daño. Creo.	The crumbs won't hurt you. I think.
+pc_051_1	probe_crew	chatter	calm	crew	pc_051	1	both	goofy	any	any	any	any	any		Te voy a enseñar a jugar a las cartas.	I'm going to teach you to play cards.
+pc_051_2	probe_crew	chatter	calm	probe	pc_051	2	both	goofy	any	any	any	any	any	curious		[beeps eagerly]
+pc_051_3	probe_crew	chatter	calm	crew	pc_051	3	both	goofy	any	any	any	any	any		Ya has ganado. ¿Cómo has ganado?	You already won. How did you win?
+pc_051_4	probe_crew	chatter	calm	probe	pc_051	4	both	goofy	any	any	any	any	any	proud		[beeps innocently]
+pc_052_1	probe_crew	chatter	calm	probe	pc_052	1	both	goofy	any	any	any	any	any	sleepy		[beeps a soft yawn]
+pc_052_2	probe_crew	chatter	calm	crew	pc_052	2	both	goofy	any	any	any	any	any		Duerme, duerme. Yo vigilo.	Sleep, sleep. I'll keep watch.
+pc_053_1	probe_crew	chatter	calm	crew	pc_053	1	both	goofy	any	any	any	any	any		Cuando volvamos, te presento a mi familia.	When we're back, I'll introduce you to my family.
+pc_053_2	probe_crew	chatter	calm	probe	pc_053	2	both	goofy	any	any	any	any	any	happy		[beeps shyly]
+pc_054_1	probe_crew	chatter	calm	probe	pc_054	1	both	goofy	any	any	any	any	any	curious		[beeps at a button]
+pc_054_2	probe_crew	chatter	calm	crew	pc_054	2	both	goofy	any	any	any	any	any		No. Ese no. Ni lo mires.	No. Not that one. Don't even look at it.
+pc_054_3	probe_crew	chatter	calm	probe	pc_054	3	both	goofy	any	any	any	any	any	offended		[beeps sulkily]
+pc_055_1	probe_crew	chatter	calm	crew	pc_055	1	both	goofy	any	any	any	any	any		¿Tú también oyes ese ruidito?	Do you hear that little noise too?
+pc_055_2	probe_crew	chatter	calm	probe	pc_055	2	both	goofy	any	any	any	any	any	curious		[beeps attentively]
+pc_055_3	probe_crew	chatter	calm	crew	pc_055	3	both	goofy	any	any	any	any	any		Ah, es mi estómago. Perdón.	Oh, it's my stomach. Sorry.
+pc_056_1	probe_crew	chatter	calm	probe	pc_056	1	both	goofy	any	any	any	any	any	happy		[beeps a greeting]
+pc_056_2	probe_crew	chatter	calm	crew	pc_056	2	both	goofy	any	any	any	any	any		Hola a ti también. Ya van cien veces hoy.	Hello to you too. That's a hundred times today.
+pc_057_1	probe_crew	chatter	calm	crew	pc_057	1	both	goofy	any	any	any	any	any		Necesito tu opinión. ¿Esto es un tornillo o una tuerca?	I need your opinion. Is this a bolt or a nut?
+pc_057_2	probe_crew	chatter	calm	probe	pc_057	2	both	goofy	any	any	any	any	any	bored		[beeps very patiently]
+pc_057_3	probe_crew	chatter	calm	crew	pc_057	3	both	goofy	any	any	any	any	any		Una tuerca. Lo sabía.	A nut. I knew it.
+pc_058_1	probe_crew	chatter	calm	probe	pc_058	1	both	goofy	any	any	any	any	any	proud		[beeps all systems green]
+pc_058_2	probe_crew	chatter	calm	crew	pc_058	2	both	goofy	any	any	any	any	any		Gracias, compañero. Me quedo más tranquilo.	Thanks, buddy. That's a relief.
+pc_059_1	probe_crew	chatter	calm	crew	pc_059	1	both	goofy	any	any	any	any	any		Prometo no volver a pegarte pegatinas.	I promise not to put stickers on you again.
+pc_059_2	probe_crew	chatter	calm	probe	pc_059	2	both	goofy	any	any	any	any	any	offended		[beeps doubtfully]
+pc_060_1	probe_crew	chatter	calm	probe	pc_060	1	both	goofy	any	any	any	any	any	curious		[beeps a long question]
+pc_060_2	probe_crew	chatter	calm	crew	pc_060	2	both	goofy	any	any	any	any	any		Eso no lo sé. Pregúntale a Control.	I don't know that. Ask Control.
+pc_060_3	probe_crew	chatter	calm	probe	pc_060	3	both	goofy	any	any	any	any	any	bored		[beeps a sigh]
+pc_061_1	probe_crew	chatter	calm	crew	pc_061	1	both	goofy	any	any	any	any	any		Eres el mejor ordenador con el que he hablado.	You're the best computer I've ever talked to.
+pc_061_2	probe_crew	chatter	calm	probe	pc_061	2	both	goofy	any	any	any	any	any	happy		[beeps bashfully]
+pc_062_1	probe_crew	chatter	calm	probe	pc_062	1	both	goofy	any	any	any	any	any	offended		[beeps very loudly]
+pc_062_2	probe_crew	chatter	calm	crew	pc_062	2	both	goofy	any	any	any	any	any		¡Vale! ¡Ya me aparto de tu ventilador!	Okay! I'm moving away from your fan!
+pc_063_1	probe_crew	chatter	tense	probe	pc_063	1	both	goofy	any	any	any	any	any	scared		[beeps nervously]
+pc_063_2	probe_crew	chatter	tense	crew	pc_063	2	both	goofy	any	any	any	any	any		Lo sé, amigo. Lo sé. Aguanta.	I know, buddy. I know. Hold on.
+pc_064_1	probe_crew	chatter	tense	crew	pc_064	1	both	goofy	any	any	any	any	any		Dime que esto está bien.	Tell me this is fine.
+pc_064_2	probe_crew	chatter	tense	probe	pc_064	2	both	goofy	any	any	any	any	any	scared		[beeps unconvincingly]
+pc_064_3	probe_crew	chatter	tense	crew	pc_064	3	both	goofy	any	any	any	any	any		Gracias. Me ayuda mucho.	Thanks. That really helps.
+pc_065_1	probe_crew	chatter	tense	probe	pc_065	1	both	goofy	any	any	any	any	any	scared		[beeps a warning]
+pc_065_2	probe_crew	chatter	tense	crew	pc_065	2	both	goofy	any	any	any	any	any		Ya lo veo. No me lo recuerdes.	I see it. Don't remind me.
+pc_066_1	probe_crew	chatter	tense	crew	pc_066	1	both	goofy	any	any	any	any	any		Tú calma. Yo me encargo.	You stay calm. I've got this.
+pc_066_2	probe_crew	chatter	tense	probe	pc_066	2	both	goofy	any	any	any	any	any	scared		[beeps doubtfully]
+pc_067_1	probe_crew	chatter	tense	probe	pc_067	1	both	goofy	any	any	any	any	any	scared		[beeps faster and faster]
+pc_067_2	probe_crew	chatter	tense	crew	pc_067	2	both	goofy	any	any	any	any	any		Respira. Bueno, tú no respiras. Pero tranquilo.	Breathe. Well, you don't breathe. But easy.
+pc_068_1	probe_crew	chatter	tense	crew	pc_068	1	both	goofy	any	any	any	any	any		¿Tú sabes qué ha sido ese ruido?	Do you know what that noise was?
+pc_068_2	probe_crew	chatter	tense	probe	pc_068	2	both	goofy	any	any	any	any	any	scared		[beeps a worried no]
+pc_069_1	probe_crew	chatter	tense	probe	pc_069	1	both	goofy	any	any	any	any	any	curious		[beeps a status report]
+pc_069_2	probe_crew	chatter	tense	crew	pc_069	2	both	goofy	any	any	any	any	any		Vale. No es lo que quería oír, pero vale.	Okay. Not what I wanted to hear, but okay.
+pc_070_1	probe_crew	chatter	tense	crew	pc_070	1	both	goofy	any	any	any	any	any		Agárrate. Bueno, tú ya estás atornillado.	Hold on. Well, you're already bolted down.
+pc_070_2	probe_crew	chatter	tense	probe	pc_070	2	both	goofy	any	any	any	any	any	scared		[beeps in agreement]
+pc_071_1	probe_crew	chatter	calm	probe	pc_071	1	both	coast	any	any	any	any	any	bored		[beeps a slow tune]
+pc_071_2	probe_crew	chatter	calm	crew	pc_071	2	both	coast	any	any	any	any	any		Qué canción tan triste. Pero bonita.	What a sad song. But pretty.
+pc_072_1	probe_crew	chatter	calm	crew	pc_072	1	both	coast	any	any	any	any	any		¿Cuántos días faltan, compañero?	How many days left, buddy?
+pc_072_2	probe_crew	chatter	calm	probe	pc_072	2	both	coast	any	any	any	any	any	proud		[beeps a big number]
+pc_072_3	probe_crew	chatter	calm	crew	pc_072	3	both	coast	any	any	any	any	any		No me lo digas así.	Don't say it like that.
+pc_073_1	probe_crew	chatter	calm	probe	pc_073	1	both	coast	any	any	any	any	any	sleepy		[beeps very sleepily]
+pc_073_2	probe_crew	chatter	calm	crew	pc_073	2	both	coast	any	any	any	any	any		Yo también. Este viaje no se acaba nunca.	Me too. This trip never ends.
+pc_074_1	probe_crew	chatter	calm	crew	pc_074	1	both	coast	any	any	any	any	any		Juguemos a algo. Tú piensas un número.	Let's play something. You think of a number.
+pc_074_2	probe_crew	chatter	calm	probe	pc_074	2	both	coast	any	any	any	any	any	happy		[beeps a number]
+pc_074_3	probe_crew	chatter	calm	crew	pc_074	3	both	coast	any	any	any	any	any		No vale decirlo.	You're not supposed to say it.
+pc_075_1	probe_crew	chatter	calm	probe	pc_075	1	both	coast	any	any	any	any	any	curious		[beeps at the stars]
+pc_075_2	probe_crew	chatter	calm	crew	pc_075	2	both	coast	any	any	any	any	any		Sí, siguen ahí. Todas.	Yes, they're still there. All of them.
+pc_076_1	probe_crew	chatter	calm	crew	pc_076	1	both	landed	any	any	any	any	any		Bueno, compañero. Hemos llegado. ¿Qué te parece?	Well, buddy. We made it. What do you think?
+pc_076_2	probe_crew	chatter	calm	probe	pc_076	2	both	landed	any	any	any	any	any	happy		[beeps with delight]
+pc_077_1	probe_crew	chatter	calm	probe	pc_077	1	both	landed	any	any	any	any	any	curious		[beeps at a rock]
+pc_077_2	probe_crew	chatter	calm	crew	pc_077	2	both	landed	any	any	any	any	any		¿Quieres que te la traiga?	Want me to bring it to you?
+pc_077_3	probe_crew	chatter	calm	probe	pc_077	3	both	landed	any	any	any	any	any	happy		[beeps yes please]
+pc_078_1	probe_crew	chatter	calm	crew	pc_078	1	both	landed	any	any	any	any	any		Voy a salir a dar un paseo. Cuida la casa.	I'm going out for a walk. Mind the house.
+pc_078_2	probe_crew	chatter	calm	probe	pc_078	2	both	landed	any	any	any	any	any	proud		[beeps responsibly]
+pc_079_1	probe_crew	chatter	calm	probe	pc_079	1	both	landed	any	any	any	any	any	proud		[beeps a landing report]
+pc_079_2	probe_crew	chatter	calm	crew	pc_079	2	both	landed	any	any	any	any	any		Sí, lo sé, aterricé un poco torcido.	Yes, I know, I landed a bit crooked.
+pc_080_1	probe_crew	chatter	calm	crew	pc_080	1	both	orbit	any	any	any	any	any		Mira, compañero. Ahí abajo vivimos.	Look, buddy. That's where we live.
+pc_080_2	probe_crew	chatter	calm	probe	pc_080	2	both	orbit	any	any	any	any	any	curious		[beeps in wonder]
+pc_081_1	probe_crew	chatter	calm	probe	pc_081	1	both	orbit	any	any	any	any	any	proud		[beeps an orbit report]
+pc_081_2	probe_crew	chatter	calm	crew	pc_081	2	both	orbit	any	any	any	any	any		Órbita estable. Lo sé. Nos ha salido bien.	Stable orbit. I know. We did well.
+pc_082_1	probe_crew	chatter	calm	crew	pc_082	1	both	goofy	any	any	dim	any	any		¿Puedes hacer los deberes por mí?	Can you do my homework for me?
+pc_082_2	probe_crew	chatter	calm	probe	pc_082	2	both	goofy	any	any	dim	any	any	bored		[beeps a firm no]
+pc_083_1	probe_crew	chatter	calm	probe	pc_083	1	both	goofy	any	any	dim	any	any	curious		[beeps a simple question]
+pc_083_2	probe_crew	chatter	calm	crew	pc_083	2	both	goofy	any	any	dim	any	any		Esa me la sé. ¡Tres!	I know this one. Three!
+pc_083_3	probe_crew	chatter	calm	probe	pc_083	3	both	goofy	any	any	dim	any	any	offended		[beeps sadly]
+pc_084_1	probe_crew	chatter	calm	crew	pc_084	1	both	goofy	any	any	nervous	any	any		Si algo va mal, me avisas, ¿vale?	If something goes wrong, you tell me, okay?
+pc_084_2	probe_crew	chatter	calm	probe	pc_084	2	both	goofy	any	any	nervous	any	any	happy		[beeps reassuringly]
+pc_084_3	probe_crew	chatter	calm	crew	pc_084	3	both	goofy	any	any	nervous	any	any		Gracias. Te creo. Casi.	Thanks. I believe you. Almost.
+pc_085_1	probe_crew	chatter	calm	probe	pc_085	1	both	goofy	any	any	nervous	any	any	curious		[beeps quietly]
+pc_085_2	probe_crew	chatter	calm	crew	pc_085	2	both	goofy	any	any	nervous	any	any		¡Ah! ¡No me asustes así!	Ah! Don't scare me like that!
+pc_086_1	probe_crew	chatter	calm	probe	pc_086	1	both	goofy	any	any	badass	any	any	scared		[beeps nervously]
+pc_086_2	probe_crew	chatter	calm	crew	pc_086	2	both	goofy	any	any	badass	any	any		Tranquilo, pequeño. He pasado por cosas peores.	Easy, little one. I've been through worse.
+pc_087_1	probe_crew	chatter	calm	crew	pc_087	1	both	goofy	any	any	badass	any	any		Tú y yo contra el universo, compañero.	You and me against the universe, buddy.
+pc_087_2	probe_crew	chatter	calm	probe	pc_087	2	both	goofy	any	any	badass	any	any	proud		[beeps bravely]
+pc_088_1	probe_crew	chatter	calm	probe	pc_088	1	both	goofy	any	any	brave	any	any	scared		[beeps a warning]
+pc_088_2	probe_crew	chatter	calm	crew	pc_088	2	both	goofy	any	any	brave	any	any		Gracias por avisar. Vamos a ello.	Thanks for the heads up. Let's do this.
+pc_089_1	probe_crew	chatter	calm	crew	pc_089	1	both	goofy	any	any	brave	any	any		No te preocupes. Pase lo que pase, estamos juntos.	Don't worry. Whatever happens, we're together.
+pc_089_2	probe_crew	chatter	calm	probe	pc_089	2	both	goofy	any	any	brave	any	any	happy		[beeps warmly]
+pc_090_1	probe_crew	chatter	calm	probe	pc_090	1	both	goofy	any	any	veteran	any	any	curious		[beeps a question]
+pc_090_2	probe_crew	chatter	calm	crew	pc_090	2	both	goofy	any	any	veteran	any	any		Eso lo aprendí hace muchos años. Escucha.	I learned that many years ago. Listen.
+pc_090_3	probe_crew	chatter	calm	probe	pc_090	3	both	goofy	any	any	veteran	any	any	bored		[beeps very slowly]
+pc_091_1	probe_crew	chatter	calm	crew	pc_091	1	both	goofy	any	any	veteran	any	any		Las sondas de antes no hablaban tanto.	Probes didn't talk this much back in my day.
+pc_091_2	probe_crew	chatter	calm	probe	pc_091	2	both	goofy	any	any	veteran	any	any	offended		[beeps indignantly]
+pc_092_1	probe_crew	chatter	calm	crew	pc_092	1	both	goofy	any	engineer	any	any	any		A ver, déjame mirarte por dentro.	Let's see, let me look inside you.
+pc_092_2	probe_crew	chatter	calm	probe	pc_092	2	both	goofy	any	engineer	any	any	any	scared		[beeps worriedly]
+pc_092_3	probe_crew	chatter	calm	crew	pc_092	3	both	goofy	any	engineer	any	any	any		Tranquilo. Solo voy a apretar un tornillo.	Easy. I'm only tightening a bolt.
+pc_093_1	probe_crew	chatter	calm	probe	pc_093	1	both	goofy	any	engineer	any	any	any	proud		[beeps a repair report]
+pc_093_2	probe_crew	chatter	calm	crew	pc_093	2	both	goofy	any	engineer	any	any	any		¿Te has arreglado solo? Me vas a dejar sin trabajo.	You fixed yourself? You'll put me out of a job.
+pc_094_1	probe_crew	chatter	calm	crew	pc_094	1	both	goofy	any	scientist	any	any	any		Ayúdame con este experimento.	Help me with this experiment.
+pc_094_2	probe_crew	chatter	calm	probe	pc_094	2	both	goofy	any	scientist	any	any	any	happy		[beeps eagerly]
+pc_094_3	probe_crew	chatter	calm	crew	pc_094	3	both	goofy	any	scientist	any	any	any		Perfecto. Tú mides y yo apunto.	Perfect. You measure and I write.
+pc_095_1	probe_crew	chatter	calm	probe	pc_095	1	both	goofy	any	scientist	any	any	any	curious		[beeps a new hypothesis]
+pc_095_2	probe_crew	chatter	calm	crew	pc_095	2	both	goofy	any	scientist	any	any	any		Me gusta. Es una locura, pero me gusta.	I like it. It's crazy, but I like it.
+pc_096_1	probe_crew	chatter	calm	probe	pc_096	1	both	goofy	any	pilot	any	any	any	offended		[beeps at the pilot]
+pc_096_2	probe_crew	chatter	calm	crew	pc_096	2	both	goofy	any	pilot	any	any	any		Sí, ya sé que me he pasado de curva.	Yes, I know I overshot that turn.
+pc_097_1	probe_crew	chatter	calm	crew	pc_097	1	both	goofy	any	pilot	any	any	any		Tú lleva las cuentas y yo llevo el volante.	You do the math and I'll do the driving.
+pc_097_2	probe_crew	chatter	calm	probe	pc_097	2	both	goofy	any	pilot	any	any	any	proud		[beeps very officially]
+pc_098_1	probe_crew	chatter	calm	crew	pc_098	1	both	goofy	any	tourist	any	any	any		¿Esto viene con guía turística?	Does this come with a tour guide?
+pc_098_2	probe_crew	chatter	calm	probe	pc_098	2	both	goofy	any	tourist	any	any	any	proud		[beeps a long tour]
+pc_098_3	probe_crew	chatter	calm	crew	pc_098	3	both	goofy	any	tourist	any	any	any		Qué interesante. No he entendido nada.	How interesting. I understood nothing.
+pc_099_1	probe_crew	chatter	calm	probe	pc_099	1	both	goofy	any	tourist	any	any	any	happy		[beeps for the photo]
+pc_099_2	probe_crew	chatter	calm	crew	pc_099	2	both	goofy	any	tourist	any	any	any		¡Patata!	Say cheese!

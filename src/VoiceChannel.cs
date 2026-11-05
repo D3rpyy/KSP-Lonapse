@@ -27,6 +27,7 @@ namespace Lonapse
         private bool hasEcho;
         private float radioHp;
         public bool intercom;              // current preset: intercom (true) or radio (false)
+        public bool radioFx;               // an intercom line that uses the radio sound (intercomRadioFx)
 
         public float gain;
         private float gainTarget;
@@ -276,11 +277,14 @@ namespace Lonapse
         /// <summary>
         /// Crew channels: switch between the radio preset (cabin echo, stress-driven low-pass, distortion) and the
         /// intercom preset (wider band, no distortion, light room reverb). Call before Play.
+        /// With <paramref name="radioSound"/> an intercom line still counts as intercom (volume, fades, chat logic),
+        /// but it gets the radio filters.
         /// </summary>
-        public void SetPreset(bool useIntercom, Tuning tu)
+        public void SetPreset(bool useIntercom, Tuning tu, bool radioSound = false)
         {
             intercom = useIntercom;
-            if (useIntercom)
+            radioFx = useIntercom && radioSound;
+            if (useIntercom && !radioSound)
             {
                 hp.cutoffFrequency = tu.intercomHp;
                 lp.cutoffFrequency = tu.intercomLp;

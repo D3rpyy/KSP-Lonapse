@@ -233,7 +233,7 @@ namespace Lonapse
         public bool PlayEvent(EventRequest r)
         {
             if (string.IsNullOrEmpty(r.ev)) return false;
-            r.maxAge = EventWatchers.MaxAgeFor(r.ev, r.maxAge, Tu.eventMaxAge); // science 90 s, soi 120 s at most
+            r.maxAge = EventWatchers.MaxAgeFor(r.ev, r.maxAge, Tu.eventMaxAge); // science 600 s, soi 120 s at most
             RemovePending(OppositeOf(r.ev), "superseded by " + r.ev);
             RemovePending(r.ev, null); // a newer request of the same event replaces the waiting one
             string why;
@@ -285,10 +285,15 @@ namespace Lonapse
         }
 
         /// <summary>Vessel switch: pending events of the old vessel go, a crew loss call stays (the kerbal is still gone).</summary>
-        private void ResetEventsForVessel()
+        private void ResetEventsForVessel(bool evaHop = false)
         {
             for (int i = pendingEvents.Count - 1; i >= 0; i--)
-                if (pendingEvents[i].r.ev != EventWatchers.CrewLost) pendingEvents.RemoveAt(i);
+            {
+                string ev = pendingEvents[i].r.ev;
+                if (ev == EventWatchers.CrewLost || (evaHop && ev == EventWatchers.Science)) continue;
+                Log.Info("Pending event " + ev + " dropped: vessel switch");
+                pendingEvents.RemoveAt(i);
+            }
             airEventPrio = 0;
         }
 
@@ -389,8 +394,8 @@ namespace Lonapse
         private PhraseScene PickFinalScene()
         {
             Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1;
-            PhraseScene sc = PhraseTable.Pick(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, "tense", one), rng, lastSceneId);
-            if (sc == null) sc = PhraseTable.Pick(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, null, one), rng, lastSceneId);
+            PhraseScene sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, "tense", one), rng, lastSceneId);
+            if (sc == null) sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, null, one), rng, lastSceneId);
             if (sc != null) lastSceneId = sc.Id;
             return sc;
         }
@@ -555,7 +560,7 @@ namespace Lonapse
             var list = PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
                 sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
                       && (sc.IsIntercom || BlackoutOk(sc)) && filter(sc));
-            PhraseScene p = PhraseTable.Pick(list, rng, lastSceneId);
+            PhraseScene p = Mem.Take(list, rng, lastSceneId);
             if (p != null) lastSceneId = p.Id;
             return p;
         }

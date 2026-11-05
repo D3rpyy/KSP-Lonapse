@@ -78,6 +78,8 @@ namespace Lonapse
         public const float BaseFont = 15f, BaseLabelFont = 11f;
         public const float Margin = 12f, Gap = 4f, PadX = 10f, PadY = 6f, LabelGap = 1f;
         public const float MinWidth = 200f;
+        /// <summary>subtitleWidth range: a factor on the preset width. The column never grows past the free space.</summary>
+        public const float MinWidthScale = 0.5f, MaxWidthScale = 1.6f;
         public const float FadeIn = 0.15f, FadeOut = 0.4f;
         public const int PanelTexSize = 16, PanelRadius = 6;
 
@@ -167,6 +169,16 @@ namespace Lonapse
         /// </summary>
         public static SubColumn Column(string pos, float W, float H, HudScales s, float customX, float customY)
         {
+            return Column(pos, W, H, s, customX, customY, 1f);
+        }
+
+        /// <summary>
+        /// Column with <paramref name="widthScale"/> (subtitleWidth) applied to the preset width. A wider column is
+        /// still narrowed by the stock HUD and the screen edge, so the scale only changes the width, not the position.
+        /// </summary>
+        public static SubColumn Column(string pos, float W, float H, HudScales s, float customX, float customY, float widthScale)
+        {
+            float k = float.IsNaN(widthScale) || float.IsInfinity(widthScale) ? 1f : Math.Max(MinWidthScale, Math.Min(MaxWidthScale, widthScale));
             s = s.Sanitized();
             if (float.IsNaN(W) || W < 1f) W = 1f;
             if (float.IsNaN(H) || H < 1f) H = 1f;
@@ -179,7 +191,7 @@ namespace Lonapse
                 case TopLeft:
                 {
                     c.x = stg.Right + Margin;
-                    c.w = Math.Min(Math.Min(520f, W * 0.34f), W - c.x - Margin);
+                    c.w = Math.Min(Math.Min(520f, W * 0.34f) * k, W - c.x - Margin);
                     c.growUp = false;
                     c.anchorY = topLimit;
                     c.minY = topLimit;
@@ -192,15 +204,17 @@ namespace Lonapse
                 {
                     c.x = stg.Right + Margin + BottomLeftExtraX * s.ui;
                     float right = nav.x - Margin;
-                    c.w = Math.Min(560f, right - c.x);
+                    // the room beside the navball decides the place, the width scale only the width
+                    bool room = right - c.x >= MinWidth;
+                    c.w = Math.Min(560f * k, right - c.x);
                     c.anchorY = H - Margin;
-                    if (c.w < MinWidth)
+                    if (!room)
                     {
                         // no room beside the navball (small screen, large UI): sit above the navball top instead
                         c.anchorY = nav.y - Margin;
                         right = W - Margin;
                         if (por.y < c.anchorY) right = Math.Min(right, por.x - Margin);
-                        c.w = Math.Max(1f, Math.Min(560f, right - c.x));
+                        c.w = Math.Max(1f, Math.Min(560f * k, right - c.x));
                     }
                     c.growUp = true;
                     c.minY = topLimit;
@@ -210,7 +224,7 @@ namespace Lonapse
                 case Custom:
                 {
                     float x = Clamp01(customX), y = Clamp01(customY);
-                    c.w = Math.Min(640f, W * 0.42f);
+                    c.w = Math.Min(Math.Min(640f, W * 0.42f) * k, W - 2f * Margin);
                     c.x = W * x - c.w * 0.5f;
                     if (c.x > W - Margin - c.w) c.x = W - Margin - c.w;
                     if (c.x < Margin) c.x = Margin;
@@ -222,7 +236,7 @@ namespace Lonapse
                 }
                 default: // above_navball
                 {
-                    float half = Math.Min(640f, W * 0.42f) * 0.5f, cx = W * 0.5f;
+                    float half = Math.Min(Math.Min(640f, W * 0.42f) * k, W - 2f * Margin) * 0.5f, cx = W * 0.5f;
                     // where custom sits by default (X 0.5, Y 0.78), but always above the navball top
                     c.anchorY = Math.Min(H * AboveNavballY, nav.y - Margin);
                     c.anchorY = Math.Max(c.anchorY, Math.Min(Margin + 40f, nav.y - Margin));

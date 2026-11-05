@@ -47,7 +47,7 @@ namespace Lonapse
         public const float PartLostMaxAge = 8f;     // only a fresh explosion is worth a call
         public const float PowerMaxAge = 120f;
         public const float SignalMaxAge = 30f;      // a stale "signal back" sounds wrong
-        public const float ScienceMaxAge = 90f;     // a science remark long after the experiment sounds wrong
+        public const float ScienceMaxAge = 600f;    // 0.6.0: was 90 s, a science line now waits through an ascent or reentry
         public const float SoiMaxAge = 120f;        // a "welcome to" long after the SOI change sounds wrong
 
         /// <summary>
@@ -132,25 +132,62 @@ namespace Lonapse
     /// A blocked result is dropped, not queued.</summary>
     public class ScienceWatcher
     {
+        /// <summary>0.6.0 (user test: experiments run right after each other got no line): experiments that come
+        /// during the overall cooldown wait here, one per topic, and come out one per cooldown.</summary>
+        public const int MaxQueued = 3;
+        /// <summary>A queued experiment older than this (s) is dropped: a remark long after it sounds wrong.</summary>
+        public const double MaxWait = 120.0;
+
+        private struct Queued { public string topic; public string body; public double since; public double maxAge; }
+
         private double lastAny = double.NegativeInfinity;
         private readonly Dictionary<string, double> lastTopic = new Dictionary<string, double>();
+        private readonly List<Queued> queue = new List<Queued>(MaxQueued);
 
-        public void Reset() { lastAny = double.NegativeInfinity; lastTopic.Clear(); }
+        public int QueuedCount { get { return queue.Count; } }
 
+        public void Reset() { lastAny = double.NegativeInfinity; lastTopic.Clear(); queue.Clear(); }
+
+        /// <summary>
+        /// An experiment result. True with a request when it may play now. During the overall cooldown it is queued
+        /// (false, Tick gives it later). The same topic within topicCooldown, or already queued, is ignored.
+        /// </summary>
         public bool OnExperiment(double now, string subjectID, string bodyKey, double cooldown, double topicCooldown,
                                  double maxAge, out EventRequest r)
         {
             r = default(EventRequest);
             string id = EventWatchers.ExperimentId(subjectID);
-            if (now - lastAny < cooldown) return false;
-            double t;
-            if (lastTopic.TryGetValue(id, out t) && now - t < topicCooldown) return false;
-            lastAny = now;
-            lastTopic[id] = now;
             // unknown experiments use the "any" science rows
             string topic = id == EventWatchers.Other ? EventWatchers.Any : id;
-            r = EventWatchers.Make(EventWatchers.Science, "calm", topic, bodyKey, false, (float)maxAge, EventPriority.Science);
+            double t;
+            if (lastTopic.TryGetValue(topic, out t) && now - t < topicCooldown) return false;
+            for (int i = 0; i < queue.Count; i++) if (queue[i].topic == topic) return false;
+            if (now - lastAny < cooldown || queue.Count > 0)
+            {
+                if (queue.Count < MaxQueued) queue.Add(new Queued { topic = topic, body = bodyKey, since = now, maxAge = maxAge });
+                return false;
+            }
+            r = Fire(now, topic, bodyKey, maxAge);
             return true;
+        }
+
+        /// <summary>Per frame: the oldest queued experiment once the overall cooldown is over.</summary>
+        public bool Tick(double now, double cooldown, out EventRequest r)
+        {
+            r = default(EventRequest);
+            for (int i = queue.Count - 1; i >= 0; i--) if (now - queue[i].since > MaxWait) queue.RemoveAt(i);
+            if (queue.Count == 0 || now - lastAny < cooldown) return false;
+            Queued q = queue[0];
+            queue.RemoveAt(0);
+            r = Fire(now, q.topic, q.body, q.maxAge);
+            return true;
+        }
+
+        private EventRequest Fire(double now, string topic, string bodyKey, double maxAge)
+        {
+            lastAny = now;
+            lastTopic[topic] = now;
+            return EventWatchers.Make(EventWatchers.Science, "calm", topic, bodyKey, false, (float)maxAge, EventPriority.Science);
         }
     }
 
