@@ -1226,6 +1226,130 @@ public static class Tests
                   + versionsNamed + " of " + versionsAll + " subtitle versions), spoken text = lonapse_text + name",
                   string.Join(" ; ", off.ToArray()));
         }
+        // numbers in Spanish words
+        object[][] nums = {
+            new object[] { 0L, false, "cero" }, new object[] { 1L, true, "un" }, new object[] { 1L, false, "uno" },
+            new object[] { 16L, false, "dieciséis" }, new object[] { 21L, true, "veintiún" }, new object[] { 22L, false, "veintidós" },
+            new object[] { 31L, true, "treinta y un" }, new object[] { 45L, false, "cuarenta y cinco" }, new object[] { 100L, false, "cien" },
+            new object[] { 101L, false, "ciento uno" }, new object[] { 250L, false, "doscientos cincuenta" },
+            new object[] { 999L, false, "novecientos noventa y nueve" }, new object[] { 1000L, false, "mil" },
+            new object[] { 2500L, false, "dos mil quinientos" }, new object[] { 21000L, false, "veintiún mil" },
+            new object[] { 120000L, false, "ciento veinte mil" }, new object[] { 1000000L, false, "un millón" },
+            new object[] { 3200001L, true, "tres millones doscientos mil un" }, new object[] { -5L, false, "menos cinco" },
+        };
+        var badNum = new List<string>();
+        foreach (object[] nn in nums)
+        {
+            string got = RuntimeLines.Number((long)nn[0], (bool)nn[1]);
+            if (got != (string)nn[2]) badNum.Add(nn[0] + " -> " + got);
+        }
+        Check(badNum.Count == 0, "runtime voice: numbers in Spanish words (apocope before a noun)", string.Join(" ; ", badNum.ToArray()));
+        Check(RuntimeLines.Words("alt_km", 12.46) == "doce" && RuntimeLines.Digits("alt_km", 12.46) == "12"
+              && RuntimeLines.Words("alt_km", 7.46) == "siete coma cinco" && RuntimeLines.Digits("alt_km", 7.46) == "7.5"
+              && RuntimeLines.Words("funds", 43250) == "cuarenta y tres mil doscientos cincuenta" && RuntimeLines.Digits("funds", 43250) == "43,250"
+              && RuntimeLines.Words("day", 21) == "veintiuno" && RuntimeLines.Words("speed", 2281.4) == "dos mil doscientos ochenta y un",
+              "runtime voice: spoken value and subtitle digits are rounded the same way",
+              RuntimeLines.Words("alt_km", 12.46) + " / " + RuntimeLines.Digits("alt_km", 12.46) + " ; " + RuntimeLines.Words("alt_km", 7.46) + " / " + RuntimeLines.Digits("alt_km", 7.46));
+
+        // stock body names: the same spelling as bodies.tsv (read forwards), and not changed again by Respell
+        string bodiesPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../audio/lonapse/bodies.tsv"));
+        var badBody = new List<string>();
+        int bodyRows = 0;
+        foreach (string line in System.IO.File.ReadAllLines(bodiesPath, System.Text.Encoding.UTF8))
+        {
+            if (line.StartsWith("#") || line.StartsWith("key\t") || line.Trim().Length == 0) continue;
+            string[] f = line.Split('\t');
+            if (f[0] == "generic") continue;
+            bodyRows++;
+            string want2 = LonapseText.ReverseText(f[1]);
+            if (RuntimeLines.BodySpoken(f[0]) != want2) badBody.Add(f[0] + ": " + RuntimeLines.BodySpoken(f[0]) + " / " + want2);
+            if (RuntimeLines.BodyEnglish(char.ToUpperInvariant(f[0][0]) + f[0].Substring(1)) != f[2]) badBody.Add(f[0] + " english " + f[2]);
+        }
+        Check(badBody.Count == 0 && bodyRows == 17, "runtime voice: stock body names are spoken like the pre-rendered clips (" + bodyRows + ")",
+              string.Join(" ; ", badBody.ToArray()));
+        Check(RuntimeLines.BodySpoken("Rhode^N") == "Rode" && RuntimeLines.BodyEnglish("Rhode^N") == "Rhode",
+              "runtime voice: a modded body is respelled, the ^N tag goes", RuntimeLines.BodySpoken("Rhode^N"));
+        Check(RuntimeSpeech.Spoken("Sobre " + RuntimeSpeech.MarkRaw("la Mun") + " y " + RuntimeSpeech.MarkName("Jool") + ".") == "erboS la Mun y Yul."
+              && RuntimeSpeech.Unmarked("a ⟪b⟫ ‹c›") == "a b c", "runtime voice: a raw mark is spoken as it is, a name mark respelled",
+              RuntimeSpeech.Spoken("Sobre " + RuntimeSpeech.MarkRaw("la Mun") + " y " + RuntimeSpeech.MarkName("Jool") + "."));
+
+        // vessel names
+        string[][] vessels = {
+            new[] { "Kerbal X", "Kerbal X" }, new[] { "Mun Lander II", "Mun Lander 2" }, new[] { "Relay (Probe)", "Relay" },
+            new[] { "Jumbo Debris", "Jumbo" }, new[] { "Untitled Space Craft", "Untitled Space Craft" },
+            new[] { "A very long ship name with words", null }, new[] { "", null }, new[] { "I II", "I 2" },
+        };
+        var badV = new List<string>();
+        foreach (string[] vv in vessels) if (RuntimeLines.VesselSpeakable(vv[0]) != vv[1]) badV.Add(vv[0] + " -> " + (RuntimeLines.VesselSpeakable(vv[0]) ?? "null"));
+        Check(badV.Count == 0, "runtime voice: vessel names a voice can say (roman numbers, debris, brackets, too long)", string.Join(" ; ", badV.ToArray()));
+
+        // body swap on the generic {body} rows of the built table
+        string so, eo;
+        Check(RuntimeSpeech.SwapBody("Saludos para el planeta.", "Say hi to the planet.", "⟪Rode⟫", "Rhode", out so, out eo)
+              && so == "Saludos para ⟪Rode⟫." && eo == "Say hi to Rhode."
+              && !RuntimeSpeech.SwapBody("El planetario.", "The planetarium.", "x", "y", out so, out eo),
+              "runtime voice: the generic body words are swapped for a real name, whole words only", so + " / " + eo);
+        if (System.IO.File.Exists(builtPath))
+        {
+            PhraseTable built2 = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(builtPath, System.Text.Encoding.UTF8)), new List<string>());
+            int gen = 0, swapped = 0;
+            foreach (PhraseEntry pe in built2.Entries)
+            {
+                if (pe.Body != "generic") continue;
+                gen++;
+                bool all = true;
+                foreach (string v in SubtitleSlots.Versions(pe.English))
+                    if (!RuntimeSpeech.SwapBody(pe.Spanish, v, "⟪Rode⟫", "Rhode", out so, out eo)) all = false;
+                if (all) swapped++;
+            }
+            Check(gen > 0 && swapped == gen, "runtime voice: every generic {body} row takes a modded body name (" + swapped + " of " + gen + ")", null);
+        }
+
+        // runtime-only lines
+        var vals = new Dictionary<string, double> { { "alt_km", 85.2 }, { "pe_km", 80.4 }, { "ap_km", 91.0 }, { "speed", 2281 }, { "fuel", 63 }, { "day", 3 } };
+        var nms = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
+        var orbit = RuntimeLines.ReportsFor("orbit", vals, nms);
+        string rs, re;
+        RuntimeTemplate t0 = null;
+        foreach (RuntimeTemplate t in orbit) if (t.Id == "rt_orbit_1") t0 = t;
+        bool filled = t0 != null && RuntimeLines.Fill(t0, vals, nms, out rs, out re)
+                      && re == "Stable orbit. Periapsis 80 km, apoapsis 91 km."
+                      && RuntimeSpeech.Spoken(rs) == LonapseText.ReverseText("Órbita estable. Periapsis ochenta kilómetros, apoapsis noventa y un kilómetros.");
+        Check(filled, "runtime voice: an orbit report, numbers in reversed Spanish words, digits in the subtitle",
+              t0 == null ? "no rt_orbit_1" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
+        var ids = new List<string>();
+        foreach (RuntimeTemplate t in orbit) ids.Add(t.Id);
+        Check(!ids.Contains("rt_flight_1") && !ids.Contains("rt_fuel_low") && ids.Contains("rt_fuel_1") && ids.Contains("rt_vessel_1")
+              && RuntimeLines.ReportsFor("landed", new Dictionary<string, double>(), new Dictionary<string, string[]>()).Count == 0
+              || false, "runtime voice: reports fit the situation and need their values", string.Join(", ", ids.ToArray()));
+        var badT = new List<string>();
+        var allT = new List<RuntimeTemplate>(RuntimeLines.Reports);
+        allT.AddRange(RuntimeLines.Science); allT.AddRange(RuntimeLines.Contracts);
+        var full = new Dictionary<string, double>(vals) { { "sci", 12.5 }, { "funds", 43250 } };
+        var fullN = new Dictionary<string, string[]>(nms) { { "exp", new[] { "temperatura", "temperature" } } };
+        foreach (RuntimeTemplate t in allT)
+        {
+            string a1, a2;
+            if (!RuntimeLines.Fill(t, full, fullN, out a1, out a2)) badT.Add(t.Id + " does not fill");
+            else if (a2.IndexOf('{') >= 0 || a1.IndexOf('{') >= 0) badT.Add(t.Id + " has a slot left");
+            else if (PhraseTable.HasExplosionWord(a1) || PhraseTable.HasExplosionWord(a2)) badT.Add(t.Id + " has an explosion word");
+        }
+        Check(badT.Count == 0, "runtime voice: every runtime-only template fills (" + allT.Count + ")", string.Join(" ; ", badT.ToArray()));
+        Check(RuntimeLines.ExperimentId("temperatureScan@KerbinSrfLanded") == "temperatureScan"
+              && RuntimeLines.ExperimentWords("cometSample_long")[1] == "comet sample" && RuntimeLines.ExperimentWords("modThing")[0] == "experimento",
+              "runtime voice: experiment words from the subject id", null);
+        // extra rows (Phrases/Extra) in the source format after the built table: both parse, lonapse_text is made
+        var mixed = new List<string> {
+            "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\ttrait\tpersona\ttopic\tcore\tbeep\tspanish\tlonapse_text\tfolder\tbody\tenglish",
+            "a_1\tchatter\tchatter\tcalm\tmc\ta\t1\tm\tany\tany\tany\tany\tany\tany\t\tHola.\taloH.\tcontrol/calm\t\tHello.",
+            "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\tspanish\tenglish",
+            "x_1\tchatter\tchatter\tcalm\tmc\tx\t1\tm\torbit\tany\tSaludos para {body}.\tSay hi to {body}.",
+        };
+        var mixErr = new List<string>();
+        PhraseTable mt = PhraseTable.Parse(mixed, mixErr);
+        PhraseEntry x1 = mt.Get("x_1");
+        Check(mixErr.Count == 0 && mt.Count == 2 && x1 != null && x1.LonapseText == LonapseText.ReverseText(x1.Spanish) && x1.Folder == "control/calm",
+              "runtime voice: extra rows in the source format parse after the built table", string.Join(" ; ", mixErr.ToArray()));
         Check(RuntimeDelivery.For("mc").Voice == "es_MX-ald-medium" && Math.Abs(RuntimeDelivery.For("m").LengthScale - Math.Pow(2, 5 / 12.0)) < 1e-9
               && RuntimeDelivery.For("x") == null, "runtime voice: delivery per kind like the build (voice, length scale)", null);
     }

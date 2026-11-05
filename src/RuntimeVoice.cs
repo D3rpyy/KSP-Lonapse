@@ -51,26 +51,38 @@ namespace Lonapse
         readonly Dictionary<string, Worker> workers = new Dictionary<string, Worker>();
         readonly Queue<Job> finished = new Queue<Job>();
         readonly object gate = new object();
+        // requests go to one dispatcher thread: starting Piper takes about half a second, the game must not wait
+        readonly Queue<KeyValuePair<string, Job>> requests = new Queue<KeyValuePair<string, Job>>();
+        readonly AutoResetEvent wake = new AutoResetEvent(false);
+        Thread dispatcher;
         int counter;
-        bool disposed;
+        volatile bool disposed;
 
-        public static string Root { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/Runtime"); } }
-        public static string TempDir { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/RuntimeTemp"); } }
+        // paths and platform are read once on the main thread (Unity calls), the dispatcher thread uses the copies
+        static string root, tempDir, platform;
+
+        /// <summary>Main thread: reads the KSP root and the player platform. The constructor calls it.</summary>
+        public static void Init()
+        {
+            if (root != null) return;
+            tempDir = Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/RuntimeTemp");
+            switch (Application.platform)
+            {
+                case RuntimePlatform.LinuxPlayer: platform = "linux"; break;
+                case RuntimePlatform.OSXPlayer: platform = "macos"; break;
+                default: platform = "windows"; break;
+            }
+            root = Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/Runtime");
+        }
+
+        public RuntimeVoice() { Init(); }
+
+        public static string Root { get { Init(); return root; } }
+        public static string TempDir { get { Init(); return tempDir; } }
 
         /// <summary>Folder of the Piper binary for this player: windows (also under Proton/Wine), linux, macos.
         /// KSP on a Mac is an x64 build, so macos holds the x64 binary (Rosetta on Apple silicon).</summary>
-        public static string Platform
-        {
-            get
-            {
-                switch (Application.platform)
-                {
-                    case RuntimePlatform.LinuxPlayer: return "linux";
-                    case RuntimePlatform.OSXPlayer: return "macos";
-                    default: return "windows";
-                }
-            }
-        }
+        public static string Platform { get { Init(); return platform; } }
 
         public static string Binary
         {
@@ -80,7 +92,20 @@ namespace Lonapse
         public static string VoicePath(string voice) { return Path.Combine(Path.Combine(Root, "voices"), voice + ".onnx"); }
 
         /// <summary>Why runtime voice cannot work here, null when the files are there.</summary>
+        static readonly Dictionary<string, KeyValuePair<float, string>> missingCache = new Dictionary<string, KeyValuePair<float, string>>();
+
         public static string Missing(string kind)
+        {
+            float now = Environment.TickCount / 1000f; // not a Unity call: the dispatcher thread asks too
+            KeyValuePair<float, string> c;
+            lock (missingCache)
+                if (missingCache.TryGetValue(kind, out c) && now - c.Key < 5f) return c.Value;
+            string why = MissingNow(kind);
+            lock (missingCache) missingCache[kind] = new KeyValuePair<float, string>(now, why);
+            return why;
+        }
+
+        static string MissingNow(string kind)
         {
             if (!File.Exists(Binary)) return "no Piper binary at " + Binary;
             RuntimeDelivery d = RuntimeDelivery.For(kind);
@@ -90,26 +115,52 @@ namespace Lonapse
             return null;
         }
 
-        /// <summary>Starts the Piper process of a kind (m, f, mc) now, so the model is loaded before the first line.</summary>
-        public string Warm(string kind)
+        /// <summary>Starts the Piper process of a kind (m, f, mc) in the background and speaks one short line it throws
+        /// away, so the model is loaded before the first real line.</summary>
+        public void Warm(string kind)
         {
-            string why = Missing(kind);
-            if (why != null) return why;
-            Worker w;
-            return GetWorker(kind, out w);
+            if (Missing(kind) == null) Request(kind, "Hola.", null);
         }
 
         /// <summary>
         /// Speaks a Spanish template (names marked with RuntimeSpeech.MarkName) in the voice of a kind. done runs on
-        /// the main thread (from Tick) with the clip, or with an error.
+        /// the main thread (from Tick) with the clip, or with an error. done null: a warm-up line, no clip is made.
+        /// Never blocks: the Piper process starts and gets the line on the dispatcher thread.
         /// </summary>
         public void Request(string kind, string spanishTemplate, Action<Result> done)
         {
-            string spoken = RuntimeSpeech.Spoken(spanishTemplate);
+            var job = new Job { id = "rt" + Interlocked.Increment(ref counter), spoken = RuntimeSpeech.Spoken(spanishTemplate),
+                                done = done, sw = Stopwatch.StartNew() };
+            if (disposed) return;
+            lock (requests)
+            {
+                requests.Enqueue(new KeyValuePair<string, Job>(kind, job));
+                if (dispatcher == null)
+                {
+                    dispatcher = new Thread(Dispatch) { IsBackground = true, Name = "Lonapse Piper dispatch" };
+                    dispatcher.Start();
+                }
+            }
+            wake.Set();
+        }
+
+        void Dispatch()
+        {
+            while (!disposed)
+            {
+                KeyValuePair<string, Job> r;
+                bool have;
+                lock (requests) { have = requests.Count > 0; r = have ? requests.Dequeue() : default(KeyValuePair<string, Job>); }
+                if (!have) { wake.WaitOne(1000); continue; }
+                Send(r.Key, r.Value);
+            }
+        }
+
+        void Send(string kind, Job job)
+        {
             string why = Missing(kind);
             Worker w = null;
             if (why == null) why = GetWorker(kind, out w);
-            var job = new Job { id = "rt" + (++counter), spoken = spoken, done = done, sw = Stopwatch.StartNew() };
             if (why != null)
             {
                 job.error = why;
@@ -118,7 +169,7 @@ namespace Lonapse
             }
             job.pitchSt = w.delivery.PitchSt;
             job.wavPath = Path.Combine(TempDir, job.id + "_" + kind + ".wav").Replace('\\', '/');
-            string json = "{\"text\": " + RuntimeSpeech.Json(spoken) + ", \"output_file\": " + RuntimeSpeech.Json(job.wavPath) + "}\n";
+            string json = "{\"text\": " + RuntimeSpeech.Json(job.spoken) + ", \"output_file\": " + RuntimeSpeech.Json(job.wavPath) + "}\n";
             byte[] bytes = new UTF8Encoding(false).GetBytes(json);
             try
             {
@@ -129,12 +180,18 @@ namespace Lonapse
             catch (Exception e)
             {
                 w.dead = true;
+                lock (w.pending) if (w.pending.Count > 0 && w.pending.Peek() == job) w.pending.Dequeue();
                 job.error = "write to Piper failed: " + e.Message;
                 lock (gate) finished.Enqueue(job);
             }
         }
 
         string GetWorker(string kind, out Worker w)
+        {
+            lock (workers) return GetWorkerLocked(kind, out w);
+        }
+
+        string GetWorkerLocked(string kind, out Worker w)
         {
             if (workers.TryGetValue(kind, out w) && !w.dead && w.proc != null && !w.proc.HasExited) return null;
             if (w != null) Stop(w);
@@ -270,8 +327,12 @@ namespace Lonapse
         public void Dispose()
         {
             disposed = true;
-            foreach (Worker w in workers.Values) Stop(w);
-            workers.Clear();
+            wake.Set();
+            lock (workers)
+            {
+                foreach (Worker w in workers.Values) Stop(w);
+                workers.Clear();
+            }
         }
     }
 }

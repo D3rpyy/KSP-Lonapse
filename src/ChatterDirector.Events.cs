@@ -393,7 +393,9 @@ namespace Lonapse
         /// <summary>A one-line MC crew_lost scene (tense first, then any band). Phase is not checked: the flight is over.</summary>
         private PhraseScene PickFinalScene()
         {
-            Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1;
+            // a real clip: the final call plays it directly, not through the runtime voice
+            Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1
+                                              && PhraseClips.Clip(x.Lines[0], false) != null;
             PhraseScene sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, "tense", one), rng, lastSceneId);
             if (sc == null) sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, null, one), rng, lastSceneId);
             if (sc != null) lastSceneId = sc.Id;

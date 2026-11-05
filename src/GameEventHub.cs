@@ -48,6 +48,8 @@ namespace Lonapse
                 GameEvents.onPartDie.Add(OnPartDie);
                 GameEvents.onKerbalStatusChange.Add(OnKerbalStatusChange);
                 GameEvents.onCrewKilled.Add(OnCrewKilled);
+                GameEvents.Contract.onCompleted.Add(OnContractCompleted);
+                GameEvents.Contract.onFailed.Add(OnContractFailed);
                 subscribed = true;
             }
             catch (Exception e) { Log.Exception("GameEventHub.Init", e); }
@@ -64,6 +66,8 @@ namespace Lonapse
                 GameEvents.onPartDie.Remove(OnPartDie);
                 GameEvents.onKerbalStatusChange.Remove(OnKerbalStatusChange);
                 GameEvents.onCrewKilled.Remove(OnCrewKilled);
+                GameEvents.Contract.onCompleted.Remove(OnContractCompleted);
+                GameEvents.Contract.onFailed.Remove(OnContractFailed);
             }
             catch (Exception e) { Log.Exception("GameEventHub.Dispose", e); }
             play = null;
@@ -191,10 +195,34 @@ namespace Lonapse
                 {
                     Log.Info("Event science: " + data.subjectID + " -> topic " + r.topic);
                     Send(r);
+                    // experimental runtime voice: sometimes the numbers after the reaction
+                    if (host.director != null)
+                        host.director.RuntimeScience(data.subjectID, data.dataAmount, v.mainBody != null ? v.mainBody.bodyName : null);
                 }
                 else Log.Debug("Science " + data.subjectID + (science.QueuedCount > 0 ? " queued or skipped (" + science.QueuedCount + " waiting)" : " skipped (cooldown)"));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnExperimentDeployed", e); }
+        }
+
+        // experimental runtime voice: Mission Control on a finished or failed contract, only in flight
+        private void OnContractCompleted(Contracts.Contract c)
+        {
+            try
+            {
+                if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
+                host.director.RuntimeContract(true, c.FundsCompletion);
+            }
+            catch (Exception e) { Log.Exception("GameEventHub.OnContractCompleted", e); }
+        }
+
+        private void OnContractFailed(Contracts.Contract c)
+        {
+            try
+            {
+                if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
+                host.director.RuntimeContract(false, 0);
+            }
+            catch (Exception e) { Log.Exception("GameEventHub.OnContractFailed", e); }
         }
 
         private void OnPartDie(Part p)

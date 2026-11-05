@@ -16,9 +16,24 @@ namespace Lonapse
 
         public static string MarkName(string name) { return NameOpen + (name ?? "") + NameClose; }
 
+        /// <summary>Marks a name that is already spelled for the voice (a stock body from bodies.tsv, a respelled
+        /// name): spoken as it is, not reversed and not respelled again.</summary>
+        public const char RawOpen = '⟪', RawClose = '⟫';
+
+        public static string MarkRaw(string name) { return RawOpen + (name ?? "") + RawClose; }
+
+        /// <summary>The template with the marks removed (the Spanish as text, for the table entry).</summary>
+        public static string Unmarked(string template)
+        {
+            if (string.IsNullOrEmpty(template)) return template ?? "";
+            var sb = new StringBuilder(template.Length);
+            foreach (char c in template) if (c != NameOpen && c != NameClose && c != RawOpen && c != RawClose) sb.Append(c);
+            return sb.ToString();
+        }
+
         /// <summary>
-        /// The text Piper reads: every word outside the name marks reversed (LonapseText.ReverseText), every name
-        /// respelled for a Spanish voice (Respell) and not reversed. The marks are removed.
+        /// The text Piper reads: every word outside the marks reversed (LonapseText.ReverseText), every name
+        /// respelled for a Spanish voice (Respell) and not reversed, a raw mark as it is. The marks are removed.
         /// </summary>
         public static string Spoken(string template)
         {
@@ -27,15 +42,45 @@ namespace Lonapse
             int i = 0;
             while (i < template.Length)
             {
-                int open = template.IndexOf(NameOpen, i);
+                int a = template.IndexOf(NameOpen, i), b = template.IndexOf(RawOpen, i);
+                int open = a < 0 ? b : (b < 0 ? a : Math.Min(a, b));
                 if (open < 0) { sb.Append(LonapseText.ReverseText(template.Substring(i))); break; }
                 if (open > i) sb.Append(LonapseText.ReverseText(template.Substring(i, open - i)));
-                int close = template.IndexOf(NameClose, open + 1);
+                bool raw = template[open] == RawOpen;
+                int close = template.IndexOf(raw ? RawClose : NameClose, open + 1);
                 if (close < 0) close = template.Length;
-                sb.Append(Respell(template.Substring(open + 1, close - open - 1)));
+                string inner = template.Substring(open + 1, close - open - 1);
+                sb.Append(raw ? inner : Respell(inner));
                 i = close + 1;
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// A generic {body} line ("el planeta", "the planet", see bodies.tsv) with a real body name instead, for a
+        /// body without its own clip (a modded planet). spanishName goes in as it is (put it in a mark), englishName
+        /// replaces "the planet" (a capital when it starts the sentence stays a capital name anyway). False unless
+        /// both texts hold the generic words exactly once.
+        /// </summary>
+        public static bool SwapBody(string spanish, string english, string spanishName, string englishName,
+                                    out string spanishOut, out string englishOut)
+        {
+            spanishOut = ReplaceOnce(spanish, "el planeta", spanishName);
+            englishOut = ReplaceOnce(english, "the planet", englishName);
+            if (spanishOut == null || englishOut == null) { spanishOut = null; englishOut = null; return false; }
+            return true;
+        }
+
+        static string ReplaceOnce(string text, string what, string with)
+        {
+            if (string.IsNullOrEmpty(text)) return null;
+            int i = text.IndexOf(what, StringComparison.OrdinalIgnoreCase);
+            if (i < 0 || text.IndexOf(what, i + what.Length, StringComparison.OrdinalIgnoreCase) >= 0) return null;
+            // whole words only ("el planetario" is not the planet)
+            if (i > 0 && char.IsLetter(text[i - 1])) return null;
+            int end = i + what.Length;
+            if (end < text.Length && char.IsLetter(text[end])) return null;
+            return text.Substring(0, i) + with + text.Substring(end);
         }
 
         static bool IsVowel(char c) { return "aeiouáéíóú".IndexOf(c) >= 0; }
@@ -109,7 +154,7 @@ namespace Lonapse
             if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(name)) return null;
             string t = text.TrimEnd();
             if (t.IndexOfAny(new[] { '"', '{', '}', '|', '“', '”', '«', '»' }) >= 0) return null;
-            string bare = name.Trim(NameOpen, NameClose);
+            string bare = name.Trim(NameOpen, NameClose, RawOpen, RawClose);
             if (bare.Length > 0 && t.IndexOf(bare, StringComparison.OrdinalIgnoreCase) >= 0) return null;
             int end = t.Length;
             while (end > 0 && ".!?…".IndexOf(t[end - 1]) >= 0) end--;

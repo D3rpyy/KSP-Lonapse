@@ -19,6 +19,12 @@ namespace Lonapse
         /// when the file is missing, then a slot shows "...".</summary>
         public static SlotPools pools = new SlotPools();
         public const string PoolsRel = "GameData/Lonapse/Phrases/pools.tsv";
+        /// <summary>Experimental (runtime voice): extra rows, in the source format of audio/lonapse/phrases. They have
+        /// no clips, so they only play when Piper can speak them (runtimeCanSpeak).</summary>
+        public const string ExtraRel = "GameData/Lonapse/Phrases/Extra";
+        public static int extraFiles;
+        /// <summary>Set by the director: true when a row without a clip can be spoken at runtime.</summary>
+        public static Func<PhraseEntry, bool> runtimeCanSpeak;
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
@@ -50,7 +56,16 @@ namespace Lonapse
             List<string> errors = new List<string>();
             try
             {
-                table = PhraseTable.Parse(new List<string>(File.ReadAllLines(path, System.Text.Encoding.UTF8)), errors);
+                var rows = new List<string>(File.ReadAllLines(path, System.Text.Encoding.UTF8));
+                extraFiles = 0;
+                string extra = Path.Combine(KSPUtil.ApplicationRootPath, ExtraRel);
+                if (Directory.Exists(extra))
+                {
+                    string[] files = Directory.GetFiles(extra, "*.tsv");
+                    Array.Sort(files, StringComparer.Ordinal);
+                    foreach (string f in files) { rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8)); extraFiles++; }
+                }
+                table = PhraseTable.Parse(rows, errors);
             }
             catch (Exception e)
             {
@@ -89,7 +104,8 @@ namespace Lonapse
                 if (sc.IsProbe) probeSceneCount++;
             }
             status = clipCount + " clips, " + sceneCount + " scenes (" + probeSceneCount + " probe), "
-                     + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "");
+                     + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "")
+                     + (extraFiles > 0 ? ", " + extraFiles + " extra table(s) for the runtime voice" : "");
             Log.Info("Lonapse: " + status);
         }
 
@@ -147,7 +163,8 @@ namespace Lonapse
         {
             if (sc == null || sc.Lines.Count == 0) return false;
             for (int i = 0; i < sc.Lines.Count; i++)
-                if (!sc.Lines[i].SubtitleOnly && Clip(sc.Lines[i], false) == null) return false;
+                if (!sc.Lines[i].SubtitleOnly && Clip(sc.Lines[i], false) == null
+                    && (runtimeCanSpeak == null || !runtimeCanSpeak(sc.Lines[i]))) return false;
             return true;
         }
 

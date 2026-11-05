@@ -476,12 +476,18 @@ namespace Lonapse
             s.planChatter = Toggle(s.planChatter, "Maneuver node talk");
             s.lightDelay = Toggle(s.lightDelay, "Light delay");
             Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
-            s.runtimeNames = Toggle(s.runtimeNames, "Mission Control says crew names (experimental)");
+
+            Header("Runtime voice (experimental)");
+            s.runtimeVoice = Toggle(s.runtimeVoice, "Speak names and new lines at runtime");
             {
-                string why = s.runtimeNames ? RuntimeVoice.Missing("mc") : null;
+                string why = s.runtimeVoice ? RuntimeVoice.Missing("mc") : null;
                 Hint(why != null ? "Not available: " + why
-                     : "Some Mission Control lines end with the name of a kerbal aboard, spoken at runtime. When the name is not ready in time, the normal line plays.");
+                     : "Names of kerbals, the vessel and modded planets are spoken in the lines. When a line is not ready in time, the normal one plays.");
             }
+            s.runtimeReports = Toggle(s.runtimeReports, "Mission Control reports with numbers");
+            Hint("Now and then: orbit, altitude, speed, fuel or the mission day, read out with the real values.");
+            s.runtimeScience = Toggle(s.runtimeScience, "Science points and contract funds");
+            Hint("After a science reaction or a finished contract, Mission Control says the numbers.");
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -989,7 +995,12 @@ namespace Lonapse
             // the director updates its status when the clip is ready
             string rts = d != null && !string.IsNullOrEmpty(d.runtimeStatus) ? d.runtimeStatus : runtimeTestStatus;
             GUILayout.Label(string.IsNullOrEmpty(rts) ? " " : rts);   // always drawn: keeps the control count stable
-            GUILayout.Label("MC lines with a crew name: " + (d != null ? d.RuntimeNameStats : "-"));
+            GUILayout.Label("Runtime lines: " + (d != null ? d.RuntimeStats : "-"));
+            if (GUILayout.Button("Runtime voice: a Mission Control report now"))
+            {
+                try { runtimeTestStatus = d != null ? d.DebugRuntimeReport() : "no director"; if (d != null) d.runtimeStatus = null; }
+                catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeReport", e); }
+            }
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));
             if (d != null)

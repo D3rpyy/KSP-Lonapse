@@ -233,6 +233,12 @@ It shows how many lines each file has, and points you to every bad row as `phras
 
 5. Build. Only the new or changed lines are rendered, so this is quick.
 
+### Without rendering (runtime voice, experimental)
+
+With the runtime voice installed and the setting "Speak names and new lines at runtime" on, rows can also go into `GameData/Lonapse/Phrases/Extra/*.tsv` in the KSP install. Same columns as the files here, no build step. Piper speaks them in game, in loñapsE like every other line. `{body}` in such a row gets the current body name, also on a modded planet.
+
+These rows have no clip. Without the runtime voice they never play. A line that is not ready 4 s after its turn is skipped. Nobody listened to these lines before they play, so a word can come out wrong.
+
 ## Folders
 
 The clips go into these folders:

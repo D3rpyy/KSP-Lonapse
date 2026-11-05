@@ -780,14 +780,20 @@ namespace Lonapse
                     KerbalVoice sp = u.speaker;
                     if (sp == null || sp.outDueToG || !host.roster.voices.Contains(sp)) sp = host.roster.PickSpeaker(rng);
                     if (sp == null) return StartResult.Skip;
+                    AudioClip rtClip;
+                    PhraseEntry rtEntry;
+                    int turn = RuntimeTurn(u, sp, out rtClip, out rtEntry);
+                    if (turn == TurnWait) return StartResult.Wait;
+                    if (turn == TurnSkip) return StartResult.Skip;
                     NoteCrewSpeaker(sp);
+                    PhraseEntry shown = rtEntry ?? u.entry;
                     AudioClip clip;
                     string what;
                     bool panic;
                     if (u.entry != null)
                     {
-                        clip = PhraseClips.Clip(u.entry, sp.isFemale);
-                        what = u.entry.ClipKey;
+                        clip = rtClip ?? PhraseClips.Clip(u.entry, sp.isFemale);
+                        what = shown.ClipKey;
                         panic = u.entry.Band == "panic";
                     }
                     else
@@ -816,7 +822,7 @@ namespace Lonapse
                     if (keep < 1f) c.TruncateAt(clip.length * keep);
                     if (staticChop) c.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
                     StampLine(sp, panic);
-                    ShowSubtitle(u.entry, sp.displayName, c.duration);
+                    ShowSubtitle(shown, sp.displayName, c.duration);
                     lastLine = sp.displayName + ": " + what + " (" + sp.BandName + ")";
                     Audit.Add("crew " + lastLine + " s " + s.ToString("0.00"));
                     Log.Debug("crew " + sp.displayName + " " + what + " " + c.clipName + " pitch " + pitch.ToString("0.00") + " vol " + vol.ToString("0.00") + (overlapping ? " overlap" : ""));
@@ -837,8 +843,14 @@ namespace Lonapse
                     if (CrewPlaying() >= CrewCap()) return StartResult.Wait;
                     VoiceChannel c = FreeCrewChannel();
                     if (c == null) return StartResult.Wait;
-                    AudioClip clip = u.entry != null ? PhraseClips.Clip(u.entry, sp.isFemale)
-                                                     : ClipLibrary.NextFor(u.folder ?? CrewFolder(sp, s), sp.isFemale, sp.rng);
+                    AudioClip rtClip;
+                    PhraseEntry rtEntry;
+                    int turn = RuntimeTurn(u, sp, out rtClip, out rtEntry);
+                    if (turn == TurnWait) return StartResult.Wait;
+                    if (turn == TurnSkip) return StartResult.Skip;
+                    PhraseEntry shown = rtEntry ?? u.entry;
+                    AudioClip clip = rtClip ?? (u.entry != null ? PhraseClips.Clip(u.entry, sp.isFemale)
+                                                     : ClipLibrary.NextFor(u.folder ?? CrewFolder(sp, s), sp.isFemale, sp.rng));
                     if (clip == null) return StartResult.Skip;
                     float sk = sp.sk, gs = host.stress.gStrain;
                     float pitch = DcMath.CrewPitch(sp.basePitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
@@ -855,8 +867,8 @@ namespace Lonapse
                     if (c.radioFx) { RadioFxFilters(c, sp, gs, tu); StartCrewBed(); }
                     else c.SetIntercomFilters(sp.timbre, gs, tu);
                     StampLine(sp, false);
-                    ShowSubtitle(u.entry, sp.displayName, c.duration);
-                    lastLine = "intercom " + sp.displayName + ": " + (u.entry != null ? u.entry.ClipKey : c.clipName);
+                    ShowSubtitle(shown, sp.displayName, c.duration);
+                    lastLine = "intercom " + sp.displayName + ": " + (shown != null ? shown.ClipKey : c.clipName);
                     Audit.Add(lastLine);
                     Log.Debug("intercom " + sp.displayName + " " + c.clipName + " pitch " + pitch.ToString("0.00"));
                     ch = c;
@@ -922,7 +934,9 @@ namespace Lonapse
                     if (!host.signal.connected) { Log.Debug("control line skipped: no signal"); return StartResult.Skip; }
                     AudioClip rtClip;
                     PhraseEntry rtEntry;
-                    if (!RuntimeTurn(u, out rtClip, out rtEntry)) return StartResult.Wait;
+                    int turn = RuntimeTurn(u, null, out rtClip, out rtEntry);
+                    if (turn == TurnWait) return StartResult.Wait;
+                    if (turn == TurnSkip) return StartResult.Skip;
                     PhraseEntry shown = rtEntry ?? u.entry;
                     AudioClip clip = rtClip ?? (u.entry != null ? PhraseClips.Clip(u.entry, false) : ClipLibrary.Next(u.folder ?? "control/calm", rng));
                     if (clip == null) return StartResult.Skip;
@@ -1050,7 +1064,7 @@ namespace Lonapse
             Enqueue(UttKind.BedStart, null, delay, 0f, null);
             Enqueue(UttKind.ControlFx, "beeps/quindar_in", 0f, 0f, null);
             Utterance u = Enqueue(UttKind.ControlLine, folder, 0.05f, 0f, null);
-            if (u != null) { u.entry = e; u.rt = MaybeAddressed(e); }
+            if (u != null) { u.entry = e; u.rt = PlanMc(e); }
             Enqueue(UttKind.ControlFx, "beeps/quindar_out", 0.03f, 0f, null);
             Enqueue(UttKind.BedStop, null, 0f, 0f, null);
             Enqueue(UttKind.ControlFx, "static/squelch", 0.02f, 0f, null);
@@ -1080,7 +1094,7 @@ namespace Lonapse
             bool keyed = overlap <= 0f;
             if (keyed) Enqueue(UttKind.RadioOpen, null, delay, 0f, null);
             Utterance u = Enqueue(UttKind.CrewLine, folder, keyed ? 0.02f : delay, overlap, sp);
-            if (u != null) u.entry = e;
+            if (u != null) { u.entry = e; u.rt = PlanLine(e, sp, null); }
             if (keyed && host.settings.rogerBeep) Enqueue(UttKind.RogerBeep, null, 0.04f, 0f, null);
             if (keyed) Enqueue(UttKind.RadioClose, null, 0.02f, 0f, null);
         }
@@ -1830,6 +1844,7 @@ namespace Lonapse
                 if (u == null) continue;
                 if (second) u.pitchMul = nudge;
                 if (lines != null) u.entry = i < lines.Count ? lines[i] : extraLine;
+                if (u.entry != null) u.rt = PlanIntercom(u.entry, second ? b : a, second ? a : b);
             }
             Enqueue(UttKind.IntercomClick, null, 0.1f, 0f, null); // release click after the last line
             Log.Debug("Intercom chat queued: " + a.displayName + " and " + b.displayName + ", " + turns + " turns" + (sc != null ? ", scene " + sc.Id : "") + ", s " + s.ToString("0.00"));
@@ -1866,6 +1881,7 @@ namespace Lonapse
             if (IntercomAudible) lastChatClock = clock;
             UpdatePendingCallout();
             UpdateEvents();
+            RuntimeTick();
             ProcessQueue();
 
             bool blackoutPhase = InBlackoutPhase;
