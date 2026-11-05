@@ -2,8 +2,10 @@
 // started once and kept running (the model loads once), fed one JSON line per sentence on stdin. Piper writes a WAV
 // and prints its path on stdout. A reader thread turns that WAV into samples (RuntimeSpeech: Kerbal shift, level
 // shaping), and Tick() on the main thread makes the AudioClip, because Unity only allows that there.
-// Files: GameData/Lonapse/Runtime/<windows|linux|macos>/piper(.exe) with its libraries and espeak-ng-data, and
-// GameData/Lonapse/Runtime/voices/<voice>.onnx(.json). KSP under Proton/Wine is the Windows player, so it uses windows/.
+// Files: GameData/Lonapse/PluginData/Runtime/<windows|linux|macos>/piper(.exe) with its libraries and espeak-ng-data,
+// and PluginData/Runtime/voices/<voice>.onnx(.json). KSP under Proton/Wine is the Windows player, so it uses windows/.
+// It must be under PluginData: KSP loads every .dll elsewhere in GameData as a plugin, and the native Piper DLLs
+// make that loader throw, which stops the game loading.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -52,8 +54,8 @@ namespace Lonapse
         int counter;
         bool disposed;
 
-        public static string Root { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/Runtime"); } }
-        public static string TempDir { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/runtime"); } }
+        public static string Root { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/Runtime"); } }
+        public static string TempDir { get { return Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/PluginData/RuntimeTemp"); } }
 
         /// <summary>Folder of the Piper binary for this player: windows (also under Proton/Wine), linux, macos.
         /// KSP on a Mac is an x64 build, so macos holds the x64 binary (Rosetta on Apple silicon).</summary>

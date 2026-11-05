@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Experimental (runtime voice): copies the standalone Piper binary and the quantized voices into the KSP install,
-# at GameData/Lonapse/Runtime/<platform>/ and GameData/Lonapse/Runtime/voices/. These files are not in git.
+# at GameData/Lonapse/PluginData/Runtime/<platform>/ and .../Runtime/voices/. These files are not in git.
+# PluginData, because KSP tries to load every other .dll in GameData as a plugin and the native ones stop loading.
 #   ./install_runtime.sh <piper folder> <voices folder> [windows|linux|macos]
 # <piper folder> holds piper(.exe), its libraries and espeak-ng-data (a rhasspy/piper release, unpacked).
 # <voices folder> holds the <voice>.onnx and .onnx.json files. KSP under Proton/Wine is the Windows player: windows.
@@ -14,7 +15,7 @@ VOICES="${2:?usage: install_runtime.sh <piper folder> <voices folder> [windows|l
 PLAT="${3:-windows}"
 [[ -n "${KSP_DIR:-}" && -d "$KSP_DIR/GameData/Squad" ]] || { echo "ERROR: no KSP install (set KSP_DIR or .ksp_dir)" >&2; exit 1; }
 if pgrep -f KSP_x64 >/dev/null 2>&1; then echo "ERROR: KSP is running, close it first" >&2; exit 1; fi
-RT="$KSP_DIR/GameData/Lonapse/Runtime"
+RT="$KSP_DIR/GameData/Lonapse/PluginData/Runtime"
 mkdir -p "$RT/$PLAT" "$RT/voices"
 # the Arabic diacritics model and the pkgconfig folder are not needed for Spanish
 rsync -a --delete --exclude 'libtashkeel_model.ort' --exclude 'pkgconfig' "$SRC/" "$RT/$PLAT/"
