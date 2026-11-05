@@ -10,7 +10,7 @@ intercom_calm_s3_1	chatter	chatter	calm	crew	intercom_calm_s3	1	both	orbit	any		
 intercom_calm_s3_2	chatter	chatter	calm	crew	intercom_calm_s3	2	both	orbit	any		Como un bebé, flotando.	Like a baby, floating. | Like a floating baby. | Like a baby. A floating one.
 intercom_tense_s1_1	chatter	chatter	tense	crew	intercom_tense_s1	1	both	goofy	spin		¿Tú también notas que giramos?	Do you feel us spinning too? | Are we spinning, or is it just me? | {other}, do you feel that spin too?
 intercom_tense_s1_2	chatter	chatter	tense	crew	intercom_tense_s1	2	both	goofy	spin		Sí. Finjamos que no.	Yes. Let's pretend we don't. | Yes. Let's ignore it. | Yep. We pretend it isn't happening.
-intercom_calm_s4_1	chatter	chatter	calm	crew	intercom_calm_s4	1	both	goofy	any		¿Quién ha pulsado ese botón?	Who pressed that button?
+intercom_calm_s4_1	chatter	chatter	calm	crew	intercom_calm_s4	1	both	goofy	any		¿Quién ha pulsado ese botón?	Who pressed that button? | Who pressed that button? | Who touched that button?
 intercom_calm_s4_2	chatter	chatter	calm	crew	intercom_calm_s4	2	both	goofy	any		Yo no.	Not me. | Wasn't me. | Not me, {other}.
 intercom_calm_s4_3	chatter	chatter	calm	crew	intercom_calm_s4	3	both	goofy	any		Yo tampoco.	Me neither. | Not me either. | Me neither. Must be the ship.
 intercom_calm_s4_3b	chatter	chatter	calm	crew	intercom_calm_s4	3	both	goofy	any	b	Entonces ha sido la nave.	Then it was the ship.

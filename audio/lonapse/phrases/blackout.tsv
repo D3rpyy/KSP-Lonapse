@@ -11,8 +11,8 @@ bl_pink_window_1	chatter	chatter	tense	crew	bl_pink_window	1	both	blackout	plasm
 bl_pink_window_2	chatter	chatter	tense	crew	bl_pink_window	2	both	blackout	plasma	Es plasma. Es normal.	It's plasma. It's normal. | Plasma. Totally normal. | That's plasma. It's fine.
 bl_pink_window_3	chatter	chatter	tense	crew	bl_pink_window	3	both	blackout	plasma	Es precioso y me da miedo.	It's beautiful and it scares me. | Beautiful. And terrifying. | It's lovely and I hate it.
 bl_shield_sale_1	chatter	chatter	calm	crew	bl_shield_sale	1	both	blackout	any	¿Confías en el escudo térmico?	Do you trust the heat shield? | Do you trust the heat shield, {other}? | Is the heat shield any good?
-bl_shield_sale_2	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any	Lo compraron en oferta.	They bought it on sale.
-bl_shield_sale_3	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any	No me ayudas.	You're not helping.
+bl_shield_sale_2	chatter	chatter	calm	crew	bl_shield_sale	2	both	blackout	any	Lo compraron en oferta.	They bought it on sale. | They bought it on sale. | It was on discount.
+bl_shield_sale_3	chatter	chatter	calm	crew	bl_shield_sale	3	both	blackout	any	No me ayudas.	You're not helping. | You're not helping. | Not helpful.
 bl_say_something_1	chatter	chatter	calm	crew	bl_say_something	1	both	blackout	any	Di algo, para saber si funciona el intercomunicador.	Say something so I know the intercom works. | Say something. I want to know the intercom works. | {other}, talk. Testing the intercom.
 bl_say_something_2	chatter	chatter	calm	crew	bl_say_something	2	both	blackout	any	Algo.	Something. | Something. | Words. There.
 bl_say_something_3	chatter	chatter	calm	crew	bl_say_something	3	both	blackout	any	Gracias. Muy útil.	Thanks. Very helpful. | Thanks. Super helpful. | Wow. Very useful.

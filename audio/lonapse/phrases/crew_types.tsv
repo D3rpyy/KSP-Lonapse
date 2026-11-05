@@ -103,7 +103,7 @@ ct_pil_04_1	chatter	chatter	calm	crew	ct_pil_04	1	both	orbit	any	pilot	any	any	A
 ct_pil_04_2	chatter	chatter	calm	crew	ct_pil_04	2	both	orbit	any	pilot	any	any	¿Otra vez?	Again? | Again? | Again?!
 ct_pil_04_3	chatter	chatter	calm	crew	ct_pil_04	3	both	orbit	any	pilot	any	any	Es por la vista. Confiad en mí.	It's for the view. Trust me. | It's for the view. Trust me. | Better view. Trust me.
 ct_pil_05_1	chatter	chatter	calm	crew	ct_pil_05	1	both	serious	any	pilot	any	any	Rumbo estable. Mantengo la orientación.	Heading stable. Holding attitude. | Heading stable. Holding attitude. | Stable heading. Attitude held.
-ct_pil_05_2	chatter	chatter	calm	mc	ct_pil_05	2	m	serious	any	pilot	any	any	Recibido.	Copy.
+ct_pil_05_2	chatter	chatter	calm	mc	ct_pil_05	2	m	serious	any	pilot	any	any	Recibido.	Copy. | Copy. | Copy that.
 ct_pil_06_1	chatter	chatter	calm	crew	ct_pil_06	1	both	orbit	any	pilot	any	any	Control, orientado a prógrado. Todo listo.	Control, pointed prograde. All set. | Control, pointed prograde. All set. | Control, prograde. Ready.
 ct_pil_06_2	chatter	chatter	calm	mc	ct_pil_06	2	m	orbit	any	pilot	any	any	Recibido. Orientación confirmada.	Copy. Attitude confirmed. | Copy. Attitude confirmed. | Copy. Attitude looks good.
 ct_pil_07_1	chatter	chatter	calm	crew	ct_pil_07	1	both	orbit	any	pilot	any	any	Control, esta nave se maneja de maravilla.	Control, this ship handles like a dream. | Control, this ship handles like a dream. | Control, {vessel} flies like a dream.
@@ -117,8 +117,8 @@ ct_eng_01_3	chatter	chatter	calm	crew	ct_eng_01	3	both	goofy	any	engineer	any	an
 ct_eng_02_1	chatter	chatter	calm	crew	ct_eng_02	1	both	goofy	any	engineer	any	any	¿Quién ha usado mi cinta adhesiva?	Who used my duct tape? | Who used my duct tape? | Where's my duct tape?
 ct_eng_02_2	chatter	chatter	calm	crew	ct_eng_02	2	both	goofy	any	engineer	any	any	Arreglé la ventana.	I fixed the window. | I fixed the window. | Used it on the window.
 ct_eng_02_3	chatter	chatter	calm	crew	ct_eng_02	3	both	goofy	any	engineer	any	any	Eso no se arregla con cinta.	That doesn't get fixed with tape. | That doesn't get fixed with tape. | You can't tape a window.
-ct_eng_03_1	chatter	chatter	calm	crew	ct_eng_03	1	both	any	any	engineer	any	any	Control, combustible equilibrado entre los tanques.	Control, fuel balanced between the tanks.
-ct_eng_03_2	chatter	chatter	calm	mc	ct_eng_03	2	m	any	any	engineer	any	any	Recibido, gracias.	Copy, thanks.
+ct_eng_03_1	chatter	chatter	calm	crew	ct_eng_03	1	both	any	any	engineer	any	any	Control, combustible equilibrado entre los tanques.	Control, fuel balanced between the tanks. | Control, fuel balanced between the tanks. | Control, the tanks are balanced.
+ct_eng_03_2	chatter	chatter	calm	mc	ct_eng_03	2	m	any	any	engineer	any	any	Recibido, gracias.	Copy, thanks. | Copy, thanks. | Copy. Thank you.
 ct_eng_04_1	chatter	chatter	calm	crew	ct_eng_04	1	both	serious	any	engineer	any	any	Sistemas estables. Todo en verde.	Systems stable. All green. | Systems stable. All green. | All systems green.
 ct_eng_04_2	chatter	chatter	calm	mc	ct_eng_04	2	m	serious	any	engineer	any	any	Recibido. Buen informe.	Copy. Good report. | Copy. Good report. | Copy. Nice report.
 ct_eng_05_1	chatter	chatter	calm	crew	ct_eng_05	1	both	goofy	any	engineer	any	any	Este ruido no salía en el manual.	This noise wasn't in the manual. | This noise wasn't in the manual. | The manual doesn't have this noise.
@@ -141,8 +141,8 @@ ct_sci_03_2	chatter	chatter	calm	crew	ct_sci_03	2	both	orbit	any	scientist	any	a
 ct_sci_03_3	chatter	chatter	calm	crew	ct_sci_03	3	both	orbit	any	scientist	any	any	Ya lo he medido. Es mucho.	I already measured it. It's a lot. | I already measured it. It's a lot. | Too late. It's loud.
 ct_sci_04_1	chatter	chatter	calm	crew	ct_sci_04	1	both	goofy	any	scientist	any	any	Control, mi hipótesis es que el espacio es grande.	Control, my hypothesis is that space is big. | Control, my hypothesis is that space is big. | Control, new hypothesis: space is big.
 ct_sci_04_2	chatter	chatter	calm	mc	ct_sci_04	2	m	goofy	any	scientist	any	any	Hipótesis confirmada.	Hypothesis confirmed. | Hypothesis confirmed. | Confirmed.
-ct_sci_05_1	chatter	chatter	calm	crew	ct_sci_05	1	both	any	any	scientist	any	any	Control, instrumentos encendidos. Registrando datos.	Control, instruments on. Recording data.
-ct_sci_05_2	chatter	chatter	calm	mc	ct_sci_05	2	m	any	any	scientist	any	any	Recibido. Los datos ya llegan.	Copy. The data is coming in.
+ct_sci_05_1	chatter	chatter	calm	crew	ct_sci_05	1	both	any	any	scientist	any	any	Control, instrumentos encendidos. Registrando datos.	Control, instruments on. Recording data. | Control, instruments on. Recording data. | Control, instruments running. Recording.
+ct_sci_05_2	chatter	chatter	calm	mc	ct_sci_05	2	m	any	any	scientist	any	any	Recibido. Los datos ya llegan.	Copy. The data is coming in. | Copy. The data is coming in. | Copy. Data is arriving.
 ct_sci_06_1	chatter	chatter	calm	crew	ct_sci_06	1	both	goofy	any	scientist	any	any	¿Has guardado tu bocadillo en mi caja de muestras?	Did you put your sandwich in my sample box? | Did you put your sandwich in my sample box? | Why is there a sandwich in my sample box?
 ct_sci_06_2	chatter	chatter	calm	crew	ct_sci_06	2	both	goofy	any	scientist	any	any	No había otro sitio.	There was nowhere else. | There was nowhere else. | No other space.
 ct_sci_06_3	chatter	chatter	calm	crew	ct_sci_06	3	both	goofy	any	scientist	any	any	Pues ahora es un experimento.	Well, now it's an experiment. | Well, now it's an experiment. | It's an experiment now.
