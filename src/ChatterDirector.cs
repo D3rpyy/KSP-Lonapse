@@ -156,14 +156,24 @@ namespace Lonapse
         private System.Collections.Generic.List<PhraseEntry> PlayLines(PhraseScene sc)
         {
             var lines = PhraseClips.LinesFor(sc, Body, opts => Mem.TakeLine(opts, rng));
+            lastVariantPick = null;
             if (sc != null && sc.HasAlts)
             {
                 var keys = new string[lines.Count];
-                for (int i = 0; i < lines.Count; i++) keys[i] = lines[i].ClipKey;
-                Log.Debug("Scene " + sc.Id + " with variants (" + sc.Versions + " versions): " + string.Join(" ", keys));
+                for (int i = 0; i < lines.Count; i++)
+                    keys[i] = string.IsNullOrEmpty(lines[i].Alt) ? "-" : lines[i].Alt;
+                lastVariantPick = sc.Versions + " versions, picked " + string.Join(" ", keys);
+                Log.Debug("Scene " + sc.Id + " with variants: " + lastVariantPick);
             }
             return lines;
         }
+
+        /// <summary>Debug tab: the alt per line of the last scene with variants that PlayLines gave ("-" is the base
+        /// line), null when that scene had none.</summary>
+        private string lastVariantPick;
+
+        /// <summary>Debug tab (experimental): the phrase test only picks scenes with alt rows.</summary>
+        public bool debugVariantsOnly;
 
         public ChatterDirector(LonapseAddon host, System.Random rng)
         {
@@ -1894,6 +1904,14 @@ namespace Lonapse
         /// </summary>
         public string DebugPlayRandom(string evt, string phase, string cause, string body, string topic = null)
         {
+            lastVariantPick = null;
+            string r = DebugPlayRandomCore(evt, phase, cause, body, topic);
+            return lastVariantPick != null && r != null && r.StartsWith("played", StringComparison.Ordinal)
+                ? r + ". " + lastVariantPick : r;
+        }
+
+        private string DebugPlayRandomCore(string evt, string phase, string cause, string body, string topic)
+        {
             string want = (string.IsNullOrEmpty(evt) ? "any" : evt) + "/" + (string.IsNullOrEmpty(phase) ? "any" : phase) + "/"
                           + (string.IsNullOrEmpty(cause) ? "any" : cause) + "/" + (string.IsNullOrEmpty(body) ? "current" : body)
                           + (string.IsNullOrEmpty(topic) ? "" : "/topic " + topic);
@@ -1908,6 +1926,7 @@ namespace Lonapse
             {
                 if (!string.IsNullOrEmpty(evt) && sc.Event != evt) continue;
                 if (sc.IsProbe) continue; // crew mode never plays a probe scene
+                if (debugVariantsOnly && !sc.HasAlts) continue;
                 if (!string.IsNullOrEmpty(phase) && !PhraseTable.PhaseMatches(sc.Phase, phase)) continue;
                 // a concrete test phase must not pull in blackout rows (PhaseMatches already handles that)
                 if (!string.IsNullOrEmpty(cause) && !PhraseTable.CauseMatches(sc.Cause, cause)) continue;

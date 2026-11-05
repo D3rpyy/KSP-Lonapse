@@ -956,6 +956,9 @@ namespace Lonapse
             testCause = Cycle("Cause", testCause, TestCauses);
             testBody = Cycle("Body", testBody, TestBodies);
             testTopic = Cycle("Topic", testTopic, TestTopics);
+            // not a setting: GUILayout.Toggle, so nothing is saved. Drawn without a director too (same controls in Layout and Repaint)
+            bool varOnly = GUILayout.Toggle(d != null && d.debugVariantsOnly, "Only scenes with variants (experimental)");
+            if (d != null) d.debugVariantsOnly = varOnly;
             if (GUILayout.Button("Play random line"))
             {
                 if (d == null) testStatus = "no director";

@@ -2837,7 +2837,8 @@ public static class Tests
                 if (!int.TryParse(r["seq"], out sq)) sq = -1;
                 string sc = r["scene"];
                 if (!seqs.ContainsKey(sc)) seqs[sc] = new List<int>();
-                seqs[sc].Add(sq);
+                // scene variants: an alt row shares the seq of its base row, only base rows count for 1..n
+                if (r["alt"].Length == 0) seqs[sc].Add(sq);
                 string f0;
                 if (sceneFile.TryGetValue(sc, out f0)) { if (f0 != r.File && !split.Contains(sc)) split.Add(sc + " (" + f0 + ", " + r.File + ")"); }
                 else sceneFile[sc] = r.File;
