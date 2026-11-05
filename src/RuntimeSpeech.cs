@@ -1,0 +1,329 @@
+// Experimental (runtime voice): the pure part of speaking a line at runtime with Piper. Text: loñapsE with real
+// names, and English names spelled for a Spanish voice. Sound: the Kerbal pitch shift and the same level shaping as
+// audio/build_lonapse.py (trim, fade, pad, gated RMS target with a peak limiter), so a runtime line sounds like a
+// pre-rendered one. Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lonapse
+{
+    public static class RuntimeSpeech
+    {
+        /// <summary>Marks a name in a Spanish template: "‹Jebediah›, aquí Control." The name is spoken as itself,
+        /// the rest becomes loñapsE.</summary>
+        public const char NameOpen = '‹', NameClose = '›';
+
+        public static string MarkName(string name) { return NameOpen + (name ?? "") + NameClose; }
+
+        /// <summary>
+        /// The text Piper reads: every word outside the name marks reversed (LonapseText.ReverseText), every name
+        /// respelled for a Spanish voice (Respell) and not reversed. The marks are removed.
+        /// </summary>
+        public static string Spoken(string template)
+        {
+            if (string.IsNullOrEmpty(template)) return "";
+            var sb = new StringBuilder(template.Length + 8);
+            int i = 0;
+            while (i < template.Length)
+            {
+                int open = template.IndexOf(NameOpen, i);
+                if (open < 0) { sb.Append(LonapseText.ReverseText(template.Substring(i))); break; }
+                if (open > i) sb.Append(LonapseText.ReverseText(template.Substring(i, open - i)));
+                int close = template.IndexOf(NameClose, open + 1);
+                if (close < 0) close = template.Length;
+                sb.Append(Respell(template.Substring(open + 1, close - open - 1)));
+                i = close + 1;
+            }
+            return sb.ToString();
+        }
+
+        static bool IsVowel(char c) { return "aeiouáéíóú".IndexOf(c) >= 0; }
+
+        /// <summary>
+        /// An English (KSP) name spelled so a Spanish voice says it about right: "Jebediah Kerman" becomes
+        /// "Yebedia Kerman", "Bill" "Bil", "Gilly" "Guili". Only letters change, word by word. Each word keeps a
+        /// capital only at its start (espeak-ng reads a capital inside a word as a separate letter).
+        /// </summary>
+        public static string Respell(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return "";
+            var sb = new StringBuilder(name.Length + 4);
+            int i = 0;
+            while (i < name.Length)
+            {
+                if (!char.IsLetter(name[i])) { sb.Append(name[i]); i++; continue; }
+                int j = i;
+                while (j < name.Length && char.IsLetter(name[j])) j++;
+                sb.Append(RespellWord(name.Substring(i, j - i)));
+                i = j;
+            }
+            return sb.ToString();
+        }
+
+        static string RespellWord(string word)
+        {
+            string w = word.ToLowerInvariant();
+            var o = new StringBuilder(w.Length + 2);
+            for (int i = 0; i < w.Length; i++)
+            {
+                char c = w[i];
+                char n = i + 1 < w.Length ? w[i + 1] : '\0';
+                char p = o.Length > 0 ? o[o.Length - 1] : '\0';
+                if (c == 'e' && n == 'e') { o.Append('i'); i++; continue; }          // Eeloo, Jeeb: i
+                if (c == 'o' && n == 'o') { o.Append('u'); i++; continue; }          // Jool, Eeloo: u
+                if (c == 'p' && n == 'h') { o.Append('f'); i++; continue; }
+                if (c == 't' && n == 'h') { o.Append('z'); i++; continue; }
+                if (c == 's' && n == 'h') { o.Append("ch"); i++; continue; }
+                if (c == 'c' && n == 'k') { o.Append('k'); i++; continue; }
+                if (c == n && c != 'e' && c != 'o') { continue; }                    // Bill: Bil (Spanish ll is y)
+                switch (c)
+                {
+                    case 'j': o.Append('y'); break;                                  // Jebediah: Yebedia
+                    case 'w': o.Append('u'); break;
+                    case 'y': o.Append(i == 0 && IsVowel(n) ? 'y' : 'i'); break;      // Gilly: Guili, Yuri: Yuri
+                    case 'h':
+                        // a spoken English h (at the start, between vowels) is the Spanish j; after a vowel it is silent
+                        if (i == 0 || (IsVowel(p) && IsVowel(n))) o.Append('j');
+                        break;
+                    case 'g': o.Append(n == 'e' || n == 'i' || n == 'y' ? "gu" : "g"); break;  // a hard g like Gilly
+                    default: o.Append(c); break;
+                }
+            }
+            if (o.Length == 0) return word;
+            o[0] = char.ToUpperInvariant(o[0]);
+            return o.ToString();
+        }
+
+        /// <summary>JSON string literal for Piper's --json-input (quotes, backslashes and control characters).</summary>
+        public static string Json(string s)
+        {
+            var sb = new StringBuilder(s.Length + 2);
+            sb.Append('"');
+            foreach (char c in s)
+            {
+                if (c == '"') sb.Append("\\\"");
+                else if (c == '\\') sb.Append("\\\\");
+                else if (c < ' ') sb.Append("\\u").Append(((int)c).ToString("x4"));
+                else sb.Append(c);
+            }
+            return sb.Append('"').ToString();
+        }
+
+        // ------------------------------------------------------------------------------------------------------
+        // Sound
+        // ------------------------------------------------------------------------------------------------------
+        public const int OutRate = 44100;
+        const int Frame = 441;                // 10 ms
+        const double SilenceDb = -50.0, RmsTargetDb = -20.0, PeakBuildDb = -1.9, FadeS = 0.008, PadS = 0.015;
+
+        /// <summary>16-bit mono PCM of a WAV file as floats, and its rate. Null when it is not 16-bit PCM.</summary>
+        public static float[] ReadWav(byte[] b, out int rate)
+        {
+            rate = 0;
+            if (b == null || b.Length < 44 || Encoding.ASCII.GetString(b, 0, 4) != "RIFF") return null;
+            int pos = 12, channels = 1, bits = 16;
+            while (pos + 8 <= b.Length)
+            {
+                string id = Encoding.ASCII.GetString(b, pos, 4);
+                int len = BitConverter.ToInt32(b, pos + 4);
+                int body = pos + 8;
+                if (id == "fmt " && body + 16 <= b.Length)
+                {
+                    channels = BitConverter.ToInt16(b, body + 2);
+                    rate = BitConverter.ToInt32(b, body + 4);
+                    bits = BitConverter.ToInt16(b, body + 14);
+                }
+                else if (id == "data")
+                {
+                    if (bits != 16 || channels < 1) return null;
+                    int end = Math.Min(b.Length, body + Math.Max(0, len));
+                    int n = (end - body) / (2 * channels);
+                    var x = new float[n];
+                    for (int i = 0; i < n; i++) x[i] = BitConverter.ToInt16(b, body + i * 2 * channels) / 32768f;
+                    return x;
+                }
+                pos = body + Math.Max(0, len) + (len & 1);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The Kerbal shift of the build (ffmpeg asetrate=rate*ratio, aresample=44100): the samples are played
+        /// ratio times faster, which raises pitch and tempo together, then resampled to 44.1 kHz (cubic Hermite).
+        /// </summary>
+        public static float[] Shift(float[] x, int rate, double ratio)
+        {
+            if (x == null || x.Length == 0 || rate <= 0 || ratio <= 0) return new float[0];
+            double step = rate * ratio / OutRate;      // input samples per output sample
+            int n = (int)Math.Floor((x.Length - 1) / step);
+            var y = new float[Math.Max(0, n)];
+            for (int k = 0; k < y.Length; k++)
+            {
+                double t = k * step;
+                int i = (int)t;
+                double f = t - i;
+                double xm1 = x[Math.Max(0, i - 1)], x0 = x[i], x1 = x[Math.Min(x.Length - 1, i + 1)], x2 = x[Math.Min(x.Length - 1, i + 2)];
+                double c1 = 0.5 * (x1 - xm1), c2 = xm1 - 2.5 * x0 + 2 * x1 - 0.5 * x2, c3 = 0.5 * (x2 - xm1) + 1.5 * (x0 - x1);
+                y[k] = (float)(((c3 * f + c2) * f + c1) * f + x0);
+            }
+            return y;
+        }
+
+        static double Db(double v) { return 20.0 * Math.Log10(Math.Max(v, 1e-12)); }
+
+        static double[] FrameDb(float[] x)
+        {
+            int nf = x.Length / Frame;
+            var r = new double[nf];
+            for (int f = 0; f < nf; f++)
+            {
+                double s = 0;
+                for (int j = 0; j < Frame; j++) { double v = x[f * Frame + j]; s += v * v; }
+                r[f] = Db(Math.Sqrt(s / Frame));
+            }
+            return r;
+        }
+
+        /// <summary>Gated RMS in dB: 10 ms frames above max(-50 dBFS, loudest frame - 30 dB), as gated_rms_db.</summary>
+        public static double GatedRmsDb(float[] x)
+        {
+            int nf = x.Length / Frame;
+            if (nf == 0) return -240.0;
+            var p = new double[nf];
+            double max = 0;
+            for (int f = 0; f < nf; f++)
+            {
+                double s = 0;
+                for (int j = 0; j < Frame; j++) { double v = x[f * Frame + j]; s += v * v; }
+                p[f] = s / Frame;
+                if (p[f] > max) max = p[f];
+            }
+            double gate = Math.Max(Math.Pow(10, SilenceDb / 10.0), max * 1e-3), sum = 0;
+            int c = 0;
+            for (int f = 0; f < nf; f++) if (p[f] >= gate) { sum += p[f]; c++; }
+            return c > 0 ? 10.0 * Math.Log10(sum / c) : -240.0;
+        }
+
+        /// <summary>Block lookahead peak limiter (64-sample blocks, fast release), as limit() in the build.</summary>
+        public static float[] Limit(float[] x, double ceilingDb)
+        {
+            double t = Math.Pow(10, ceilingDb / 20.0);
+            const int B = 64;
+            int nb = (x.Length + B - 1) / B;
+            var req = new double[nb];
+            for (int b = 0; b < nb; b++)
+            {
+                double pk = 0;
+                for (int i = b * B; i < Math.Min(x.Length, (b + 1) * B); i++) pk = Math.Max(pk, Math.Abs(x[i]));
+                req[b] = pk <= t ? 1.0 : t / pk;
+            }
+            var env = new double[nb];
+            for (int k = 0; k < nb; k++) env[k] = Math.Min(req[Math.Max(0, k - 1)], Math.Min(req[k], req[Math.Min(nb - 1, k + 1)]));
+            const double rel = 0.02;
+            for (int k = 1; k < nb; k++) env[k] = Math.Min(env[k], env[k - 1] + rel);
+            for (int k = nb - 2; k >= 0; k--) env[k] = Math.Min(env[k], env[k + 1] + rel);
+            var y = new float[x.Length];
+            for (int k = 0; k < nb; k++)
+            {
+                double g0 = env[k], g1 = Math.Min(k + 1 < nb ? env[k + 1] : env[k], req[k]);
+                for (int j = 0; j < B; j++)
+                {
+                    int i = k * B + j;
+                    if (i >= x.Length) break;
+                    double v = x[i] * (g0 + (g1 - g0) * j / B);
+                    y[i] = (float)Math.Max(-t, Math.Min(t, v));
+                }
+            }
+            return y;
+        }
+
+        /// <summary>
+        /// shape() of the build: trim the quiet ends (30 dB under the loudest frame), 8 ms fades, 15 ms silence on
+        /// both ends, gain to -20 dB gated RMS with the peak under -1.9 dBFS, then cut long quiet edges. Null when
+        /// there is no speech.
+        /// </summary>
+        public static float[] Shape(float[] x)
+        {
+            if (x == null) return null;
+            double[] fdb = FrameDb(x);
+            if (fdb.Length == 0) return null;
+            double loud = double.MinValue;
+            foreach (double d in fdb) loud = Math.Max(loud, d);
+            double cut = Math.Max(SilenceDb + 5.0, loud - 30.0);
+            int a = -1, z = -1;
+            for (int f = 0; f < fdb.Length; f++) if (fdb[f] > cut) { if (a < 0) a = f; z = f; }
+            if (a < 0) return null;
+            int len = (z - a + 1) * Frame;
+            int fade = (int)Math.Round(FadeS * OutRate), pad = (int)Math.Round(PadS * OutRate);
+            var s = new float[len + 2 * pad];
+            Array.Copy(x, a * Frame, s, pad, len);
+            for (int i = 0; i < Math.Min(fade, len); i++)
+            {
+                float g = i / (float)fade;
+                s[pad + i] *= g;
+                s[pad + len - 1 - i] *= g;
+            }
+            double gDb = RmsTargetDb - GatedRmsDb(s);
+            float[] y = s;
+            for (int it = 0; it < 12; it++)
+            {
+                float g = (float)Math.Pow(10, gDb / 20.0);
+                var t = new float[s.Length];
+                for (int i = 0; i < s.Length; i++) t[i] = s[i] * g;
+                y = Limit(t, PeakBuildDb);
+                double err = RmsTargetDb - GatedRmsDb(y);
+                if (Math.Abs(err) < 0.2) break;
+                gDb += err;
+            }
+            return EdgeTrim(y, 3);
+        }
+
+        static float[] EdgeTrim(float[] y, int keep)
+        {
+            double[] fdb = FrameDb(y);
+            int nf = fdb.Length;
+            if (nf <= 2 * keep) return y;
+            int lead = 0, trail = 0;
+            while (lead < nf && fdb[lead] <= SilenceDb) lead++;
+            while (trail < nf && fdb[nf - 1 - trail] <= SilenceDb) trail++;
+            if (lead >= nf) return y;
+            int start = Math.Max(0, lead - keep) * Frame, end = y.Length - Math.Max(0, trail - keep) * Frame;
+            var r = new float[end - start];
+            Array.Copy(y, start, r, 0, r.Length);
+            return r;
+        }
+
+        /// <summary>The whole chain for one Piper WAV: read, Kerbal shift, shape. Null when it fails.</summary>
+        public static float[] FromPiperWav(byte[] wav, double pitchSemitones)
+        {
+            int rate;
+            float[] x = ReadWav(wav, out rate);
+            if (x == null || rate <= 0) return null;
+            return Shape(Shift(x, rate, Math.Pow(2.0, pitchSemitones / 12.0)));
+        }
+    }
+
+    /// <summary>Experimental (runtime voice): how one speaker kind sounds, from DELIVERY and BAND_DELIVERY in
+    /// audio/build_lonapse.py for the calm band. Piper renders slower by the pitch ratio, so after the shift the
+    /// tempo is the natural one times Tempo.</summary>
+    public sealed class RuntimeDelivery
+    {
+        public string Kind, Voice;
+        public double PitchSt, Tempo = 1.0, NoiseScale = 0.667, NoiseW = 0.8;
+
+        public double LengthScale { get { return Math.Pow(2.0, PitchSt / 12.0) / Tempo; } }
+
+        public static readonly RuntimeDelivery[] All = {
+            new RuntimeDelivery { Kind = "m", Voice = "es_ES-davefx-medium", PitchSt = 5.0 },
+            new RuntimeDelivery { Kind = "f", Voice = "es_MX-claude-high", PitchSt = 4.0 },
+            new RuntimeDelivery { Kind = "mc", Voice = "es_MX-ald-medium", PitchSt = 3.0, Tempo = 1.04, NoiseScale = 0.80, NoiseW = 0.90 },
+        };
+
+        public static RuntimeDelivery For(string kind)
+        {
+            foreach (RuntimeDelivery d in All) if (d.Kind == kind) return d;
+            return null;
+        }
+    }
+}

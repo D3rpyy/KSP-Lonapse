@@ -338,6 +338,7 @@ namespace Lonapse
         private static readonly string[] CountDirections = { "Up (1 to 10)", "Down (10 to 1)" };
         private string testEvent = "", testPhase = "", testCause = "", testBody = "", testTopic = "";
         private string testStatus = "";
+        private string runtimeTestStatus;
 
         /// <summary>Button that cycles <paramref name="value"/> through <paramref name="list"/>. Empty shows as "any".</summary>
         private static string Cycle(string caption, string value, string[] list)
@@ -970,6 +971,18 @@ namespace Lonapse
                 }
             }
             GUILayout.Label(string.IsNullOrEmpty(testStatus) ? " " : testStatus);   // always drawn: keeps the control count stable
+            if (GUILayout.Button("Runtime voice: MC greets the crew (experimental)"))
+            {
+                if (d == null) runtimeTestStatus = "no director";
+                else
+                {
+                    try { runtimeTestStatus = d.DebugRuntimeGreeting() ?? ""; }
+                    catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeGreeting", e); }
+                }
+            }
+            // the director updates its status when the clip is ready
+            string rts = d != null && !string.IsNullOrEmpty(d.runtimeStatus) ? d.runtimeStatus : runtimeTestStatus;
+            GUILayout.Label(string.IsNullOrEmpty(rts) ? " " : rts);   // always drawn: keeps the control count stable
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));
             if (d != null)

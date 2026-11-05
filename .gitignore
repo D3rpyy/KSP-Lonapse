@@ -11,3 +11,6 @@ audio/samples/
 notes/
 dist/
 GameData/Lonapse/PluginData/
+
+# experimental runtime voice: Piper binaries and voices, installed by install_runtime.sh
+GameData/Lonapse/Runtime/

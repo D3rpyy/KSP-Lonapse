@@ -908,6 +908,7 @@ public static class Tests
               "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
         SceneMemoryTests();
         SubtitleSlotTests();
+        RuntimeSpeechTests();
         ProbeCoreTests();
         ProbeSynthTests();
         ProbeSettingsTests();
@@ -1132,6 +1133,57 @@ public static class Tests
             Check(big.Count <= SceneMemory.MaxEntries && big.LastSeq("id" + (SceneMemory.MaxEntries + 9)) > 0 && big.LastSeq("id0") < 0,
                   "line memory: past the cap the oldest scenes are forgotten", big.Count.ToString());
         }
+    }
+
+    // Experimental (runtime voice): names in loñapsE, the Spanish respelling, WAV reading and the build level shaping.
+    static void RuntimeSpeechTests()
+    {
+        string[][] names = {
+            new[] { "Jebediah Kerman", "Yebedia Kerman" }, new[] { "Bill", "Bil" }, new[] { "Bob", "Bob" },
+            new[] { "Valentina", "Valentina" }, new[] { "Gilly", "Guili" }, new[] { "Jool", "Yul" }, new[] { "Eeloo", "Ilu" },
+        };
+        var bad = new List<string>();
+        foreach (string[] n in names) if (RuntimeSpeech.Respell(n[0]) != n[1]) bad.Add(n[0] + " -> " + RuntimeSpeech.Respell(n[0]));
+        Check(bad.Count == 0, "runtime voice: names are respelled for a Spanish voice", string.Join(", ", bad.ToArray()));
+        string sp = RuntimeSpeech.Spoken(RuntimeSpeech.MarkName("Jebediah") + ", aquí Control.");
+        Check(sp == "Yebedia, íuqa lortnoC.", "runtime voice: the name stays a name, the rest is loñapsE", sp);
+        Check(RuntimeSpeech.Spoken("Hola.") == LonapseText.ReverseText("Hola.") && RuntimeSpeech.Spoken(null) == "",
+              "runtime voice: without names it is ReverseText", null);
+        Check(RuntimeSpeech.Json("a \"b\" \\ c\n") == "\"a \\\"b\\\" \\\\ c\\u000a\"", "runtime voice: JSON string escaping",
+              RuntimeSpeech.Json("a \"b\" \\ c\n"));
+
+        // a 1 s 220 Hz tone at 22050 Hz with 0.2 s silence on both ends, as a 16-bit WAV
+        int sr = 22050, n0 = sr / 5, n1 = sr;
+        var pcm = new short[n0 + n1 + n0];
+        for (int i = 0; i < n1; i++) pcm[n0 + i] = (short)(8000 * Math.Sin(2 * Math.PI * 220 * i / sr));
+        var ms = new System.IO.MemoryStream();
+        var bw = new System.IO.BinaryWriter(ms);
+        bw.Write(System.Text.Encoding.ASCII.GetBytes("RIFF")); bw.Write(36 + pcm.Length * 2);
+        bw.Write(System.Text.Encoding.ASCII.GetBytes("WAVEfmt ")); bw.Write(16); bw.Write((short)1); bw.Write((short)1);
+        bw.Write(sr); bw.Write(sr * 2); bw.Write((short)2); bw.Write((short)16);
+        bw.Write(System.Text.Encoding.ASCII.GetBytes("data")); bw.Write(pcm.Length * 2);
+        foreach (short v in pcm) bw.Write(v);
+        int rate;
+        float[] x = RuntimeSpeech.ReadWav(ms.ToArray(), out rate);
+        Check(x != null && rate == sr && x.Length == pcm.Length && Math.Abs(x[n0 + 30] - pcm[n0 + 30] / 32768f) < 1e-6,
+              "runtime voice: ReadWav gives the 16-bit samples and the rate", x == null ? "null" : x.Length + " @ " + rate);
+        double ratio = Math.Pow(2, 3.0 / 12.0);
+        float[] y = RuntimeSpeech.FromPiperWav(ms.ToArray(), 3.0);
+        double secs = y == null ? 0 : y.Length / 44100.0, want = 1.0 / ratio;
+        double rms = y == null ? -240 : RuntimeSpeech.GatedRmsDb(y), peak = 0;
+        if (y != null) foreach (float v in y) peak = Math.Max(peak, Math.Abs(v));
+        Check(y != null && Math.Abs(secs - want) < 0.06 && Math.Abs(rms + 20.0) < 1.0 && 20 * Math.Log10(peak) <= -1.85,
+              "runtime voice: shift by +3 st shortens by the ratio, silence trimmed, -20 dB RMS, peak under -1.9 dBFS",
+              string.Format("{0:0.000} s (want about {1:0.000}), rms {2:0.0} dB, peak {3:0.0} dBFS", secs, want, rms, 20 * Math.Log10(Math.Max(peak, 1e-9))));
+        // pitch: count zero crossings, 220 Hz times the ratio
+        // over the middle half second only, so the padding and fades do not count
+        int zc = 0, a = y == null ? 0 : y.Length / 2 - 11025, b = a + 22050;
+        if (y != null && a > 0 && b < y.Length) for (int i = a + 1; i < b; i++) if ((y[i - 1] < 0) != (y[i] < 0)) zc++;
+        double hz = zc / 2.0 / 0.5;
+        Check(Math.Abs(hz - 220 * ratio) < 6, "runtime voice: the shift raises the pitch by the ratio (220 Hz +3 st = 262 Hz)",
+              hz.ToString("0.0") + " Hz");
+        Check(RuntimeDelivery.For("mc").Voice == "es_MX-ald-medium" && Math.Abs(RuntimeDelivery.For("m").LengthScale - Math.Pow(2, 5 / 12.0)) < 1e-9
+              && RuntimeDelivery.For("x") == null, "runtime voice: delivery per kind like the build (voice, length scale)", null);
     }
 
     // Experimental (procedural talk): subtitle slots, filled in game. The spanish (the audio) stays general.

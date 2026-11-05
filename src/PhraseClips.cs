@@ -108,6 +108,25 @@ namespace Lonapse
             catch (Exception e) { Log.Warn("Lonapse pools: read failed: " + e.Message); pools = new SlotPools(); }
         }
 
+        private static readonly Queue<string> runtimeUrls = new Queue<string>();
+        private const int RuntimeKeep = 16;
+
+        /// <summary>Experimental (runtime voice): a clip made at runtime for a row that has no file, so Clip(e) finds
+        /// it like any other. Only the last RuntimeKeep stay, older ones are destroyed.</summary>
+        public static void SetRuntimeClip(PhraseEntry e, AudioClip clip)
+        {
+            if (e == null || clip == null) return;
+            string url = e.ClipUrl(PhraseTable.FixedGender(e.Role) ?? "m");
+            clips[url] = clip;
+            runtimeUrls.Enqueue(url);
+            while (runtimeUrls.Count > RuntimeKeep)
+            {
+                string old = runtimeUrls.Dequeue();
+                AudioClip c;
+                if (clips.TryGetValue(old, out c)) { clips.Remove(old); if (c != null) UnityEngine.Object.Destroy(c); }
+            }
+        }
+
         /// <summary>Clip for a row. A crew row falls back to the other gender, so a line is never lost.
         /// mc uses the male clip. A subtitle-only row gives null.</summary>
         public static AudioClip Clip(PhraseEntry e, bool female)
