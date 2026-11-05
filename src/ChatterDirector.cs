@@ -169,14 +169,77 @@ namespace Lonapse
             for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
-            string phase = !string.IsNullOrEmpty(debugSlotPhase) ? debugSlotPhase : CurrentPhase;
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
-                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved,
-                                            SubtitleSlots.ConditionsFor(phase, Body));
+                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions());
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
             for (int i = 0; i < filled.Count; i++)
                 if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
             return filled;
+        }
+
+        /// <summary>The conditions for [ ] versions and pool values now: phase, kerbin or away, and the vessel parts.</summary>
+        private System.Collections.Generic.List<string> SlotConditions()
+        {
+            string phase = !string.IsNullOrEmpty(debugSlotPhase) ? debugSlotPhase : CurrentPhase;
+            var c = SubtitleSlots.ConditionsFor(phase, Body);
+            c.AddRange(VesselConditions());
+            return c;
+        }
+
+        private System.Collections.Generic.List<string> vesselConds;
+        private float vesselCondsAt = -100f;
+        private Guid vesselCondsId;
+
+        /// <summary>Parts of the active vessel as slot conditions (solar, antenna, legs, ...), so a subtitle only
+        /// names a part that is there. Worked out at most every 5 s per vessel.</summary>
+        private System.Collections.Generic.List<string> VesselConditions()
+        {
+            Vessel v = null;
+            try { v = FlightGlobals.ActiveVessel; } catch (Exception) { }
+            if (vesselConds != null && v != null && v.id == vesselCondsId && clock - vesselCondsAt < 5f) return vesselConds;
+            var r = new System.Collections.Generic.List<string>();
+            try
+            {
+                if (v != null)
+                    foreach (Part p in v.parts)
+                    {
+                        if (p == null) continue;
+                        foreach (PartModule m in p.Modules)
+                        {
+                            string tag = null;
+                            if (m is ModuleDeployableSolarPanel) tag = "solar";
+                            else if (m is ModuleDataTransmitter) { if (((ModuleDataTransmitter)m).antennaType != AntennaType.INTERNAL) tag = "antenna"; }
+                            else if (m is ModuleWheelBase) { if (((ModuleWheelBase)m).wheelType == WheelType.LEG) tag = "legs"; }
+                            else if (m is RetractableLadder) tag = "ladder";
+                            else if (m is ModuleDockingNode) tag = "docking";
+                            else if (m is ModuleAblator) tag = "heatshield";
+                            else if (m is ModuleParachute) tag = "chute";
+                            else if (m is ModuleEngines) tag = "engine";
+                            else if (m is CompoundParts.CModuleStrut) tag = "strut";
+                            else if (m is ModuleCommand) { if (((ModuleCommand)m).minimumCrew == 0) tag = "probe"; }
+                            else if (m is ModuleScienceExperiment) tag = SubtitleSlots.ExperimentCondition(((ModuleScienceExperiment)m).experimentID);
+                            if (tag != null && !r.Contains(tag)) r.Add(tag);
+                        }
+                    }
+            }
+            catch (Exception e) { Log.Exception("Slot vessel conditions", e); }
+            vesselConds = r;
+            vesselCondsAt = clock;
+            vesselCondsId = v != null ? v.id : Guid.Empty;
+            return r;
+        }
+
+        /// <summary>A scene with slots or versions can be played only when every line can be filled now
+        /// (SubtitleSlots.CanFill): no subtitle about a solar panel on a ship without one. Intercom scenes get
+        /// names for {other} and {self}, other scenes none.</summary>
+        private bool SlotsOk(PhraseScene sc)
+        {
+            if (sc == null || !sc.HasSlots) return true;
+            System.Collections.Generic.IDictionary<string, string> names = new System.Collections.Generic.Dictionary<string, string> {
+                { SubtitleSlots.Self, "a" }, { SubtitleSlots.Other, "b" } };
+            Func<int, System.Collections.Generic.IDictionary<string, string>> per = null;
+            if (sc.IsIntercom) per = i => names;
+            return SubtitleSlots.CanFill(PhraseClips.LinesFor(sc, Body), PhraseClips.pools, SlotFlightValues(), per, SlotConditions());
         }
 
         private System.Collections.Generic.Dictionary<string, string> SlotFlightValues()
@@ -1088,7 +1151,7 @@ namespace Lonapse
                 && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
                 && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
                 && (intercom || BlackoutOk(sc))
-                && (filter == null || filter(sc)));
+                && (filter == null || filter(sc)) && SlotsOk(sc));
             bool stressBand = !intercom && (band == "tense" || band == "panic");
             if (stressBand) list = StressRepeatFilter(list);
             else if (ev == "chatter") list = CalmRepeatFilter(list);
@@ -1993,6 +2056,7 @@ namespace Lonapse
                 // v4 topic (science experiment, home for soi_enter): topic-any rows fit too, like the events do
                 if (!string.IsNullOrEmpty(topic) && !PhraseTable.TopicMatches(sc.Topic, topic)) continue;
                 if (!PhraseClips.Playable(sc)) continue;
+                if (!SlotsOk(sc)) continue;
                 all.Add(sc);
                 // preferred: the exact cause, the exact topic, and a {body} scene when a body was chosen
                 bool causeExact = string.IsNullOrEmpty(cause) || sc.Cause == cause;

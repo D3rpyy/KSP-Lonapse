@@ -1281,8 +1281,7 @@ public static class Tests
         var lu = new List<string>();
         string lf = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "l", English = "{loop}" } },
                                        np, null, null, null, lu)[0].English;
-        Check(lf.StartsWith("Again again", StringComparison.Ordinal) && lf.EndsWith("...", StringComparison.Ordinal) && lu.Count == 1,
-              "slots: a pool that refers to itself stops at MaxDepth", lf);
+        Check(lf == "..." && lu.Count == 1, "slots: a pool that refers to itself has no usable value", lf);
         var ve = new List<string>();
         PhraseTable.Parse(new List<string> { H,
             "q1\tchatter\tchatter\tcalm\tcrew\tsq\t1\tboth\tHola\tHi | ",
@@ -1307,6 +1306,31 @@ public static class Tests
             "k2\tchatter\tchatter\tcalm\tcrew\tsl\t1\tboth\tHola\tHi | [moon] Ho",
             "k3\tchatter\tchatter\tcalm\tcrew\tsm\t1\tboth\tHola\tHi | [landed] Ho" }, ce);
         Check(ce.Count == 2, "slots: versions need a plain one and known conditions", string.Join(" | ", ce.ToArray()));
+
+        // vessel conditions on pool values, and scenes that cannot be filled
+        var vp = SlotPools.Parse(new List<string> { "pool\tenglish", "outside\t[solar] solar panel", "outside\t[legs] landing leg",
+            "exp\t[goo] Mystery Goo" }, null);
+        var vl2 = new List<PhraseEntry> { new PhraseEntry { ClipKey = "w1", English = "The {outside} wobbles. | Something wobbles." } };
+        var onlyLegs = new List<string> { "legs" };
+        Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, onlyLegs)[0].English == "The landing leg wobbles."
+              || SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, onlyLegs)[0].English == "Something wobbles.",
+              "slots: a pool value with [legs] is used only when the vessel has legs", null);
+        bool neverSolar = true;
+        for (int i = 0; i < 20; i++)
+            neverSolar &= SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[i % vals.Count], null, onlyLegs)[0].English != "The solar panel wobbles.";
+        Check(neverSolar, "slots: a part the vessel does not have is never named", null);
+        Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, new List<string>())[0].English == "Something wobbles.",
+              "slots: a version whose pool has no usable value is skipped", null);
+        var ex = new List<PhraseEntry> { new PhraseEntry { ClipKey = "x1", English = "The {exp} glows. | The {exp} hums." } };
+        Check(!SubtitleSlots.CanFill(ex, vp, null, null, new List<string>()) && SubtitleSlots.CanFill(ex, vp, null, null, new List<string> { "goo" }),
+              "slots: CanFill is false when no version can be filled (no Mystery Goo aboard)", null);
+        var px = new List<PhraseEntry> { new PhraseEntry { ClipKey = "p1", English = "Hi {other}. | Hi there {other}." } };
+        Check(!SubtitleSlots.CanFill(px, vp, null, null, null)
+              && SubtitleSlots.CanFill(px, vp, null, i => new Dictionary<string, string> { { "other", "Bob" } }, null),
+              "slots: {other} needs a person, so it only fills in a chat", null);
+        var pe = new List<string>();
+        SlotPools.Parse(new List<string> { "pool\tenglish", "a\t[moon] x", "a\t[solar]" }, pe);
+        Check(pe.Count == 2, "slots: a pool value with an unknown condition or no text is rejected", string.Join(" | ", pe.ToArray()));
 
         // TakeValue goes through the pool before a value comes back
         SceneMemory mem = new SceneMemory();

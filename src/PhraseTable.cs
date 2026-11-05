@@ -866,10 +866,15 @@ namespace Lonapse
         {
             get
             {
-                foreach (PhraseEntry e in AllLines) if (SubtitleSlots.NeedsFill(e.English)) return true;
-                return false;
+                if (hasSlots < 0)
+                {
+                    hasSlots = 0;
+                    foreach (PhraseEntry e in AllLines) if (SubtitleSlots.NeedsFill(e.English)) { hasSlots = 1; break; }
+                }
+                return hasSlots == 1;
             }
         }
+        private int hasSlots = -1;
         /// <summary>How many different versions of the scene the alternatives give (the product per seq of 1 plus
         /// the alternatives of that seq). 1 for a scene without alternatives.</summary>
         public int Versions

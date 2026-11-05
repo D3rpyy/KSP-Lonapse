@@ -60,7 +60,7 @@ namespace Lonapse
         {
             if (!PhraseClips.Loaded) return null;
             List<PhraseScene> list = PhraseClips.table.ProbeScenesFor(ev, Core, CurrentPhase, false,
-                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)));
+                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)) && SlotsOk(sc));
             if (list.Count == 0) return null;
             if (!IsAnyKey(topic))
             {

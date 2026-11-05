@@ -16,7 +16,7 @@ namespace Lonapse
 
         /// <summary>Most scene ids kept. The oldest are forgotten first, so they count as new again. Raised from 4000
         /// for the scene variants: the lines of a scene with alternatives are kept too (LineKey).</summary>
-        public const int MaxEntries = 8000;
+        public const int MaxEntries = 20000;
         /// <summary>Prefix of a line id in the memory, so a clip key never mixes with a scene id.</summary>
         public const string LinePrefix = "line:";
 

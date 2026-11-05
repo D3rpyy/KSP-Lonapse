@@ -14,40 +14,58 @@ thing	camera
 thing	toothbrush
 thing	favorite spoon
 thing	spare strut
-thing	jar of Mystery Goo
+thing	[goo] jar of Mystery Goo
 thing	snack bar
 thing	rover key
 thing	sandwich
 thing	pillow
 thing	lucky wrench
 thing	comic book
-# spot: Look behind the X. / Try the X. / Last time it was under the X. / The X. Don't ask why.
+# spot: Look behind the X. / Try the X. / Last time it was under the X. (inside the cabin, in reach)
 spot	seat
 spot	control panel
 spot	snack locker
 spot	air vent
 spot	toilet
-spot	parachute
-spot	docking port
-spot	battery pack
-spot	Science Jr.
-spot	reaction wheel
-spot	fuel tank
-# part: The X came loose again. / Is the X supposed to wobble? / It's the X. Probably. / I smell smoke. Is that the X?
-part	antenna
-part	solar panel
-part	landing leg
-part	ladder
+spot	headrest
+spot	cup holder
+spot	sleeping bag
+spot	storage net
+spot	first aid kit
+spot	window
+spot	life support panel
+# part: The X came loose again. / Tape it, like the X. / That was the X. (inside the cabin, in reach)
 part	hatch handle
-part	strut
 part	radio knob
-part	reaction wheel
-part	docking port
-part	heat shield
-part	fuel line
 part	window seal
 part	seat belt
-part	toilet
+part	toilet lid
+part	cabin light
+part	air vent cover
+part	throttle lever
+part	cup holder
+part	snack locker door
+part	headrest
+# outside_part: It's the X. Probably. / Control, the X is shaking. (outside: only when the vessel has one)
+outside_part	[solar] solar panel
+outside_part	[antenna] antenna
+outside_part	[legs] landing leg
+outside_part	[ladder] ladder
+outside_part	[docking] docking port
+outside_part	[heatshield] heat shield
+outside_part	[chute] parachute
+outside_part	[engine] engine
+outside_part	[strut] strut
+# beeper: Why is the X beeping?
+beeper	fuel gauge
+beeper	life support panel
+beeper	toilet
+beeper	snack locker
+beeper	radio
+beeper	control panel
+beeper	[probe] probe core
+beeper	[goo] Mystery Goo
+beeper	[sciencejr] Science Jr.
 # food: Is that X? / Someone ate all the X. / Eat the X. It builds character. / Can you send us some X?
 food	snack paste
 food	tube cheese
@@ -78,7 +96,7 @@ not_me	I didn't touch it.
 not_me	Wasn't me this time.
 not_me	Why do you always ask me?
 not_me	I was asleep.
-not_me	Ask the probe.
+not_me	[probe] Ask the probe.
 # silly_name: It was that or X.
 silly_name	Rocky McRocketface
 silly_name	Big Tube 2
@@ -90,14 +108,14 @@ silly_name	Boom Mk1
 silly_name	Dave
 # chore: Whose turn is it to X? / Loser has to X. / You X tomorrow.
 chore	clean the toilet
-chore	scrape the windows
+chore	clean the windows
 chore	count the snacks
 chore	talk to Control
-chore	check the struts
-chore	feed the Mystery Goo
-chore	untangle the parachutes
+chore	[goo] feed the Mystery Goo
 chore	wipe the helmets
 chore	sort the rocks
+chore	fix the cup holder
+chore	read the manual out loud
 # noise: Did you hear that X? / There it is again. That X.
 noise	clank
 noise	squeak
@@ -121,14 +139,14 @@ song	the snack song
 song	that jingle from the ads
 song	Kerbin, Sweet Kerbin
 song	the theme from the safety video
-# experiment: Control, the X is doing something weird. / Is the X supposed to glow?
-experiment	Mystery Goo
-experiment	thermometer
-experiment	barometer
-experiment	seismic sensor
-experiment	gravity sensor
-experiment	Science Jr.
-experiment	magnetometer
+# experiment: Control, the X is doing something weird. (only experiments on the vessel)
+experiment	[goo] Mystery Goo
+experiment	[thermometer] thermometer
+experiment	[barometer] barometer
+experiment	[seismic] seismic sensor
+experiment	[gravity] gravity sensor
+experiment	[sciencejr] Science Jr.
+experiment	[magnetometer] magnetometer
 # mc_excuse: That's not in the budget. X (a whole sentence)
 mc_excuse	Budget cuts.
 mc_excuse	Gene says no.
@@ -141,7 +159,7 @@ status	the snacks are holding up.
 status	nobody has cried today.
 status	the toilet works again.
 status	we only lost one glove.
-status	the Mystery Goo is looking at us.
+status	[goo] the Mystery Goo is looking at us.
 status	morale is high. Mostly.
 # home_thing: I miss X. / I miss Kerbin. Even X.
 home_thing	real gravity
@@ -165,13 +183,13 @@ cure	thinking about taxes
 cure	staring at the fuel gauge
 cure	talking to the probe
 cure	holding your nose and humming
-# loud_thing: You snore like a X.
-loud_thing	Mainsail
-loud_thing	broken vacuum
-loud_thing	angry goat
-loud_thing	rusty hatch
-loud_thing	rocket on the pad
-loud_thing	kraken with a cold
+# loud_thing: You snore like X. (with a or an)
+loud_thing	a Mainsail
+loud_thing	a broken vacuum
+loud_thing	an angry goat
+loud_thing	a rusty hatch
+loud_thing	a rocket on the pad
+loud_thing	a Kraken with a cold
 # game: Let's play X.
 game	I spy
 game	rock paper scissors

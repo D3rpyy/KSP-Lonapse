@@ -577,7 +577,10 @@ def validate(rows):
 
 # Conditions a version can start with: "[landed] You're on the ground." Same as SubtitleSlots.Conditions in C#.
 CONDITIONS = ["prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
-              "kerbin", "away"]
+              "kerbin", "away",
+              # parts and experiments on the vessel
+              "solar", "antenna", "legs", "ladder", "docking", "heatshield", "chute", "engine", "strut", "probe",
+              "goo", "sciencejr", "thermometer", "barometer", "seismic", "gravity", "magnetometer"]
 COND_RE = re.compile(r"^\[([^\]]*)\]\s*(.*)$")
 
 
@@ -626,8 +629,14 @@ def slot_names(text):
 
 
 def value_problem(val):
-    """Same as SubtitleSlots.ValueProblem in C#: non-empty, no |, only well-formed slots and no {body}."""
+    """Same as SubtitleSlots.ValueProblem in C#: optional [conditions], non-empty, no |, only well-formed slots and
+    no {body}."""
     if not val.strip():
+        return "value is empty"
+    conds, val = split_conditions(val)
+    if conds is None:
+        return "bad [conditions], they are " + " ".join(CONDITIONS)
+    if not val:
         return "value is empty"
     if "|" in val:
         return "a value cannot hold |, give each version its own row"

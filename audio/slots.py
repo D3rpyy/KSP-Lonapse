@@ -7,6 +7,7 @@ in a scene, {pool:2} another value, pool values with slots inside, a capital at 
   python3 audio/slots.py tp_lost -n 8  8 fills of one scene
   python3 audio/slots.py --spanish     with the spanish under each line
   python3 audio/slots.py --phase landed --body kerbin   the versions for that situation ([landed], [kerbin])
+  python3 audio/slots.py --has solar,legs              the vessel parts there are (default: a typical lander)
 """
 import argparse
 import random
@@ -32,12 +33,26 @@ def cap(v):
     return v[:1].upper() + v[1:]
 
 
-def pick_version(english, conditions, rng):
-    """Same rule as SubtitleSlots.PickVersion: the versions whose conditions all hold, else the plain ones."""
+def pick_version(english, conditions, rng, pools):
+    """Same rule as SubtitleSlots.PickVersion: the versions whose conditions all hold, else the plain ones, and of
+    those only the ones whose pool slots have a usable value."""
+    def ok(t):
+        return all(n in FAKE_FLIGHT or n in ("self", "other") or usable(n, pools, conditions)
+                   for n in b.slot_names(t))
     vs = [b.split_conditions(v) for v in english.split("|")]
-    match = [t for c, t in vs if c and all(x in conditions for x in c)]
-    plain = [t for c, t in vs if not c]
-    return rng.choice(match or plain)
+    match = [t for c, t in vs if c and all(x in conditions for x in c) and ok(t)]
+    plain = [t for c, t in vs if not c and ok(t)]
+    return rng.choice(match or plain or ["(cannot be filled now, the scene is skipped)"])
+
+
+def usable(pool, pools, conditions):
+    """Values of a pool whose [conditions] hold, without the [ ] part."""
+    out = []
+    for raw in pools.get(pool, []):
+        c, t = b.split_conditions(raw)
+        if c is not None and all(x in conditions for x in c):
+            out.append(t)
+    return out
 
 
 def fill_scene(lines, pools, rng, conditions, body):
@@ -56,10 +71,11 @@ def fill_scene(lines, pools, rng, conditions, body):
         key = name + ":" + n
         if key in chosen:
             return chosen[key]
-        if name not in pools or depth >= 6:
+        vals = usable(name, pools, conditions)
+        if not vals or depth >= 6:
             return "..."
         taken = used.setdefault(name, [])
-        free = [v for v in pools[name] if v not in taken] or pools[name]
+        free = [v for v in vals if v not in taken] or vals
         raw = rng.choice(free)
         taken.append(raw)
         v = expand(raw, False, per, depth + 1)
@@ -79,7 +95,7 @@ def fill_scene(lines, pools, rng, conditions, body):
     res = []
     for i, r in enumerate(lines):
         per = {"self": a if i % 2 == 0 else bb, "other": bb if i % 2 == 0 else a}
-        version = pick_version(r["english"], conditions, rng)
+        version = pick_version(r["english"], conditions, rng, pools)
         who = r["role"] if r["role"] != "crew" else per["self"]
         res.append((who, expand(version, True, per, 0), r))
     return res
@@ -93,6 +109,8 @@ def main():
     ap.add_argument("--spanish", action="store_true", help="also print the spanish of each line")
     ap.add_argument("--phase", default="orbit", help="flight phase for [conditions] (default orbit)")
     ap.add_argument("--body", default="kerbin", help="body key for [kerbin] and [away] (default kerbin)")
+    ap.add_argument("--has", default="solar,antenna,legs,ladder,chute,engine,heatshield,goo,thermometer",
+                    help="vessel parts for [solar], [goo] and so on, comma separated")
     args = ap.parse_args()
     rows, errors, _ = b.load_sources()
     good, verr = b.validate(rows)
@@ -116,7 +134,7 @@ def main():
         lines = sorted(scenes[sc], key=lambda r: r["seq"])
         print("== %s" % sc)
         for _ in range(args.n):
-            conds = [args.phase, "kerbin" if args.body == "kerbin" else "away"]
+            conds = [args.phase, "kerbin" if args.body == "kerbin" else "away"] + [x for x in args.has.split(",") if x]
             for who, text, r in fill_scene(lines, pools, rng, conds, args.body):
                 print("  %-10s %s" % (who + ":", text))
                 if args.spanish:

@@ -117,9 +117,12 @@ namespace Lonapse
         public const char VersionSep = '|';
 
         /// <summary>A pool value is non-empty, has no | and only well-formed slots (no {body}). Null when it is fine.</summary>
-        public static string ValueProblem(string val)
+        public static string ValueProblem(string raw)
         {
-            if (string.IsNullOrEmpty(val) || val.Trim().Length == 0) return "value is empty";
+            if (string.IsNullOrEmpty(raw) || raw.Trim().Length == 0) return "value is empty";
+            string val;
+            if (!SplitConditions(raw, null, out val)) return "bad [conditions], they are " + string.Join(" ", Conditions);
+            if (val.Length == 0) return "value is empty";
             if (val.IndexOf(VersionSep) >= 0) return "a value cannot hold |, give each version its own row";
             string rest = SlotRe.Replace(val, "");
             if (rest.IndexOf('{') >= 0 || rest.IndexOf('}') >= 0) return "value has a bad slot, use {name} or {name:2}";
@@ -131,7 +134,29 @@ namespace Lonapse
         /// <summary>Conditions a version can have: the flight phases, kerbin (at Kerbin) and away (anywhere else).
         /// Same list as CONDITIONS in audio/build_lonapse.py.</summary>
         public static readonly string[] Conditions = { "prelaunch", "launch", "ascent", "orbit", "coast", "reentry",
-                                                       "descent", "landed", "blackout", "kerbin", "away" };
+                                                       "descent", "landed", "blackout", "kerbin", "away",
+                                                       // parts on the vessel (ChatterDirector.VesselConditions)
+                                                       "solar", "antenna", "legs", "ladder", "docking", "heatshield",
+                                                       "chute", "engine", "strut", "probe",
+                                                       // science experiments on the vessel
+                                                       "goo", "sciencejr", "thermometer", "barometer", "seismic",
+                                                       "gravity", "magnetometer" };
+
+        /// <summary>The vessel condition of a ModuleScienceExperiment experimentID, null for another one.</summary>
+        public static string ExperimentCondition(string experimentId)
+        {
+            switch (experimentId)
+            {
+                case "mysteryGoo": return "goo";
+                case "mobileMaterialsLab": return "sciencejr";
+                case "temperatureScan": return "thermometer";
+                case "barometerScan": return "barometer";
+                case "seismicScan": return "seismic";
+                case "gravityScan": return "gravity";
+                case "magnetometer": return "magnetometer";
+                default: return null;
+            }
+        }
 
         /// <summary>Splits "[landed kerbin] text" into its conditions and the text. A version without [ ] has no
         /// conditions. Returns false for an unknown condition or a [ without ].</summary>
@@ -142,13 +167,15 @@ namespace Lonapse
             int close = text.IndexOf(']');
             if (close < 0) return false;
             bool ok = true;
+            int n = 0;
             foreach (string c in text.Substring(1, close - 1).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (Array.IndexOf(Conditions, c) < 0) ok = false;
                 if (conds != null) conds.Add(c);
+                n++;
             }
             text = text.Substring(close + 1).Trim();
-            return ok && (conds == null || conds.Count > 0);
+            return ok && n > 0;
         }
 
         /// <summary>The conditions that hold for a flight: the phase (when it is one of Conditions) and kerbin or
@@ -203,17 +230,39 @@ namespace Lonapse
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
             var st = new FillState();
-            st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved;
+            st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved; st.conditions = conditions;
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
                 if (e == null || !NeedsFill(e.English)) { r.Add(e); continue; }
                 st.per = lineValues != null ? lineValues(i) : null;
                 st.where = e.ClipKey + " (line " + i + ")";
-                string src = PickVersion(e, pick, conditions);
+                string src = PickVersion(e, st);
                 r.Add(CopyWithEnglish(e, Expand(src, true, 0, st)));
             }
             return r;
+        }
+
+        /// <summary>
+        /// True when every line of the scene can be filled now: each line that needs Fill has a version for the
+        /// conditions whose slots all have a value (a pool value whose conditions hold, a flight value, a person
+        /// for {other} and {self}). The director skips a scene that cannot, so a template about the solar panels
+        /// never plays on a ship without one.
+        /// </summary>
+        public static bool CanFill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
+                                   Func<int, IDictionary<string, string>> lineValues, ICollection<string> conditions)
+        {
+            if (lines == null) return true;
+            var st = new FillState();
+            st.pools = pools; st.values = values; st.conditions = conditions;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                PhraseEntry e = lines[i];
+                if (e == null || !NeedsFill(e.English)) continue;
+                st.per = lineValues != null ? lineValues(i) : null;
+                if (FillableVersions(e, st).Count == 0) return false;
+            }
+            return true;
         }
 
         sealed class FillState
@@ -222,36 +271,95 @@ namespace Lonapse
             public IDictionary<string, string> values, per;
             public Func<string, IList<string>, string> pick;
             public List<string> unresolved;
+            public ICollection<string> conditions;
             public string where;
             // slot (name:n) to its filled text, for the whole scene
             public readonly Dictionary<string, string> chosen = new Dictionary<string, string>();
             // pool to the raw values taken from it in this scene, so {pool:2} gets another one
             public readonly Dictionary<string, List<string>> used = new Dictionary<string, List<string>>();
+            // pool to its values whose conditions hold and whose slots can be filled (null while being worked out)
+            public readonly Dictionary<string, List<string>> usable = new Dictionary<string, List<string>>();
         }
 
-        static string PickVersion(PhraseEntry e, Func<string, IList<string>, string> pick, ICollection<string> conditions)
+        static bool Holds(List<string> conds, ICollection<string> now)
+        {
+            foreach (string c in conds) if (now == null || !now.Contains(c)) return false;
+            return true;
+        }
+
+        // The pool values whose [conditions] hold and whose own slots can be filled, raw (with the [ ] part).
+        static List<string> Usable(string pool, int depth, FillState st)
+        {
+            List<string> r;
+            if (st.usable.TryGetValue(pool, out r)) return r ?? new List<string>();   // null: a pool inside itself
+            st.usable[pool] = null;
+            r = new List<string>();
+            IList<string> all = st.pools != null ? st.pools.Values(pool) : null;
+            if (all != null && depth < MaxDepth)
+                foreach (string raw in all)
+                {
+                    var conds = new List<string>();
+                    string text;
+                    SplitConditions(raw, conds, out text);
+                    if (Holds(conds, st.conditions) && TextFillable(text, depth + 1, st)) r.Add(raw);
+                }
+            st.usable[pool] = r;
+            return r;
+        }
+
+        static bool TextFillable(string text, int depth, FillState st)
+        {
+            foreach (Match m in SlotRe.Matches(text))
+            {
+                string name = m.Groups[1].Value;
+                int n = m.Groups[2].Success ? m.Groups[2].Value[0] - '0' : 1;
+                if (name == "body") continue;
+                string v;
+                if (st.per != null && st.per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) continue;
+                if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) continue;
+                if (st.chosen.ContainsKey(name + ":" + n)) continue;
+                if (Usable(name, depth, st).Count < n) return false;
+            }
+            return true;
+        }
+
+        // The versions of a line that may be picked now: those whose conditions hold, else the plain ones; and of
+        // those only the ones that can be filled. Each entry is the index in Versions and the text without [ ].
+        static List<KeyValuePair<int, string>> FillableVersions(PhraseEntry e, FillState st)
         {
             List<string> vs = Versions(e.English);
-            if (vs.Count == 1) return vs[0];
-            var texts = new string[vs.Count];
-            var matching = new List<string>();
-            var plain = new List<string>();
+            var matching = new List<KeyValuePair<int, string>>();
+            var plain = new List<KeyValuePair<int, string>>();
             for (int k = 0; k < vs.Count; k++)
             {
                 var conds = new List<string>();
-                SplitConditions(vs[k], conds, out texts[k]);
-                string id = k.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                if (conds.Count == 0) { plain.Add(id); continue; }
-                bool all = conditions != null;
-                foreach (string c in conds) if (all && !conditions.Contains(c)) all = false;
-                if (all) matching.Add(id);
+                string text;
+                SplitConditions(vs[k], conds, out text);
+                if (!TextFillable(text, 0, st)) continue;
+                if (conds.Count == 0) plain.Add(new KeyValuePair<int, string>(k, text));
+                else if (Holds(conds, st.conditions)) matching.Add(new KeyValuePair<int, string>(k, text));
             }
-            List<string> idx = matching.Count > 0 ? matching : plain;
-            if (idx.Count == 0) return texts[0];   // the build script makes sure a line has a version without [ ]
-            string choice = pick != null ? pick("version:" + e.ClipKey, idx) : idx[0];
-            int n;
-            if (choice == null || !int.TryParse(choice, out n) || n < 0 || n >= vs.Count) n = int.Parse(idx[0]);
-            return texts[n];
+            return matching.Count > 0 ? matching : plain;
+        }
+
+        static string PickVersion(PhraseEntry e, FillState st)
+        {
+            List<KeyValuePair<int, string>> ok = FillableVersions(e, st);
+            if (ok.Count == 0)
+            {
+                // CanFill said no: the director should not have picked the scene. Take the first version, its
+                // slots show "..." and go to unresolved.
+                string text;
+                SplitConditions(Versions(e.English)[0], null, out text);
+                return text;
+            }
+            if (ok.Count == 1 || st.pick == null) return ok[0].Value;
+            var idx = new List<string>();
+            foreach (var kv in ok) idx.Add(kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            string choice = st.pick("version:" + e.ClipKey, idx);
+            foreach (var kv in ok)
+                if (kv.Key.ToString(System.Globalization.CultureInfo.InvariantCulture) == choice) return kv.Value;
+            return ok[0].Value;
         }
 
         // Fills the slots of one text. atStart: the text itself starts a sentence (the top level, or a pool value
@@ -280,8 +388,8 @@ namespace Lonapse
             if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
             string key = name + ":" + n;
             if (st.chosen.TryGetValue(key, out v)) return v;
-            IList<string> pool = st.pools != null ? st.pools.Values(name) : null;
-            if (pool == null || pool.Count == 0 || depth >= MaxDepth)
+            List<string> pool = depth < MaxDepth ? Usable(name, depth, st) : new List<string>();
+            if (pool.Count == 0)
             {
                 if (st.unresolved != null) st.unresolved.Add(name + " in " + st.where);
                 return "...";
@@ -292,10 +400,12 @@ namespace Lonapse
             foreach (string c in pool) if (!taken.Contains(c)) free.Add(c);
             IList<string> from = free.Count > 0 ? (IList<string>)free : pool;
             string raw = st.pick != null ? st.pick(name, from) : from[0];
-            if (string.IsNullOrEmpty(raw)) raw = from[0];
+            if (string.IsNullOrEmpty(raw) || !pool.Contains(raw)) raw = from[0];
             taken.Add(raw);
+            string text;
+            SplitConditions(raw, null, out text);
             // filled as if mid-sentence, the caller adds the capital when the slot starts a sentence
-            v = HasSlots(raw) ? Expand(raw, false, depth + 1, st) : raw;
+            v = HasSlots(text) ? Expand(text, false, depth + 1, st) : text;
             st.chosen[key] = v;
             return v;
         }
