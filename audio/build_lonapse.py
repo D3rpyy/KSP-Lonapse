@@ -230,7 +230,7 @@ PROBE_VARIANT_EVENTS = ["science", "power_low", "power_ok", "soi_enter", "part_l
                         "touchdown", "splashdown", "docked", "burn_soon", "staging", "chute_semi", "chute_full",
                         "throttle_full", "throttle_cut", "plan_node"]
 # Plan v5 core and beep columns. Same as PhraseTable.Cores (any plus ProbeCores.Keys) and ProbeCores.Moods in C#.
-CORES = ["any", "stayputnik", "okto", "hecs", "rovemate", "snob", "generic"]
+CORES = ["any", "stayputnik", "okto", "hecs", "rovemate", "snob", "qbe", "mk2drone", "mpo", "mtm", "generic"]
 MOODS = ["happy", "offended", "curious", "scared", "sleepy", "proud", "bored"]
 SEVERITIES = ["chatter", "callout", "warning"]
 BANDS = ["calm", "tense", "panic", "none"]

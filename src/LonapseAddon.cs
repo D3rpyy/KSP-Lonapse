@@ -143,6 +143,7 @@ namespace Lonapse
         }
         public ProbeVoiceSpec probeVoice;                    // voice of the active probe, null without a core
         public string probeVoicePart;                        // part name of the core that decided it
+        public string probeModuleName;                       // ModuleLonapse.displayName of that core, null without one
         public ProbeVoicePick.Why probeVoiceWhy;
         public string probeDefaultVoice;                     // what the pick gives without the player's own picks
         public ProbeVoicePick.Why probeDefaultWhy;
@@ -906,6 +907,7 @@ namespace Lonapse
             probeCoreKey = null;
             probeVoice = null;
             probeVoicePart = null;
+            probeModuleName = null;
             probeVoiceWhy = ProbeVoicePick.Why.None;
             if (v == null) return;
             try
@@ -935,6 +937,7 @@ namespace Lonapse
             int at;
             probeVoice = ProbeVoicePick.Resolve(probeCoreParts, settings.probeParts, probeVoices, out at, out probeVoiceWhy);
             probeVoicePart = at >= 0 && at < probeCoreParts.Count ? probeCoreParts[at].partName : null;
+            probeModuleName = ProbeVoicePick.ModuleName(probeCoreParts, at);
             int dat;
             ProbeVoiceSpec def = ProbeVoicePick.Resolve(probeCoreParts, null, probeVoices, out dat, out probeDefaultWhy);
             probeDefaultVoice = def != null ? def.Name : null;
@@ -943,14 +946,16 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Subtitle name of the probe: the voice's display name. The unchanged generic voice (a core Lonapse does not
-        /// know) and a voice without a name use the part's own title, like "Probodobodyne OKTO" or a mod's name.
+        /// Subtitle name of the probe: the ModuleLonapse displayName of the deciding part when it has one, else the
+        /// voice's display name. The unchanged generic voice (a core Lonapse does not know) and a voice without a name
+        /// use the part's own title, like "Probodobodyne OKTO" or a mod's name.
         /// </summary>
         public string ProbeDisplayName
         {
             get
             {
                 if (probeVoice == null) return ProbeCores.DisplayName(probeCoreKey);
+                if (!string.IsNullOrEmpty(probeModuleName)) return probeModuleName;
                 bool plainGeneric = probeVoice.Name == ProbeCores.Generic && probeVoices.SourceOf(ProbeCores.Generic) == ProbeVoiceSource.Stock;
                 if ((plainGeneric || string.IsNullOrEmpty(probeVoice.DisplayName)) && !string.IsNullOrEmpty(probeVoicePart))
                     return PartTitle(probeVoicePart);
@@ -1014,7 +1019,7 @@ namespace Lonapse
                 probeCmds.Add(c);
                 string partName = p.partInfo != null && !string.IsNullOrEmpty(p.partInfo.name) ? p.partInfo.name : p.name;
                 probeNames.Add(partName);
-                string mv = null;
+                string mv = null, dn = null;
                 int prio = 0;
                 for (int k = 0; k < p.Modules.Count; k++)
                 {
@@ -1022,9 +1027,16 @@ namespace Lonapse
                     if (ml == null) continue;
                     mv = ml.voice;
                     prio = ml.priority;
+                    dn = ml.displayName;
+                    // a mod may give a localization tag (#autoLOC_... or its own #LOC_...)
+                    if (!string.IsNullOrEmpty(dn) && dn.Trim().StartsWith("#", StringComparison.Ordinal))
+                    {
+                        try { dn = KSP.Localization.Localizer.Format(dn.Trim()); }
+                        catch (Exception) { }
+                    }
                     break;
                 }
-                probeCoreParts.Add(new ProbeCorePart(partName, mv, prio));
+                probeCoreParts.Add(new ProbeCorePart(partName, mv, prio, dn));
                 return; // one entry per part
             }
         }

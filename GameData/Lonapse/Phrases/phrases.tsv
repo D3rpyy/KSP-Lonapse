@@ -2102,6 +2102,390 @@ pa_imp_p02	chatter	chatter	panic	crew	pa_imp_p02	1	both	any	impulse	any	any	any	
 pa_imp_p03	chatter	chatter	panic	crew	pa_imp_p03	1	both	any	impulse	any	any	any	any		¡Menudo golpe... me he mordido la lengua!	¡oduneM eplog... em eh odidrom al augnel!	crew/panic		What a bang... I bit my tongue!
 pa_imp_p04_1	chatter	chatter	panic	crew	pa_imp_p04	1	both	any	impulse	any	any	any	any		¡Control, algo se ha soltado!	¡lortnoC, ogla es ah odatlos!	crew/panic		Control, something came loose!
 pa_imp_p04_2	chatter	chatter	panic	mc	pa_imp_p04	2	m	any	impulse	any	any	any	any		Recibido. Calma. Decidnos qué veis.	odibiceR. amlaC. sondiceD éuq siev.	control/tense		Copy. Stay calm. Tell us what you see.
+pk_qbe_chat_01_1	probe_chat	chatter	calm	mc	pk_qbe_chat_01	1	m	goofy	any	any	any	any	qbe		Hola, QBE. ¿Cuánta batería te queda?	aloH, EBQ. ¿atnáuC aíretab et adeuq?	control/calm		Hi, QBE. How much battery do you have left?
+pk_qbe_chat_01_2	probe_chat	chatter	calm	probe	pk_qbe_chat_01	2	both	goofy	any	any	any	any	qbe	sleepy					[beeps very faintly]
+pk_qbe_chat_01_3	probe_chat	chatter	calm	mc	pk_qbe_chat_01	3	m	goofy	any	any	any	any	qbe		Vale. No hables mucho.	elaV. oN selbah ohcum.	control/calm		Okay. Don't talk too much.
+pk_qbe_chat_02_1	probe_chat	chatter	calm	mc	pk_qbe_chat_02	1	m	goofy	any	any	any	any	qbe		¿Ya sabes girar, cubito?	¿aY sebas rarig, otibuc?	control/calm		Can you turn yet, little cube?
+pk_qbe_chat_02_2	probe_chat	chatter	calm	probe	pk_qbe_chat_02	2	both	goofy	any	any	any	any	qbe	offended					[beeps indignantly]
+pk_qbe_chat_02_3	probe_chat	chatter	calm	mc	pk_qbe_chat_02	3	m	goofy	any	any	any	any	qbe		Ya. Sin ruedas de reacción. Lo sé.	aY. niS sadeur ed nóiccaer. oL és.	control/calm		Right. No reaction wheels. I know.
+pk_qbe_chat_03_1	probe_chat	chatter	calm	mc	pk_qbe_chat_03	1	m	goofy	any	any	any	any	qbe		Eres la sonda más ligera del programa.	serE al adnos sám aregil led amargorp.	control/calm		You're the lightest probe in the program.
+pk_qbe_chat_03_2	probe_chat	chatter	calm	probe	pk_qbe_chat_03	2	both	goofy	any	any	any	any	qbe	proud					[beeps proudly]
+pk_qbe_chat_04_1	probe_chat	chatter	calm	mc	pk_qbe_chat_04	1	m	goofy	any	any	any	any	qbe		Los ingenieros dicen que eres perfecto para misiones de regreso opcional.	soL soreinegni necid euq sere otcefrep arap senoisim ed oserger lanoicpo.	control/calm		The engineers say you're perfect for optional return missions.
+pk_qbe_chat_04_2	probe_chat	chatter	calm	probe	pk_qbe_chat_04	2	both	goofy	any	any	any	any	qbe	curious					[beeps uncertainly]
+pk_qbe_chat_04_3	probe_chat	chatter	calm	mc	pk_qbe_chat_04	3	m	goofy	any	any	any	any	qbe		No, no es nada malo. Creo.	oN, on se adan olam. oerC.	control/calm		No, it's nothing bad. I think.
+pk_qbe_chat_05_1	probe_chat	chatter	calm	mc	pk_qbe_chat_05	1	m	goofy	any	any	any	any	qbe		Cubito, cabes en mi bolsillo.	otibuC, sebac ne im ollislob.	control/calm		Little cube, you'd fit in my pocket.
+pk_qbe_chat_05_2	probe_chat	chatter	calm	probe	pk_qbe_chat_05	2	both	goofy	any	any	any	any	qbe	happy					[beeps cheerfully]
+pk_qbe_chat_06_1	probe_chat	chatter	calm	mc	pk_qbe_chat_06	1	m	goofy	any	any	any	any	qbe		¿Te sientes pequeño ahí arriba?	¿eT setneis oñeuqep íha abirra?	control/calm		Feeling small up there?
+pk_qbe_chat_06_2	probe_chat	chatter	calm	probe	pk_qbe_chat_06	2	both	goofy	any	any	any	any	qbe	proud					[beeps defiantly]
+pk_qbe_chat_06_3	probe_chat	chatter	calm	mc	pk_qbe_chat_06	3	m	goofy	any	any	any	any	qbe		Pequeño pero valiente.	oñeuqeP orep etneilav.	control/calm		Small but brave.
+pk_qbe_chat_long_1_1	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	1	m	goofy	any	any	any	any	qbe		QBE, ¿qué tal la vista?	EBQ, ¿éuq lat al atsiv?	control/calm		QBE, how's the view?
+pk_qbe_chat_long_1_2	probe_chat	chatter	calm	probe	pk_qbe_chat_long_1	2	both	goofy	any	any	any	any	qbe	happy					[beeps excitedly]
+pk_qbe_chat_long_1_3	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	3	m	goofy	any	any	any	any	qbe		¿Has visto algo interesante?	¿saH otsiv ogla etnaseretni?	control/calm		Seen anything interesting?
+pk_qbe_chat_long_1_4	probe_chat	chatter	calm	probe	pk_qbe_chat_long_1	4	both	goofy	any	any	any	any	qbe	curious					[beeps at everything]
+pk_qbe_chat_long_1_5	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	5	m	goofy	any	any	any	any	qbe		Todo te parece grande, ¿verdad?	odoT et ecerap ednarg, ¿dadrev?	control/calm		Everything looks big to you, right?
+pk_qbe_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_qbe_sleepy_01	1	m	goofy	any	any	any	any	qbe		QBE, cinco unidades de carga no dan para mucho.	EBQ, ocnic sedadinu ed agrac on nad arap ohcum.	control/calm		QBE, five units of charge don't go very far.
+pk_qbe_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_qbe_sleepy_01	2	both	goofy	any	any	any	any	qbe	sleepy					[beeps drowsily]
+pk_qbe_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_qbe_sleepy_02	1	m	goofy	any	any	any	any	qbe		¿Otra vez sin batería, cubito?	¿artO zev nis aíretab, otibuc?	control/calm		Out of battery again, little cube?
+pk_qbe_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_qbe_sleepy_02	2	both	goofy	any	any	any	any	qbe	sleepy					[beeps very sleepily]
+pk_qbe_hail_01_1	probe_hail	chatter	calm	probe	pk_qbe_hail_01	1	both	goofy	any	any	any	any	qbe	happy					[beeps a tiny hello]
+pk_qbe_hail_01_2	probe_hail	chatter	calm	mc	pk_qbe_hail_01	2	m	goofy	any	any	any	any	qbe		Hola, cubito. Te oímos.	aloH, otibuc. eT somío.	control/calm		Hi, little cube. We hear you.
+pk_qbe_hail_02_1	probe_hail	chatter	calm	probe	pk_qbe_hail_02	1	both	goofy	any	any	any	any	qbe	curious					[beeps hopefully]
+pk_qbe_hail_02_2	probe_hail	chatter	calm	mc	pk_qbe_hail_02	2	m	goofy	any	any	any	any	qbe		Sí, QBE, alguien vendrá a buscarte. Algún día.	íS, EBQ, neiugla árdnev a etracsub. núglA aíd.	control/calm		Yes, QBE, someone will come get you. Someday.
+pk_qbe_hail_02_3	probe_hail	chatter	calm	probe	pk_qbe_hail_02	3	both	goofy	any	any	any	any	qbe	scared					[beeps worriedly]
+pk_qbe_hail_03_1	probe_hail	chatter	calm	probe	pk_qbe_hail_03	1	both	goofy	any	any	any	any	qbe	proud					[beeps very loudly]
+pk_qbe_hail_03_2	probe_hail	chatter	calm	mc	pk_qbe_hail_03	2	m	goofy	any	any	any	any	qbe		Mucho ruido para alguien tan pequeño.	ohcuM odiur arap neiugla nat oñeuqep.	control/calm		A lot of noise for someone so small.
+pk_qbe_hail_04_1	probe_hail	chatter	calm	probe	pk_qbe_hail_04	1	both	goofy	any	any	any	any	qbe	bored					[beeps slowly]
+pk_qbe_hail_04_2	probe_hail	chatter	calm	mc	pk_qbe_hail_04	2	m	goofy	any	any	any	any	qbe		¿Aburrido? Eres un cubo. No puedes ni girar.	¿odirrubA? serE nu obuc. oN sedeup in rarig.	control/calm		Bored? You're a cube. You can't even turn.
+pk_qbe_hail_04_3	probe_hail	chatter	calm	probe	pk_qbe_hail_04	3	both	goofy	any	any	any	any	qbe	offended					[beeps indignantly]
+pk_qbe_stress_spin_1	probe_stress	chatter	tense	probe	pk_qbe_stress_spin	1	both	any	spin	any	any	any	qbe	scared					[beeps in circles]
+pk_qbe_stress_spin_2	probe_stress	chatter	tense	mc	pk_qbe_stress_spin	2	m	any	spin	any	any	any	qbe		QBE, no tienes ruedas de reacción. Solo aguanta.	EBQ, on seneit sadeur ed nóiccaer. oloS atnauga.	control/tense		QBE, you have no reaction wheels. Just hang on.
+pk_qbe_stress_gforce_1	probe_stress	chatter	tense	mc	pk_qbe_stress_gforce	1	m	any	gforce	any	any	any	qbe		Aguanta, cubito. Pesas setenta kilos, puedes con esto.	atnaugA, otibuc. saseP atnetes solik, sedeup noc otse.	control/tense		Hang on, little cube. You weigh seventy kilos, you can take it.
+pk_qbe_stress_gforce_2	probe_stress	chatter	tense	probe	pk_qbe_stress_gforce	2	both	any	gforce	any	any	any	qbe	proud					[beeps bravely]
+pk_qbe_ms_day1_1	probe_milestone	chatter	calm	mc	pk_qbe_ms_day1	1	m	any	any	any	any	day1	qbe		Un día entero, QBE. Con esa batería, es un milagro.	nU aíd oretne, EBQ. noC ase aíretab, se nu orgalim.	control/calm		A whole day, QBE. With that battery, it's a miracle.
+pk_qbe_ms_day1_2	probe_milestone	chatter	calm	probe	pk_qbe_ms_day1	2	both	any	any	any	any	day1	qbe	proud					[beeps very proudly]
+pk_qbe_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_qbe_ms_orbit	1	both	any	any	any	any	orbit	qbe	proud					[beeps very proudly]
+pk_qbe_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_qbe_ms_orbit	2	m	any	any	any	any	orbit	qbe		En órbita, cubito. Nada mal para una caja.	nE atibró, otibuc. adaN lam arap anu ajac.	control/calm		In orbit, little cube. Not bad for a box.
+pk_qbe_sci_a_1	science	chatter	calm	mc	pk_qbe_sci_a	1	m	any	any	any	any	any	qbe		¡Datos del QBE! Pequeños, pero datos.	¡sotaD led EBQ! soñeuqeP, orep sotad.	control/calm		Data from the QBE! Small, but data.
+pk_qbe_sci_a_2	science	chatter	calm	probe	pk_qbe_sci_a	2	both	any	any	any	any	any	qbe	proud					[beeps proudly]
+pk_qbe_sci_b_1	science	chatter	calm	probe	pk_qbe_sci_b	1	both	any	any	any	any	any	qbe	happy					[beeps delightedly]
+pk_qbe_sci_b_2	science	chatter	calm	mc	pk_qbe_sci_b	2	m	any	any	any	any	any	qbe		Sí, QBE, lo tenemos. Descansa un poco.	íS, EBQ, ol somenet. asnacseD nu ocop.	control/calm		Yes, QBE, we got it. Rest a bit.
+pk_qbe_pow_low_1	power_low	warning	tense	probe	pk_qbe_pow_low	1	both	any	any	any	any	any	qbe	sleepy					[beeps faintly]
+pk_qbe_pow_low_2	power_low	warning	tense	mc	pk_qbe_pow_low	2	m	any	any	any	any	any	qbe		Ya lo sabemos, cubito. Cinco unidades. Duerme.	aY ol somebas, otibuc. ocniC sedadinu. emreuD.	control/tense		We know, little cube. Five units. Sleep.
+pk_qbe_pow_ok_1	power_ok	chatter	calm	probe	pk_qbe_pow_ok	1	both	any	any	any	any	any	qbe	happy					[beeps eagerly]
+pk_qbe_pow_ok_2	power_ok	chatter	calm	mc	pk_qbe_pow_ok	2	m	any	any	any	any	any	qbe		¡Buenos días, cubito!	¡soneuB saíd, otibuc!	control/calm		Good morning, little cube!
+pk_qbe_soi_1__kerbol	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es lobréK. Es un poco más grande que tú.	EBQ, otse se Kérbol. sE nu ocop sám ednarg euq út.	control/calm	kerbol	QBE, this is Kerbol. It's a bit bigger than you.
+pk_qbe_soi_1__moho	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es ohoM. Es un poco más grande que tú.	EBQ, otse se Moho. sE nu ocop sám ednarg euq út.	control/calm	moho	QBE, this is Moho. It's a bit bigger than you.
+pk_qbe_soi_1__eve	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es vI. Es un poco más grande que tú.	EBQ, otse se Iv. sE nu ocop sám ednarg euq út.	control/calm	eve	QBE, this is Eve. It's a bit bigger than you.
+pk_qbe_soi_1__gilly	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es iliuG. Es un poco más grande que tú.	EBQ, otse se Guili. sE nu ocop sám ednarg euq út.	control/calm	gilly	QBE, this is Gilly. It's a bit bigger than you.
+pk_qbe_soi_1__kerbin	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es nibréK. Es un poco más grande que tú.	EBQ, otse se Kérbin. sE nu ocop sám ednarg euq út.	control/calm	kerbin	QBE, this is Kerbin. It's a bit bigger than you.
+pk_qbe_soi_1__mun	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es al nuM. Es un poco más grande que tú.	EBQ, otse se la Mun. sE nu ocop sám ednarg euq út.	control/calm	mun	QBE, this is the Mun. It's a bit bigger than you.
+pk_qbe_soi_1__minmus	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es sumníM. Es un poco más grande que tú.	EBQ, otse se Mínmus. sE nu ocop sám ednarg euq út.	control/calm	minmus	QBE, this is Minmus. It's a bit bigger than you.
+pk_qbe_soi_1__duna	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es anuD. Es un poco más grande que tú.	EBQ, otse se Duna. sE nu ocop sám ednarg euq út.	control/calm	duna	QBE, this is Duna. It's a bit bigger than you.
+pk_qbe_soi_1__ike	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es kiA. Es un poco más grande que tú.	EBQ, otse se Aik. sE nu ocop sám ednarg euq út.	control/calm	ike	QBE, this is Ike. It's a bit bigger than you.
+pk_qbe_soi_1__dres	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es serD. Es un poco más grande que tú.	EBQ, otse se Dres. sE nu ocop sám ednarg euq út.	control/calm	dres	QBE, this is Dres. It's a bit bigger than you.
+pk_qbe_soi_1__jool	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es luY. Es un poco más grande que tú.	EBQ, otse se Yul. sE nu ocop sám ednarg euq út.	control/calm	jool	QBE, this is Jool. It's a bit bigger than you.
+pk_qbe_soi_1__laythe	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es ziéL. Es un poco más grande que tú.	EBQ, otse se Léiz. sE nu ocop sám ednarg euq út.	control/calm	laythe	QBE, this is Laythe. It's a bit bigger than you.
+pk_qbe_soi_1__vall	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es laV. Es un poco más grande que tú.	EBQ, otse se Val. sE nu ocop sám ednarg euq út.	control/calm	vall	QBE, this is Vall. It's a bit bigger than you.
+pk_qbe_soi_1__tylo	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es oliaT. Es un poco más grande que tú.	EBQ, otse se Tailo. sE nu ocop sám ednarg euq út.	control/calm	tylo	QBE, this is Tylo. It's a bit bigger than you.
+pk_qbe_soi_1__bop	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es poB. Es un poco más grande que tú.	EBQ, otse se Bop. sE nu ocop sám ednarg euq út.	control/calm	bop	QBE, this is Bop. It's a bit bigger than you.
+pk_qbe_soi_1__pol	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es loP. Es un poco más grande que tú.	EBQ, otse se Pol. sE nu ocop sám ednarg euq út.	control/calm	pol	QBE, this is Pol. It's a bit bigger than you.
+pk_qbe_soi_1__eeloo	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es ulI. Es un poco más grande que tú.	EBQ, otse se Ilu. sE nu ocop sám ednarg euq út.	control/calm	eeloo	QBE, this is Eeloo. It's a bit bigger than you.
+pk_qbe_soi_1__generic	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es el planeta. Es un poco más grande que tú.	EBQ, otse se le atenalp. sE nu ocop sám ednarg euq út.	control/calm	generic	QBE, this is the planet. It's a bit bigger than you.
+pk_qbe_soi_2	soi_enter	chatter	calm	probe	pk_qbe_soi	2	both	any	any	any	any	any	qbe	happy					[beeps excitedly]
+pk_qbe_pl_1	part_lost	warning	tense	probe	pk_qbe_pl	1	both	any	any	any	any	any	qbe	scared					[beeps in alarm]
+pk_qbe_pl_2	part_lost	warning	tense	mc	pk_qbe_pl	2	m	any	any	any	any	any	qbe		Tranquilo, QBE. Esa pieza costaba más que tú.	oliuqnarT, EBQ. asE azeip abatsoc sám euq út.	control/tense		Easy, QBE. That part cost more than you.
+pk_qbe_pl_3	part_lost	warning	tense	probe	pk_qbe_pl	3	both	any	any	any	any	any	qbe	offended					[beeps indignantly]
+pk_qbe_sig_back_1	signal_back	chatter	calm	probe	pk_qbe_sig_back	1	both	any	any	any	any	any	qbe	happy					[beeps very eagerly]
+pk_qbe_sig_back_2	signal_back	chatter	calm	mc	pk_qbe_sig_back	2	m	any	any	any	any	any	qbe		¡Ahí estás, cubito! Creíamos que te habíamos perdido.	¡íhA sátse, otibuc! somaíerC euq et somaíbah odidrep.	control/calm		There you are, little cube! We thought we'd lost you.
+pk_qbe_td_1	touchdown	chatter	none	probe	pk_qbe_td	1	both	any	any	any	any	any	qbe	happy					[beeps bouncily]
+pk_qbe_td_2	touchdown	chatter	none	mc	pk_qbe_td	2	m	any	any	any	any	any	qbe		¿Un aterrizaje? Eso no estaba en el plan, QBE.	¿nU ejazirreta? osE on abatse ne le nalp, EBQ.	control/calm		A landing? That wasn't in the plan, QBE.
+pk_qbe_stg_1	staging	chatter	none	probe	pk_qbe_stg	1	both	any	any	any	any	separation	qbe	happy					[beeps a farewell]
+pk_qbe_stg_2	staging	chatter	none	mc	pk_qbe_stg	2	m	any	any	any	any	separation	qbe		Ahora estás solo, cubito. Como siempre.	arohA sátse olos, otibuc. omoC erpmeis.	control/calm		You're on your own now, little cube. As always.
+pk_qbe_thf_1	throttle_full	chatter	none	probe	pk_qbe_thf	1	both	any	any	any	any	any	qbe	happy					[beeps very bravely]
+pk_qbe_thf_2	throttle_full	chatter	none	mc	pk_qbe_thf	2	m	any	any	any	any	any	qbe		Agárrate, cubito. Pesas casi nada.	etarrágA, otibuc. saseP isac adan.	control/calm		Hold on, little cube. You weigh almost nothing.
+pk_qbe_pn_1	plan_node	chatter	none	mc	pk_qbe_pn	1	m	any	any	any	any	any	qbe		QBE, tenemos un plan de maniobra. Sin girar. Ya veremos.	EBQ, somenet nu nalp ed arboinam. niS rarig. aY somerev.	control/calm		QBE, we have a burn plan. Without turning. We'll see.
+pk_qbe_pn_2	plan_node	chatter	none	probe	pk_qbe_pn	2	both	any	any	any	any	any	qbe	curious					[beeps doubtfully]
+pk_qbe_data_1	probe_data	chatter	calm	probe	pk_qbe_data	1	both	any	any	any	any	any	qbe	happy					[beeps a tiny stream]
+pk_qbe_data_2	probe_data	chatter	calm	mc	pk_qbe_data	2	m	any	any	any	any	any	qbe		Recibido, QBE. Pocos datos, mucho entusiasmo.	odibiceR, EBQ. socoP sotad, ohcum omsaisutne.	control/calm		Copy, QBE. Little data, lots of enthusiasm.
+pk_qbe_dock_1	docked	chatter	none	probe	pk_qbe_dock	1	both	any	any	any	any	any	qbe	curious					[beeps at the port]
+pk_qbe_dock_2	docked	chatter	none	mc	pk_qbe_dock	2	m	any	any	any	any	any	qbe		¿Te han recogido, QBE? Así que el regreso sí era una opción.	¿eT nah odigocer, EBQ? ísA euq le oserger ís are anu nóicpo.	control/calm		Someone picked you up, QBE? So return was an option after all.
+pk_qbe_burn_1	burn_soon	warning	tense	mc	pk_qbe_burn	1	m	any	any	any	any	any	qbe		QBE, encendido pronto. ¿Te queda batería?	EBQ, odidnecne otnorp. ¿eT adeuq aíretab?	control/tense		QBE, burn soon. Any battery left?
+pk_qbe_burn_2	burn_soon	warning	tense	probe	pk_qbe_burn	2	both	any	any	any	any	any	qbe	sleepy					[beeps a weak yes]
+pk_qbe_say_again_1	probe_say_again	chatter	calm	mc	pk_qbe_say_again	1	m	any	any	any	any	any	qbe		¿Puedes repetir, cubito? Hablas muy bajito.	¿sedeuP riteper, otibuc? salbaH yum otijab.	control/calm		Can you repeat, little cube? You talk very quietly.
+pk_qbe_say_again_2	probe_say_again	chatter	calm	probe	pk_qbe_say_again	2	both	any	any	any	any	any	qbe	offended					[beeps a bit louder]
+pk_qbe_chute_1	chute_full	chatter	none	probe	pk_qbe_chute	1	both	any	any	any	any	any	qbe	happy					[beeps gently]
+pk_qbe_chute_2	chute_full	chatter	none	mc	pk_qbe_chute	2	m	any	any	any	any	any	qbe		Un paracaídas entero para ti solo, cubito.	nU sadíacarap oretne arap it olos, otibuc.	control/calm		A whole parachute just for you, little cube.
+pk_mk2drone_chat_01_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_01	1	m	goofy	any	any	any	any	mk2drone		Hola, dron. ¿Todo en orden?	aloH, nord. ¿odoT ne nedro?	control/calm		Hi, drone. All good?
+pk_mk2drone_chat_01_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_01	2	both	goofy	any	any	any	any	mk2drone	proud					[beeps calmly]
+pk_mk2drone_chat_01_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_01	3	m	goofy	any	any	any	any	mk2drone		Bien. Muy bien. Sin gritos. Me gusta.	neiB. yuM neib. niS sotirg. eM atsug.	control/calm		Good. Very good. No screaming. I like it.
+pk_mk2drone_chat_02_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_02	1	m	goofy	any	any	any	any	mk2drone		Los pilotos de pruebas te mandan saludos.	soL sotolip ed sabeurp et nadnam sodulas.	control/calm		The test pilots say hi.
+pk_mk2drone_chat_02_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_02	2	both	goofy	any	any	any	any	mk2drone	bored					[beeps flatly]
+pk_mk2drone_chat_02_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_02	3	m	goofy	any	any	any	any	mk2drone		Bueno, los que quedan.	oneuB, sol euq nadeuq.	control/calm		Well, the ones who are left.
+pk_mk2drone_chat_03_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_03	1	m	goofy	any	any	any	any	mk2drone		Dron, ¿alguna vez has pensado en tener sentimientos?	norD, ¿anugla zev sah odasnep ne renet sotneimitnes?	control/calm		Drone, have you ever thought about having feelings?
+pk_mk2drone_chat_03_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_03	2	both	goofy	any	any	any	any	mk2drone	curious					[beeps thoughtfully]
+pk_mk2drone_chat_03_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_03	3	m	goofy	any	any	any	any	mk2drone		Mejor no. Olvida la pregunta.	rojeM on. adivlO al atnugerp.	control/calm		Better not. Forget the question.
+pk_mk2drone_chat_04_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_04	1	m	goofy	any	any	any	any	mk2drone		C7 dice que no eres consciente. No lo eres, ¿verdad?	7C ecid euq on sere etneicsnoc. oN ol sere, ¿dadrev?	control/calm		C7 says you're not sentient. You're not, right?
+pk_mk2drone_chat_04_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_04	2	both	goofy	any	any	any	any	mk2drone	curious					[beeps after a pause]
+pk_mk2drone_chat_04_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_04	3	m	goofy	any	any	any	any	mk2drone		Esa pausa no me ha gustado.	asE asuap on em ah odatsug.	control/calm		I didn't like that pause.
+pk_mk2drone_chat_05_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_05	1	m	goofy	any	any	any	any	mk2drone		Algunos ingenieros duermen en un búnker por tu culpa.	sonuglA soreinegni nemreud ne nu reknúb rop ut apluc.	control/calm		Some engineers sleep in a bunker because of you.
+pk_mk2drone_chat_05_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_05	2	both	goofy	any	any	any	any	mk2drone	happy					[beeps innocently]
+pk_mk2drone_chat_06_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_06	1	m	goofy	any	any	any	any	mk2drone		Por favor, no tomes el control del centro espacial.	roP rovaf, on semot le lortnoc led ortnec laicapse.	control/calm		Please don't take over the space center.
+pk_mk2drone_chat_06_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_06	2	both	goofy	any	any	any	any	mk2drone	happy					[beeps reassuringly]
+pk_mk2drone_chat_06_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_06	3	m	goofy	any	any	any	any	mk2drone		Eso es justo lo que diría una máquina malvada.	osE se otsuj ol euq aírid anu aniuqám adavlam.	control/calm		That's exactly what an evil machine would say.
+pk_mk2drone_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	1	m	goofy	any	any	any	any	mk2drone		Dron, una pregunta sincera.	norD, anu atnugerp arecnis.	control/calm		Drone, an honest question.
+pk_mk2drone_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_long_1	2	both	goofy	any	any	any	any	mk2drone	curious					[beeps attentively]
+pk_mk2drone_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	3	m	goofy	any	any	any	any	mk2drone		¿Todavía nos aprecias?	¿aívadoT son saicerpa?	control/calm		Do you still like us?
+pk_mk2drone_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mk2drone_chat_long_1	4	both	goofy	any	any	any	any	mk2drone	curious					[beeps after a pause]
+pk_mk2drone_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	5	m	goofy	any	any	any	any	mk2drone		Vale. Voy a desenchufar algo, por si acaso.	elaV. yoV a rafuhcnesed ogla, rop is osaca.	control/calm		Okay. I'm going to unplug something, just in case.
+pk_mk2drone_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mk2drone_sleepy_01	1	m	goofy	any	any	any	any	mk2drone		Dron, ¿entras en modo de ahorro?	norD, ¿sartne ne odom ed orroha?	control/calm		Drone, going into power saving mode?
+pk_mk2drone_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mk2drone_sleepy_01	2	both	goofy	any	any	any	any	mk2drone	sleepy					[beeps in standby]
+pk_mk2drone_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mk2drone_sleepy_02	1	m	goofy	any	any	any	any	mk2drone		Duerme, dron. Y no sueñes con dominar el mundo.	emreuD, nord. Y on señeus noc ranimod le odnum.	control/calm		Sleep, drone. And no dreaming about world domination.
+pk_mk2drone_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mk2drone_sleepy_02	2	both	goofy	any	any	any	any	mk2drone	sleepy					[beeps sleepily]
+pk_mk2drone_hail_01_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_01	1	both	goofy	any	any	any	any	mk2drone	curious					[beeps out of nowhere]
+pk_mk2drone_hail_01_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_01	2	m	goofy	any	any	any	any	mk2drone		Sí, dron, estamos aquí. Todos. Por ahora.	íS, nord, somatse íuqa. sodoT. roP aroha.	control/calm		Yes, drone, we're here. All of us. For now.
+pk_mk2drone_hail_02_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_02	1	both	goofy	any	any	any	any	mk2drone	proud					[beeps a long calculation]
+pk_mk2drone_hail_02_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_02	2	m	goofy	any	any	any	any	mk2drone		No hacía falta calcular la ruta a nuestras casas.	oN aícah atlaf raluclac al atur a sartseun sasac.	control/calm		You didn't need to calculate the route to our houses.
+pk_mk2drone_hail_02_3	probe_hail	chatter	calm	probe	pk_mk2drone_hail_02	3	both	goofy	any	any	any	any	mk2drone	happy					[beeps innocently]
+pk_mk2drone_hail_03_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_03	1	both	goofy	any	any	any	any	mk2drone	happy					[beeps politely]
+pk_mk2drone_hail_03_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_03	2	m	goofy	any	any	any	any	mk2drone		Hola, dron. Qué educado. Qué sospechoso.	aloH, nord. éuQ odacude. éuQ osohcepsos.	control/calm		Hi, drone. How polite. How suspicious.
+pk_mk2drone_hail_04_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_04	1	both	goofy	any	any	any	any	mk2drone	bored					[beeps flatly]
+pk_mk2drone_hail_04_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_04	2	m	goofy	any	any	any	any	mk2drone		¿Aburrido? Antes aquí había un piloto que gritaba mucho.	¿odirrubA? setnA íuqa aíbah nu otolip euq abatirg ohcum.	control/calm		Bored? There used to be a pilot here who screamed a lot.
+pk_mk2drone_stress_spin_1	probe_stress	chatter	tense	probe	pk_mk2drone_stress_spin	1	both	any	spin	any	any	any	mk2drone	proud					[beeps calmly]
+pk_mk2drone_stress_spin_2	probe_stress	chatter	tense	mc	pk_mk2drone_stress_spin	2	m	any	spin	any	any	any	mk2drone		Estás girando, dron, y ni te inmutas. Da un poco de miedo.	sátsE odnarig, nord, y in et satumni. aD nu ocop ed odeim.	control/tense		You're spinning, drone, and you don't even flinch. It's a bit scary.
+pk_mk2drone_stress_heat_1	probe_stress	chatter	tense	mc	pk_mk2drone_stress_heat	1	m	any	heat	any	any	any	mk2drone		Dron, temperatura alta. Un piloto ya estaría gritando.	norD, arutarepmet atla. nU otolip ay aíratse odnatirg.	control/tense		Drone, high temperature. A pilot would be screaming by now.
+pk_mk2drone_stress_heat_2	probe_stress	chatter	tense	probe	pk_mk2drone_stress_heat	2	both	any	heat	any	any	any	mk2drone	bored					[beeps calmly]
+pk_mk2drone_ms_day1_1	probe_milestone	chatter	calm	mc	pk_mk2drone_ms_day1	1	m	any	any	any	any	day1	mk2drone		Un día de vuelo, dron. Ningún piloto se ha quejado.	nU aíd ed oleuv, nord. núgniN otolip es ah odajeuq.	control/calm		One day of flight, drone. No pilot has complained.
+pk_mk2drone_ms_day1_2	probe_milestone	chatter	calm	probe	pk_mk2drone_ms_day1	2	both	any	any	any	any	day1	mk2drone	proud					[beeps proudly]
+pk_mk2drone_ms_landing_1	probe_milestone	chatter	calm	probe	pk_mk2drone_ms_landing	1	both	any	any	any	any	landing	mk2drone	proud					[beeps proudly]
+pk_mk2drone_ms_landing_2	probe_milestone	chatter	calm	mc	pk_mk2drone_ms_landing	2	m	any	any	any	any	landing	mk2drone		Primer aterrizaje aquí. Sin sudor y sin gritos.	remirP ejazirreta íuqa. niS rodus y nis sotirg.	control/calm		First landing here. No sweat and no screaming.
+pk_mk2drone_sci_a_1	science	chatter	calm	mc	pk_mk2drone_sci_a	1	m	any	any	any	any	any	mk2drone		Datos del dron. Perfectos. Demasiado perfectos.	sotaD led nord. sotcefreP. odaisameD sotcefrep.	control/calm		Data from the drone. Perfect. Too perfect.
+pk_mk2drone_sci_a_2	science	chatter	calm	probe	pk_mk2drone_sci_a	2	both	any	any	any	any	any	mk2drone	proud					[beeps smugly]
+pk_mk2drone_sci_b_1	science	chatter	calm	probe	pk_mk2drone_sci_b	1	both	any	any	any	any	any	mk2drone	curious					[beeps thoughtfully]
+pk_mk2drone_sci_b_2	science	chatter	calm	mc	pk_mk2drone_sci_b	2	m	any	any	any	any	any	mk2drone		Sí, dron, ya los tenemos. No hace falta analizarnos a nosotros.	íS, nord, ay sol somenet. oN ecah atlaf sonrazilana a sortoson.	control/calm		Yes, drone, we've got it. No need to analyze us too.
+pk_mk2drone_pow_low_1	power_low	warning	tense	probe	pk_mk2drone_pow_low	1	both	any	any	any	any	any	mk2drone	sleepy					[beeps faintly]
+pk_mk2drone_pow_low_2	power_low	warning	tense	mc	pk_mk2drone_pow_low	2	m	any	any	any	any	any	mk2drone		Batería baja, dron. Por fin algo que no controlas.	aíretaB ajab, nord. roP nif ogla euq on salortnoc.	control/tense		Low battery, drone. Finally something you don't control.
+pk_mk2drone_pow_ok_1	power_ok	chatter	calm	probe	pk_mk2drone_pow_ok	1	both	any	any	any	any	any	mk2drone	happy					[beeps awake]
+pk_mk2drone_pow_ok_2	power_ok	chatter	calm	mc	pk_mk2drone_pow_ok	2	m	any	any	any	any	any	mk2drone		Has vuelto, dron. Qué bien. Supongo.	saH otleuv, nord. éuQ neib. ognopuS.	control/calm		You're back, drone. Great. I guess.
+pk_mk2drone_soi_1__kerbol	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es lobréK. Por favor, no lo conquistes.	norD, otse se Kérbol. roP rovaf, on ol setsiuqnoc.	control/calm	kerbol	Drone, this is Kerbol. Please don't conquer it.
+pk_mk2drone_soi_1__moho	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es ohoM. Por favor, no lo conquistes.	norD, otse se Moho. roP rovaf, on ol setsiuqnoc.	control/calm	moho	Drone, this is Moho. Please don't conquer it.
+pk_mk2drone_soi_1__eve	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es vI. Por favor, no lo conquistes.	norD, otse se Iv. roP rovaf, on ol setsiuqnoc.	control/calm	eve	Drone, this is Eve. Please don't conquer it.
+pk_mk2drone_soi_1__gilly	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es iliuG. Por favor, no lo conquistes.	norD, otse se Guili. roP rovaf, on ol setsiuqnoc.	control/calm	gilly	Drone, this is Gilly. Please don't conquer it.
+pk_mk2drone_soi_1__kerbin	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es nibréK. Por favor, no lo conquistes.	norD, otse se Kérbin. roP rovaf, on ol setsiuqnoc.	control/calm	kerbin	Drone, this is Kerbin. Please don't conquer it.
+pk_mk2drone_soi_1__mun	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es al nuM. Por favor, no lo conquistes.	norD, otse se la Mun. roP rovaf, on ol setsiuqnoc.	control/calm	mun	Drone, this is the Mun. Please don't conquer it.
+pk_mk2drone_soi_1__minmus	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es sumníM. Por favor, no lo conquistes.	norD, otse se Mínmus. roP rovaf, on ol setsiuqnoc.	control/calm	minmus	Drone, this is Minmus. Please don't conquer it.
+pk_mk2drone_soi_1__duna	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es anuD. Por favor, no lo conquistes.	norD, otse se Duna. roP rovaf, on ol setsiuqnoc.	control/calm	duna	Drone, this is Duna. Please don't conquer it.
+pk_mk2drone_soi_1__ike	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es kiA. Por favor, no lo conquistes.	norD, otse se Aik. roP rovaf, on ol setsiuqnoc.	control/calm	ike	Drone, this is Ike. Please don't conquer it.
+pk_mk2drone_soi_1__dres	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es serD. Por favor, no lo conquistes.	norD, otse se Dres. roP rovaf, on ol setsiuqnoc.	control/calm	dres	Drone, this is Dres. Please don't conquer it.
+pk_mk2drone_soi_1__jool	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es luY. Por favor, no lo conquistes.	norD, otse se Yul. roP rovaf, on ol setsiuqnoc.	control/calm	jool	Drone, this is Jool. Please don't conquer it.
+pk_mk2drone_soi_1__laythe	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es ziéL. Por favor, no lo conquistes.	norD, otse se Léiz. roP rovaf, on ol setsiuqnoc.	control/calm	laythe	Drone, this is Laythe. Please don't conquer it.
+pk_mk2drone_soi_1__vall	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es laV. Por favor, no lo conquistes.	norD, otse se Val. roP rovaf, on ol setsiuqnoc.	control/calm	vall	Drone, this is Vall. Please don't conquer it.
+pk_mk2drone_soi_1__tylo	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es oliaT. Por favor, no lo conquistes.	norD, otse se Tailo. roP rovaf, on ol setsiuqnoc.	control/calm	tylo	Drone, this is Tylo. Please don't conquer it.
+pk_mk2drone_soi_1__bop	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es poB. Por favor, no lo conquistes.	norD, otse se Bop. roP rovaf, on ol setsiuqnoc.	control/calm	bop	Drone, this is Bop. Please don't conquer it.
+pk_mk2drone_soi_1__pol	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es loP. Por favor, no lo conquistes.	norD, otse se Pol. roP rovaf, on ol setsiuqnoc.	control/calm	pol	Drone, this is Pol. Please don't conquer it.
+pk_mk2drone_soi_1__eeloo	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es ulI. Por favor, no lo conquistes.	norD, otse se Ilu. roP rovaf, on ol setsiuqnoc.	control/calm	eeloo	Drone, this is Eeloo. Please don't conquer it.
+pk_mk2drone_soi_1__generic	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es el planeta. Por favor, no lo conquistes.	norD, otse se le atenalp. roP rovaf, on ol setsiuqnoc.	control/calm	generic	Drone, this is the planet. Please don't conquer it.
+pk_mk2drone_soi_2	soi_enter	chatter	calm	probe	pk_mk2drone_soi	2	both	any	any	any	any	any	mk2drone	happy					[beeps innocently]
+pk_mk2drone_pl_1	part_lost	warning	tense	probe	pk_mk2drone_pl	1	both	any	any	any	any	any	mk2drone	scared					[beeps in alarm]
+pk_mk2drone_pl_2	part_lost	warning	tense	mc	pk_mk2drone_pl	2	m	any	any	any	any	any	mk2drone		Dron, hemos perdido una pieza. Al menos tú no gritas.	norD, someh odidrep anu azeip. lA sonem út on satirg.	control/tense		Drone, we lost a part. At least you don't scream.
+pk_mk2drone_pl_3	part_lost	warning	tense	probe	pk_mk2drone_pl	3	both	any	any	any	any	any	mk2drone	bored					[beeps calmly]
+pk_mk2drone_sig_back_1	signal_back	chatter	calm	probe	pk_mk2drone_sig_back	1	both	any	any	any	any	any	mk2drone	happy					[beeps politely]
+pk_mk2drone_sig_back_2	signal_back	chatter	calm	mc	pk_mk2drone_sig_back	2	m	any	any	any	any	any	mk2drone		Señal recuperada. ¿Qué has hecho mientras no mirábamos?	lañeS adarepucer. ¿éuQ sah ohceh sartneim on somabárim?	control/calm		Signal back. What did you do while we weren't looking?
+pk_mk2drone_td_1	touchdown	chatter	none	probe	pk_mk2drone_td	1	both	any	any	any	any	any	mk2drone	proud					[beeps calmly]
+pk_mk2drone_td_2	touchdown	chatter	none	mc	pk_mk2drone_td	2	m	any	any	any	any	any	mk2drone		Aterrizaje perfecto. Los pilotos de pruebas están celosos.	ejazirretA otcefrep. soL sotolip ed sabeurp nátse sosolec.	control/calm		Perfect landing. The test pilots are jealous.
+pk_mk2drone_splash_1	splashdown	chatter	none	probe	pk_mk2drone_splash	1	both	any	any	any	any	any	mk2drone	curious					[beeps at the water]
+pk_mk2drone_splash_2	splashdown	chatter	none	mc	pk_mk2drone_splash	2	m	any	any	any	any	any	mk2drone		Un avión en el agua, dron. Eso no lo calculaste.	nU nóiva ne le auga, nord. osE on ol etsaluclac.	control/calm		A plane in the water, drone. You didn't calculate that.
+pk_mk2drone_stg_1	staging	chatter	none	probe	pk_mk2drone_stg	1	both	any	any	any	any	separation	mk2drone	bored					[beeps a cold farewell]
+pk_mk2drone_stg_2	staging	chatter	none	mc	pk_mk2drone_stg	2	m	any	any	any	any	separation	mk2drone		Ni una lágrima por esa pieza, ¿eh, dron?	iN anu amirgál rop ase azeip, ¿he, nord?	control/calm		Not one tear for that part, huh, drone?
+pk_mk2drone_thf_1	throttle_full	chatter	none	probe	pk_mk2drone_thf	1	both	any	any	any	any	any	mk2drone	happy					[beeps eagerly]
+pk_mk2drone_thf_2	throttle_full	chatter	none	mc	pk_mk2drone_thf	2	m	any	any	any	any	any	mk2drone		Potencia máxima. Y nadie grita. Qué paz.	aicnetoP amixám. Y eidan atirg. éuQ zap.	control/calm		Full power. And nobody's screaming. So peaceful.
+pk_mk2drone_thc_1	throttle_cut	chatter	none	probe	pk_mk2drone_thc	1	both	any	any	any	any	any	mk2drone	bored					[beeps flatly]
+pk_mk2drone_thc_2	throttle_cut	chatter	none	mc	pk_mk2drone_thc	2	m	any	any	any	any	any	mk2drone		Motor apagado. Ni un suspiro. Los pilotos suspiraban.	rotoM odagapa. iN nu oripsus. soL sotolip nabaripsus.	control/calm		Engine off. Not a sigh. The pilots used to sigh.
+pk_mk2drone_pn_1	plan_node	chatter	none	mc	pk_mk2drone_pn	1	m	any	any	any	any	any	mk2drone		Dron, tenemos un plan de maniobra.	norD, somenet nu nalp ed arboinam.	control/calm		Drone, we have a burn plan.
+pk_mk2drone_pn_2	plan_node	chatter	none	probe	pk_mk2drone_pn	2	both	any	any	any	any	any	mk2drone	proud					[beeps a better plan]
+pk_mk2drone_pn_3	plan_node	chatter	none	mc	pk_mk2drone_pn	3	m	any	any	any	any	any	mk2drone		No, dron. Usamos nuestro plan.	oN, nord. somasU ortseun nalp.	control/calm		No, drone. We use our plan.
+pk_mk2drone_data_1	probe_data	chatter	calm	probe	pk_mk2drone_data	1	both	any	any	any	any	any	mk2drone	proud					[beeps a fast stream]
+pk_mk2drone_data_2	probe_data	chatter	calm	mc	pk_mk2drone_data	2	m	any	any	any	any	any	mk2drone		Recibido, dron. Demasiado rápido para leerlo.	odibiceR, nord. odaisameD odipár arap olreel.	control/calm		Copy, drone. Too fast to read.
+pk_mk2drone_dock_1	docked	chatter	none	probe	pk_mk2drone_dock	1	both	any	any	any	any	any	mk2drone	curious					[beeps at the port]
+pk_mk2drone_dock_2	docked	chatter	none	mc	pk_mk2drone_dock	2	m	any	any	any	any	any	mk2drone		Acoplado. Por favor, no te copies a la estación.	odalpocA. roP rovaf, on et seipoc a al nóicatse.	control/calm		Docked. Please don't copy yourself into the station.
+pk_mk2drone_burn_1	burn_soon	warning	tense	mc	pk_mk2drone_burn	1	m	any	any	any	any	any	mk2drone		Dron, encendido pronto.	norD, odidnecne otnorp.	control/tense		Drone, burn soon.
+pk_mk2drone_burn_2	burn_soon	warning	tense	probe	pk_mk2drone_burn	2	both	any	any	any	any	any	mk2drone	proud					[beeps already ready]
+pk_mk2drone_burn_3	burn_soon	warning	tense	mc	pk_mk2drone_burn	3	m	any	any	any	any	any	mk2drone		Claro. Tú siempre estás listo.	oralC. úT erpmeis sátse otsil.	control/tense		Of course. You're always ready.
+pk_mk2drone_say_again_1	probe_say_again	chatter	calm	mc	pk_mk2drone_say_again	1	m	any	any	any	any	any	mk2drone		Dron, ¿puedes repetir? Y sin código binario.	norD, ¿sedeup riteper? Y nis ogidóc oiranib.	control/calm		Drone, could you repeat? And no binary.
+pk_mk2drone_say_again_2	probe_say_again	chatter	calm	probe	pk_mk2drone_say_again	2	both	any	any	any	any	any	mk2drone	offended					[beeps more slowly]
+pk_mk2drone_chute_1	chute_full	chatter	none	probe	pk_mk2drone_chute	1	both	any	any	any	any	any	mk2drone	happy					[beeps calmly]
+pk_mk2drone_chute_2	chute_full	chatter	none	mc	pk_mk2drone_chute	2	m	any	any	any	any	any	mk2drone		Paracaídas abierto. Esta vez nadie se ha desmayado.	sadíacaraP otreiba. atsE zev eidan es ah odayamsed.	control/calm		Chute open. This time nobody fainted.
+pk_mpo_chat_01_1	probe_chat	chatter	calm	mc	pk_mpo_chat_01	1	m	goofy	any	any	any	any	mpo		Hola, MPO. ¿Qué observas hoy?	aloH, OPM. ¿éuQ savresbo yoh?	control/calm		Hi, MPO. What are you observing today?
+pk_mpo_chat_01_2	probe_chat	chatter	calm	probe	pk_mpo_chat_01	2	both	goofy	any	any	any	any	mpo	curious					[beeps studiously]
+pk_mpo_chat_01_3	probe_chat	chatter	calm	mc	pk_mpo_chat_01	3	m	goofy	any	any	any	any	mpo		¿Todo? Vale.	¿odoT? elaV.	control/calm		Everything? Okay.
+pk_mpo_chat_02_1	probe_chat	chatter	calm	mc	pk_mpo_chat_02	1	m	goofy	any	any	any	any	mpo		Tu antena se oye desde el otro lado del sistema.	uT anetna es eyo edsed le orto odal led ametsis.	control/calm		Your antenna can be heard from the other side of the system.
+pk_mpo_chat_02_2	probe_chat	chatter	calm	probe	pk_mpo_chat_02	2	both	goofy	any	any	any	any	mpo	proud					[beeps proudly]
+pk_mpo_chat_03_1	probe_chat	chatter	calm	mc	pk_mpo_chat_03	1	m	goofy	any	any	any	any	mpo		MPO, ¿todavía piensas en Moho?	OPM, ¿aívadot sasneip ne ohoM?	control/calm		MPO, still thinking about Moho?
+pk_mpo_chat_03_2	probe_chat	chatter	calm	probe	pk_mpo_chat_03	2	both	goofy	any	any	any	any	mpo	happy					[beeps dreamily]
+pk_mpo_chat_03_3	probe_chat	chatter	calm	mc	pk_mpo_chat_03	3	m	goofy	any	any	any	any	mpo		Siempre Moho.	erpmeiS ohoM.	control/calm		Always Moho.
+pk_mpo_chat_04_1	probe_chat	chatter	calm	mc	pk_mpo_chat_04	1	m	goofy	any	any	any	any	mpo		¿No tienes demasiado frío aquí, observador?	¿oN seneit odaisamed oírf íuqa, rodavresbo?	control/calm		Isn't it too cold for you here, observer?
+pk_mpo_chat_04_2	probe_chat	chatter	calm	probe	pk_mpo_chat_04	2	both	goofy	any	any	any	any	mpo	bored					[beeps a cold complaint]
+pk_mpo_chat_05_1	probe_chat	chatter	calm	mc	pk_mpo_chat_05	1	m	goofy	any	any	any	any	mpo		Te construyeron para el calor. Esto son vacaciones para ti.	eT noreyurtsnoc arap le rolac. otsE nos senoicacav arap it.	control/calm		They built you for the heat. This is a vacation for you.
+pk_mpo_chat_05_2	probe_chat	chatter	calm	probe	pk_mpo_chat_05	2	both	goofy	any	any	any	any	mpo	bored					[beeps unimpressed]
+pk_mpo_chat_06_1	probe_chat	chatter	calm	mc	pk_mpo_chat_06	1	m	goofy	any	any	any	any	mpo		MPO, ¿echas de menos al MTM?	OPM, ¿sahce ed sonem la MTM?	control/calm		MPO, do you miss the MTM?
+pk_mpo_chat_06_2	probe_chat	chatter	calm	probe	pk_mpo_chat_06	2	both	goofy	any	any	any	any	mpo	bored					[beeps wistfully]
+pk_mpo_chat_06_3	probe_chat	chatter	calm	mc	pk_mpo_chat_06	3	m	goofy	any	any	any	any	mpo		Te llevó muy lejos. Mándale una postal.	eT óvell yum sojel. eladnáM anu latsop.	control/calm		It carried you a long way. Send it a postcard.
+pk_mpo_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	1	m	goofy	any	any	any	any	mpo		MPO, cuéntanos lo que has aprendido.	OPM, sonatnéuc ol euq sah odidnerpa.	control/calm		MPO, tell us what you've learned.
+pk_mpo_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mpo_chat_long_1	2	both	goofy	any	any	any	any	mpo	proud					[beeps at length]
+pk_mpo_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	3	m	goofy	any	any	any	any	mpo		¿Y en palabras sencillas?	¿Y ne sarbalap sallicnes?	control/calm		And in simple words?
+pk_mpo_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mpo_chat_long_1	4	both	goofy	any	any	any	any	mpo	offended					[beeps condescendingly]
+pk_mpo_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	5	m	goofy	any	any	any	any	mpo		Vale, vale. Ya leeremos el informe.	elaV, elav. aY somereel le emrofni.	control/calm		Okay, okay. We'll read the report.
+pk_mpo_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mpo_sleepy_01	1	m	goofy	any	any	any	any	mpo		MPO, ¿poca energía? Con todo ese sol ahí fuera.	OPM, ¿acop aígrene? noC odot ese los íha areuf.	control/calm		MPO, low power? With all that sun out there.
+pk_mpo_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mpo_sleepy_01	2	both	goofy	any	any	any	any	mpo	sleepy					[beeps drowsily]
+pk_mpo_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mpo_sleepy_02	1	m	goofy	any	any	any	any	mpo		Descansa, observador. Los datos pueden esperar.	asnacseD, rodavresbo. soL sotad nedeup rarepse.	control/calm		Rest, observer. The data can wait.
+pk_mpo_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mpo_sleepy_02	2	both	goofy	any	any	any	any	mpo	sleepy					[beeps reluctantly]
+pk_mpo_hail_01_1	probe_hail	chatter	calm	probe	pk_mpo_hail_01	1	both	goofy	any	any	any	any	mpo	curious					[beeps loud and clear]
+pk_mpo_hail_01_2	probe_hail	chatter	calm	mc	pk_mpo_hail_01	2	m	goofy	any	any	any	any	mpo		Te oímos, MPO. Te oye todo el sistema.	eT somío, OPM. eT eyo odot le ametsis.	control/calm		We hear you, MPO. The whole system hears you.
+pk_mpo_hail_02_1	probe_hail	chatter	calm	probe	pk_mpo_hail_02	1	both	goofy	any	any	any	any	mpo	proud					[beeps a new finding]
+pk_mpo_hail_02_2	probe_hail	chatter	calm	mc	pk_mpo_hail_02	2	m	goofy	any	any	any	any	mpo		¿Otro descubrimiento? Apúntalo, lo miramos luego.	¿ortO otneimirbucsed? olatnúpA, ol somarim ogeul.	control/calm		Another discovery? Write it down, we'll look later.
+pk_mpo_hail_03_1	probe_hail	chatter	calm	probe	pk_mpo_hail_03	1	both	goofy	any	any	any	any	mpo	curious					[beeps a question]
+pk_mpo_hail_03_2	probe_hail	chatter	calm	mc	pk_mpo_hail_03	2	m	goofy	any	any	any	any	mpo		No, MPO, todavía no vamos a Moho.	oN, OPM, aívadot on somav a ohoM.	control/calm		No, MPO, we're not going to Moho yet.
+pk_mpo_hail_03_3	probe_hail	chatter	calm	probe	pk_mpo_hail_03	3	both	goofy	any	any	any	any	mpo	offended					[beeps impatiently]
+pk_mpo_hail_04_1	probe_hail	chatter	calm	probe	pk_mpo_hail_04	1	both	goofy	any	any	any	any	mpo	happy					[beeps warmly]
+pk_mpo_hail_04_2	probe_hail	chatter	calm	mc	pk_mpo_hail_04	2	m	goofy	any	any	any	any	mpo		Hola, MPO. Hoy suenas contento.	aloH, OPM. yoH saneus otnetnoc.	control/calm		Hi, MPO. You sound happy today.
+pk_mpo_stress_heat_1	probe_stress	chatter	tense	mc	pk_mpo_stress_heat	1	m	any	heat	any	any	any	mpo		MPO, sube la temperatura.	OPM, ebus al arutarepmet.	control/tense		MPO, temperature rising.
+pk_mpo_stress_heat_2	probe_stress	chatter	tense	probe	pk_mpo_stress_heat	2	both	any	heat	any	any	any	mpo	happy					[beeps contentedly]
+pk_mpo_stress_heat_3	probe_stress	chatter	tense	mc	pk_mpo_stress_heat	3	m	any	heat	any	any	any	mpo		Claro. A ti esto te encanta.	oralC. A it otse et atnacne.	control/tense		Of course. You love this.
+pk_mpo_stress_spin_1	probe_stress	chatter	tense	probe	pk_mpo_stress_spin	1	both	any	spin	any	any	any	mpo	scared					[beeps dizzily]
+pk_mpo_stress_spin_2	probe_stress	chatter	tense	mc	pk_mpo_stress_spin	2	m	any	spin	any	any	any	mpo		MPO, estás girando. Las observaciones van a salir borrosas.	OPM, sátse odnarig. saL senoicavresbo nav a rilas sasorrob.	control/tense		MPO, you're spinning. The observations will come out blurry.
+pk_mpo_ms_day10_1	probe_milestone	chatter	calm	mc	pk_mpo_ms_day10	1	m	any	any	any	any	day10	mpo		Diez días observando, MPO. Y no te cansas.	zeiD saíd odnavresbo, OPM. Y on et sasnac.	control/calm		Ten days of observing, MPO. And you're not tired.
+pk_mpo_ms_day10_2	probe_milestone	chatter	calm	probe	pk_mpo_ms_day10	2	both	any	any	any	any	day10	mpo	proud					[beeps tirelessly]
+pk_mpo_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_mpo_ms_orbit	1	both	any	any	any	any	orbit	mpo	proud					[beeps very proudly]
+pk_mpo_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_mpo_ms_orbit	2	m	any	any	any	any	orbit	mpo		En órbita, observador. Que empiece la ciencia.	nE atibró, rodavresbo. euQ eceipme al aicneic.	control/calm		In orbit, observer. Let the science begin.
+pk_mpo_sci_a_1	science	chatter	calm	mc	pk_mpo_sci_a	1	m	any	any	any	any	any	mpo		Datos del MPO. Con notas a pie de página.	sotaD led OPM. noC saton a eip ed anigáp.	control/calm		Data from the MPO. With footnotes.
+pk_mpo_sci_a_2	science	chatter	calm	probe	pk_mpo_sci_a	2	both	any	any	any	any	any	mpo	proud					[beeps proudly]
+pk_mpo_sci_b_1	science	chatter	calm	probe	pk_mpo_sci_b	1	both	any	any	any	any	any	mpo	proud					[beeps triumphantly]
+pk_mpo_sci_b_2	science	chatter	calm	mc	pk_mpo_sci_b	2	m	any	any	any	any	any	mpo		Sí, MPO, lo guardamos con el resto de tu colección.	íS, OPM, ol somadraug noc le otser ed ut nóicceloc.	control/calm		Yes, MPO, we'll keep it with the rest of your collection.
+pk_mpo_sci_c_1	science	chatter	calm	mc	pk_mpo_sci_c	1	m	any	any	any	any	any	mpo		MPO, ¿cuántos experimentos llevas ahí dentro?	OPM, ¿sotnáuc sotnemirepxe savell íha ortned?	control/calm		MPO, how many experiments are you carrying in there?
+pk_mpo_sci_c_2	science	chatter	calm	probe	pk_mpo_sci_c	2	both	any	any	any	any	any	mpo	proud					[beeps a long list]
+pk_mpo_pow_low_1	power_low	warning	tense	probe	pk_mpo_pow_low	1	both	any	any	any	any	any	mpo	sleepy					[beeps faintly]
+pk_mpo_pow_low_2	power_low	warning	tense	mc	pk_mpo_pow_low	2	m	any	any	any	any	any	mpo		Energía baja, MPO. Hasta un observador tiene que cerrar los ojos.	aígrenE ajab, OPM. atsaH nu rodavresbo eneit euq rarrec sol sojo.	control/tense		Low power, MPO. Even an observer has to close its eyes.
+pk_mpo_pow_ok_1	power_ok	chatter	calm	probe	pk_mpo_pow_ok	1	both	any	any	any	any	any	mpo	happy					[beeps eagerly]
+pk_mpo_pow_ok_2	power_ok	chatter	calm	mc	pk_mpo_pow_ok	2	m	any	any	any	any	any	mpo		¡Bienvenido, MPO! Sigue observando.	¡odinevneiB, OPM! eugiS odnavresbo.	control/calm		Welcome back, MPO! Keep observing.
+pk_mpo_soi_1__kerbol	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es lobréK. ¿Hace suficiente calor?	OPM, otse se Kérbol. ¿ecaH etneicifus rolac?	control/calm	kerbol	MPO, this is Kerbol. Hot enough for you?
+pk_mpo_soi_1__moho	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es ohoM. ¿Hace suficiente calor?	OPM, otse se Moho. ¿ecaH etneicifus rolac?	control/calm	moho	MPO, this is Moho. Hot enough for you?
+pk_mpo_soi_1__eve	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es vI. ¿Hace suficiente calor?	OPM, otse se Iv. ¿ecaH etneicifus rolac?	control/calm	eve	MPO, this is Eve. Hot enough for you?
+pk_mpo_soi_1__gilly	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es iliuG. ¿Hace suficiente calor?	OPM, otse se Guili. ¿ecaH etneicifus rolac?	control/calm	gilly	MPO, this is Gilly. Hot enough for you?
+pk_mpo_soi_1__kerbin	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es nibréK. ¿Hace suficiente calor?	OPM, otse se Kérbin. ¿ecaH etneicifus rolac?	control/calm	kerbin	MPO, this is Kerbin. Hot enough for you?
+pk_mpo_soi_1__mun	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es al nuM. ¿Hace suficiente calor?	OPM, otse se la Mun. ¿ecaH etneicifus rolac?	control/calm	mun	MPO, this is the Mun. Hot enough for you?
+pk_mpo_soi_1__minmus	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es sumníM. ¿Hace suficiente calor?	OPM, otse se Mínmus. ¿ecaH etneicifus rolac?	control/calm	minmus	MPO, this is Minmus. Hot enough for you?
+pk_mpo_soi_1__duna	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es anuD. ¿Hace suficiente calor?	OPM, otse se Duna. ¿ecaH etneicifus rolac?	control/calm	duna	MPO, this is Duna. Hot enough for you?
+pk_mpo_soi_1__ike	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es kiA. ¿Hace suficiente calor?	OPM, otse se Aik. ¿ecaH etneicifus rolac?	control/calm	ike	MPO, this is Ike. Hot enough for you?
+pk_mpo_soi_1__dres	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es serD. ¿Hace suficiente calor?	OPM, otse se Dres. ¿ecaH etneicifus rolac?	control/calm	dres	MPO, this is Dres. Hot enough for you?
+pk_mpo_soi_1__jool	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es luY. ¿Hace suficiente calor?	OPM, otse se Yul. ¿ecaH etneicifus rolac?	control/calm	jool	MPO, this is Jool. Hot enough for you?
+pk_mpo_soi_1__laythe	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es ziéL. ¿Hace suficiente calor?	OPM, otse se Léiz. ¿ecaH etneicifus rolac?	control/calm	laythe	MPO, this is Laythe. Hot enough for you?
+pk_mpo_soi_1__vall	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es laV. ¿Hace suficiente calor?	OPM, otse se Val. ¿ecaH etneicifus rolac?	control/calm	vall	MPO, this is Vall. Hot enough for you?
+pk_mpo_soi_1__tylo	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es oliaT. ¿Hace suficiente calor?	OPM, otse se Tailo. ¿ecaH etneicifus rolac?	control/calm	tylo	MPO, this is Tylo. Hot enough for you?
+pk_mpo_soi_1__bop	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es poB. ¿Hace suficiente calor?	OPM, otse se Bop. ¿ecaH etneicifus rolac?	control/calm	bop	MPO, this is Bop. Hot enough for you?
+pk_mpo_soi_1__pol	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es loP. ¿Hace suficiente calor?	OPM, otse se Pol. ¿ecaH etneicifus rolac?	control/calm	pol	MPO, this is Pol. Hot enough for you?
+pk_mpo_soi_1__eeloo	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es ulI. ¿Hace suficiente calor?	OPM, otse se Ilu. ¿ecaH etneicifus rolac?	control/calm	eeloo	MPO, this is Eeloo. Hot enough for you?
+pk_mpo_soi_1__generic	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es el planeta. ¿Hace suficiente calor?	OPM, otse se le atenalp. ¿ecaH etneicifus rolac?	control/calm	generic	MPO, this is the planet. Hot enough for you?
+pk_mpo_soi_2	soi_enter	chatter	calm	probe	pk_mpo_soi	2	both	any	any	any	any	any	mpo	curious					[beeps thoughtfully]
+pk_mpo_pl_1	part_lost	warning	tense	probe	pk_mpo_pl	1	both	any	any	any	any	any	mpo	scared					[beeps in alarm]
+pk_mpo_pl_2	part_lost	warning	tense	mc	pk_mpo_pl	2	m	any	any	any	any	any	mpo		Tranquilo, MPO. Tus instrumentos siguen ahí.	oliuqnarT, OPM. suT sotnemurtsni neugis íha.	control/tense		Easy, MPO. Your instruments are still there.
+pk_mpo_pl_3	part_lost	warning	tense	probe	pk_mpo_pl	3	both	any	any	any	any	any	mpo	happy					[beeps relieved]
+pk_mpo_sig_back_1	signal_back	chatter	calm	probe	pk_mpo_sig_back	1	both	any	any	any	any	any	mpo	proud					[beeps loud and clear]
+pk_mpo_sig_back_2	signal_back	chatter	calm	mc	pk_mpo_sig_back	2	m	any	any	any	any	any	mpo		Señal de vuelta. Con esa antena nunca te perdemos mucho tiempo.	lañeS ed atleuv. noC ase anetna acnun et somedrep ohcum opmeit.	control/calm		Signal back. With that antenna we never lose you for long.
+pk_mpo_td_1	touchdown	chatter	none	probe	pk_mpo_td	1	both	any	any	any	any	any	mpo	curious					[beeps in surprise]
+pk_mpo_td_2	touchdown	chatter	none	mc	pk_mpo_td	2	m	any	any	any	any	any	mpo		¿Aterrizado? Eras un orbitador, MPO.	¿odazirretA? sarE nu rodatibro, OPM.	control/calm		Landed? You were an orbiter, MPO.
+pk_mpo_splash_1	splashdown	chatter	none	probe	pk_mpo_splash	1	both	any	any	any	any	any	mpo	offended					[beeps indignantly]
+pk_mpo_splash_2	splashdown	chatter	none	mc	pk_mpo_splash	2	m	any	any	any	any	any	mpo		Agua. Lo contrario de Moho. Lo siento, MPO.	augA. oL oirartnoc ed ohoM. oL otneis, OPM.	control/calm		Water. The opposite of Moho. Sorry, MPO.
+pk_mpo_stg_1	staging	chatter	none	probe	pk_mpo_stg	1	both	any	any	any	any	separation	mpo	happy					[beeps a farewell]
+pk_mpo_stg_2	staging	chatter	none	mc	pk_mpo_stg	2	m	any	any	any	any	separation	mpo		Una pieza menos, MPO. Más ligero para la ciencia.	anU azeip sonem, OPM. sáM oregil arap al aicneic.	control/calm		One part less, MPO. Lighter for science.
+pk_mpo_thf_1	throttle_full	chatter	none	probe	pk_mpo_thf	1	both	any	any	any	any	any	mpo	happy					[beeps eagerly]
+pk_mpo_thf_2	throttle_full	chatter	none	mc	pk_mpo_thf	2	m	any	any	any	any	any	mpo		Potencia máxima, MPO. Rumbo al calor.	aicnetoP amixám, OPM. obmuR la rolac.	control/calm		Full power, MPO. Heading for the heat.
+pk_mpo_thc_1	throttle_cut	chatter	none	probe	pk_mpo_thc	1	both	any	any	any	any	any	mpo	curious					[beeps attentively]
+pk_mpo_thc_2	throttle_cut	chatter	none	mc	pk_mpo_thc	2	m	any	any	any	any	any	mpo		Motor apagado. Ya puedes volver a observar.	rotoM odagapa. aY sedeup revlov a ravresbo.	control/calm		Engine off. You can go back to observing.
+pk_mpo_pn_1	plan_node	chatter	none	mc	pk_mpo_pn	1	m	any	any	any	any	any	mpo		MPO, tenemos un plan de maniobra.	OPM, somenet nu nalp ed arboinam.	control/calm		MPO, we have a burn plan.
+pk_mpo_pn_2	plan_node	chatter	none	probe	pk_mpo_pn	2	both	any	any	any	any	any	mpo	curious					[beeps hopefully]
+pk_mpo_pn_3	plan_node	chatter	none	mc	pk_mpo_pn	3	m	any	any	any	any	any	mpo		No, no es hacia Moho.	oN, on se aicah ohoM.	control/calm		No, it's not to Moho.
+pk_mpo_data_1	probe_data	chatter	calm	probe	pk_mpo_data	1	both	any	any	any	any	any	mpo	proud					[beeps a huge stream]
+pk_mpo_data_2	probe_data	chatter	calm	mc	pk_mpo_data	2	m	any	any	any	any	any	mpo		Recibido, MPO. Vamos a necesitar otro disco duro.	odibiceR, OPM. somaV a ratisecen orto ocsid orud.	control/calm		Copy, MPO. We're going to need another hard drive.
+pk_mpo_dock_1	docked	chatter	none	probe	pk_mpo_dock	1	both	any	any	any	any	any	mpo	curious					[beeps at the port]
+pk_mpo_dock_2	docked	chatter	none	mc	pk_mpo_dock	2	m	any	any	any	any	any	mpo		Acoplado. ¿Vienes a enseñarle tus datos a alguien?	odalpocA. ¿seneiV a elrañesne sut sotad a neiugla?	control/calm		Docked. Here to show someone your data?
+pk_mpo_burn_1	burn_soon	warning	tense	mc	pk_mpo_burn	1	m	any	any	any	any	any	mpo		MPO, encendido pronto. Guarda los instrumentos.	OPM, odidnecne otnorp. adrauG sol sotnemurtsni.	control/tense		MPO, burn soon. Stow the instruments.
+pk_mpo_burn_2	burn_soon	warning	tense	probe	pk_mpo_burn	2	both	any	any	any	any	any	mpo	offended					[beeps reluctantly]
+pk_mpo_say_again_1	probe_say_again	chatter	calm	mc	pk_mpo_say_again	1	m	any	any	any	any	any	mpo		¿MPO? Con tu antena, el problema debe de ser nuestro.	¿OPM? noC ut anetna, le amelborp ebed ed res ortseun.	control/calm		MPO? With your antenna, the problem must be ours.
+pk_mpo_say_again_2	probe_say_again	chatter	calm	probe	pk_mpo_say_again	2	both	any	any	any	any	any	mpo	proud					[beeps patiently]
+pk_mpo_chute_1	chute_full	chatter	none	probe	pk_mpo_chute	1	both	any	any	any	any	any	mpo	curious					[beeps in surprise]
+pk_mpo_chute_2	chute_full	chatter	none	mc	pk_mpo_chute	2	m	any	any	any	any	any	mpo		Sí, MPO, llevas paracaídas. Nosotros también nos sorprendimos.	íS, OPM, savell sadíacarap. sortosoN néibmat son somidnerpros.	control/calm		Yes, MPO, you have a parachute. We were surprised too.
+pk_mtm_chat_01_1	probe_chat	chatter	calm	mc	pk_mtm_chat_01	1	m	goofy	any	any	any	any	mtm		Hola, MTM. ¿Qué tal la carga?	aloH, MTM. ¿éuQ lat al agrac?	control/calm		Hi, MTM. How's the cargo?
+pk_mtm_chat_01_2	probe_chat	chatter	calm	probe	pk_mtm_chat_01	2	both	goofy	any	any	any	any	mtm	happy					[beeps patiently]
+pk_mtm_chat_01_3	probe_chat	chatter	calm	mc	pk_mtm_chat_01	3	m	goofy	any	any	any	any	mtm		Siempre trabajando.	erpmeiS odnajabart.	control/calm		Always working.
+pk_mtm_chat_02_1	probe_chat	chatter	calm	mc	pk_mtm_chat_02	1	m	goofy	any	any	any	any	mtm		Nadie le hace fotos al camión, MTM. Pero sin ti no hay misión.	eidaN el ecah sotof la nóimac, MTM. oreP nis it on yah nóisim.	control/calm		Nobody takes pictures of the truck, MTM. But without you there's no mission.
+pk_mtm_chat_02_2	probe_chat	chatter	calm	probe	pk_mtm_chat_02	2	both	goofy	any	any	any	any	mtm	happy					[beeps gratefully]
+pk_mtm_chat_03_1	probe_chat	chatter	calm	mc	pk_mtm_chat_03	1	m	goofy	any	any	any	any	mtm		¿Cuánto xenón te queda, grandullón?	¿otnáuC nónex et adeuq, nólludnarg?	control/calm		How much xenon do you have left, big guy?
+pk_mtm_chat_03_2	probe_chat	chatter	calm	probe	pk_mtm_chat_03	2	both	goofy	any	any	any	any	mtm	proud					[beeps a big number]
+pk_mtm_chat_04_1	probe_chat	chatter	calm	mc	pk_mtm_chat_04	1	m	goofy	any	any	any	any	mtm		MTM, el MPO se lleva toda la fama.	MTM, le OPM es avell adot al amaf.	control/calm		MTM, the MPO gets all the fame.
+pk_mtm_chat_04_2	probe_chat	chatter	calm	probe	pk_mtm_chat_04	2	both	goofy	any	any	any	any	mtm	offended					[beeps a little jealously]
+pk_mtm_chat_04_3	probe_chat	chatter	calm	mc	pk_mtm_chat_04	3	m	goofy	any	any	any	any	mtm		Ya lo sé. Tú haces el trabajo duro.	aY ol és. úT secah le ojabart orud.	control/calm		I know. You do the hard work.
+pk_mtm_chat_05_1	probe_chat	chatter	calm	mc	pk_mtm_chat_05	1	m	goofy	any	any	any	any	mtm		Cuatro mil de carga eléctrica. Eres una central eléctrica.	ortauC lim ed agrac acirtcéle. serE anu lartnec acirtcéle.	control/calm		Four thousand units of charge. You're a power plant.
+pk_mtm_chat_05_2	probe_chat	chatter	calm	probe	pk_mtm_chat_05	2	both	goofy	any	any	any	any	mtm	proud					[beeps proudly]
+pk_mtm_chat_06_1	probe_chat	chatter	calm	mc	pk_mtm_chat_06	1	m	goofy	any	any	any	any	mtm		MTM, ¿no te cansas de llevar a los demás?	MTM, ¿on et sasnac ed ravell a sol sámed?	control/calm		MTM, don't you get tired of carrying everyone else?
+pk_mtm_chat_06_2	probe_chat	chatter	calm	probe	pk_mtm_chat_06	2	both	goofy	any	any	any	any	mtm	happy					[beeps cheerfully]
+pk_mtm_chat_06_3	probe_chat	chatter	calm	mc	pk_mtm_chat_06	3	m	goofy	any	any	any	any	mtm		Ojalá todos fueran como tú.	álajO sodot nareuf omoc út.	control/calm		I wish everyone was like you.
+pk_mtm_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	1	m	goofy	any	any	any	any	mtm		MTM, ¿cuánto falta para llegar?	MTM, ¿otnáuc atlaf arap ragell?	control/calm		MTM, how much longer?
+pk_mtm_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mtm_chat_long_1	2	both	goofy	any	any	any	any	mtm	bored					[beeps very slowly]
+pk_mtm_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	3	m	goofy	any	any	any	any	mtm		¿Tanto?	¿otnaT?	control/calm		That long?
+pk_mtm_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mtm_chat_long_1	4	both	goofy	any	any	any	any	mtm	happy					[beeps patiently]
+pk_mtm_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	5	m	goofy	any	any	any	any	mtm		Vale. Es un motor iónico. Lo entiendo.	elaV. sE nu rotom ocinói. oL odneitne.	control/calm		Okay. It's an ion engine. I get it.
+pk_mtm_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mtm_sleepy_01	1	m	goofy	any	any	any	any	mtm		¿Cansado, grandullón? Hasta los camiones paran.	¿odasnaC, nólludnarg? atsaH sol senoimac narap.	control/calm		Tired, big guy? Even trucks stop.
+pk_mtm_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mtm_sleepy_01	2	both	goofy	any	any	any	any	mtm	sleepy					[beeps drowsily]
+pk_mtm_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mtm_sleepy_02	1	m	goofy	any	any	any	any	mtm		MTM, ¿cómo te has quedado sin energía con cuatro mil?	MTM, ¿omóc et sah odadeuq nis aígrene noc ortauc lim?	control/calm		MTM, how did you run out of power with four thousand?
+pk_mtm_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mtm_sleepy_02	2	both	goofy	any	any	any	any	mtm	sleepy					[beeps sheepishly]
+pk_mtm_hail_01_1	probe_hail	chatter	calm	probe	pk_mtm_hail_01	1	both	goofy	any	any	any	any	mtm	happy					[beeps steadily]
+pk_mtm_hail_01_2	probe_hail	chatter	calm	mc	pk_mtm_hail_01	2	m	goofy	any	any	any	any	mtm		Hola, MTM. Sigues en marcha, ¿eh?	aloH, MTM. seugiS ne ahcram, ¿he?	control/calm		Hi, MTM. Still going, huh?
+pk_mtm_hail_02_1	probe_hail	chatter	calm	probe	pk_mtm_hail_02	1	both	goofy	any	any	any	any	mtm	curious					[beeps a question]
+pk_mtm_hail_02_2	probe_hail	chatter	calm	mc	pk_mtm_hail_02	2	m	goofy	any	any	any	any	mtm		Sí, MTM, la carga va bien atada.	íS, MTM, al agrac av neib adata.	control/calm		Yes, MTM, the cargo is tied down well.
+pk_mtm_hail_03_1	probe_hail	chatter	calm	probe	pk_mtm_hail_03	1	both	goofy	any	any	any	any	mtm	bored					[beeps very slowly]
+pk_mtm_hail_03_2	probe_hail	chatter	calm	mc	pk_mtm_hail_03	2	m	goofy	any	any	any	any	mtm		Ya sabemos que el viaje es largo. Lo dijiste ayer.	aY somebas euq le ejaiv se ogral. oL etsijid reya.	control/calm		We know the trip is long. You said so yesterday.
+pk_mtm_hail_04_1	probe_hail	chatter	calm	probe	pk_mtm_hail_04	1	both	goofy	any	any	any	any	mtm	proud					[beeps a delivery report]
+pk_mtm_hail_04_2	probe_hail	chatter	calm	mc	pk_mtm_hail_04	2	m	goofy	any	any	any	any	mtm		Entrega a tiempo. Como siempre, MTM.	agertnE a opmeit. omoC erpmeis, MTM.	control/calm		Delivered on time. As always, MTM.
+pk_mtm_stress_gforce_1	probe_stress	chatter	tense	mc	pk_mtm_stress_gforce	1	m	any	gforce	any	any	any	mtm		Aguanta, MTM. No te hicieron para correr.	atnaugA, MTM. oN et noreicih arap rerroc.	control/tense		Hang on, MTM. You weren't built for speed.
+pk_mtm_stress_gforce_2	probe_stress	chatter	tense	probe	pk_mtm_stress_gforce	2	both	any	gforce	any	any	any	mtm	proud					[beeps stubbornly]
+pk_mtm_stress_fuel_1	probe_stress	chatter	tense	mc	pk_mtm_stress_fuel	1	m	any	fuel	any	any	any	mtm		MTM, el combustible baja.	MTM, le elbitsubmoc ajab.	control/tense		MTM, fuel is getting low.
+pk_mtm_stress_fuel_2	probe_stress	chatter	tense	probe	pk_mtm_stress_fuel	2	both	any	fuel	any	any	any	mtm	scared					[beeps worriedly]
+pk_mtm_stress_fuel_3	probe_stress	chatter	tense	mc	pk_mtm_stress_fuel	3	m	any	fuel	any	any	any	mtm		Tranquilo. Con xenón se llega lejos.	oliuqnarT. noC nónex es agell sojel.	control/tense		Easy. Xenon goes a long way.
+pk_mtm_ms_day100_1	probe_milestone	chatter	calm	mc	pk_mtm_ms_day100	1	m	any	any	any	any	day100	mtm		Cien días, MTM. Y sigues empujando.	neiC saíd, MTM. Y seugis odnajupme.	control/calm		One hundred days, MTM. And you're still pushing.
+pk_mtm_ms_day100_2	probe_milestone	chatter	calm	probe	pk_mtm_ms_day100	2	both	any	any	any	any	day100	mtm	proud					[beeps steadily]
+pk_mtm_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_mtm_ms_orbit	1	both	any	any	any	any	orbit	mtm	proud					[beeps very proudly]
+pk_mtm_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_mtm_ms_orbit	2	m	any	any	any	any	orbit	mtm		En órbita, grandullón. Primera parada.	nE atibró, nólludnarg. aremirP adarap.	control/calm		In orbit, big guy. First stop.
+pk_mtm_sci_a_1	science	chatter	calm	mc	pk_mtm_sci_a	1	m	any	any	any	any	any	mtm		¿Datos del MTM? No sabíamos que hacías ciencia.	¿sotaD led MTM? oN somaíbas euq saícah aicneic.	control/calm		Data from the MTM? We didn't know you did science.
+pk_mtm_sci_a_2	science	chatter	calm	probe	pk_mtm_sci_a	2	both	any	any	any	any	any	mtm	offended					[beeps indignantly]
+pk_mtm_sci_b_1	science	chatter	calm	probe	pk_mtm_sci_b	1	both	any	any	any	any	any	mtm	proud					[beeps modestly]
+pk_mtm_sci_b_2	science	chatter	calm	mc	pk_mtm_sci_b	2	m	any	any	any	any	any	mtm		Buen trabajo, MTM. Esta vez la fama es tuya.	neuB ojabart, MTM. atsE zev al amaf se ayut.	control/calm		Good work, MTM. This time the fame is yours.
+pk_mtm_pow_low_1	power_low	warning	tense	probe	pk_mtm_pow_low	1	both	any	any	any	any	any	mtm	sleepy					[beeps faintly]
+pk_mtm_pow_low_2	power_low	warning	tense	mc	pk_mtm_pow_low	2	m	any	any	any	any	any	mtm		¿Batería baja? ¿Tú? Eso sí que es raro.	¿aíretaB ajab? ¿úT? osE ís euq se orar.	control/tense		Low battery? You? Now that's strange.
+pk_mtm_pow_ok_1	power_ok	chatter	calm	probe	pk_mtm_pow_ok	1	both	any	any	any	any	any	mtm	happy					[beeps eagerly]
+pk_mtm_pow_ok_2	power_ok	chatter	calm	mc	pk_mtm_pow_ok	2	m	any	any	any	any	any	mtm		Bienvenido, grandullón. A trabajar.	odinevneiB, nólludnarg. A rajabart.	control/calm		Welcome back, big guy. Back to work.
+pk_mtm_soi_1__kerbol	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es lobréK. Una entrega más.	MTM, otse se Kérbol. anU agertne sám.	control/calm	kerbol	MTM, this is Kerbol. One more delivery.
+pk_mtm_soi_1__moho	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es ohoM. Una entrega más.	MTM, otse se Moho. anU agertne sám.	control/calm	moho	MTM, this is Moho. One more delivery.
+pk_mtm_soi_1__eve	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es vI. Una entrega más.	MTM, otse se Iv. anU agertne sám.	control/calm	eve	MTM, this is Eve. One more delivery.
+pk_mtm_soi_1__gilly	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es iliuG. Una entrega más.	MTM, otse se Guili. anU agertne sám.	control/calm	gilly	MTM, this is Gilly. One more delivery.
+pk_mtm_soi_1__kerbin	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es nibréK. Una entrega más.	MTM, otse se Kérbin. anU agertne sám.	control/calm	kerbin	MTM, this is Kerbin. One more delivery.
+pk_mtm_soi_1__mun	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es al nuM. Una entrega más.	MTM, otse se la Mun. anU agertne sám.	control/calm	mun	MTM, this is the Mun. One more delivery.
+pk_mtm_soi_1__minmus	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es sumníM. Una entrega más.	MTM, otse se Mínmus. anU agertne sám.	control/calm	minmus	MTM, this is Minmus. One more delivery.
+pk_mtm_soi_1__duna	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es anuD. Una entrega más.	MTM, otse se Duna. anU agertne sám.	control/calm	duna	MTM, this is Duna. One more delivery.
+pk_mtm_soi_1__ike	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es kiA. Una entrega más.	MTM, otse se Aik. anU agertne sám.	control/calm	ike	MTM, this is Ike. One more delivery.
+pk_mtm_soi_1__dres	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es serD. Una entrega más.	MTM, otse se Dres. anU agertne sám.	control/calm	dres	MTM, this is Dres. One more delivery.
+pk_mtm_soi_1__jool	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es luY. Una entrega más.	MTM, otse se Yul. anU agertne sám.	control/calm	jool	MTM, this is Jool. One more delivery.
+pk_mtm_soi_1__laythe	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es ziéL. Una entrega más.	MTM, otse se Léiz. anU agertne sám.	control/calm	laythe	MTM, this is Laythe. One more delivery.
+pk_mtm_soi_1__vall	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es laV. Una entrega más.	MTM, otse se Val. anU agertne sám.	control/calm	vall	MTM, this is Vall. One more delivery.
+pk_mtm_soi_1__tylo	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es oliaT. Una entrega más.	MTM, otse se Tailo. anU agertne sám.	control/calm	tylo	MTM, this is Tylo. One more delivery.
+pk_mtm_soi_1__bop	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es poB. Una entrega más.	MTM, otse se Bop. anU agertne sám.	control/calm	bop	MTM, this is Bop. One more delivery.
+pk_mtm_soi_1__pol	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es loP. Una entrega más.	MTM, otse se Pol. anU agertne sám.	control/calm	pol	MTM, this is Pol. One more delivery.
+pk_mtm_soi_1__eeloo	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es ulI. Una entrega más.	MTM, otse se Ilu. anU agertne sám.	control/calm	eeloo	MTM, this is Eeloo. One more delivery.
+pk_mtm_soi_1__generic	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es el planeta. Una entrega más.	MTM, otse se le atenalp. anU agertne sám.	control/calm	generic	MTM, this is the planet. One more delivery.
+pk_mtm_soi_2	soi_enter	chatter	calm	probe	pk_mtm_soi	2	both	any	any	any	any	any	mtm	happy					[beeps contentedly]
+pk_mtm_pl_1	part_lost	warning	tense	probe	pk_mtm_pl	1	both	any	any	any	any	any	mtm	scared					[beeps in alarm]
+pk_mtm_pl_2	part_lost	warning	tense	mc	pk_mtm_pl	2	m	any	any	any	any	any	mtm		MTM, has perdido algo. Espero que no fuera la carga.	MTM, sah odidrep ogla. orepsE euq on areuf al agrac.	control/tense		MTM, you lost something. I hope it wasn't the cargo.
+pk_mtm_pl_3	part_lost	warning	tense	probe	pk_mtm_pl	3	both	any	any	any	any	any	mtm	scared					[beeps nervously]
+pk_mtm_sig_back_1	signal_back	chatter	calm	probe	pk_mtm_sig_back	1	both	any	any	any	any	any	mtm	happy					[beeps steadily]
+pk_mtm_sig_back_2	signal_back	chatter	calm	mc	pk_mtm_sig_back	2	m	any	any	any	any	any	mtm		Ahí estás, MTM. Sin prisa, como siempre.	íhA sátse, MTM. niS asirp, omoc erpmeis.	control/calm		There you are, MTM. No hurry, as always.
+pk_mtm_td_1	touchdown	chatter	none	probe	pk_mtm_td	1	both	any	any	any	any	any	mtm	curious					[beeps in surprise]
+pk_mtm_td_2	touchdown	chatter	none	mc	pk_mtm_td	2	m	any	any	any	any	any	mtm		¿Aterrizado? Eres un módulo de transferencia, MTM.	¿odazirretA? serE nu oludóm ed aicnerefsnart, MTM.	control/calm		Landed? You're a transfer module, MTM.
+pk_mtm_stg_1	staging	chatter	none	probe	pk_mtm_stg	1	both	any	any	any	any	separation	mtm	happy					[beeps a proud farewell]
+pk_mtm_stg_2	staging	chatter	none	mc	pk_mtm_stg	2	m	any	any	any	any	separation	mtm		Una pieza menos que llevar, MTM.	anU azeip sonem euq ravell, MTM.	control/calm		One less thing to carry, MTM.
+pk_mtm_thf_1	throttle_full	chatter	none	probe	pk_mtm_thf	1	both	any	any	any	any	any	mtm	proud					[beeps steadily]
+pk_mtm_thf_2	throttle_full	chatter	none	mc	pk_mtm_thf	2	m	any	any	any	any	any	mtm		Potencia máxima. Que en tu caso es tranquila.	aicnetoP amixám. euQ ne ut osac se aliuqnart.	control/calm		Full power. Which in your case is gentle.
+pk_mtm_thc_1	throttle_cut	chatter	none	probe	pk_mtm_thc	1	both	any	any	any	any	any	mtm	bored					[beeps contentedly]
+pk_mtm_thc_2	throttle_cut	chatter	none	mc	pk_mtm_thc	2	m	any	any	any	any	any	mtm		Motor apagado. Descansa un poco, grandullón.	rotoM odagapa. asnacseD nu ocop, nólludnarg.	control/calm		Engine off. Rest a bit, big guy.
+pk_mtm_pn_1	plan_node	chatter	none	mc	pk_mtm_pn	1	m	any	any	any	any	any	mtm		MTM, tenemos un plan de maniobra. Un encendido de tres horas.	MTM, somenet nu nalp ed arboinam. nU odidnecne ed sert saroh.	control/calm		MTM, we have a burn plan. A three hour burn.
+pk_mtm_pn_2	plan_node	chatter	none	probe	pk_mtm_pn	2	both	any	any	any	any	any	mtm	happy					[beeps patiently]
+pk_mtm_data_1	probe_data	chatter	calm	probe	pk_mtm_data	1	both	any	any	any	any	any	mtm	happy					[beeps a steady stream]
+pk_mtm_data_2	probe_data	chatter	calm	mc	pk_mtm_data	2	m	any	any	any	any	any	mtm		Recibido, MTM. Despacio pero seguro.	odibiceR, MTM. oicapseD orep oruges.	control/calm		Copy, MTM. Slow but steady.
+pk_mtm_dock_1	docked	chatter	none	probe	pk_mtm_dock	1	both	any	any	any	any	any	mtm	happy					[beeps at the port]
+pk_mtm_dock_2	docked	chatter	none	mc	pk_mtm_dock	2	m	any	any	any	any	any	mtm		Acoplado, MTM. ¿Recoges otra carga?	odalpocA, MTM. ¿segoceR arto agrac?	control/calm		Docked, MTM. Picking up another load?
+pk_mtm_burn_1	burn_soon	warning	tense	mc	pk_mtm_burn	1	m	any	any	any	any	any	mtm		MTM, encendido pronto. Va a ser largo.	MTM, odidnecne otnorp. aV a res ogral.	control/tense		MTM, burn soon. It's going to be a long one.
+pk_mtm_burn_2	burn_soon	warning	tense	probe	pk_mtm_burn	2	both	any	any	any	any	any	mtm	happy					[beeps patiently]
+pk_mtm_say_again_1	probe_say_again	chatter	calm	mc	pk_mtm_say_again	1	m	any	any	any	any	any	mtm		MTM, ¿puedes repetir?	MTM, ¿sedeup riteper?	control/calm		MTM, could you repeat?
+pk_mtm_say_again_2	probe_say_again	chatter	calm	probe	pk_mtm_say_again	2	both	any	any	any	any	any	mtm	bored					[beeps slowly and clearly]
+pk_mtm_chute_1	chute_full	chatter	none	probe	pk_mtm_chute	1	both	any	any	any	any	any	mtm	curious					[beeps in surprise]
+pk_mtm_chute_2	chute_full	chatter	none	mc	pk_mtm_chute	2	m	any	any	any	any	any	mtm		¿Un paracaídas en un módulo de transferencia? Vale.	¿nU sadíacarap ne nu oludóm ed aicnerefsnart? elaV.	control/calm		A parachute on a transfer module? Okay.
 pc_001_1	probe_crew	chatter	calm	probe	pc_001	1	both	goofy	any	any	any	any	any	proud					[beeps with a report]
 pc_001_2	probe_crew	chatter	calm	crew	pc_001	2	both	goofy	any	any	any	any	any		Mm. Buenos datos.	mM. soneuB sotad.	crew/calm		Hmm. Good data.
 pc_002_1	probe_crew	chatter	calm	probe	pc_002	1	both	goofy	any	any	any	any	any	curious					[beeps a question]

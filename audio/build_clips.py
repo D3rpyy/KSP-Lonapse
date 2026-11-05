@@ -65,7 +65,7 @@ FOLDERS = {
 
 # Plan v5 probe mode: beeps per probe core and mood, timbre from audio/probe/cores.tsv. Same keys as ProbeCores.Keys and ProbeCores.Moods in src/ProbeCore.cs, folders as ProbeCores.Folders().
 PROBE_CORES_TSV = ROOT / "probe" / "cores.tsv"
-PROBE_CORE_KEYS = ["stayputnik", "okto", "hecs", "rovemate", "snob", "generic"]
+PROBE_CORE_KEYS = ["stayputnik", "okto", "hecs", "rovemate", "snob", "qbe", "mk2drone", "mpo", "mtm", "generic"]
 PROBE_MOODS = ["happy", "offended", "curious", "scared", "sleepy", "proud", "bored"]
 PROBE_WAVES = ["sine", "triangle", "square", "saw", "pulse", "fm"]
 PROBE_RHYTHMS = ["even", "swing", "stutter", "lazy"]
@@ -79,7 +79,7 @@ FOLDERS["beeps/probe_data"] = dict(min=3, count=4, lo=0.3, hi=1.4, rms=-22.0, ki
 PEAK_LIMIT_DB = -1.3       # limiter ceiling, contract requires <= -1 dBFS
 RMS_TOL = 1.0              # +- dB
 MAX_SILENCE = 0.050        # leading / trailing silence
-SIZE_LIMIT = 110 * 1024 * 1024  # 40 MB, 80 MB in v4 (about 2500 clips), 110 MB in 0.6.0 (about 4600 clips plus the effects)
+SIZE_LIMIT = 120 * 1024 * 1024  # 40 MB, 80 MB in v4 (about 2500 clips), 110 MB in 0.6.0 (about 4600 clips plus the effects), 120 MB for the qbe, mk2drone, mpo and mtm beeps
 SILENCE_DB = -50.0
 NAME_RE = re.compile(r"^[a-z0-9_]+_[0-9]{3}\.wav$")
 
@@ -351,7 +351,7 @@ def make_beeps(folder, i, seed):
 
 
 # ---------------------------------------------------------------------------
-# Plan v5: probe beeps (6 cores x 7 moods). Pure Python synthesis.
+# Plan v5: probe beeps (10 cores x 7 moods). Pure Python synthesis.
 # ---------------------------------------------------------------------------
 _PROBE_CORES = None
 

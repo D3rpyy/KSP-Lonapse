@@ -88,7 +88,7 @@ LONAPSE_PROBE_VOICE
 {
     name = myprobe          // the name parts use
     displayName = My Probe  // the subtitle name
-    lines = okto            // whose phrase table lines it gets: stayputnik okto hecs rovemate snob generic
+    lines = okto            // whose lines: stayputnik okto hecs rovemate snob qbe mk2drone mpo mtm generic
     baseHz = 760            // 200 to 3000
     wave = fm
     rhythm = swing
@@ -128,9 +128,14 @@ part from another mod, or only when Lonapse is installed, use a Module Manager p
         name = ModuleLonapse
         voice = myprobe     // a stock voice or a LONAPSE_PROBE_VOICE name
         priority = 0        // with several cores on a vessel, the highest wins
+        displayName = STP   // optional, the subtitle name of this part
     }
 }
 ```
+
+`displayName` on the module wins over the `displayName` of the voice. So several parts can share one voice and
+still show their own name in the subtitles. It may be a localization tag like `#LOC_myMod_stp`. Without it, the
+part shows the name of its voice.
 
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.

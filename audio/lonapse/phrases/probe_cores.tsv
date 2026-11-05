@@ -1,0 +1,321 @@
+# Own lines for the qbe, mk2drone, mpo and mtm probe cores (characters from their in-game part descriptions). New keys: pk_
+# QBE: tiny, no reaction wheels, 5 EC, built for optional return. Drone Core: C7's AI that replaced the test pilots.
+# MPO: the Moho Planetary Observer, loves heat, huge antenna. MTM: the patient xenon workhorse that carries it.
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
+pk_qbe_chat_01_1	probe_chat	chatter	calm	mc	pk_qbe_chat_01	1	m	goofy	any	any	any	any	qbe		Hola, QBE. ¿Cuánta batería te queda?	Hi, QBE. How much battery do you have left?
+pk_qbe_chat_01_2	probe_chat	chatter	calm	probe	pk_qbe_chat_01	2	both	goofy	any	any	any	any	qbe	sleepy		[beeps very faintly]
+pk_qbe_chat_01_3	probe_chat	chatter	calm	mc	pk_qbe_chat_01	3	m	goofy	any	any	any	any	qbe		Vale. No hables mucho.	Okay. Don't talk too much.
+pk_qbe_chat_02_1	probe_chat	chatter	calm	mc	pk_qbe_chat_02	1	m	goofy	any	any	any	any	qbe		¿Ya sabes girar, cubito?	Can you turn yet, little cube?
+pk_qbe_chat_02_2	probe_chat	chatter	calm	probe	pk_qbe_chat_02	2	both	goofy	any	any	any	any	qbe	offended		[beeps indignantly]
+pk_qbe_chat_02_3	probe_chat	chatter	calm	mc	pk_qbe_chat_02	3	m	goofy	any	any	any	any	qbe		Ya. Sin ruedas de reacción. Lo sé.	Right. No reaction wheels. I know.
+pk_qbe_chat_03_1	probe_chat	chatter	calm	mc	pk_qbe_chat_03	1	m	goofy	any	any	any	any	qbe		Eres la sonda más ligera del programa.	You're the lightest probe in the program.
+pk_qbe_chat_03_2	probe_chat	chatter	calm	probe	pk_qbe_chat_03	2	both	goofy	any	any	any	any	qbe	proud		[beeps proudly]
+pk_qbe_chat_04_1	probe_chat	chatter	calm	mc	pk_qbe_chat_04	1	m	goofy	any	any	any	any	qbe		Los ingenieros dicen que eres perfecto para misiones de regreso opcional.	The engineers say you're perfect for optional return missions.
+pk_qbe_chat_04_2	probe_chat	chatter	calm	probe	pk_qbe_chat_04	2	both	goofy	any	any	any	any	qbe	curious		[beeps uncertainly]
+pk_qbe_chat_04_3	probe_chat	chatter	calm	mc	pk_qbe_chat_04	3	m	goofy	any	any	any	any	qbe		No, no es nada malo. Creo.	No, it's nothing bad. I think.
+pk_qbe_chat_05_1	probe_chat	chatter	calm	mc	pk_qbe_chat_05	1	m	goofy	any	any	any	any	qbe		Cubito, cabes en mi bolsillo.	Little cube, you'd fit in my pocket.
+pk_qbe_chat_05_2	probe_chat	chatter	calm	probe	pk_qbe_chat_05	2	both	goofy	any	any	any	any	qbe	happy		[beeps cheerfully]
+pk_qbe_chat_06_1	probe_chat	chatter	calm	mc	pk_qbe_chat_06	1	m	goofy	any	any	any	any	qbe		¿Te sientes pequeño ahí arriba?	Feeling small up there?
+pk_qbe_chat_06_2	probe_chat	chatter	calm	probe	pk_qbe_chat_06	2	both	goofy	any	any	any	any	qbe	proud		[beeps defiantly]
+pk_qbe_chat_06_3	probe_chat	chatter	calm	mc	pk_qbe_chat_06	3	m	goofy	any	any	any	any	qbe		Pequeño pero valiente.	Small but brave.
+pk_qbe_chat_long_1_1	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	1	m	goofy	any	any	any	any	qbe		QBE, ¿qué tal la vista?	QBE, how's the view?
+pk_qbe_chat_long_1_2	probe_chat	chatter	calm	probe	pk_qbe_chat_long_1	2	both	goofy	any	any	any	any	qbe	happy		[beeps excitedly]
+pk_qbe_chat_long_1_3	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	3	m	goofy	any	any	any	any	qbe		¿Has visto algo interesante?	Seen anything interesting?
+pk_qbe_chat_long_1_4	probe_chat	chatter	calm	probe	pk_qbe_chat_long_1	4	both	goofy	any	any	any	any	qbe	curious		[beeps at everything]
+pk_qbe_chat_long_1_5	probe_chat	chatter	calm	mc	pk_qbe_chat_long_1	5	m	goofy	any	any	any	any	qbe		Todo te parece grande, ¿verdad?	Everything looks big to you, right?
+pk_qbe_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_qbe_sleepy_01	1	m	goofy	any	any	any	any	qbe		QBE, cinco unidades de carga no dan para mucho.	QBE, five units of charge don't go very far.
+pk_qbe_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_qbe_sleepy_01	2	both	goofy	any	any	any	any	qbe	sleepy		[beeps drowsily]
+pk_qbe_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_qbe_sleepy_02	1	m	goofy	any	any	any	any	qbe		¿Otra vez sin batería, cubito?	Out of battery again, little cube?
+pk_qbe_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_qbe_sleepy_02	2	both	goofy	any	any	any	any	qbe	sleepy		[beeps very sleepily]
+pk_qbe_hail_01_1	probe_hail	chatter	calm	probe	pk_qbe_hail_01	1	both	goofy	any	any	any	any	qbe	happy		[beeps a tiny hello]
+pk_qbe_hail_01_2	probe_hail	chatter	calm	mc	pk_qbe_hail_01	2	m	goofy	any	any	any	any	qbe		Hola, cubito. Te oímos.	Hi, little cube. We hear you.
+pk_qbe_hail_02_1	probe_hail	chatter	calm	probe	pk_qbe_hail_02	1	both	goofy	any	any	any	any	qbe	curious		[beeps hopefully]
+pk_qbe_hail_02_2	probe_hail	chatter	calm	mc	pk_qbe_hail_02	2	m	goofy	any	any	any	any	qbe		Sí, QBE, alguien vendrá a buscarte. Algún día.	Yes, QBE, someone will come get you. Someday.
+pk_qbe_hail_02_3	probe_hail	chatter	calm	probe	pk_qbe_hail_02	3	both	goofy	any	any	any	any	qbe	scared		[beeps worriedly]
+pk_qbe_hail_03_1	probe_hail	chatter	calm	probe	pk_qbe_hail_03	1	both	goofy	any	any	any	any	qbe	proud		[beeps very loudly]
+pk_qbe_hail_03_2	probe_hail	chatter	calm	mc	pk_qbe_hail_03	2	m	goofy	any	any	any	any	qbe		Mucho ruido para alguien tan pequeño.	A lot of noise for someone so small.
+pk_qbe_hail_04_1	probe_hail	chatter	calm	probe	pk_qbe_hail_04	1	both	goofy	any	any	any	any	qbe	bored		[beeps slowly]
+pk_qbe_hail_04_2	probe_hail	chatter	calm	mc	pk_qbe_hail_04	2	m	goofy	any	any	any	any	qbe		¿Aburrido? Eres un cubo. No puedes ni girar.	Bored? You're a cube. You can't even turn.
+pk_qbe_hail_04_3	probe_hail	chatter	calm	probe	pk_qbe_hail_04	3	both	goofy	any	any	any	any	qbe	offended		[beeps indignantly]
+pk_qbe_stress_spin_1	probe_stress	chatter	tense	probe	pk_qbe_stress_spin	1	both	any	spin	any	any	any	qbe	scared		[beeps in circles]
+pk_qbe_stress_spin_2	probe_stress	chatter	tense	mc	pk_qbe_stress_spin	2	m	any	spin	any	any	any	qbe		QBE, no tienes ruedas de reacción. Solo aguanta.	QBE, you have no reaction wheels. Just hang on.
+pk_qbe_stress_gforce_1	probe_stress	chatter	tense	mc	pk_qbe_stress_gforce	1	m	any	gforce	any	any	any	qbe		Aguanta, cubito. Pesas setenta kilos, puedes con esto.	Hang on, little cube. You weigh seventy kilos, you can take it.
+pk_qbe_stress_gforce_2	probe_stress	chatter	tense	probe	pk_qbe_stress_gforce	2	both	any	gforce	any	any	any	qbe	proud		[beeps bravely]
+pk_qbe_ms_day1_1	probe_milestone	chatter	calm	mc	pk_qbe_ms_day1	1	m	any	any	any	any	day1	qbe		Un día entero, QBE. Con esa batería, es un milagro.	A whole day, QBE. With that battery, it's a miracle.
+pk_qbe_ms_day1_2	probe_milestone	chatter	calm	probe	pk_qbe_ms_day1	2	both	any	any	any	any	day1	qbe	proud		[beeps very proudly]
+pk_qbe_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_qbe_ms_orbit	1	both	any	any	any	any	orbit	qbe	proud		[beeps very proudly]
+pk_qbe_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_qbe_ms_orbit	2	m	any	any	any	any	orbit	qbe		En órbita, cubito. Nada mal para una caja.	In orbit, little cube. Not bad for a box.
+pk_qbe_sci_a_1	science	chatter	calm	mc	pk_qbe_sci_a	1	m	any	any	any	any	any	qbe		¡Datos del QBE! Pequeños, pero datos.	Data from the QBE! Small, but data.
+pk_qbe_sci_a_2	science	chatter	calm	probe	pk_qbe_sci_a	2	both	any	any	any	any	any	qbe	proud		[beeps proudly]
+pk_qbe_sci_b_1	science	chatter	calm	probe	pk_qbe_sci_b	1	both	any	any	any	any	any	qbe	happy		[beeps delightedly]
+pk_qbe_sci_b_2	science	chatter	calm	mc	pk_qbe_sci_b	2	m	any	any	any	any	any	qbe		Sí, QBE, lo tenemos. Descansa un poco.	Yes, QBE, we got it. Rest a bit.
+pk_qbe_pow_low_1	power_low	warning	tense	probe	pk_qbe_pow_low	1	both	any	any	any	any	any	qbe	sleepy		[beeps faintly]
+pk_qbe_pow_low_2	power_low	warning	tense	mc	pk_qbe_pow_low	2	m	any	any	any	any	any	qbe		Ya lo sabemos, cubito. Cinco unidades. Duerme.	We know, little cube. Five units. Sleep.
+pk_qbe_pow_ok_1	power_ok	chatter	calm	probe	pk_qbe_pow_ok	1	both	any	any	any	any	any	qbe	happy		[beeps eagerly]
+pk_qbe_pow_ok_2	power_ok	chatter	calm	mc	pk_qbe_pow_ok	2	m	any	any	any	any	any	qbe		¡Buenos días, cubito!	Good morning, little cube!
+pk_qbe_soi_1	soi_enter	chatter	calm	mc	pk_qbe_soi	1	m	any	any	any	any	any	qbe		QBE, esto es {body}. Es un poco más grande que tú.	QBE, this is {body}. It's a bit bigger than you.
+pk_qbe_soi_2	soi_enter	chatter	calm	probe	pk_qbe_soi	2	both	any	any	any	any	any	qbe	happy		[beeps excitedly]
+pk_qbe_pl_1	part_lost	warning	tense	probe	pk_qbe_pl	1	both	any	any	any	any	any	qbe	scared		[beeps in alarm]
+pk_qbe_pl_2	part_lost	warning	tense	mc	pk_qbe_pl	2	m	any	any	any	any	any	qbe		Tranquilo, QBE. Esa pieza costaba más que tú.	Easy, QBE. That part cost more than you.
+pk_qbe_pl_3	part_lost	warning	tense	probe	pk_qbe_pl	3	both	any	any	any	any	any	qbe	offended		[beeps indignantly]
+pk_qbe_sig_back_1	signal_back	chatter	calm	probe	pk_qbe_sig_back	1	both	any	any	any	any	any	qbe	happy		[beeps very eagerly]
+pk_qbe_sig_back_2	signal_back	chatter	calm	mc	pk_qbe_sig_back	2	m	any	any	any	any	any	qbe		¡Ahí estás, cubito! Creíamos que te habíamos perdido.	There you are, little cube! We thought we'd lost you.
+pk_qbe_td_1	touchdown	chatter	none	probe	pk_qbe_td	1	both	any	any	any	any	any	qbe	happy		[beeps bouncily]
+pk_qbe_td_2	touchdown	chatter	none	mc	pk_qbe_td	2	m	any	any	any	any	any	qbe		¿Un aterrizaje? Eso no estaba en el plan, QBE.	A landing? That wasn't in the plan, QBE.
+pk_qbe_stg_1	staging	chatter	none	probe	pk_qbe_stg	1	both	any	any	any	any	separation	qbe	happy		[beeps a farewell]
+pk_qbe_stg_2	staging	chatter	none	mc	pk_qbe_stg	2	m	any	any	any	any	separation	qbe		Ahora estás solo, cubito. Como siempre.	You're on your own now, little cube. As always.
+pk_qbe_thf_1	throttle_full	chatter	none	probe	pk_qbe_thf	1	both	any	any	any	any	any	qbe	happy		[beeps very bravely]
+pk_qbe_thf_2	throttle_full	chatter	none	mc	pk_qbe_thf	2	m	any	any	any	any	any	qbe		Agárrate, cubito. Pesas casi nada.	Hold on, little cube. You weigh almost nothing.
+pk_qbe_pn_1	plan_node	chatter	none	mc	pk_qbe_pn	1	m	any	any	any	any	any	qbe		QBE, tenemos un plan de maniobra. Sin girar. Ya veremos.	QBE, we have a burn plan. Without turning. We'll see.
+pk_qbe_pn_2	plan_node	chatter	none	probe	pk_qbe_pn	2	both	any	any	any	any	any	qbe	curious		[beeps doubtfully]
+pk_qbe_data_1	probe_data	chatter	calm	probe	pk_qbe_data	1	both	any	any	any	any	any	qbe	happy		[beeps a tiny stream]
+pk_qbe_data_2	probe_data	chatter	calm	mc	pk_qbe_data	2	m	any	any	any	any	any	qbe		Recibido, QBE. Pocos datos, mucho entusiasmo.	Copy, QBE. Little data, lots of enthusiasm.
+pk_qbe_dock_1	docked	chatter	none	probe	pk_qbe_dock	1	both	any	any	any	any	any	qbe	curious		[beeps at the port]
+pk_qbe_dock_2	docked	chatter	none	mc	pk_qbe_dock	2	m	any	any	any	any	any	qbe		¿Te han recogido, QBE? Así que el regreso sí era una opción.	Someone picked you up, QBE? So return was an option after all.
+pk_qbe_burn_1	burn_soon	warning	tense	mc	pk_qbe_burn	1	m	any	any	any	any	any	qbe		QBE, encendido pronto. ¿Te queda batería?	QBE, burn soon. Any battery left?
+pk_qbe_burn_2	burn_soon	warning	tense	probe	pk_qbe_burn	2	both	any	any	any	any	any	qbe	sleepy		[beeps a weak yes]
+pk_qbe_say_again_1	probe_say_again	chatter	calm	mc	pk_qbe_say_again	1	m	any	any	any	any	any	qbe		¿Puedes repetir, cubito? Hablas muy bajito.	Can you repeat, little cube? You talk very quietly.
+pk_qbe_say_again_2	probe_say_again	chatter	calm	probe	pk_qbe_say_again	2	both	any	any	any	any	any	qbe	offended		[beeps a bit louder]
+pk_qbe_chute_1	chute_full	chatter	none	probe	pk_qbe_chute	1	both	any	any	any	any	any	qbe	happy		[beeps gently]
+pk_qbe_chute_2	chute_full	chatter	none	mc	pk_qbe_chute	2	m	any	any	any	any	any	qbe		Un paracaídas entero para ti solo, cubito.	A whole parachute just for you, little cube.
+pk_mk2drone_chat_01_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_01	1	m	goofy	any	any	any	any	mk2drone		Hola, dron. ¿Todo en orden?	Hi, drone. All good?
+pk_mk2drone_chat_01_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_01	2	both	goofy	any	any	any	any	mk2drone	proud		[beeps calmly]
+pk_mk2drone_chat_01_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_01	3	m	goofy	any	any	any	any	mk2drone		Bien. Muy bien. Sin gritos. Me gusta.	Good. Very good. No screaming. I like it.
+pk_mk2drone_chat_02_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_02	1	m	goofy	any	any	any	any	mk2drone		Los pilotos de pruebas te mandan saludos.	The test pilots say hi.
+pk_mk2drone_chat_02_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_02	2	both	goofy	any	any	any	any	mk2drone	bored		[beeps flatly]
+pk_mk2drone_chat_02_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_02	3	m	goofy	any	any	any	any	mk2drone		Bueno, los que quedan.	Well, the ones who are left.
+pk_mk2drone_chat_03_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_03	1	m	goofy	any	any	any	any	mk2drone		Dron, ¿alguna vez has pensado en tener sentimientos?	Drone, have you ever thought about having feelings?
+pk_mk2drone_chat_03_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_03	2	both	goofy	any	any	any	any	mk2drone	curious		[beeps thoughtfully]
+pk_mk2drone_chat_03_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_03	3	m	goofy	any	any	any	any	mk2drone		Mejor no. Olvida la pregunta.	Better not. Forget the question.
+pk_mk2drone_chat_04_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_04	1	m	goofy	any	any	any	any	mk2drone		C7 dice que no eres consciente. No lo eres, ¿verdad?	C7 says you're not sentient. You're not, right?
+pk_mk2drone_chat_04_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_04	2	both	goofy	any	any	any	any	mk2drone	curious		[beeps after a pause]
+pk_mk2drone_chat_04_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_04	3	m	goofy	any	any	any	any	mk2drone		Esa pausa no me ha gustado.	I didn't like that pause.
+pk_mk2drone_chat_05_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_05	1	m	goofy	any	any	any	any	mk2drone		Algunos ingenieros duermen en un búnker por tu culpa.	Some engineers sleep in a bunker because of you.
+pk_mk2drone_chat_05_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_05	2	both	goofy	any	any	any	any	mk2drone	happy		[beeps innocently]
+pk_mk2drone_chat_06_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_06	1	m	goofy	any	any	any	any	mk2drone		Por favor, no tomes el control del centro espacial.	Please don't take over the space center.
+pk_mk2drone_chat_06_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_06	2	both	goofy	any	any	any	any	mk2drone	happy		[beeps reassuringly]
+pk_mk2drone_chat_06_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_06	3	m	goofy	any	any	any	any	mk2drone		Eso es justo lo que diría una máquina malvada.	That's exactly what an evil machine would say.
+pk_mk2drone_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	1	m	goofy	any	any	any	any	mk2drone		Dron, una pregunta sincera.	Drone, an honest question.
+pk_mk2drone_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mk2drone_chat_long_1	2	both	goofy	any	any	any	any	mk2drone	curious		[beeps attentively]
+pk_mk2drone_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	3	m	goofy	any	any	any	any	mk2drone		¿Todavía nos aprecias?	Do you still like us?
+pk_mk2drone_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mk2drone_chat_long_1	4	both	goofy	any	any	any	any	mk2drone	curious		[beeps after a pause]
+pk_mk2drone_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mk2drone_chat_long_1	5	m	goofy	any	any	any	any	mk2drone		Vale. Voy a desenchufar algo, por si acaso.	Okay. I'm going to unplug something, just in case.
+pk_mk2drone_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mk2drone_sleepy_01	1	m	goofy	any	any	any	any	mk2drone		Dron, ¿entras en modo de ahorro?	Drone, going into power saving mode?
+pk_mk2drone_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mk2drone_sleepy_01	2	both	goofy	any	any	any	any	mk2drone	sleepy		[beeps in standby]
+pk_mk2drone_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mk2drone_sleepy_02	1	m	goofy	any	any	any	any	mk2drone		Duerme, dron. Y no sueñes con dominar el mundo.	Sleep, drone. And no dreaming about world domination.
+pk_mk2drone_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mk2drone_sleepy_02	2	both	goofy	any	any	any	any	mk2drone	sleepy		[beeps sleepily]
+pk_mk2drone_hail_01_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_01	1	both	goofy	any	any	any	any	mk2drone	curious		[beeps out of nowhere]
+pk_mk2drone_hail_01_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_01	2	m	goofy	any	any	any	any	mk2drone		Sí, dron, estamos aquí. Todos. Por ahora.	Yes, drone, we're here. All of us. For now.
+pk_mk2drone_hail_02_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_02	1	both	goofy	any	any	any	any	mk2drone	proud		[beeps a long calculation]
+pk_mk2drone_hail_02_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_02	2	m	goofy	any	any	any	any	mk2drone		No hacía falta calcular la ruta a nuestras casas.	You didn't need to calculate the route to our houses.
+pk_mk2drone_hail_02_3	probe_hail	chatter	calm	probe	pk_mk2drone_hail_02	3	both	goofy	any	any	any	any	mk2drone	happy		[beeps innocently]
+pk_mk2drone_hail_03_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_03	1	both	goofy	any	any	any	any	mk2drone	happy		[beeps politely]
+pk_mk2drone_hail_03_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_03	2	m	goofy	any	any	any	any	mk2drone		Hola, dron. Qué educado. Qué sospechoso.	Hi, drone. How polite. How suspicious.
+pk_mk2drone_hail_04_1	probe_hail	chatter	calm	probe	pk_mk2drone_hail_04	1	both	goofy	any	any	any	any	mk2drone	bored		[beeps flatly]
+pk_mk2drone_hail_04_2	probe_hail	chatter	calm	mc	pk_mk2drone_hail_04	2	m	goofy	any	any	any	any	mk2drone		¿Aburrido? Antes aquí había un piloto que gritaba mucho.	Bored? There used to be a pilot here who screamed a lot.
+pk_mk2drone_stress_spin_1	probe_stress	chatter	tense	probe	pk_mk2drone_stress_spin	1	both	any	spin	any	any	any	mk2drone	proud		[beeps calmly]
+pk_mk2drone_stress_spin_2	probe_stress	chatter	tense	mc	pk_mk2drone_stress_spin	2	m	any	spin	any	any	any	mk2drone		Estás girando, dron, y ni te inmutas. Da un poco de miedo.	You're spinning, drone, and you don't even flinch. It's a bit scary.
+pk_mk2drone_stress_heat_1	probe_stress	chatter	tense	mc	pk_mk2drone_stress_heat	1	m	any	heat	any	any	any	mk2drone		Dron, temperatura alta. Un piloto ya estaría gritando.	Drone, high temperature. A pilot would be screaming by now.
+pk_mk2drone_stress_heat_2	probe_stress	chatter	tense	probe	pk_mk2drone_stress_heat	2	both	any	heat	any	any	any	mk2drone	bored		[beeps calmly]
+pk_mk2drone_ms_day1_1	probe_milestone	chatter	calm	mc	pk_mk2drone_ms_day1	1	m	any	any	any	any	day1	mk2drone		Un día de vuelo, dron. Ningún piloto se ha quejado.	One day of flight, drone. No pilot has complained.
+pk_mk2drone_ms_day1_2	probe_milestone	chatter	calm	probe	pk_mk2drone_ms_day1	2	both	any	any	any	any	day1	mk2drone	proud		[beeps proudly]
+pk_mk2drone_ms_landing_1	probe_milestone	chatter	calm	probe	pk_mk2drone_ms_landing	1	both	any	any	any	any	landing	mk2drone	proud		[beeps proudly]
+pk_mk2drone_ms_landing_2	probe_milestone	chatter	calm	mc	pk_mk2drone_ms_landing	2	m	any	any	any	any	landing	mk2drone		Primer aterrizaje aquí. Sin sudor y sin gritos.	First landing here. No sweat and no screaming.
+pk_mk2drone_sci_a_1	science	chatter	calm	mc	pk_mk2drone_sci_a	1	m	any	any	any	any	any	mk2drone		Datos del dron. Perfectos. Demasiado perfectos.	Data from the drone. Perfect. Too perfect.
+pk_mk2drone_sci_a_2	science	chatter	calm	probe	pk_mk2drone_sci_a	2	both	any	any	any	any	any	mk2drone	proud		[beeps smugly]
+pk_mk2drone_sci_b_1	science	chatter	calm	probe	pk_mk2drone_sci_b	1	both	any	any	any	any	any	mk2drone	curious		[beeps thoughtfully]
+pk_mk2drone_sci_b_2	science	chatter	calm	mc	pk_mk2drone_sci_b	2	m	any	any	any	any	any	mk2drone		Sí, dron, ya los tenemos. No hace falta analizarnos a nosotros.	Yes, drone, we've got it. No need to analyze us too.
+pk_mk2drone_pow_low_1	power_low	warning	tense	probe	pk_mk2drone_pow_low	1	both	any	any	any	any	any	mk2drone	sleepy		[beeps faintly]
+pk_mk2drone_pow_low_2	power_low	warning	tense	mc	pk_mk2drone_pow_low	2	m	any	any	any	any	any	mk2drone		Batería baja, dron. Por fin algo que no controlas.	Low battery, drone. Finally something you don't control.
+pk_mk2drone_pow_ok_1	power_ok	chatter	calm	probe	pk_mk2drone_pow_ok	1	both	any	any	any	any	any	mk2drone	happy		[beeps awake]
+pk_mk2drone_pow_ok_2	power_ok	chatter	calm	mc	pk_mk2drone_pow_ok	2	m	any	any	any	any	any	mk2drone		Has vuelto, dron. Qué bien. Supongo.	You're back, drone. Great. I guess.
+pk_mk2drone_soi_1	soi_enter	chatter	calm	mc	pk_mk2drone_soi	1	m	any	any	any	any	any	mk2drone		Dron, esto es {body}. Por favor, no lo conquistes.	Drone, this is {body}. Please don't conquer it.
+pk_mk2drone_soi_2	soi_enter	chatter	calm	probe	pk_mk2drone_soi	2	both	any	any	any	any	any	mk2drone	happy		[beeps innocently]
+pk_mk2drone_pl_1	part_lost	warning	tense	probe	pk_mk2drone_pl	1	both	any	any	any	any	any	mk2drone	scared		[beeps in alarm]
+pk_mk2drone_pl_2	part_lost	warning	tense	mc	pk_mk2drone_pl	2	m	any	any	any	any	any	mk2drone		Dron, hemos perdido una pieza. Al menos tú no gritas.	Drone, we lost a part. At least you don't scream.
+pk_mk2drone_pl_3	part_lost	warning	tense	probe	pk_mk2drone_pl	3	both	any	any	any	any	any	mk2drone	bored		[beeps calmly]
+pk_mk2drone_sig_back_1	signal_back	chatter	calm	probe	pk_mk2drone_sig_back	1	both	any	any	any	any	any	mk2drone	happy		[beeps politely]
+pk_mk2drone_sig_back_2	signal_back	chatter	calm	mc	pk_mk2drone_sig_back	2	m	any	any	any	any	any	mk2drone		Señal recuperada. ¿Qué has hecho mientras no mirábamos?	Signal back. What did you do while we weren't looking?
+pk_mk2drone_td_1	touchdown	chatter	none	probe	pk_mk2drone_td	1	both	any	any	any	any	any	mk2drone	proud		[beeps calmly]
+pk_mk2drone_td_2	touchdown	chatter	none	mc	pk_mk2drone_td	2	m	any	any	any	any	any	mk2drone		Aterrizaje perfecto. Los pilotos de pruebas están celosos.	Perfect landing. The test pilots are jealous.
+pk_mk2drone_splash_1	splashdown	chatter	none	probe	pk_mk2drone_splash	1	both	any	any	any	any	any	mk2drone	curious		[beeps at the water]
+pk_mk2drone_splash_2	splashdown	chatter	none	mc	pk_mk2drone_splash	2	m	any	any	any	any	any	mk2drone		Un avión en el agua, dron. Eso no lo calculaste.	A plane in the water, drone. You didn't calculate that.
+pk_mk2drone_stg_1	staging	chatter	none	probe	pk_mk2drone_stg	1	both	any	any	any	any	separation	mk2drone	bored		[beeps a cold farewell]
+pk_mk2drone_stg_2	staging	chatter	none	mc	pk_mk2drone_stg	2	m	any	any	any	any	separation	mk2drone		Ni una lágrima por esa pieza, ¿eh, dron?	Not one tear for that part, huh, drone?
+pk_mk2drone_thf_1	throttle_full	chatter	none	probe	pk_mk2drone_thf	1	both	any	any	any	any	any	mk2drone	happy		[beeps eagerly]
+pk_mk2drone_thf_2	throttle_full	chatter	none	mc	pk_mk2drone_thf	2	m	any	any	any	any	any	mk2drone		Potencia máxima. Y nadie grita. Qué paz.	Full power. And nobody's screaming. So peaceful.
+pk_mk2drone_thc_1	throttle_cut	chatter	none	probe	pk_mk2drone_thc	1	both	any	any	any	any	any	mk2drone	bored		[beeps flatly]
+pk_mk2drone_thc_2	throttle_cut	chatter	none	mc	pk_mk2drone_thc	2	m	any	any	any	any	any	mk2drone		Motor apagado. Ni un suspiro. Los pilotos suspiraban.	Engine off. Not a sigh. The pilots used to sigh.
+pk_mk2drone_pn_1	plan_node	chatter	none	mc	pk_mk2drone_pn	1	m	any	any	any	any	any	mk2drone		Dron, tenemos un plan de maniobra.	Drone, we have a burn plan.
+pk_mk2drone_pn_2	plan_node	chatter	none	probe	pk_mk2drone_pn	2	both	any	any	any	any	any	mk2drone	proud		[beeps a better plan]
+pk_mk2drone_pn_3	plan_node	chatter	none	mc	pk_mk2drone_pn	3	m	any	any	any	any	any	mk2drone		No, dron. Usamos nuestro plan.	No, drone. We use our plan.
+pk_mk2drone_data_1	probe_data	chatter	calm	probe	pk_mk2drone_data	1	both	any	any	any	any	any	mk2drone	proud		[beeps a fast stream]
+pk_mk2drone_data_2	probe_data	chatter	calm	mc	pk_mk2drone_data	2	m	any	any	any	any	any	mk2drone		Recibido, dron. Demasiado rápido para leerlo.	Copy, drone. Too fast to read.
+pk_mk2drone_dock_1	docked	chatter	none	probe	pk_mk2drone_dock	1	both	any	any	any	any	any	mk2drone	curious		[beeps at the port]
+pk_mk2drone_dock_2	docked	chatter	none	mc	pk_mk2drone_dock	2	m	any	any	any	any	any	mk2drone		Acoplado. Por favor, no te copies a la estación.	Docked. Please don't copy yourself into the station.
+pk_mk2drone_burn_1	burn_soon	warning	tense	mc	pk_mk2drone_burn	1	m	any	any	any	any	any	mk2drone		Dron, encendido pronto.	Drone, burn soon.
+pk_mk2drone_burn_2	burn_soon	warning	tense	probe	pk_mk2drone_burn	2	both	any	any	any	any	any	mk2drone	proud		[beeps already ready]
+pk_mk2drone_burn_3	burn_soon	warning	tense	mc	pk_mk2drone_burn	3	m	any	any	any	any	any	mk2drone		Claro. Tú siempre estás listo.	Of course. You're always ready.
+pk_mk2drone_say_again_1	probe_say_again	chatter	calm	mc	pk_mk2drone_say_again	1	m	any	any	any	any	any	mk2drone		Dron, ¿puedes repetir? Y sin código binario.	Drone, could you repeat? And no binary.
+pk_mk2drone_say_again_2	probe_say_again	chatter	calm	probe	pk_mk2drone_say_again	2	both	any	any	any	any	any	mk2drone	offended		[beeps more slowly]
+pk_mk2drone_chute_1	chute_full	chatter	none	probe	pk_mk2drone_chute	1	both	any	any	any	any	any	mk2drone	happy		[beeps calmly]
+pk_mk2drone_chute_2	chute_full	chatter	none	mc	pk_mk2drone_chute	2	m	any	any	any	any	any	mk2drone		Paracaídas abierto. Esta vez nadie se ha desmayado.	Chute open. This time nobody fainted.
+pk_mpo_chat_01_1	probe_chat	chatter	calm	mc	pk_mpo_chat_01	1	m	goofy	any	any	any	any	mpo		Hola, MPO. ¿Qué observas hoy?	Hi, MPO. What are you observing today?
+pk_mpo_chat_01_2	probe_chat	chatter	calm	probe	pk_mpo_chat_01	2	both	goofy	any	any	any	any	mpo	curious		[beeps studiously]
+pk_mpo_chat_01_3	probe_chat	chatter	calm	mc	pk_mpo_chat_01	3	m	goofy	any	any	any	any	mpo		¿Todo? Vale.	Everything? Okay.
+pk_mpo_chat_02_1	probe_chat	chatter	calm	mc	pk_mpo_chat_02	1	m	goofy	any	any	any	any	mpo		Tu antena se oye desde el otro lado del sistema.	Your antenna can be heard from the other side of the system.
+pk_mpo_chat_02_2	probe_chat	chatter	calm	probe	pk_mpo_chat_02	2	both	goofy	any	any	any	any	mpo	proud		[beeps proudly]
+pk_mpo_chat_03_1	probe_chat	chatter	calm	mc	pk_mpo_chat_03	1	m	goofy	any	any	any	any	mpo		MPO, ¿todavía piensas en Moho?	MPO, still thinking about Moho?
+pk_mpo_chat_03_2	probe_chat	chatter	calm	probe	pk_mpo_chat_03	2	both	goofy	any	any	any	any	mpo	happy		[beeps dreamily]
+pk_mpo_chat_03_3	probe_chat	chatter	calm	mc	pk_mpo_chat_03	3	m	goofy	any	any	any	any	mpo		Siempre Moho.	Always Moho.
+pk_mpo_chat_04_1	probe_chat	chatter	calm	mc	pk_mpo_chat_04	1	m	goofy	any	any	any	any	mpo		¿No tienes demasiado frío aquí, observador?	Isn't it too cold for you here, observer?
+pk_mpo_chat_04_2	probe_chat	chatter	calm	probe	pk_mpo_chat_04	2	both	goofy	any	any	any	any	mpo	bored		[beeps a cold complaint]
+pk_mpo_chat_05_1	probe_chat	chatter	calm	mc	pk_mpo_chat_05	1	m	goofy	any	any	any	any	mpo		Te construyeron para el calor. Esto son vacaciones para ti.	They built you for the heat. This is a vacation for you.
+pk_mpo_chat_05_2	probe_chat	chatter	calm	probe	pk_mpo_chat_05	2	both	goofy	any	any	any	any	mpo	bored		[beeps unimpressed]
+pk_mpo_chat_06_1	probe_chat	chatter	calm	mc	pk_mpo_chat_06	1	m	goofy	any	any	any	any	mpo		MPO, ¿echas de menos al MTM?	MPO, do you miss the MTM?
+pk_mpo_chat_06_2	probe_chat	chatter	calm	probe	pk_mpo_chat_06	2	both	goofy	any	any	any	any	mpo	bored		[beeps wistfully]
+pk_mpo_chat_06_3	probe_chat	chatter	calm	mc	pk_mpo_chat_06	3	m	goofy	any	any	any	any	mpo		Te llevó muy lejos. Mándale una postal.	It carried you a long way. Send it a postcard.
+pk_mpo_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	1	m	goofy	any	any	any	any	mpo		MPO, cuéntanos lo que has aprendido.	MPO, tell us what you've learned.
+pk_mpo_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mpo_chat_long_1	2	both	goofy	any	any	any	any	mpo	proud		[beeps at length]
+pk_mpo_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	3	m	goofy	any	any	any	any	mpo		¿Y en palabras sencillas?	And in simple words?
+pk_mpo_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mpo_chat_long_1	4	both	goofy	any	any	any	any	mpo	offended		[beeps condescendingly]
+pk_mpo_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mpo_chat_long_1	5	m	goofy	any	any	any	any	mpo		Vale, vale. Ya leeremos el informe.	Okay, okay. We'll read the report.
+pk_mpo_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mpo_sleepy_01	1	m	goofy	any	any	any	any	mpo		MPO, ¿poca energía? Con todo ese sol ahí fuera.	MPO, low power? With all that sun out there.
+pk_mpo_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mpo_sleepy_01	2	both	goofy	any	any	any	any	mpo	sleepy		[beeps drowsily]
+pk_mpo_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mpo_sleepy_02	1	m	goofy	any	any	any	any	mpo		Descansa, observador. Los datos pueden esperar.	Rest, observer. The data can wait.
+pk_mpo_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mpo_sleepy_02	2	both	goofy	any	any	any	any	mpo	sleepy		[beeps reluctantly]
+pk_mpo_hail_01_1	probe_hail	chatter	calm	probe	pk_mpo_hail_01	1	both	goofy	any	any	any	any	mpo	curious		[beeps loud and clear]
+pk_mpo_hail_01_2	probe_hail	chatter	calm	mc	pk_mpo_hail_01	2	m	goofy	any	any	any	any	mpo		Te oímos, MPO. Te oye todo el sistema.	We hear you, MPO. The whole system hears you.
+pk_mpo_hail_02_1	probe_hail	chatter	calm	probe	pk_mpo_hail_02	1	both	goofy	any	any	any	any	mpo	proud		[beeps a new finding]
+pk_mpo_hail_02_2	probe_hail	chatter	calm	mc	pk_mpo_hail_02	2	m	goofy	any	any	any	any	mpo		¿Otro descubrimiento? Apúntalo, lo miramos luego.	Another discovery? Write it down, we'll look later.
+pk_mpo_hail_03_1	probe_hail	chatter	calm	probe	pk_mpo_hail_03	1	both	goofy	any	any	any	any	mpo	curious		[beeps a question]
+pk_mpo_hail_03_2	probe_hail	chatter	calm	mc	pk_mpo_hail_03	2	m	goofy	any	any	any	any	mpo		No, MPO, todavía no vamos a Moho.	No, MPO, we're not going to Moho yet.
+pk_mpo_hail_03_3	probe_hail	chatter	calm	probe	pk_mpo_hail_03	3	both	goofy	any	any	any	any	mpo	offended		[beeps impatiently]
+pk_mpo_hail_04_1	probe_hail	chatter	calm	probe	pk_mpo_hail_04	1	both	goofy	any	any	any	any	mpo	happy		[beeps warmly]
+pk_mpo_hail_04_2	probe_hail	chatter	calm	mc	pk_mpo_hail_04	2	m	goofy	any	any	any	any	mpo		Hola, MPO. Hoy suenas contento.	Hi, MPO. You sound happy today.
+pk_mpo_stress_heat_1	probe_stress	chatter	tense	mc	pk_mpo_stress_heat	1	m	any	heat	any	any	any	mpo		MPO, sube la temperatura.	MPO, temperature rising.
+pk_mpo_stress_heat_2	probe_stress	chatter	tense	probe	pk_mpo_stress_heat	2	both	any	heat	any	any	any	mpo	happy		[beeps contentedly]
+pk_mpo_stress_heat_3	probe_stress	chatter	tense	mc	pk_mpo_stress_heat	3	m	any	heat	any	any	any	mpo		Claro. A ti esto te encanta.	Of course. You love this.
+pk_mpo_stress_spin_1	probe_stress	chatter	tense	probe	pk_mpo_stress_spin	1	both	any	spin	any	any	any	mpo	scared		[beeps dizzily]
+pk_mpo_stress_spin_2	probe_stress	chatter	tense	mc	pk_mpo_stress_spin	2	m	any	spin	any	any	any	mpo		MPO, estás girando. Las observaciones van a salir borrosas.	MPO, you're spinning. The observations will come out blurry.
+pk_mpo_ms_day10_1	probe_milestone	chatter	calm	mc	pk_mpo_ms_day10	1	m	any	any	any	any	day10	mpo		Diez días observando, MPO. Y no te cansas.	Ten days of observing, MPO. And you're not tired.
+pk_mpo_ms_day10_2	probe_milestone	chatter	calm	probe	pk_mpo_ms_day10	2	both	any	any	any	any	day10	mpo	proud		[beeps tirelessly]
+pk_mpo_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_mpo_ms_orbit	1	both	any	any	any	any	orbit	mpo	proud		[beeps very proudly]
+pk_mpo_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_mpo_ms_orbit	2	m	any	any	any	any	orbit	mpo		En órbita, observador. Que empiece la ciencia.	In orbit, observer. Let the science begin.
+pk_mpo_sci_a_1	science	chatter	calm	mc	pk_mpo_sci_a	1	m	any	any	any	any	any	mpo		Datos del MPO. Con notas a pie de página.	Data from the MPO. With footnotes.
+pk_mpo_sci_a_2	science	chatter	calm	probe	pk_mpo_sci_a	2	both	any	any	any	any	any	mpo	proud		[beeps proudly]
+pk_mpo_sci_b_1	science	chatter	calm	probe	pk_mpo_sci_b	1	both	any	any	any	any	any	mpo	proud		[beeps triumphantly]
+pk_mpo_sci_b_2	science	chatter	calm	mc	pk_mpo_sci_b	2	m	any	any	any	any	any	mpo		Sí, MPO, lo guardamos con el resto de tu colección.	Yes, MPO, we'll keep it with the rest of your collection.
+pk_mpo_sci_c_1	science	chatter	calm	mc	pk_mpo_sci_c	1	m	any	any	any	any	any	mpo		MPO, ¿cuántos experimentos llevas ahí dentro?	MPO, how many experiments are you carrying in there?
+pk_mpo_sci_c_2	science	chatter	calm	probe	pk_mpo_sci_c	2	both	any	any	any	any	any	mpo	proud		[beeps a long list]
+pk_mpo_pow_low_1	power_low	warning	tense	probe	pk_mpo_pow_low	1	both	any	any	any	any	any	mpo	sleepy		[beeps faintly]
+pk_mpo_pow_low_2	power_low	warning	tense	mc	pk_mpo_pow_low	2	m	any	any	any	any	any	mpo		Energía baja, MPO. Hasta un observador tiene que cerrar los ojos.	Low power, MPO. Even an observer has to close its eyes.
+pk_mpo_pow_ok_1	power_ok	chatter	calm	probe	pk_mpo_pow_ok	1	both	any	any	any	any	any	mpo	happy		[beeps eagerly]
+pk_mpo_pow_ok_2	power_ok	chatter	calm	mc	pk_mpo_pow_ok	2	m	any	any	any	any	any	mpo		¡Bienvenido, MPO! Sigue observando.	Welcome back, MPO! Keep observing.
+pk_mpo_soi_1	soi_enter	chatter	calm	mc	pk_mpo_soi	1	m	any	any	any	any	any	mpo		MPO, esto es {body}. ¿Hace suficiente calor?	MPO, this is {body}. Hot enough for you?
+pk_mpo_soi_2	soi_enter	chatter	calm	probe	pk_mpo_soi	2	both	any	any	any	any	any	mpo	curious		[beeps thoughtfully]
+pk_mpo_pl_1	part_lost	warning	tense	probe	pk_mpo_pl	1	both	any	any	any	any	any	mpo	scared		[beeps in alarm]
+pk_mpo_pl_2	part_lost	warning	tense	mc	pk_mpo_pl	2	m	any	any	any	any	any	mpo		Tranquilo, MPO. Tus instrumentos siguen ahí.	Easy, MPO. Your instruments are still there.
+pk_mpo_pl_3	part_lost	warning	tense	probe	pk_mpo_pl	3	both	any	any	any	any	any	mpo	happy		[beeps relieved]
+pk_mpo_sig_back_1	signal_back	chatter	calm	probe	pk_mpo_sig_back	1	both	any	any	any	any	any	mpo	proud		[beeps loud and clear]
+pk_mpo_sig_back_2	signal_back	chatter	calm	mc	pk_mpo_sig_back	2	m	any	any	any	any	any	mpo		Señal de vuelta. Con esa antena nunca te perdemos mucho tiempo.	Signal back. With that antenna we never lose you for long.
+pk_mpo_td_1	touchdown	chatter	none	probe	pk_mpo_td	1	both	any	any	any	any	any	mpo	curious		[beeps in surprise]
+pk_mpo_td_2	touchdown	chatter	none	mc	pk_mpo_td	2	m	any	any	any	any	any	mpo		¿Aterrizado? Eras un orbitador, MPO.	Landed? You were an orbiter, MPO.
+pk_mpo_splash_1	splashdown	chatter	none	probe	pk_mpo_splash	1	both	any	any	any	any	any	mpo	offended		[beeps indignantly]
+pk_mpo_splash_2	splashdown	chatter	none	mc	pk_mpo_splash	2	m	any	any	any	any	any	mpo		Agua. Lo contrario de Moho. Lo siento, MPO.	Water. The opposite of Moho. Sorry, MPO.
+pk_mpo_stg_1	staging	chatter	none	probe	pk_mpo_stg	1	both	any	any	any	any	separation	mpo	happy		[beeps a farewell]
+pk_mpo_stg_2	staging	chatter	none	mc	pk_mpo_stg	2	m	any	any	any	any	separation	mpo		Una pieza menos, MPO. Más ligero para la ciencia.	One part less, MPO. Lighter for science.
+pk_mpo_thf_1	throttle_full	chatter	none	probe	pk_mpo_thf	1	both	any	any	any	any	any	mpo	happy		[beeps eagerly]
+pk_mpo_thf_2	throttle_full	chatter	none	mc	pk_mpo_thf	2	m	any	any	any	any	any	mpo		Potencia máxima, MPO. Rumbo al calor.	Full power, MPO. Heading for the heat.
+pk_mpo_thc_1	throttle_cut	chatter	none	probe	pk_mpo_thc	1	both	any	any	any	any	any	mpo	curious		[beeps attentively]
+pk_mpo_thc_2	throttle_cut	chatter	none	mc	pk_mpo_thc	2	m	any	any	any	any	any	mpo		Motor apagado. Ya puedes volver a observar.	Engine off. You can go back to observing.
+pk_mpo_pn_1	plan_node	chatter	none	mc	pk_mpo_pn	1	m	any	any	any	any	any	mpo		MPO, tenemos un plan de maniobra.	MPO, we have a burn plan.
+pk_mpo_pn_2	plan_node	chatter	none	probe	pk_mpo_pn	2	both	any	any	any	any	any	mpo	curious		[beeps hopefully]
+pk_mpo_pn_3	plan_node	chatter	none	mc	pk_mpo_pn	3	m	any	any	any	any	any	mpo		No, no es hacia Moho.	No, it's not to Moho.
+pk_mpo_data_1	probe_data	chatter	calm	probe	pk_mpo_data	1	both	any	any	any	any	any	mpo	proud		[beeps a huge stream]
+pk_mpo_data_2	probe_data	chatter	calm	mc	pk_mpo_data	2	m	any	any	any	any	any	mpo		Recibido, MPO. Vamos a necesitar otro disco duro.	Copy, MPO. We're going to need another hard drive.
+pk_mpo_dock_1	docked	chatter	none	probe	pk_mpo_dock	1	both	any	any	any	any	any	mpo	curious		[beeps at the port]
+pk_mpo_dock_2	docked	chatter	none	mc	pk_mpo_dock	2	m	any	any	any	any	any	mpo		Acoplado. ¿Vienes a enseñarle tus datos a alguien?	Docked. Here to show someone your data?
+pk_mpo_burn_1	burn_soon	warning	tense	mc	pk_mpo_burn	1	m	any	any	any	any	any	mpo		MPO, encendido pronto. Guarda los instrumentos.	MPO, burn soon. Stow the instruments.
+pk_mpo_burn_2	burn_soon	warning	tense	probe	pk_mpo_burn	2	both	any	any	any	any	any	mpo	offended		[beeps reluctantly]
+pk_mpo_say_again_1	probe_say_again	chatter	calm	mc	pk_mpo_say_again	1	m	any	any	any	any	any	mpo		¿MPO? Con tu antena, el problema debe de ser nuestro.	MPO? With your antenna, the problem must be ours.
+pk_mpo_say_again_2	probe_say_again	chatter	calm	probe	pk_mpo_say_again	2	both	any	any	any	any	any	mpo	proud		[beeps patiently]
+pk_mpo_chute_1	chute_full	chatter	none	probe	pk_mpo_chute	1	both	any	any	any	any	any	mpo	curious		[beeps in surprise]
+pk_mpo_chute_2	chute_full	chatter	none	mc	pk_mpo_chute	2	m	any	any	any	any	any	mpo		Sí, MPO, llevas paracaídas. Nosotros también nos sorprendimos.	Yes, MPO, you have a parachute. We were surprised too.
+pk_mtm_chat_01_1	probe_chat	chatter	calm	mc	pk_mtm_chat_01	1	m	goofy	any	any	any	any	mtm		Hola, MTM. ¿Qué tal la carga?	Hi, MTM. How's the cargo?
+pk_mtm_chat_01_2	probe_chat	chatter	calm	probe	pk_mtm_chat_01	2	both	goofy	any	any	any	any	mtm	happy		[beeps patiently]
+pk_mtm_chat_01_3	probe_chat	chatter	calm	mc	pk_mtm_chat_01	3	m	goofy	any	any	any	any	mtm		Siempre trabajando.	Always working.
+pk_mtm_chat_02_1	probe_chat	chatter	calm	mc	pk_mtm_chat_02	1	m	goofy	any	any	any	any	mtm		Nadie le hace fotos al camión, MTM. Pero sin ti no hay misión.	Nobody takes pictures of the truck, MTM. But without you there's no mission.
+pk_mtm_chat_02_2	probe_chat	chatter	calm	probe	pk_mtm_chat_02	2	both	goofy	any	any	any	any	mtm	happy		[beeps gratefully]
+pk_mtm_chat_03_1	probe_chat	chatter	calm	mc	pk_mtm_chat_03	1	m	goofy	any	any	any	any	mtm		¿Cuánto xenón te queda, grandullón?	How much xenon do you have left, big guy?
+pk_mtm_chat_03_2	probe_chat	chatter	calm	probe	pk_mtm_chat_03	2	both	goofy	any	any	any	any	mtm	proud		[beeps a big number]
+pk_mtm_chat_04_1	probe_chat	chatter	calm	mc	pk_mtm_chat_04	1	m	goofy	any	any	any	any	mtm		MTM, el MPO se lleva toda la fama.	MTM, the MPO gets all the fame.
+pk_mtm_chat_04_2	probe_chat	chatter	calm	probe	pk_mtm_chat_04	2	both	goofy	any	any	any	any	mtm	offended		[beeps a little jealously]
+pk_mtm_chat_04_3	probe_chat	chatter	calm	mc	pk_mtm_chat_04	3	m	goofy	any	any	any	any	mtm		Ya lo sé. Tú haces el trabajo duro.	I know. You do the hard work.
+pk_mtm_chat_05_1	probe_chat	chatter	calm	mc	pk_mtm_chat_05	1	m	goofy	any	any	any	any	mtm		Cuatro mil de carga eléctrica. Eres una central eléctrica.	Four thousand units of charge. You're a power plant.
+pk_mtm_chat_05_2	probe_chat	chatter	calm	probe	pk_mtm_chat_05	2	both	goofy	any	any	any	any	mtm	proud		[beeps proudly]
+pk_mtm_chat_06_1	probe_chat	chatter	calm	mc	pk_mtm_chat_06	1	m	goofy	any	any	any	any	mtm		MTM, ¿no te cansas de llevar a los demás?	MTM, don't you get tired of carrying everyone else?
+pk_mtm_chat_06_2	probe_chat	chatter	calm	probe	pk_mtm_chat_06	2	both	goofy	any	any	any	any	mtm	happy		[beeps cheerfully]
+pk_mtm_chat_06_3	probe_chat	chatter	calm	mc	pk_mtm_chat_06	3	m	goofy	any	any	any	any	mtm		Ojalá todos fueran como tú.	I wish everyone was like you.
+pk_mtm_chat_long_1_1	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	1	m	goofy	any	any	any	any	mtm		MTM, ¿cuánto falta para llegar?	MTM, how much longer?
+pk_mtm_chat_long_1_2	probe_chat	chatter	calm	probe	pk_mtm_chat_long_1	2	both	goofy	any	any	any	any	mtm	bored		[beeps very slowly]
+pk_mtm_chat_long_1_3	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	3	m	goofy	any	any	any	any	mtm		¿Tanto?	That long?
+pk_mtm_chat_long_1_4	probe_chat	chatter	calm	probe	pk_mtm_chat_long_1	4	both	goofy	any	any	any	any	mtm	happy		[beeps patiently]
+pk_mtm_chat_long_1_5	probe_chat	chatter	calm	mc	pk_mtm_chat_long_1	5	m	goofy	any	any	any	any	mtm		Vale. Es un motor iónico. Lo entiendo.	Okay. It's an ion engine. I get it.
+pk_mtm_sleepy_01_1	probe_sleepy	chatter	calm	mc	pk_mtm_sleepy_01	1	m	goofy	any	any	any	any	mtm		¿Cansado, grandullón? Hasta los camiones paran.	Tired, big guy? Even trucks stop.
+pk_mtm_sleepy_01_2	probe_sleepy	chatter	calm	probe	pk_mtm_sleepy_01	2	both	goofy	any	any	any	any	mtm	sleepy		[beeps drowsily]
+pk_mtm_sleepy_02_1	probe_sleepy	chatter	calm	mc	pk_mtm_sleepy_02	1	m	goofy	any	any	any	any	mtm		MTM, ¿cómo te has quedado sin energía con cuatro mil?	MTM, how did you run out of power with four thousand?
+pk_mtm_sleepy_02_2	probe_sleepy	chatter	calm	probe	pk_mtm_sleepy_02	2	both	goofy	any	any	any	any	mtm	sleepy		[beeps sheepishly]
+pk_mtm_hail_01_1	probe_hail	chatter	calm	probe	pk_mtm_hail_01	1	both	goofy	any	any	any	any	mtm	happy		[beeps steadily]
+pk_mtm_hail_01_2	probe_hail	chatter	calm	mc	pk_mtm_hail_01	2	m	goofy	any	any	any	any	mtm		Hola, MTM. Sigues en marcha, ¿eh?	Hi, MTM. Still going, huh?
+pk_mtm_hail_02_1	probe_hail	chatter	calm	probe	pk_mtm_hail_02	1	both	goofy	any	any	any	any	mtm	curious		[beeps a question]
+pk_mtm_hail_02_2	probe_hail	chatter	calm	mc	pk_mtm_hail_02	2	m	goofy	any	any	any	any	mtm		Sí, MTM, la carga va bien atada.	Yes, MTM, the cargo is tied down well.
+pk_mtm_hail_03_1	probe_hail	chatter	calm	probe	pk_mtm_hail_03	1	both	goofy	any	any	any	any	mtm	bored		[beeps very slowly]
+pk_mtm_hail_03_2	probe_hail	chatter	calm	mc	pk_mtm_hail_03	2	m	goofy	any	any	any	any	mtm		Ya sabemos que el viaje es largo. Lo dijiste ayer.	We know the trip is long. You said so yesterday.
+pk_mtm_hail_04_1	probe_hail	chatter	calm	probe	pk_mtm_hail_04	1	both	goofy	any	any	any	any	mtm	proud		[beeps a delivery report]
+pk_mtm_hail_04_2	probe_hail	chatter	calm	mc	pk_mtm_hail_04	2	m	goofy	any	any	any	any	mtm		Entrega a tiempo. Como siempre, MTM.	Delivered on time. As always, MTM.
+pk_mtm_stress_gforce_1	probe_stress	chatter	tense	mc	pk_mtm_stress_gforce	1	m	any	gforce	any	any	any	mtm		Aguanta, MTM. No te hicieron para correr.	Hang on, MTM. You weren't built for speed.
+pk_mtm_stress_gforce_2	probe_stress	chatter	tense	probe	pk_mtm_stress_gforce	2	both	any	gforce	any	any	any	mtm	proud		[beeps stubbornly]
+pk_mtm_stress_fuel_1	probe_stress	chatter	tense	mc	pk_mtm_stress_fuel	1	m	any	fuel	any	any	any	mtm		MTM, el combustible baja.	MTM, fuel is getting low.
+pk_mtm_stress_fuel_2	probe_stress	chatter	tense	probe	pk_mtm_stress_fuel	2	both	any	fuel	any	any	any	mtm	scared		[beeps worriedly]
+pk_mtm_stress_fuel_3	probe_stress	chatter	tense	mc	pk_mtm_stress_fuel	3	m	any	fuel	any	any	any	mtm		Tranquilo. Con xenón se llega lejos.	Easy. Xenon goes a long way.
+pk_mtm_ms_day100_1	probe_milestone	chatter	calm	mc	pk_mtm_ms_day100	1	m	any	any	any	any	day100	mtm		Cien días, MTM. Y sigues empujando.	One hundred days, MTM. And you're still pushing.
+pk_mtm_ms_day100_2	probe_milestone	chatter	calm	probe	pk_mtm_ms_day100	2	both	any	any	any	any	day100	mtm	proud		[beeps steadily]
+pk_mtm_ms_orbit_1	probe_milestone	chatter	calm	probe	pk_mtm_ms_orbit	1	both	any	any	any	any	orbit	mtm	proud		[beeps very proudly]
+pk_mtm_ms_orbit_2	probe_milestone	chatter	calm	mc	pk_mtm_ms_orbit	2	m	any	any	any	any	orbit	mtm		En órbita, grandullón. Primera parada.	In orbit, big guy. First stop.
+pk_mtm_sci_a_1	science	chatter	calm	mc	pk_mtm_sci_a	1	m	any	any	any	any	any	mtm		¿Datos del MTM? No sabíamos que hacías ciencia.	Data from the MTM? We didn't know you did science.
+pk_mtm_sci_a_2	science	chatter	calm	probe	pk_mtm_sci_a	2	both	any	any	any	any	any	mtm	offended		[beeps indignantly]
+pk_mtm_sci_b_1	science	chatter	calm	probe	pk_mtm_sci_b	1	both	any	any	any	any	any	mtm	proud		[beeps modestly]
+pk_mtm_sci_b_2	science	chatter	calm	mc	pk_mtm_sci_b	2	m	any	any	any	any	any	mtm		Buen trabajo, MTM. Esta vez la fama es tuya.	Good work, MTM. This time the fame is yours.
+pk_mtm_pow_low_1	power_low	warning	tense	probe	pk_mtm_pow_low	1	both	any	any	any	any	any	mtm	sleepy		[beeps faintly]
+pk_mtm_pow_low_2	power_low	warning	tense	mc	pk_mtm_pow_low	2	m	any	any	any	any	any	mtm		¿Batería baja? ¿Tú? Eso sí que es raro.	Low battery? You? Now that's strange.
+pk_mtm_pow_ok_1	power_ok	chatter	calm	probe	pk_mtm_pow_ok	1	both	any	any	any	any	any	mtm	happy		[beeps eagerly]
+pk_mtm_pow_ok_2	power_ok	chatter	calm	mc	pk_mtm_pow_ok	2	m	any	any	any	any	any	mtm		Bienvenido, grandullón. A trabajar.	Welcome back, big guy. Back to work.
+pk_mtm_soi_1	soi_enter	chatter	calm	mc	pk_mtm_soi	1	m	any	any	any	any	any	mtm		MTM, esto es {body}. Una entrega más.	MTM, this is {body}. One more delivery.
+pk_mtm_soi_2	soi_enter	chatter	calm	probe	pk_mtm_soi	2	both	any	any	any	any	any	mtm	happy		[beeps contentedly]
+pk_mtm_pl_1	part_lost	warning	tense	probe	pk_mtm_pl	1	both	any	any	any	any	any	mtm	scared		[beeps in alarm]
+pk_mtm_pl_2	part_lost	warning	tense	mc	pk_mtm_pl	2	m	any	any	any	any	any	mtm		MTM, has perdido algo. Espero que no fuera la carga.	MTM, you lost something. I hope it wasn't the cargo.
+pk_mtm_pl_3	part_lost	warning	tense	probe	pk_mtm_pl	3	both	any	any	any	any	any	mtm	scared		[beeps nervously]
+pk_mtm_sig_back_1	signal_back	chatter	calm	probe	pk_mtm_sig_back	1	both	any	any	any	any	any	mtm	happy		[beeps steadily]
+pk_mtm_sig_back_2	signal_back	chatter	calm	mc	pk_mtm_sig_back	2	m	any	any	any	any	any	mtm		Ahí estás, MTM. Sin prisa, como siempre.	There you are, MTM. No hurry, as always.
+pk_mtm_td_1	touchdown	chatter	none	probe	pk_mtm_td	1	both	any	any	any	any	any	mtm	curious		[beeps in surprise]
+pk_mtm_td_2	touchdown	chatter	none	mc	pk_mtm_td	2	m	any	any	any	any	any	mtm		¿Aterrizado? Eres un módulo de transferencia, MTM.	Landed? You're a transfer module, MTM.
+pk_mtm_stg_1	staging	chatter	none	probe	pk_mtm_stg	1	both	any	any	any	any	separation	mtm	happy		[beeps a proud farewell]
+pk_mtm_stg_2	staging	chatter	none	mc	pk_mtm_stg	2	m	any	any	any	any	separation	mtm		Una pieza menos que llevar, MTM.	One less thing to carry, MTM.
+pk_mtm_thf_1	throttle_full	chatter	none	probe	pk_mtm_thf	1	both	any	any	any	any	any	mtm	proud		[beeps steadily]
+pk_mtm_thf_2	throttle_full	chatter	none	mc	pk_mtm_thf	2	m	any	any	any	any	any	mtm		Potencia máxima. Que en tu caso es tranquila.	Full power. Which in your case is gentle.
+pk_mtm_thc_1	throttle_cut	chatter	none	probe	pk_mtm_thc	1	both	any	any	any	any	any	mtm	bored		[beeps contentedly]
+pk_mtm_thc_2	throttle_cut	chatter	none	mc	pk_mtm_thc	2	m	any	any	any	any	any	mtm		Motor apagado. Descansa un poco, grandullón.	Engine off. Rest a bit, big guy.
+pk_mtm_pn_1	plan_node	chatter	none	mc	pk_mtm_pn	1	m	any	any	any	any	any	mtm		MTM, tenemos un plan de maniobra. Un encendido de tres horas.	MTM, we have a burn plan. A three hour burn.
+pk_mtm_pn_2	plan_node	chatter	none	probe	pk_mtm_pn	2	both	any	any	any	any	any	mtm	happy		[beeps patiently]
+pk_mtm_data_1	probe_data	chatter	calm	probe	pk_mtm_data	1	both	any	any	any	any	any	mtm	happy		[beeps a steady stream]
+pk_mtm_data_2	probe_data	chatter	calm	mc	pk_mtm_data	2	m	any	any	any	any	any	mtm		Recibido, MTM. Despacio pero seguro.	Copy, MTM. Slow but steady.
+pk_mtm_dock_1	docked	chatter	none	probe	pk_mtm_dock	1	both	any	any	any	any	any	mtm	happy		[beeps at the port]
+pk_mtm_dock_2	docked	chatter	none	mc	pk_mtm_dock	2	m	any	any	any	any	any	mtm		Acoplado, MTM. ¿Recoges otra carga?	Docked, MTM. Picking up another load?
+pk_mtm_burn_1	burn_soon	warning	tense	mc	pk_mtm_burn	1	m	any	any	any	any	any	mtm		MTM, encendido pronto. Va a ser largo.	MTM, burn soon. It's going to be a long one.
+pk_mtm_burn_2	burn_soon	warning	tense	probe	pk_mtm_burn	2	both	any	any	any	any	any	mtm	happy		[beeps patiently]
+pk_mtm_say_again_1	probe_say_again	chatter	calm	mc	pk_mtm_say_again	1	m	any	any	any	any	any	mtm		MTM, ¿puedes repetir?	MTM, could you repeat?
+pk_mtm_say_again_2	probe_say_again	chatter	calm	probe	pk_mtm_say_again	2	both	any	any	any	any	any	mtm	bored		[beeps slowly and clearly]
+pk_mtm_chute_1	chute_full	chatter	none	probe	pk_mtm_chute	1	both	any	any	any	any	any	mtm	curious		[beeps in surprise]
+pk_mtm_chute_2	chute_full	chatter	none	mc	pk_mtm_chute	2	m	any	any	any	any	any	mtm		¿Un paracaídas en un módulo de transferencia? Vale.	A parachute on a transfer module? Okay.
