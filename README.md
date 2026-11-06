@@ -42,9 +42,15 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all). If you want a real countdown from 10, pick Down in the General tab.
 - **Stations and bases.** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
-- **They say your names.** A small speech engine (Piper) ships with the mod and speaks new lines while you play. Mission Control and the crew say the names of your kerbals and your vessel, Mission Control reports your real orbit, fuel and science numbers, and it knows your crew's history: a first flight, a first time at Duna or a veteran. You can add your own lines in a text file, no audio needed. See Runtime voice files below for what is in the download.
-- **English subtitles** with a colour per speaker. The number of subtitle lines, their size, width and position are fully customizable.
-- **Lots of lines.** 1729 interactions with almost 3500 lines, 738 of them new in 0.6.0. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
+- **Runtime voice: they say your names.** A small speech engine (Piper) ships with the mod and speaks new lines while you play, in the same voices as the recorded ones. It is on by default and runs on Windows and Linux (see Runtime voice files below).
+  - **Names.** Mission Control ends a line with the name of the kerbal who just spoke or with your vessel's name, and kerbals on the intercom call each other by name. A planet from a mod is called by its real name.
+  - **Real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, on a docking approach the distance to the target. After science it says the points, after a contract the funds.
+  - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
+  - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
+  - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
+  - **Your own lines.** Add a row to `Phrases/runtime.tsv` or a file in `Phrases/Extra/` and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
+- **English subtitles** with a colour per speaker. Most lines have several wordings, so a line you heard before can read differently. The number of subtitle lines, their size, width and position are fully customizable.
+- **Lots of lines.** 1896 recorded interactions with 6478 extra subtitle wordings, plus 53 runtime lines and 22 runtime chats. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
@@ -148,7 +154,6 @@ the missing module to its log. Nothing else happens.
 - I play on Linux. Windows and macOS should be fine since it is a plain plugin, but I have not tested them.
 - Don't run it together with Chatterer. Both would talk at the same time.
 - RemoteTech is supported for the radio signal simulation, but I have not tested it in game yet.
-- Modded probe cores get the generic probe voice with "Probe" as the subtitle name, unless they have a Lonapse voice (see Probe voices). You can also pick one for them in the window.
 
 ## Known limits
 
