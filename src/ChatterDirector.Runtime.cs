@@ -29,6 +29,27 @@ namespace Lonapse
         const double RuntimeNameChance = 0.35, RuntimeIntercomNameChance = 0.3;
         /// <summary>With crew aboard, the share of MC names that is the vessel instead of a kerbal.</summary>
         const double RuntimeVesselShare = 0.25;
+        /// <summary>After a name was said (an added name, or a line with {other}, {vessel} ...), the time in s in
+        /// which lines prefer to say none. People do not name each other in every sentence.</summary>
+        const float NameGap = 45f;
+        float lastNameClock = -999f;
+        bool NamesRecent { get { return clock - lastNameClock < NameGap; } }
+        void NameSaid() { lastNameClock = clock; }
+
+        /// <summary>One of the fillable versions of a runtime line. With <paramref name="fewNames"/> one without a
+        /// name wins when there is one. A picked version with a name starts the name gap.</summary>
+        int PickRuntimeVersion(RuntimeTemplate t, List<int> vs, bool fewNames)
+        {
+            if (vs == null || vs.Count == 0) return -1;
+            if (fewNames)
+            {
+                List<int> bare = vs.FindAll(i => !SubtitleSlots.NamesSomeone(t.Versions[i][1]));
+                if (bare.Count > 0) vs = bare;
+            }
+            int v = vs[rng.Next(vs.Count)];
+            if (SubtitleSlots.NamesSomeone(t.Versions[v][1])) NameSaid();
+            return v;
+        }
         /// <summary>How long a line may hold its turn for Piper, in s: one with a clip to fall back on, and one without.</summary>
         const float RuntimeMaxWait = 1.0f, RuntimeMaxWaitRequired = 4.0f;
         /// <summary>The kerbal who spoke in the last minute is the one Mission Control answers.</summary>
@@ -205,42 +226,56 @@ namespace Lonapse
             return null;
         }
 
-        /// <summary>An MC line: sometimes with the name of the kerbal who spoke last (else one aboard) or the vessel.
-        /// Without crew (a probe), the vessel.</summary>
+        /// <summary>An MC line: sometimes with a name at the end. The kerbal MC answers (the scene's speaker, or who
+        /// spoke in the last minute), else the vessel or "team". One kerbal picked at random only when alone aboard:
+        /// with more crew that sounds like MC talks to one and ignores the rest. Without crew (a probe), the vessel.
+        /// No name when one was said a moment ago.</summary>
         RuntimeLine PlanMc(PhraseEntry e, KerbalVoice to = null)
         {
             if (e == null || !RuntimeOn) return null;
             string[] name = null;
-            if (rng.NextDouble() < RuntimeNameChance)
+            if (!NamesRecent && rng.NextDouble() < RuntimeNameChance)
             {
-                bool crew = host.roster.voices.Count > 0;
-                if (!crew || rng.NextDouble() < RuntimeVesselShare) name = VesselNames();
-                if (name == null && crew)
+                int crew = host.roster.voices.Count;
+                // user report: MC named one kerbal and another answered. The scene's own crew speaker wins
+                // (the lines are queued before anyone speaks, so lastCrewVoice is the one before)
+                KerbalVoice k = to != null && host.roster.voices.Contains(to) ? to
+                                : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
+                                && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
+                                : crew == 1 ? host.roster.voices[0] : null;
+                if (crew == 0 || rng.NextDouble() < RuntimeVesselShare) name = VesselNames();
+                if (name == null && k != null)
                 {
-                    // user report: MC named one kerbal and another answered. The scene's own crew speaker wins
-                    // (the lines are queued before anyone speaks, so lastCrewVoice is the one before)
-                    KerbalVoice k = to != null && host.roster.voices.Contains(to) ? to
-                                    : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
-                                    && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
-                                    : host.roster.voices[rng.Next(host.roster.voices.Count)];
-                    string first = k != null ? RuntimeLines.CleanName(SubtitleSlots.FirstName(k.displayName)) : null;
+                    string first = RuntimeLines.CleanName(SubtitleSlots.FirstName(k.displayName));
                     if (!string.IsNullOrEmpty(first)) name = new[] { RuntimeSpeech.Respell(first), first };
                 }
+                if (name == null && crew > 1) name = rng.NextDouble() < 0.5 ? VesselNames() : TeamNames();
             }
-            return PlanLine(e, null, name);
+            RuntimeLine r = PlanLine(e, null, name);
+            if (name != null && r != null) NameSaid();
+            return r;
         }
 
-        /// <summary>An intercom line: sometimes with the partner's first name at the end.</summary>
+        /// <summary>The whole crew as a name for the end of an MC line: "Good work, team."</summary>
+        static string[] TeamNames()
+        {
+            return new[] { LonapseText.ReverseText("equipo"), "team" };
+        }
+
+        /// <summary>An intercom line: sometimes with the partner's first name at the end, not when a name was said a
+        /// moment ago.</summary>
         RuntimeLine PlanIntercom(PhraseEntry e, KerbalVoice speaker, KerbalVoice partner)
         {
             if (e == null || !RuntimeOn) return null;
             string[] name = null;
-            if (partner != null && rng.NextDouble() < RuntimeIntercomNameChance)
+            if (partner != null && !NamesRecent && rng.NextDouble() < RuntimeIntercomNameChance)
             {
                 string first = RuntimeLines.CleanName(SubtitleSlots.FirstName(partner.displayName));
                 if (!string.IsNullOrEmpty(first)) name = new[] { RuntimeSpeech.Respell(first), first };
             }
-            return PlanLine(e, speaker, name, partner);
+            RuntimeLine r = PlanLine(e, speaker, name, partner);
+            if (name != null && r != null) NameSaid();
+            return r;
         }
 
         const int TurnWait = 0, TurnGo = 1, TurnSkip = 2;
@@ -669,7 +704,9 @@ namespace Lonapse
                 string sp, en;
                 Dictionary<string, string[]> who = i % 2 == 0 ? namesA : namesB;
                 List<int> vs = RuntimeLines.FillableVersions(chat[i], nums, who);
-                if (vs.Count == 0 || !RuntimeLines.Fill(chat[i], vs[rng.Next(vs.Count)], nums, who, out sp, out en)) return false;
+                // one name per chat when the lines allow it: a line with a name starts the gap, the rest prefer none
+                int vi = PickRuntimeVersion(chat[i], vs, NamesRecent);
+                if (vi < 0 || !RuntimeLines.Fill(chat[i], vi, nums, who, out sp, out en)) return false;
                 var e = new PhraseEntry
                 {
                     ClipKey = chat[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
@@ -811,7 +848,8 @@ namespace Lonapse
         {
             string spanish, english;
             List<int> vs = RuntimeLines.FillableVersions(t, nums, names);
-            if (vs.Count == 0 || !RuntimeLines.Fill(t, vs[rng.Next(vs.Count)], nums, names, out spanish, out english)) return;
+            int vi = PickRuntimeVersion(t, vs, NamesRecent);
+            if (vi < 0 || !RuntimeLines.Fill(t, vi, nums, names, out spanish, out english)) return;
             recentRuntime.Enqueue(t.Id);
             while (recentRuntime.Count > 4) recentRuntime.Dequeue();
             var e = new PhraseEntry
@@ -912,7 +950,9 @@ namespace Lonapse
             RuntimeTemplate t = fresh[rng.Next(fresh.Count)];
             string sp, en;
             List<int> vs = RuntimeLines.FillableVersions(t, nn, rn);
-            if (vs.Count == 0 || !RuntimeLines.Fill(t, vs[rng.Next(vs.Count)], nn, rn, out sp, out en)) return null;
+            // an answer rarely says a name: always the versions without one when there are
+            int vi = PickRuntimeVersion(t, vs, true);
+            if (vi < 0 || !RuntimeLines.Fill(t, vi, nn, rn, out sp, out en)) return null;
             recentReplies.Enqueue(t.Id);
             while (recentReplies.Count > 8) recentReplies.Dequeue();
             var e = new PhraseEntry

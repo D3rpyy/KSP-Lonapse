@@ -1469,12 +1469,14 @@ public static class Tests
             var toErr = new List<string>();
             RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_r1\treport\tto=rt_fuel\tA.\tA.",
                 "rt_r2\treply\tto=fuel\tB.\tB.", "rt_r3\treply\tto=rt_fuel* to=rt_ec\tC.\tC." }, toErr);
-            Check(rFuel.Contains("rt_re_fuel_low") && rFuel.Contains("rt_re_any") && rFuel.Contains("rt_re_self") && !rFuel.Contains("rt_re_fuel")
+            Check(rFuel.Contains("rt_re_fuel_low") && rFuel.Contains("rt_re_any") && rFuel.Contains("rt_re_vessel") && !rFuel.Contains("rt_re_fuel")
                   && rDock.Count == 0 && rOrbit.Contains("rt_re_orbit") && rSci.Contains("rt_re_sci") && !rSci.Contains("rt_re_any")
                   && toErr.Count == 2,
                   "runtime voice: crew replies answer their own MC lines, the general ones any report",
                   string.Join(",", rFuel.ToArray()) + " / dock " + rDock.Count + " / " + string.Join(",", rOrbit.ToArray()) + " / " + string.Join(",", rSci.ToArray())
                   + " / " + string.Join(" ; ", toErr.ToArray()));
+            Check(!rtAll.Exists(t => t.Kind == "reply" && t.Versions.Exists(vv0 => vv0[1].Contains("{self"))),
+                  "runtime voice: no crew reply says its own name", "");
         }
         {
             // science and contracts: the extra values pick their own lines
@@ -1683,6 +1685,24 @@ public static class Tests
                 i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "1" : vv[0], null, null, false);
             Check(outO[0].RuntimeSpanish == null && outOff[0].RuntimeSpanish == null && outOff[0].English == "Bob, where is my lucky rock?",
                   "spanish_rt: an empty piece and the runtime voice off keep the recorded clip", outO[0].RuntimeSpanish + " / " + outOff[0].RuntimeSpanish);
+
+            // names: one per scene, none when one was said a moment ago
+            var nmTbl = PhraseTable.Parse(new List<string> {
+                "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\tenglish",
+                "n_1\tchatter\tchatter\tcalm\tcrew\tn\t1\tboth\tA.\t{other}, hi. | Hi.",
+                "n_2\tchatter\tchatter\tcalm\tcrew\tn\t2\tboth\tB.\t{other}, go. | Go." }, null);
+            var nmLines = new List<PhraseEntry>(nmTbl.Entries);
+            Func<int, IDictionary<string, string>> nmPer = i => new Dictionary<string, string> { { "other", i == 0 ? "Bob" : "Jeb" } };
+            Func<string, IList<string>, string> nmPick = (pool, vv) => vv[0];
+            bool nmNamed, nmNamedFew;
+            var nmOut = SubtitleSlots.Fill(nmLines, esPools, new Dictionary<string, string>(), nmPer, nmPick, null, null, false, false, out nmNamed);
+            var nmFew = SubtitleSlots.Fill(nmLines, esPools, new Dictionary<string, string>(), nmPer, nmPick, null, null, false, true, out nmNamedFew);
+            Check(nmOut[0].English == "Bob, hi." && nmOut[1].English == "Go." && nmNamed
+                  && nmFew[0].English == "Hi." && nmFew[1].English == "Go." && !nmNamedFew
+                  && SubtitleSlots.NamesSomeone("{vessel} here.") && SubtitleSlots.NamesSomeone("Hi {other:2}.")
+                  && !SubtitleSlots.NamesSomeone("Fuel at {fuel}.") && !SubtitleSlots.NamesSomeone("Over {here}."),
+                  "names: a scene says one name, and none right after another name",
+                  nmOut[0].English + " " + nmOut[1].English + " / " + nmFew[0].English + " " + nmFew[1].English);
 
             // a runtime number: only with its value (the runtime voice on), said in words, shown in digits
             PhraseEntry fuel = new List<PhraseEntry>(tbl.Entries).Find(q0 => q0.ClipKey == "u_1");

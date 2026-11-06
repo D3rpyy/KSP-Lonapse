@@ -283,10 +283,25 @@ namespace Lonapse
                                              Func<string, IList<string>, string> pick, List<string> unresolved,
                                              ICollection<string> conditions, bool spoken)
         {
+            bool named;
+            return Fill(lines, pools, values, lineValues, pick, unresolved, conditions, spoken, false, out named);
+        }
+
+        /// <summary>Fill, and with <paramref name="fewNames"/> a version without a name ({other}, {self}, {kerbal},
+        /// {vessel}) wins when the line has one. A name was said a moment ago. In every case a scene says at most one
+        /// name when it can: after a line with a name the next lines prefer versions without. named: a picked
+        /// version holds a name.</summary>
+        public static List<PhraseEntry> Fill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
+                                             Func<int, IDictionary<string, string>> lineValues,
+                                             Func<string, IList<string>, string> pick, List<string> unresolved,
+                                             ICollection<string> conditions, bool spoken, bool fewNames, out bool named)
+        {
+            named = false;
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
             var st = new FillState();
             st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved; st.conditions = conditions; st.spoken = spoken;
+            st.fewNames = fewNames;
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
@@ -295,6 +310,7 @@ namespace Lonapse
                 st.where = e.ClipKey + " (line " + i + ")";
                 int vi;
                 string src = PickVersion(e, st, out vi);
+                if (NamesSomeone(src)) { named = true; st.fewNames = true; }
                 string en = Expand(Plurals(src, st, false), true, 0, st);
                 r.Add(CopyWithEnglish(e, en, SpanishFor(e, vi, st)));
             }
@@ -332,6 +348,8 @@ namespace Lonapse
             public ICollection<string> conditions;
             public string where;
             public bool spoken;
+            // prefer versions without a name (one was said a moment ago, or earlier in this scene)
+            public bool fewNames;
             // slot (name:n) to the pool value taken (its english without [ ]), for the Spanish
             public readonly Dictionary<string, string> chosenRaw = new Dictionary<string, string>();
             // slot (name:n) to its filled text, for the whole scene
@@ -405,6 +423,18 @@ namespace Lonapse
             return matching.Count > 0 ? matching : plain;
         }
 
+        /// <summary>The text says a name: a person slot ({other}, {self}, {kerbal}) or {vessel}.</summary>
+        public static bool NamesSomeone(string text)
+        {
+            if (string.IsNullOrEmpty(text) || text.IndexOf('{') < 0) return false;
+            foreach (Match m in SlotRe.Matches(text))
+            {
+                string n = m.Groups[1].Value;
+                if (Slots.IsPerson(n) || n == "vessel") return true;
+            }
+            return false;
+        }
+
         /// <summary>The text uses a number slot that only the runtime voice can say ({fuel}, {ec} ...).</summary>
         public static bool HasRuntimeNumber(string text)
         {
@@ -443,6 +473,11 @@ namespace Lonapse
                 string text;
                 SplitConditions(Versions(e.English)[0], null, out text);
                 return text;
+            }
+            if (st.fewNames && ok.Count > 1)
+            {
+                List<KeyValuePair<int, string>> bare = ok.FindAll(kv => !NamesSomeone(kv.Value));
+                if (bare.Count > 0) ok = bare;
             }
             index = ok[0].Key;
             if (ok.Count == 1 || st.pick == null) return ok[0].Value;

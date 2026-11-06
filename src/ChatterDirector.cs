@@ -169,9 +169,11 @@ namespace Lonapse
             for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
+            bool named;
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
                                             (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions(),
-                                            RuntimeOn);
+                                            RuntimeOn, NamesRecent, out named);
+            if (named) NameSaid();
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
             for (int i = 0; i < filled.Count; i++)
                 if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
