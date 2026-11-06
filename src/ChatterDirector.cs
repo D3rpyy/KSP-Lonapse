@@ -1956,18 +1956,20 @@ namespace Lonapse
             // experimental runtime voice: sometimes a chat with real values, spoken in game (it queues itself when ready)
             if (forced == null && !blackoutFirst && TryRuntimeChat(a, b)) return true;
             PhraseScene sc = forced;
-            // with a tourist in the pair only the dialogues written for that pair (Persona.PairFits)
-            bool aT = a.persona.IsTourist, bT = b.persona.IsTourist;
-            Predicate<PhraseScene> pair = x => x.IsIntercom && Persona.PairFits(x.Trait, aT, bT);
             if (sc == null && PhraseClips.Loaded)
             {
-                // speaker A starts the chat: persona and trait scenes for A are preferred, never a misfit
-                if (blackoutFirst) sc = PickIntercomSceneFor(null, a, x => pair(x) && x.Phase == FlightPhase.Blackout);
-                if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, pair);
-                if (sc == null) sc = PickIntercomSceneFor("calm", a, pair);
+                sc = PickChatScene(a, b, blackoutFirst);
+                // a pair with a tourist only has the tourist dialogues. When none fits now, two others aboard chat.
+                if (sc == null && (a.persona.IsTourist || b.persona.IsTourist))
+                {
+                    KerbalVoice a2 = KerbalVoice.PickWithTrait(host.roster.voices, null, null, rng, k => !k.persona.IsTourist);
+                    KerbalVoice b2 = a2 != null ? KerbalVoice.PickWithTrait(host.roster.voices, null, null, rng, k => !k.persona.IsTourist && k != a2) : null;
+                    PhraseScene sc2 = b2 != null ? PickChatScene(a2, b2, blackoutFirst) : null;
+                    if (sc2 != null) { sc = sc2; a = a2; b = b2; }
+                }
             }
             // folder turns could say anything: not with a tourist
-            if (sc == null && forced == null && (aT || bT)) return false;
+            if (sc == null && forced == null && (a.persona.IsTourist || b.persona.IsTourist)) return false;
             // {other} and {self}: line i is spoken by a when i is even (see the turn loop below)
             string nameA = SubtitleSlots.FirstName(a.displayName), nameB = SubtitleSlots.FirstName(b.displayName);
             var lines = sc != null ? PlayLines(sc, i => new System.Collections.Generic.Dictionary<string, string> {
@@ -1990,6 +1992,19 @@ namespace Lonapse
             if (!QueueChatTurns(a, b, lines, turns, extraLine, forced != null)) return false;
             Log.Debug("Intercom chat queued: " + a.displayName + " and " + b.displayName + ", " + turns + " turns" + (sc != null ? ", scene " + sc.Id : "") + ", s " + s.ToString("0.00"));
             return true;
+        }
+
+        /// <summary>Intercom scene for the pair a and b. Speaker A starts: persona and trait scenes for A are preferred,
+        /// never a misfit. With a tourist in the pair only the dialogues written for that pair (Persona.PairFits).</summary>
+        private PhraseScene PickChatScene(KerbalVoice a, KerbalVoice b, bool blackoutFirst)
+        {
+            bool aT = a.persona.IsTourist, bT = b.persona.IsTourist;
+            Predicate<PhraseScene> pair = x => x.IsIntercom && Persona.PairFits(x.Trait, aT, bT);
+            PhraseScene sc = null;
+            if (blackoutFirst) sc = PickIntercomSceneFor(null, a, x => pair(x) && x.Phase == FlightPhase.Blackout);
+            if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, pair);
+            if (sc == null) sc = PickIntercomSceneFor("calm", a, pair);
+            return sc;
         }
 
         /// <summary>Queues the turns of an intercom chat between a and b: a click and a line per turn, a release click
