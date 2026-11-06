@@ -1369,7 +1369,8 @@ public static class Tests
         foreach (RuntimeTemplate t in rtAll) { int c0; kindCount.TryGetValue(t.Kind, out c0); kindCount[t.Kind] = c0 + 1; }
         var kc = new List<string>();
         foreach (var kv in kindCount) kc.Add(kv.Key + " " + kv.Value);
-        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length - RuntimeLines.ModKinds.Length,
+        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5
+              && System.Linq.Enumerable.All(RuntimeLines.Kinds, k => kindCount.ContainsKey(k) || Array.IndexOf(RuntimeLines.ModKinds, k) >= 0),
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
         {
@@ -1441,6 +1442,7 @@ public static class Tests
         foreach (string k in RuntimeLines.NumberSlots) full[k] = 50;
         var fullN = new Dictionary<string, string[]>();
         foreach (string k in RuntimeLines.NameSlots) fullN[k] = new[] { "Nombre", "Name" };
+        fullN["x_frozen"] = new[] { "Jeb", "Jeb" };   // the DeepFreeze lines (deepfreeze.tsv)
         var badT = new List<string>();
         foreach (RuntimeTemplate t in rtAll)
         for (int v = 0; v < t.Versions.Count; v++)
@@ -1612,13 +1614,29 @@ public static class Tests
                 ModEventInfo repair = ModEvents.Info(withMod, "examplemod.repair_done");
                 ModEventInfo supplies = ModEvents.Info(withMod, "examplemod.supplies_low");
                 ModEventInfo exp = ModEvents.Info(withMod, "examplemod.experiment_done");
-                List<string> modIds = ModEvents.Ids(withMod);
+                List<string> modIds = ModEvents.Ids(withMod).FindAll(i => i.StartsWith("examplemod.", StringComparison.Ordinal));
                 Check(modErr.Count == 0 && mine.Count >= 10 && withMod.Count == rtAll.Count + mine.Count
                       && repair.HasChat && repair.HasMc && repair.Cooldown == 180 && repair.Priority == 1 && repair.Who == "any"
                       && supplies.Priority == 2 && supplies.Cooldown == 600 && exp.Who == "mc" && exp.Priority == 0 && exp.HasLines
                       && !ModEvents.Info(withMod, "examplemod.nothing").HasLines && modIds.Count == 3 && modIds[0] == "examplemod.experiment_done",
                       "mod API: the example mod file parses next to the Lonapse files, with its meta settings",
                       mine.Count + " mod templates; " + string.Join(" ; ", modErr.ToArray()));
+                // DeepFreeze: Lonapse's own lines for the events the bridge sends
+                {
+                    var dfIds = new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" };
+                    var dfBad = new List<string>();
+                    foreach (string id in dfIds)
+                    {
+                        ModEventInfo inf = ModEvents.Info(rtAll, id);
+                        if (!inf.HasLines || !inf.HasChat || !inf.HasMc) dfBad.Add(id + " misses chat or Mission Control lines");
+                        if (inf.Cooldown != 60) dfBad.Add(id + " cooldown " + inf.Cooldown);
+                    }
+                    foreach (RuntimeTemplate t in rtAll)
+                        if (t.Where.StartsWith("deepfreeze.tsv") && t.Kind == "event"
+                            && !rtAll.Exists(r => r.Kind == "reply" && r.To.Contains(t.Id))) dfBad.Add(t.Id + " has no reply");
+                    Check(dfBad.Count == 0, "DeepFreeze: frozen, thawed and comatose have chats, Mission Control lines and replies",
+                          string.Join(" ; ", dfBad.ToArray()));
+                }
 
                 // mod events never mix with the stock events, the stock lines never answer them
                 RuntimeTemplate anySci = withMod.Find(t => t.Id == "rt_chat_snolink_1");
@@ -3440,6 +3458,13 @@ public static class Tests
             Check(!cl.Tick(10, 3, 600, out r) && !cl.OnLost(10, "Bill Kerman"), "events: each kerbal reported once", null);
             cl.Reset();
             Check(cl.KnownCount == 0 && !cl.OnLost(11, "Bill Kerman"), "events: crew Reset forgets the flight", null);
+            // DeepFreeze: a kerbal that is back (thawed) when the call is due is dropped and can be lost later
+            cl.Know("Bill Kerman"); cl.Know("Jebediah Kerman");
+            cl.OnLost(20, "Bill Kerman"); cl.OnLost(20, "Jebediah Kerman");
+            Check(cl.Tick(24, 3, 600, n => n == "Jebediah Kerman", out r) && cl.lastNames.Count == 1 && cl.lastNames[0] == "Jebediah Kerman",
+                  "events: crew_lost names only the kerbals still lost", string.Join(", ", cl.lastNames.ToArray()));
+            Check(cl.OnLost(30, "Bill Kerman") && !cl.Tick(34, 3, 600, n => false, out r) && cl.pending.Count == 0,
+                  "events: a dropped kerbal can be reported again, nobody still lost gives no call", null);
 
             // priorities
             Check(EventPriority.CrewLost > EventPriority.PartLost && EventPriority.PartLost > EventPriority.Power && EventPriority.Power > EventPriority.Signal

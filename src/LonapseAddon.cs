@@ -39,6 +39,7 @@ namespace Lonapse
         public FaceDriver face;           // expression follows the line, head turns to the speaker
         public PortraitRefresh portraits; // portraits rendered again at the end of the frame, after the jaw and head writes
         public GameEventHub events;       // game events to director.PlayEvent
+        private DeepFreezeBridge deepFreeze;   // DeepFreeze freeze and thaw as mod events, when it is installed
         private bool eventsTickFailed;    // log a failing hub Tick once, never kill Update
 
         public bool gateOpen;
@@ -287,6 +288,8 @@ namespace Lonapse
                 events = new GameEventHub();
                 events.Init(this);
                 events.play = director.PlayEvent;
+                deepFreeze = new DeepFreezeBridge();
+                deepFreeze.Init(this);
 
                 LogGainInputs();
                 Subscribe();
@@ -319,6 +322,7 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnDestroy.channels", e); }
             try { Unsubscribe(); } catch (Exception e) { Log.Exception("OnDestroy.events", e); }
             try { if (events != null) events.Dispose(); } catch (Exception e) { Log.Exception("OnDestroy.eventHub", e); }
+            try { if (deepFreeze != null) deepFreeze.Dispose(); } catch (Exception e) { Log.Exception("OnDestroy.deepFreeze", e); }
             try { if (window != null) { window.ReleaseLock(); window.RemoveButton(); } } catch (Exception e) { Log.Exception("OnDestroy.button", e); }
             try { InputLockManager.RemoveControlLock("Lonapse_window"); } catch (Exception) { }
             try { if (settingsDirty && settings != null) settings.Save(); } catch (Exception e) { Log.Exception("OnDestroy.save", e); }
@@ -865,6 +869,7 @@ namespace Lonapse
         private void TickEvents(float dt)
         {
             if (events == null) return;
+            try { if (deepFreeze != null) deepFreeze.Tick(dt); } catch (Exception e) { Log.Exception("DeepFreezeBridge.Tick", e); }
             try { events.Tick(dt, sample); }
             catch (Exception e)
             {

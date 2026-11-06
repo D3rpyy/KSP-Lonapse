@@ -561,15 +561,23 @@ namespace Lonapse
             for (int i = 0; i < voices.Count; i++)
             {
                 voices[i].UpdateStress(stress, maxBand, panicOffset);
-                try { voices[i].outDueToG = members[i] != null && members[i].outDueToG; }
+                try { voices[i].outDueToG = IsOut(members[i]); }
                 catch (Exception) { voices[i].outDueToG = false; }
             }
             for (int i = 0; i < radio.Count; i++)
             {
                 radio[i].UpdateStress(stress, maxBand, panicOffset);
-                try { radio[i].outDueToG = radioMembers[i] != null && radioMembers[i].outDueToG; }
+                try { radio[i].outDueToG = IsOut(radioMembers[i]); }
                 catch (Exception) { radio[i].outDueToG = false; }
             }
+        }
+
+        /// <summary>Out cold: G-LOC, or comatose after a DeepFreeze emergency thaw. DeepFreeze makes such a kerbal
+        /// the Tourist type while the job stays, so a Tourist type with another job is comatose.</summary>
+        private static bool IsOut(ProtoCrewMember pcm)
+        {
+            if (pcm == null) return false;
+            return pcm.outDueToG || (pcm.type == ProtoCrewMember.KerbalType.Tourist && pcm.trait != "Tourist");
         }
 
         public int SpeakableCount() { return KerbalVoice.SpeakableCount(voices); }

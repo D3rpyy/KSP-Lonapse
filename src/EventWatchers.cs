@@ -343,11 +343,23 @@ namespace Lonapse
 
         public bool Tick(double now, double delay, double maxAge, out EventRequest r)
         {
+            return Tick(now, delay, maxAge, null, out r);
+        }
+
+        /// <summary>stillLost (null: everyone) checks each name again when the call is due. A kerbal that came back in
+        /// the meantime (frozen, thawed) is dropped and can be reported again later.</summary>
+        public bool Tick(double now, double delay, double maxAge, Predicate<string> stillLost, out EventRequest r)
+        {
             r = default(EventRequest);
             if (pending.Count == 0 || now - firstAt < delay) return false;
             lastNames.Clear();
-            lastNames.AddRange(pending);
+            foreach (string n in pending)
+            {
+                if (stillLost == null || stillLost(n)) lastNames.Add(n);
+                else reported.Remove(n);
+            }
             pending.Clear();
+            if (lastNames.Count == 0) return false;
             r = EventWatchers.Make(EventWatchers.CrewLost, "tense", EventWatchers.Any, "", false, (float)maxAge,
                                    EventPriority.CrewLost);
             return true;
