@@ -1,10 +1,10 @@
-# Body names for {body} in audio/lonapse/phrases/*.tsv. UTF-8, tab separated, # starts a comment line.
-# key: lowercase stock bodyName (FlightSample.body), generic for every other body.
-# spanish: written backwards on purpose. Lonapse reverses every word, so the clip says the real name
-# ("nibréK" is spoken as "Kérbin"). Spelled for a Spanish voice: Jool is "luY" (Yul), Eeloo "ulI" (Ilu).
-# generic stays plain Spanish ("el planeta") and is spoken as Lonapse like every other word.
-# english: the subtitle text. Use "the" where English needs it (the Mun).
 key	spanish	english
+# Body names for {body} in audio/lonapse/phrases/*.tsv. UTF-8, tab separated, # starts a comment line.		
+# key: lowercase stock bodyName (FlightSample.body), generic for every other body.		
+# spanish: written backwards on purpose. Lonapse reverses every word, so the clip says the real name		
+# ("nibréK" is spoken as "Kérbin"). Spelled for a Spanish voice: Jool is "luY" (Yul), Eeloo "ulI" (Ilu).		
+# generic stays plain Spanish ("el planeta") and is spoken as Lonapse like every other word.		
+# english: the subtitle text. Use "the" where English needs it (the Mun).		
 kerbol	lobréK	Kerbol
 moho	ohoM	Moho
 eve	vI	Eve

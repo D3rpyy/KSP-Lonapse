@@ -29,8 +29,12 @@ class MidRandom:
 def main():
     bc.random = type("R", (), {"Random": MidRandom})
     out = os.path.join(HERE, "..", "tests", "probe_reference.tsv")
-    rows = ["# Probe beep fingerprints from audio/probe_reference.py (build_clips.py with midpoint jitter).",
-            "# core\tmood\tvariant\tsamples\tgated_rms_db\t%d samples at i * (samples - 1) / %d" % (POINTS, POINTS - 1)]
+    # header first and every comment padded to the header width, so GitHub shows the file as a table
+    header = ["core", "mood", "variant", "samples", "gated_rms_db"] + ["p%d" % k for k in range(POINTS)]
+    pad = "\t" * (len(header) - 1)
+    rows = ["\t".join(header),
+            "# Probe beep fingerprints from audio/probe_reference.py (build_clips.py with midpoint jitter)." + pad,
+            "# p0 to p%d: %d samples at i * (samples - 1) / %d" % (POINTS - 1, POINTS, POINTS - 1) + pad]
     bc.load_probe_cores()   # fail early on a bad cores.tsv
     for core in bc.PROBE_CORE_KEYS:
         for mood in bc.PROBE_MOODS:
@@ -43,7 +47,7 @@ def main():
                 rows.append("\t".join([core, mood, str(i), str(n), "%.6f" % bc.gated_rms_db(y)] + ["%.9f" % v for v in pts]))
     with open(out, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(rows) + "\n")
-    print("Wrote %s (%d clips, cores from %s)" % (os.path.normpath(out), len(rows) - 2, bc.PROBE_CORES_TSV.name))
+    print("Wrote %s (%d clips, cores from %s)" % (os.path.normpath(out), len(rows) - 3, bc.PROBE_CORES_TSV.name))
 
 
 if __name__ == "__main__":

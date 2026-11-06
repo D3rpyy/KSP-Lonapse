@@ -1,6 +1,6 @@
-# Scenes that name the current body with {body} (see audio/lonapse/bodies.tsv). New keys: bo_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+# Scenes that name the current body with {body} (see audio/lonapse/bodies.tsv). New keys: bo_												
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
 chat_calm_s4_1	chatter	chatter	calm	mc	chat_calm_s4	1	m	orbit	any	¿Qué tal la vista desde ahí arriba?	How's the view from up there? | How's the view from up there? | How's the view, {vessel}?	 |  | ¿Qué tal la vista, {vessel}?
 chat_calm_s4_2	chatter	chatter	calm	crew	chat_calm_s4	2	both	orbit	any	Increíble. Qué vista sobre {body}.	Incredible. What a view of {body}.	
 bo_greetings_1	chatter	chatter	calm	mc	bo_greetings	1	m	goofy	any	Saludos para {body} de parte de todos.	Say hi to {body} from all of us.	

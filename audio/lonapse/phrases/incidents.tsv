@@ -1,7 +1,7 @@
-# Incidents: part lost, low power, signal lost and back, crew lost (plan v4 features 6, 7, 8, 10). New keys: in_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
-# Explosion words are allowed only in part_lost rows. signal_lost has no MC rows: Control cannot hear the crew.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+# Incidents: part lost, low power, signal lost and back, crew lost (plan v4 features 6, 7, 8, 10). New keys: in_															
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.															
+# Explosion words are allowed only in part_lost rows. signal_lost has no MC rows: Control cannot hear the crew.															
 in_pl_calm_a_1	part_lost	chatter	calm	crew	in_pl_calm_a	1	both	any	any	any	any	any	¿Eso que se aleja es nuestro?	Is that thing drifting away ours? | Is that thing drifting away ours? | Hey, is that piece floating off one of ours?	
 in_pl_calm_a_2	part_lost	chatter	calm	mc	in_pl_calm_a	2	m	any	any	any	any	any	Parece que sí. No pasa nada, seguid.	Looks like it. No problem, carry on. | Looks like it. No problem, carry on. | Probably. Not a problem. Continue.	
 in_pl_calm_b_1	part_lost	chatter	calm	crew	in_pl_calm_b	1	both	any	any	any	any	any	Algo pequeño se ha soltado. Nada grave.	Something small came loose. Nothing serious. | Something small came loose. Nothing serious. | A small bit came off. Nothing big.	

@@ -1,55 +1,55 @@
-# Example lines of a made-up mod, "examplemod", for the Lonapse API (docs/API.md).
-# Put a file like this in GameData/<YourMod>/Lonapse/ and Lonapse reads it at the first flight scene.
-# The format is that of GameData/Lonapse/Phrases/Runtime (explained at the top of reports.tsv). For mod events:
-#   on=yourmod.event   the event of a chat (an event chat: the kerbal who did it says line 1) or of an event line
-#   kind event         a Mission Control line about the event. A reply with to= its id lets the kerbal answer.
-#   kind meta          the settings of an event: cooldown=<seconds> (default 120), priority=low|normal|high,
-#                      who=crew|mc|any (default any). No text.
-#   {x_name}           your own values, sent with the event. A number becomes Spanish words in the voice and digits
-#                      in the subtitle, a name is said as it is. Every version uses the same slots in both languages.
-# Ids start with rt_ and must be unique over all files: start them with rt_<yourmod>_ (chats rt_chat_<yourmod>_...).
 id	kind	when	spanish	english
-# meta rows: the settings of each event (all optional).
+# Example lines of a made-up mod, "examplemod", for the Lonapse API (docs/API.md).				
+# Put a file like this in GameData/<YourMod>/Lonapse/ and Lonapse reads it at the first flight scene.				
+# The format is that of GameData/Lonapse/Phrases/Runtime (explained at the top of reports.tsv). For mod events:				
+#   on=yourmod.event   the event of a chat (an event chat: the kerbal who did it says line 1) or of an event line				
+#   kind event         a Mission Control line about the event. A reply with to= its id lets the kerbal answer.				
+#   kind meta          the settings of an event: cooldown=<seconds> (default 120), priority=low|normal|high,				
+#                      who=crew|mc|any (default any). No text.				
+#   {x_name}           your own values, sent with the event. A number becomes Spanish words in the voice and digits				
+#                      in the subtitle, a name is said as it is. Every version uses the same slots in both languages.				
+# Ids start with rt_ and must be unique over all files: start them with rt_<yourmod>_ (chats rt_chat_<yourmod>_...).				
+# meta rows: the settings of each event (all optional).				
 rt_examplemod_repair_meta	meta	on=examplemod.repair_done cooldown=180 priority=normal who=any		
 rt_examplemod_supplies_meta	meta	on=examplemod.supplies_low cooldown=600 priority=high		
 rt_examplemod_experiment_meta	meta	on=examplemod.experiment_done priority=low who=mc		
-# examplemod.repair_done, sent with the kerbal who did it and x_part, the part with its article.
+# examplemod.repair_done, sent with the kerbal who did it and x_part, the part with its article.				
 rt_chat_examplemod_repair_1	chat	on=examplemod.repair_done	{other}, ya está arreglado: {x_part}. | {other}, reparación terminada.	{other}, it's fixed: {x_part}. | {other}, repair done.
 rt_chat_examplemod_repair_2	chat		¿Y por qué sobra un tornillo? | Buen trabajo. ¿Has usado cinta?	Then why is there a screw left over? | Good work. Did you use tape?
 rt_chat_examplemod_repair_3	chat		Es de repuesto. | Mucha. Mucha cinta.	It's a spare. | Lots. Lots of tape.
-# One line, for a kerbal alone.
+# One line, for a kerbal alone.				
 rt_chat_examplemod_repairsolo_1	chat	on=examplemod.repair_done	Reparación terminada. Me ha sobrado un tornillo. | Arreglado. Creo. Bueno, ya no hace ruido.	Repair done. I have a screw left over. | Fixed. I think. Well, it stopped making noise.
-# Mission Control about it, and the kerbal's answer.
+# Mission Control about it, and the kerbal's answer.				
 rt_examplemod_repair	event	on=examplemod.repair_done	{kerbal}, vemos la reparación en los datos. Buen trabajo. | Reparación recibida. Ya no parpadea nada en la pantalla.	{kerbal}, we see the repair in the data. Good work. | Repair confirmed. Nothing is blinking on the screen anymore.
 rt_re_examplemod_repair	reply	to=rt_examplemod_repair	Gracias. No toquéis nada. | De nada. Sobró un tornillo, por cierto.	Thanks. Don't touch anything. | You're welcome. One screw left over, by the way.
-# examplemod.supplies_low, sent with x_days, the days of supplies left. A check on x_days keeps the plural right.
+# examplemod.supplies_low, sent with x_days, the days of supplies left. A check on x_days keeps the plural right.				
 rt_chat_examplemod_supplies_1	chat	on=examplemod.supplies_low x_days>=2	{other}, quedan provisiones para {x_days} días. | {other}, la despensa dice {x_days} días.	{other}, we have supplies for {x_days} days. | {other}, the pantry says {x_days} days.
 rt_chat_examplemod_supplies_2	chat		Entonces nada de segundas raciones. | Vale. Escondo mis galletas.	Then no second helpings. | Okay. I'm hiding my cookies.
 rt_chat_examplemod_supplies_3	chat		Lo apunto en la lista. | Me parece bien.	I'll put it on the list. | Sounds fair.
 rt_examplemod_supplies	event	on=examplemod.supplies_low x_days>=2	Os quedan provisiones para {x_days} días. Planead la vuelta. | Según los datos, {x_days} días de provisiones. Comed despacio.	You have supplies for {x_days} days. Plan the trip home. | The data says {x_days} days of supplies. Eat slowly.
 rt_examplemod_supplies_one	event	on=examplemod.supplies_low x_days<2	Solo queda comida para un día. Volved pronto.	Only one day of food left. Come home soon.
-# examplemod.experiment_done, sent with x_experiment as "spanish|english". who=mc: only Mission Control.
+# examplemod.experiment_done, sent with x_experiment as "spanish|english". who=mc: only Mission Control.				
 rt_examplemod_experiment	event	on=examplemod.experiment_done	Experimento de {x_experiment} terminado. Los científicos ya miran los datos. | Recibido: {x_experiment}, completo. Buen trabajo, {kerbal}.	The {x_experiment} experiment is done. The scientists are looking at the data. | Copy: {x_experiment}, complete. Good work, {kerbal}.
 rt_re_examplemod_experiment	reply	to=rt_examplemod_experiment	Ha sido fácil. Casi. | Gracias. El manual ayudó mucho.	That was easy. Almost. | Thanks. The manual helped a lot.
-# An experiment of your own that runs through the KSP science system (a ModuleScienceExperiment with experimentID
-# exampleSoil). Lonapse sees it like a stock experiment, so do not call Trigger for it. The experiment row gives {exp}
-# its words and names its topic. Science lines and event chats with on=examplemod.soil only play for it.
+# An experiment of your own that runs through the KSP science system (a ModuleScienceExperiment with experimentID				
+# exampleSoil). Lonapse sees it like a stock experiment, so do not call Trigger for it. The experiment row gives {exp}				
+# its words and names its topic. Science lines and event chats with on=examplemod.soil only play for it.				
 rt_examplemod_soil_exp	experiment	on=examplemod.soil id=exampleSoil	análisis del suelo	soil analysis
 rt_sci_examplemod_soil	science	on=examplemod.soil	Recibimos el {exp}. Mucha tierra, pocas sorpresas. | Ya tenemos el {exp}. Los geólogos están contentos.	We have the {exp}. Lots of dirt, few surprises. | The {exp} is in. The geologists are happy.
 rt_chat_examplemod_soil_1	chat	on=examplemod.soil	{other}, el {exp} está listo. Es tierra.	{other}, the {exp} is done. It's dirt.
 rt_chat_examplemod_soil_2	chat		¿Solo tierra? | ¿Tierra buena, al menos?	Just dirt? | Good dirt, at least?
 rt_chat_examplemod_soil_3	chat		Tierra muy científica.	Very scientific dirt.
 rt_chat_examplemod_soilsolo_1	chat	on=examplemod.soil	Ya tengo el {exp}. Es tierra, sobre todo.	I have the {exp}. It's mostly dirt.
-# A Breaking Ground part of your own (a ModuleGroundSciencePart, part name exampleDrillRig). Lonapse sees the deploy
-# itself. The device row gives {device} its words and names its topic. Chats with on=deploy play for it too.
+# A Breaking Ground part of your own (a ModuleGroundSciencePart, part name exampleDrillRig). Lonapse sees the deploy				
+# itself. The device row gives {device} its words and names its topic. Chats with on=deploy play for it too.				
 rt_examplemod_drill_dev	device	on=examplemod.drill id=exampleDrillRig	el taladro	the drill rig
 rt_chat_examplemod_drill_1	chat	on=examplemod.drill	{other}, {device} ya está montado.	{other}, {device} is set up.
 rt_chat_examplemod_drill_2	chat		¿Y si encuentra agua? | ¿Hace mucho ruido?	What if it finds water? | Is it loud?
 rt_chat_examplemod_drill_3	chat		Entonces somos ricos. | Solo un poco.	Then we're rich. | Only a little.
 rt_chat_examplemod_drillsolo_1	chat	on=examplemod.drill	Listo, {device} está montado. A ver si encuentra algo.	Done, {device} is set up. Let's see if it finds something.
 rt_sci_examplemod_drill	science	on=examplemod.drill	Llegan datos: {device} funciona.	Data is coming in: {device} works.
-# A contract type of your own (the class name of your Contract, ExampleSalvageContract). The contract row gives
-# {contract} its words. Contract lines with on=examplemod.salvage play only for that contract.
+# A contract type of your own (the class name of your Contract, ExampleSalvageContract). The contract row gives				
+# {contract} its words. Contract lines with on=examplemod.salvage play only for that contract.				
 rt_examplemod_salvage_con	contract	on=examplemod.salvage id=ExampleSalvageContract	el rescate de chatarra	the salvage job
 rt_con_examplemod_salvage	contract_funds	on=examplemod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
 rt_con_examplemod_salvage_fail	contract_failed	on=examplemod.salvage	Hemos perdido {contract}. Otra vez será.	We lost {contract}. Maybe next time.

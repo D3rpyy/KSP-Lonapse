@@ -1,9 +1,9 @@
-# Experimental (procedural talk): values for the subtitle slots in the english column, like {thing}.
-# The audio never says these words. One pool per name, one value per row. A value may hold slots itself,
-# so a pool can be a list of whole sentences. Every value must read well in every sentence that uses the
-# pool (the comment above a pool shows a few). Things from KSP work best. Used by build_lonapse.py and the plugin.
 pool	english	spanish
-# thing: Who took my X? / Next to my X. / Bet you my X. / You still owe me a X. (singular, no vowel at the start)
+# Experimental (procedural talk): values for the subtitle slots in the english column, like {thing}.		
+# The audio never says these words. One pool per name, one value per row. A value may hold slots itself,		
+# so a pool can be a list of whole sentences. Every value must read well in every sentence that uses the		
+# pool (the comment above a pool shows a few). Things from KSP work best. Used by build_lonapse.py and the plugin.		
+# thing: Who took my X? / Next to my X. / Bet you my X. / You still owe me a X. (singular, no vowel at the start)		
 thing	lucky rock	f:piedra de la suerte
 thing	rubber duck	m:pato de goma
 thing	space pen	m:bolígrafo espacial
@@ -28,7 +28,7 @@ thing	notebook	f:libreta
 thing	yo-yo	m:yoyó
 thing	travel mug	f:taza de viaje
 thing	pocket mirror	m:espejo de bolsillo
-# spot: Look behind the X. / Try the X. / Last time it was under the X. (inside the cabin, in reach)
+# spot: Look behind the X. / Try the X. / Last time it was under the X. (inside the cabin, in reach)		
 spot	seat	m:asiento
 spot	control panel	m:panel de control
 spot	snack locker	m:armario de aperitivos
@@ -46,7 +46,7 @@ spot	helmet rack	m:soporte de cascos
 spot	food warmer	m:calentador de comida
 spot	tool drawer	m:cajón de herramientas
 spot	laundry bag	f:bolsa de la ropa sucia
-# part: The X came loose again. / Tape it, like the X. / That was the X. (inside the cabin, in reach)
+# part: The X came loose again. / Tape it, like the X. / That was the X. (inside the cabin, in reach)		
 part	hatch handle	f:manija de la escotilla
 part	radio knob	m:botón de la radio
 part	window seal	f:junta de la ventana
@@ -62,7 +62,7 @@ part	reading light	f:luz de lectura
 part	footrest	m:reposapiés
 part	seat cushion	m:cojín del asiento
 part	panel screw	m:tornillo del panel
-# outside_part: It's the X. Probably. / Control, the X is shaking. (outside: only when the vessel has one)
+# outside_part: It's the X. Probably. / Control, the X is shaking. (outside: only when the vessel has one)		
 outside_part	[solar] solar panel	m:panel solar
 outside_part	[antenna] antenna	f:antena
 outside_part	[legs] landing leg	f:pata de aterrizaje
@@ -72,7 +72,7 @@ outside_part	[heatshield] heat shield	m:escudo térmico
 outside_part	[chute] parachute	m:paracaídas
 outside_part	[engine] engine	m:motor
 outside_part	[strut] strut	m:puntal
-# beeper: Why is the X beeping?
+# beeper: Why is the X beeping?		
 beeper	fuel gauge	m:indicador de combustible
 beeper	life support panel	m:panel de soporte vital
 beeper	toilet	m:váter
@@ -85,7 +85,7 @@ beeper	[sciencejr] Science Jr.	m:laboratorio Science Jr
 beeper	coffee maker	f:cafetera
 beeper	smoke alarm	f:alarma de humo
 beeper	wristwatch	m:reloj de pulsera
-# food: Is that X? / Someone ate all the X. / Eat the X. It builds character. / Can you send us some X?
+# food: Is that X? / Someone ate all the X. / Eat the X. It builds character. / Can you send us some X?		
 food	snack paste	f:pasta de aperitivo
 food	tube cheese	m:queso en tubo
 food	freeze-dried noodles	mp:fideos liofilizados
@@ -104,7 +104,7 @@ food	instant coffee	m:café instantáneo
 food	gummy rockets	mp:cohetes de gominola
 food	rehydrated pudding	m:pudin rehidratado
 food	freeze-dried ice cream	m:helado liofilizado
-# creature: Last night I dreamt about X. It knew my name.
+# creature: Last night I dreamt about X. It knew my name.		
 creature	the Kraken	el Kraken
 creature	a giant space whale	una ballena espacial gigante
 creature	a Mun made of cheese	una nuM de queso
@@ -119,7 +119,7 @@ creature	a booster with stage fright	un propulsor con miedo escénico
 creature	a parachute that was afraid of heights	un paracaídas con miedo a las alturas
 creature	a wrench that floated away forever	una llave inglesa que se iba flotando para siempre
 creature	a flag that wanted to go home	una bandera que quería volver a casa
-# not_me: X Look behind the toilet. (a whole sentence)
+# not_me: X Look behind the toilet. (a whole sentence)		
 not_me	Not me.	Yo no.
 not_me	Don't look at me.	No me mires a mí.
 not_me	I didn't touch it.	Yo no lo he tocado.
@@ -130,7 +130,7 @@ not_me	[probe] Ask the probe.	Pregúntale a la sonda.
 not_me	I have an alibi.	Tengo coartada.
 not_me	Ask the pilot.	Pregúntale al piloto.
 not_me	It was like that when I got here.	Ya estaba así cuando llegué.
-# silly_name: It was that or X.
+# silly_name: It was that or X.		
 silly_name	Rocky McRocketface	‹Rocky McRocketface›
 silly_name	Big Tube 2	Tubo Grande 2
 silly_name	Untitled Craft 3	Nave Sin Título 3
@@ -142,7 +142,7 @@ silly_name	Dave	‹Dave›
 silly_name	Second Try	Segundo Intento
 silly_name	Probably Fine	Seguramente Bien
 silly_name	Not Again	Otra Vez No
-# chore: Whose turn is it to X? / Loser has to X. / You X tomorrow.
+# chore: Whose turn is it to X? / Loser has to X. / You X tomorrow.		
 chore	clean the toilet	limpiar el váter
 chore	clean the windows	limpiar las ventanas
 chore	count the snacks	contar los aperitivos
@@ -155,7 +155,7 @@ chore	read the manual out loud	leer el manual en voz alta
 chore	fold the parachutes	doblar los paracaídas
 chore	polish the hatch	pulir la escotilla
 chore	water the plants	regar las plantas
-# noise: Did you hear that X? / There it is again. That X.
+# noise: Did you hear that X? / There it is again. That X.		
 noise	clank	golpe
 noise	squeak	chirrido
 noise	hiss	silbido
@@ -167,7 +167,7 @@ noise	pop	chasquido
 noise	thump	golpe sordo
 noise	buzz	zumbido
 noise	gurgle	gorgoteo
-# rumor: Did you hear? X / Don't tell anyone, but X (lowercase unless a name)
+# rumor: Did you hear? X / Don't tell anyone, but X (lowercase unless a name)		
 rumor	Gene sleeps under his desk.	Gene duerme debajo de su mesa.
 rumor	the intern launched a pizza last week.	el becario lanzó una pizza la semana pasada.
 rumor	Wernher strapped a booster to his chair.	Wernher se ató un propulsor a la silla.
@@ -179,7 +179,7 @@ rumor	the cafeteria ran out of coffee.	la cafetería se ha quedado sin café.
 rumor	someone painted the launch tower pink.	alguien ha pintado de rosa la torre de lanzamiento.
 rumor	the boss has a secret snack drawer.	el jefe tiene un cajón secreto de aperitivos.
 rumor	the next rocket has no seats.	el próximo cohete no tiene asientos.
-# song: Can you stop humming X?
+# song: Can you stop humming X?		
 song	the countdown song	la canción de la cuenta atrás
 song	the snack song	la canción de los aperitivos
 song	that jingle from the ads	esa musiquilla de los anuncios
@@ -188,7 +188,7 @@ song	the theme from the safety video	la música del vídeo de seguridad
 song	the docking waltz	el vals del atraque
 song	the launch pad lullaby	la nana de la plataforma
 song	the elevator music	la música del ascensor
-# experiment: Control, the X is doing something weird. (only experiments on the vessel)
+# experiment: Control, the X is doing something weird. (only experiments on the vessel)		
 experiment	[goo] Mystery Goo	m:Moco Misterioso
 experiment	[thermometer] thermometer	m:termómetro
 experiment	[barometer] barometer	m:barómetro
@@ -196,7 +196,7 @@ experiment	[seismic] seismic sensor	m:sensor sísmico
 experiment	[gravity] gravity sensor	m:sensor de gravedad
 experiment	[sciencejr] Science Jr.	m:laboratorio Science Jr.
 experiment	[magnetometer] magnetometer	m:magnetómetro
-# mc_excuse: That's not in the budget. X (a whole sentence)
+# mc_excuse: That's not in the budget. X (a whole sentence)		
 mc_excuse	Budget cuts.	Recortes de presupuesto.
 mc_excuse	Gene says no.	‹Gene› dice que no.
 mc_excuse	The intern spent it on boosters.	El becario se lo gastó en propulsores.
@@ -206,7 +206,7 @@ mc_excuse	We spent it on snacks.	Nos lo gastamos en aperitivos.
 mc_excuse	The form got lost.	Se ha perdido el formulario.
 mc_excuse	The budget is in orbit.	El presupuesto está en órbita.
 mc_excuse	Accounting is on holiday.	Contabilidad está de vacaciones.
-# status: Control, day 3 report: X (lowercase sentence)
+# status: Control, day 3 report: X (lowercase sentence)		
 status	the snacks are holding up.	los aperitivos aguantan.
 status	nobody has cried today.	hoy nadie ha llorado.
 status	the toilet works again.	el váter vuelve a funcionar.
@@ -216,7 +216,7 @@ status	morale is high. Mostly.	la moral está alta. Casi siempre.
 status	the window is clean. On the inside.	la ventana está limpia. Por dentro.
 status	we found the lost sock.	hemos encontrado el calcetín perdido.
 status	nobody touched the red button.	nadie ha tocado el botón rojo.
-# home_thing: I miss X. / I miss Kerbin. Even X.
+# home_thing: I miss X. / I miss Kerbin. Even X.		
 home_thing	real gravity	la gravedad de verdad
 home_thing	rain	la lluvia
 home_thing	the KSC cafeteria	la cafetería del centro espacial
@@ -228,7 +228,7 @@ home_thing	pizza that isn't frozen	la pizza que no está congelada
 home_thing	fresh air	el aire fresco
 home_thing	the noise of the city	el ruido de la ciudad
 home_thing	doors that just open	las puertas normales
-# jeb_idea: Probably X.
+# jeb_idea: Probably X.		
 jeb_idea	add more boosters	poner más propulsores
 jeb_idea	do a flip	dar una voltereta
 jeb_idea	eat the Mystery Goo	comerse el Moco Misterioso
@@ -238,7 +238,7 @@ jeb_idea	push the big red button	pulsar el gran botón rojo
 jeb_idea	stage everything at once	separar todas las etapas a la vez
 jeb_idea	turn off the computer	apagar el ordenador
 jeb_idea	land upside down	aterrizar boca abajo
-# cure: Try X.
+# cure: Try X.		
 cure	drinking upside down	beber boca abajo
 cure	thinking about taxes	pensar en los impuestos
 cure	staring at the fuel gauge	mirar fijamente el indicador de combustible
@@ -247,7 +247,7 @@ cure	holding your nose and humming	taparte la nariz y tararear
 cure	counting backwards from ten	contar hacia atrás desde diez
 cure	looking out the window	mirar por la ventana
 cure	a spoon of tube cheese	una cucharada de queso en tubo
-# loud_thing: You snore like X. (with a or an)
+# loud_thing: You snore like X. (with a or an)		
 loud_thing	a Mainsail	un motor Mainsail
 loud_thing	a broken vacuum	una aspiradora rota
 loud_thing	an angry goat	una cabra enfadada
@@ -257,7 +257,7 @@ loud_thing	a Kraken with a cold	un Kraken resfriado
 loud_thing	a broken radio	una radio rota
 loud_thing	a herd of rovers	una manada de róvers
 loud_thing	an alarm clock in a bucket	un despertador en un cubo
-# game: Let's play X.
+# game: Let's play X.		
 game	I spy	veo veo
 game	rock paper scissors	piedra, papel o tijera
 game	twenty questions	las veinte preguntas

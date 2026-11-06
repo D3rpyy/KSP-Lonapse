@@ -1,6 +1,6 @@
-# Blackout intercom: crew-only scenes for the radio blackout (phase blackout). New keys: bl_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+# Blackout intercom: crew-only scenes for the radio blackout (phase blackout). New keys: bl_												
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
 bl_privacy_1	chatter	chatter	calm	crew	bl_privacy	1	both	blackout	any	¿Hola? ¿Control de Misión?	Hello? Mission Control? | Control? Hello? | Mission Control, do you read?	
 bl_privacy_2	chatter	chatter	calm	crew	bl_privacy	2	both	blackout	any	No nos oyen. Es el apagón de radio.	They can't hear us. It's the radio blackout. | Radio blackout. They can't hear us. | They can't hear anything right now, {other}.	 |  | Ahora mismo no oyen nada, {other}.
 bl_privacy_3	chatter	chatter	calm	crew	bl_privacy	3	both	blackout	any	Por fin un poco de intimidad.	Finally some privacy. | Privacy, at last. | Finally, some alone time.	

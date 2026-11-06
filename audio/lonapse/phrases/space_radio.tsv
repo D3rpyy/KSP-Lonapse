@@ -1,6 +1,6 @@
-# Goofy kerbal radio with Mission Control in orbit, coast and landed. New keys: sp_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	topic	spanish	english	spanish_rt
+# Goofy kerbal radio with Mission Control in orbit, coast and landed. New keys: sp_													
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.													
 chatter_calm_01	chatter	chatter	calm	crew	chatter_calm_01	1	both	any	any	any	Todo sigue normal.	Everything still normal. | All still normal. | Everything's normal here.	
 chatter_calm_02	chatter	chatter	calm	crew	chatter_calm_02	1	both	any	any	any	Vamos bien por ahora.	So far so good. | Good so far. | No problems so far.	
 chatter_calm_03	chatter	chatter	calm	crew	chatter_calm_03	1	both	goofy	any	any	Esto va tranquilo.	Things are quiet. | It's quiet. | Quiet up here.	

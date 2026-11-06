@@ -1,9 +1,9 @@
-# Runtime voice: the crew answers a Mission Control runtime line. The format is explained at the top of reports.tsv.
-# kind reply: spoken by a kerbal aboard right after the MC line, sometimes. The kerbal a report talks to answers it.
-# to=<id> in the when column: the MC lines it answers. An id, or a prefix with * (to=rt_orbit* answers rt_orbit,
-#   rt_orbit_inc ...). Several to= : any of them. Without to= a reply answers any report or warp line.
-# The values and names of the MC line are there too, self is the kerbal who answers.
 id	kind	when	spanish	english
+# Runtime voice: the crew answers a Mission Control runtime line. The format is explained at the top of reports.tsv.				
+# kind reply: spoken by a kerbal aboard right after the MC line, sometimes. The kerbal a report talks to answers it.				
+# to=<id> in the when column: the MC lines it answers. An id, or a prefix with * (to=rt_orbit* answers rt_orbit,				
+#   rt_orbit_inc ...). Several to= : any of them. Without to= a reply answers any report or warp line.				
+# The values and names of the MC line are there too, self is the kerbal who answers.				
 rt_re_any	reply		Recibido, Control. Lo apuntamos en algún sitio. | Gracias, Control. ¿Eso entra en el examen? | Entendido. No sé qué significa, pero entendido. | Recibido. La próxima vez, más despacio. | Control, ¿podéis mandar eso también por escrito? | Anotado. En la pared, porque no tenemos papel. | Lo que tú digas, Control. | Vale. Haremos como que lo entendemos. | Gracias, Control. Nos alegráis el día. | Recibido. Seguimos aquí, por si alguien preguntaba. | Gracias, Control. Muy interesante. De verdad.	Copy, Control. We'll write that down somewhere. | Thanks, Control. Will that be on the test? | Understood. No idea what it means, but understood. | Copy. Slower next time. | Control, can you send that in writing too? | Noted. On the wall, because we're out of paper. | Whatever you say, Control. | Okay. We'll pretend we understand. | Thanks, Control. You make our day. | Copy. Still here, in case anyone was wondering. | Thanks, Control. Very interesting. Really.
 rt_re_vessel	reply		{vessel} recibe. Alto y claro. | Aquí {vessel}. Todo tranquilo por aquí arriba.	{vessel} copies. Loud and clear. | {vessel} here. All quiet up here.
 rt_re_orbit	reply	to=rt_orbit*	Lo sabemos. Llevamos un rato dando vueltas. | Desde aquí arriba todo se ve muy pequeño. | ¿Otra vuelta? Me estoy mareando.	We know. We've been going round for a while. | Everything looks very small from up here. | Another lap? I'm getting dizzy.

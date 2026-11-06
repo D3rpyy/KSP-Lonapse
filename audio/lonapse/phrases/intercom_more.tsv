@@ -1,5 +1,5 @@
-# Lonapse 0.6.0 lines (im_). Written as drafts, converted to this table.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+# Lonapse 0.6.0 lines (im_). Written as drafts, converted to this table.															
 im_001_1	chatter	chatter	calm	crew	im_001	1	both	orbit	any	any	any	any	¿Quién se ha comido mi bocadillo?	Who ate my sandwich? | Where did my sandwich go? | {other}, who ate my sandwich?	 |  | {other}, ¿quién se ha comido mi bocadillo?
 im_001_2	chatter	chatter	calm	crew	im_001	2	both	orbit	any	any	any	any	La gravedad.	Gravity did. | Gravity ate it. | Blame gravity. | Gravity did, {other}.	 |  |  | La gravedad, {other}.
 im_001_3	chatter	chatter	calm	crew	im_001	3	both	orbit	any	any	any	any	Aquí no hay gravedad.	There's no gravity here. | We don't have gravity here. | There is no gravity up here.	

@@ -1,12 +1,12 @@
-# Runtime voice: radio chats between kerbals of two vessels nearby: a ship and a kerbal outside, a ship and a
-# lander, two EVA kerbals further apart. The format is explained at the top of reports.tsv.
-# A chat with apart=1 in the when of line 1 only plays between two kerbals of different vessels within 2.3 km. It
-# sounds like the radio and needs no link to Mission Control. Line 1 has the values of the kerbal who starts it:
-# a_eva is 1 when that kerbal is on EVA (else 0), b_eva the same for the other. pair_m is the meters between the
-# two vessels, jet and ship_m are the starter's own on EVA. my_ship is the ship the speaker is in, their_ship the
-# ship of the one spoken to (not set for a kerbal on EVA). link is 1 with a link to Mission Control, else 0.
-# Each wording of a line must fit each wording of the line before and after it: the wordings are picked one by one.
 id	kind	when	spanish	english
+# Runtime voice: radio chats between kerbals of two vessels nearby: a ship and a kerbal outside, a ship and a				
+# lander, two EVA kerbals further apart. The format is explained at the top of reports.tsv.				
+# A chat with apart=1 in the when of line 1 only plays between two kerbals of different vessels within 2.3 km. It				
+# sounds like the radio and needs no link to Mission Control. Line 1 has the values of the kerbal who starts it:				
+# a_eva is 1 when that kerbal is on EVA (else 0), b_eva the same for the other. pair_m is the meters between the				
+# two vessels, jet and ship_m are the starter's own on EVA. my_ship is the ship the speaker is in, their_ship the				
+# ship of the one spoken to (not set for a kerbal on EVA). link is 1 with a link to Mission Control, else 0.				
+# Each wording of a line must fit each wording of the line before and after it: the wordings are picked one by one.				
 rt_chat_rshipeva_1	chat	apart=1 a_eva=0 b_eva=1	{other}, ¿qué tal ahí fuera? | {other}, ¿cómo va el paseo?	{other}, how's it out there? | {other}, how's the walk?
 rt_chat_rshipeva_2	chat		Precioso. Deberías salir. | Bien. El traje aprieta un poco.	Gorgeous. You should come out. | Fine. The suit's a bit tight.
 rt_chat_rshipeva_3	chat		Aquí dentro tenemos café. | Pues aquí dentro se está calentito.	We have coffee in here. | Well, it's nice and warm in here.

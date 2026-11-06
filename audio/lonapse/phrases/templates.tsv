@@ -1,8 +1,8 @@
-# Experimental (procedural talk): templates. The spanish is a general sentence, the english has slots that the
-# plugin fills in game ({thing} from pools.tsv, {day} {here} {vessel} {alt_km} from the flight, {other} and
-# {self} in intercom scenes). Versions split by | are picked per play. Every version of a line must fit every
-# version of the lines around it. So one clip gives many subtitles, and it is still real loñapsE. New keys: tp_
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+# Experimental (procedural talk): templates. The spanish is a general sentence, the english has slots that the												
+# plugin fills in game ({thing} from pools.tsv, {day} {here} {vessel} {alt_km} from the flight, {other} and												
+# {self} in intercom scenes). Versions split by | are picked per play. Every version of a line must fit every												
+# version of the lines around it. So one clip gives many subtitles, and it is still real loñapsE. New keys: tp_												
 tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again. | Okay. Who moved my {thing}? | {other}, did you take my {thing}?	¿Quién se ha llevado mi {thing}? | ¿Alguien ha visto mi {thing}? | Mi {thing} ha desaparecido. Otra vez. | A ver. ¿Quién ha movido mi {thing}? | {other}, ¿has cogido tú mi {thing}?
 tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	{not_me} Look behind the {spot}. | {not_me} Try the {spot}. | Check behind the {spot}, {other}. | Last time it was under the {spot}.	{not_me} Mira detrás {del spot}. | {not_me} Prueba en {el spot}. | Mira detrás {del spot}, {other}. | La última vez estaba debajo {del spot}.
 tp_lost_3	chatter	chatter	calm	crew	tp_lost	3	both	goofy	any	Ah. Ahí estaba.	Oh. Found it. Next to my {thing:2}. | Found it. It was with my {thing:2}. | Oh. There it is. | Got it. Sorry, {other}.	Ah. Ya está. Al lado de mi {thing:2}. | Encontrado. Estaba con mi {thing:2}. | Ah. Ahí está. | Ya lo tengo. Perdona, {other}.

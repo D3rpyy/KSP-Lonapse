@@ -1,5 +1,5 @@
-# Lonapse 0.6.0: more lines for the flight events (callouts, power, signal, landing, docking, EVA, stations).
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
+# Lonapse 0.6.0: more lines for the flight events (callouts, power, signal, landing, docking, EVA, stations).																	
 em_001	throttle_full	callout	none	crew	em_001	1	both	any	any	any	any	any	any		¡A tope!	Full throttle! | Full throttle! | Throttle all the way!	
 em_002	throttle_full	callout	none	crew	em_002	1	both	any	any	any	any	any	any		Todo el empuje.	All the thrust. | All the thrust. | Every bit of thrust.	
 em_003	throttle_full	callout	none	crew	em_003	1	both	any	any	any	any	any	any		¡Potencia máxima!	Maximum power! | Maximum power! | Max power!	

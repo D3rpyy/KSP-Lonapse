@@ -1,10 +1,10 @@
-# Runtime voice: chats between kerbals on EVA, over the suit radio. The format is explained at the top of reports.tsv.
-# A chat with on_eva=1 in the when of line 1 only plays on EVA, between two kerbals of an EVA group (other kerbals on
-# EVA within 150 m). It sounds like the radio: key click, line, roger beep. Chats without on_eva never play on EVA.
-# Values of the kerbal who starts: jet (jetpack percent), ship_m (meters to the ship), pair_m (meters between the two),
-# eva_mins (minutes outside). vessel is the ship nearby. Each wording of a line must fit each wording of the line
-# before and after it: the wordings are picked one by one.
 id	kind	when	spanish	english
+# Runtime voice: chats between kerbals on EVA, over the suit radio. The format is explained at the top of reports.tsv.				
+# A chat with on_eva=1 in the when of line 1 only plays on EVA, between two kerbals of an EVA group (other kerbals on				
+# EVA within 150 m). It sounds like the radio: key click, line, roger beep. Chats without on_eva never play on EVA.				
+# Values of the kerbal who starts: jet (jetpack percent), ship_m (meters to the ship), pair_m (meters between the two),				
+# eva_mins (minutes outside). vessel is the ship nearby. Each wording of a line must fit each wording of the line				
+# before and after it: the wordings are picked one by one.				
 rt_chat_evacheck_1	chat	on_eva=1	{other}, ¿me oyes? | {other}, prueba de radio. ¿Me recibes?	{other}, can you hear me? | {other}, radio check. Do you copy?
 rt_chat_evacheck_2	chat		Alto y claro. Demasiado claro. | Te oigo. Y te veo. Deja de saludar.	Loud and clear. Too clear. | I hear you. And I see you. Stop waving.
 rt_chat_evacheck_3	chat		Perfecto. Solo quería hablar con alguien. | Vale. Era para probar el botón.	Great. I just wanted to talk to someone. | Okay. I was testing the button.

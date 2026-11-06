@@ -1,8 +1,8 @@
-# Own lines for the qbe, mk2drone, mpo and mtm probe cores (characters from their in-game part descriptions). New keys: pk_
-# QBE: tiny, no reaction wheels, 5 EC, built for optional return. Drone Core: C7's AI that replaced the test pilots.
-# MPO: the Moho Planetary Observer, loves heat, huge antenna. MTM: the patient xenon workhorse that carries it.
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english
+# Own lines for the qbe, mk2drone, mpo and mtm probe cores (characters from their in-game part descriptions). New keys: pk_																
+# QBE: tiny, no reaction wheels, 5 EC, built for optional return. Drone Core: C7's AI that replaced the test pilots.																
+# MPO: the Moho Planetary Observer, loves heat, huge antenna. MTM: the patient xenon workhorse that carries it.																
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.																
 pk_qbe_chat_01_1	probe_chat	chatter	calm	mc	pk_qbe_chat_01	1	m	goofy	any	any	any	any	qbe		Hola, QBE. ¿Cuánta batería te queda?	Hi, QBE. How much battery do you have left? | Hi, QBE. How much battery do you have left? | Hello, QBE. Battery check?
 pk_qbe_chat_01_2	probe_chat	chatter	calm	probe	pk_qbe_chat_01	2	both	goofy	any	any	any	any	qbe	sleepy		[beeps very faintly]
 pk_qbe_chat_01_3	probe_chat	chatter	calm	mc	pk_qbe_chat_01	3	m	goofy	any	any	any	any	qbe		Vale. No hables mucho.	Okay. Don't talk too much. | Okay. Don't talk too much. | Okay. Save your words.

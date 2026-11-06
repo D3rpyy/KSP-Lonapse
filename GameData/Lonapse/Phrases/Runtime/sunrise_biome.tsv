@@ -1,7 +1,7 @@
-# Runtime voice: sunrise in orbit and the biome under the vessel. The format is explained at the top of reports.tsv.
-# kind sunrise: Mission Control when the vessel comes out of the shadow of its body in orbit, now and then.
-# sunrises is the number of sunrises this flight. biome is the biome under the vessel (a name, said as it is).
 id	kind	when	spanish	english
+# Runtime voice: sunrise in orbit and the biome under the vessel. The format is explained at the top of reports.tsv.				
+# kind sunrise: Mission Control when the vessel comes out of the shadow of its body in orbit, now and then.				
+# sunrises is the number of sunrises this flight. biome is the biome under the vessel (a name, said as it is).				
 rt_sunrise	sunrise		{vessel}, ahí sale el sol otra vez. Buenos días. | Amanecer sobre {body}. Poneos las gafas de sol. | Buenos días, otra vez.	{vessel}, there's the sun again. Good morning. | Sunrise over {body}. Put your sunglasses on. | Good morning, again.
 rt_sunrise_first	sunrise	sunrises=1	Vuestro primer amanecer en órbita. Disfrutadlo. | Primer amanecer del vuelo. Precioso, ¿verdad?	Your first sunrise in orbit. Enjoy it. | First sunrise of the flight. Beautiful, isn't it?
 rt_sunrise_count	sunrise	sunrises>=2	Amanecer número {sunrises} de este vuelo. Seguimos contando. | Ya van {sunrises} amaneceres. Aquí abajo solo hemos visto uno.	Sunrise number {sunrises} this flight. We're still counting. | That's {sunrises} sunrises. Down here we've only seen one.

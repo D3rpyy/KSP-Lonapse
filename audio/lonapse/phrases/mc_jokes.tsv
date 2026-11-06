@@ -1,6 +1,6 @@
-# Mission Control jokes to the crew. New keys: mj_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+# Mission Control jokes to the crew. New keys: mj_												
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
 chat_calm_s6_1	chatter	chatter	calm	crew	chat_calm_s6	1	both	orbit	any	Control, ¿qué tiempo hace en el centro espacial?	Control, how's the weather at the space center? | Control, what's the weather like at the space center? | Control, how's the weather down there?	
 chat_calm_s6_2	chatter	chatter	calm	mc	chat_calm_s6	2	m	orbit	any	Nublado. Os envidiamos un poco.	Cloudy. We envy you a little. | Gray. We're a bit jealous of you. | Cloudy. We kind of envy you.	
 chat_calm_s7_1	chatter	chatter	calm	mc	chat_calm_s7	1	m	goofy	any	Recordad comer algo.	Remember to eat something. | Don't forget to eat. | Remember lunch, {vessel}.	 |  | Acordaos de comer, {vessel}.

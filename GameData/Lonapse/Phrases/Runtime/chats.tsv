@@ -1,5 +1,5 @@
-# Runtime voice: intercom chats between two kerbals with real values. The format is explained at the top of reports.tsv.
 id	kind	when	spanish	english
+# Runtime voice: intercom chats between two kerbals with real values. The format is explained at the top of reports.tsv.				
 rt_chat_fuel_1	chat	fuel>=25	{other}, nos queda el {fuel} por ciento de combustible. | {other}, el combustible está al {fuel} por ciento.	{other}, we have {fuel} percent fuel left. | {other}, fuel is at {fuel} percent.
 rt_chat_fuel_2	chat		¿Y eso es mucho o poco? | ¿Eso nos llega para volver?	Is that a lot or a little? | Is that enough to get back?
 rt_chat_fuel_3	chat		Depende de a quién preguntes. | Si no preguntas más, sí. | Pregúntamelo cuando lleguemos.	Depends on who you ask. | If you stop asking, yes. | Ask me when we get there.
@@ -91,7 +91,7 @@ rt_chat_newname_1	chat		{other}, esta nave necesita un nombre. | Se me ha ocurri
 rt_chat_newname_2	chat		Ya lo tiene. {vessel}. Está escrito en un lado. | {vessel}. Ese es su nombre. Lo elegí yo.	It has one. {vessel}. It's written on the side. | {vessel}. That's its name. I picked it.
 rt_chat_newname_3	chat		¿{vessel}? ¿En serio? | ¿Y por qué {vessel}?	{vessel}? Really? | And why {vessel}?
 rt_chat_newname_4	chat		Lo saqué de un sombrero. Había dos papeles. | Porque suena a alguien que vuelve a casa. | Sonaba mejor en la plataforma. | Los ingenieros dijeron que trae suerte. Uno de ellos.	I pulled it out of a hat. There were two notes. | Because it sounds like someone who comes home. | It sounded better on the launch pad. | The engineers said it's lucky. One of them did.
-# chats with a persona: a=dim b=brave and so on (badass brave nervous dim veteran)
+# chats with a persona: a=dim b=brave and so on (badass brave nervous dim veteran)				
 rt_chat_dimbtn_1	chat	a=dim	{other}, ¿para qué sirve este botón? | Voy a pulsar este botón.	{other}, what does this button do? | I'm going to press this button.
 rt_chat_dimbtn_2	chat		¡No lo toques! | {other}, aparta la mano de ahí.	Don't touch it! | {other}, move your hand away from there.
 rt_chat_dimbtn_3	chat		Demasiado tarde. | Vale. Pero era rojo y bonito.	Too late. | Fine. But it was red and pretty.

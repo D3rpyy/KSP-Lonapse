@@ -1,6 +1,6 @@
-# Science radio after an experiment (event science, topic = experiment id or any). New keys: sc_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+# Science radio after an experiment (event science, topic = experiment id or any). New keys: sc_															
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.															
 sc_crewreport_a_1	science	chatter	calm	crew	sc_crewreport_a	1	both	any	any	any	any	crewreport	Informe: todo verde, todo raro, todo bonito.	Report: everything green, everything weird, everything pretty. | Report: everything green, everything weird, everything pretty. | Crew report: green, weird and pretty. All of it.	
 sc_crewreport_a_2	science	chatter	calm	mc	sc_crewreport_a	2	m	any	any	any	any	crewreport	Recibido. Va a la carpeta de cosas bonitas.	Copy. Filing it under pretty things. | Copy. Filing it under pretty things. | Copy. That goes in the pretty folder.	
 sc_crewreport_b_1	science	chatter	calm	crew	sc_crewreport_b	1	both	any	any	scientist	any	crewreport	Anoto lo que veo. Mucho espacio y poca gente.	Noting what I see. Lots of space, few people. | Noting what I see. Lots of space, few people. | Observation: much space, not many people.	

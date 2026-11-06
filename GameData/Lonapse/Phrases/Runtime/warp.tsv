@@ -1,9 +1,9 @@
-# Runtime voice: lines for time warp on rails. The format is explained at the top of reports.tsv.
-# kind warp: Mission Control, now and then in place of the usual exchange while the warp runs.
-# The chats below are normal intercom chats that only fit in warp (the check in_warp=1).
-# in_warp is 1 in time warp, for checks only. node_h is the hours to the next burn,
-# soi_h the hours until the orbit leaves this body, next the body after that.
 id	kind	when	spanish	english
+# Runtime voice: lines for time warp on rails. The format is explained at the top of reports.tsv.				
+# kind warp: Mission Control, now and then in place of the usual exchange while the warp runs.				
+# The chats below are normal intercom chats that only fit in warp (the check in_warp=1).				
+# in_warp is 1 in time warp, for checks only. node_h is the hours to the next burn,				
+# soi_h the hours until the orbit leaves this body, next the body after that.				
 rt_warp	warp		Aceleración temporal activa. Aquí abajo el café se enfría muy rápido. | Seguimos aquí. Avisad cuando lleguéis. | El tiempo vuela. Literalmente. | Nada que hacer más que esperar. Disfrutad de las vistas. | {vessel}, os vemos correr por el mapa.	Time warp is on. Down here the coffee goes cold very fast. | We're still here. Let us know when you get there. | Time flies. Literally. | Nothing to do but wait. Enjoy the view. | {vessel}, we see you racing across the map.
 rt_warp_node	warp	node_min>=2 node_min<60	Maniobra en {node_min} minutos. Preparad los motores. | Faltan {node_min} minutos para la maniobra. Os despertamos a tiempo. | La maniobra llega en {node_min} minutos. Atentos al reloj.	Burn in {node_min} minutes. Get the engines ready. | {node_min} minutes to the burn. We'll wake you in time. | The burn comes in {node_min} minutes. Watch the clock.
 rt_warp_node_h	warp	node_h>=2	Próxima maniobra en {node_h} horas. Hay tiempo para una siesta. | La maniobra es dentro de {node_h} horas. Tranquilos. | Quedan {node_h} horas para la maniobra. Os avisamos antes.	Next burn in {node_h} hours. Time for a nap. | The burn is {node_h} hours away. Relax. | {node_h} hours to the burn. We'll call you before it.

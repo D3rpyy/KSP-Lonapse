@@ -1,6 +1,6 @@
-# Intercom: crew-only scenes with two or more lines. Always funny, never in a serious phase. New keys: ic_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+# Intercom: crew-only scenes with two or more lines. Always funny, never in a serious phase. New keys: ic_												
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
 intercom_calm_s1_1	chatter	chatter	calm	crew	intercom_calm_s1	1	both	goofy	any	¿Has visto eso por la ventana?	Did you see that out the window? | Did you see that out the window, {other}? | Look out the window. Did you see that?	 | ¿Has visto eso por la ventana, {other}? | 
 intercom_calm_s1_2	chatter	chatter	calm	crew	intercom_calm_s1	2	both	goofy	any	Precioso, ¿verdad?	Beautiful, isn't it? | Pretty, isn't it? | Gorgeous, right? | Beautiful, isn't it, {other}?	 |  |  | Precioso, ¿verdad, {other}?
 intercom_calm_s2_1	chatter	chatter	calm	crew	intercom_calm_s2	1	both	goofy	any	¿Queda café?	Any coffee left? | Is there any coffee left? | {other}, any coffee left?	 |  | {other}, ¿queda café?

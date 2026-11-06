@@ -1,11 +1,11 @@
-# Runtime voice: EVA and flags. The format is explained at the top of reports.tsv.
-# kind eva: Mission Control to a kerbal on EVA, now and then in place of a recorded EVA scene, and as the report
-#   on EVA (the ship reports do not fit a kerbal outside). kerbal is the kerbal it talks to, who also answers.
-#   jet is the jetpack propellant in percent, ship_m the meters to the ship nearby, eva_mins the minutes outside
-#   (only when the kerbal was seen going out this session). vessel is the ship nearby, not the kerbal.
-# kind flag: Mission Control right after a flag is planted. The kerbal who planted it nearly always answers.
-#   flag is the name of the flag, when the voice can say it.
 id	kind	when	spanish	english
+# Runtime voice: EVA and flags. The format is explained at the top of reports.tsv.				
+# kind eva: Mission Control to a kerbal on EVA, now and then in place of a recorded EVA scene, and as the report				
+#   on EVA (the ship reports do not fit a kerbal outside). kerbal is the kerbal it talks to, who also answers.				
+#   jet is the jetpack propellant in percent, ship_m the meters to the ship nearby, eva_mins the minutes outside				
+#   (only when the kerbal was seen going out this session). vessel is the ship nearby, not the kerbal.				
+# kind flag: Mission Control right after a flag is planted. The kerbal who planted it nearly always answers.				
+#   flag is the name of the flag, when the voice can say it.				
 rt_eva	eva		{kerbal}, te vemos en cámara. Saluda. | Todo tranquilo por aquí abajo. ¿Y ahí fuera? | Recuerda: un pie delante del otro. | Respira despacio. El aire del traje no es infinito. | Seguimos tu señal. Muy bonita, por cierto. | Paseo espacial en curso. Medio centro de control está mirando.	{kerbal}, we have you on camera. Wave. | All quiet down here. And out there? | Remember: one foot in front of the other. | Breathe slowly. The suit air isn't endless. | We're tracking your signal. Very pretty, by the way. | EVA in progress. Half of Mission Control is watching.
 rt_eva_jet	eva	jet>=50	Mochila al {jet} por ciento. Hay para volar un rato. | Te queda el {jet} por ciento de propulsor. No lo gastes en piruetas.	Jetpack at {jet} percent. Enough to fly around a bit. | {jet} percent propellant left. Don't spend it on flips.
 rt_eva_jet_low	eva	jet<25	Propulsor al {jet} por ciento. Vuelve antes de quedarte flotando. | Solo el {jet} por ciento en la mochila. Nada de acrobacias.	Propellant at {jet} percent. Come back before you're left floating. | Only {jet} percent in the jetpack. No stunts.

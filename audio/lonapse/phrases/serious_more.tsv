@@ -1,5 +1,5 @@
-# Lonapse 0.6.0 lines (sr_). Written as drafts, converted to this table.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+# Lonapse 0.6.0 lines (sr_). Written as drafts, converted to this table.															
 sr_001	chatter	chatter	calm	mc	sr_001	1	m	launch	any	any	any	any	¡Despegue limpio! Aquí abajo gritan todos.	Clean liftoff! Everyone down here is cheering. | Clean liftoff! Everyone down here is cheering. | Clean liftoff! The room is cheering.	
 sr_002	chatter	chatter	calm	mc	sr_002	1	m	launch	any	any	any	any	Torre despejada. Buen viaje.	Tower cleared. Have a good trip. | Tower cleared. Have a good trip. | Tower clear. Good trip, {vessel}.	 |  | Torre despejada. Buen viaje, {vessel}.
 sr_003	chatter	chatter	calm	crew	sr_003	1	both	launch	any	any	any	any	¡Nos vamos! ¡De verdad nos vamos!	We're going! We're really going! | We're going! We're really going! | We're flying! Really flying!	

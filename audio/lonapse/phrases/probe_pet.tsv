@@ -1,9 +1,9 @@
-# Probe pet talk (plan v5 and v6): Mission Control and the probe talk on the radio. probe_chat and probe_sleepy:
-# MC starts. probe_hail (v6): the probe starts with a beep, MC answers. New keys: pp_
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
-# probe rows are subtitle only: empty spanish, english like [beeps excitedly], a beep mood. Core holds for the whole scene.
-# Cores: stayputnik eager old-timer, okto clever show-off, hecs anxious perfectionist, rovemate lazy dog, snob posh and aloof, generic plain.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
+# Probe pet talk (plan v5 and v6): Mission Control and the probe talk on the radio. probe_chat and probe_sleepy:																	
+# MC starts. probe_hail (v6): the probe starts with a beep, MC answers. New keys: pp_																	
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.																	
+# probe rows are subtitle only: empty spanish, english like [beeps excitedly], a beep mood. Core holds for the whole scene.																	
+# Cores: stayputnik eager old-timer, okto clever show-off, hecs anxious perfectionist, rovemate lazy dog, snob posh and aloof, generic plain.																	
 pp_stayputnik_chat_01_1	probe_chat	chatter	calm	mc	pp_stayputnik_chat_01	1	m	goofy	any	any	any	any	stayputnik		Hola, Stayputnik. ¿Cómo va todo?	Hi, Stayputnik. How's it going? | Hi, Stayputnik. How's it going? | Hello, Stayputnik. All good?	
 pp_stayputnik_chat_01_2	probe_chat	chatter	calm	probe	pp_stayputnik_chat_01	2	both	goofy	any	any	any	any	stayputnik	happy		[beeps very eagerly]	
 pp_stayputnik_chat_01_3	probe_chat	chatter	calm	mc	pp_stayputnik_chat_01	3	m	goofy	any	any	any	any	stayputnik		Vale, vale. De una en una.	Okay, okay. One at a time. | Okay, okay. One at a time. | Fine. One beep at a time.	
@@ -206,7 +206,7 @@ pp_generic_hail_03_2	probe_hail	chatter	calm	mc	pp_generic_hail_03	2	m	goofy	any
 pp_generic_hail_04_1	probe_hail	chatter	calm	probe	pp_generic_hail_04	1	both	goofy	any	any	any	any	generic	happy		[beeps rhythmically]	
 pp_generic_hail_04_2	probe_hail	chatter	calm	mc	pp_generic_hail_04	2	m	goofy	any	any	any	any	generic		¿Eso era una canción?	Was that a song? | Was that a song? | Did you just sing?	
 pp_generic_hail_04_3	probe_hail	chatter	calm	probe	pp_generic_hail_04	3	both	goofy	any	any	any	any	generic	proud		[beeps proudly]	
-# plan v6: callouts, plan_node, stress, say again, milestones, rover, data
+# plan v6: callouts, plan_node, stress, say again, milestones, rover, data																	
 pp_stress_spin_any_1	probe_stress	chatter	tense	mc	pp_stress_spin_any	1	m	any	spin	any	any	any	any		Sonda, giras demasiado. Aguanta.	Probe, you're spinning too much. Hang on. | Probe, you're spinning too much. Hang on. | Too much spin, probe. Hold on.	
 pp_stress_spin_any_2	probe_stress	chatter	tense	probe	pp_stress_spin_any	2	both	any	spin	any	any	any	any	scared		[beeps dizzily]	
 pp_stress_gforce_any_1	probe_stress	chatter	tense	mc	pp_stress_gforce_any	1	m	any	gforce	any	any	any	any		Mucha fuerza. Ya casi está.	Lots of g. Almost done. | Lots of g. Almost done. | Heavy g's. Nearly over.	
@@ -299,8 +299,8 @@ pp_data_any_2_1	probe_data	chatter	calm	probe	pp_data_any_2	1	both	any	any	any	a
 pp_data_any_2_2	probe_data	chatter	calm	mc	pp_data_any_2	2	m	any	any	any	any	any	any		Datos entrando. Gracias.	Data coming in. Thanks. | Data coming in. Thanks. | Getting the data. Thanks.	
 pp_data_any_3_1	probe_data	chatter	calm	probe	pp_data_any_3	1	both	any	any	any	any	any	any	happy		[beeps a data stream]	
 pp_data_any_3_2	probe_data	chatter	calm	mc	pp_data_any_3	2	m	any	any	any	any	any	any		Te leemos. Sigue enviando.	We read you. Keep sending. | We read you. Keep sending. | Got you. Keep it coming.	
-
-# Serious phases (launch, ascent, reentry, descent): MC keeps talking to the probe, short and calm. Core any.
+																	
+# Serious phases (launch, ascent, reentry, descent): MC keeps talking to the probe, short and calm. Core any.																	
 pp_any_serious_01_1	probe_chat	chatter	calm	mc	pp_any_serious_01	1	m	serious	any	any	any	any	any		Sonda, telemetría limpia. Sigue así.	Probe, clean telemetry. Keep it up. | Probe, clean telemetry. Keep it up. | Clean telemetry, probe. Keep going.	
 pp_any_serious_01_2	probe_chat	chatter	calm	probe	pp_any_serious_01	2	both	serious	any	any	any	any	any	happy		[beeps steadily]	
 pp_any_serious_01_3	probe_chat	chatter	calm	mc	pp_any_serious_01	3	m	serious	any	any	any	any	any		Recibido.	Copy. | Copy. | Copy that.	

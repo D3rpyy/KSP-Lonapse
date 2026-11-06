@@ -1,5 +1,5 @@
-# Runtime voice: science and contract follow-ups. The format is explained at the top of reports.tsv.
 id	kind	when	spanish	english
+# Runtime voice: science and contract follow-ups. The format is explained at the top of reports.tsv.				
 rt_sci_pts	science_pts		Datos de {exp} recibidos desde {body}. Son {sci} puntos de ciencia. | Los científicos dan las gracias por los datos de {exp}. {sci} puntos. | Datos de {exp} recibidos. Ciencia: {sci} puntos.	Got the {exp} data from {body}. That's {sci} science points. | The scientists say thanks for the {exp} data. {sci} points. | Got the {exp} data. Science: {sci} points.
 rt_sci_big	science_pts	sci>=10	¡{sci} puntos! El laboratorio está de fiesta.	{sci} points! The lab is partying.
 rt_sci	science		Datos de {exp} recibidos desde {body}. | Han llegado los datos de {exp}. Gracias.	Got the {exp} data from {body}. | The {exp} data came in. Thanks.
@@ -7,9 +7,9 @@ rt_con_funds	contract_funds		Contrato cumplido. {funds} fondos para el programa.
 rt_con_big	contract_funds	funds>=100000	{funds} fondos. Contabilidad no se lo cree.	{funds} funds. Accounting can't believe it.
 rt_con_done	contract_done		Contrato cumplido. Buen trabajo, equipo. | Otro contrato cumplido. Contabilidad sonríe.	Contract complete. Good work, team. | Another contract done. Accounting is smiling.
 rt_con_fail	contract_failed		Hemos perdido un contrato. Contabilidad no está contenta. | Contrato perdido. Lo intentaremos otra vez.	We lost a contract. Accounting is not happy. | Contract lost. We'll try again.
-# Science: exp and body, and with the totals also vessel, day, sci_total and the other flight values. sci is the
-# value of this data, sci_left what is still left of this experiment here after it, sci_first is 1 for the first
-# data of this experiment here (else 0). science_pts plays when sci is known, science only when it is not.
+# Science: exp and body, and with the totals also vessel, day, sci_total and the other flight values. sci is the				
+# value of this data, sci_left what is still left of this experiment here after it, sci_first is 1 for the first				
+# data of this experiment here (else 0). science_pts plays when sci is known, science only when it is not.				
 rt_sci_pts_more	science_pts	sci>=2	Datos de {exp} desde {body}: {sci} puntos de ciencia. Seguid así. | {vessel}, recibimos {sci} puntos de ciencia. El laboratorio toma nota. | El informe de {exp} vale {sci} puntos. Nada mal.	{exp} data from {body}: {sci} science points. Keep it up. | {vessel}, we're getting {sci} science points. The lab is taking notes. | The {exp} report is worth {sci} points. Not bad.
 rt_sci_small	science_pts	sci<2	Datos de {exp} recibidos. Poca ciencia, pero toda cuenta. | Un poco más de ciencia de {exp}. Cada dato cuenta.	Got the {exp} data. Not much science, but it all counts. | A little more {exp} science. Every bit counts.
 rt_sci_first	science_pts	sci_first=1	¡Primeros datos de {exp} desde {body}! Esto no lo tenía nadie. | Es la primera vez que recibimos datos de {exp} desde {body}. Los científicos están encantados.	First {exp} data from {body}! Nobody had this yet. | That's the first time we get {exp} data from {body}. The scientists are delighted.
@@ -20,9 +20,9 @@ rt_sci_home	science_pts	at_home=1	Datos de {exp} desde nuestro propio patio. Bar
 rt_sci_far	science_pts	at_home=0	Datos de {exp} desde {body}. Eso queda muy lejos de aquí. | {body} nos cuenta sus secretos. Gracias por los datos de {exp}.	{exp} data from {body}. That's a long way from here. | {body} is telling us its secrets. Thanks for the {exp} data.
 rt_sci_day	science_pts	day>=2	Día {day} y la ciencia sigue llegando. | Día {day} de la misión. Otro informe de {exp} para el archivo.	Day {day} and the science keeps coming. | Mission day {day}. Another {exp} report for the archive.
 rt_sci_more	science		{vessel}, datos de {exp} recibidos. Buen trabajo. | Los datos de {exp} de {body} ya están en el laboratorio. | Datos de {exp} recibidos. Los científicos ya discuten.	{vessel}, {exp} data received. Good work. | The {exp} data from {body} is in the lab. | Got the {exp} data. The scientists are already arguing.
-# Contracts: funds is the reward of a finished contract (contract_funds), or the funds a failed one costs
-# (contract_failed). con_sci and con_rep are the science and reputation it gives, con_rep also what a failed one
-# costs. contracts is the number of contracts still open, with funds_total, sci_total, rep, day and vessel.
+# Contracts: funds is the reward of a finished contract (contract_funds), or the funds a failed one costs				
+# (contract_failed). con_sci and con_rep are the science and reputation it gives, con_rep also what a failed one				
+# costs. contracts is the number of contracts still open, with funds_total, sci_total, rep, day and vessel.				
 rt_con_more	contract_funds	funds>=2	{vessel}, contrato cumplido. Nos pagan {funds} fondos. | El cliente está contento. {funds} fondos en camino.	{vessel}, contract complete. They pay us {funds} funds. | The client is happy. {funds} funds on the way.
 rt_con_total	contract_funds	funds>=2 funds_total>=2	Entran {funds} fondos. Ahora tenemos {funds_total}. | Contrato pagado. La agencia tiene {funds_total} fondos.	{funds} funds coming in. We have {funds_total} now. | Contract paid. The agency has {funds_total} funds.
 rt_con_sci	contract_funds	con_sci>=2	Contrato cumplido. Además nos dan {con_sci} puntos de ciencia. | {funds} fondos y {con_sci} puntos de ciencia. Buen trato.	Contract complete. They throw in {con_sci} science points too. | {funds} funds and {con_sci} science points. Good deal.

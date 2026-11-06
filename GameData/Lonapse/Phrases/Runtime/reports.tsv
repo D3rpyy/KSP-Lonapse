@@ -1,69 +1,69 @@
-# Runtime voice: lines that only exist in game, because they hold real values. Piper speaks them, no audio is built.
-# Every .tsv in this folder is read, in name order. Add a row, or a file of your own, and restart KSP.
-# UTF-8, tab separated, # starts a comment line. The columns are found by name: id kind when spanish english.
-# This header explains them all. The other files in this folder use the same format.
-#
-# id       a-z 0-9 _, starts with rt_, unique over all files
-# kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),
-#          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed
-#          warp: Mission Control in time warp on rails, now and then in place of the usual exchange (warp.tsv)
-#          reply: a kerbal answers a Mission Control line right after it, sometimes. to=rt_fuel_low in the when
-#          column: the MC lines it answers (a prefix with *: to=rt_orbit*). Without to=: any report or warp line.
-#          self is the kerbal who answers (replies.tsv). Without to= it can also follow a sunrise line, or a
-#          recorded calm chatter scene that ends with a Mission Control statement.
-#          sunrise: Mission Control at a sunrise in orbit, now and then (sunrise_biome.tsv)
-#          eva: Mission Control to a kerbal on EVA, also the report on EVA. flag: after a flag is planted (eva_flag.tsv)
-#          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
-#          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
-#          A chat with on_eva=1 is for two EVA kerbals (eva_chats.tsv), one with apart=1 for two kerbals of different
-#          vessels nearby (radio_chats.tsv). Both play over the radio, the others only in one cabin.
-#          An event chat has on= in the when (on=flag on=surfacesample ...): it only plays on that event and may have
-#          one line, for a kerbal alone (event_chats.tsv).
-# when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
-#          or node_min>=2. Several situations: one must match. Every check must hold.
-#          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).
-#          Jobs: pilot engineer scientist tourist. The chat only plays when the two kerbals have those jobs, in
-#          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.
-#          Personas work the same way: badass brave nervous dim veteran (a=dim b=veteran). Several for one kerbal
-#          (a=pilot a=brave): all must hold.
-#          on=: the event of an event chat, or the experiment of a science line: flag deploy science (any
-#          experiment) evareport surfacesample roc crewreport mysterygoo and the other stock experiment ids.
-#          Or an event of another mod: on=yourmod.event (docs/API.md). Then also kind event (a Mission Control
-#          line about it), kind meta (cooldown= priority= who=, no text) and your own slots {x_name}.
-#          A mod experiment that runs through KSP science: kind experiment with on=yourmod.topic id=<experiment id>
-#          and the words of {exp}. Then science lines and event chats may use on=yourmod.topic. The same for a
-#          mod's Breaking Ground part (kind device, id=<part name>, words of {device}) and its contract type
-#          (kind contract, id=<class name>, words of {contract}, for contract lines with on=yourmod.topic).
-# spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
-#          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
-# english  the subtitle. A number slot shows digits, a name slot the name.
-#
-# Versions: spanish and english may hold several versions split by |, in the same order. One is picked per play,
-#   from the versions whose slots all have a value. Each spanish version uses the same slots as its english one.
-#   Put lines with the same when in one row as versions. Give a line with another when its own row.
-#
-# Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
-#   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
-#   at_home flight_no missions stars visits landings (crew history, see below)
-#   in_warp (1 in time warp, for checks only) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
-#   sci_left sci_first con_sci con_rep (science and contract lines, see science_contracts.tsv)
-#   sunrises (sunrises in orbit this flight)
-#   jet ship_m eva_mins (on EVA: jetpack percent, meters to the ship, minutes outside, see eva_flag.tsv)
-#   on_eva (1 on EVA, for checks only: a chat with on_eva=1 plays on the suit radio) pair_m (meters between two
-#   kerbals in an EVA chat, see eva_chats.tsv)
-#   link (1 with a link to Mission Control, 0 without one or in a blackout, for checks only)
-#   apart a_eva b_eva (radio chats between two vessels: apart is 1, a_eva is 1 when kerbal A is on EVA, b_eva the
-#   same for kerbal B, for checks only, see radio_chats.tsv)
-#   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), device (a deployed part with its article), contract (a registered contract type of a mod),
-#   my_ship and their_ship (in a chat between two vessels: the ship of the speaker and of the one spoken to), kerbal in a report, and in a chat self (the speaker) and other (the one
-#   spoken to). The same list is in src/Slots.cs.
-# Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
-#   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions
-#   (flights that ended with a recovery), visits and landings (earlier flights that reached or landed on this body),
-#   stars (experience level). at_home is 1 at Kerbin, else 0. A template that uses them only plays with crew aboard.
-# Avoid a plural noun after a value that can be 1: use a check like node_min>=2.
 id	kind	when	spanish	english
+# Runtime voice: lines that only exist in game, because they hold real values. Piper speaks them, no audio is built.				
+# Every .tsv in this folder is read, in name order. Add a row, or a file of your own, and restart KSP.				
+# UTF-8, tab separated, # starts a comment line. The columns are found by name: id kind when spanish english.				
+# This header explains them all. The other files in this folder use the same format.				
+#				
+# id       a-z 0-9 _, starts with rt_, unique over all files				
+# kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),				
+#          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed				
+#          warp: Mission Control in time warp on rails, now and then in place of the usual exchange (warp.tsv)				
+#          reply: a kerbal answers a Mission Control line right after it, sometimes. to=rt_fuel_low in the when				
+#          column: the MC lines it answers (a prefix with *: to=rt_orbit*). Without to=: any report or warp line.				
+#          self is the kerbal who answers (replies.tsv). Without to= it can also follow a sunrise line, or a				
+#          recorded calm chatter scene that ends with a Mission Control statement.				
+#          sunrise: Mission Control at a sunrise in orbit, now and then (sunrise_biome.tsv)				
+#          eva: Mission Control to a kerbal on EVA, also the report on EVA. flag: after a flag is planted (eva_flag.tsv)				
+#          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.				
+#          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.				
+#          A chat with on_eva=1 is for two EVA kerbals (eva_chats.tsv), one with apart=1 for two kerbals of different				
+#          vessels nearby (radio_chats.tsv). Both play over the radio, the others only in one cabin.				
+#          An event chat has on= in the when (on=flag on=surfacesample ...): it only plays on that event and may have				
+#          one line, for a kerbal alone (event_chats.tsv).				
+# when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25				
+#          or node_min>=2. Several situations: one must match. Every check must hold.				
+#          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).				
+#          Jobs: pilot engineer scientist tourist. The chat only plays when the two kerbals have those jobs, in				
+#          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.				
+#          Personas work the same way: badass brave nervous dim veteran (a=dim b=veteran). Several for one kerbal				
+#          (a=pilot a=brave): all must hold.				
+#          on=: the event of an event chat, or the experiment of a science line: flag deploy science (any				
+#          experiment) evareport surfacesample roc crewreport mysterygoo and the other stock experiment ids.				
+#          Or an event of another mod: on=yourmod.event (docs/API.md). Then also kind event (a Mission Control				
+#          line about it), kind meta (cooldown= priority= who=, no text) and your own slots {x_name}.				
+#          A mod experiment that runs through KSP science: kind experiment with on=yourmod.topic id=<experiment id>				
+#          and the words of {exp}. Then science lines and event chats may use on=yourmod.topic. The same for a				
+#          mod's Breaking Ground part (kind device, id=<part name>, words of {device}) and its contract type				
+#          (kind contract, id=<class name>, words of {contract}, for contract lines with on=yourmod.topic).				
+# spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).				
+#          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.				
+# english  the subtitle. A number slot shows digits, a name slot the name.				
+#				
+# Versions: spanish and english may hold several versions split by |, in the same order. One is picked per play,				
+#   from the versions whose slots all have a value. Each spanish version uses the same slots as its english one.				
+#   Put lines with the same when in one row as versions. Give a line with another when its own row.				
+#				
+# Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts				
+#   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms				
+#   at_home flight_no missions stars visits landings (crew history, see below)				
+#   in_warp (1 in time warp, for checks only) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)				
+#   sci_left sci_first con_sci con_rep (science and contract lines, see science_contracts.tsv)				
+#   sunrises (sunrises in orbit this flight)				
+#   jet ship_m eva_mins (on EVA: jetpack percent, meters to the ship, minutes outside, see eva_flag.tsv)				
+#   on_eva (1 on EVA, for checks only: a chat with on_eva=1 plays on the suit radio) pair_m (meters between two				
+#   kerbals in an EVA chat, see eva_chats.tsv)				
+#   link (1 with a link to Mission Control, 0 without one or in a blackout, for checks only)				
+#   apart a_eva b_eva (radio chats between two vessels: apart is 1, a_eva is 1 when kerbal A is on EVA, b_eva the				
+#   same for kerbal B, for checks only, see radio_chats.tsv)				
+#   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)				
+# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), device (a deployed part with its article), contract (a registered contract type of a mod),				
+#   my_ship and their_ship (in a chat between two vessels: the ship of the speaker and of the one spoken to), kerbal in a report, and in a chat self (the speaker) and other (the one				
+#   spoken to). The same list is in src/Slots.cs.				
+# Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.				
+#   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions				
+#   (flights that ended with a recovery), visits and landings (earlier flights that reached or landed on this body),				
+#   stars (experience level). at_home is 1 at Kerbin, else 0. A template that uses them only plays with crew aboard.				
+# Avoid a plural noun after a value that can be 1: use a check like node_min>=2.				
 rt_orbit	report	orbit	Órbita estable. Periapsis {pe_km} kilómetros, apoapsis {ap_km} kilómetros. | Os vemos a {alt_km} kilómetros sobre {body}. | Seguimos vuestra órbita. Vais a {speed} metros por segundo. Nada mal. | Órbita confirmada. Periapsis a {pe_km} kilómetros.	Stable orbit. Periapsis {pe_km} km, apoapsis {ap_km} km. | We see you {alt_km} km above {body}. | Tracking your orbit. You're doing {speed} m/s. Not bad. | Orbit confirmed. Periapsis at {pe_km} km.
 rt_orbit_inc	report	orbit inc_deg>=2	Inclinación de {inc_deg} grados. Los de navegación están contentos. | Vuestra órbita tiene {inc_deg} grados de inclinación. Bonita vista de los polos. | Inclinación {inc_deg} grados. Anotado en el cuaderno de vuelo.	Inclination {inc_deg} degrees. Navigation is happy. | Your orbit has {inc_deg} degrees of inclination. Nice view of the poles. | Inclination {inc_deg} degrees. It's in the flight log.
 rt_orbit_eq	report	orbit inc_deg<1	Órbita casi ecuatorial. Menos de un grado de inclinación. | Inclinación casi cero. Seguís el ecuador como un tren. | Órbita ecuatorial. Los de navegación están orgullosos.	Almost equatorial orbit. Less than one degree of inclination. | Inclination almost zero. You follow the equator like a train. | Equatorial orbit. Navigation is proud.

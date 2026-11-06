@@ -2236,7 +2236,7 @@ public static class Tests
             string first = null;
             foreach (string raw in System.IO.File.ReadAllLines(refPath))
             {
-                if (raw.StartsWith("#") || raw.Trim().Length == 0) continue;
+                if (raw.StartsWith("#") || raw.Trim().Length == 0 || raw.StartsWith("core\t")) continue;
                 string[] f = raw.Split('\t');
                 clips++;
                 ProbeVoiceSpec v = stock[f[0]];

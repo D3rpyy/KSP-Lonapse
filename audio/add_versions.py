@@ -49,7 +49,7 @@ def main():
         header = None
         changed = 0
         for i, line in enumerate(lines):
-            if not line or line.startswith("#"):
+            if not line.strip() or line.lstrip().startswith("#"):
                 continue
             cols = line.split("\t")
             if header is None:
