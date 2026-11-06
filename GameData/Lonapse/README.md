@@ -48,13 +48,13 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
   - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
   - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
-  - **Your own lines.** Add a row to `Phrases/runtime.tsv` or a file in `Phrases/Extra/` and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
+  - **Your own lines.** Add a row or a file of your own to `Phrases/Runtime/` (the format is at the top of `reports.tsv`), or a file in `Phrases/Extra/`, and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
 - **English subtitles** with a colour per speaker. Most lines have several wordings, so a line you heard before can read differently. The number of subtitle lines, their size, width and position are fully customizable.
 - **Lots of lines.** 1896 recorded interactions with 6478 extra subtitle wordings, plus 53 runtime lines and 22 runtime chats. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
-1. Download `Lonapse-0.7.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
+1. Download `Lonapse-0.8.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
@@ -145,8 +145,23 @@ part from another mod, or only when Lonapse is installed, use a Module Manager p
 still show their own name in the subtitles. It may be a localization tag like `#LOC_myMod_stp`. Without it, the
 part shows the name of its voice.
 
+The stock cores get the module too, from `Patches/Lonapse_StockCores.cfg` (priority -1, so a modded core with
+priority 0 or more still wins). Module Manager is not required: without it that patch does nothing and the stock
+cores keep the same voices from Lonapse's own list. With MM, a patch of yours can run `:AFTER[Lonapse]` to change a
+stock core's voice.
+
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.
+
+## Lines for your own mod
+
+Another mod can give its own events a voice: a repair that is done, supplies that run low, an experiment that is
+finished. That mod ships its lines in `GameData/<ItsMod>/Lonapse/*.tsv` and tells Lonapse when the event happens.
+Lonapse picks who talks and fits it into the radio. Neither mod needs the other. How it works is in
+[docs/API.md](docs/API.md), with a wrapper to copy and an example file in [docs/api](docs/api).
+
+A mod can also name its own experiments, Breaking Ground parts and contract types, so the lines use their real
+names. Players who do not like the lines of one mod can turn them off in the Mods tab.
 
 ## Compatibility
 
@@ -203,7 +218,8 @@ On a Mac, Lonapse plays the recorded lines only. I play KSP for Windows under Pr
 in the game.
 
 The licence texts and the source links are in `PluginData/Runtime/LICENSES`. The source code of Piper,
-piper-phonemize and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+piper-phonemize and espeak-ng is on GitHub at the commits listed in
+[runtime/licenses](runtime/licenses/README.md#source-code).
 `./fetch_runtime.sh` in the repo downloads the Piper release, checks every file against these hashes and puts the
 runtime folder together.
 
@@ -237,4 +253,4 @@ The code is MIT licensed ([LICENSE](LICENSE)). The sounds and the phrase text ar
 ([LICENSE-CC-BY-4.0](LICENSE-CC-BY-4.0)). Which part has which license is in [docs/LICENSING.md](docs/LICENSING.md).
 The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
 piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng, [LICENSE-GPL-3.0](LICENSE-GPL-3.0)), and CC0, Apache-2.0 and the Unlicense (the voices).
-The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.
+The texts are in [runtime/licenses](runtime/licenses/README.md), and so are the links to the source code.

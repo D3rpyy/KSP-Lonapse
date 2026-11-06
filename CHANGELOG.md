@@ -2,13 +2,14 @@
 
 ## 0.8.0
 
-**Your kerbals talk more, and with each other.** They answer Mission Control, talk over the radio between ships and on EVA, keep talking without a signal, and chat during time warp. Most new lines need the runtime voice: "Speak names and new lines at runtime" in the General tab.
+**Your kerbals talk more, and with each other.** They answer Mission Control, talk over the radio between ships and on EVA, keep talking without a signal, and chat during time warp. Additionally, I spent some time trying to improve the talking animations the kerbals have. Most new lines need the runtime voice, so "Speak names and new lines at runtime" in the General tab should be on.
 
 ### New
+
 - **Chatter during time warp.** Time warp is no longer silent. The crew and Mission Control keep talking, also about the next burn or the next body. The faster the warp, the more they talk and the faster their voices sound. "Chatter during time warp" in the General tab turns it off, and two sliders under it set how much.
-- **The crew answers back.** Now and then a kerbal replies to Mission Control, mostly with a joke.
+- **Replies on reports.** Now and then a kerbal replies to Mission Control's reports, mostly with a joke.
 - **Radio between ships and on EVA.** Kerbals on EVA nearby and the crews of other vessels within 2.3 km join the radio. A kerbal outside talks with the ship, a lander talks with the mothership, and two kerbals on EVA chat over their suit radio. "Nearby kerbals join the radio" in the General tab turns it off.
-- **Talk without a signal.** Without a link to Mission Control, the kerbals still talk to each other. They talk about flags, samples and experiments too, and nobody calls Control.
+- **Talk without a signal.** Without a link to Mission Control, the kerbals still talk to each other during EVA about everything EVA.
 - **More to say on EVA.** New lines about the jetpack, the distance to the ship, the time outside and the place. The radio is busier on EVA, like a real spacewalk.
 - **Science with the place.** EVA reports and surface samples now say where they were taken: "Control, Midlands sample in the bag." Deploying a Breaking Ground part gets a line with its name.
 - **Flags.** Mission Control says something when you plant a flag, and the kerbal who planted it answers.
@@ -19,6 +20,7 @@
 - **Subtitle time.** A "Stay on screen" slider sets how long a subtitle stays after its line.
 
 ### Changed
+
 - **More variety.** Mission Control's reports, science and contract lines and the crew chats have many more wordings and topics, so they repeat less. More recorded chats say the other kerbal's name, and the word lists are longer.
 - **Real numbers in more lines.** With the runtime voice, Mission Control also says real values in ordinary lines: the battery, the fuel after a cutoff, the delta-v of a new maneuver node.
 - **Fewer names.** Kerbals and Mission Control say names less often. Mission Control no longer picks a kerbal at random to talk to.
@@ -27,17 +29,19 @@
 - **Right click goes back.** Buttons that step through a list go back with a right click.
 
 ### Fixed
+
 - On EVA, lines about the ship now name the ship, not the kerbal outside. Lines about the hatch only play right after you leave, and only near the ship.
 - Switching vessels while someone talks no longer gives the line to the wrong kerbal.
 - The voice now says the same name or value as the subtitle, in every line.
 - Changing the stage order in flight no longer gives a staging callout.
 - The voice no longer tries to say vessel names in another alphabet. The subtitle still shows them.
-- A fresh rocket no longer reports "92 percent fuel left". Fuel lines count the next stage, and none play on the launch pad.
+- A fresh rocket no longer reports the wrong fuel percentage. Fuel lines count the next stage, and none play on the launch pad.
 
 ### For modders
-- **An API for other mods.** Give the events of your mod a voice: ship lines in `GameData/<YourMod>/Lonapse/` and call `Trigger` through a small wrapper file. There is no dependency either way, and Module Manager is not needed. Your mod can also name its own experiments, Breaking Ground parts and contract types. Everything is in `docs/API.md`, with an example in `docs/api` and a test mod in `tests/ingame`. Tested with a made-up mod, not with a real one yet.
-- **Tools in the Mods tab.** "Show the tools for modders" reloads all lines without a restart, tests each event and lists the last ones.
-- **Probe cores.** The stock probe cores get `ModuleLonapse` through an optional Module Manager patch. A patch of your own can change them with `:AFTER[Lonapse]`.
+
+- **An API for other mods.** Give the events of your mod a voice: ship lines in `GameData/<YourMod>/Lonapse/` and call `Trigger` through a small wrapper file. There is no dependency either way, and Module Manager is not needed. Your mod can also name its own experiments, Breaking Ground parts and contract types. Everything is in `docs/API.md` on GitHub, with an example in `docs/api` and a test mod in `tests/ingame`. I tested the functionality with a made-up mod, not with a real one yet. If you do, please provide feedback on what could be improved!
+- **Tools in the Mods tab.** "Show the tools for modders" reloads all lines without a restart, tests each event and lists the last ones. Made so that you won't have to restart KSP every time you want to add a new line.
+- **Probe cores.** The stock probe cores get `ModuleLonapse` through an optional Module Manager patch. A patch of your own can change them with `:AFTER[Lonapse]`. If MM is not installed, it falls back to the default.
 - **Runtime lines.** `Phrases/runtime.tsv` is now the folder `Phrases/Runtime/`. Every `.tsv` in it is read, so your own lines can go in a file of your own. `Phrases/slots_es.tsv` is gone, the Spanish is now the `spanish_rt` column. The install removes the old files.
 - **New kinds and slots.** New kinds `warp`, `sunrise`, `reply`, `event`, `meta`, `experiment`, `device` and `contract`. Chats can ask for a persona, and play on an event with `on=`. The slots are listed at the top of `Phrases/Runtime/reports.tsv`.
 
@@ -46,6 +50,7 @@
 **Kerbals now say your names, and Mission Control reads your real numbers.** Until now every line was a recording made before release, so the voice could never say the name of your kerbal, your vessel or the place you are at. This version ships a small speech engine (Piper) with the same three voices, and it speaks new lines while you play. That adds 53 Mission Control lines and 22 crew chats (56 lines) with real values, on top of 6478 new subtitle versions, 29 scenes with subtitle slots and 138 new probe scenes. The voice still speaks loñapsE. Only names are said as they are.
 
 ### New
+
 - **Runtime voice.** It is on by default. Turn it off with "Speak names and new lines at runtime" in the Crew tab, then only the recorded lines play. Piper runs as a separate program next to KSP. A line that is not ready within a second plays as before, without the name, so nothing ever waits for it.
   - **Names.** Mission Control sometimes ends a line with the name of the kerbal who just spoke, or with the name of your vessel. On a probe it uses the vessel name. In crew chats on the intercom, a kerbal sometimes says the other one's name. On a planet from a mod, lines about "the planet" say its real name.
   - **Reports with real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel of the burning stage, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, and on a docking approach the distance to the target. Big numbers are said short, in thousands, millions and billions. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
@@ -62,6 +67,7 @@
 - **"Light delay"** in the Crew tab. Turn it off and Mission Control answers right away, also far from Kerbin.
 
 ### Fixed
+
 - The same lines came back too often for kerbals with a personality or a job. Their own scenes are a small list, and now they wait like every other scene before they come back.
 - Mission Control said the name of one kerbal and another one answered. It now talks to the kerbal who answers.
 - A subtitle showed the vessel name, but nobody said it. With the runtime voice on, the name is now spoken too.
@@ -71,6 +77,7 @@
 - Vessel names from KSP's localization (like `#autoLOC_...`) are shown and spoken as the real name.
 
 ### Notes
+
 - The download is about 80 MB bigger: Piper for Windows and Linux and the three voices, in `GameData/Lonapse/PluginData/Runtime`. The voices are smaller copies of the build voices (int8 weights, decoder kept at full precision), and they sound the same.
 - There is no runtime voice on macOS yet. The macOS build of Piper is missing its libraries. On a Mac only the recorded lines play. The Linux build is not tested in the game.
 - Piper, espeak-ng, ONNX Runtime and the voices come with their own licences, see the licence files in that folder and "Runtime voice files" in the readme. The readme also lists the sha256 of every file, if your virus scanner asks.
@@ -81,6 +88,7 @@
 **738 new interactions with 1514 new lines.** That is 233 radio chats with Mission Control, 76 crew chats on the intercom, 141 scenes for tense moments, launch and reentry, 121 for flight events like staging, landing, docking and EVA, 99 chats between a probe and the crew and 68 probe events. Lonapse now has 1729 interactions in total.
 
 ### New
+
 - Probes and crew together. A crewed vessel with a probe core now gets small cabin chats. The probe beeps and a kerbal answers, often in their own way. This also works with only one kerbal aboard. Turn it off with "Probe talks with the crew" in the Probes tab.
 - Probe voices you can change. Fly a probe, open the Probes tab, pick another voice for that core part, change its sound with the sliders and press Play to hear a mood. This is saved in `settings.cfg` and needs no config files.
 - Mods can add probe voices. A voice is only text: a few values like pitch, wave and rhythm. Lonapse makes the sound in the game, so a mod ships one `.cfg` file and no audio. The voice borrows the lines and subtitles of a stock core or of the generic probe (`lines = okto`).
@@ -95,6 +103,7 @@
 - Subtitle width slider.
 
 ### Changed
+
 - Subtitles are on by default.
 - The crew chats on the intercom more often: about every minute on a calm flight instead of every 5. Stations and quiet coasts no longer get extra chats on top, so it is about a minute everywhere.
 - Full throttle and throttle cut callouts can come 5 s apart instead of 20 s.
@@ -103,6 +112,7 @@
 - When you update, these settings move to the new defaults only if you never changed them. Your own values are kept. Subtitles were off by default before, so they get turned on. You can turn them off again in the window.
 
 ### Fixed
+
 - Science experiments run right after each other no longer lose their lines. They wait in a short queue (up to 3) and the crew talks about them one by one, 30 s apart. The same experiment type gets a new line after 60 s instead of 5 minutes, so a crew report in a new biome is mentioned.
 - A science line during launch, ascent, reentry or descent now waits until things calm down (up to 10 minutes) instead of being dropped after 90 s.
 - A waiting science line is no longer lost when a kerbal goes out on EVA or climbs back in.

@@ -15,7 +15,7 @@ root are [LICENSE](../LICENSE) (MIT), [LICENSE-CC-BY-4.0](../LICENSE-CC-BY-4.0) 
    and three voice models) is not part of Lonapse. Each part keeps its own license: MIT, GPL-3.0-or-later
    (espeak-ng, see [LICENSE-GPL-3.0](../LICENSE-GPL-3.0)), CC0, Apache-2.0 and the Unlicense. The texts and the source links are in
    `PluginData/Runtime/LICENSES` (in the repo: [runtime/licenses](../runtime/licenses/README.md)). Lonapse only
-   starts Piper as a separate program. The source code of Piper, piper-phonemize and espeak-ng is attached to each
-   GitHub release as `Lonapse-<version>-runtime-source.zip`.
+   starts Piper as a separate program. The source code of Piper, piper-phonemize and espeak-ng is on GitHub at
+   the commits listed in [runtime/licenses](../runtime/licenses/README.md#source-code).
 
 Third-party credits for the TTS voices are in [audio/CREDITS.md](../audio/CREDITS.md).
