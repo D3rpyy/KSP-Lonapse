@@ -15,6 +15,8 @@ The API is new in 0.8.0 and has API version 1. I have tested it with the example
 2. `LonapseWrapper.cs` copied into your mod (from `docs/api/` in the Lonapse repository).
 3. One call where your event happens.
 
+Module Manager is not needed. Lonapse reads your line files itself.
+
 The full example is `docs/api/example_mod.tsv`. It is a made-up mod, `examplemod`, with three events, an experiment, a Breaking Ground part and a contract type of its
 own.
 
