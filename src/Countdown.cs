@@ -47,7 +47,7 @@ namespace Lonapse
 
         /// <summary>
         /// Clip key for a step, counting up (1 .. 10, the Lonapse joke: reversed Spanish "counts up") or down
-        /// (10 .. 1, 0.6.0 option countdownDown). Liftoff stays liftoff.
+        /// (10 .. 1, option countdownDown). Liftoff stays liftoff.
         /// </summary>
         public static string ClipKey(int stepNo, bool down)
         {

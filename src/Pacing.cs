@@ -131,8 +131,8 @@ namespace Lonapse
 
     public enum StationAction { Check, Exchange }
 
-    // Plan v2 helpers for the scheduler. Pure, tested offline.
-    /// <summary>What a stage holds, for the staging callout (user request).</summary>
+    // Helpers for the scheduler. Pure, tested offline.
+    /// <summary>What a stage holds, for the staging callout.</summary>
     public enum StageKind { Separation, Ignition, Any }
 
     public static class PacingRules
@@ -169,7 +169,7 @@ namespace Lonapse
             return stress < burstBand ? StationAction.Check : StationAction.Exchange;
         }
 
-        // Req 18: signature of the maneuver plan. Count, the sum of node UTs rounded to 0.5 s, and the summed
+        // Signature of the maneuver plan. Count, the sum of node UTs rounded to 0.5 s, and the summed
         // delta-v magnitude rounded to 0.1 m/s. Dragging a node changes it, a plain clock tick does not.
         public static string PlanSignature(int count, double[] uts, double[] dvs)
         {
@@ -239,7 +239,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// A new intercom chat may be queued, with a look ahead (user report: radio cut into a running chat).
+        /// A new intercom chat may be queued, with a look ahead (radio cut into a running chat).
         /// radioDueIn: seconds until the radio scheduler fires, below 0 when it is off. A chat does not start when the
         /// radio is due within IntercomRadioLead s, unless the chat already waited IntercomLeadMaxWait s for it.
         /// </summary>
@@ -300,7 +300,7 @@ namespace Lonapse
         }
     }
 
-    // Largest value seen over roughly the last `window` seconds (req 14: closing speed just before contact).
+    // Largest value seen over roughly the last `window` seconds (closing speed just before contact).
     public class RecentMax
     {
         readonly float window;

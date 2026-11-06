@@ -9,7 +9,7 @@ namespace Lonapse
     public static class ProbeCores
     {
         public const string Stayputnik = "stayputnik", Okto = "okto", Hecs = "hecs", RoveMate = "rovemate", Snob = "snob", Generic = "generic";
-        // own cores for parts that had the stayputnik or snob character before (user request)
+        // own cores for parts that had the stayputnik or snob character before
         public const string Qbe = "qbe", Mk2Drone = "mk2drone", Mpo = "mpo", Mtm = "mtm";
 
         /// <summary>All core keys. Generic is last. The order matches <see cref="DisplayNames"/>.</summary>
@@ -87,7 +87,7 @@ namespace Lonapse
             return Array.IndexOf(BorrowGenericLines, key) >= 0 ? Generic : key;
         }
 
-        /// <summary>Plan v6: the data stream beep while an antenna sends (built by build_clips.py).</summary>
+        /// <summary>The data stream beep while an antenna sends (built by build_clips.py).</summary>
         public const string DataFolder = "beeps/probe_data";
 
         /// <summary>Beep folder of one core and mood: beeps/probe_&lt;core&gt;_&lt;mood&gt;.</summary>

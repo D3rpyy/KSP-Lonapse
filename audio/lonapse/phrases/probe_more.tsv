@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
-# Lonapse 0.6.0: more probe mode events (probe alone, MC answers).																	
+# More probe mode events (probe alone, MC answers).																	
 pm_001_1	throttle_full	chatter	none	mc	pm_001	1	m	any	any	any	any	any	any		Empuje completo. Ahí vas.	Full thrust. There you go. | Full thrust. There you go. | Full power. Off you go.	
 pm_001_2	throttle_full	chatter	none	probe	pm_001	2	both	any	any	any	any	any	any	happy		[beeps with excitement]	
 pm_002_1	throttle_full	chatter	none	probe	pm_002	1	both	any	any	any	any	any	any	proud		[beeps a roar]	

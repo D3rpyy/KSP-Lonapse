@@ -8,7 +8,7 @@ namespace Lonapse
         public const int Spin = 0, GForce = 1, Q = 2, Ground = 3, Heat = 4, Plasma = 5, Fuel = 6, Impulse = 7, Rover = 8, Eva = 9, Count = 10;
         public static readonly string[] Names = { "spin", "gforce", "q", "ground", "heat", "plasma", "fuel", "impulse", "rover", "eva" };
 
-        // loss of control (req 10): spin component at or above this for LossOfControlTime seconds is a real failure
+        // loss of control: spin component at or above this for LossOfControlTime seconds is a real failure
         public const float LossOfControlSpin = 0.9f, LossOfControlTime = 2f;
 
         public readonly float[] comp = new float[Count];     // raw component values 0..1
@@ -97,7 +97,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Rover stress (req 13): the largest of three ramps. Rough ground at speed, air time, and tilt.
+        /// Rover stress: the largest of three ramps. Rough ground at speed, air time, and tilt.
         /// Speed and roughness must both be high for the terrain term, so a flat road at low speed gives 0.
         /// </summary>
         public static float RoverComponent(float speed, float roughness, float airTime, float tiltDeg, Tuning tu)
@@ -109,7 +109,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Docking impulse (req 14): 0 at or below soft, impulseMax at or above hard, linear in between.
+        /// Docking impulse: 0 at or below soft, impulseMax at or above hard, linear in between.
         /// The caller adds it as a critical impulse, so the docking quiet window does not hide it.
         /// </summary>
         public static float DockImpulse(float relSpeed, float soft, float hard, float impulseMax)
@@ -119,9 +119,9 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// EVA stress (req 12): 0..1, for real EVA dangers only. Normal jetpack spin is handled by the spin weight.
+        /// EVA stress: 0..1, for real EVA dangers only. Normal jetpack spin is handled by the spin weight.
         /// (a) jetpack propellant below lowProp while thrusting. (b) EC below lowEC and no crewed vessel within farDist.
-        /// crewDist is in metres; pass +infinity when no other crewed vessel exists.
+        /// crewDist is in metres. Pass +infinity when no other crewed vessel exists.
         /// </summary>
         public static float EvaComponent(double propFrac, bool thrusting, double ecFrac, double crewDist,
                                          float lowProp, float lowEC, float farDist)
@@ -132,7 +132,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// True when the flight has a real failure (req 10): overheating, loss of control, or an engine flameout.
+        /// True when the flight has a real failure: overheating, loss of control, or an engine flameout.
         /// Only a real failure lifts the launch cap.
         /// </summary>
         public static bool RealFailure(double heatRatio, float heatHi, bool engineOut, float lossOfControlTime)
@@ -145,7 +145,7 @@ namespace Lonapse
             if (dt <= 0f || float.IsNaN(dt)) return;
             if (dt > 0.5f) dt = 0.5f;
 
-            // EVA (req 12): jetpack turns and the bumps and tumbles of walking or ragdolling are not hazards.
+            // EVA: jetpack turns and the bumps and tumbles of walking or ragdolling are not hazards.
             // Spin and G are scaled by evaSpinWeight on EVA. They are ignored while the kerbal is ragdolled,
             // standing or lying on the ground, and for evaSettleTime after a ragdoll (getting up, rolling).
             // Falling toward the ground stays a hazard through the Ground component.

@@ -128,7 +128,7 @@ namespace Lonapse
                     case 'w': o.Append('u'); break;
                     case 'y': o.Append(i == 0 && IsVowel(n) ? 'y' : 'i'); break;      // Gilly: Guili, Yuri: Yuri
                     case 'h':
-                        // a spoken English h (at the start, between vowels) is the Spanish j; after a vowel it is silent
+                        // a spoken English h (at the start, between vowels) is the Spanish j. After a vowel it is silent.
                         if (i == 0 || (IsVowel(p) && IsVowel(n))) o.Append('j');
                         break;
                     case 'g': o.Append(n == 'e' || n == 'i' || n == 'y' ? "gu" : "g"); break;  // a hard g like Gilly
@@ -393,7 +393,7 @@ namespace Lonapse
         };
 
         // BAND_DELIVERY, MC_LIVELY_* and PANIC_NOISE_* in build_lonapse.py: a runtime line must sound like the
-        // recorded lines of the same band (user request). Tempo factor and extra semitones per delivery band.
+        // recorded lines of the same band. Tempo factor and extra semitones per delivery band.
         static readonly Dictionary<string, double[]> Bands = new Dictionary<string, double[]> {
             { "calm", new[] { 1.00, 0.0 } }, { "tense", new[] { 1.10, 0.7 } }, { "panic", new[] { 1.10, 1.0 } },
             { "mc_panic", new[] { 0.95, 0.3 } }, { "callout", new[] { 1.08, 0.5 } },

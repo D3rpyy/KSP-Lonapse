@@ -1,4 +1,4 @@
-// v4 events (plan v4, features 4 to 8 and 10): pure watchers, tested offline. No UnityEngine, no KSP types.
+// Game events: pure watchers, tested offline. No UnityEngine, no KSP types.
 // GameEventHub feeds them from GameEvents and the FlightSample and hands the EventRequests to the director.
 // Every watcher takes the time in seconds ("now", any monotonic clock) and the tuning values as arguments,
 // so a changed setting applies at once and the tests need no Settings object.
@@ -27,7 +27,7 @@ namespace Lonapse
         }
     }
 
-    /// <summary>Pending-list priority (plan v4, Director API): crew_lost > part_lost > power > signal > science > soi.</summary>
+    /// <summary>Pending-list priority (Director API): crew_lost > part_lost > power > signal > science > soi.</summary>
     public static class EventPriority
     {
         public const int Soi = 1, Science = 2, Signal = 3, Power = 4, PartLost = 5, CrewLost = 6;
@@ -47,7 +47,7 @@ namespace Lonapse
         public const float PartLostMaxAge = 8f;     // only a fresh explosion is worth a call
         public const float PowerMaxAge = 120f;
         public const float SignalMaxAge = 30f;      // a stale "signal back" sounds wrong
-        public const float ScienceMaxAge = 600f;    // 0.6.0: was 90 s, a science line now waits through an ascent or reentry
+        public const float ScienceMaxAge = 600f;    // was 90 s, a science line now waits through an ascent or reentry
         public const float SoiMaxAge = 120f;        // a "welcome to" long after the SOI change sounds wrong
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace Lonapse
     /// A blocked result is dropped, not queued.</summary>
     public class ScienceWatcher
     {
-        /// <summary>0.6.0 (user test: experiments run right after each other got no line): experiments that come
-        /// during the overall cooldown wait here, one per topic, and come out one per cooldown.</summary>
+        /// <summary>Experiments that come during the overall cooldown wait here, one per topic, and come out one per
+        /// cooldown. Without it, experiments run right after each other got no line.</summary>
         public const int MaxQueued = 3;
         /// <summary>A queued experiment older than this (s) is dropped: a remark long after it sounds wrong.</summary>
         public const double MaxWait = 120.0;

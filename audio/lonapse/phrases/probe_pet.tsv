@@ -1,6 +1,6 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
-# Probe pet talk (plan v5 and v6): Mission Control and the probe talk on the radio. probe_chat and probe_sleepy:																	
-# MC starts. probe_hail (v6): the probe starts with a beep, MC answers. New keys: pp_																	
+# Probe pet talk: Mission Control and the probe talk on the radio. probe_chat and probe_sleepy:																	
+# MC starts. probe_hail: the probe starts with a beep, MC answers. New keys: pp_																	
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.																	
 # probe rows are subtitle only: empty spanish, english like [beeps excitedly], a beep mood. Core holds for the whole scene.																	
 # Cores: stayputnik eager old-timer, okto clever show-off, hecs anxious perfectionist, rovemate lazy dog, snob posh and aloof, generic plain.																	
@@ -206,7 +206,7 @@ pp_generic_hail_03_2	probe_hail	chatter	calm	mc	pp_generic_hail_03	2	m	goofy	any
 pp_generic_hail_04_1	probe_hail	chatter	calm	probe	pp_generic_hail_04	1	both	goofy	any	any	any	any	generic	happy		[beeps rhythmically]	
 pp_generic_hail_04_2	probe_hail	chatter	calm	mc	pp_generic_hail_04	2	m	goofy	any	any	any	any	generic		¿Eso era una canción?	Was that a song? | Was that a song? | Did you just sing?	
 pp_generic_hail_04_3	probe_hail	chatter	calm	probe	pp_generic_hail_04	3	both	goofy	any	any	any	any	generic	proud		[beeps proudly]	
-# plan v6: callouts, plan_node, stress, say again, milestones, rover, data																	
+# Callouts, plan_node, stress, say again, milestones, rover, data																	
 pp_stress_spin_any_1	probe_stress	chatter	tense	mc	pp_stress_spin_any	1	m	any	spin	any	any	any	any		Sonda, giras demasiado. Aguanta.	Probe, you're spinning too much. Hang on. | Probe, you're spinning too much. Hang on. | Too much spin, probe. Hold on.	
 pp_stress_spin_any_2	probe_stress	chatter	tense	probe	pp_stress_spin_any	2	both	any	spin	any	any	any	any	scared		[beeps dizzily]	
 pp_stress_gforce_any_1	probe_stress	chatter	tense	mc	pp_stress_gforce_any	1	m	any	gforce	any	any	any	any		Mucha fuerza. Ya casi está.	Lots of g. Almost done. | Lots of g. Almost done. | Heavy g's. Nearly over.	

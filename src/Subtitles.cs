@@ -1,4 +1,4 @@
-// Optional subtitles for Lonapse lines (plan v2 req 22, restyled in plan v4 feature 12).
+// Optional subtitles for Lonapse lines.
 // IMGUI. A rounded translucent panel per line with a small speaker label above the English text.
 // Speaker colour from a stable hash of the name, MC amber. Placement and maths in SubtitleLayout (pure).
 // Per frame this only draws: every GUIContent and measurement is cached per entry.

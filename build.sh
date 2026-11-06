@@ -126,7 +126,7 @@ for f in "$REPO"/GameData/Lonapse/Patches/*.cfg; do
   echo "Installed: $GD/Patches/$(basename "$f")"
 done
 shopt -u nullglob
-# 0.7.0 tables that moved: runtime.tsv is now Phrases/Runtime, slots_es.tsv is the spanish_rt column and pools.tsv
+# Tables of older installs that moved: runtime.tsv is now Phrases/Runtime, slots_es.tsv is the spanish_rt column and pools.tsv
 for old in runtime.tsv slots_es.tsv; do
   if [[ -f "$GD/Phrases/$old" ]]; then rm -f "$GD/Phrases/$old"; echo "Removed old: $GD/Phrases/$old"; fi
 done

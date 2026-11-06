@@ -1,4 +1,4 @@
-// Plan v6: pure watchers for probe mode. Milestones (mission days, first orbit and first landing per body), rover
+// Pure watchers for probe mode. Milestones (mission days, first orbit and first landing per body), rover
 // moments (fast, air time, tilt, idle) and the data beeps while an antenna sends. No Unity or KSP references, so they
 // compile under DC_OFFLINE_TEST and the tests cover them. LonapseAddon feeds them, the director plays what they return.
 using System;

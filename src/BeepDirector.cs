@@ -17,9 +17,9 @@ namespace Lonapse
         private float warpPingLeft = -1f;   // > 0: single "radio is back" ping pending after rails warp
         private float lastWarpPingTime = -999f;
 
-        // req 5: descent blips, touchdown tone and touchdown exchange are one sequence
+        // Descent blips, touchdown tone and touchdown exchange are one sequence
         public readonly DescentSequence descent = new DescentSequence(6f);
-        // req 6: a ping is keyed like a transmission: key up, ping, key down
+        // A ping is keyed like a transmission: key up, ping, key down
         private float pingSeqPing = -1f, pingSeqClose = -1f;
 
         public BeepDirector(LonapseAddon host, System.Random rng)
@@ -128,7 +128,7 @@ namespace Lonapse
 
             // descent blips: only below descentMaxH (radar altitude, default 500 m) while descending,
             // soft, and never faster than descentFast (default 1.5 s)
-            // not on EVA: a jumping or falling kerbal is no vessel descent (user test)
+            // not on EVA: a jumping or falling kerbal is no vessel descent
             bool descending = s.valid && !host.evaMode && !s.landed && s.vs < -tu.descentVsMin && s.h < tu.descentMaxH;
             descent.Update(dt, descending, (float)s.h, (float)s.vs, s.valid && s.landed);
             // the sequence ends the blips at touchdown, even before the situation event arrives
@@ -204,10 +204,10 @@ namespace Lonapse
             float now = Time.unscaledTime;
             if (!host.callouts.TryShared(now, Tu.calloutCooldown)) { Log.Info("Stage callout skipped, " + tag + ": cooldown"); return; }
 
-            // user request: separation with a decoupler (also with an engine), ignition for an engine alone
+            // Separation with a decoupler (also with an engine), ignition for an engine alone
             StageKind kind = host.StageContents(stage);
             tag += ", " + kind;
-            // a callout that waits for an intercom line returns null; if it is dropped later the stage tone
+            // a callout that waits for an intercom line returns null. If it is dropped later, the stage tone
             // still plays as the fallback (unless stageTone already played it now)
             Action<string> onDrop = host.settings.stageTone ? (Action<string>)null : dropWhy =>
             {
@@ -216,7 +216,7 @@ namespace Lonapse
                 Log.Info("Deferred stage callout dropped, " + tag + ": " + dropWhy + ", using the stage tone");
                 PlayStageTone(tag);
             };
-            // plan v6: in probe mode the probe beeps the stage, with the stage kind as the scene topic
+            // In probe mode the probe beeps the stage, with the stage kind as the scene topic
             string why = host.probeMode
                 ? host.director.PlayProbeCallout("staging", kind == StageKind.Ignition ? "ignition" : kind == StageKind.Separation ? "separation" : null, tag)
                 : host.director.PlayCallout("staging", null, 0f, tag, onDrop,
@@ -227,7 +227,7 @@ namespace Lonapse
             if (!spoke || host.settings.stageTone) PlayStageTone(tag);
         }
 
-        /// <summary>Plan v5: probe beeps put beep[1] on the radio band. Tones get the channel's own band back.</summary>
+        /// <summary>Probe beeps put beep[1] on the radio band. Tones get the channel's own band back.</summary>
         private void ResetBeep1()
         {
             host.beep[1].SetBand(250f, 6000f);

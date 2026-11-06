@@ -1,4 +1,4 @@
-// Kerbal faces (v4 feature 2): the face of a speaking kerbal matches the line, and kerbals in the same part turn their
+// Kerbal faces: the face of a speaking kerbal matches the line, and kerbals in the same part turn their
 // head toward the speaker. MouthDriver (the jaw) is separate and untouched.
 //
 // Expression. The stock kerbalExpressionSystem.Update computes `expression` (whee - panic, positive is a grin,
@@ -285,7 +285,7 @@ namespace Lonapse
                 if (best != null) { sp.lookAt = best; sp.lookScale = FaceMath.GlanceScale; }
             }
 
-            // expression weights; the SetFloat itself runs in ExpressionLoop, after the stock Update
+            // expression weights. The SetFloat itself runs in ExpressionLoop, after the stock Update.
             float testMood = FaceMath.TestMood(now - testStart);
             foreach (Face f in faces.Values)
             {

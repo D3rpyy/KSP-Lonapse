@@ -16,7 +16,7 @@ namespace Lonapse
     public class Tuning
     {
         // --- Stress components ---
-        // spin (user feedback 0.4.0: rolling a small ship on reaction wheels caused panic): 1 rad/s to 5 rad/s
+        // spin: 1 rad/s to 5 rad/s. Lower made a small ship rolling on reaction wheels panic.
         public float spinLo = 1.0f, spinHi = 5.0f, wSpin = 1.00f;
         public float gLo = 2.5f, gHi = 8.0f, gTau = 0.15f, gClamp = 20f, wG = 0.85f;
         public float qLo = 15f, qHi = 45f, wQ = 0.60f;
@@ -31,7 +31,7 @@ namespace Lonapse
         public float attackTau = 3.0f, fastAttackTau = 0.35f, decayTau = 9f, holdTime = 1.5f;
         public float gStrainLo = 3f, gStrainHi = 9f, gStrainAttack = 0.2f, gStrainDecay = 1.0f;
 
-        // --- Gate (4.2). Any on-rails warp (TimeWarp.Modes.HIGH, rate > 1) closes the gate. ---
+        // --- Gate. Any on-rails warp (TimeWarp.Modes.HIGH, rate > 1) closes the gate. ---
         public float gateFadeTime = 0.30f, reopenDelayMin = 3f, reopenDelayMax = 8f;
         public float warpEndPingDelay = 1.0f, warpEndHoldoff = 3.0f, warpPingCooldown = 15f;
 
@@ -49,7 +49,7 @@ namespace Lonapse
         public float stationMcMin = 150f, stationMcMax = 300f;
 
         // --- Phase 2: crew intercom chats ---
-        // intercom at stress 0: 60 s everywhere (0.6.0). The station and quiet coast boosts are 1 now, they were for the
+        // intercom at stress 0: 60 s everywhere. The station and quiet coast boosts are 1 now, they were for the
         // old 300 s gap and multiply (a station is nearly always a quiet coast). Independent of the radio rate slider.
         // The interval shrinks log-linearly with stress down to intercomStressMin at intercomStressPeak.
         public float intercomInterval = 60f, intercomStationBoost = 1f, intercomQuietBoost = 1f;
@@ -60,25 +60,25 @@ namespace Lonapse
         public float intercomRoomAtten = 600f, intercomReverbAtten = 200f, intercomReflAtten = 400f, intercomDecay = 0.4f;
         public float intercomMinPitchGap = 0.05f;
 
-        // --- Blackout (4.7) ---
+        // --- Blackout ---
         public float plasmaTau = 0.5f, blackoutEnter = 0.35f, blackoutEnterTime = 1.0f, blackoutDeep = 0.65f;
         public float blackoutExit = 0.20f, staticExitTime = 1.5f, blackoutExitTime = 2.0f, blackoutMinDuration = 3f;
         public float staticMin = 2.5f, staticMax = 4f, staticRampTime = 1.5f, staticFadeOut = 0.6f;
         public float crackleMin = 0.2f, crackleMax = 0.7f, chopMin = 0.3f, chopMax = 0.8f, staticExtraDistortion = 0.3f;
         public float reliefHoldoff = 8f;
 
-        // --- Scheduler (4.10) ---
+        // --- Scheduler ---
         public float tQuiet = 110f, tManic = 1.0f, quietBand = 0.15f, burstBand = 0.6f;
         // crew delivery under stress: extra pitch at stress 1 in semitones, total pitch cap, clip truncation, overlap
         public float crewStressSemitones = 0.5f, crewPitchMax = 1.12f, truncStart = 0.85f, truncMinFrac = 0.8f, overlapMax = 0.35f;
         public float mcTenseLo = 0.20f, mcTenseHi = 0.45f;
 
-        // --- Voice channels (4.8) ---
-        // crew RADIO lines get a mild transmit band-pass (crewHp .. crewLpCalm); the intercom is wider and has no such band
+        // --- Voice channels ---
+        // crew RADIO lines get a mild transmit band-pass (crewHp .. crewLpCalm). The intercom is wider and has no such band.
         public float crewLpCalm = 4000f, crewLpStress = 3200f, crewLpMin = 1400f, crewHp = 300f;
         public float controlHp = 350f, controlLp = 2800f, controlDistortion = 0.30f, controlBedVolume = 0.12f;
 
-        // --- Beeps (4.11) ---
+        // --- Beeps ---
         public float pingOrbit = 40f, pingFlying = 25f, pingLanded = 90f, pingVolume = 0.5f;
         // descent blips: only below descentMaxH (radar altitude) while descending, never faster than descentFast s
         public float descentMaxH = 500f, descentVsMin = 2f, descentVsSpan = 40f, descentSlow = 5.0f, descentFast = 1.5f;
@@ -92,57 +92,57 @@ namespace Lonapse
         // --- one-word callouts (crew/callout): staging, parachutes, docking distances ---
         public float calloutCooldown = 1.5f, chuteGroupCooldown = 5f, chuteFullMinGap = 3f, chutePollInterval = 0.25f;
 
-        // --- v2 (plan section 3). New keys only: no existing default changed, so no CurrentVersion bump. ---
-        // req 2: chatter hold after a callout preempts it
+        // --- Radio, callouts, stress causes and pacing. ---
+        // Chatter hold after a callout preempts it
         public float calloutHoldPad = 0.3f;
-        // req 3: ducking of game audio
+        // Ducking of game audio
         public float duckAttack = 0.08f, duckRelease = 0.4f;
-        // req 4: throttle callouts
+        // Throttle callouts
         public float throttleFullAt = 0.98f, throttleCutAt = 0.05f, throttleMinGap = 5f;
-        // req 8: pitch factor per gender
+        // Pitch factor per gender
         public float genderPitchFemale = 1.06f, genderPitchMale = 0.96f;
-        // req 10: launch cap on the panic band (0 or 1) and altitude where it stops
+        // Launch cap on the panic band (0 or 1) and altitude where it stops
         public float launchCap = 1f, launchCapAlt = 10000f;
-        // req 11: panic pacing and escalation
+        // Panic pacing and escalation
         public float panicMinGap = 8f, panicCooldown = 45f, screamCooldown = 60f, speakerCooldown = 8f, talkBurst = 4f, talkPerMinute = 8f;
         public float panicEscTau = 40f, panicEscStep = 0.04f, panicEscCap = 0.16f;
-        // req 12: EVA stress. evaSpinWeight is a factor on wSpin and wG while on EVA (0 while ragdolled).
+        // EVA stress. evaSpinWeight is a factor on wSpin and wG while on EVA (0 while ragdolled).
         // evaSettleTime: seconds after a ragdoll in which EVA spin and G still count as nothing.
         public float evaSettleTime = 3f;
         public float evaSpinWeight = 0.3f, wEva = 0.4f, evaLowProp = 0.15f, evaLowEC = 0.1f, evaFarDist = 200f;
-        // req 13: rover stress component
+        // Rover stress component
         public float wRover = 0.7f, roverSpeedLo = 5f, roverSpeedHi = 25f, roverRoughLo = 0.5f, roverRoughHi = 3f;
         public float roverAirTimeLo = 0.3f, roverAirTimeHi = 1.5f, roverTiltLo = 25f, roverTiltHi = 45f;
-        // req 14: docking impulse
+        // Docking impulse
         public float dockSoftSpeed = 0.2f, dockHardSpeed = 0.5f, impulseDockHard = 0.35f;
-        // req 17: CommNet signal to static level
+        // CommNet signal to static level
         public float signalStaticMax = 0.6f, signalRangeFullKm = 500f, signalRangeZeroKm = 2500f;
         public float signalPollSec = 1.0f, signalHoldTime = 5f;
-        // req 18: maneuver node chatter
+        // Maneuver node chatter
         public float planRateSec = 90f, burnWarnSec = 60f;
-        // req 6, 16: volume of the radio key-up and key-down sound (desk click or headset squelch)
+        // volume of the radio key-up and key-down sound (desk click or headset squelch)
         public float radioKeyVolume = 0.7f;
-        // ideas round: light delay (MC answers later far from Kerbin), touchdown ambience level
-        // light delay (user request: at most 10 s): about 0.9 s at the Mun, 2 s at Minmus, 8 to 10 s at Duna and beyond
+        // light delay (MC answers later far from Kerbin), touchdown ambience level
+        // light delay (at most 10 s): about 0.9 s at the Mun, 2 s at Minmus, 8 to 10 s at Duna and beyond
         public float lightDelayMax = 10.0f, lightDelayScale = 2.6f;
         // master alarm: very quiet, slow in and out, so it stays in the background. Only at very high vessel stress.
         public float alarmVolume = 0.12f, alarmFadeIn = 2.5f, alarmFadeOut = 3f, alarmHold = 4f, alarmStress = 0.9f;
         // a stress cause (q, spin, heat, ...) gets its own lines at most once per this many seconds, at any radio amount
         public float causeRepeatGap = 45f;
-        // 0.6.0: a calm chatter exchange or chat (2+ lines) does not come back within this many seconds. New key only.
+        // A calm chatter exchange or chat (2+ lines) does not come back within this many seconds. New key only.
         public float calmRepeatGap = 600f;
 
-        // --- v3. New keys, plus mouthOpenDeg 12 -> 18 in tuning version 7. ---
-        // req 9: talking mouths. mouthAxis is the local hinge axis (0 = X, 1 = Y, 2 = Z), mouthInvert 0 or 1 flips the sign.
+        // --- Mouths and the intercom in blackout. mouthOpenDeg went from 12 to 18 in tuning version 7. ---
+        // Talking mouths. mouthAxis is the local hinge axis (0 = X, 1 = Y, 2 = Z), mouthInvert 0 or 1 flips the sign.
         public float mouthOpenDeg = 18f, mouthAxis = 2f, mouthInvert = 0f;
-        // 1: crew portraits (7 to 10 fps) alternate wide and nearly closed per portrait frame while the voice is audible
+        // crew portraits (7 to 10 fps) alternate wide and nearly closed per portrait frame while the voice is audible
         public float mouthPortraitAlternate = 1f;
         // envelope follower on the voice: gain on RMS, noise gate, attack and release in seconds
         public float mouthGain = 6f, mouthGate = 0.02f, mouthAttack = 0.03f, mouthRelease = 0.10f;
-        // req 6: intercom during blackout. Stress cap, first chat after entry (s), gap between blackout chats (s).
+        // Intercom during blackout. Stress cap, first chat after entry (s), gap between blackout chats (s).
         public float blackoutIntercomMaxStress = 0.9f, blackoutIntercomFirst = 4f, blackoutIntercomGap = 30f;
 
-        // --- v4. New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // --- Personality, game events, faces and head turns. ---
         // personality: how strongly the director prefers scenes that match the speaker's trait or persona (0..1)
         public float traitPreference = 0.35f, personaPreference = 0.4f;
         // power events: power_low below powerLowFrac, power_ok above powerOkFrac, only with at least powerMinMax EC capacity
@@ -161,10 +161,10 @@ namespace Lonapse
         public float mouthLead = 0.06f;
         public float faceWeight = 0.8f, faceExpressionSign = 1f;
 
-        // --- v5: probe mode. New keys only: no existing default changed, so no CurrentVersion bump. ---
+        // --- Probe mode. ---
         // pet talk: factor on the radio chatter gap in probe mode (> 1 is quieter)
-        public float probeRateFactor = 1.0f;   // 0.6.0: was 1.5 (user feedback: probes too quiet)
-        // 0.6.0: probe and crew on one vessel. With 2 or more crew, this share of the intercom chats is a probe and
+        public float probeRateFactor = 1.0f;   // was 1.5, probes were too quiet
+        // Probe and crew on one vessel. With 2 or more crew, this share of the intercom chats is a probe and
         // crew scene instead. With 1 crew member every intercom chat is one (there is nobody else to talk to).
         public float probeCrewShare = 0.35f;
         // electric charge fractions: drowsy below probeDrowsyFrac, asleep below probeSleepFrac
@@ -172,15 +172,15 @@ namespace Lonapse
         // cap on the beep pitch (1 + 0.25 x stress)
         public float probeBeepPitchMax = 1.35f;
 
-        // --- v6. New keys only: no existing default changed, so no CurrentVersion bump. ---
-        // probe hails (the probe beeps first, Mission Control answers): mean gap in s. Replaces the v5 roomInterval.
+        // --- Probe hails, EVA relay and breathing, probe callouts and moments. ---
+        // probe hails (the probe beeps first, Mission Control answers): mean gap in s. Replaces roomInterval.
         public float hailInterval = 360f;
         // EVA relay: an EVA kerbal reaches Mission Control through a nearby ship. The suit link to the ship is full up
         // to evaRelayFullKm and gone at evaRelayZeroKm (KSP unloads vessels at about 2.5 km).
         public float evaRelayFullKm = 1.0f, evaRelayZeroKm = 2.3f;
-        // EVA fall (user test): least gap in s between two eva_fall exchanges
+        // EVA fall: least gap in s between two eva_fall exchanges
         public float evaFallCooldown = 45f;
-        // EVA breathing (user test): running builds exertion over evaExertRise s and it fades over evaExertFall s.
+        // EVA breathing: running builds exertion over evaExertRise s and it fades over evaExertFall s.
         // At full exertion the breath loop plays evaBreathRate times as fast and evaBreathGain times as loud.
         public float evaExertRise = 20f, evaExertFall = 30f, evaBreathRate = 1.4f, evaBreathGain = 1.5f;
         // probe callouts (staging, chutes, throttle): chance that Mission Control answers the beep, and the least gap
@@ -205,7 +205,7 @@ namespace Lonapse
         public const int CurrentVersion = 12;
 
         /// <summary>
-        /// Fields whose defaults changed in version 3 (0.3.0). A file written by an older version gets these reset to
+        /// Fields whose defaults changed in version 3. A file written by an older version gets these reset to
         /// the new defaults, every other saved value is kept.
         /// </summary>
         public static readonly string[] ChangedInV3 =
@@ -269,7 +269,7 @@ namespace Lonapse
             if (crackleMin < 0.05f) crackleMin = 0.05f;
             if (descentFast < 0.1f) descentFast = 0.1f;
 
-            // v2 ranges from plan section 3. Fields without a stated range only get the generic checks above.
+            // Ranges per field. Fields without a range here only get the generic checks above.
             calloutHoldPad = DcMath.Clamp(calloutHoldPad, 0f, 2f);
             genderPitchFemale = DcMath.Clamp(genderPitchFemale, 0.8f, 1.3f);
             genderPitchMale = DcMath.Clamp(genderPitchMale, 0.8f, 1.3f);
@@ -298,7 +298,7 @@ namespace Lonapse
             FixPair(ref roverAirTimeLo, ref roverAirTimeHi); FixPair(ref roverTiltLo, ref roverTiltHi);
             FixPair(ref signalRangeFullKm, ref signalRangeZeroKm);
 
-            // v3 ranges
+            // mouths and blackout
             mouthOpenDeg = DcMath.Clamp(mouthOpenDeg, 0f, 45f);
             mouthAxis = DcMath.Clamp((float)Math.Round(mouthAxis), 0f, 2f);
             mouthInvert = mouthInvert >= 0.5f ? 1f : 0f;
@@ -312,7 +312,7 @@ namespace Lonapse
             blackoutIntercomFirst = DcMath.Clamp(blackoutIntercomFirst, 0f, 120f);
             blackoutIntercomGap = DcMath.Clamp(blackoutIntercomGap, 5f, 600f);
 
-            // v4 ranges
+            // personality, events and faces
             traitPreference = DcMath.Clamp01(traitPreference);
             personaPreference = DcMath.Clamp01(personaPreference);
             powerLowFrac = DcMath.Clamp(powerLowFrac, 0f, 0.9f);
@@ -339,7 +339,7 @@ namespace Lonapse
             faceWeight = DcMath.Clamp01(faceWeight);
             faceExpressionSign = faceExpressionSign < 0f ? -1f : 1f;
 
-            // v5 ranges
+            // probe mode, EVA relay and moments
             hailInterval = DcMath.Clamp(hailInterval, 60f, 1800f);
             evaRelayFullKm = DcMath.Clamp(evaRelayFullKm, 0.01f, 100f);
             evaBreathRate = DcMath.Clamp(evaBreathRate, 1f, 2f);
@@ -382,7 +382,7 @@ namespace Lonapse
         public float controlVolume = 0.8f;
         public float beepVolume = 0.6f;
         public float staticVolume = 0.5f;
-        public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old v2 level)
+        public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old, harsher level)
         public float intercomVolume = 0.8f;
         public bool intercomEnabled = true;
         public bool radioEnabled = true;      // crew <-> Mission Control radio (lines, quindar, squelch, bed, blackout static)
@@ -403,31 +403,31 @@ namespace Lonapse
         public float windowX = 200f;
         public float windowY = 120f;
 
-        // --- v2 (plan section 3). Top-level keys. ---
-        public float calloutVolume = 1.0f;          // req 1, 0..2
-        public float voiceBoostDb = 6f;             // req 3, 0..12
-        public bool voiceCompressor = true;         // req 3
-        public string duckMode = "listener";        // req 3: listener | off
-        public float duckDepth = 0.35f;             // req 3, 0..0.8
-        public bool throttleCallouts = true;        // req 4
-        public bool roverStress = true;             // req 13
-        public string stationStyle = "auto";        // req 9: auto | check | exchange
-        public string radioProfile = "auto";        // req 16: auto | station | ship | eva
-        public bool evaRadio = true;                // req 15
+        // --- Player settings (the main window). ---
+        public float calloutVolume = 1.0f;          // 0..2
+        public float voiceBoostDb = 6f;             // 0..12
+        public bool voiceCompressor = true;         // voice clarity: presence EQ and compressor
+        public string duckMode = "listener";        // listener | off
+        public float duckDepth = 0.35f;             // 0..0.8
+        public bool throttleCallouts = true;        // callouts at full throttle and cut-off
+        public bool roverStress = true;             // rough rover driving adds stress
+        public string stationStyle = "auto";        // auto | check | exchange
+        public string radioProfile = "auto";        // auto | station | ship | eva
+        public bool evaRadio = true;                // EVA kerbals talk on the suit radio
         public bool warpChatter = true;             // calm chatter during rails warp, events wait for the end of it
         public bool evaGroup = true;                // kerbals nearby (EVA, other ships) join the radio
-        public bool evaRelay = true;                // v6: the EVA suit radio reaches MC through a nearby ship
-        public float evaRadioVolume = 0.8f;         // req 15, 0..1
-        public bool planChatter = true;             // req 18
-        public string signalMode = "auto";          // req 17: auto | off | fixed
-        public float signalFixed = 0.7f;            // req 17, 0..1
-        public bool signalOcclusion = true;         // req 17
-        public bool subtitles = true;               // req 22. 0.6.0: on by default
+        public bool evaRelay = true;                // the EVA suit radio reaches MC through a nearby ship
+        public float evaRadioVolume = 0.8f;         // 0..1
+        public bool planChatter = true;             // chatter about maneuver nodes
+        public string signalMode = "auto";          // auto | off | fixed
+        public float signalFixed = 0.7f;            // 0..1
+        public bool signalOcclusion = true;         // a body between vessel and Kerbin weakens the signal
+        public bool subtitles = true;               // on by default
         public bool countdownAutoStage = false;     // launch countdown: activate the next stage on liftoff
-        public bool countdownDown = false;          // 0.6.0: count 10 .. 1 instead of 1 .. 10
+        public bool countdownDown = false;          // count 10 .. 1 instead of 1 .. 10
         public bool rogerBeep = true;               // short beep when the crew lets go of the key
         public bool lightDelay = true;              // small extra answer delay far from Kerbin (max lightDelayMax s)
-        public bool runtimeVoice = true;            // lines spoken at runtime by Piper (names, bodies, extra rows). 0.7.0: on by default
+        public bool runtimeVoice = true;            // lines spoken at runtime by Piper (names, bodies, extra rows). On by default
         public bool runtimeReports = true;          // with runtimeVoice: Mission Control reads out real values now and then
         /// <summary>Mod folders (GameData/&lt;Mod&gt;/Lonapse) whose lines the player muted, split by commas.</summary>
         public string mutedMods = "";
@@ -436,46 +436,46 @@ namespace Lonapse
         public bool runtimeScience = true;          // with runtimeVoice: science points and contract funds
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
         public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
-        // --- v3 ---
-        public bool mouthAnimation = true;          // req 9: kerbals move their jaw while they talk
-        public bool mouthDebug = false;             // req 9: log and show mouth driver details
-        // --- v4 ---
-        public bool personalityEffects = true;      // 1: courage, stupidity, badass and veteran shape lines and panic
-        public bool faceExpressions = true;         // 2: faces match the line
-        public bool headTurn = true;                // 2: listeners turn their head to the speaker
-        public bool subtitleSpeaker = true;         // 12: speaker name above the subtitle
-        public bool subtitleColors = true;          // 12: colour per speaker, MC amber
-        public bool eventSoi = true;                // 4
-        public bool eventScience = true;            // 5
-        public bool eventPartLoss = true;           // 6
-        public bool eventPower = true;              // 7
-        public bool eventSignal = true;             // 8
-        public bool eventCrewLoss = true;           // 10
-        public string subtitlePos = "above_navball"; // 12: above_navball (default, at X 0.5 / Y 0.78) | custom | top_left | bottom_left
+        // --- Mouths ---
+        public bool mouthAnimation = true;          // kerbals move their jaw while they talk
+        public bool mouthDebug = false;             // log and show mouth driver details
+        // --- Personality, faces, events and subtitles ---
+        public bool personalityEffects = true;      // courage, stupidity, badass and veteran shape lines and panic
+        public bool faceExpressions = true;         // faces match the line
+        public bool headTurn = true;                // listeners turn their head to the speaker
+        public bool subtitleSpeaker = true;         // speaker name above the subtitle
+        public bool subtitleColors = true;          // colour per speaker, MC amber
+        public bool eventSoi = true;                // entering a new sphere of influence
+        public bool eventScience = true;            // science results
+        public bool eventPartLoss = true;           // parts lost
+        public bool eventPower = true;              // low and restored electric charge
+        public bool eventSignal = true;             // signal lost and back
+        public bool eventCrewLoss = true;           // a kerbal dies
+        public string subtitlePos = "above_navball"; // above_navball (default, at X 0.5 / Y 0.78) | custom | top_left | bottom_left
         public float subtitleX = 0.5f;              // custom: centre of the subtitle column, fraction of the screen width
         public float subtitleY = 0.78f;             // custom: bottom edge of the newest subtitle, fraction of the screen height
-        public float subtitleSize = 1.0f;           // 0.7 .. 1.6, text 15 px x size
+        public float subtitleSize = 1.0f;           // 0.7 .. Text 15 px x size
         public float subtitleOpacity = 0.55f;       // panel opacity 0 .. 1
         public int subtitleMaxEntries = 2;          // 1 .. 4
-        public float subtitleWidth = 1.0f;          // 0.6.0: 0.5 .. 1.6, times the width of the position preset
-        public float subtitleHold = SubtitleLayout.DefaultHold; // 0.8.0: s a subtitle stays after its line ends, 0 .. 10
-        public float radioStatic = 0.5f;            // 0.6.0: 0..1, static under every radio line at any signal (DcMath.StaticCurve)
-        public bool intercomRadioFx = false;        // 0.6.0: crew-to-crew lines get the radio sound, not the cabin sound
-        // --- v5: probe mode ---
+        public float subtitleWidth = 1.0f;          // 0.5 .. Times the width of the position preset
+        public float subtitleHold = SubtitleLayout.DefaultHold; // s a subtitle stays after its line ends, 0 .. 10
+        public float radioStatic = 0.5f;            // 0..1, static under every radio line at any signal (DcMath.StaticCurve)
+        public bool intercomRadioFx = false;        // crew-to-crew lines get the radio sound, not the cabin sound
+        // --- Probe mode ---
         public bool probeMode = true;               // uncrewed vessels with a probe core get probe chatter
         public bool probePetTalk = true;            // MC talks to the probe, the probe answers in beeps
-        public bool probeHail = true;               // v6: the probe beeps first, Mission Control answers
-        public bool probeCallouts = true;           // v6: the probe beeps at staging, chutes and throttle
-        public bool probePlanTalk = true;           // v6: maneuver node and burn talk with the probe
-        public bool probeStressTalk = true;         // v6: Mission Control calms the probe per stress cause
-        public bool probeSayAgain = true;           // v6: "say again?" when the signal is weak
-        public bool probeCrewChats = true;          // 0.6.0: a probe core on a crewed vessel beeps and the crew answers
-        public bool probeMilestones = true;         // v6: mission days, first orbit, first landing per body
-        public bool probeRover = true;              // v6: rover moments (fast, air time, tilt, idle)
-        public bool probeTransmit = true;           // v6: data beeps while an antenna sends science
+        public bool probeHail = true;               // the probe beeps first, Mission Control answers
+        public bool probeCallouts = true;           // the probe beeps at staging, chutes and throttle
+        public bool probePlanTalk = true;           // maneuver node and burn talk with the probe
+        public bool probeStressTalk = true;         // mission Control calms the probe per stress cause
+        public bool probeSayAgain = true;           // "say again?" when the signal is weak
+        public bool probeCrewChats = true;          // a probe core on a crewed vessel beeps and the crew answers
+        public bool probeMilestones = true;         // mission days, first orbit, first landing per body
+        public bool probeRover = true;              // rover moments (fast, air time, tilt, idle)
+        public bool probeTransmit = true;           // data beeps while an antenna sends science
         public bool probeSleep = true;              // drowsy and asleep probe on low electric charge
         public Tuning tuning = new Tuning();
-        // --- 0.6.0: probe voices made or changed in the window (PROBE_VOICE nodes), and the voice per core part
+        // --- Probe voices made or changed in the window (PROBE_VOICE nodes), and the voice per core part
         // (PROBE_PART nodes, key = ProbeCores.Normalise(part name)). Both win over GameData and stock.
         public System.Collections.Generic.List<ProbeVoiceSpec> probeVoices = new System.Collections.Generic.List<ProbeVoiceSpec>();
         public System.Collections.Generic.Dictionary<string, string> probeParts = new System.Collections.Generic.Dictionary<string, string>();
@@ -521,68 +521,68 @@ namespace Lonapse
                         reset.Add(f.Name + " " + oldV.ToString(CultureInfo.InvariantCulture) + " -> " + newV.ToString(CultureInfo.InvariantCulture));
                     }
                 }
-                // 0.3.0 limits overlapping crew voices to 2 (old default 3 was saved by every earlier version)
+                // at most 2 overlapping crew voices now (the old default 3 was saved by every earlier version)
                 if (maxCrewVoices == 3) { maxCrewVoices = 2; reset.Add("maxCrewVoices 3 -> 2"); }
             }
             if (fromVersion < 4)
             {
-                // 0.3.1: intercom 300 s and stress-driven. Only replace values that still hold an old default.
+                // Intercom 300 s and stress-driven. Only replace values that still hold an old default.
                 ResetIfOld(reset, "intercomInterval", 600f, 240f);
                 ResetIfOld(reset, "intercomMaxStress", 0.35f, 0.35f);
                 ResetIfOld(reset, "intercomAbortStress", 0.5f, 0.5f);
             }
             if (fromVersion < 5)
             {
-                // 0.4.0: light delay up to 10 s (was 2 s). Only replace the old defaults.
+                // Light delay up to 10 s (was 2 s). Only replace the old defaults.
                 ResetIfOld(reset, "lightDelayMax", 2f, 2f);
                 ResetIfOld(reset, "lightDelayScale", 0.45f, 0.45f);
             }
             if (fromVersion < 6)
             {
-                // 0.4.0: stress builds slower, spin counts from 1 rad/s (user feedback). Only replace old defaults.
+                // Stress builds slower, spin counts from 1 rad/s. Only replace old defaults.
                 ResetIfOld(reset, "spinLo", 0.35f, 0.35f);
                 ResetIfOld(reset, "spinHi", 2.5f, 2.5f);
                 ResetIfOld(reset, "attackTau", 0.35f, 0.35f);
             }
             if (fromVersion < 7)
             {
-                // 0.4.0: wider jaw so talking reads through expressions (user feedback). Only replace the old default.
+                // Wider jaw so talking reads through expressions. Only replace the old default.
                 ResetIfOld(reset, "mouthOpenDeg", 12f, 12f);
             }
             if (fromVersion < 8 && subtitlePos == "above_navball")
             {
-                // 0.4.0: custom (X 0.5, Y 0.78) is the default subtitle position (user feedback). Only the old default moves.
+                // Custom (X 0.5, Y 0.78) is the default subtitle position. Only the old default moves.
                 subtitlePos = "custom";
                 reset.Add("subtitlePos");
             }
             if (fromVersion < 10)
             {
-                // 0.5.0: less pitch under stress, panic sounded like chipmunks (user test). Only the old defaults move.
+                // Less pitch under stress, panic sounded like chipmunks. Only the old defaults move.
                 ResetIfOld(reset, "crewStressSemitones", 2f, 2f);
                 ResetIfOld(reset, "crewPitchMax", 1.2f, 1.2f);
             }
             if (fromVersion < 9 && subtitlePos == "custom" && subtitleX == 0.5f && subtitleY == 0.78f)
             {
-                // 0.5.0: above_navball sits at the old custom default and is the default again. Custom moved by the user stays.
+                // above_navball sits at the old custom default and is the default again. Custom moved by the user stays.
                 subtitlePos = "above_navball";
                 reset.Add("subtitlePos");
             }
             if (fromVersion < 11)
             {
-                // 0.6.0: crew chats every 60 s (was 300), probes talk as often as crews (was 1.5x the gap) and
-                // subtitles are on by default (user feedback). Only the old defaults move. Subtitles were off by
+                // Crew chats every 60 s (was 300), probes talk as often as crews (was 1.5x the gap) and
+                // subtitles are on by default. Only the old defaults move. Subtitles were off by
                 // default before, so an old file with them off gets them on. Players can turn them off again.
                 ResetIfOld(reset, "intercomInterval", 300f, 300f);
                 ResetIfOld(reset, "probeRateFactor", 1.5f, 1.5f);
-                ResetIfOld(reset, "scienceTopicCooldown", 300f, 300f);
-                ResetIfOld(reset, "throttleMinGap", 20f, 20f);
-                ResetIfOld(reset, "intercomStationBoost", 2.5f, 2.5f);  // 0.6.0: 1, the 60 s gap is lively enough
-                ResetIfOld(reset, "intercomQuietBoost", 2f, 2f);          // 0.6.0: 5 s, quick throttle changes get callouts   // 0.6.0: 60 s, a new biome gets its line
+                ResetIfOld(reset, "scienceTopicCooldown", 300f, 300f);  // 60 s, a new biome gets its line
+                ResetIfOld(reset, "throttleMinGap", 20f, 20f);          // 5 s, quick throttle changes get callouts
+                ResetIfOld(reset, "intercomStationBoost", 2.5f, 2.5f);  // 1, the 60 s gap is lively enough
+                ResetIfOld(reset, "intercomQuietBoost", 2f, 2f);        // 1, the same
                 if (!subtitles) { subtitles = true; reset.Add("subtitles off -> on"); }
             }
             if (fromVersion < 12)
             {
-                // 0.7.0: the runtime voice is on by default. It was off in the development builds, so an old file
+                // The runtime voice is on by default. It was off in the development builds, so an old file
                 // with it off gets it on. Players can turn it off again.
                 if (!runtimeVoice) { runtimeVoice = true; reset.Add("runtimeVoice off -> on"); }
             }

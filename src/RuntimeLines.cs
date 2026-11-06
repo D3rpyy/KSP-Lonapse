@@ -124,7 +124,7 @@ namespace Lonapse
         static readonly string[] VisitTypes = { "Flyby", "Orbit", "Suborbit", "Land", "Flight", "Escape" };
 
         /// <summary>
-        /// Crew history (user request): from a kerbal's career log, entries { flight, type, target } of the flights
+        /// Crew history: from a kerbal's career log, entries { flight, type, target } of the flights
         /// before this one. missions: flights that ended with a recovery. flight_no: missions + 1, this flight.
         /// visits and landings: earlier flights that reached or landed on <paramref name="body"/>. stars: the
         /// experience level. Training entries do not count.
@@ -773,7 +773,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// The value that is spoken and shown, rounded so it stays short (user report: "15 000 000 km" was a long string
+        /// The value that is spoken and shown, rounded so it stays short ("15 000 000 km" was a long string
         /// of words). From a billion: one decimal below 10 billion. From a million: whole millions, one decimal below
         /// 10 million (2.5 million). From 10 000: whole thousands. Below that: one decimal below 10 for keys with decimals (km, min, deg, ms, science points),
         /// else whole numbers. Spoken words and subtitle digits use this same value.

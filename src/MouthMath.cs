@@ -1,4 +1,4 @@
-// Pure math for the talking-kerbal mouth (req 9). No Unity or KSP dependencies so the offline test harness can
+// Pure math for the talking-kerbal mouth. No Unity or KSP dependencies so the offline test harness can
 // compile this file. MouthDriver feeds it the output samples of a voice channel and applies the result to the jaw.
 using System;
 using System.Collections.Generic;

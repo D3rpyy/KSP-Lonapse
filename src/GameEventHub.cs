@@ -1,4 +1,4 @@
-// v4 events (plan v4, features 4 to 8 and 10): KSP side. Subscribes to GameEvents for the active vessel,
+// Game events, the KSP side. Subscribes to GameEvents for the active vessel,
 // feeds the pure watchers in EventWatchers.cs and hands every EventRequest to `play` (wired by the addon to
 // ChatterDirector.PlayEvent). Init and Dispose add and remove exactly the same handlers.
 #if !DC_OFFLINE_TEST
@@ -166,7 +166,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || !host.settings.eventSoi || !IsActive(d.host) || d.to == null) return;
-                // feature 4: no welcome while the crew panics or the ship is in plasma
+                // no welcome while the crew panics or the ship is in plasma
                 if (lastPanic || lastPlasma) { Log.Debug("SOI change to " + d.to.bodyName + " skipped (panic or plasma)"); return; }
                 Tuning tu = host.settings.tuning;
                 CelestialBody home = FlightGlobals.GetHomeBody();

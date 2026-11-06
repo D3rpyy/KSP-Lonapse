@@ -118,7 +118,7 @@ namespace Lonapse
         /// <summary>Spoken and English vessel name, null when it is too long to say.</summary>
         string[] VesselNames() { return NamesOfVessel(ActiveVessel); }
 
-        /// <summary>{vessel} on EVA: the ship nearby, not the kerbal (user report: "Stay close to" the kerbal's own name).</summary>
+        /// <summary>{vessel} on EVA: the ship nearby, not the kerbal ("Stay close to" the kerbal's own name).</summary>
         string[] ShipNames()
         {
             double d;
@@ -245,7 +245,7 @@ namespace Lonapse
             if (!NamesRecent && rng.NextDouble() < RuntimeNameChance)
             {
                 int crew = host.roster.voices.Count;
-                // user report: MC named one kerbal and another answered. The scene's own crew speaker wins
+                // MC named one kerbal and another answered. The scene's own crew speaker wins
                 // (the lines are queued before anyone speaks, so lastCrewVoice is the one before)
                 KerbalVoice k = to != null && host.roster.voices.Contains(to) ? to
                                 : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
@@ -384,7 +384,7 @@ namespace Lonapse
                 if (sit == "orbit") { nums["period_min"] = o.period / 60.0; nums["t_pe_min"] = o.timeToPe / 60.0; }
                 if (o.ApA > 0 && o.timeToAp > 0) nums["t_ap_min"] = o.timeToAp / 60.0;
             }
-            // not on the pad: "fuel left" means something was used (user report: a fuel line before any engine fired)
+            // not on the pad: "fuel left" means something was used (a fuel line before any engine fired)
             bool pad = false;
             try { pad = v.situation == Vessel.Situations.PRELAUNCH; } catch (Exception) { }
             bool eva = v.isEVA;
@@ -398,7 +398,7 @@ namespace Lonapse
             else
             {
                 // a kerbal on EVA: the jetpack, the ship nearby and the time outside. Not the vessel values: the
-                // kerbal is a vessel of one part (user report: "one kerbal aboard" answered by a kerbal outside)
+                // kerbal is a vessel of one part ("one kerbal aboard" answered by a kerbal outside)
                 double jet = ResourcePercent(v, "EVA Propellant");
                 if (double.IsNaN(jet)) jet = ResourcePercent(v, "MonoPropellant");
                 Put(nums, "jet", jet);
@@ -521,9 +521,9 @@ namespace Lonapse
 
         /// <summary>
         /// Liquid fuel left in percent for the stage that burns: the tanks that feed a running engine (its crossfeed
-        /// set), like the stage view of the KSP resource panel (user report: 73 % was said with 530 of 1125 in the
+        /// set), like the stage view of the KSP resource panel (73 % was said with 530 of 1125 in the
         /// stage, the full upper stage tanks were counted too). No running engine: the tanks of the next stage with a
-        /// liquid engine, the one that fires next. No liquid engine at all: NaN, so no fuel line plays (user report:
+        /// liquid engine, the one that fires next. No liquid engine at all: NaN, so no fuel line plays (
         /// "92 % fuel left" before any engine had fired, the old fallback counted every tank of the vessel).
         /// </summary>
         static double StageFuelPercent(Vessel v, bool log)
@@ -660,7 +660,7 @@ namespace Lonapse
         readonly Dictionary<string, double> evaStartUT = new Dictionary<string, double>();
         const double EvaStartWindow = 90.0, NearShipRange = 100.0, ShipRange = 500.0;
         /// <summary>Scenes about going out (only in the first EvaStartWindow s) and about the hatch or the ship (only
-        /// within NearShipRange of it). User report: "Leaving the hatch" far from the ship.</summary>
+        /// within NearShipRange of it), so no "Leaving the hatch" far from the ship.</summary>
         static readonly string[] EvaStartScenes = { "eva_check_03", "ev_eva_08" };
         static readonly string[] NearShipScenes = { "ev_eva_03", "ev_eva_04" };
 

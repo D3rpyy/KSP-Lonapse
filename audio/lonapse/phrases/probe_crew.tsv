@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
-# Lonapse 0.6.0: probe and crew in the cabin (event probe_crew). The probe beeps, a crew member answers.																	
+# Probe and crew in the cabin (event probe_crew). The probe beeps, a crew member answers.																	
 pc_001_1	probe_crew	chatter	calm	probe	pc_001	1	both	goofy	any	any	any	any	any	proud		[beeps with a report]	
 pc_001_2	probe_crew	chatter	calm	crew	pc_001	2	both	goofy	any	any	any	any	any		Mm. Buenos datos.	Hmm. Good data. | Hmm. Good data. | Hm. Nice data.	
 pc_002_1	probe_crew	chatter	calm	probe	pc_002	1	both	goofy	any	any	any	any	any	curious		[beeps a question]	

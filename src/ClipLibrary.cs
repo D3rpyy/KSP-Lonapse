@@ -46,7 +46,7 @@ namespace Lonapse
         // one entry per folder in BaseFolders, in the same order
         private static readonly int[] BaseMinimums = { 24, 24, 24, 8, 8, 24, 12, 3, 2, 2, 1, 1, 1, 1, 6, 2, 2, 1, 1, 1, 1, 1, 1 };
 
-        // Plan v5: built clips per probe beep folder (build_clips.py)
+        // Built clips per probe beep folder (build_clips.py)
         public const int ProbeBeepMinimum = 3;
 
         /// <summary>Every folder the library loads: the fixed folders, then ProbeCores.Folders()
@@ -60,7 +60,7 @@ namespace Lonapse
         {
             List<string> r = new List<string>(BaseFolders);
             foreach (string f in ProbeCores.Folders()) if (!r.Contains(f)) r.Add(f);
-            r.Add(ProbeCores.DataFolder); // plan v6
+            r.Add(ProbeCores.DataFolder);
             return r.ToArray();
         }
 
@@ -219,7 +219,7 @@ namespace Lonapse
                 case "crew/relief": return "crew/calm";
                 case "control/tense": return "control/calm";
             }
-            // plan v5: an empty core beep folder falls back to the generic core with the same mood
+            // An empty core beep folder falls back to the generic core with the same mood
             const string probe = "beeps/probe_";
             if (folder != null && folder.StartsWith(probe, StringComparison.Ordinal))
             {

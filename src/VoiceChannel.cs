@@ -70,7 +70,7 @@ namespace Lonapse
             src.bypassEffects = false;
             src.bypassListenerEffects = true;
             src.bypassReverbZones = true;
-            // the game listener is ducked under voice (req 3): our sources apply the listener base volume themselves
+            // the game listener is ducked under voice: our sources apply the listener base volume themselves
             src.ignoreListenerVolume = true;
             src.ignoreListenerPause = false;
             src.priority = priority;
@@ -120,7 +120,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Radio profile band-pass (req 16) for the control channel.</summary>
+        /// <summary>Radio profile band-pass for the control channel.</summary>
         public void SetBand(float hpHz, float lpHz)
         {
             if (hp != null) hp.cutoffFrequency = hpHz;

@@ -1,7 +1,7 @@
 // Lonapse phrase clips: loads GameData/Lonapse/Phrases/phrases.tsv and resolves each row to its AudioClips
-// (plan v2 4.7, plan v3). Scenes without a playable clip are dropped, so the director only sees what can be heard.
+//. Scenes without a playable clip are dropped, so the director only sees what can be heard.
 // sceneCount counts a {body} scene once. clipCount counts every clip, body variants included.
-// Plan v5: probe rows are subtitle only. They need no clip, and the director shows their text
+// Probe rows are subtitle only. They need no clip, and the director shows their text
 // with Subtitle and plays the probe beep itself.
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace Lonapse
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
-        // Plan v5: rows without a clip (probe) and playable probe scenes (IsProbeScene)
+        // Rows without a clip (probe) and playable probe scenes (IsProbeScene)
         public static int subtitleOnlyCount, probeSceneCount;
         public static string status = "not loaded";
 
@@ -324,19 +324,19 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>Plan v5: true for a probe row. It has no clip, only its subtitle.</summary>
+        /// <summary>True for a probe row. It has no clip, only its subtitle.</summary>
         public static bool SubtitleOnly(PhraseEntry e)
         {
             return e != null && e.SubtitleOnly;
         }
 
-        /// <summary>Plan v5: the speaker role of a row (crew mc probe), null for null.</summary>
+        /// <summary>The speaker role of a row (crew mc probe), null for null.</summary>
         public static string SpeakerRole(PhraseEntry e)
         {
             return e == null ? null : e.Role;
         }
 
-        /// <summary>Plan v5: beep mood of a probe row (happy offended ...), empty for other rows.</summary>
+        /// <summary>Beep mood of a probe row (happy offended ...), empty for other rows.</summary>
         public static string BeepMood(PhraseEntry e)
         {
             return e == null ? "" : e.Beep;

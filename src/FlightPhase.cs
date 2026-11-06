@@ -1,4 +1,4 @@
-// Flight phase classification (plan v3, req 3). Pure C#, no Unity or KSP, so the offline tests can compile it.
+// Flight phase classification. Pure C#, no Unity or KSP, so the offline tests can compile it.
 using System;
 
 namespace Lonapse

@@ -93,12 +93,12 @@ namespace Lonapse
             if (host.blackout.state == BlackoutState.Blackout) sb.Append(' ').Append(host.blackout.blackoutDuration.ToString("0.0", Inv)).Append(" s");
             sb.Append("  intercom ").Append(cd.blackoutIntercomLeft < 0f ? "-" : "in " + Math.Max(0f, cd.blackoutIntercomLeft).ToString("0.0", Inv) + " s");
             sb.Append('\n');
-            // v3 context (req 3, 5)
+            // flight phase and context
             sb.Append("phase ").Append(cd.CurrentPhase ?? "-").Append(" (classifier ").Append(cd.ClassifiedPhase ?? "-")
               .Append(", force ").Append(cd.forcePhase ?? "auto").Append(")  cause ").Append(cd.DominantCause ?? "-")
               .Append("  body ").Append(s.body ?? "-").Append('\n');
 
-            // plan v5 probe mode
+            // probe mode
             sb.Append("probe: ").Append(host.probeMode ? "on" : "off").Append("  core ").Append(host.probeCoreKey ?? "-")
               .Append("  voice ").Append(host.probeVoice != null ? host.probeVoice.Name + " (" + host.probeVoiceWhy + ")" : "-")
               .Append("  sleep ").Append(host.probeSleepState).Append("  EC ").Append((s.ecFrac * 100.0).ToString("0", Inv)).Append('%')
@@ -112,12 +112,12 @@ namespace Lonapse
                   .Append("  pitch ").Append(k.basePitch.ToString("0.000", Inv));
                 if (k.outDueToG) sb.Append("  OUT (G)");
                 sb.Append('\n');
-                // v4 persona (the full text is in the log through Describe)
+                // persona (the full text is in the log through Describe)
                 sb.Append("    persona ").Append(k.persona != null ? k.persona.ToString() : "-")
                   .Append("  courage ").Append(k.courage.ToString("0.00", Inv)).Append("  stupidity ").Append(k.stupidity.ToString("0.00", Inv))
                   .Append("  panicAt ").Append(k.panicAt.ToString("0.00", Inv)).Append(k.personaEffects ? "" : "  (effects off)").Append('\n');
             }
-            // v4 faces and events
+            // faces and events
             sb.Append("face: ").Append(host.face != null ? (host.face.Status ?? "-") : "no face driver").Append('\n');
             GameEventHub ev = host.events;
             if (ev != null)
@@ -150,7 +150,7 @@ namespace Lonapse
             for (int i = 0; i < text.Length; i++) if (text[i] == '\n') lines++;
         }
 
-        // Hook for the director's v4 event state. Looked up by name once, so this file does not depend on the exact
+        // Hook for the director's event state. Looked up by name once, so this file does not depend on the exact
         // director API: a string member "EventStatus" (pending list) and a float member "SomberLeft" (seconds of
         // somber mood left, 0 or less = off). Members that are missing are simply not shown.
         private bool hookResolved;

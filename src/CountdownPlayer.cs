@@ -59,7 +59,7 @@ namespace Lonapse
             Log.Info("Countdown started" + (host.settings.countdownAutoStage ? " (auto stage on liftoff)" : ""));
         }
 
-        /// <summary>Stops the count. With scream, launch control yells "¡haaaaaaA!" (user request), when sound is allowed.</summary>
+        /// <summary>Stops the count. With scream, launch control yells "¡haaaaaaA!", when sound is allowed.</summary>
         public void Abort(string why, bool scream = false)
         {
             if (!count.Running) return;
@@ -83,7 +83,7 @@ namespace Lonapse
             AudioClip clip = PhraseClips.Clip(e, false);
             if (clip == null) return false;
             VoiceChannel c = host.control;
-            // Clean, fixed band for every count line (user report: some numbers sounded muffled). Not the station or
+            // Clean, fixed band for every count line (some numbers sounded muffled). Not the station or
             // EVA profile (low-pass 2800 or 2600 Hz), no weak-signal dropouts, only a trace of radio distortion.
             c.SetBand(CleanHighPassHz, CleanLowPassHz);
             c.Play(clip, vol, 1f, false, 0f);

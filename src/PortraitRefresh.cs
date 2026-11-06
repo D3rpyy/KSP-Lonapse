@@ -1,4 +1,4 @@
-// Crew portraits after the pose (user test after v6). Kerbal.kerbalAvatarUpdateCycle renders the portrait from a
+// Crew portraits after the pose. Kerbal.kerbalAvatarUpdateCycle renders the portrait from a
 // coroutine early in the frame, before the Animator and before LateUpdate. MouthDriver and FaceDriver also write the
 // jaw and the head right before that render (Camera.onPreCull), and the overlay counted those writes, yet the portrait
 // showed no talking and the head snapped back. In the IVA view, rendered after LateUpdate, everything worked.

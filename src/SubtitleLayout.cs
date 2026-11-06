@@ -280,7 +280,7 @@ namespace Lonapse
 
         /// <summary>
         /// Place <paramref name="count"/> entries (heights ordered oldest to newest) in the column, newest at the bottom.
-        /// Older entries that do not fit between minY and maxY are dropped; the newest is always placed.
+        /// Older entries that do not fit between minY and maxY are dropped. The newest is always placed.
         /// Fills rects[i] for the placed entries and returns the index of the oldest placed entry
         /// (count when nothing was placed).
         /// </summary>
@@ -380,7 +380,7 @@ namespace Lonapse
             return Duration(seconds, DefaultHold);
         }
 
-        /// <summary>Settings.subtitleHold: how long a subtitle stays after its line, default and most (user request).</summary>
+        /// <summary>Settings.subtitleHold: how long a subtitle stays after its line, default and most.</summary>
         public const float DefaultHold = 0.6f, MaxHold = 10f;
 
         /// <summary>On screen for the line plus <paramref name="hold"/> s (0 .. MaxHold), at least 1.2 s.</summary>

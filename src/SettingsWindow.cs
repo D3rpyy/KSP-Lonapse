@@ -307,13 +307,12 @@ namespace Lonapse
             "", "chatter", "relief", "staging", "countdown", "touchdown", "splashdown", "throttle_full", "throttle_cut",
             "plan_node", "burn_soon", "eva_check", "eva_fall", "station_check", "dock_approach", "dock_close", "dock_hard", "docked",
             "chute_semi", "chute_full",
-            // v4 game events
+            // game events
             "soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
-            // 0.6.0: probe and crew in the cabin (a crewed vessel with a probe core)
+            // Probe and crew in the cabin (a crewed vessel with a probe core)
             "probe_crew",
-            // v5 probe events
+            // probe events
             "probe_chat", "probe_sleepy",
-            // v6 probe events
             "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data",
         };
         // "" (any), the science topics and home (soi_enter)
@@ -582,7 +581,7 @@ namespace Lonapse
             DrawProbeVoice(s);
         }
 
-        // ------------------------------------------------ probe voice (0.6.0)
+        // ------------------------------------------------ probe voice
 
         private int previewMood;
         private string voiceStatus = "";
@@ -659,7 +658,7 @@ namespace Lonapse
             double gl = have ? v.Glide : 0.0;
             float rg = Row("Glide", (float)gl, 0f, 1f, Mathf.Round((float)gl * 100f), "0'%'");
             if (have && rg != (float)gl) EditVoice(s).Glide = Mathf.Round(rg * 20f) / 20f;
-            // 0.6.0 extras
+            // extras
             double sp = have ? v.Speed : 1.0;
             float rs = Row("Speed", (float)sp, (float)ProbeVoiceSpec.MinSpeed, (float)ProbeVoiceSpec.MaxSpeed, (float)sp, "0.0#'x'");
             if (have && rs != (float)sp) EditVoice(s).Speed = Mathf.Round(rs * 20f) / 20f;

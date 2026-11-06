@@ -1,5 +1,5 @@
 key	base_hz	wave	rhythm	glide
-# Probe core timbres for the beeps (plan v5). Read by audio/build_clips.py.				
+# Probe core timbres for the beeps. Read by audio/build_clips.py.				
 # key: a ProbeCores.Keys value (src/ProbeCore.cs). Every key must be here once.				
 # base_hz: pitch of mood note 0, 200 to 3000.				
 # wave: sine, triangle, square, saw, pulse or fm.				

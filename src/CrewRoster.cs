@@ -43,7 +43,7 @@ namespace Lonapse
         public Band band = Band.Calm;
         public bool isFemale;
 
-        /// <summary>Persona flags and trait key (plan v4). Persona.None until ApplyPersona runs.</summary>
+        /// <summary>Persona flags and trait key. Persona.None until ApplyPersona runs.</summary>
         public Persona persona = Persona.None;
         /// <summary>True when the veteran stress tweak is in exponent and panicAt (personalityEffects on).</summary>
         public bool personaEffects;
@@ -70,11 +70,11 @@ namespace Lonapse
             return effects ? persona.IntercomWeight : 1f;
         }
 
-        /// <summary>Key for per-speaker cooldowns in Pacing (plan 4.3: "sk:&lt;name&gt;").</summary>
+        /// <summary>Key for per-speaker cooldowns in Pacing ("sk:&lt;name&gt;").</summary>
         public string CooldownKey { get { return "sk:" + (name ?? "?"); } }
 
         /// <summary>
-        /// Same as Create, plus gender (req 8). The gender pitch factor is applied after the hash, so the
+        /// Same as Create, plus gender. The gender pitch factor is applied after the hash, so the
         /// hash-based profile of a kerbal stays the same. The defaults match Tuning.genderPitchFemale/Male.
         /// </summary>
         public static KerbalVoice Create(string name, float courage, float stupidity, bool isBadass, bool female,
@@ -132,7 +132,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Band with a ceiling. maxBand Panic gives the plain NextBand. Tense as ceiling gives Tense at most (req 10).
+        /// Band with a ceiling. maxBand Panic gives the plain NextBand. Tense as ceiling gives Tense at most.
         /// </summary>
         public static Band NextBand(Band current, float sk, float tenseAt, float panicAt, Band maxBand)
         {
@@ -141,7 +141,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Launch cap (req 10): the highest band allowed now. Tense while the cap is on, the height is below capAlt,
+        /// Launch cap: the highest band allowed now. Tense while the cap is on, the height is below capAlt,
         /// and there is no real failure. Otherwise Panic (no cap).
         /// </summary>
         public static Band LaunchMaxBand(bool capOn, double heightM, double capAlt, bool realFailure)
@@ -180,7 +180,7 @@ namespace Lonapse
             UpdateStress(vesselStress, maxBand, 0f);
         }
 
-        /// <summary>panicOffset raises the panic threshold (escalation, req 11). 0 means no offset.</summary>
+        /// <summary>panicOffset raises the panic threshold (escalation). 0 means no offset.</summary>
         public void UpdateStress(float vesselStress, Band maxBand, float panicOffset)
         {
             sk = PersonalStress(vesselStress, exponent);
@@ -408,12 +408,12 @@ namespace Lonapse
         public KerbalVoice lastSpeaker;
         /// <summary>Band ceiling for UpdateStress (launch cap). Set it from LaunchMaxBand each tick. Panic means no cap.</summary>
         public Band maxBand = Band.Panic;
-        /// <summary>Escalation offset on every panic threshold (req 11), set by the director. 0 means none.</summary>
+        /// <summary>Escalation offset on every panic threshold, set by the director. 0 means none.</summary>
         public float panicOffset;
-        /// <summary>Gender pitch factors (req 8), set from Tuning by the addon. Defaults match Tuning.</summary>
+        /// <summary>Gender pitch factors, set from Tuning by the addon. Defaults match Tuning.</summary>
         public float genderPitchFemale = 1.06f, genderPitchMale = 0.96f;
         /// <summary>
-        /// Settings.personalityEffects (plan v4). Set it from the settings by the addon, like the gender pitch.
+        /// Settings.personalityEffects. Set it from the settings by the addon, like the gender pitch.
         /// Change it at runtime with SetPersonalityEffects so the voices update at once.
         /// </summary>
         public bool personalityEffects = true;

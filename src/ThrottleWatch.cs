@@ -1,4 +1,4 @@
-// Full throttle and throttle cutoff detection (plan v2, req 4). Pure state machine, tested offline.
+// Full throttle and throttle cutoff detection. Pure state machine, tested offline.
 // Full: throttle at or above fullAt for holdFull seconds, after a rise from below midLevel.
 // Cut: throttle below cutAt for holdCut seconds, after being above midLevel.
 // A repeat of the same event within minGap seconds is dropped. The arm is reset in that case too.

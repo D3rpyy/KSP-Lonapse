@@ -1,4 +1,4 @@
-// Probe voices (0.6.0): which voices exist and which one a vessel uses.
+// Probe voices: which voices exist and which one a vessel uses.
 // Voices come from three places, a later one replaces an earlier one with the same name:
 //   stock (ProbeVoiceSpec.Stock), LONAPSE_PROBE_VOICE nodes in GameData, PROBE_VOICE nodes in settings.cfg.
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.

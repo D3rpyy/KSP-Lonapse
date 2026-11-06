@@ -402,8 +402,8 @@ namespace Lonapse
             return true;
         }
 
-        // The versions of a line that may be picked now: those whose conditions hold, else the plain ones; and of
-        // those only the ones that can be filled. Each entry is the index in Versions and the text without [ ].
+        // The versions of a line that may be picked now: those whose conditions hold, else the plain ones. Of those,
+        // only the ones that can be filled. Each entry is the index in Versions and the text without [ ].
         static List<KeyValuePair<int, string>> FillableVersions(PhraseEntry e, FillState st)
         {
             List<string> vs = Versions(e.English);

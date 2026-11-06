@@ -1,8 +1,8 @@
-// Plan v5 section 2 and plan v6: the director in probe mode (an uncrewed vessel with a probe core).
+// The director in probe mode (an uncrewed vessel with a probe core).
 // Only Mission Control and the probe talk, always on the radio. Pet talk: Mission Control talks to the probe, the
-// probe answers with beeps (beep[1], radio band) and a bracketed subtitle. Hails (v6): the probe beeps first on its
+// probe answers with beeps (beep[1], radio band) and a bracketed subtitle. Hails: the probe beeps first on its
 // own timer, Mission Control answers. Events: probe scenes per
-// event, also for touchdown, splashdown, docking and a burn (v6). Everything audible goes through the queue, so the
+// event, also for touchdown, splashdown, docking and a burn. Everything audible goes through the queue, so the
 // radio arbitration (AirRules) stays in charge.
 // The pure rules live in ProbeRules.cs (tested offline).
 using System;
@@ -13,7 +13,7 @@ namespace Lonapse
 {
     public partial class ChatterDirector
     {
-        public float hailLeft = -1f;          // s to the next probe hail (v6), -1 = not in probe mode
+        public float hailLeft = -1f;          // s to the next probe hail, -1 = not in probe mode
         private bool wasProbeMode;
         private float lastProbeCalloutMc = -1e9f;   // clock of the last MC answer to a probe callout
         private float lastSayAgain = -1e9f;         // clock of the last "say again?"
@@ -85,7 +85,7 @@ namespace Lonapse
         /// <summary>
         /// Queues a probe scene line by line: mc on the radio (quindar), probe as a beep on the radio.
         /// mcOnly: the probe rows are left out (a sleeping probe does not answer). firstOnly: only the first line (a
-        /// callout without the MC answer). Plan v6 "say again?": on a weak signal the first probe answer to an MC line
+        /// callout without the MC answer). "Say again?": on a weak signal the first probe answer to an MC line
         /// may get an MC "say again?" and a repeated beep (ProbeRules.SayAgainDue). False when nothing was queued.
         /// </summary>
         private bool EnqueueProbeScene(PhraseScene sc, float delay, bool mcOnly = false, bool firstOnly = false)
@@ -195,7 +195,7 @@ namespace Lonapse
                     b.SetBand(p.HighPassHz, p.LowPassHz);
                     b.Play(clip, 0.7f, pitch, false, 0f);
                     b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion) + 0.3f * host.StaticLevel * cfg.weakSignalVolume;
-                    b.dropout = host.Dropout; // plan v6: a weak signal chops the beeps like the MC lines
+                    b.dropout = host.Dropout; // a weak signal chops the beeps like the MC lines
                     if (staticChop) b.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
                     ShowProbeSubtitle(who, text, Math.Max(2.5f, b.duration + 1f));
                     lastLine = who + ": " + mood + " beeps (" + b.clipName + ", pitch " + pitch.ToString("0.00") + ")";
@@ -259,7 +259,7 @@ namespace Lonapse
             }
             string ev = ProbeDrowsy ? "probe_sleepy" : "probe_chat";
             PhraseScene sc = null;
-            // plan v6: under stress Mission Control calms the probe about the main cause (heat, spin, g, ...)
+            // Under stress Mission Control calms the probe about the main cause (heat, spin, g, ...)
             if (ProbeTense && cfg.probeStressTalk) sc = PickProbeCause(ProbeRules.StressEvent, DominantCause, fits);
             if (sc == null && ProbeTense) sc = PickProbe(ev, x => fits(x) && HasProbeMood(x, ProbeRules.ScaredMood));
             if (sc == null) sc = PickProbe(ev, fits);
@@ -286,7 +286,7 @@ namespace Lonapse
 
         private bool AirFree { get { return count == 0 && Idle && !RadioAudible && !Holding && !calloutPending; } }
 
-        /// <summary>Plan v6: a probe scene for the cause first (cause column), else one with cause any.</summary>
+        /// <summary>A probe scene for the cause first (cause column), else one with cause any.</summary>
         private PhraseScene PickProbeCause(string ev, string cause, Predicate<PhraseScene> fits)
         {
             PhraseScene sc = null;
@@ -302,7 +302,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Plan v6: the probe version of a callout (staging, chutes, throttle). One short beep keyed on the radio, and
+        /// The probe version of a callout (staging, chutes, throttle). One short beep keyed on the radio, and
         /// now and then the MC answer of the scene (ProbeRules.CalloutMcAllowed). topic: separation or ignition for
         /// staging, null otherwise. Null when played, else the reason (staging then plays the stage tone).
         /// </summary>
@@ -340,7 +340,7 @@ namespace Lonapse
             return null;
         }
 
-        /// <summary>Plan v6: a milestone scene (probe_milestone, topic day1 to day365, orbit or landing). False when none
+        /// <summary>A milestone scene (probe_milestone, topic day1 to day365, orbit or landing). False when none
         /// was queued. Used for the first landing on a body, the rest arrives as an event.</summary>
         public bool EnqueueProbeMilestone(string topic, float delay)
         {
@@ -352,7 +352,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Plan v6: an antenna is sending science. The first beep of a send may be a probe_data scene (the probe
+        /// An antenna is sending science. The first beep of a send may be a probe_data scene (the probe
         /// beeps the data stream, MC confirms). Later beeps are the data stream beep alone (beeps/probe_data).
         /// </summary>
         public void PlayProbeData(bool first)
@@ -369,7 +369,7 @@ namespace Lonapse
             Log.Debug("Probe data beep" + (first ? " (send started)" : ""));
         }
 
-        /// <summary>Plan v6: the probe calls Mission Control on its own (probe_hail), Mission Control answers.
+        /// <summary>The probe calls Mission Control on its own (probe_hail), Mission Control answers.
         /// Own timer (hailInterval), only awake, with the link and outside a serious phase.</summary>
         private void UpdateHail(float dt)
         {
@@ -388,7 +388,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Plan v6: the probe reacts to a flight event (touchdown, splashdown, docked, burn_soon) on the radio. A probe
+        /// The probe reacts to a flight event (touchdown, splashdown, docked, burn_soon) on the radio. A probe
         /// scene of the event, else the probe's own mood beep. Needs the link and an awake probe. preempt cuts the
         /// chatter first (warnings). False when nothing was queued.
         /// </summary>
@@ -523,7 +523,7 @@ namespace Lonapse
                    + (!host.signal.connected && shape.NeedsSignal ? " (no signal: radio lines skipped)" : "");
         }
 
-        // ---------------- probe and crew on one vessel (0.6.0) ----------------
+        // ---------------- probe and crew on one vessel ----------------
 
         // cabin sound of the probe: a wide band and no grit (the radio band only with intercomRadioFx)
         private const float CabinBeepHighPass = 180f, CabinBeepLowPass = 9000f, CabinBeepVolume = 0.6f;

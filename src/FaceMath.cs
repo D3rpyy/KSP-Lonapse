@@ -1,4 +1,4 @@
-// Pure math for kerbal faces (v4 feature 2): the mood of a voice line, the expression blend, the head-turn angle and
+// Pure math for kerbal faces: the mood of a voice line, the expression blend, the head-turn angle and
 // the smoothing. No Unity or KSP dependencies so the offline test harness can compile this file. FaceDriver feeds it
 // the playing line and the bone positions and applies the result to the Animator and to bn_headPivot_b01.
 //
@@ -44,7 +44,7 @@ namespace Lonapse
 
         /// <summary>
         /// How happy a face may look at this personal stress (sk, 0..1), anchored to the kerbal's own thresholds, so
-        /// the face matches the voice (user request): free below tenseAt, then down to clearly scared (FaceAtPanic) at
+        /// the face matches the voice: free below tenseAt, then down to clearly scared (FaceAtPanic) at
         /// panicAt, then on to full fear at 1. A brave or badass kerbal has later thresholds, so it stays calm longer.
         /// </summary>
         public static float StressCap(float stress, float tenseAt, float panicAt)

@@ -15,7 +15,7 @@ touchdown_03	touchdown	chatter	none	crew	touchdown_03	1	both	any	any	Suave como 
 touchdown_s1_1	touchdown	chatter	none	crew	touchdown_s1	1	both	any	any	¡Contacto!	Contact! | Contact! | Ground contact!	
 touchdown_s1_2	touchdown	chatter	none	mc	touchdown_s1	2	m	any	any	Contacto confirmado. Bienvenidos.	Contact confirmed. Welcome. | Contact confirmed. Welcome. | Confirmed. Welcome to {here}.	 |  | Confirmado. Bienvenidos a {here}.
 splashdown_03	splashdown	chatter	none	crew	splashdown_03	1	both	any	any	Flotamos bien.	We're floating fine. | We're floating fine. | Floating nicely.	
-# W1 (plan v3): serious launch and return radio, procedural. Calm mostly, tense lines name their cause.												
+# Serious launch and return radio, procedural. Calm mostly, tense lines name their cause.												
 re_orb_s1_1	chatter	chatter	calm	mc	re_orb_s1	1	m	orbit	any	Preparad la maniobra de desorbitación.	Prepare the deorbit maneuver. | Prepare the deorbit maneuver. | Get ready to deorbit.	
 re_orb_s1_2	chatter	chatter	calm	crew	re_orb_s1	2	both	orbit	any	Recibido, orientando al retrógrado.	Copy, pointing retrograde. | Copy, pointing retrograde. | Copy. Going retrograde.	
 re_ent_s3_1	chatter	chatter	calm	crew	re_ent_s3	1	both	reentry	any	Interfaz de entrada.	Entry interface. | Entry interface. | We're at entry interface.	

@@ -1,4 +1,4 @@
-// Plan v4 (Director API, design 1 to 10): persona and trait in scene picking, the somber mood after a crew loss,
+// Director events: persona and trait in scene picking, the somber mood after a crew loss,
 // and PlayEvent with a small pending list for the game events (soi_enter science part_lost power_low power_ok
 // signal_lost signal_back crew_lost). Everything goes through the existing queue, so the radio/intercom
 // arbitration (AirRules, IntercomTurnOpen, the deferred callout) and the blackout rules stay in charge.
@@ -10,7 +10,7 @@ namespace Lonapse
 {
     public partial class ChatterDirector
     {
-        // ---------------- persona and trait (design 1 and 3) ----------------
+        // ---------------- persona and trait ----------------
 
         /// <summary>Body key for {body} lines while an event or the debug tab plays a scene. Null: the sample body.</summary>
         public string bodyOverride;
@@ -75,7 +75,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// User report (0.7.0): a persona or trait tier is a small list (2 to 8 scenes in orbit), so its own shuffle
+        /// A persona or trait tier is a small list (2 to 8 scenes in orbit), so its own shuffle
         /// bag repeats it every few picks. A tier may only take a scene the whole list would also give now: one never
         /// heard, or in the quarter heard longest ago (SceneMemory.Freshest of the whole list).
         /// </summary>
@@ -135,7 +135,7 @@ namespace Lonapse
             return b != null;
         }
 
-        // ---------------- somber mood (design 10) ----------------
+        // ---------------- somber mood ----------------
 
         /// <summary>Clock until which the crew mourns: no goofy radio scenes, no MC jokes, no intercom banter.</summary>
         public float somberUntil = -1f;
@@ -332,7 +332,7 @@ namespace Lonapse
             }
             if (pendingEvents.Count == 0 || clock < nextEventTry) return;
             nextEventTry = clock + 0.25f;
-            // highest priority first, the older one on a tie; at most one plays per try
+            // highest priority first, the older one on a tie. At most one plays per try.
             pendingEvents.Sort((x, y) => x.r.priority != y.r.priority ? y.r.priority.CompareTo(x.r.priority) : x.since.CompareTo(y.since));
             for (int i = 0; i < pendingEvents.Count; i++)
             {
@@ -505,16 +505,16 @@ namespace Lonapse
             if (!EventEnabled(ev)) { why = "disabled"; return EvGo.Drop; }
             // time warp chatter: an event waits for the end of the warp, as it did with the gate closed
             if (host.warpChatter) { why = "time warp"; return EvGo.Wait; }
-            if (host.probeMode) return TryProbeEvent(r, out why); // plan v5: probe scenes, crew_lost dropped
+            if (host.probeMode) return TryProbeEvent(r, out why); // probe scenes, crew_lost dropped
             if (!host.settings.radioEnabled) { why = "radio disabled"; return EvGo.Drop; }
             if (!host.CanStartAudio) { why = "gate " + host.gateReason; return EvGo.Wait; }
             if (!PhraseClips.Loaded) { why = "Lonapse table not loaded"; return EvGo.Drop; }
             // with crew aboard the crew still talks in a blackout (MC lines are dropped), so radio events go on
             bool blackout = radioSilent || (InBlackoutPhase && !mcBlackout);
-            // design 4: no welcome in a panic or in plasma
+            // no welcome in a panic or in plasma
             if (soi && (r.band == "panic" || KerbalVoice.AnyPanic(host.roster.voices))) { why = "panic"; return EvGo.Drop; }
             if (soi && blackout) { why = "blackout"; return EvGo.Drop; }
-            // radio events wait for the blackout to end; a crew-only event may still use the intercom (below)
+            // radio events wait for the blackout to end. A crew-only event may still use the intercom (below).
             if (blackout && !r.crewOnly) { why = "blackout"; return EvGo.Wait; }
             if (upbeat && FlightPhase.IsSerious(CurrentPhase)) { why = "serious phase"; return EvGo.Wait; }
             if (upbeat && Somber) { why = "somber"; return EvGo.Wait; }
@@ -548,7 +548,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Event scene: exact topic first, then topic any; the requested band first, then any band. Trait and persona
+        /// Event scene: exact topic first, then topic any. The requested band first, then any band. Trait and persona
         /// tiers like PreferFor, but the speaker is chosen after the scene (PickFitting). Shape filters the scene form.
         /// </summary>
         private PhraseScene PickEventScene(EventRequest r, Predicate<PhraseScene> shape)
@@ -622,7 +622,7 @@ namespace Lonapse
             PhraseScene sc;
             if (r.crewOnly)
             {
-                // signal_lost: no MC line. Two-line crew scenes go on the intercom; in blackout only those.
+                // signal_lost: no MC line. Two-line crew scenes go on the intercom. In blackout only those.
                 // Only on a free intercom: FireIntercom would overwrite a running chat (chatA, chatB, chatStarted).
                 // A busy intercom falls through to the one-line crew radio scene (in blackout: wait).
                 bool intercomFree = !HasChatItems() && !IntercomAudible && IntercomMayStartNow;
@@ -646,7 +646,7 @@ namespace Lonapse
 
             if (ev == EventWatchers.CrewLost)
             {
-                // Mission Control speaks first (no crew-first scene); a short crew reaction may follow
+                // Mission Control speaks first (no crew-first scene). A short crew reaction may follow.
                 sc = PickEventScene(r, x => x.StartsWithMc && !x.IsIntercom);
                 if (sc == null) return "no MC-first crew_lost scene";
                 if (preempt) { PreemptChatter(); if (HasChatItems()) DropChat("crew lost"); }

@@ -1,4 +1,4 @@
-// Personality of one kerbal from the stock stats (plan v4, features 1 and 3).
+// Personality of one kerbal from the stock stats.
 // Pure: no Unity or KSP dependencies, so the offline test harness can compile this file.
 using System;
 

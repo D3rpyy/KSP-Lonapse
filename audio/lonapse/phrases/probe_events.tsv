@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
-# Probe variants of science, power_low, power_ok, soi_enter, part_lost, signal_back, touchdown, splashdown, docked and burn_soon (plan v5 and v6). New keys: pe_																	
+# Probe variants of science, power_low, power_ok, soi_enter, part_lost, signal_back, touchdown, splashdown, docked and burn_soon. New keys: pe_																	
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.																	
 # Every scene has a core or a probe-mode role, so crew mode never picks it. Explosion words only in part_lost.																	
 # signal_lost has no rows here: Mission Control cannot reach the probe, so nobody talks.																	
@@ -171,7 +171,7 @@ pe_bn_any_b_1	burn_soon	warning	tense	probe	pe_bn_any_b	1	both	any	any	any	any	a
 pe_bn_any_b_2	burn_soon	warning	tense	mc	pe_bn_any_b	2	m	any	any	any	any	any	any		Sí, ya lo vemos. Espera a la marca.	Yes, we see it. Wait for the mark. | Yes, we see it. Wait for the mark. | We see it. Wait for the mark.	
 pe_bn_any_c_1	burn_soon	warning	tense	mc	pe_bn_any_c	1	m	any	any	any	any	any	any		Encendido en breve. Apunta bien.	Burn coming up. Point it right. | Burn coming up. Point it right. | Burn soon. Aim well.	
 pe_bn_any_c_2	burn_soon	warning	tense	probe	pe_bn_any_c	2	both	any	any	any	any	any	any	proud		[beeps confidently]	
-# plan v6: callouts, plan_node, stress, say again, milestones, rover, data																	
+# Callouts, plan_node, stress, say again, milestones, rover, data																	
 pe_stg_sep_any_a_1	staging	chatter	none	probe	pe_stg_sep_any_a	1	both	any	any	any	any	separation	any	happy		[beeps a goodbye]	
 pe_stg_sep_any_a_2	staging	chatter	none	mc	pe_stg_sep_any_a	2	m	any	any	any	any	separation	any		Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation.	
 pe_stg_sep_any_b_1	staging	chatter	none	probe	pe_stg_sep_any_b	1	both	any	any	any	any	separation	any	curious		[beeps lightly]	
