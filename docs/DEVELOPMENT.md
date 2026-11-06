@@ -32,8 +32,13 @@ Windows and Linux from the pinned release, the three voices and the licence text
 download and every voice is checked against a pinned sha256. The voices come from `audio/build/runtime_voices`. When
 they are missing, pass `--python <python with onnx and onnxruntime>` and the script makes them with
 `audio/quantize_runtime_voices.py`. It also zips the Piper, piper-phonemize and espeak-ng source as
-`audio/build/runtime_source/Lonapse-<version>-runtime-source.zip`. Attach that file to the GitHub release, the GPL of
-espeak-ng asks for it. Run it after the version bump, so the file name has the right version.
+`audio/build/runtime_source/Lonapse-<version>-runtime-source.zip`. The GPL of espeak-ng asks for it next to the
+release. Run it after the version bump, so the file name has the right version.
+
+When a GitHub release is published, `.github/workflows/release.yml` does the same on its own: it installs the
+packages in `runtime/requirements.txt`, runs `fetch_runtime.sh` (Piper and the original voices are downloaded and every
+file is checked against the pinned sha256), packs the zip with `pack_zip.sh` and uploads `Lonapse-<version>.zip` and
+`Lonapse-<version>-runtime-source.zip` to the release. Locally `package.sh` uses the same `pack_zip.sh`.
 
 `build.sh` compiles with `mcs` against the game's own DLLs in `KSP_Data/Managed/` and copies the result to
 `GameData/Lonapse/Plugins/Lonapse.dll`. It also installs every other file players get: the phrase tables, the docs,
