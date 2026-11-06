@@ -1422,6 +1422,10 @@ public static class Tests
               && RuntimeLines.BiomeSpeakable("高地") == null && RuntimeLines.BiomeSpeakable("Высокогорье") == null
               && RuntimeLines.BiomeSpeakable("Northern Polar Highland Craters") == null && RuntimeLines.BiomeSpeakable("") == null,
               "runtime voice: biome names from mods are said, untranslated tags and other scripts are left out", null);
+        Check(RuntimeLines.VesselSpeakable("Kerbal X") == "Kerbal X" && RuntimeLines.VesselSpeakable("Señora Brillitos") == "Señora Brillitos"
+              && RuntimeLines.VesselSpeakable("Восток 1") == null && RuntimeLines.VesselSpeakable("はやぶさ") == null
+              && RuntimeLines.VesselSpeakable("Mun Lander II") == "Mun Lander 2",
+              "runtime voice: vessel names in another alphabet are not said", null);
         {
             // shadow: behind the body inside its cylinder is dark, in front or beside it is lit
             bool shadowOk = DcMath.InShadow(-700, 0, 0, 1e9, 0, 0, 600) && !DcMath.InShadow(700, 0, 0, 1e9, 0, 0, 600)

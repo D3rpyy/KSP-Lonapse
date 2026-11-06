@@ -602,11 +602,12 @@ namespace Lonapse
         static readonly string[] RomanValues = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
         /// <summary>A vessel name a voice can say: "Mun Lander II" gives "Mun Lander 2" (a digit is said in Spanish by
-        /// the voice), " Debris" and brackets go. Null for a name too long to say in a line (over 4 words or 28 letters).</summary>
+        /// the voice), " Debris" and brackets go. Null for a name too long to say in a line (over 4 words or 28 letters)
+        /// and for a name with letters outside the Latin alphabet: the Spanish voice cannot say those.</summary>
         public static string VesselSpeakable(string vesselName)
         {
             string n = CleanName(vesselName);
-            if (string.IsNullOrEmpty(n)) return null;
+            if (string.IsNullOrEmpty(n) || !LatinOnly(n)) return null;
             n = Regex.Replace(n, @"\s*[\(\[].*?[\)\]]\s*", " ").Trim();
             if (n.EndsWith(" Debris", StringComparison.OrdinalIgnoreCase)) n = n.Substring(0, n.Length - 7).Trim();
             string[] words = n.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -624,16 +625,21 @@ namespace Lonapse
             return sb.Length > 0 ? sb.ToString() : null;
         }
 
-        /// <summary>A biome name a voice can say, as VesselSpeakable. Null for a localization tag a planet pack left
-        /// untranslated (#LOC_...) and for a name with letters outside the Latin alphabet (KSP in Chinese, Japanese
-        /// or Russian): the Spanish voice cannot say those.</summary>
+        /// <summary>A biome name a voice can say, as VesselSpeakable (so also not in another alphabet, as with KSP in
+        /// Chinese, Japanese or Russian). Null for a localization tag a planet pack left untranslated (#LOC_...).</summary>
         public static string BiomeSpeakable(string biomeName)
         {
             string n = CleanName(biomeName);
             if (string.IsNullOrEmpty(n) || n.StartsWith("#", StringComparison.Ordinal)) return null;
-            foreach (char c in n)
-                if (char.IsLetter(c) && c > '\u024F') return null;   // Basic Latin up to Latin Extended-B
             return VesselSpeakable(n);
+        }
+
+        /// <summary>Every letter is Latin (Basic Latin up to Latin Extended-B, so accents pass).</summary>
+        public static bool LatinOnly(string text)
+        {
+            foreach (char c in text ?? "")
+                if (char.IsLetter(c) && c > '\u024F') return false;
+            return true;
         }
 
         /// <summary>KSP display names can end in a gender tag (^N, ^f). Trimmed, the tag removed.</summary>
