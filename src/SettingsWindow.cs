@@ -477,7 +477,7 @@ namespace Lonapse
             s.lightDelay = Toggle(s.lightDelay, "Light delay");
             Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
 
-            Header("Runtime voice (experimental)");
+            Header("Runtime voice");
             s.runtimeVoice = Toggle(s.runtimeVoice, "Speak names and new lines at runtime");
             {
                 string why = s.runtimeVoice ? RuntimeVoice.Missing("mc") : null;
@@ -983,24 +983,13 @@ namespace Lonapse
                 }
             }
             GUILayout.Label(string.IsNullOrEmpty(testStatus) ? " " : testStatus);   // always drawn: keeps the control count stable
-            if (GUILayout.Button("Runtime voice: MC greets the crew (experimental)"))
-            {
-                if (d == null) runtimeTestStatus = "no director";
-                else
-                {
-                    try { runtimeTestStatus = d.DebugRuntimeGreeting() ?? ""; }
-                    catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeGreeting", e); }
-                }
-            }
-            // the director updates its status when the clip is ready
-            string rts = d != null && !string.IsNullOrEmpty(d.runtimeStatus) ? d.runtimeStatus : runtimeTestStatus;
-            GUILayout.Label(string.IsNullOrEmpty(rts) ? " " : rts);   // always drawn: keeps the control count stable
             GUILayout.Label("Runtime lines: " + (d != null ? d.RuntimeStats : "-"));
-            if (GUILayout.Button("Runtime voice: a Mission Control report now"))
+            if (GUILayout.Button("Test MC report"))
             {
-                try { runtimeTestStatus = d != null ? d.DebugRuntimeReport() : "no director"; if (d != null) d.runtimeStatus = null; }
+                try { runtimeTestStatus = d != null ? d.DebugRuntimeReport() : "no director"; }
                 catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeReport", e); }
             }
+            GUILayout.Label(string.IsNullOrEmpty(runtimeTestStatus) ? " " : runtimeTestStatus);   // always drawn: keeps the control count stable
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));
             if (d != null)

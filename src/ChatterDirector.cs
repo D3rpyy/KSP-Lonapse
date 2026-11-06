@@ -170,7 +170,8 @@ namespace Lonapse
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
-                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions());
+                                            (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions(),
+                                            PhraseClips.slotsEs);
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
             for (int i = 0; i < filled.Count; i++)
                 if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
@@ -557,6 +558,17 @@ namespace Lonapse
             return false;
         }
 
+        /// <summary>A queued crew line calls Control.</summary>
+        private bool HasControlCalls()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Utterance u = queue[(head + i) % Capacity];
+                if (u.who == UttKind.CrewLine && AddressesControl(u.entry)) return true;
+            }
+            return false;
+        }
+
         /// <summary>Blackout with crew: drop the Mission Control items, everything else stays in order.</summary>
         public void DropMcItems()
         {
@@ -568,9 +580,13 @@ namespace Lonapse
 
         /// <summary>Blackout with crew: only radio scenes without Mission Control, and nobody calls Control (user
         /// report: the crew kept trying to reach Control). The crew knows the radio is out.</summary>
+        /// <summary>Mission Control cannot hear the crew: a blackout with crew, or no link (user report 0.7.0: after
+        /// the link was lost the crew kept calling Control, and its answers were skipped without a word).</summary>
+        private bool McUnreachable { get { return mcBlackout || (!host.probeMode && !host.signal.connected); } }
+
         private bool BlackoutOk(PhraseScene sc)
         {
-            if (!mcBlackout) return true;
+            if (!McUnreachable) return true;
             if (sc.Lines.Count == 0 || sc.McLines > 0) return false;
             for (int i = 0; i < sc.Lines.Count; i++) if (AddressesControl(sc.Lines[i])) return false;
             return true;
@@ -650,7 +666,7 @@ namespace Lonapse
                 // blackout: radio items go, intercom chat items stay (req 6)
                 if (radioSilent && HasRadioItems()) { ClearRadioQueue(); if (count == 0) return; }
                 // blackout with crew: only the Mission Control part goes, the crew keeps keying the radio
-                if (mcBlackout && HasMcItems()) { DropMcItems(); if (count == 0) return; }
+                if (McUnreachable && (HasMcItems() || HasControlCalls())) { DropMcItems(); if (count == 0) return; }
                 // a started chat holds the air to its end (user report: radio cut into the chat): radio queued
                 // behind it waits. A chat that has not started yet still lets the radio go first.
                 bool chatHolds = ChatHoldsAir;
@@ -817,7 +833,7 @@ namespace Lonapse
                     }
                     if (clip == null) return StartResult.Skip;
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.basePitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
+                    float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(false, tu);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -864,7 +880,7 @@ namespace Lonapse
                                                      : ClipLibrary.NextFor(u.folder ?? CrewFolder(sp, s), sp.isFemale, sp.rng));
                     if (clip == null) return StartResult.Skip;
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.basePitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
+                    float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -1063,8 +1079,9 @@ namespace Lonapse
             return DcMath.Lerp(1.2f, 0.35f, s) * U(0.8f, 1.2f) + host.LightDelay;
         }
 
-        /// <summary>MC transmission: quindar in, line, quindar out, static bed under it, squelch tail.</summary>
-        private void EnqueueMc(string folder, float delay, PhraseEntry e = null)
+        /// <summary>MC transmission: quindar in, line, quindar out, static bed under it, squelch tail. to: the kerbal
+        /// Mission Control talks to in this scene (the one who answers or just spoke), for a runtime name.</summary>
+        private void EnqueueMc(string folder, float delay, PhraseEntry e = null, KerbalVoice to = null)
         {
             if (count + 7 > Capacity) return;
             // a weak signal sometimes cracks before the transmission (req 17)
@@ -1075,7 +1092,7 @@ namespace Lonapse
             Enqueue(UttKind.BedStart, null, delay, 0f, null);
             Enqueue(UttKind.ControlFx, "beeps/quindar_in", 0f, 0f, null);
             Utterance u = Enqueue(UttKind.ControlLine, folder, 0.05f, 0f, null);
-            if (u != null) { u.entry = e; u.rt = PlanMc(e); }
+            if (u != null) { u.entry = e; u.rt = PlanMc(e, to); }
             Enqueue(UttKind.ControlFx, "beeps/quindar_out", 0.03f, 0f, null);
             Enqueue(UttKind.BedStop, null, 0f, 0f, null);
             Enqueue(UttKind.ControlFx, "static/squelch", 0.02f, 0f, null);
@@ -1170,17 +1187,9 @@ namespace Lonapse
 
         private PhraseScene PickCore(string ev, string band, string cause, bool intercom, Predicate<PhraseScene> filter)
         {
-            if (!PhraseClips.Loaded) return null;
-            string phase = CurrentPhase;
-            // phase is checked here (radio and intercom rules differ), cause by the table
-            var list = PhraseClips.table.ScenesFor(ev, band, null, cause, sc => PhraseClips.Playable(sc)
-                && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
-                && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
-                && (intercom || BlackoutOk(sc))
-                && (filter == null || filter(sc)) && SlotsOk(sc));
+            var list = CoreList(ev, band, cause, intercom, filter);
+            if (list == null) return null;
             bool stressBand = !intercom && (band == "tense" || band == "panic");
-            if (stressBand) list = StressRepeatFilter(list);
-            else if (ev == "chatter") list = CalmRepeatFilter(list);
             PhraseScene p = Mem.Take(list, rng, lastSceneId);
             if (p != null)
             {
@@ -1189,6 +1198,23 @@ namespace Lonapse
                 else if (ev == "chatter" && p.Lines.Count >= 2) calmSaid[p.Id] = clock;
             }
             return p;
+        }
+
+        /// <summary>The scenes PickCore picks from (after the repeat filters), null when the table is not loaded.</summary>
+        private System.Collections.Generic.List<PhraseScene> CoreList(string ev, string band, string cause, bool intercom, Predicate<PhraseScene> filter)
+        {
+            if (!PhraseClips.Loaded) return null;
+            string phase = CurrentPhase;
+            // phase is checked here (radio and intercom rules differ), cause by the table
+            var list = PhraseClips.table.ScenesFor(ev, band, null, cause, sc => PhraseClips.Playable(sc)
+                && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
+                && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
+                && (intercom || BlackoutOk(sc)) && sc.PlaysAt(Body)
+                && (filter == null || filter(sc)) && SlotsOk(sc));
+            bool stressBand = !intercom && (band == "tense" || band == "panic");
+            if (stressBand) list = StressRepeatFilter(list);
+            else if (ev == "chatter") list = CalmRepeatFilter(list);
+            return list;
         }
 
         /// <summary>
@@ -1255,9 +1281,7 @@ namespace Lonapse
         /// </summary>
         private PhraseScene PickScene(string ev, string band, Predicate<PhraseScene> filter)
         {
-            string cause = DominantCause ?? NoCause;
-            // the same cause is not talked about again within causeRepeatGap: then only cause-any scenes
-            if (cause != NoCause && !CauseFresh(cause)) cause = NoCause;
+            string cause = SceneCause();
             if ((band == "tense" || band == "panic") && cause != NoCause)
             {
                 PhraseScene sc = PickCore(ev, band, cause, false, x => x.Cause == cause && (filter == null || filter(x)));
@@ -1266,6 +1290,15 @@ namespace Lonapse
             PhraseScene p = PickCore(ev, band, cause, false, filter);
             NoteCause(p);
             return p;
+        }
+
+        /// <summary>The cause PickScene uses: the dominant cause, or none when it was talked about within causeRepeatGap.</summary>
+        private string SceneCause()
+        {
+            string cause = DominantCause ?? NoCause;
+            // the same cause is not talked about again within causeRepeatGap: then only cause-any scenes
+            if (cause != NoCause && !CauseFresh(cause)) cause = NoCause;
+            return cause;
         }
 
         private bool CauseFresh(string cause)
@@ -1315,7 +1348,7 @@ namespace Lonapse
             {
                 PhraseEntry e = lines[i];
                 float d = i == 0 ? delay : ResponseDelay(s);
-                if (e.Role == "mc") EnqueueMc(e.Folder, d, e);
+                if (e.Role == "mc") EnqueueMc(e.Folder, d, e, sc.CrewLines > 0 ? sp : null);
                 else EnqueueCrew(e.Folder, d, 0f, sp, e);
             }
             Log.Debug("Scene " + sc.Id + " (" + sc.Event + ", " + sc.Band + ") queued" + (sp != null ? " for " + sp.displayName : ""));
@@ -1427,7 +1460,7 @@ namespace Lonapse
                         // it answers the crew line's own cause (user report: a generic line after every spin line)
                         PhraseScene ack = PickMcAck(band, sc.Cause);
                         PhraseEntry ae = FirstLine(ack);
-                        if (ae != null) EnqueueMc(ae.Folder, ResponseDelay(s), ae);
+                        if (ae != null) EnqueueMc(ae.Folder, ResponseDelay(s), ae, sp);
                     }
                     return true;
                 }
@@ -1766,7 +1799,7 @@ namespace Lonapse
             VoiceChannel c = host.calloutCh;
             Tuning tu = Tu;
             float sk = sp.sk, gs = host.stress.gStrain;
-            float pitch = DcMath.CrewPitch(sp.basePitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
+            float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
             float vol = DcMath.Lerp(0.65f, 1.0f, sk);
             PreemptChatter();
             c.SetPreset(false, tu);
@@ -1793,7 +1826,7 @@ namespace Lonapse
                 for (int i = 1; i < scLines.Count; i++)
                 {
                     PhraseEntry e = scLines[i];
-                    if (e.Role == "mc") EnqueueMc(e.Folder, ResponseDelay(0.3f), e);
+                    if (e.Role == "mc") EnqueueMc(e.Folder, ResponseDelay(0.3f), e, sp);
                     else EnqueueCrew(e.Folder, ResponseDelay(0.3f), 0f, sp, e);
                 }
             }
@@ -1858,7 +1891,7 @@ namespace Lonapse
             lastChatClock = clock;
             chatLimit = IntercomAbortLimit;   // a blackout chat keeps the blackout limit after the blackout ends
             // keep the two voices audibly apart even when their base pitches are close
-            float nudge = DcMath.PairPitchNudge(a.basePitch, b.basePitch, Tu.intercomMinPitchGap);
+            float nudge = DcMath.PairPitchNudge(a.Pitch, b.Pitch, Tu.intercomMinPitchGap);
             for (int i = 0; i < turns; i++)
             {
                 bool second = (i % 2) == 1;
@@ -1946,7 +1979,7 @@ namespace Lonapse
 
             bool radioOn = host.settings.radioEnabled;
             bool checkStyle = !host.probeMode && host.stationMode && PacingRules.StationChoice(host.settings.stationStyle, s, tu.burstBand) == StationAction.Check;
-            if (radioOn && checkStyle && !radioSilent && !mcBlackout && holdoff <= 0f)
+            if (radioOn && checkStyle && !radioSilent && !McUnreachable && holdoff <= 0f)
             {
                 // stations and bases: Mission Control checks in now and then. Only this mechanism at low stress (req 9).
                 stationMcLeft -= dt;

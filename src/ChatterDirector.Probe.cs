@@ -565,8 +565,11 @@ namespace Lonapse
             string band = KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)];
             Func<string, Func<Predicate<PhraseScene>, PhraseScene>> pick = b =>
                 f => PickProbe(PhraseTable.ProbeCrewEvent, x => x.Band == b && f(x));
-            PhraseScene sc = PreferFor(a, band, pick(band), null);
-            if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), null);
+            Func<string, Func<Predicate<PhraseScene>, List<PhraseScene>>> all = b =>
+                f => PhraseClips.Loaded ? PhraseClips.table.ProbeScenesFor(PhraseTable.ProbeCrewEvent, Core, CurrentPhase, false,
+                         x => x.Band == b && PhraseClips.Playable(x) && f(x) && SlotsOk(x)) : new List<PhraseScene>();
+            PhraseScene sc = PreferFor(a, band, pick(band), all(band), null);
+            if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), all("calm"), null);
             if (sc == null) return false;
             List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0 || count + 2 * lines.Count + 1 > Capacity) return false;

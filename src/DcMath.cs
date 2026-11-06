@@ -161,6 +161,42 @@ namespace Lonapse
         /// Intercom pair: pitch multiplier for the second voice so the two base pitches differ by at least minGap.
         /// Returns 1 when they already differ enough.
         /// </summary>
+        /// <summary>
+        /// User report (0.7.0): two kerbals aboard sounded the same (pitch 1.005 and 0.948). Multipliers for the
+        /// pitches of one crew (one voice model) so every two are at least minGap apart: sorted, pushed up from the
+        /// lowest, then all shifted back so the average stays, kept in lo..hi. One pitch or none: all 1.
+        /// </summary>
+        public static float[] SpreadPitches(float[] pitch, float minGap, float lo, float hi)
+        {
+            int n = pitch == null ? 0 : pitch.Length;
+            var mul = new float[n];
+            for (int i = 0; i < n; i++) mul[i] = 1f;
+            if (n < 2) return mul;
+            var order = new int[n];
+            for (int i = 0; i < n; i++) order[i] = i;
+            Array.Sort(order, (a, b) => pitch[a] != pitch[b] ? pitch[a].CompareTo(pitch[b]) : a.CompareTo(b));
+            var p = new float[n];
+            float before = 0f, after = 0f;
+            for (int k = 0; k < n; k++)
+            {
+                p[k] = pitch[order[k]];
+                if (k > 0 && p[k] < p[k - 1] + minGap) p[k] = p[k - 1] + minGap;
+                before += pitch[order[k]];
+                after += p[k];
+            }
+            float shift = (before - after) / n;
+            // the whole set must fit in lo..hi: shift into the range, the gap wins over the range when it cannot fit
+            float low = p[0] + shift, high = p[n - 1] + shift;
+            if (low < lo) shift += lo - low;
+            else if (high > hi) shift -= Math.Min(high - hi, low - lo);
+            for (int k = 0; k < n; k++)
+            {
+                int i = order[k];
+                mul[i] = pitch[i] > 0.01f ? (p[k] + shift) / pitch[i] : 1f;
+            }
+            return mul;
+        }
+
         public static float PairPitchNudge(float pitchA, float pitchB, float minGap)
         {
             if (pitchB <= 0.01f) return 1f;

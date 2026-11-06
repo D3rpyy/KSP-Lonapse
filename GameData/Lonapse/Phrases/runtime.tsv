@@ -8,14 +8,22 @@
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
 #          or node_min>=2. Several situations: one must match. Every check must hold.
+#          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).
+#          Jobs: pilot engineer scientist tourist. The chat only plays when the two kerbals have those jobs, in
+#          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
 #          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
 # english  the subtitle. A number slot shows digits, a name slot the name.
 #
 # Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
 #   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
+#   at_home flight_no missions stars visits landings (crew history, see below)
 #   (km, min, deg, ms and sci get one decimal below 10, the rest whole numbers)
 # Name slots: vessel body exp target, and in a chat self (the speaker) and other (the one spoken to)
+# Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
+#   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions
+#   (flights that ended with a recovery), visits and landings (earlier flights that reached or landed on this body),
+#   stars (experience level). at_home is 1 at Kerbin, else 0. A template that uses them only plays with crew aboard.
 # Avoid a plural noun after a value that can be 1: use a check like node_min>=2.
 id	kind	when	spanish	english
 rt_orbit_1	report	orbit	Órbita estable. Periapsis {pe_km} kilómetros, apoapsis {ap_km} kilómetros.	Stable orbit. Periapsis {pe_km} km, apoapsis {ap_km} km.
@@ -102,3 +110,28 @@ rt_chat_crew_1	chat	crew>=3	Somos {crew} aquí dentro. Hace calor.	There are {cr
 rt_chat_crew_2	chat		Eres tú, {other}. Siempre eres tú.	It's you, {other}. It's always you.
 rt_chat_funds_1	chat	funds_total>=2	¿Sabes cuánto dinero le queda a la agencia? {funds_total} fondos.	Know how much money the agency has left? {funds_total} funds.
 rt_chat_funds_2	chat		Entonces no rompas nada, {other}.	Then don't break anything, {other}.
+rt_chat_pilotnode_1	chat	node_min>=2 a=pilot	{other}, la maniobra es dentro de {node_min} minutos. Agárrate.	{other}, the burn is in {node_min} minutes. Hold on.
+rt_chat_pilotnode_2	chat		¿Puedo conducir yo?	Can I drive?
+rt_chat_pilotnode_3	chat		No.	No.
+rt_chat_engfuel_1	chat	fuel>0 fuel<25 a=engineer	Según mis cálculos, queda el {fuel} por ciento de combustible.	By my numbers we have {fuel} percent fuel left.
+rt_chat_engfuel_2	chat		¿Y según los míos?	And by mine?
+rt_chat_engfuel_3	chat		Tú no haces cálculos, {other}.	You don't do numbers, {other}.
+rt_chat_scipts_1	chat	sci_total>=2 a=scientist	{other}, en casa ya tienen {sci_total} puntos de ciencia.	{other}, back home they have {sci_total} science points.
+rt_chat_scipts_2	chat		¿Eso es bueno?	Is that good?
+rt_chat_scipts_3	chat		Es ciencia. Siempre es bueno.	It's science. It's always good.
+rt_chat_tourist_1	chat	orbit alt_km>=2 a=tourist b=pilot	¿De verdad estamos a {alt_km} kilómetros de casa?	Are we really {alt_km} km from home?
+rt_chat_tourist_2	chat		Sí. Y no, no paramos para hacer fotos.	Yes. And no, we're not stopping for photos.
+rt_crew_first	report	flight_no=1	{kerbal}, es tu primer vuelo. Respira y disfruta.	{kerbal}, it's your first flight. Breathe and enjoy it.
+rt_crew_flightno	report	flight_no>=2 flight_no<10	{kerbal}, este es tu vuelo número {flight_no}. Ya eres de la casa.	{kerbal}, this is flight number {flight_no} for you. You're family now.
+rt_crew_veteran	report	missions>=10	{kerbal}, con {missions} vuelos a la espalda, esto es rutina para ti.	{kerbal}, with {missions} flights behind you, this is routine.
+rt_crew_newbody	report	at_home=0 visits=0	{kerbal}, es tu primera vez en {body}. Saluda de nuestra parte.	{kerbal}, it's your first time at {body}. Say hi for us.
+rt_crew_visits	report	at_home=0 visits>=2	{kerbal}, ya has estado en {body} en {visits} viajes. Tú nos guías.	{kerbal}, you've been to {body} on {visits} trips. You lead the way.
+rt_crew_landedbefore	report	landed at_home=0 landings>=1	{kerbal}, tú ya conoces {body}. Ya aterrizaste aquí antes.	{kerbal}, you know {body}. You landed here before.
+rt_crew_stars	report	stars>=3	{kerbal}, con nivel {stars} ya no hace falta que te digamos nada.	{kerbal}, at level {stars} we don't need to tell you anything.
+rt_chat_firstflight_1	chat	flight_no=1	{other}, es mi primer vuelo. ¿Se nota?	{other}, this is my first flight. Can you tell?
+rt_chat_firstflight_2	chat		Solo porque te agarras a todo.	Only because you're holding on to everything.
+rt_chat_newbody_1	chat	at_home=0 visits=0	Nunca había estado en {body}.	I've never been to {body} before.
+rt_chat_newbody_2	chat		Pues ya lo puedes contar, {other}.	Well, now you can tell everyone, {other}.
+rt_chat_oldhand_1	chat	missions>=5	{other}, este es mi vuelo número {flight_no}.	{other}, this is flight number {flight_no} for me.
+rt_chat_oldhand_2	chat		¿Y todavía te mareas?	And you still get sick?
+rt_chat_oldhand_3	chat		Cada vez.	Every time.

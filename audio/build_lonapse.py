@@ -163,6 +163,10 @@ CAUSES = ["any", "spin", "gforce", "q", "ground", "heat", "plasma", "fuel", "imp
 STOCK_BODIES = ["kerbol", "moho", "eve", "gilly", "kerbin", "mun", "minmus", "duna", "ike", "dres", "jool",
                 "laythe", "vall", "tylo", "bop", "pol", "eeloo"]
 GENERIC_BODY = "generic"
+# {body} scenes that make no sense at home ("you can't take Kerbin home"): no kerbin variant, so the game skips them
+# at Kerbin (PhraseScene.PlaysAt, it does not fall back to generic there)
+HOME_BODY = "kerbin"
+NOT_AT_HOME = {"bo_souvenir", "bo_greetings", "bo_kids"}
 BODY_SEP = "__"              # variant clip_key = <clip_key>__<body key>
 PLACEHOLDER_RE = re.compile(r"\{([^{}]*)\}")
 # Experimental (procedural talk): subtitle slots in the english only, filled in game (SubtitleSlots in C#).
@@ -754,6 +758,8 @@ def expand_bodies(rows, bodies):
             out.append(e)
             continue
         for bk, (es, en) in bodies.items():
+            if bk == HOME_BODY and r["scene"] in NOT_AT_HOME:
+                continue
             e = dict(r)
             e["clip_key"] = r["clip_key"] + BODY_SEP + bk
             e["body"] = bk

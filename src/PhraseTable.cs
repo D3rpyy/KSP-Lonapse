@@ -40,6 +40,9 @@ namespace Lonapse
         public string English = "";
         // Sounds/ folder of the clip, e.g. "crew/calm" (from the built table, or PhraseTable.FolderFor)
         public string Folder;
+        // Experimental (runtime voice): the Spanish of the filled subtitle from slots_es.tsv, marked for
+        // RuntimeSpeech. Set by SubtitleSlots.Fill, null when the recorded clip says the line.
+        public string RuntimeSpanish;
 
         public bool HasBody { get { return !string.IsNullOrEmpty(Body); } }
 
@@ -244,6 +247,8 @@ namespace Lonapse
         public static readonly string[] Causes = {
             "any", "spin", "gforce", "q", "ground", "heat", "plasma", "fuel", "impulse", "engine_out" };
         public const string GenericBody = "generic";
+        /// <summary>The home body: body scenes listed in NOT_AT_HOME (build_lonapse.py) have no variant for it.</summary>
+        public const string HomeBody = "kerbin";
         // Plan v4, same values as TRAITS, PERSONAS and TOPICS_BY_EVENT in audio/build_lonapse.py
         public const string Any = "any";
         public static readonly string[] Traits = { "any", "pilot", "engineer", "scientist", "tourist" };
@@ -784,12 +789,30 @@ namespace Lonapse
                     else if (e.Body == body) exact = e;
                     else if (e.Body == PhraseTable.GenericBody) generic = e;
                 }
+                // Kerbin is home: a scene without a Kerbin variant ("you can't take {body} home") does not fall back
+                // to the generic planet there, the seq is left out and PlaysAt says no
+                if (body == PhraseTable.HomeBody) generic = null;
                 PhraseEntry pick = plain ?? exact ?? generic;
                 if (pick != null) r.Add(pick);
             }
             forBody[body] = r;
             return r;
         }
+
+        /// <summary>Every seq of the scene has a line for this body (see LinesFor). False for a body scene that has
+        /// no variant for Kerbin, at Kerbin.</summary>
+        public bool PlaysAt(string body)
+        {
+            if (!HasBody) return true;
+            if (seqCount < 0)
+            {
+                var seqs = new HashSet<int>();
+                foreach (PhraseEntry e in AllLines) seqs.Add(e.Seq);
+                seqCount = seqs.Count;
+            }
+            return LinesFor(body).Count == seqCount;
+        }
+        int seqCount = -1;
 
         /// <summary>Experimental (procedural talk): a line of the scene has a subtitle slot like {thing}.</summary>
         public bool HasSlots

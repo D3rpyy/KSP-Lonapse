@@ -20,6 +20,9 @@ namespace Lonapse
         /// <summary>Checks of the "when" column: value key, operator (&lt; &lt;= &gt; &gt;= =), number.</summary>
         public readonly List<KeyValuePair<string, KeyValuePair<string, double>>> Checks =
             new List<KeyValuePair<string, KeyValuePair<string, double>>>();
+        /// <summary>Chat only: the job kerbal A and kerbal B must have (a=pilot b=scientist in the when column).
+        /// Null: any job.</summary>
+        public string TraitA, TraitB;
 
         public RuntimeTemplate(string id, string kind, string spanish, string english)
         {
@@ -35,12 +38,47 @@ namespace Lonapse
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         public static readonly string[] NumberSlots = { "alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
             "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
-            "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms" };
-        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target", "self", "other" };
+            "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
+            "at_home", "flight_no", "missions", "stars", "visits", "landings" };
+        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target", "self", "other", "kerbal" };
+
+        /// <summary>Career log types that count as a visit to their target body.</summary>
+        static readonly string[] VisitTypes = { "Flyby", "Orbit", "Suborbit", "Land", "Flight", "Escape" };
+
+        /// <summary>
+        /// Crew history (user request): from a kerbal's career log, entries { flight, type, target } of the flights
+        /// before this one. missions: flights that ended with a recovery. flight_no: missions + 1, this flight.
+        /// visits and landings: earlier flights that reached or landed on <paramref name="body"/>. stars: the
+        /// experience level. Training entries do not count.
+        /// </summary>
+        public static void CrewHistory(IEnumerable<string[]> career, string body, int stars, Dictionary<string, double> nums)
+        {
+            if (nums == null) return;
+            var recovered = new HashSet<string>();
+            var visits = new HashSet<string>();
+            var lands = new HashSet<string>();
+            if (career != null)
+                foreach (string[] e in career)
+                {
+                    if (e == null || e.Length < 3) continue;
+                    string f = e[0] ?? "", type = e[1] ?? "", target = e[2] ?? "";
+                    if (type.StartsWith("Training", StringComparison.Ordinal)) continue;
+                    if (type == "Recover") recovered.Add(f);
+                    bool here = !string.IsNullOrEmpty(body) && string.Equals(target, body, StringComparison.OrdinalIgnoreCase);
+                    if (here && Array.IndexOf(VisitTypes, type) >= 0) visits.Add(f);
+                    if (here && type == "Land") lands.Add(f);
+                }
+            nums["missions"] = recovered.Count;
+            nums["flight_no"] = recovered.Count + 1;
+            nums["visits"] = visits.Count;
+            nums["landings"] = lands.Count;
+            nums["stars"] = Math.Max(0, stars);
+        }
         /// <summary>A chat line: rt_chat_&lt;name&gt;_&lt;seq&gt;. The lines of one name form one chat, seq from 1.</summary>
         static readonly Regex ChatId = new Regex(@"^(rt_chat_[a-z0-9_]+?)_([0-9]+)$");
 
         static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
+        static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
 
         /// <summary>Parses runtime.tsv: header "id kind when spanish english", # comments. Bad rows go to errors and
@@ -75,6 +113,16 @@ namespace Lonapse
                 {
                     if (tok == "any") continue;
                     if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
+                    Match tm = TraitCheck.Match(tok);
+                    if (tm.Success)
+                    {
+                        string job = tm.Groups[2].Value;
+                        if (t.Kind != "chat") bad.Add("'" + tok + "' only works in a chat");
+                        else if (Array.IndexOf(Persona.TraitKeys, job) < 0) bad.Add("unknown job '" + job + "' (pilot engineer scientist tourist)");
+                        else if (tm.Groups[1].Value == "a") t.TraitA = job;
+                        else t.TraitB = job;
+                        continue;
+                    }
                     Match m = Check.Match(tok);
                     if (m.Success && Array.IndexOf(NumberSlots, m.Groups[1].Value) >= 0)
                     {
@@ -114,7 +162,8 @@ namespace Lonapse
                 for (int i = 0; i < kv.Value.Count && why == null; i++)
                 {
                     if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
-                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0)) why = "only line 1 has a when";
+                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0
+                                       || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null)) why = "only line 1 has a when";
                 }
                 if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
             }
@@ -150,12 +199,15 @@ namespace Lonapse
             return r;
         }
 
-        /// <summary>Line 1 of a chat fits (situation and checks), and every line fills with the names of its speaker:
-        /// line i is spoken by A when i is even. namesA and namesB hold self and other for each speaker.</summary>
+        /// <summary>Line 1 of a chat fits (situation, checks and the jobs of A and B), and every line fills with the
+        /// names of its speaker: line i is spoken by A when i is even. namesA and namesB hold self and other for each
+        /// speaker. jobA and jobB are the trait keys of the two kerbals (Persona.trait). Null: the job is not checked.</summary>
         public static bool ChatFits(List<RuntimeTemplate> chat, string situation, Dictionary<string, double> nums,
-                                    Dictionary<string, string[]> namesA, Dictionary<string, string[]> namesB)
+                                    Dictionary<string, string[]> namesA, Dictionary<string, string[]> namesB,
+                                    string jobA = null, string jobB = null)
         {
             if (chat == null || chat.Count == 0) return false;
+            if (!JobOk(chat[0].TraitA, jobA) || !JobOk(chat[0].TraitB, jobB)) return false;
             var head = new List<RuntimeTemplate> { new RuntimeTemplate(chat[0].Id, "chat", chat[0].Spanish, chat[0].English) };
             head[0].Situations.AddRange(chat[0].Situations);
             head[0].Checks.AddRange(chat[0].Checks);
@@ -166,6 +218,29 @@ namespace Lonapse
                 if (!Fill(chat[i], nums, i % 2 == 0 ? namesA : namesB, out s, out e)) return false;
             }
             return true;
+        }
+
+        /// <summary>The text holds the name as a whole word (not inside another word), ignoring case.</summary>
+        public static bool HasWord(string text, string name)
+        {
+            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(name)) return false;
+            for (int i = text.IndexOf(name, StringComparison.OrdinalIgnoreCase); i >= 0;
+                 i = text.IndexOf(name, i + 1, StringComparison.OrdinalIgnoreCase))
+            {
+                bool before = i == 0 || !char.IsLetterOrDigit(text[i - 1]);
+                int j = i + name.Length;
+                bool after = j >= text.Length || !char.IsLetterOrDigit(text[j]);
+                if (before && after) return true;
+            }
+            return false;
+        }
+
+        /// <summary>The job a chat asks for (null: any) and the job of the kerbal (null: not checked). A kerbal with an
+        /// unknown job (any) only fits a chat that asks for none.</summary>
+        public static bool JobOk(string want, string have)
+        {
+            if (want == null || have == null) return true;
+            return string.Equals(want, have, StringComparison.Ordinal);
         }
 
         static string SlotSet(string text)
@@ -488,10 +563,12 @@ namespace Lonapse
         static readonly Dictionary<string, string> SpanishPlurals = new Dictionary<string, string> {
             { "kilómetros", "kilómetro" }, { "metros", "metro" }, { "minutos", "minuto" }, { "grados", "grado" },
             { "puntos", "punto" }, { "fondos", "fondo" }, { "piezas", "pieza" }, { "contratos", "contrato" }, { "kerbals", "kerbal" },
+            { "vuelos", "vuelo" }, { "viajes", "viaje" }, { "aterrizajes", "aterrizaje" },
         };
         static readonly Dictionary<string, string> EnglishPlurals = new Dictionary<string, string> {
             { "meters", "meter" }, { "minutes", "minute" }, { "degrees", "degree" }, { "points", "point" }, { "funds", "fund" },
             { "parts", "part" }, { "contracts", "contract" }, { "kerbals", "kerbal" },
+            { "flights", "flight" }, { "trips", "trip" }, { "landings", "landing" },
         };
         static readonly Regex SlotNoun = new Regex(@"\{([a-z_]+)\} (\p{L}+)");
 

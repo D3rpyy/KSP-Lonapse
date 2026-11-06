@@ -194,7 +194,7 @@ namespace Lonapse
         public static readonly string[] SignedFields = { "faceExpressionSign" };
 
         /// <summary>Schema version of the saved TUNING node. Bump when defaults of existing fields change.</summary>
-        public const int CurrentVersion = 11;
+        public const int CurrentVersion = 12;
 
         /// <summary>
         /// Fields whose defaults changed in version 3 (0.3.0). A file written by an older version gets these reset to
@@ -409,7 +409,7 @@ namespace Lonapse
         public bool countdownDown = false;          // 0.6.0: count 10 .. 1 instead of 1 .. 10
         public bool rogerBeep = true;               // short beep when the crew lets go of the key
         public bool lightDelay = true;              // small extra answer delay far from Kerbin (max lightDelayMax s)
-        public bool runtimeVoice = false;           // experimental: lines spoken at runtime by Piper (names, bodies, extra rows)
+        public bool runtimeVoice = true;            // lines spoken at runtime by Piper (names, bodies, extra rows). 0.7.0: on by default
         public bool runtimeReports = true;          // with runtimeVoice: Mission Control reads out real values now and then
         public bool runtimeScience = true;          // with runtimeVoice: science points and contract funds
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
@@ -556,6 +556,12 @@ namespace Lonapse
                 ResetIfOld(reset, "intercomStationBoost", 2.5f, 2.5f);  // 0.6.0: 1, the 60 s gap is lively enough
                 ResetIfOld(reset, "intercomQuietBoost", 2f, 2f);          // 0.6.0: 5 s, quick throttle changes get callouts   // 0.6.0: 60 s, a new biome gets its line
                 if (!subtitles) { subtitles = true; reset.Add("subtitles off -> on"); }
+            }
+            if (fromVersion < 12)
+            {
+                // 0.7.0: the runtime voice is on by default. It was off in the development builds, so an old file
+                // with it off gets it on. Players can turn it off again.
+                if (!runtimeVoice) { runtimeVoice = true; reset.Add("runtimeVoice off -> on"); }
             }
             tuningVersion = Tuning.CurrentVersion;
             return reset;

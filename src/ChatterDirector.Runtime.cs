@@ -9,7 +9,7 @@
 //   contract a completed contract with its funds, a failed one
 // A line that has a clip falls back to it when Piper is not done in time. A line without a clip waits longer and is
 // skipped when it still has no sound. Reports, science and contract lines are queued only once their clip is ready.
-// Also the Debug tab test: Mission Control greets a kerbal aboard by name.
+// Also the Debug tab test: a Mission Control report right now.
 using System;
 using System.Collections.Generic;
 
@@ -17,22 +17,13 @@ namespace Lonapse
 {
     public partial class ChatterDirector
     {
-        static readonly string[][] RuntimeGreetings = {
-            new[] { "{n}, aquí Control. ¿Qué tal va todo por ahí arriba?", "{N}, Control here. How is everything up there?" },
-            new[] { "Hola, {n}. Te oímos perfectamente.", "Hello, {N}. We hear you perfectly." },
-            new[] { "{n}, buen trabajo hoy. Sigue así.", "{N}, good work today. Keep it up." },
-            new[] { "{n}, ¿nos copias? Cambio.", "{N}, do you copy? Over." },
-        };
-        int runtimeTests, runtimeAsked, runtimeUsed, runtimeLate, runtimeFailed, runtimeOnly;
+        int runtimeAsked, runtimeUsed, runtimeLate, runtimeFailed, runtimeOnly;
         KerbalVoice lastCrewVoice;
         float lastCrewVoiceClock = -999f;
         float nextReport = -1f;
         bool reportPending;
         readonly Queue<string> recentRuntime = new Queue<string>();
         readonly HashSet<string> warmed = new HashSet<string>();
-
-        /// <summary>Status line of the last runtime voice test, for the Debug tab.</summary>
-        public string runtimeStatus;
 
         /// <summary>Share of Mission Control lines that get a name, and of intercom lines that get the partner's.</summary>
         const double RuntimeNameChance = 0.35, RuntimeIntercomNameChance = 0.3;
@@ -73,6 +64,8 @@ namespace Lonapse
 
         RuntimeVoice Voice { get { if (host.runtimeVoice == null) host.runtimeVoice = new RuntimeVoice(); return host.runtimeVoice; } }
 
+        /// <summary>The Piper voice of a kerbal: m or f, like the recorded clips. The kerbal's own pitch, timbre and
+        /// tremolo come from the playback, the same for recorded and runtime lines.</summary>
         static string KindFor(KerbalVoice sp) { return sp != null && sp.isFemale ? "f" : "m"; }
 
         /// <summary>For PhraseClips.Playable: a line without a clip can still play when Piper can speak it.</summary>
@@ -117,17 +110,19 @@ namespace Lonapse
         /// Plans the runtime version of a table line, or null when the line plays as it is. speaker: the kerbal for a
         /// crew line (null for MC). name: { spoken, english } to add at the end, or null.
         /// </summary>
-        RuntimeLine PlanLine(PhraseEntry e, KerbalVoice speaker, string[] name)
+        RuntimeLine PlanLine(PhraseEntry e, KerbalVoice speaker, string[] name, KerbalVoice partner = null)
         {
             if (e == null || e.SubtitleOnly || string.IsNullOrEmpty(e.Spanish) || !RuntimeOn) return null;
             if (e.ClipKey != null && e.ClipKey.StartsWith("rt_", StringComparison.Ordinal)) return null; // already runtime
             bool mc = e.Role == "mc";
             if (!mc && speaker == null) return null;
-            string kind = mc ? "mc" : KindFor(speaker);
-            if (RuntimeVoice.Missing(kind) != null) return null;
+            // the delivery of the line's band, as in the build (tense and panic faster and higher, MC calm in a panic)
+            string kind = RuntimeDelivery.KindFor(mc ? "mc" : KindFor(speaker), e.Band, e.Severity, e.Event);
+            if (kind == null || RuntimeVoice.Missing(kind) != null) return null;
             bool required = PhraseClips.Clip(e, !mc && speaker.isFemale) == null;
-            string spanish = e.Spanish, english = e.English ?? "";
-            bool changed = false;
+            // a subtitle template with its Spanish from slots_es.tsv: the voice says what the subtitle shows
+            string spanish = e.RuntimeSpanish ?? e.Spanish, english = e.English ?? "";
+            bool changed = e.RuntimeSpanish != null;
             if (spanish.IndexOf("{body}", StringComparison.Ordinal) >= 0 || english.IndexOf("{body}", StringComparison.Ordinal) >= 0)
             {
                 // a new row with {body}: the body name goes in at runtime
@@ -145,6 +140,13 @@ namespace Lonapse
                 {
                     spanish = s2; english = e2; changed = true;
                 }
+            }
+            // a subtitle slot ({vessel}, {other}) already shows a name the recorded Spanish does not say: say it too
+            string[] shown = SubtitleName(english, spanish, partner);
+            if (shown != null)
+            {
+                string s4 = RuntimeSpeech.AddName(spanish, RuntimeSpeech.MarkRaw(shown[0]));
+                if (s4 != null) { spanish = s4; changed = true; name = null; }
             }
             if (name != null)
             {
@@ -180,9 +182,30 @@ namespace Lonapse
             };
         }
 
+        /// <summary>The vessel name or the partner's first name when the subtitle shows it as a whole word and the
+        /// Spanish does not: { spoken, english }. Null otherwise.</summary>
+        string[] SubtitleName(string english, string spanish, KerbalVoice partner)
+        {
+            if (string.IsNullOrEmpty(english)) return null;
+            var cands = new List<string[]>();
+            string[] vn = VesselNames();
+            if (vn != null)
+            {
+                Vessel v = ActiveVessel;
+                string raw = v != null ? Names.Of(v) : null;
+                cands.Add(vn);
+                if (!string.IsNullOrEmpty(raw) && raw != vn[1]) cands.Add(new[] { vn[0], raw });
+            }
+            string[] pn = FirstNames(partner);
+            if (pn != null) cands.Add(pn);
+            foreach (string[] c in cands)
+                if (RuntimeLines.HasWord(english, c[1]) && !RuntimeLines.HasWord(spanish ?? "", c[1])) return c;
+            return null;
+        }
+
         /// <summary>An MC line: sometimes with the name of the kerbal who spoke last (else one aboard) or the vessel.
         /// Without crew (a probe), the vessel.</summary>
-        RuntimeLine PlanMc(PhraseEntry e)
+        RuntimeLine PlanMc(PhraseEntry e, KerbalVoice to = null)
         {
             if (e == null || !RuntimeOn) return null;
             string[] name = null;
@@ -192,7 +215,10 @@ namespace Lonapse
                 if (!crew || rng.NextDouble() < RuntimeVesselShare) name = VesselNames();
                 if (name == null && crew)
                 {
-                    KerbalVoice k = lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
+                    // user report: MC named one kerbal and another answered. The scene's own crew speaker wins
+                    // (the lines are queued before anyone speaks, so lastCrewVoice is the one before)
+                    KerbalVoice k = to != null && host.roster.voices.Contains(to) ? to
+                                    : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
                                     && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
                                     : host.roster.voices[rng.Next(host.roster.voices.Count)];
                     string first = k != null ? RuntimeLines.CleanName(SubtitleSlots.FirstName(k.displayName)) : null;
@@ -212,7 +238,7 @@ namespace Lonapse
                 string first = RuntimeLines.CleanName(SubtitleSlots.FirstName(partner.displayName));
                 if (!string.IsNullOrEmpty(first)) name = new[] { RuntimeSpeech.Respell(first), first };
             }
-            return PlanLine(e, speaker, name);
+            return PlanLine(e, speaker, name, partner);
         }
 
         const int TurnWait = 0, TurnGo = 1, TurnSkip = 2;
@@ -228,7 +254,7 @@ namespace Lonapse
             RuntimeLine rt = u.rt;
             if (rt == null) return TurnGo;
             // a different kerbal took the line (the planned one fainted): the other voice only when there is no clip
-            if (speaker != null && rt.kind != KindFor(speaker) && !rt.required) { u.rt = null; return TurnGo; }
+            if (speaker != null && RuntimeDelivery.BaseKind(rt.kind) != KindFor(speaker) && !rt.required) { u.rt = null; return TurnGo; }
             if (rt.clip != null) { clip = rt.clip; shown = rt.entry; runtimeUsed++; return TurnGo; }
             if (!rt.failed)
             {
@@ -346,9 +372,29 @@ namespace Lonapse
             if (b != null) names["body"] = b;
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
+            try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
         }
 
         static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
+
+        /// <summary>The crew history of a kerbal aboard (RuntimeLines.CrewHistory) into nums. Nothing for an unknown
+        /// kerbal: templates that need these values then do not fit.</summary>
+        void CrewValues(KerbalVoice k, Vessel v, Dictionary<string, double> nums)
+        {
+            if (k == null || v == null) return;
+            try
+            {
+                ProtoCrewMember pcm = HighLogic.CurrentGame != null && HighLogic.CurrentGame.CrewRoster != null
+                                      ? HighLogic.CurrentGame.CrewRoster[k.name] : null;
+                if (pcm == null) return;
+                var entries = new List<string[]>();
+                if (pcm.careerLog != null)
+                    foreach (FlightLog.Entry e in pcm.careerLog.Entries)
+                        entries.Add(new[] { e.flight.ToString(System.Globalization.CultureInfo.InvariantCulture), e.type, e.target });
+                RuntimeLines.CrewHistory(entries, v.mainBody != null ? v.mainBody.bodyName : null, pcm.experienceLevel, nums);
+            }
+            catch (Exception e) { Log.Debug("Runtime voice crew history: " + e.Message); }
+        }
 
         /// <summary>
         /// Liquid fuel left in percent for the stage that burns: the tanks that feed a running engine (its crossfeed
@@ -423,6 +469,15 @@ namespace Lonapse
             var nums = new Dictionary<string, double>();
             var names = new Dictionary<string, string[]>();
             CollectValues(v, sit, nums, names);
+            // the kerbal Mission Control talks to in a report with {kerbal}: the one who spoke last, else one aboard
+            if (host.roster.voices.Count > 0)
+            {
+                KerbalVoice k = lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
+                                && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
+                                : host.roster.voices[rng.Next(host.roster.voices.Count)];
+                string[] kn = FirstNames(k);
+                if (kn != null) { names["kerbal"] = kn; CrewValues(k, v, nums); }
+            }
             return QueueKind("report", sit, nums, names, 0.3f, true);
         }
 
@@ -479,11 +534,29 @@ namespace Lonapse
             if (na == null || nb == null) return false;
             var namesA = new Dictionary<string, string[]>(common) { { "self", na }, { "other", nb } };
             var namesB = new Dictionary<string, string[]>(common) { { "self", nb }, { "other", na } };
-            var fit = new List<List<RuntimeTemplate>>();
+            // a chat with jobs (a=pilot b=scientist) also fits with A and B swapped: then B starts it
+            string jobA = a.persona.trait, jobB = b.persona.trait;
+            // the crew history values (flight_no, visits ...) are those of the kerbal who starts the chat
+            var numsA = new Dictionary<string, double>(nums);
+            var numsB = new Dictionary<string, double>(nums);
+            CrewValues(a, v, numsA);
+            CrewValues(b, v, numsB);
+            var fit = new List<KeyValuePair<List<RuntimeTemplate>, bool>>();
             foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
-                if (!recentRuntime.Contains(c[0].Id) && RuntimeLines.ChatFits(c, sit, nums, namesA, namesB)) fit.Add(c);
+            {
+                if (recentRuntime.Contains(c[0].Id)) continue;
+                if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
+                else if (RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
+            }
             if (fit.Count == 0) return false;
-            List<RuntimeTemplate> chat = fit[rng.Next(fit.Count)];
+            var pick = fit[rng.Next(fit.Count)];
+            List<RuntimeTemplate> chat = pick.Key;
+            if (pick.Value)
+            {
+                KerbalVoice k = a; a = b; b = k;
+                var n = namesA; namesA = namesB; namesB = n;
+            }
+            nums = pick.Value ? numsB : numsA;
             recentRuntime.Enqueue(chat[0].Id);
             while (recentRuntime.Count > 6) recentRuntime.Dequeue();
 
@@ -637,43 +710,6 @@ namespace Lonapse
         }
 
         // ---------------- Debug tab ----------------
-
-        /// <summary>Debug tab: MC greets a kerbal aboard by name with a runtime clip. Returns a status line.</summary>
-        public string DebugRuntimeGreeting()
-        {
-            string why = RuntimeVoice.Missing("mc");
-            if (why != null) return runtimeStatus = "runtime voice: " + why;
-            string full = null;
-            if (host.roster.voices.Count > 0)
-            {
-                KerbalVoice k = host.roster.voices[rng.Next(host.roster.voices.Count)];
-                full = k != null ? k.displayName : null;
-            }
-            if (string.IsNullOrEmpty(full)) full = "Jebediah Kerman";
-            string name = RuntimeLines.CleanName(SubtitleSlots.FirstName(full));
-            string[] g = RuntimeGreetings[runtimeTests++ % RuntimeGreetings.Length];
-            string spanish = g[0].Replace("{n}", RuntimeSpeech.MarkName(name));
-            var e = new PhraseEntry
-            {
-                ClipKey = "rt_greet_" + runtimeTests, Event = "chatter", Severity = "chatter", Band = "calm", Role = "mc",
-                Scene = "rt_greet", Seq = 1, Gender = "m", Phase = "any", Cause = "any",
-                Spanish = g[0].Replace("{n}", name), English = g[1].Replace("{N}", name),
-            };
-            e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
-            e.LonapseText = RuntimeSpeech.Spoken(spanish);
-            runtimeStatus = "runtime voice: rendering \"" + e.LonapseText + "\"";
-            Voice.Request("mc", spanish, r =>
-            {
-                if (r.clip == null) { runtimeStatus = "runtime voice failed: " + r.error; return; }
-                PhraseClips.SetRuntimeClip(e, r.clip);
-                EnqueueMc(e.Folder, 0.2f, e);
-                runtimeStatus = string.Format("runtime voice: \"{0}\" ready in {1:0} ms (Piper {2:0} ms), {3:0.00} s of speech",
-                                              r.spoken, r.queueToReadyMs, r.piperMs, r.clip.length);
-                Log.Info("Runtime voice: " + e.ClipKey + " \"" + r.spoken + "\" ready in " + r.queueToReadyMs.ToString("0")
-                         + " ms (Piper " + r.piperMs.ToString("0") + " ms), " + r.clip.length.ToString("0.00") + " s");
-            });
-            return runtimeStatus;
-        }
 
         /// <summary>Debug tab: a report right now (any template that fits), to hear the numbers.</summary>
         public string DebugRuntimeReport()

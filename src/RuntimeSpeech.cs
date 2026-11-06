@@ -385,16 +385,62 @@ namespace Lonapse
 
         public double LengthScale { get { return Math.Pow(2.0, PitchSt / 12.0) / Tempo; } }
 
+        /// <summary>DELIVERY in build_lonapse.py: the voice and the Kerbal shift per speaker.</summary>
         public static readonly RuntimeDelivery[] All = {
             new RuntimeDelivery { Kind = "m", Voice = "es_ES-davefx-medium", PitchSt = 5.0 },
             new RuntimeDelivery { Kind = "f", Voice = "es_MX-claude-high", PitchSt = 4.0 },
-            new RuntimeDelivery { Kind = "mc", Voice = "es_MX-ald-medium", PitchSt = 3.0, Tempo = 1.04, NoiseScale = 0.80, NoiseW = 0.90 },
+            new RuntimeDelivery { Kind = "mc", Voice = "es_MX-ald-medium", PitchSt = 3.0 },
         };
 
+        // BAND_DELIVERY, MC_LIVELY_* and PANIC_NOISE_* in build_lonapse.py: a runtime line must sound like the
+        // recorded lines of the same band (user request). Tempo factor and extra semitones per delivery band.
+        static readonly Dictionary<string, double[]> Bands = new Dictionary<string, double[]> {
+            { "calm", new[] { 1.00, 0.0 } }, { "tense", new[] { 1.10, 0.7 } }, { "panic", new[] { 1.10, 1.0 } },
+            { "mc_panic", new[] { 0.95, 0.3 } }, { "callout", new[] { 1.08, 0.5 } },
+        };
+        public const double McLivelyTempo = 1.04, McLivelyNoise = 0.80, McLivelyNoiseW = 0.90;
+        public const double PanicNoise = 0.90, PanicNoiseW = 1.10;
+
+        /// <summary>
+        /// The kind for one line, like delivery() in build_lonapse.py: "m", "f" or "mc" with the delivery band after a
+        /// dot ("m.tense", "mc.mc_panic", "f.callout"). Calm and none give the plain kind. Null for the launch
+        /// countdown (it is never spoken at runtime).
+        /// </summary>
+        public static string KindFor(string speaker, string band, string severity, string ev)
+        {
+            if (ev == "countdown") return null;
+            bool mc = speaker == "mc";
+            string b;
+            if (severity == "callout") b = "callout";
+            else if (band == "panic" && mc) b = "mc_panic";
+            else if (band == "tense" || band == "panic") b = band;
+            else b = "calm";
+            return b == "calm" ? speaker : speaker + "." + b;
+        }
+
+        /// <summary>The base kind of a kind: "m.tense" gives "m".</summary>
+        public static string BaseKind(string kind)
+        {
+            if (kind == null) return null;
+            int dot = kind.IndexOf('.');
+            return dot < 0 ? kind : kind.Substring(0, dot);
+        }
+
+        /// <summary>The delivery of a kind (see KindFor). Null for an unknown kind.</summary>
         public static RuntimeDelivery For(string kind)
         {
-            foreach (RuntimeDelivery d in All) if (d.Kind == kind) return d;
-            return null;
+            string b = BaseKind(kind);
+            RuntimeDelivery basis = null;
+            foreach (RuntimeDelivery d in All) if (d.Kind == b) basis = d;
+            if (basis == null) return null;
+            string band = b == kind ? "calm" : kind.Substring(b.Length + 1);
+            double[] bd;
+            if (!Bands.TryGetValue(band, out bd)) return null;
+            bool mc = b == "mc";
+            var r = new RuntimeDelivery { Kind = kind, Voice = basis.Voice, PitchSt = basis.PitchSt + bd[1], Tempo = bd[0] };
+            if (mc && band != "mc_panic") { r.Tempo *= McLivelyTempo; r.NoiseScale = McLivelyNoise; r.NoiseW = McLivelyNoiseW; }
+            else if (!mc && band == "panic") { r.NoiseScale = PanicNoise; r.NoiseW = PanicNoiseW; }
+            return r;
         }
     }
 }

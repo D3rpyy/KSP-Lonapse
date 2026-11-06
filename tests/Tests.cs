@@ -529,6 +529,11 @@ public static class Tests
             Settings m10u = new Settings(); m10u.tuning.intercomInterval = 450f; m10u.tuning.probeRateFactor = 2f;
             m10u.MigrateValues(10);
             Check(m10u.tuning.intercomInterval == 450f && m10u.tuning.probeRateFactor == 2f, "migration v11: user-set values are kept", null);
+            Settings m11 = new Settings(); m11.runtimeVoice = false; m11.runtimeReports = false;
+            m11.MigrateValues(11);
+            Check(m11.runtimeVoice && !m11.runtimeReports, "migration v12: runtime voice on, a user-set report toggle is kept", null);
+            Check(new Settings().runtimeVoice && new Settings().runtimeReports && new Settings().runtimeScience,
+                  "defaults: all runtime voice settings are on", null);
             Settings m4 = new Settings(); m4.tuning.lightDelayMax = 2f; m4.tuning.lightDelayScale = 0.45f;
             m4.MigrateValues(4);
             Check(m4.tuning.lightDelayMax == 10f && m4.tuning.lightDelayScale == 2.6f, "migration v5: light delay up to 10 s replaces the old defaults", null);
@@ -1424,6 +1429,101 @@ public static class Tests
             "rt_chat_c_1\tchat\t\tC.\tC.", "rt_chat_c_2\tchat\torbit\tC.\tC.", "rt_chat_ok_1\tchat\t\tD.\tD.", "rt_chat_ok_2\tchat\t\tD.\tD." }, chatErr);
         Check(chatErr.Count == 3 && RuntimeLines.Chats(badChats).Count == 1, "runtime voice: a bad chat is dropped (one line, a gap, a when after line 1)",
               string.Join(" ; ", chatErr.ToArray()));
+        // jobs in a chat: a=pilot b=scientist on line 1 only, a known job, chats only
+        var jobErr = new List<string>();
+        var jobChats = RuntimeLines.Chats(RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
+            "rt_chat_j_1\tchat\ta=pilot b=scientist\tJ.\tJ.", "rt_chat_j_2\tchat\t\tJ.\tJ.",
+            "rt_chat_x_1\tchat\ta=cook\tX.\tX.", "rt_chat_x_2\tchat\t\tX.\tX.",
+            "rt_chat_y_1\tchat\t\tY.\tY.", "rt_chat_y_2\tchat\tb=pilot\tY.\tY.",
+            "rt_jobreport\treport\ta=pilot\tR.\tR." }, jobErr));
+        var jc = jobChats.Count == 1 ? jobChats[0] : null;
+        var none = new Dictionary<string, double>();
+        bool jobsOk = jc != null && jc[0].TraitA == "pilot" && jc[0].TraitB == "scientist"
+            && RuntimeLines.ChatFits(jc, "orbit", none, nA, nB, "pilot", "scientist")
+            && !RuntimeLines.ChatFits(jc, "orbit", none, nA, nB, "scientist", "pilot")
+            && !RuntimeLines.ChatFits(jc, "orbit", none, nA, nB, "pilot", "pilot")
+            && !RuntimeLines.ChatFits(jc, "orbit", none, nA, nB, Persona.Any, "scientist")
+            && RuntimeLines.ChatFits(jc, "orbit", none, nA, nB)
+            && RuntimeLines.ChatFits(chats.Find(c => c[0].TraitA == null && c[0].TraitB == null && c[0].Situations.Count == 0 && c[0].Checks.Count == 0),
+                                     "orbit", full, nA, nB, Persona.Any, Persona.Any);
+        Check(jobErr.Count == 4 && jobsOk && chats.Exists(c => c[0].TraitA != null),
+              "runtime voice: a chat with a=/b= jobs only fits kerbals with those jobs (bad job, line 2 and a report are refused)",
+              string.Join(" ; ", jobErr.ToArray()));
+        Check(RuntimeLines.HasWord("Good to hear, Kerbal X.", "Kerbal X") && RuntimeLines.HasWord("bob, hi", "Bob")
+              && !RuntimeLines.HasWord("Bobby is here.", "Bob") && !RuntimeLines.HasWord("", "Bob") && RuntimeLines.HasWord("Hi Bob", "Bob"),
+              "runtime voice: a name in a subtitle is found as a whole word only", "");
+        var hist = new Dictionary<string, double>();
+        RuntimeLines.CrewHistory(new List<string[]> {
+            new[] { "0", "Training1", "Kerbin" },
+            new[] { "1", "Orbit", "Kerbin" }, new[] { "1", "Flyby", "Mun" }, new[] { "1", "Recover", "Kerbin" },
+            new[] { "2", "Land", "Mun" }, new[] { "2", "Orbit", "Mun" }, new[] { "2", "Recover", "Kerbin" },
+            new[] { "3", "Flyby", "Minmus" } }, "Mun", 2, hist);
+        Check(hist["missions"] == 2 && hist["flight_no"] == 3 && hist["visits"] == 2 && hist["landings"] == 1 && hist["stars"] == 2,
+              "runtime voice: crew history counts recovered flights, visits and landings per flight, without training",
+              hist["missions"] + " " + hist["flight_no"] + " " + hist["visits"] + " " + hist["landings"] + " " + hist["stars"]);
+        // slots_es.tsv: every line matches its table row, every pool value is in pools.tsv, and a fill gives the Spanish
+        {
+            string dir = System.IO.Path.GetDirectoryName(rtPath);
+            var esErr = new List<string>();
+            SlotsEs es = SlotsEs.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "slots_es.tsv"), System.Text.Encoding.UTF8)), esErr);
+            var english = new Dictionary<string, string>();
+            string[] head = null;
+            foreach (string l in System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "phrases.tsv"), System.Text.Encoding.UTF8))
+            {
+                string[] f = l.Split('\t');
+                if (head == null) { head = f; continue; }
+                int ik = Array.IndexOf(head, "clip_key"), ie = Array.IndexOf(head, "english");
+                if (f.Length > ie && ie >= 0) english[f[ik]] = f[ie];
+            }
+            foreach (string k in es.LineKeys)
+            {
+                string en;
+                if (!english.TryGetValue(k, out en)) esErr.Add(k + " is not in phrases.tsv");
+                else if (en != es.LineEnglish(k)) esErr.Add(k + ": english differs from phrases.tsv");
+            }
+            Check(esErr.Count == 0 && es.LineCount >= 40 && es.PoolCount >= 100,
+                  "slots_es: " + es.LineCount + " lines and " + es.PoolCount + " pool values parse and match phrases.tsv", string.Join(" ; ", esErr.ToArray()));
+
+            var esPools = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\tlucky rock" }, null);
+            var se = SlotsEs.Parse(new List<string> { "kind\tkey\tenglish\tspanish",
+                "line\tt_1\tA. | {other}, where is my {thing}?\tA. | {other}, ¿dónde está {el thing}?",
+                "pool\tthing\tlucky rock\tf:piedra de la suerte" }, null);
+            var row = new PhraseEntry { ClipKey = "t_1", Role = "crew", Spanish = "A.", English = "A. | {other}, where is my {thing}?" };
+            var outE = SubtitleSlots.Fill(new List<PhraseEntry> { row }, esPools, new Dictionary<string, string>(),
+                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "1" : vv[0], null, null, se);
+            string esText = outE[0].RuntimeSpanish;
+            Check(outE[0].English == "Bob, where is my lucky rock?" && esText == "‹Bob›, ¿dónde está la piedra de la suerte?"
+                  && SubtitleSlots.Article("del", "mp") == "de los" && SubtitleSlots.Article("el", null) == null,
+                  "slots_es: the filled version gets its Spanish with the same values (name mark, article by gender)", outE[0].English + " / " + esText);
+            var outO = SubtitleSlots.Fill(new List<PhraseEntry> { row }, esPools, new Dictionary<string, string>(),
+                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "0" : vv[0], null, null, se);
+            Check(outO[0].RuntimeSpanish == null, "slots_es: the original version keeps its recorded clip (no runtime Spanish)", outO[0].RuntimeSpanish);
+        }
+        {
+            float[] pitch = { 1.005f, 0.948f, 1.163f };
+            float[] mul = DcMath.SpreadPitches(pitch, 0.09f, 0.82f, 1.28f);
+            float pa = pitch[0] * mul[0], pb = pitch[1] * mul[1], pc = pitch[2] * mul[2];
+            bool gaps = Math.Abs(pa - pb) >= 0.0899f && Math.Abs(pa - pc) >= 0.0899f && Math.Abs(pb - pc) >= 0.0899f;
+            bool mean = Math.Abs((pa + pb + pc) - (pitch[0] + pitch[1] + pitch[2])) < 0.001f;
+            bool order = pb < pa && pa < pc;
+            float[] far = DcMath.SpreadPitches(new[] { 0.9f, 1.1f }, 0.09f, 0.82f, 1.28f);
+            float[] one = DcMath.SpreadPitches(new[] { 1.0f }, 0.09f, 0.82f, 1.28f);
+            Check(gaps && mean && order && far[0] == 1f && far[1] == 1f && one[0] == 1f,
+                  "voices: a crew's pitches are pushed apart to the gap, the average and the order stay, far apart stays as it is",
+                  pa.ToString("0.000") + " " + pb.ToString("0.000") + " " + pc.ToString("0.000"));
+            RuntimeDelivery mcCalm = RuntimeDelivery.For("mc"), mcPanic = RuntimeDelivery.For(RuntimeDelivery.KindFor("mc", "panic", "chatter", "chatter"));
+            RuntimeDelivery mT = RuntimeDelivery.For(RuntimeDelivery.KindFor("m", "tense", "chatter", "chatter"));
+            RuntimeDelivery fP = RuntimeDelivery.For(RuntimeDelivery.KindFor("f", "panic", "chatter", "chatter"));
+            RuntimeDelivery mC = RuntimeDelivery.For(RuntimeDelivery.KindFor("m", "calm", "callout", "staging"));
+            bool same = RuntimeDelivery.KindFor("m", "calm", "chatter", "chatter") == "m" && RuntimeDelivery.KindFor("f", "none", "chatter", "x") == "f"
+                && Math.Abs(mcCalm.Tempo - 1.04) < 1e-9 && mcCalm.NoiseScale == 0.80 && mcCalm.PitchSt == 3.0
+                && Math.Abs(mcPanic.Tempo - 0.95) < 1e-9 && Math.Abs(mcPanic.PitchSt - 3.3) < 1e-9 && mcPanic.NoiseScale == 0.667
+                && Math.Abs(mT.Tempo - 1.10) < 1e-9 && Math.Abs(mT.PitchSt - 5.7) < 1e-9
+                && fP.NoiseScale == 0.90 && Math.Abs(fP.PitchSt - 5.0) < 1e-9
+                && Math.Abs(mC.Tempo - 1.08) < 1e-9 && Math.Abs(mC.PitchSt - 5.5) < 1e-9
+                && RuntimeDelivery.KindFor("mc", "calm", "chatter", "countdown") == null && RuntimeDelivery.BaseKind("m.tense") == "m";
+            Check(same, "voices: runtime lines use the build's delivery per band (tempo, pitch, noise), the countdown is never runtime", "");
+        }
         // a value of 1: the noun after it is singular, in both languages ("un kilómetro", "1 minute")
         var plural = new List<string>();
         var pluralRe = new System.Text.RegularExpressions.Regex(@"\b(un|1) (kilómetros|metros|minutos|grados|puntos|fondos|piezas|contratos|kerbals|meters|minutes|degrees|points|funds|parts|contracts)\b");
@@ -1992,7 +2092,7 @@ public static class Tests
         Near(DcMath.StaticCurve(float.NaN), 0.0, 1e-6, "radio static: NaN is silent");
         Check(new Settings().radioStatic == 0.5f, "radio static: on by default (50 %)", null);
         Settings old = new Settings(); old.tuningVersion = Tuning.CurrentVersion;
-        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 11, "settings v5: no migration needed at the current version (11 since the 0.6.0 defaults)", null);
+        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 12, "settings v5: no migration needed at the current version (12 since the 0.7.0 defaults)", null);
     }
 
     static void ReviewFixTests()

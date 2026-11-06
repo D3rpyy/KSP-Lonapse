@@ -46,7 +46,14 @@ namespace Lonapse
             public readonly Queue<Job> pending = new Queue<Job>();
             public volatile bool dead;
             public string lastErr;
+            public long lastUsed;
         }
+
+        /// <summary>Piper processes besides calm Mission Control running at once (one per kind and delivery band, see
+        /// RuntimeDelivery.KindFor). Each holds its own copy of the model in memory, so the least recently used one
+        /// stops when another is needed.</summary>
+        public const int MaxCrewWorkers = 4;
+        long useCounter;
 
         readonly Dictionary<string, Worker> workers = new Dictionary<string, Worker>();
         readonly Queue<Job> finished = new Queue<Job>();
@@ -193,10 +200,26 @@ namespace Lonapse
 
         string GetWorkerLocked(string kind, out Worker w)
         {
-            if (workers.TryGetValue(kind, out w) && !w.dead && w.proc != null && !w.proc.HasExited) return null;
-            if (w != null) Stop(w);
+            if (workers.TryGetValue(kind, out w) && !w.dead && w.proc != null && !w.proc.HasExited) { w.lastUsed = ++useCounter; return null; }
+            if (w != null) { Stop(w); workers.Remove(kind); }
+            if (kind != "mc")
+            {
+                // one crew process too many: stop the one used longest ago (its waiting lines fail and fall back)
+                var crew = new List<string>();
+                foreach (var kv in workers) if (kv.Key != "mc") crew.Add(kv.Key);
+                while (crew.Count >= MaxCrewWorkers)
+                {
+                    string old = crew[0];
+                    foreach (string k in crew) if (workers[k].lastUsed < workers[old].lastUsed) old = k;
+                    lock (workers[old].pending) if (workers[old].pending.Count > 0) break; // busy: run one more for now
+                    Log.Info("Runtime voice: stopping Piper " + old + " (more than " + MaxCrewWorkers + " crew voices)");
+                    Stop(workers[old]);
+                    workers.Remove(old);
+                    crew.Remove(old);
+                }
+            }
             RuntimeDelivery d = RuntimeDelivery.For(kind);
-            w = new Worker { delivery = d };
+            w = new Worker { delivery = d, lastUsed = ++useCounter };
             try
             {
                 Directory.CreateDirectory(TempDir);
@@ -229,7 +252,7 @@ namespace Lonapse
                 w.errReader.Start();
                 workers[kind] = w;
                 Log.Info("Runtime voice: started Piper for " + kind + " (" + d.Voice + ", length scale "
-                         + d.LengthScale.ToString("0.000") + ") in " + sw.ElapsedMilliseconds + " ms");
+                         + d.LengthScale.ToString("0.000") + ", noise " + d.NoiseScale.ToString("0.000") + ") in " + sw.ElapsedMilliseconds + " ms");
                 return null;
             }
             catch (Exception e)
