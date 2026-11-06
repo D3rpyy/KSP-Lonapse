@@ -51,6 +51,13 @@ declare -A VOICE_SHA=(
   [es_MX-ald-medium]=07cfd143e350cc5e6400f2da0b98409b8a16ca4524e3b26c11900d709c573468
 )
 
+# the .onnx.json of each voice as it ships. The ald config on Hugging Face says "PhonemeType.ESPEAK", a known
+# export mistake: it is fixed to "espeak" like in the other two voices.
+declare -A JSON_SHA=(
+  [es_ES-davefx-medium]=0e0dda87c732f6f38771ff274a6380d9252f327dca77aa2963d5fbdf9ec54842
+  [es_MX-claude-high]=1afc81f703c0e4cb3b4d7c0dca096b8b54a98806807f0170cf5eb5557723c12d
+  [es_MX-ald-medium]=5a71498158e04afc8099bfd019c7e87c68eb9d042505a2b1a87e5c1ac2b1a61d
+)
 # the original voices (audio/CREDITS.md), only downloaded when the runtime voices have to be made
 HF="https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es"
 ORIGINALS=(
@@ -107,6 +114,7 @@ voices_ok() {
   for v in "${!VOICE_SHA[@]}"; do
     [[ -f "$VOICES/$v.onnx" && -f "$VOICES/$v.onnx.json" ]] || return 1
     [[ "$(sha "$VOICES/$v.onnx")" == "${VOICE_SHA[$v]}" ]] || return 1
+    [[ "$(sha "$VOICES/$v.onnx.json")" == "${JSON_SHA[$v]}" ]] || return 1
   done
 }
 if ! voices_ok; then
@@ -114,7 +122,11 @@ if ! voices_ok; then
   for o in "${ORIGINALS[@]}"; do
     IFS='|' read -r n u s <<<"$o"
     fetch "$n.onnx" "$u/$n.onnx" "$s" "$REPO/audio/voices"
-    [[ -f "$REPO/audio/voices/$n.onnx.json" ]] || fetch "$n.onnx.json" "$u/$n.onnx.json" "" "$REPO/audio/voices"
+    j="$REPO/audio/voices/$n.onnx.json"
+    [[ -f "$j" ]] || fetch "$n.onnx.json" "$u/$n.onnx.json" "" "$REPO/audio/voices"
+    sed -i 's/"phoneme_type": "PhonemeType.ESPEAK"/"phoneme_type": "espeak"/' "$j"
+    [[ -z "$(tail -c1 "$j")" ]] || echo >> "$j"
+    [[ "$(sha "$j")" == "${JSON_SHA[$n]}" ]] || { echo "ERROR: $j has sha256 $(sha "$j"), expected ${JSON_SHA[$n]}" >&2; exit 1; }
   done
   "$PY" -I "$REPO/audio/quantize_runtime_voices.py" --out "$VOICES"
   voices_ok || { echo "ERROR: the new voices differ from the pinned sha256 (other onnx or onnxruntime version?)" >&2; exit 1; }

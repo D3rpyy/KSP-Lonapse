@@ -24,7 +24,8 @@ These files ship in `GameData/Lonapse/PluginData/Runtime/LICENSES`. They cover t
 - The voices come from [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices) v1.0.0. They are
   changed: the weights are quantized to int8 with ONNX Runtime `quantize_dynamic` (QUInt8), and the decoder is kept
   at float32. The script is `audio/quantize_runtime_voices.py` in the Lonapse repo. The `.onnx.json` files are
-  unchanged. The model cards state the licence of the training dataset and no separate licence for the weights.
+  unchanged, except one fix in `es_MX-ald-medium.onnx.json`: its `phoneme_type` says `PhonemeType.ESPEAK` (an
+  export mistake) and is set to `espeak`, as in the other two voices. The model cards state the licence of the training dataset and no separate licence for the weights.
 
 ## Source code
 
