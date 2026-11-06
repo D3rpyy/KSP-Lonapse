@@ -82,3 +82,12 @@ rt_chat_nodedv_3	chat		Agárrate bien y ya está.	Just hold on tight.
 rt_chat_veteran_1	chat	missions>=10	Llevo {missions} misiones y nunca había visto esto.	{missions} missions and I've never seen this.
 rt_chat_veteran_2	chat		¿Ver qué, {other}?	Seen what, {other}?
 rt_chat_veteran_3	chat		Una nave tan ordenada. Es preocupante. | Un piloto que lee el manual.	A ship this tidy. It's worrying. | A pilot who reads the manual.
+rt_chat_shipname_1	chat		{other}, le he puesto nombre a la nave. | Tengo un nombre nuevo para la nave.	{other}, I gave the ship a name. | I've got a new name for the ship.
+rt_chat_shipname_2	chat		La nave ya tiene nombre. Se llama {vessel}. | Ya tiene uno, {other}. {vessel}.	The ship already has a name. It's called {vessel}. | It already has one, {other}. {vessel}.
+rt_chat_shipname_3	chat		¿Y a quién se le ocurrió? | ¿Quién eligió ese nombre?	And who came up with that? | Who picked that name?
+rt_chat_shipname_4	chat		Yo. Sonaba mejor a las tres de la mañana. | Yo. Es el nombre de mi primer pez. | Yo. Y no pienso cambiarlo, {other}. | Yo. Era eso o Cohete Uno. | Yo. Lo soñé una noche.	Me. It sounded better at three in the morning. | Me. It's my first goldfish's name. | Me. And I'm not changing it, {other}. | Me. It was that or Rocket One. | Me. I dreamt it one night.
+rt_chat_shipname_5	chat		Pues es un nombre horrible. Me encanta. | Vale. Pero yo le digo Señora Brillitos. | Ya veo por qué nadie te deja elegir.	Well, it's a terrible name. I love it. | Fine. But I'm calling it Mrs. Sparkles. | I see why nobody lets you choose.
+rt_chat_newname_1	chat		{other}, esta nave necesita un nombre. | Se me ha ocurrido un nombre para la nave.	{other}, this ship needs a name. | I came up with a name for the ship.
+rt_chat_newname_2	chat		Ya lo tiene. {vessel}. Está escrito en un lado. | {vessel}. Ese es su nombre. Lo elegí yo.	It has one. {vessel}. It's written on the side. | {vessel}. That's its name. I picked it.
+rt_chat_newname_3	chat		¿{vessel}? ¿En serio? | ¿Y por qué {vessel}?	{vessel}? Really? | And why {vessel}?
+rt_chat_newname_4	chat		Lo saqué de un sombrero. Había dos papeles. | Porque suena a alguien que vuelve a casa. | Sonaba mejor en la plataforma. | Los ingenieros dijeron que trae suerte. Uno de ellos.	I pulled it out of a hat. There were two notes. | Because it sounds like someone who comes home. | It sounded better on the launch pad. | The engineers said it's lucky. One of them did.
