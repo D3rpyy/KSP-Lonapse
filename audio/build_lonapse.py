@@ -196,14 +196,16 @@ POOL_COLUMNS = ["pool", "english"]
 POOL_OPTIONAL = {"spanish": ""}   # runtime voice: the Spanish of the value, m: f: mp: fp: before it for the article
 POOL_GENDERS = ["m", "f", "mp", "fp"]
 
-# Panic crew delivery (user request): broken pieces with a gasp or a ragged pause in between, Piper with more
+# Panic crew delivery (user request): broken pieces with a ragged pause in between (gasps off), Piper with more
 # variation (noise), light drive, and now and then a voice crack. All random choices are seeded per clip.
 PANIC_NOISE_SCALE = 0.90
 PANIC_NOISE_W = 1.10
 PANIC_DRIVE = 2.2            # tanh drive for the shouted sound
 PANIC_CRACK_CHANCE = 0.35    # chance per piece that the end of the piece cracks upward
 PANIC_CRACK_ST = 3.0
-PANIC_GASP_CHANCE = 0.7      # chance of a gasp between two pieces (otherwise a short ragged pause)
+PANIC_GASP_CHANCE = 0.0      # chance of a gasp between two pieces (otherwise a short ragged pause). Was 0.7, the
+                             # synthetic gasp sounded like a swoosh (user test, 0.8.x). The draw stays, so the pieces
+                             # keep the same random choices as the approved test render.
 # Plan v4: speaker trait, speaker persona and topic. Same values as PhraseTable.Traits, Personas, ScienceTopics and
 # SoiTopics in C#. topic is any on every event except science, soi_enter and (v6) staging, probe_milestone, probe_rover.
 TRAITS = ["any", "pilot", "engineer", "scientist", "tourist"]

@@ -224,7 +224,7 @@ measured ones. If something feels off, this is where you can change it. The tuni
 - **Touchdown.** The descent blips stop when you land, then the crew and Mission Control talk about the landing.
 - **The radio clicks.** A desk click on stations and bases, a short headset squelch in ships and on EVA.
 - **Static follows your signal.** With CommNet on and no link, Mission Control can't hear you and stays silent.
-- **Panic sounds like panic.** The crew shouts in broken pieces with gasps in between. Mission Control answers slowly
+- **Panic sounds like panic.** The crew shouts in broken pieces with ragged pauses in between. Mission Control answers slowly
   and calmly. Now and then someone screams, at most once a minute per kerbal (`screamCooldown`).
 - **The master alarm is for real trouble.** A soft alarm plays far in the background only when the stress of the
   vessel reaches 0.9 (`alarmStress`). A nervous kerbal panicking at low stress doesn't set it off.
