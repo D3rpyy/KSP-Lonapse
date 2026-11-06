@@ -897,7 +897,7 @@ namespace Lonapse
                     // a recorded panic clip gets no stress pitch on top (a runtime voice render has no panic delivery)
                     bool recordedPanic = panic && rtClip == null;
                     float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
-                    float vol = DcMath.Lerp(0.55f, 1.0f, sk);
+                    float vol = DcMath.CrewVolume(sk);
                     c.SetPreset(false, tu);
                     c.Play(clip, vol, pitch, false, 0f);
                     c.speaker = sp;
@@ -908,7 +908,7 @@ namespace Lonapse
                     c.SetCrewFilters(sk, sp.timbre, gs, tu);
                     ApplyProfile(c);
                     StartCrewBed();
-                    float keep = DcMath.TruncFraction(sk, tu.truncStart, tu.truncMinFrac);
+                    float keep = DcMath.TruncFraction(sk, tu.truncStart, tu.truncMinFrac, recordedPanic);
                     if (keep < 1f) c.TruncateAt(clip.length * keep);
                     if (staticChop) c.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
                     StampLine(sp, panic);
@@ -946,7 +946,7 @@ namespace Lonapse
                     float sk = sp.sk, gs = host.stress.gStrain;
                     bool recordedPanic = rtClip == null && (u.entry != null ? u.entry.Band == "panic" : icFolder == "crew/panic");
                     float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
-                    float vol = DcMath.Lerp(0.55f, 1.0f, sk);
+                    float vol = DcMath.CrewVolume(sk);
                     c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);
                     c.speaker = sp;
@@ -1047,7 +1047,7 @@ namespace Lonapse
                     // v3 req 7: no runtime pitch drop under stress, the panic delivery sounds like the calm one.
                     // 0.6.0: one controller, like a real CAPCOM. The livelier sound is in the clips.
                     float pitch = WarpPitch;   // time warp: everybody sounds sped up
-                    float vol = DcMath.Lerp(0.80f, 0.60f, s);
+                    float vol = DcMath.McVolume;
                     RadioProfile p = Profile;
                     c.SetBand(p.HighPassHz, p.LowPassHz);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -1895,7 +1895,7 @@ namespace Lonapse
             Tuning tu = Tu;
             float sk = sp.sk, gs = host.stress.gStrain;
             float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
-            float vol = DcMath.Lerp(0.65f, 1.0f, sk);
+            float vol = DcMath.CalloutVolume(sk);
             PreemptChatter();
             c.SetPreset(false, tu);
             c.Play(clip, vol, pitch, false, 0f);

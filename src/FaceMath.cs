@@ -39,22 +39,57 @@ namespace Lonapse
         /// <summary>Below this the stock face counts as fearful (KSP's own panic, high g).</summary>
         public const float FearFace = -0.15f;
 
+        /// <summary>Below this stress the face is free, above it fear grows step by step.</summary>
+        public const float StressFree = 0.3f;
+
+        /// <summary>
+        /// How happy a face may look at this stress (0..1, the same that picks the voice band): no cap up to 0.3, then
+        /// a straight line down, a straight face at 0.65 and full fear at 1 (user request: fear grows gradually with
+        /// stress, and at 1 the kerbal is very scared). A badass gets 0.4 more room.
+        /// </summary>
+        public static float StressCap(float stress, bool badass)
+        {
+            if (float.IsNaN(stress) || float.IsInfinity(stress)) stress = 0f;
+            float t = Clamp01((stress - StressFree) / (1f - StressFree));
+            return Clamp(1f - 2f * t + (badass ? 0.4f : 0f), -1f, 1f);
+        }
+
         /// <summary>
         /// The mood a talking or listening face moves to. The line mood, but a line never makes the face happier than
         /// it is: a fearful stock face (stockMood below FearFace) keeps its fear on a calm line, a fearful line may
-        /// deepen it. The kerbal's own stress (0..1, the same that picks the voice band) caps how happy the face can
-        /// look: no cap up to 0.3, a straight face at 0.8, mild fear at 1. A badass gets 0.4 more room.
+        /// deepen it. The stress caps how happy the face can look (StressCap).
         /// </summary>
         public static float HeldMood(float lineMood, float stockMood, float stress, bool badass)
         {
             if (float.IsNaN(lineMood)) lineMood = 0f;
             if (float.IsNaN(stockMood)) stockMood = 0f;
-            if (float.IsNaN(stress)) stress = 0f;
             float m = lineMood;
             if (stockMood < FearFace && m > stockMood) m = stockMood;
-            float cap = 1f - 2f * Math.Max(0f, Clamp01(stress) - 0.3f) + (badass ? 0.4f : 0f);
+            float cap = StressCap(stress, badass);
             if (m > cap) m = cap;
             return Clamp(m, -1f, 1f);
+        }
+
+        /// <summary>
+        /// The mood of a face between lines: the stock face, but never happier than the stress allows. So a stressed
+        /// kerbal no longer grins between two scared lines (stock KSP grins at speed and G). Below StressFree it is
+        /// the stock face.
+        /// </summary>
+        public static float IdleMood(float stockMood, float stress, bool badass)
+        {
+            if (float.IsNaN(stockMood) || float.IsInfinity(stockMood)) stockMood = 0f;
+            return Clamp(Math.Min(stockMood, StressCap(stress, badass)), -1f, 1f);
+        }
+
+        /// <summary>
+        /// The mood written to the face: the idle mood, moved toward the held line mood by the line weight (0..1). With
+        /// no stress the idle mood is the stock face, so this is the old blend of stock face and line.
+        /// </summary>
+        public static float FaceMood(float lineMood, float lineWeight, float stockMood, float stress, bool badass)
+        {
+            float idle = IdleMood(stockMood, stress, badass);
+            float line = HeldMood(lineMood, stockMood, stress, badass);
+            return Clamp(idle + (line - idle) * Clamp01(lineWeight), -1f, 1f);
         }
 
         /// <summary>Same as PhraseTable.IsGoofyPhase, repeated here so this file stays free of the table.</summary>

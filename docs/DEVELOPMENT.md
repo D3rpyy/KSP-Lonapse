@@ -274,10 +274,13 @@ What stress changes:
 
 - **How often they talk**: from about once every 110 s at stress 0 to once a second at stress 1 (10.5 s at 0.5),
   with some randomness on top.
-- **How the crew sounds**: calm, tense or panic lines. Under stress the crew gets louder and rougher, and the pitch
-  goes up by at most half a semitone (`crewStressSemitones`, total pitch capped by `crewPitchMax`). Above personal
-  stress 0.85 lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
-- **Mission Control**: gets calmer and slower the more stressed the crew is.
+- **How the crew sounds**: calm, tense or panic lines. Under stress the crew gets a little louder (about 2 dB from
+  calm to full stress) and rougher, and the pitch goes up by at most half a semitone (`crewStressSemitones`, total
+  pitch capped by `crewPitchMax`). Panic clips get neither: the panic is already in the recording. Above personal
+  stress 0.85 other lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
+- **Faces**: above stress 0.3 a kerbal looks more and more scared, a straight face at 0.65 and full fear at 1, also
+  between lines. Badass kerbals keep a bit more room.
+- **Mission Control**: gets calmer and slower the more stressed the crew is, at a steady volume.
 - **Every kerbal is different**: the name sets a fixed pitch, wobble and timbre, so Jeb always sounds like Jeb.
   Courage and stupidity change how strongly a kerbal reacts and when they move to tense or panic. Badass kerbals stay
   steadier. Kerbals that black out from G stay silent.

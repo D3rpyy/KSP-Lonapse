@@ -189,6 +189,24 @@ namespace Lonapse
             return Lerp(1f, minFrac, Ramp(sk, truncStart, 1.0));
         }
 
+        /// <summary>Same, but a recorded panic clip is never cut: it is already broken into pieces, so a cut only
+        /// loses the last word (user test).</summary>
+        public static float TruncFraction(float sk, float truncStart, float minFrac, bool recordedPanic)
+        {
+            return recordedPanic ? 1f : TruncFraction(sk, truncStart, minFrac);
+        }
+
+        /// <summary>Crew line volume by the kerbal's stress: 0.70 calm to 0.90 at full stress (about 2 dB). Was
+        /// 0.55 to 1.0 (5 dB), which made panic lines much louder than the rest (user test).</summary>
+        public static float CrewVolume(float sk) { return Lerp(0.70f, 0.90f, Clamp01(sk)); }
+
+        /// <summary>Crew callout volume: the same 2 dB range, a little higher (was 0.65 to 1.0).</summary>
+        public static float CalloutVolume(float sk) { return Lerp(0.75f, 0.95f, Clamp01(sk)); }
+
+        /// <summary>Mission Control volume: steady. Was 0.80 calm down to 0.60 under stress, which left MC far below
+        /// a panicking crew (user test).</summary>
+        public const float McVolume = 0.75f;
+
         /// <summary>
         /// Intercom pair: pitch multiplier for the second voice so the two base pitches differ by at least minGap.
         /// Returns 1 when they already differ enough.
