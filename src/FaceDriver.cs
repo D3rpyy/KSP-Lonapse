@@ -37,6 +37,7 @@ namespace Lonapse
         private const float MoodFall = 0.5f;       // seconds for the mood weight 1 -> 0 after the line
         private const float YawEps = 0.05f;        // degrees: below this a returning head counts as back at 0
         private const string HeadBone = "bn_headPivot_b01";
+        private const float ListenNodTime = 0.5f;  // seconds of a listener's nod
 
         private sealed class Face
         {
@@ -68,6 +69,10 @@ namespace Lonapse
             public float lookScale;            // 1 listener, GlanceScale speaker
             public float yaw;                  // current turn in degrees
             public float yawTarget;
+            public float nod;                  // current nod in degrees (speaker accents, listener nod)
+            public float nodFast, nodSlow;     // FaceMath.Accent followers
+            public float listenNodT = -1f;     // seconds into a listener nod, -1: none
+            public bool wasLooking;            // looked at a speaker last frame
             public Quaternion animPose;
             public Quaternion lastWritten;
             public bool hasWritten;
@@ -400,9 +405,12 @@ namespace Lonapse
                 else f.yawTarget = 0f;
                 f.yaw = FaceMath.Follow(f.yaw, f.yawTarget, dt, tu.headTurnSpeed);
                 if (f.yawTarget == 0f && Math.Abs(f.yaw) < YawEps) f.yaw = 0f;
-                if (f.yaw != 0f || f.needFinal)
+                float nodTarget = headOn && !test ? NodTarget(f, dt, tu) : 0f;
+                f.nod = FaceMath.Follow(f.nod, nodTarget, dt, 14f);
+                if (nodTarget == 0f && Math.Abs(f.nod) < YawEps) f.nod = 0f;
+                if (f.yaw != 0f || f.nod != 0f || f.needFinal)
                 {
-                    Write(f, Compose(f, f.yaw, tu));
+                    Write(f, Compose(f, f.yaw, f.nod, tu));
                     if (f.kerbal != null && tu.portraitRefresh > 0.5f && host.portraits != null) host.portraits.Request(f.kerbal);
                 }
             }
@@ -417,6 +425,27 @@ namespace Lonapse
             active = true;
 
             if (now >= statusAt) { statusAt = now + 0.5f; status = BuildStatus(tu, test); }
+        }
+
+        /// <summary>Head nod in degrees: the speaker dips the head on stressed syllables (the mouth gets wider than
+        /// its average), a listener in the same part nods once when a line that is not a fearful one ends.</summary>
+        private float NodTarget(Face f, float dt, Tuning tu)
+        {
+            bool looking = f.lookAt != null && f.lookScale >= 1f;
+            if (f.wasLooking && !looking && !f.speaking && f.moodTarget > -0.3f) f.listenNodT = 0f;
+            f.wasLooking = looking;
+            float accent = 0f;
+            float open = f.speaking && host.mouth != null ? host.mouth.Speech(f.name) : 0f;
+            accent = FaceMath.Accent(ref f.nodFast, ref f.nodSlow, open, dt);
+            float listen = 0f;
+            if (f.listenNodT >= 0f)
+            {
+                f.listenNodT += dt;
+                listen = FaceMath.ListenerNod(f.listenNodT, ListenNodTime);
+                if (f.listenNodT > ListenNodTime) f.listenNodT = -1f;
+            }
+            float deg = tu.headNodDeg * Math.Max(accent, 0.8f * listen);
+            return tu.headNodInvert > 0.5f ? -deg : deg;
         }
 
         /// <summary>Turn target in degrees for f toward a world position, limited and scaled.</summary>
@@ -446,14 +475,25 @@ namespace Lonapse
             return tu.headTurnInvert > 0.5f ? -v : v;
         }
 
-        /// <summary>Animator pose of the head with a rotation of yaw degrees around the world turn axis applied on top.</summary>
-        private static Quaternion Compose(Face f, float yaw, Tuning tu)
+        /// <summary>Animator pose of the head with a rotation of yaw degrees around the world turn axis and a nod of
+        /// nod degrees around the side axis (turn axis cross forward) applied on top.</summary>
+        private static Quaternion Compose(Face f, float yaw, float nod, Tuning tu)
         {
-            if (yaw == 0f) return f.animPose;
+            if (yaw == 0f && nod == 0f) return f.animPose;
             Transform p = f.head.parent;
             Vector3 axisW = AxisWorld(f, tu);
             Vector3 axisP = p != null ? p.InverseTransformDirection(axisW) : axisW;
-            return Quaternion.AngleAxis(yaw, axisP) * f.animPose;
+            Quaternion q = Quaternion.AngleAxis(yaw, axisP);
+            if (nod != 0f)
+            {
+                Vector3 sideW = Vector3.Cross(axisW, ForwardWorld(f, tu));
+                if (sideW.sqrMagnitude > 1e-6f)
+                {
+                    Vector3 sideP = p != null ? p.InverseTransformDirection(sideW.normalized) : sideW.normalized;
+                    q = Quaternion.AngleAxis(nod, sideP) * q;
+                }
+            }
+            return q * f.animPose;
         }
 
         /// <summary>A bone value different from our last write came from the Animator: it is the new Animator pose.</summary>
@@ -475,7 +515,7 @@ namespace Lonapse
             h.localRotation = q;
             f.lastWritten = h.localRotation;
             f.hasWritten = true;
-            f.needFinal = f.yaw != 0f;
+            f.needFinal = f.yaw != 0f || f.nod != 0f;
         }
 
         /// <summary>Camera.onPreCull: a kerbalCam portrait render (avatar coroutine, before the Animator and LateUpdate).</summary>
@@ -494,11 +534,11 @@ namespace Lonapse
                 if (f.head == null || f.root == null) return;
                 if (PortraitRefresh.Rendering) return; // our end-of-frame render: LateUpdate already set the head
                 f.portraitSeen++;
-                if (f.yaw == 0f) return; // not turned: the Animator pose stays untouched
+                if (f.yaw == 0f && f.nod == 0f) return; // not turned: the Animator pose stays untouched
                 Tuning tu = activeTuning;
                 if (tu == null) return;
                 Observe(f, false);
-                Write(f, Compose(f, f.yaw, tu));
+                Write(f, Compose(f, f.yaw, f.nod, tu));
                 f.portraitApplied++;
             }
             catch (Exception e)
@@ -541,6 +581,8 @@ namespace Lonapse
                 if (f.head != null && f.hasWritten && Same(f.head.localRotation, f.lastWritten))
                     f.head.localRotation = f.animPose;
                 f.yaw = 0f;
+                f.nod = 0f;
+                f.listenNodT = -1f;
                 f.needFinal = false;
             }
             catch (Exception) { }

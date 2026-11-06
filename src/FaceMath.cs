@@ -96,6 +96,27 @@ namespace Lonapse
             return cur + (target - cur) * a;
         }
 
+        /// <summary>
+        /// Stress of the voice for a head nod, 0..1: a fast follow of the open amount minus a slow one, so the head
+        /// dips when the voice gets louder than its own average (a stressed syllable) and not on a steady voice.
+        /// fast and slow are the follower states, kept per kerbal.
+        /// </summary>
+        public static float Accent(ref float fast, ref float slow, float open, float dt)
+        {
+            if (float.IsNaN(open)) open = 0f;
+            fast = Follow(fast, open, dt, 12f);
+            slow = Follow(slow, open, dt, 1.6f);
+            float a = (fast - slow) * 2.5f;
+            return a < 0f ? 0f : (a > 1f ? 1f : a);
+        }
+
+        /// <summary>A listener's single nod, t seconds after the line ended: half a sine over dur seconds, 0 outside.</summary>
+        public static float ListenerNod(float t, float dur)
+        {
+            if (float.IsNaN(t) || t < 0f || dur <= 0f || t > dur) return 0f;
+            return (float)Math.Sin(Math.PI * t / dur);
+        }
+
         /// <summary>Wraps to -180..180 degrees.</summary>
         public static float WrapDeg(float a)
         {

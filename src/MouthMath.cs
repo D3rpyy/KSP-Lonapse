@@ -1,6 +1,7 @@
 // Pure math for the talking-kerbal mouth (req 9). No Unity or KSP dependencies so the offline test harness can
 // compile this file. MouthDriver feeds it the output samples of a voice channel and applies the result to the jaw.
 using System;
+using System.Collections.Generic;
 
 namespace Lonapse
 {
@@ -150,6 +151,72 @@ namespace Lonapse
             if (float.IsNaN(open)) open = 0f;
             float v = openPhase ? Math.Max(open, openFloor) : closedValue;
             return v < 0f ? 0f : (v > 1f ? 1f : v);
+        }
+
+        /// <summary>Frame length of a loudness track in seconds (100 frames per second).</summary>
+        public const float EnvelopeFrame = 0.01f;
+
+        /// <summary>
+        /// Loudness track of a clip from its samples (interleaved channels): the RMS of each frame of frame seconds,
+        /// mixed to mono, scaled so the 95th percentile of the voiced frames is 1 and clamped to 0..1. A quiet and a
+        /// loud recording move the mouth the same. Null for no data.
+        /// </summary>
+        public static float[] Envelope(float[] data, int channels, int frequency, float frame)
+        {
+            if (data == null || channels < 1 || frequency < 1 || frame <= 0f) return null;
+            int per = Math.Max(1, (int)Math.Round(frequency * frame));
+            int samples = data.Length / channels;
+            int n = (samples + per - 1) / per;
+            if (n == 0) return null;
+            var env = new float[n];
+            for (int f = 0; f < n; f++)
+            {
+                double sum = 0;
+                int start = f * per, end = Math.Min(samples, start + per), cnt = 0;
+                for (int i = start; i < end; i++)
+                {
+                    double m = 0;
+                    for (int c = 0; c < channels; c++)
+                    {
+                        float x = data[i * channels + c];
+                        if (!float.IsNaN(x)) m += x;
+                    }
+                    m /= channels;
+                    sum += m * m;
+                    cnt++;
+                }
+                env[f] = cnt > 0 ? (float)Math.Sqrt(sum / cnt) : 0f;
+            }
+            float max = 0f;
+            for (int f = 0; f < n; f++) if (env[f] > max) max = env[f];
+            if (max < 1e-5f) { for (int f = 0; f < n; f++) env[f] = 0f; return env; }
+            var voiced = new List<float>();
+            for (int f = 0; f < n; f++) if (env[f] > 0.05f * max) voiced.Add(env[f]);
+            voiced.Sort();
+            float top = voiced.Count > 0 ? voiced[Math.Min(voiced.Count - 1, (int)(voiced.Count * 0.95))] : max;
+            if (top < 1e-5f) top = max;
+            for (int f = 0; f < n; f++) { float v = env[f] / top; env[f] = v > 1f ? 1f : v; }
+            return env;
+        }
+
+        /// <summary>The track at clip time t in seconds, linear between frames. 0 outside the clip.</summary>
+        public static float EnvelopeAt(float[] env, float frame, float t)
+        {
+            if (env == null || env.Length == 0 || frame <= 0f || float.IsNaN(t) || t < 0f) return 0f;
+            float x = t / frame;
+            int i = (int)x;
+            if (i >= env.Length) return 0f;
+            float a = env[i], b = i + 1 < env.Length ? env[i + 1] : 0f;
+            return a + (b - a) * (x - i);
+        }
+
+        /// <summary>Jaw open amount 0..1 from a loudness track value: closed below 0.12 (pauses and breath), fully
+        /// open from 0.8.</summary>
+        public static float EnvelopeOpen(float v)
+        {
+            if (float.IsNaN(v) || v <= 0.12f) return 0f;
+            float o = (v - 0.12f) / 0.68f;
+            return o > 1f ? 1f : o;
         }
 
         /// <summary>Hinge axis index from the tuning float: 0 = X, 1 = Y, anything else = Z.</summary>

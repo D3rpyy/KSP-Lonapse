@@ -958,6 +958,7 @@ namespace Lonapse
             bool inv = Toggle(tu.mouthInvert >= 0.5f, "Invert jaw direction");
             tu.mouthInvert = inv ? 1f : 0f;
             tu.mouthOpenDeg = Mathf.Round(Slider("Mouth open degrees", tu.mouthOpenDeg, 0f, 45f, "0") * 2f) / 2f;
+            tu.mouthLead = Mathf.Round(Slider("Mouth lead seconds", tu.mouthLead, 0f, 0.3f, "0.00") * 100f) / 100f;
 
             // --- faces and head turn (axis and sign are not verified offline: tune them live) ---
             Header("Faces and head turn");
@@ -968,6 +969,9 @@ namespace Lonapse
             tu.headTurnInvert = hinv ? 1f : 0f;
             tu.headTurnMaxDeg = Mathf.Round(Slider("Head turn max degrees", tu.headTurnMaxDeg, 0f, 60f, "0"));
             tu.headTurnSpeed = Mathf.Round(Slider("Head turn speed", tu.headTurnSpeed, 0.1f, 30f, "0.0") * 10f) / 10f;
+            tu.headNodDeg = Mathf.Round(Slider("Head nod degrees", tu.headNodDeg, 0f, 15f, "0.0") * 2f) / 2f;
+            bool ninv = Toggle(tu.headNodInvert >= 0.5f, "Invert head nod direction");
+            tu.headNodInvert = ninv ? 1f : 0f;
             tu.faceWeight = Mathf.Round(Slider("Face expression weight", tu.faceWeight, 0f, 1f, "0.00") * 20f) / 20f;
             bool flip = Toggle(tu.faceExpressionSign < 0f, "Flip expression sign (grin vs fear)");
             tu.faceExpressionSign = flip ? -1f : 1f;

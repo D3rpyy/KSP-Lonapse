@@ -72,6 +72,7 @@ namespace Lonapse
             public float silentFor;
             public bool signalSeen;
             public AudioClip lastClip;
+            public float[] track;          // loudness track of lastClip, null: follow the channel output
             public bool flapping;
             public float flapT;
             public int portraitFlipFrame = -1;
@@ -94,6 +95,12 @@ namespace Lonapse
         private readonly float[] buf = new float[BufLen];
         private VoiceChannel[] speakingCh = new VoiceChannel[8];
         private int speakingCount;
+        // loudness tracks of the clips by instance id (null: the clip has no readable samples), the oldest go first
+        private readonly Dictionary<int, float[]> tracks = new Dictionary<int, float[]>();
+        private readonly Queue<int> trackOrder = new Queue<int>();
+        private const int TrackKeep = 64;
+        private int tracksBuilt, tracksFailed;
+        private static bool faceBonesLogged;
         private float testUntil = -1f;
         private bool wasEnabled;
         private bool active;               // Tick ran with the feature on this frame: the pre-cull hook may write
@@ -306,6 +313,44 @@ namespace Lonapse
             }
         }
 
+        /// <summary>
+        /// The loudness track of a clip, built once from its samples. Null when Unity cannot give the samples (a
+        /// compressed or streamed clip): the mouth follows the channel output then, as before.
+        /// </summary>
+        private float[] TrackOf(AudioClip clip)
+        {
+            if (clip == null) return null;
+            int id = clip.GetInstanceID();
+            float[] t;
+            if (tracks.TryGetValue(id, out t)) return t;
+            t = null;
+            try
+            {
+                if (clip.loadType == AudioClipLoadType.DecompressOnLoad && clip.loadState == AudioDataLoadState.Loaded
+                    && clip.samples > 0 && clip.channels > 0 && clip.samples < 48000 * 60)
+                {
+                    var data = new float[clip.samples * clip.channels];
+                    if (clip.GetData(data, 0)) t = MouthMath.Envelope(data, clip.channels, clip.frequency, MouthMath.EnvelopeFrame);
+                }
+            }
+            catch (Exception) { t = null; }
+            if (t != null) tracksBuilt++; else tracksFailed++;
+            if (tracksFailed == 1 && t == null)
+                Log.Info("Mouth: no samples for clip " + clip.name + " (" + clip.loadType + "), the mouth follows the output for such clips");
+            tracks[id] = t;
+            trackOrder.Enqueue(id);
+            while (trackOrder.Count > TrackKeep) tracks.Remove(trackOrder.Dequeue());
+            return t;
+        }
+
+        /// <summary>How far the kerbal's mouth is open now, 0..1. 0 when the kerbal is not talking. For the head nod.</summary>
+        public float Speech(string name)
+        {
+            Rig r;
+            if (name == null || !rigs.TryGetValue(name, out r) || !r.speaking) return 0f;
+            return r.open;
+        }
+
         /// <summary>Busy crew and callout channels with a kerbal speaker. Mission Control has no speaker.</summary>
         private void CollectSpeakers()
         {
@@ -332,11 +377,22 @@ namespace Lonapse
             {
                 // a new line: start the envelope and the silence check from zero
                 r.lastClip = src.clip;
+                r.track = TrackOf(src.clip);
                 r.env = 0f;
                 r.silentFor = 0f;
                 r.signalSeen = false;
                 r.flapT = 0f;
                 r.portraitPhase = false;
+            }
+            if (r.track != null)
+            {
+                // the clean voice of the clip, a little ahead of the sound: no static, works when muted
+                float t = src.time + tu.mouthLead * Math.Abs(src.pitch);
+                r.signalSeen = true;
+                r.silentFor = 0f;
+                r.flapping = false;
+                r.env = MouthMath.EnvelopeAt(r.track, MouthMath.EnvelopeFrame, t);
+                return MouthMath.EnvelopeOpen(r.env);
             }
             float vol = src.volume;
             float level = 0f;
@@ -687,6 +743,15 @@ namespace Lonapse
                 }
                 return null;
             }
+            if (!faceBonesLogged && jaw.parent != null)
+            {
+                // once per game: the bones of the head, to see what a mouth shape could move
+                faceBonesLogged = true;
+                var sb = new StringBuilder();
+                foreach (Transform t in jaw.parent.GetComponentsInChildren<Transform>(true))
+                    sb.Append(sb.Length == 0 ? "" : ", ").Append(t.name);
+                Log.Info("Mouth: head bones of " + name + " under " + jaw.parent.name + ": " + sb);
+            }
             Rig r = new Rig();
             r.name = name;
             r.root = root;
@@ -759,6 +824,7 @@ namespace Lonapse
             StringBuilder sb = new StringBuilder();
             sb.Append("mouth: ").Append(rigs.Count).Append(" rig(s), axis ").Append("XYZ"[MouthMath.AxisIndex(tu.mouthAxis)])
               .Append(tu.mouthInvert > 0.5f ? " inverted" : "").Append(", ").Append(tu.mouthOpenDeg.ToString("0")).Append(" deg");
+            sb.Append(", tracks ").Append(tracksBuilt).Append(" built ").Append(tracksFailed).Append(" without samples");
             if (test) sb.Append(", TEST");
             foreach (Rig r in rigs.Values)
             {
@@ -766,7 +832,7 @@ namespace Lonapse
                 sb.Append(" | ").Append(r.name).Append(r.eva ? " EVA" : " IVA")
                   .Append(" open ").Append(r.open.ToString("0.00"))
                   .Append(" w ").Append(r.talkW.ToString("0.00"))
-                  .Append(r.flapping ? " flap" : " env " + r.env.ToString("0.000"))
+                  .Append(r.flapping ? " flap" : (r.track != null ? " track " : " env ") + r.env.ToString("0.000"))
                   .Append(" ref ").Append(OpenAngle(r, r.closedRef, tu).ToString("0")).Append("/")
                   .Append(OpenAngle(r, r.animPose, tu).ToString("0")).Append(" deg")
                   .Append(r.animatorWrites ? " anim" : "");

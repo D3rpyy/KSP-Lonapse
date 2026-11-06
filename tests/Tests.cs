@@ -4052,6 +4052,34 @@ public static class Tests
             }
 
             // ---- MouthMath ----
+            {
+                // loudness track: 1 kHz stereo, 0.1 s quiet tone, 0.1 s silence, 0.1 s loud tone
+                int fr = 1000;
+                var data = new float[300 * 2];
+                for (int i = 0; i < 300; i++)
+                {
+                    float amp = i < 100 ? 0.1f : (i < 200 ? 0f : 0.4f);
+                    float x = amp * (i % 2 == 0 ? 1f : -1f);
+                    data[2 * i] = x; data[2 * i + 1] = x;
+                }
+                float[] env = MouthMath.Envelope(data, 2, fr, MouthMath.EnvelopeFrame);
+                Check(env != null && env.Length == 30 && Math.Abs(env[25] - 1f) < 1e-4 && env[15] == 0f && Math.Abs(env[5] - 0.25f) < 0.01f,
+                      "mouth track: one frame per 10 ms, scaled so the loud part is 1, silence 0",
+                      env == null ? "null" : env.Length + " " + env[5] + " " + env[15] + " " + env[25]);
+                Check(MouthMath.EnvelopeAt(env, 0.01f, 0.255f) > 0.99f && MouthMath.EnvelopeAt(env, 0.01f, 0.5f) == 0f
+                      && MouthMath.EnvelopeAt(env, 0.01f, -1f) == 0f && MouthMath.EnvelopeAt(null, 0.01f, 0.1f) == 0f
+                      && MouthMath.Envelope(null, 1, 1000, 0.01f) == null,
+                      "mouth track: read at a clip time, 0 outside the clip", "");
+                Check(MouthMath.EnvelopeOpen(0.1f) == 0f && MouthMath.EnvelopeOpen(0.8f) == 1f && MouthMath.EnvelopeOpen(1f) == 1f
+                      && Math.Abs(MouthMath.EnvelopeOpen(0.46f) - 0.5f) < 1e-4,
+                      "mouth track: closed in pauses, wide on the loud syllables", "");
+                float fa = 0f, sl = 0f, peak = 0f, steady = 0f;
+                for (int i = 0; i < 30; i++) peak = Math.Max(peak, FaceMath.Accent(ref fa, ref sl, 1f, 0.01f));
+                for (int i = 0; i < 400; i++) steady = FaceMath.Accent(ref fa, ref sl, 1f, 0.01f);
+                Check(peak > 0.5f && steady < 0.05f && FaceMath.ListenerNod(0.25f, 0.5f) > 0.99f && FaceMath.ListenerNod(0.6f, 0.5f) == 0f
+                      && FaceMath.ListenerNod(-0.1f, 0.5f) == 0f,
+                      "head nod: on a louder syllable, not on a steady voice. A listener nods once", peak + " / " + steady);
+            }
             Near(MouthMath.Rms(new float[] { 1f, -1f, 1f, -1f }), 1.0, 1e-6, "mouth: Rms of a full-scale square is 1");
             Near(MouthMath.Rms(new float[] { 3f, 4f }), Math.Sqrt(12.5), 1e-5, "mouth: Rms of 3, 4");
             Check(MouthMath.Rms(null) == 0f && MouthMath.Rms(new float[0]) == 0f && MouthMath.Rms(new float[] { 1f }, 0) == 0f,

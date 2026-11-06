@@ -151,6 +151,10 @@ namespace Lonapse
         // faces and head turn. headTurnAxis 0 = X, 1 = Y, 2 = Z, headTurnInvert 0 or 1.
         // faceExpressionSign is +1 or -1 (the only TUNING float allowed to be negative, see Sanitize).
         public float headTurnMaxDeg = 25f, headTurnAxis = 1f, headTurnInvert = 0f, headTurnSpeed = 4f;
+        // head nods: the speaker on stressed syllables, a listener once at the end of a line. headNodInvert 0 or 1.
+        public float headNodDeg = 4f, headNodInvert = 0f;
+        // the mouth opens this many seconds before the sound (the loudness track of the clip)
+        public float mouthLead = 0.06f;
         public float faceWeight = 0.8f, faceExpressionSign = 1f;
 
         // --- v5: probe mode. New keys only: no existing default changed, so no CurrentVersion bump. ---
@@ -320,6 +324,9 @@ namespace Lonapse
             headTurnAxis = DcMath.Clamp((float)Math.Round(headTurnAxis), 0f, 2f);
             headTurnInvert = headTurnInvert >= 0.5f ? 1f : 0f;
             headTurnSpeed = DcMath.Clamp(headTurnSpeed, 0.1f, 30f);
+            headNodDeg = DcMath.Clamp(headNodDeg, 0f, 15f);
+            headNodInvert = headNodInvert >= 0.5f ? 1f : 0f;
+            mouthLead = DcMath.Clamp(mouthLead, 0f, 0.3f);
             faceWeight = DcMath.Clamp01(faceWeight);
             faceExpressionSign = faceExpressionSign < 0f ? -1f : 1f;
 

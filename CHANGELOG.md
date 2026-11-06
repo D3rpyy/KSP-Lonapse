@@ -8,6 +8,8 @@
 - **Sunrise in orbit.** The mod counts the sunrises of a flight. Now and then Mission Control says one: "Sunrise number 12 this flight. We're still counting." A crew chat can use the count too.
 - **Biome names.** Reports and crew chats can say the biome under the vessel: "You're passing over the Highlands." "Welcome to the Midlands. Population: us." Biomes of planet packs work too. A name the voice cannot say is left out: an untranslated tag (`#LOC_...`), a name in another alphabet, or one that is too long.
 - **Personality in runtime chats.** A runtime chat can ask for a persona, like a dim kerbal and a brave one. 6 new chats use it: the dim kerbal and the red button, a nervous kerbal and a strange noise, a veteran who still shakes, and more.
+- **Better lip sync.** The jaw now follows the clean voice of the line itself, not the sound after the radio effect. Static no longer moves the mouth, the mouth closes in the pauses between words, and it opens a little before the sound, like a real mouth. It also works with the voice muted. A clip whose samples Unity cannot read keeps the old behaviour. "Mouth lead seconds" in the Debug tab sets how far ahead the mouth is.
+- **Head nods.** A talking kerbal dips the head a little on stressed syllables. A listener in the same part nods once when a line ends, but not after a fearful one. "Head nod degrees" and "Invert head nod direction" are in the Debug tab, next to the head turn.
 - **Subtitle time on screen.** A new "Stay on screen" slider in the subtitle settings sets how long a subtitle stays after its line is spoken, from 0 to 10 s. The default is 0.6 s, as before. The countdown numbers keep the short time.
 
 ### Changed
