@@ -838,7 +838,14 @@ namespace Lonapse
                     VoiceChannel c = FreeCrewChannel();
                     if (c == null) return StartResult.Wait;
                     KerbalVoice sp = u.speaker;
-                    if (sp == null || sp.outDueToG || !host.roster.voices.Contains(sp)) sp = host.roster.PickSpeaker(rng);
+                    // a line queued for one kerbal never moves to another: after a switch the subtitle, the name
+                    // slots and the scene all belong to that kerbal, so skip it when they left the roster
+                    if (sp != null && !host.roster.voices.Contains(sp))
+                    {
+                        Log.Info("Runtime voice: " + (u.entry != null ? u.entry.ClipKey : "crew line") + " skipped, " + sp.displayName + " is no longer nearby");
+                        return StartResult.Skip;
+                    }
+                    if (sp == null || sp.outDueToG) sp = host.roster.PickSpeaker(rng);
                     if (sp == null) return StartResult.Skip;
                     AudioClip rtClip;
                     PhraseEntry rtEntry;
