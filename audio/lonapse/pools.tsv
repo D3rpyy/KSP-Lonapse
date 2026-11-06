@@ -21,6 +21,13 @@ thing	sandwich	m:bocadillo
 thing	pillow	f:almohada
 thing	lucky wrench	f:llave inglesa de la suerte
 thing	comic book	m:cómic
+thing	pocket calculator	f:calculadora de bolsillo
+thing	lucky sock	m:calcetín de la suerte
+thing	harmonica	f:armónica
+thing	notebook	f:libreta
+thing	yo-yo	m:yoyó
+thing	travel mug	f:taza de viaje
+thing	pocket mirror	m:espejo de bolsillo
 # spot: Look behind the X. / Try the X. / Last time it was under the X. (inside the cabin, in reach)
 spot	seat	m:asiento
 spot	control panel	m:panel de control
@@ -34,6 +41,11 @@ spot	storage net	f:red de almacenaje
 spot	first aid kit	m:botiquín
 spot	window	f:ventana
 spot	life support panel	m:panel de soporte vital
+spot	glove box	f:guantera
+spot	helmet rack	m:soporte de cascos
+spot	food warmer	m:calentador de comida
+spot	tool drawer	m:cajón de herramientas
+spot	laundry bag	f:bolsa de la ropa sucia
 # part: The X came loose again. / Tape it, like the X. / That was the X. (inside the cabin, in reach)
 part	hatch handle	f:manija de la escotilla
 part	radio knob	m:botón de la radio
@@ -46,6 +58,10 @@ part	throttle lever	f:palanca de gases
 part	cup holder	m:posavasos
 part	snack locker door	f:puerta del armario de aperitivos
 part	headrest	m:reposacabezas
+part	reading light	f:luz de lectura
+part	footrest	m:reposapiés
+part	seat cushion	m:cojín del asiento
+part	panel screw	m:tornillo del panel
 # outside_part: It's the X. Probably. / Control, the X is shaking. (outside: only when the vessel has one)
 outside_part	[solar] solar panel	m:panel solar
 outside_part	[antenna] antenna	f:antena
@@ -66,6 +82,9 @@ beeper	control panel	m:panel de control
 beeper	[probe] probe core	m:núcleo de la sonda
 beeper	[goo] Mystery Goo	m:Moco Misterioso
 beeper	[sciencejr] Science Jr.	m:laboratorio Science Jr
+beeper	coffee maker	f:cafetera
+beeper	smoke alarm	f:alarma de humo
+beeper	wristwatch	m:reloj de pulsera
 # food: Is that X? / Someone ate all the X. / Eat the X. It builds character. / Can you send us some X?
 food	snack paste	f:pasta de aperitivo
 food	tube cheese	m:queso en tubo
@@ -79,6 +98,12 @@ food	emergency rations	fp:raciones de emergencia
 food	reheated soup	f:sopa recalentada
 food	dehydrated fish	m:pescado deshidratado
 food	cold pizza	f:pizza fría
+food	space tacos	mp:tacos espaciales
+food	carrot puree	m:puré de zanahoria
+food	instant coffee	m:café instantáneo
+food	gummy rockets	mp:cohetes de gominola
+food	rehydrated pudding	m:pudin rehidratado
+food	freeze-dried ice cream	m:helado liofilizado
 # creature: Last night I dreamt about X. It knew my name.
 creature	the Kraken	el Kraken
 creature	a giant space whale	una ballena espacial gigante
@@ -89,6 +114,11 @@ creature	a booster that wanted a hug	un propulsor que quería un abrazo
 creature	Mission Control, but they were all ducks	Control de Misión, pero eran todos patos
 creature	Gene, but he was a goat	Gene, pero era una cabra
 creature	a probe core that would not stop beeping	un núcleo de sonda que no paraba de pitar
+creature	a sandwich with its own orbit	un bocadillo con órbita propia
+creature	a booster with stage fright	un propulsor con miedo escénico
+creature	a parachute that was afraid of heights	un paracaídas con miedo a las alturas
+creature	a wrench that floated away forever	una llave inglesa que se iba flotando para siempre
+creature	a flag that wanted to go home	una bandera que quería volver a casa
 # not_me: X Look behind the toilet. (a whole sentence)
 not_me	Not me.	Yo no.
 not_me	Don't look at me.	No me mires a mí.
@@ -97,6 +127,9 @@ not_me	Wasn't me this time.	Esta vez no he sido yo.
 not_me	Why do you always ask me?	¿Por qué siempre me preguntas a mí?
 not_me	I was asleep.	Yo estaba dormido.
 not_me	[probe] Ask the probe.	Pregúntale a la sonda.
+not_me	I have an alibi.	Tengo coartada.
+not_me	Ask the pilot.	Pregúntale al piloto.
+not_me	It was like that when I got here.	Ya estaba así cuando llegué.
 # silly_name: It was that or X.
 silly_name	Rocky McRocketface	‹Rocky McRocketface›
 silly_name	Big Tube 2	Tubo Grande 2
@@ -106,6 +139,9 @@ silly_name	The Flying Pickle	El Pepinillo Volador
 silly_name	Definitely Safe	Segurísimo
 silly_name	Boom Mk1	Pum Mk1
 silly_name	Dave	‹Dave›
+silly_name	Second Try	Segundo Intento
+silly_name	Probably Fine	Seguramente Bien
+silly_name	Not Again	Otra Vez No
 # chore: Whose turn is it to X? / Loser has to X. / You X tomorrow.
 chore	clean the toilet	limpiar el váter
 chore	clean the windows	limpiar las ventanas
@@ -116,6 +152,9 @@ chore	wipe the helmets	limpiar los cascos
 chore	sort the rocks	ordenar las piedras
 chore	fix the cup holder	arreglar el posavasos
 chore	read the manual out loud	leer el manual en voz alta
+chore	fold the parachutes	doblar los paracaídas
+chore	polish the hatch	pulir la escotilla
+chore	water the plants	regar las plantas
 # noise: Did you hear that X? / There it is again. That X.
 noise	clank	golpe
 noise	squeak	chirrido
@@ -125,6 +164,9 @@ noise	long groan	crujido largo
 noise	beep	pitido
 noise	rattle	traqueteo
 noise	pop	chasquido
+noise	thump	golpe sordo
+noise	buzz	zumbido
+noise	gurgle	gorgoteo
 # rumor: Did you hear? X / Don't tell anyone, but X (lowercase unless a name)
 rumor	Gene sleeps under his desk.	Gene duerme debajo de su mesa.
 rumor	the intern launched a pizza last week.	el becario lanzó una pizza la semana pasada.
@@ -133,12 +175,19 @@ rumor	Control lost the manual. Again.	Control ha perdido el manual. Otra vez.
 rumor	the new rocket is just three old rockets.	el cohete nuevo son tres cohetes viejos.
 rumor	Gene cried at the last launch.	Gene lloró en el último lanzamiento.
 rumor	the snack budget is bigger than the fuel budget.	hay más dinero para aperitivos que para combustible.
+rumor	the cafeteria ran out of coffee.	la cafetería se ha quedado sin café.
+rumor	someone painted the launch tower pink.	alguien ha pintado de rosa la torre de lanzamiento.
+rumor	the boss has a secret snack drawer.	el jefe tiene un cajón secreto de aperitivos.
+rumor	the next rocket has no seats.	el próximo cohete no tiene asientos.
 # song: Can you stop humming X?
 song	the countdown song	la canción de la cuenta atrás
 song	the snack song	la canción de los aperitivos
 song	that jingle from the ads	esa musiquilla de los anuncios
 song	Kerbin, Sweet Kerbin	nibréK, dulce nibréK
 song	the theme from the safety video	la música del vídeo de seguridad
+song	the docking waltz	el vals del atraque
+song	the launch pad lullaby	la nana de la plataforma
+song	the elevator music	la música del ascensor
 # experiment: Control, the X is doing something weird. (only experiments on the vessel)
 experiment	[goo] Mystery Goo	m:Moco Misterioso
 experiment	[thermometer] thermometer	m:termómetro
@@ -154,6 +203,9 @@ mc_excuse	The intern spent it on boosters.	El becario se lo gastó en propulsore
 mc_excuse	Maybe next year.	Quizá el año que viene.
 mc_excuse	Fill out form 27B first.	Primero rellenad el formulario veintisiete be.
 mc_excuse	We spent it on snacks.	Nos lo gastamos en aperitivos.
+mc_excuse	The form got lost.	Se ha perdido el formulario.
+mc_excuse	The budget is in orbit.	El presupuesto está en órbita.
+mc_excuse	Accounting is on holiday.	Contabilidad está de vacaciones.
 # status: Control, day 3 report: X (lowercase sentence)
 status	the snacks are holding up.	los aperitivos aguantan.
 status	nobody has cried today.	hoy nadie ha llorado.
@@ -161,6 +213,9 @@ status	the toilet works again.	el váter vuelve a funcionar.
 status	we only lost one glove.	solo hemos perdido un guante.
 status	[goo] the Mystery Goo is looking at us.	el Moco Misterioso nos está mirando.
 status	morale is high. Mostly.	la moral está alta. Casi siempre.
+status	the window is clean. On the inside.	la ventana está limpia. Por dentro.
+status	we found the lost sock.	hemos encontrado el calcetín perdido.
+status	nobody touched the red button.	nadie ha tocado el botón rojo.
 # home_thing: I miss X. / I miss Kerbin. Even X.
 home_thing	real gravity	la gravedad de verdad
 home_thing	rain	la lluvia
@@ -170,6 +225,9 @@ home_thing	grass	la hierba
 home_thing	showers	las duchas
 home_thing	Mom's mystery stew	el guiso misterioso de mamá
 home_thing	pizza that isn't frozen	la pizza que no está congelada
+home_thing	fresh air	el aire fresco
+home_thing	the noise of the city	el ruido de la ciudad
+home_thing	doors that just open	las puertas normales
 # jeb_idea: Probably X.
 jeb_idea	add more boosters	poner más propulsores
 jeb_idea	do a flip	dar una voltereta
@@ -177,12 +235,18 @@ jeb_idea	eat the Mystery Goo	comerse el Moco Misterioso
 jeb_idea	go faster	ir más rápido
 jeb_idea	lick the window	lamer la ventana
 jeb_idea	push the big red button	pulsar el gran botón rojo
+jeb_idea	stage everything at once	separar todas las etapas a la vez
+jeb_idea	turn off the computer	apagar el ordenador
+jeb_idea	land upside down	aterrizar boca abajo
 # cure: Try X.
 cure	drinking upside down	beber boca abajo
 cure	thinking about taxes	pensar en los impuestos
 cure	staring at the fuel gauge	mirar fijamente el indicador de combustible
 cure	talking to the probe	hablar con la sonda
 cure	holding your nose and humming	taparte la nariz y tararear
+cure	counting backwards from ten	contar hacia atrás desde diez
+cure	looking out the window	mirar por la ventana
+cure	a spoon of tube cheese	una cucharada de queso en tubo
 # loud_thing: You snore like X. (with a or an)
 loud_thing	a Mainsail	un motor Mainsail
 loud_thing	a broken vacuum	una aspiradora rota
@@ -190,9 +254,15 @@ loud_thing	an angry goat	una cabra enfadada
 loud_thing	a rusty hatch	una escotilla oxidada
 loud_thing	a rocket on the pad	un cohete en la plataforma
 loud_thing	a Kraken with a cold	un Kraken resfriado
+loud_thing	a broken radio	una radio rota
+loud_thing	a herd of rovers	una manada de róvers
+loud_thing	an alarm clock in a bucket	un despertador en un cubo
 # game: Let's play X.
 game	I spy	veo veo
 game	rock paper scissors	piedra, papel o tijera
 game	twenty questions	las veinte preguntas
 game	who can float the longest	quién flota más tiempo
 game	guess the snack	adivinar el aperitivo
+game	hide the wrench	esconder la llave inglesa
+game	guess the planet	adivinar el planeta
+game	who blinks first	quién parpadea primero
