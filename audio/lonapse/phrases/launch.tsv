@@ -1,121 +1,121 @@
 # Launch and ascent: staging, throttle and countdown callouts, serious launch radio. New keys: la_
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-staging_01	staging	callout	none	crew	staging_01	1	both	any	any	Separación	Separation | Separation | Separating
-staging_02	staging	callout	none	crew	staging_02	1	both	any	any	Soltar	Release | Release | Released
-throttle_full_01	throttle_full	callout	none	crew	throttle_full_01	1	both	any	any	Empuje máximo	Maximum thrust | Maximum thrust | Thrust to max
-throttle_full_02	throttle_full	callout	none	crew	throttle_full_02	1	both	any	any	Acelerador a fondo	Full throttle | Full throttle | Throttle up
-throttle_cut_01	throttle_cut	callout	none	crew	throttle_cut_01	1	both	any	any	Motor apagado	Engine off | Engine off | Engine is off
-throttle_cut_02	throttle_cut	callout	none	crew	throttle_cut_02	1	both	any	any	Corte de empuje	Thrust cut | Thrust cut | Cutting thrust
-staging_any_01	staging	callout	none	crew	staging_any_01	1	both	any	any	¡Etapa!	Stage! | Stage! | Staging!
-staging_04	staging	callout	none	crew	staging_04	1	both	any	any	¡Fuera!	Away! | Away! | Gone!
-staging_s1_1	staging	callout	none	crew	staging_s1	1	both	any	any	¡Separación!	Separation! | Separation! | Separated!
-staging_s1_2	staging	callout	none	mc	staging_s1	2	m	any	any	Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation.
-staging_s2_1	staging	callout	none	crew	staging_s2	1	both	any	any	Etapa fuera.	Stage away. | Stage away. | Stage is gone.
-staging_s2_2	staging	callout	none	mc	staging_s2	2	m	any	any	Recibido, buena separación.	Copy, good separation. | Copy, good separation. | Copy. Nice separation.
-staging_ign_s1_1	staging	callout	none	crew	staging_ign_s1	1	both	any	any	Encendido de la siguiente etapa.	Next stage ignition. | Next stage ignition. | Igniting the next stage.
-staging_ign_s1_2	staging	callout	none	mc	staging_ign_s1	2	m	any	any	Confirmado, empuje nominal.	Confirmed, thrust nominal. | Confirmed, thrust nominal. | Confirmed. Thrust looks good.
-throttle_full_03	throttle_full	callout	none	crew	throttle_full_03	1	both	any	any	¡A tope!	Full power! | Full power! | All power!
-throttle_full_s1_1	throttle_full	callout	none	crew	throttle_full_s1	1	both	any	any	Potencia máxima.	Maximum power. | Maximum power. | Power to max.
-throttle_full_s1_2	throttle_full	callout	none	mc	throttle_full_s1	2	m	any	any	Recibido, potencia máxima.	Copy, maximum power. | Copy, maximum power. | Copy. Max power.
-throttle_cut_03	throttle_cut	callout	none	crew	throttle_cut_03	1	both	any	any	Corte.	Cutoff. | Cutoff. | Engine cutoff.
-throttle_cut_s1_1	throttle_cut	callout	none	crew	throttle_cut_s1	1	both	any	any	Motores apagados.	Engines off. | Engines off. | Engines are off.
-throttle_cut_s1_2	throttle_cut	callout	none	mc	throttle_cut_s1	2	m	any	any	Confirmado, apagado del motor.	Confirmed, engine shutdown. | Confirmed, engine shutdown. | Confirmed. Engines shut down.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+staging_01	staging	callout	none	crew	staging_01	1	both	any	any	Separación	Separation | Separation | Separating	
+staging_02	staging	callout	none	crew	staging_02	1	both	any	any	Soltar	Release | Release | Released	
+throttle_full_01	throttle_full	callout	none	crew	throttle_full_01	1	both	any	any	Empuje máximo	Maximum thrust | Maximum thrust | Thrust to max	
+throttle_full_02	throttle_full	callout	none	crew	throttle_full_02	1	both	any	any	Acelerador a fondo	Full throttle | Full throttle | Throttle up	
+throttle_cut_01	throttle_cut	callout	none	crew	throttle_cut_01	1	both	any	any	Motor apagado	Engine off | Engine off | Engine is off	
+throttle_cut_02	throttle_cut	callout	none	crew	throttle_cut_02	1	both	any	any	Corte de empuje	Thrust cut | Thrust cut | Cutting thrust	
+staging_any_01	staging	callout	none	crew	staging_any_01	1	both	any	any	¡Etapa!	Stage! | Stage! | Staging!	
+staging_04	staging	callout	none	crew	staging_04	1	both	any	any	¡Fuera!	Away! | Away! | Gone!	
+staging_s1_1	staging	callout	none	crew	staging_s1	1	both	any	any	¡Separación!	Separation! | Separation! | Separated!	
+staging_s1_2	staging	callout	none	mc	staging_s1	2	m	any	any	Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation.	
+staging_s2_1	staging	callout	none	crew	staging_s2	1	both	any	any	Etapa fuera.	Stage away. | Stage away. | Stage is gone.	
+staging_s2_2	staging	callout	none	mc	staging_s2	2	m	any	any	Recibido, buena separación.	Copy, good separation. | Copy, good separation. | Copy. Nice separation.	
+staging_ign_s1_1	staging	callout	none	crew	staging_ign_s1	1	both	any	any	Encendido de la siguiente etapa.	Next stage ignition. | Next stage ignition. | Igniting the next stage.	
+staging_ign_s1_2	staging	callout	none	mc	staging_ign_s1	2	m	any	any	Confirmado, empuje nominal.	Confirmed, thrust nominal. | Confirmed, thrust nominal. | Confirmed. Thrust looks good.	
+throttle_full_03	throttle_full	callout	none	crew	throttle_full_03	1	both	any	any	¡A tope!	Full power! | Full power! | All power!	
+throttle_full_s1_1	throttle_full	callout	none	crew	throttle_full_s1	1	both	any	any	Potencia máxima.	Maximum power. | Maximum power. | Power to max.	
+throttle_full_s1_2	throttle_full	callout	none	mc	throttle_full_s1	2	m	any	any	Recibido, potencia máxima.	Copy, maximum power. | Copy, maximum power. | Copy. Max power.	
+throttle_cut_03	throttle_cut	callout	none	crew	throttle_cut_03	1	both	any	any	Corte.	Cutoff. | Cutoff. | Engine cutoff.	
+throttle_cut_s1_1	throttle_cut	callout	none	crew	throttle_cut_s1	1	both	any	any	Motores apagados.	Engines off. | Engines off. | Engines are off.	
+throttle_cut_s1_2	throttle_cut	callout	none	mc	throttle_cut_s1	2	m	any	any	Confirmado, apagado del motor.	Confirmed, engine shutdown. | Confirmed, engine shutdown. | Confirmed. Engines shut down.	
 # Launch countdown. It counts up in Spanish because Lonapse reverses: onU, soD ... zeiD, then liftoff.
 # The build gives Piper the countdown text with only the first letter as a capital (build_lonapse.py spoken_text).
 # Two numbers are spelled for the voice: Sinko is spoken "Oknis" (Cinco gave "Ocnic", over 1 s with the end stop),
 # Neuve is spoken "Evuen" (Nueve gave "Eveun", dragged). The period keeps every number short and level.
-countdown_01	countdown	callout	none	mc	countdown_s1	1	m	any	any	Uno.	One
-countdown_02	countdown	callout	none	mc	countdown_s1	2	m	any	any	Dos.	Two
-countdown_03	countdown	callout	none	mc	countdown_s1	3	m	any	any	Tres.	Three
-countdown_04	countdown	callout	none	mc	countdown_s1	4	m	any	any	Cuatro.	Four
-countdown_05	countdown	callout	none	mc	countdown_s1	5	m	any	any	Sinko.	Five
-countdown_06	countdown	callout	none	mc	countdown_s1	6	m	any	any	Seis.	Six
-countdown_07	countdown	callout	none	mc	countdown_s1	7	m	any	any	Siete.	Seven
-countdown_08	countdown	callout	none	mc	countdown_s1	8	m	any	any	Ocho.	Eight
-countdown_09	countdown	callout	none	mc	countdown_s1	9	m	any	any	Neuve.	Nine
-countdown_10	countdown	callout	none	mc	countdown_s1	10	m	any	any	Diez.	Ten
-countdown_liftoff	countdown	callout	none	mc	countdown_s1	11	m	any	any	¡Despegue!	Liftoff!
-countdown_abort	countdown	callout	none	mc	countdown_abort	1	m	any	any	¡Aaaaaaah!	Aaaaaaah!
-staging_ign_01	staging	callout	none	crew	staging_ign_01	1	both	any	any	¡Ignición!	Ignition! | Ignition! | We have ignition!
-staging_ign_02	staging	callout	none	crew	staging_ign_02	1	both	any	any	¡Encendido!	Lit! | Lit! | It's lit!
-staging_ign_03	staging	callout	none	crew	staging_ign_03	1	both	any	any	Motores en marcha.	Engines running. | Engines running. | Engines are running.
-staging_ign_s2_1	staging	callout	none	crew	staging_ign_s2	1	both	any	any	Motor encendido.	Engine lit. | Engine lit. | The engine is lit.
-staging_ign_s2_2	staging	callout	none	mc	staging_ign_s2	2	m	any	any	Recibido, buen encendido.	Copy, good ignition. | Copy, good ignition. | Copy. Clean ignition.
-staging_any_02	staging	callout	none	crew	staging_any_02	1	both	any	any	Siguiente etapa.	Next stage. | Next stage. | On to the next stage.
+countdown_01	countdown	callout	none	mc	countdown_s1	1	m	any	any	Uno.	One	
+countdown_02	countdown	callout	none	mc	countdown_s1	2	m	any	any	Dos.	Two	
+countdown_03	countdown	callout	none	mc	countdown_s1	3	m	any	any	Tres.	Three	
+countdown_04	countdown	callout	none	mc	countdown_s1	4	m	any	any	Cuatro.	Four	
+countdown_05	countdown	callout	none	mc	countdown_s1	5	m	any	any	Sinko.	Five	
+countdown_06	countdown	callout	none	mc	countdown_s1	6	m	any	any	Seis.	Six	
+countdown_07	countdown	callout	none	mc	countdown_s1	7	m	any	any	Siete.	Seven	
+countdown_08	countdown	callout	none	mc	countdown_s1	8	m	any	any	Ocho.	Eight	
+countdown_09	countdown	callout	none	mc	countdown_s1	9	m	any	any	Neuve.	Nine	
+countdown_10	countdown	callout	none	mc	countdown_s1	10	m	any	any	Diez.	Ten	
+countdown_liftoff	countdown	callout	none	mc	countdown_s1	11	m	any	any	¡Despegue!	Liftoff!	
+countdown_abort	countdown	callout	none	mc	countdown_abort	1	m	any	any	¡Aaaaaaah!	Aaaaaaah!	
+staging_ign_01	staging	callout	none	crew	staging_ign_01	1	both	any	any	¡Ignición!	Ignition! | Ignition! | We have ignition!	
+staging_ign_02	staging	callout	none	crew	staging_ign_02	1	both	any	any	¡Encendido!	Lit! | Lit! | It's lit!	
+staging_ign_03	staging	callout	none	crew	staging_ign_03	1	both	any	any	Motores en marcha.	Engines running. | Engines running. | Engines are running.	
+staging_ign_s2_1	staging	callout	none	crew	staging_ign_s2	1	both	any	any	Motor encendido.	Engine lit. | Engine lit. | The engine is lit.	
+staging_ign_s2_2	staging	callout	none	mc	staging_ign_s2	2	m	any	any	Recibido, buen encendido.	Copy, good ignition. | Copy, good ignition. | Copy. Clean ignition.	
+staging_any_02	staging	callout	none	crew	staging_any_02	1	both	any	any	Siguiente etapa.	Next stage. | Next stage. | On to the next stage.	
 # W1 (plan v3): serious launch and return radio, procedural. Calm mostly, tense lines name their cause.
-la_pre_s1_1	chatter	chatter	calm	mc	la_pre_s1	1	m	prelaunch	any	Tripulación, comprobación final. ¿Estado?	Crew, final check. Status? | Crew, final check. Status? | Final check, crew. Status?
-la_pre_s1_2	chatter	chatter	calm	crew	la_pre_s1	2	both	prelaunch	any	Todos listos en cabina.	All set in the cockpit. | All set in the cockpit. | Cockpit is ready.
-la_pre_s1_3	chatter	chatter	calm	mc	la_pre_s1	3	m	prelaunch	any	Recibido. Buen trabajo.	Copy. Good work. | Copy. Good work. | Copy. Nice.
-la_pre_s2_1	chatter	chatter	calm	crew	la_pre_s2	1	both	prelaunch	any	Control, cinturones abrochados.	Control, belts fastened. | Control, belts fastened. | Control, seat belts on.
-la_pre_s2_2	chatter	chatter	calm	mc	la_pre_s2	2	m	prelaunch	any	Recibido, cerrad la escotilla.	Copy, close the hatch. | Copy, close the hatch. | Copy. Hatch closed, please.
-la_pre_s3_1	chatter	chatter	calm	mc	la_pre_s3	1	m	prelaunch	any	Sondeo de lanzamiento. ¿Propulsión?	Launch poll. Propulsion? | Launch poll. Propulsion? | Go/no-go poll. Propulsion?
-la_pre_s3_2	chatter	chatter	calm	crew	la_pre_s3	2	both	prelaunch	any	Propulsión lista.	Propulsion is go. | Propulsion is go. | Propulsion go.
-la_pre_s3_3	chatter	chatter	calm	mc	la_pre_s3	3	m	prelaunch	any	Guiado listo. Todo en verde.	Guidance is go. All green. | Guidance is go. All green. | Guidance go. Everything green.
-la_pre_s6_1	chatter	chatter	calm	mc	la_pre_s6	1	m	prelaunch	any	Brazo de acceso retirado.	Access arm retracted. | Access arm retracted. | The access arm is back.
-la_pre_s6_2	chatter	chatter	calm	crew	la_pre_s6	2	both	prelaunch	any	Recibido, esperando la cuenta.	Copy, standing by for the count. | Copy, standing by for the count. | Copy. Waiting for the count.
-la_pre_s8_1	chatter	chatter	calm	crew	la_pre_s8	1	both	prelaunch	any	Prueba de radio. ¿Me oís?	Radio check. Do you read? | Radio check. Do you read? | Radio check. Hear me?
-la_pre_s8_2	chatter	chatter	calm	mc	la_pre_s8	2	m	prelaunch	any	Alto y claro.	Loud and clear. | Loud and clear. | We hear you fine, {vessel}.
-la_pre_s9_1	chatter	chatter	calm	mc	la_pre_s9	1	m	prelaunch	any	Último sondeo. ¿Tripulación?	Final poll. Crew? | Final poll. Crew? | Last poll. Crew?
-la_pre_s9_2	chatter	chatter	calm	crew	la_pre_s9	2	both	prelaunch	any	La tripulación está lista.	Crew is go. | Crew is go. | The crew is go.
-la_pre_s9_3	chatter	chatter	calm	mc	la_pre_s9	3	m	prelaunch	any	Listos para el lanzamiento.	We are go for launch. | We are go for launch. | Go for launch, {vessel}.
-la_pre_01	chatter	chatter	calm	crew	la_pre_01	1	both	prelaunch	any	Listos cuando digáis.	Ready when you say. | Ready when you say. | Ready on your word.
-la_pre_02	chatter	chatter	calm	mc	la_pre_02	1	m	prelaunch	any	Presión de tanques nominal.	Tank pressure nominal. | Tank pressure nominal. | Tank pressure looks good.
-la_pre_04	chatter	chatter	calm	mc	la_pre_04	1	m	prelaunch	any	Estamos en verde para lanzar.	We are green for launch. | We are green for launch. | All green for launch.
-la_lau_s1_1	chatter	chatter	calm	mc	la_lau_s1	1	m	launch	any	Despegue confirmado.	Liftoff confirmed. | Liftoff confirmed. | We confirm liftoff.
-la_lau_s1_2	chatter	chatter	calm	crew	la_lau_s1	2	both	launch	any	Subiendo. Todo estable.	Climbing. All stable. | Climbing. All stable. | Going up. Stable.
-la_lau_s2_1	chatter	chatter	calm	crew	la_lau_s2	1	both	launch	any	Libres de la torre.	Clear of the tower. | Clear of the tower. | Tower cleared.
-la_lau_s2_2	chatter	chatter	calm	mc	la_lau_s2	2	m	launch	any	Recibido, libres de la torre.	Copy, clear of the tower. | Copy, clear of the tower. | Copy. Tower cleared.
-la_lau_s3_1	chatter	chatter	calm	crew	la_lau_s3	1	both	launch	any	Iniciando programa de alabeo.	Starting roll program. | Starting roll program. | Roll program starting.
-la_lau_s3_2	chatter	chatter	calm	mc	la_lau_s3	2	m	launch	any	Recibido, alabeo en curso.	Copy, roll in progress. | Copy, roll in progress. | Copy. Rolling.
-la_lau_s4_1	chatter	chatter	calm	crew	la_lau_s4	1	both	launch	any	Alabeo completo.	Roll complete. | Roll complete. | Roll done.
-la_lau_s4_2	chatter	chatter	calm	mc	la_lau_s4	2	m	launch	any	Confirmado, rumbo correcto.	Confirmed, heading good. | Confirmed, heading good. | Confirmed. Good heading.
-la_lau_s6_1	chatter	chatter	calm	mc	la_lau_s6	1	m	launch	any	Llegando a presión máxima.	Approaching max Q. | Approaching max Q. | Max Q coming up.
-la_lau_s6_2	chatter	chatter	calm	crew	la_lau_s6	2	both	launch	any	Recibido, nos agarramos.	Copy, holding on. | Copy, holding on. | Copy. Hanging on.
-la_lau_s7_1	chatter	chatter	calm	crew	la_lau_s7	1	both	launch	any	Presión máxima superada.	Through max Q. | Through max Q. | Max Q is behind us.
-la_lau_s7_2	chatter	chatter	calm	mc	la_lau_s7	2	m	launch	any	Recibido. Subid el empuje.	Copy. Throttle back up. | Copy. Throttle back up. | Copy. More throttle again.
-la_lau_s8_1	chatter	chatter	calm	mc	la_lau_s8	1	m	launch	any	Buena velocidad, buena altura.	Good speed, good altitude. | Good speed, good altitude. | Speed and altitude look good.
-la_lau_s8_2	chatter	chatter	calm	crew	la_lau_s8	2	both	launch	any	Todo según el plan.	All on plan. | All on plan. | Right on plan.
-la_lau_s9_1	chatter	chatter	calm	mc	la_lau_s9	1	m	launch	any	Superáis la velocidad del sonido.	You are going supersonic. | You are going supersonic. | You're supersonic now.
-la_lau_s9_2	chatter	chatter	calm	crew	la_lau_s9	2	both	launch	any	Recibido, más suave ahora.	Copy, smoother now. | Copy, smoother now. | Copy. It's calmer now.
-la_lau_01	chatter	chatter	calm	crew	la_lau_01	1	both	launch	any	Vibración dentro de lo normal.	Vibration within limits. | Vibration within limits. | Shaking is within limits.
-la_lau_02	chatter	chatter	calm	mc	la_lau_02	1	m	launch	any	Trayectoria nominal.	Trajectory nominal. | Trajectory nominal. | Good trajectory, {vessel}.
-la_lau_04	chatter	chatter	calm	mc	la_lau_04	1	m	launch	any	Ascenso limpio.	Clean climb. | Clean climb. | Nice clean climb.
-la_asc_s1_1	chatter	chatter	calm	crew	la_asc_s1	1	both	ascent	any	Iniciando giro gravitatorio.	Starting gravity turn. | Starting gravity turn. | Gravity turn starting.
-la_asc_s1_2	chatter	chatter	calm	mc	la_asc_s1	2	m	ascent	any	Recibido, buen perfil.	Copy, good profile. | Copy, good profile. | Copy. Nice profile.
-la_asc_s2_1	chatter	chatter	calm	mc	la_asc_s2	1	m	ascent	any	El apoapsis sube bien.	Apoapsis rising nicely. | Apoapsis rising nicely. | Apoapsis is going up nicely.
-la_asc_s2_2	chatter	chatter	calm	crew	la_asc_s2	2	both	ascent	any	Lo vemos. Seguimos.	We see it. Continuing. | We see it. Continuing. | Copy. Carrying on.
-la_asc_s6_1	chatter	chatter	calm	mc	la_asc_s6	1	m	ascent	any	Preparad la maniobra de circularización.	Prepare the circularisation maneuver. | Prepare the circularisation maneuver. | Get ready to circularise.
-la_asc_s6_2	chatter	chatter	calm	crew	la_asc_s6	2	both	ascent	any	Recibido, orientando al prógrado.	Copy, pointing prograde. | Copy, pointing prograde. | Copy. Going prograde.
-la_asc_s8_1	chatter	chatter	calm	mc	la_asc_s8	1	m	ascent	any	Listos para la órbita.	You are go for orbit. | You are go for orbit. | Go for orbit, {vessel}.
-la_asc_s8_2	chatter	chatter	calm	crew	la_asc_s8	2	both	ascent	any	Recibido, seguimos hacia la órbita.	Copy, continuing to orbit. | Copy, continuing to orbit. | Copy. On to orbit.
-la_asc_s9_1	chatter	chatter	calm	mc	la_asc_s9	1	m	ascent	any	Sondeo de ascenso. ¿Estado?	Ascent poll. Status? | Ascent poll. Status? | Ascent check. Status?
-la_asc_s9_2	chatter	chatter	calm	crew	la_asc_s9	2	both	ascent	any	Todo nominal a bordo.	All nominal on board. | All nominal on board. | Everything nominal aboard.
-la_asc_s9_3	chatter	chatter	calm	mc	la_asc_s9	3	m	ascent	any	Recibido. Continuad.	Copy. Continue. | Copy. Continue. | Copy. Keep going.
-la_asc_s13_1	chatter	chatter	calm	mc	la_asc_s13	1	m	ascent	any	Trayectoria suborbital confirmada.	Suborbital trajectory confirmed. | Suborbital trajectory confirmed. | We confirm a suborbital path.
-la_asc_s13_2	chatter	chatter	calm	crew	la_asc_s13	2	both	ascent	any	Recibido, mantenemos la actitud.	Copy, holding attitude. | Copy, holding attitude. | Copy. Attitude held.
-la_asc_01	chatter	chatter	calm	crew	la_asc_01	1	both	ascent	any	Inclinando hacia el horizonte.	Pitching toward the horizon. | Pitching toward the horizon. | Tilting toward the horizon.
-la_asc_02	chatter	chatter	calm	mc	la_asc_02	1	m	ascent	any	Perfil de ascenso nominal.	Ascent profile nominal. | Ascent profile nominal. | Ascent looks good.
-la_asc_03	chatter	chatter	calm	crew	la_asc_03	1	both	ascent	fuel	Combustible según lo previsto.	Fuel as expected. | Fuel as expected. | Fuel is where we want it.
-la_asc_06	chatter	chatter	calm	mc	la_asc_06	1	m	ascent	any	Os seguimos en el radar.	We have you on radar. | We have you on radar. | You're on our radar, {vessel}.
-la_ten_s1_1	chatter	chatter	tense	crew	la_ten_s1	1	both	launch	q	Control, mucha vibración.	Control, heavy vibration. | Control, heavy vibration. | Control, it shakes a lot.
-la_ten_s1_2	chatter	chatter	tense	mc	la_ten_s1	2	m	launch	q	Recibido. Lo vemos, aguantad.	Copy. We see it, hang in there. | Copy. We see it, hang in there. | Copy. We see it. Hang on.
-la_ten_s2_1	chatter	chatter	tense	mc	la_ten_s2	1	m	launch	q	Presión dinámica alta.	Dynamic pressure high. | Dynamic pressure high. | High dynamic pressure.
-la_ten_s2_2	chatter	chatter	tense	crew	la_ten_s2	2	both	launch	q	Recibido, lo notamos.	Copy, we can feel it. | Copy, we can feel it. | Copy. We feel it.
-la_ten_s3_1	chatter	chatter	tense	crew	la_ten_s3	1	both	ascent	gforce	La aceleración aprieta mucho.	The g-load is heavy. | The g-load is heavy. | Lots of g's.
-la_ten_s3_2	chatter	chatter	tense	mc	la_ten_s3	2	m	ascent	gforce	Recibido. Bajad un poco el empuje.	Copy. Ease the throttle a little. | Copy. Ease the throttle a little. | Copy. A little less throttle.
-la_ten_s4_1	chatter	chatter	tense	mc	la_ten_s4	1	m	ascent	fuel	Combustible justo para la órbita.	Fuel is tight for orbit. | Fuel is tight for orbit. | Orbit will be tight on fuel.
-la_ten_s4_2	chatter	chatter	tense	crew	la_ten_s4	2	both	ascent	fuel	Recibido, ahorrando cada gota.	Copy, saving every drop. | Copy, saving every drop. | Copy. Saving every drop.
-la_ten_s5_1	chatter	chatter	tense	crew	la_ten_s5	1	both	ascent	engine_out	Perdimos un motor.	We lost an engine. | We lost an engine. | One engine is gone.
-la_ten_s5_2	chatter	chatter	tense	mc	la_ten_s5	2	m	ascent	engine_out	Recibido. Seguid con los demás.	Copy. Continue on the others. | Copy. Continue on the others. | Copy. Keep going on the rest.
-la_ten_s6_1	chatter	chatter	tense	crew	la_ten_s6	1	both	launch	spin	La nave gira sola.	The ship is rolling by itself. | The ship is rolling by itself. | {vessel} is rolling on its own.
-la_ten_s6_2	chatter	chatter	tense	mc	la_ten_s6	2	m	launch	spin	Recibido. Corregid el alabeo.	Copy. Correct the roll. | Copy. Correct the roll. | Copy. Fix the roll.
-la_ten_01	chatter	chatter	tense	mc	la_ten_01	1	m	ascent	gforce	Vigilad la aceleración.	Watch the g-load. | Watch the g-load. | Careful with the g's.
-la_ten_03	chatter	chatter	tense	crew	la_ten_03	1	both	ascent	fuel	Combustible bajo en esta etapa.	Fuel low in this stage. | Fuel low in this stage. | This stage is low on fuel.
-la_ten_04	chatter	chatter	tense	mc	la_ten_04	1	m	ascent	engine_out	Vemos un motor apagado.	We see an engine out. | We see an engine out. | One engine is out on our screens.
-la_stg_sep_1	staging	callout	none	crew	staging_sep_la1	1	both	any	any	Desacople.	Decouple. | Decouple. | Decoupling.
-la_stg_sep_s2_1	staging	callout	none	crew	staging_sep_la2	1	both	any	any	Etapa separada.	Stage separated. | Stage separated. | Stage is off.
-la_stg_sep_s2_2	staging	callout	none	mc	staging_sep_la2	2	m	any	any	Confirmado, separación limpia.	Confirmed, clean separation. | Confirmed, clean separation. | Confirmed. Clean.
-la_stg_ign_s1_1	staging	callout	none	crew	staging_ign_la1	1	both	any	any	Ignición de etapa.	Stage ignition. | Stage ignition. | Stage lit.
-la_stg_ign_s1_2	staging	callout	none	mc	staging_ign_la1	2	m	any	any	Recibido, empuje estable.	Copy, steady thrust. | Copy, steady thrust. | Copy. Thrust is steady.
-la_stg_any_1	staging	callout	none	crew	staging_any_la1	1	both	any	any	Activando etapa.	Staging. | Staging. | Stage.
+la_pre_s1_1	chatter	chatter	calm	mc	la_pre_s1	1	m	prelaunch	any	Tripulación, comprobación final. ¿Estado?	Crew, final check. Status? | Crew, final check. Status? | Final check, crew. Status?	
+la_pre_s1_2	chatter	chatter	calm	crew	la_pre_s1	2	both	prelaunch	any	Todos listos en cabina.	All set in the cockpit. | All set in the cockpit. | Cockpit is ready.	
+la_pre_s1_3	chatter	chatter	calm	mc	la_pre_s1	3	m	prelaunch	any	Recibido. Buen trabajo.	Copy. Good work. | Copy. Good work. | Copy. Nice.	
+la_pre_s2_1	chatter	chatter	calm	crew	la_pre_s2	1	both	prelaunch	any	Control, cinturones abrochados.	Control, belts fastened. | Control, belts fastened. | Control, seat belts on.	
+la_pre_s2_2	chatter	chatter	calm	mc	la_pre_s2	2	m	prelaunch	any	Recibido, cerrad la escotilla.	Copy, close the hatch. | Copy, close the hatch. | Copy. Hatch closed, please.	
+la_pre_s3_1	chatter	chatter	calm	mc	la_pre_s3	1	m	prelaunch	any	Sondeo de lanzamiento. ¿Propulsión?	Launch poll. Propulsion? | Launch poll. Propulsion? | Go/no-go poll. Propulsion?	
+la_pre_s3_2	chatter	chatter	calm	crew	la_pre_s3	2	both	prelaunch	any	Propulsión lista.	Propulsion is go. | Propulsion is go. | Propulsion go.	
+la_pre_s3_3	chatter	chatter	calm	mc	la_pre_s3	3	m	prelaunch	any	Guiado listo. Todo en verde.	Guidance is go. All green. | Guidance is go. All green. | Guidance go. Everything green.	
+la_pre_s6_1	chatter	chatter	calm	mc	la_pre_s6	1	m	prelaunch	any	Brazo de acceso retirado.	Access arm retracted. | Access arm retracted. | The access arm is back.	
+la_pre_s6_2	chatter	chatter	calm	crew	la_pre_s6	2	both	prelaunch	any	Recibido, esperando la cuenta.	Copy, standing by for the count. | Copy, standing by for the count. | Copy. Waiting for the count.	
+la_pre_s8_1	chatter	chatter	calm	crew	la_pre_s8	1	both	prelaunch	any	Prueba de radio. ¿Me oís?	Radio check. Do you read? | Radio check. Do you read? | Radio check. Hear me?	
+la_pre_s8_2	chatter	chatter	calm	mc	la_pre_s8	2	m	prelaunch	any	Alto y claro.	Loud and clear. | Loud and clear. | We hear you fine, {vessel}.	 |  | Os oímos bien, {vessel}.
+la_pre_s9_1	chatter	chatter	calm	mc	la_pre_s9	1	m	prelaunch	any	Último sondeo. ¿Tripulación?	Final poll. Crew? | Final poll. Crew? | Last poll. Crew?	
+la_pre_s9_2	chatter	chatter	calm	crew	la_pre_s9	2	both	prelaunch	any	La tripulación está lista.	Crew is go. | Crew is go. | The crew is go.	
+la_pre_s9_3	chatter	chatter	calm	mc	la_pre_s9	3	m	prelaunch	any	Listos para el lanzamiento.	We are go for launch. | We are go for launch. | Go for launch, {vessel}.	 |  | Listos para el lanzamiento, {vessel}.
+la_pre_01	chatter	chatter	calm	crew	la_pre_01	1	both	prelaunch	any	Listos cuando digáis.	Ready when you say. | Ready when you say. | Ready on your word.	
+la_pre_02	chatter	chatter	calm	mc	la_pre_02	1	m	prelaunch	any	Presión de tanques nominal.	Tank pressure nominal. | Tank pressure nominal. | Tank pressure looks good.	
+la_pre_04	chatter	chatter	calm	mc	la_pre_04	1	m	prelaunch	any	Estamos en verde para lanzar.	We are green for launch. | We are green for launch. | All green for launch.	
+la_lau_s1_1	chatter	chatter	calm	mc	la_lau_s1	1	m	launch	any	Despegue confirmado.	Liftoff confirmed. | Liftoff confirmed. | We confirm liftoff.	
+la_lau_s1_2	chatter	chatter	calm	crew	la_lau_s1	2	both	launch	any	Subiendo. Todo estable.	Climbing. All stable. | Climbing. All stable. | Going up. Stable.	
+la_lau_s2_1	chatter	chatter	calm	crew	la_lau_s2	1	both	launch	any	Libres de la torre.	Clear of the tower. | Clear of the tower. | Tower cleared.	
+la_lau_s2_2	chatter	chatter	calm	mc	la_lau_s2	2	m	launch	any	Recibido, libres de la torre.	Copy, clear of the tower. | Copy, clear of the tower. | Copy. Tower cleared.	
+la_lau_s3_1	chatter	chatter	calm	crew	la_lau_s3	1	both	launch	any	Iniciando programa de alabeo.	Starting roll program. | Starting roll program. | Roll program starting.	
+la_lau_s3_2	chatter	chatter	calm	mc	la_lau_s3	2	m	launch	any	Recibido, alabeo en curso.	Copy, roll in progress. | Copy, roll in progress. | Copy. Rolling.	
+la_lau_s4_1	chatter	chatter	calm	crew	la_lau_s4	1	both	launch	any	Alabeo completo.	Roll complete. | Roll complete. | Roll done.	
+la_lau_s4_2	chatter	chatter	calm	mc	la_lau_s4	2	m	launch	any	Confirmado, rumbo correcto.	Confirmed, heading good. | Confirmed, heading good. | Confirmed. Good heading.	
+la_lau_s6_1	chatter	chatter	calm	mc	la_lau_s6	1	m	launch	any	Llegando a presión máxima.	Approaching max Q. | Approaching max Q. | Max Q coming up.	
+la_lau_s6_2	chatter	chatter	calm	crew	la_lau_s6	2	both	launch	any	Recibido, nos agarramos.	Copy, holding on. | Copy, holding on. | Copy. Hanging on.	
+la_lau_s7_1	chatter	chatter	calm	crew	la_lau_s7	1	both	launch	any	Presión máxima superada.	Through max Q. | Through max Q. | Max Q is behind us.	
+la_lau_s7_2	chatter	chatter	calm	mc	la_lau_s7	2	m	launch	any	Recibido. Subid el empuje.	Copy. Throttle back up. | Copy. Throttle back up. | Copy. More throttle again.	
+la_lau_s8_1	chatter	chatter	calm	mc	la_lau_s8	1	m	launch	any	Buena velocidad, buena altura.	Good speed, good altitude. | Good speed, good altitude. | Speed and altitude look good.	
+la_lau_s8_2	chatter	chatter	calm	crew	la_lau_s8	2	both	launch	any	Todo según el plan.	All on plan. | All on plan. | Right on plan.	
+la_lau_s9_1	chatter	chatter	calm	mc	la_lau_s9	1	m	launch	any	Superáis la velocidad del sonido.	You are going supersonic. | You are going supersonic. | You're supersonic now.	
+la_lau_s9_2	chatter	chatter	calm	crew	la_lau_s9	2	both	launch	any	Recibido, más suave ahora.	Copy, smoother now. | Copy, smoother now. | Copy. It's calmer now.	
+la_lau_01	chatter	chatter	calm	crew	la_lau_01	1	both	launch	any	Vibración dentro de lo normal.	Vibration within limits. | Vibration within limits. | Shaking is within limits.	
+la_lau_02	chatter	chatter	calm	mc	la_lau_02	1	m	launch	any	Trayectoria nominal.	Trajectory nominal. | Trajectory nominal. | Good trajectory, {vessel}.	 |  | Buena trayectoria, {vessel}.
+la_lau_04	chatter	chatter	calm	mc	la_lau_04	1	m	launch	any	Ascenso limpio.	Clean climb. | Clean climb. | Nice clean climb.	
+la_asc_s1_1	chatter	chatter	calm	crew	la_asc_s1	1	both	ascent	any	Iniciando giro gravitatorio.	Starting gravity turn. | Starting gravity turn. | Gravity turn starting.	
+la_asc_s1_2	chatter	chatter	calm	mc	la_asc_s1	2	m	ascent	any	Recibido, buen perfil.	Copy, good profile. | Copy, good profile. | Copy. Nice profile.	
+la_asc_s2_1	chatter	chatter	calm	mc	la_asc_s2	1	m	ascent	any	El apoapsis sube bien.	Apoapsis rising nicely. | Apoapsis rising nicely. | Apoapsis is going up nicely.	
+la_asc_s2_2	chatter	chatter	calm	crew	la_asc_s2	2	both	ascent	any	Lo vemos. Seguimos.	We see it. Continuing. | We see it. Continuing. | Copy. Carrying on.	
+la_asc_s6_1	chatter	chatter	calm	mc	la_asc_s6	1	m	ascent	any	Preparad la maniobra de circularización.	Prepare the circularisation maneuver. | Prepare the circularisation maneuver. | Get ready to circularise.	
+la_asc_s6_2	chatter	chatter	calm	crew	la_asc_s6	2	both	ascent	any	Recibido, orientando al prógrado.	Copy, pointing prograde. | Copy, pointing prograde. | Copy. Going prograde.	
+la_asc_s8_1	chatter	chatter	calm	mc	la_asc_s8	1	m	ascent	any	Listos para la órbita.	You are go for orbit. | You are go for orbit. | Go for orbit, {vessel}.	 |  | Listos para la órbita, {vessel}.
+la_asc_s8_2	chatter	chatter	calm	crew	la_asc_s8	2	both	ascent	any	Recibido, seguimos hacia la órbita.	Copy, continuing to orbit. | Copy, continuing to orbit. | Copy. On to orbit.	
+la_asc_s9_1	chatter	chatter	calm	mc	la_asc_s9	1	m	ascent	any	Sondeo de ascenso. ¿Estado?	Ascent poll. Status? | Ascent poll. Status? | Ascent check. Status?	
+la_asc_s9_2	chatter	chatter	calm	crew	la_asc_s9	2	both	ascent	any	Todo nominal a bordo.	All nominal on board. | All nominal on board. | Everything nominal aboard.	
+la_asc_s9_3	chatter	chatter	calm	mc	la_asc_s9	3	m	ascent	any	Recibido. Continuad.	Copy. Continue. | Copy. Continue. | Copy. Keep going.	
+la_asc_s13_1	chatter	chatter	calm	mc	la_asc_s13	1	m	ascent	any	Trayectoria suborbital confirmada.	Suborbital trajectory confirmed. | Suborbital trajectory confirmed. | We confirm a suborbital path.	
+la_asc_s13_2	chatter	chatter	calm	crew	la_asc_s13	2	both	ascent	any	Recibido, mantenemos la actitud.	Copy, holding attitude. | Copy, holding attitude. | Copy. Attitude held.	
+la_asc_01	chatter	chatter	calm	crew	la_asc_01	1	both	ascent	any	Inclinando hacia el horizonte.	Pitching toward the horizon. | Pitching toward the horizon. | Tilting toward the horizon.	
+la_asc_02	chatter	chatter	calm	mc	la_asc_02	1	m	ascent	any	Perfil de ascenso nominal.	Ascent profile nominal. | Ascent profile nominal. | Ascent looks good.	
+la_asc_03	chatter	chatter	calm	crew	la_asc_03	1	both	ascent	fuel	Combustible según lo previsto.	Fuel as expected. | Fuel as expected. | Fuel is where we want it.	
+la_asc_06	chatter	chatter	calm	mc	la_asc_06	1	m	ascent	any	Os seguimos en el radar.	We have you on radar. | We have you on radar. | You're on our radar, {vessel}.	 |  | Os tenemos en el radar, {vessel}.
+la_ten_s1_1	chatter	chatter	tense	crew	la_ten_s1	1	both	launch	q	Control, mucha vibración.	Control, heavy vibration. | Control, heavy vibration. | Control, it shakes a lot.	
+la_ten_s1_2	chatter	chatter	tense	mc	la_ten_s1	2	m	launch	q	Recibido. Lo vemos, aguantad.	Copy. We see it, hang in there. | Copy. We see it, hang in there. | Copy. We see it. Hang on.	
+la_ten_s2_1	chatter	chatter	tense	mc	la_ten_s2	1	m	launch	q	Presión dinámica alta.	Dynamic pressure high. | Dynamic pressure high. | High dynamic pressure.	
+la_ten_s2_2	chatter	chatter	tense	crew	la_ten_s2	2	both	launch	q	Recibido, lo notamos.	Copy, we can feel it. | Copy, we can feel it. | Copy. We feel it.	
+la_ten_s3_1	chatter	chatter	tense	crew	la_ten_s3	1	both	ascent	gforce	La aceleración aprieta mucho.	The g-load is heavy. | The g-load is heavy. | Lots of g's.	
+la_ten_s3_2	chatter	chatter	tense	mc	la_ten_s3	2	m	ascent	gforce	Recibido. Bajad un poco el empuje.	Copy. Ease the throttle a little. | Copy. Ease the throttle a little. | Copy. A little less throttle.	
+la_ten_s4_1	chatter	chatter	tense	mc	la_ten_s4	1	m	ascent	fuel	Combustible justo para la órbita.	Fuel is tight for orbit. | Fuel is tight for orbit. | Orbit will be tight on fuel.	
+la_ten_s4_2	chatter	chatter	tense	crew	la_ten_s4	2	both	ascent	fuel	Recibido, ahorrando cada gota.	Copy, saving every drop. | Copy, saving every drop. | Copy. Saving every drop.	
+la_ten_s5_1	chatter	chatter	tense	crew	la_ten_s5	1	both	ascent	engine_out	Perdimos un motor.	We lost an engine. | We lost an engine. | One engine is gone.	
+la_ten_s5_2	chatter	chatter	tense	mc	la_ten_s5	2	m	ascent	engine_out	Recibido. Seguid con los demás.	Copy. Continue on the others. | Copy. Continue on the others. | Copy. Keep going on the rest.	
+la_ten_s6_1	chatter	chatter	tense	crew	la_ten_s6	1	both	launch	spin	La nave gira sola.	The ship is rolling by itself. | The ship is rolling by itself. | {vessel} is rolling on its own.	 |  | La {vessel} gira sola.
+la_ten_s6_2	chatter	chatter	tense	mc	la_ten_s6	2	m	launch	spin	Recibido. Corregid el alabeo.	Copy. Correct the roll. | Copy. Correct the roll. | Copy. Fix the roll.	
+la_ten_01	chatter	chatter	tense	mc	la_ten_01	1	m	ascent	gforce	Vigilad la aceleración.	Watch the g-load. | Watch the g-load. | Careful with the g's.	
+la_ten_03	chatter	chatter	tense	crew	la_ten_03	1	both	ascent	fuel	Combustible bajo en esta etapa.	Fuel low in this stage. | Fuel low in this stage. | This stage is low on fuel.	
+la_ten_04	chatter	chatter	tense	mc	la_ten_04	1	m	ascent	engine_out	Vemos un motor apagado.	We see an engine out. | We see an engine out. | One engine is out on our screens.	
+la_stg_sep_1	staging	callout	none	crew	staging_sep_la1	1	both	any	any	Desacople.	Decouple. | Decouple. | Decoupling.	
+la_stg_sep_s2_1	staging	callout	none	crew	staging_sep_la2	1	both	any	any	Etapa separada.	Stage separated. | Stage separated. | Stage is off.	
+la_stg_sep_s2_2	staging	callout	none	mc	staging_sep_la2	2	m	any	any	Confirmado, separación limpia.	Confirmed, clean separation. | Confirmed, clean separation. | Confirmed. Clean.	
+la_stg_ign_s1_1	staging	callout	none	crew	staging_ign_la1	1	both	any	any	Ignición de etapa.	Stage ignition. | Stage ignition. | Stage lit.	
+la_stg_ign_s1_2	staging	callout	none	mc	staging_ign_la1	2	m	any	any	Recibido, empuje estable.	Copy, steady thrust. | Copy, steady thrust. | Copy. Thrust is steady.	
+la_stg_any_1	staging	callout	none	crew	staging_any_la1	1	both	any	any	Activando etapa.	Staging. | Staging. | Stage.	
