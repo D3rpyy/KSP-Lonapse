@@ -6,7 +6,7 @@
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
 [![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
-[![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
+[![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE-CC-BY-4.0)
 [![Runtime voice: own licenses](https://img.shields.io/badge/runtime%20voice-own%20licenses-lightgrey)](runtime/licenses/README.md)
 [![CKAN](https://img.shields.io/badge/CKAN-Indexed-green.svg)](https://github.com/KSP-CKAN/CKAN)
 [![SpaceDock](https://img.shields.io/badge/SpaceDock-Available-blue.svg)](https://spacedock.info/mod/4786/Lonapse#stats)
@@ -228,7 +228,8 @@ and [ONNX Runtime](https://github.com/microsoft/onnxruntime), and changed copies
 I wrote the mod with help from Claude (an AI assistant) for code and documentation. The design, the testing in game
 and the decisions are my own.
 
-The code is MIT licensed. The sounds and the phrase text are CC BY 4.0. See [LICENSE](LICENSE).
+The code is MIT licensed ([LICENSE](LICENSE)). The sounds and the phrase text are CC BY 4.0
+([LICENSE-CC-BY-4.0](LICENSE-CC-BY-4.0)). Which part has which license is in [docs/LICENSING.md](docs/LICENSING.md).
 The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
 piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng), and CC0, Apache-2.0 and the Unlicense (the voices).
 The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.

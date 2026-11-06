@@ -47,6 +47,8 @@ rsync -a --delete --prune-empty-dirs --include='*/' --include='*.wav' --include=
   "$SOUNDS/" "$GD/Sounds/"
 cp "$TABLE" "$GD/Phrases/phrases.tsv"
 cp LICENSE "$GD/LICENSE.txt"
+cp LICENSE-CC-BY-4.0 "$GD/LICENSE-CC-BY-4.0.txt"
+cp docs/LICENSING.md "$GD/LICENSING.md"
 cp README.md CHANGELOG.md "$GD/"
 cp audio/CREDITS.md "$GD/CREDITS.md"
 

@@ -111,10 +111,12 @@ fi
 
 # docs and the version file, as in the zip
 cp -f "$REPO/LICENSE" "$GD/LICENSE.txt"
+cp -f "$REPO/LICENSE-CC-BY-4.0" "$GD/LICENSE-CC-BY-4.0.txt"
+cp -f "$REPO/docs/LICENSING.md" "$GD/LICENSING.md"
 cp -f "$REPO/README.md" "$REPO/CHANGELOG.md" "$GD/"
 cp -f "$REPO/audio/CREDITS.md" "$GD/CREDITS.md"
 cp -f "$REPO/GameData/Lonapse/Lonapse.version" "$GD/Lonapse.version"
-echo "Installed: LICENSE.txt, README.md, CHANGELOG.md, CREDITS.md, Lonapse.version"
+echo "Installed: LICENSE.txt, LICENSE-CC-BY-4.0.txt, LICENSING.md, README.md, CHANGELOG.md, CREDITS.md, Lonapse.version"
 
 # runtime voice: Piper and the voices, as in the zip. --delete only inside PluginData/Runtime.
 RT_SRC="$REPO/audio/build/runtime/Runtime"

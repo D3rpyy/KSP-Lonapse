@@ -2,7 +2,7 @@
 
 These files ship in `GameData/Lonapse/PluginData/Runtime/LICENSES`. They cover the programs and voices in
 `PluginData/Runtime`, which Lonapse starts as a separate program. Lonapse itself is MIT (code) and CC BY 4.0
-(sounds and phrase text), see `LICENSE.txt` in the Lonapse folder.
+(sounds and phrase text), see `LICENSING.md` in the Lonapse folder.
 
 | Part | Files in Runtime | License | Text here |
 |---|---|---|---|
