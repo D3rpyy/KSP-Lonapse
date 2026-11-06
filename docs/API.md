@@ -1,14 +1,13 @@
 # Lonapse API for other mods
 
-With this API your mod can give its own events a voice. Your code tells Lonapse that something happened. Lonapse
+With this API your mod can give its own events a voice! Your code tells Lonapse that something happened. Lonapse
 picks who talks, queues it with the rest of the radio, and keeps the priorities and cooldowns. Your mod ships the
 lines as a text file. A kerbal can say it, two kerbals can chat about it, or Mission Control can say it and the
 kerbal can answer.
 
-Neither mod depends on the other. Without Lonapse your mod runs as normal, and the call does nothing. Without your
-mod Lonapse runs as normal, and your lines are never used.
+Neither mod depends on the other. Without Lonapse your mod runs as normal, and the call does nothing. 
 
-The API is new in 0.8.0 and has API version 1. I have tested it with the example below, not with a real mod yet.
+The API is new in 0.8.0 and has API version 1. I have tested it with the example below, not with a real mod yet. It is in an experimental phase now, please provide feedback if you find any bugs!
 
 ## What you need
 
@@ -31,7 +30,7 @@ LonapseWrapper.Trigger("yourmod.repair_done", vessel, kerbal,
 
 - `eventId` is `yourmod.event`: a-z, 0-9 and `_`, with one dot. Start it with your mod's name, so two mods
   never use the same id.
-- `vessel` is where it happened. Pass null for the active vessel.
+- `vessel` is what vessel it happened on. Pass null for the active vessel.
 - `kerbal` is the kerbal who did it, a `ProtoCrewMember`. Pass null and Lonapse picks one.
 - `numbers` and `names` are your own values, for the `{x_...}` slots in your lines. Both may be null.
   - A number becomes Spanish words in the voice and digits in the subtitle.
@@ -73,25 +72,59 @@ rt_re_yourmod_repair	reply	to=rt_yourmod_repair	Gracias.	Thanks.
 rt_yourmod_repair_meta	meta	on=yourmod.repair_done cooldown=180 priority=normal who=any
 ```
 
-What each kind does:
+## Kinds
 
-- `chat` with `on=yourmod.event`: an event chat.
-  - The kerbal who did it says line 1, and another kerbal nearby answers.
-  - A chat of one line is for a kerbal alone.
-  - Chat ids are `rt_chat_<name>_<seq>`, with seq 1, 2, 3 and so on.
-  - Only line 1 has a `when`.
-- `event` with `on=yourmod.event`: a Mission Control line about the event. `{kerbal}` is the kerbal who did it.
-- `reply` with `to=<id of your event line>`: the kerbal answers Mission Control.
-  - `to=rt_yourmod_*` answers every line that starts with that.
-  - Only replies with your `to=` answer your lines.
-- `meta`: the settings of one event. It has no text, and every setting is optional.
-  - `cooldown=<seconds>`: the event plays at most once in that time. The default is 120.
-  - `priority=low|normal|high`: high skips the 30 s gap between two mod events and plays at a higher crew stress.
-    The default is normal.
-  - `who=crew|mc|any`: only the event chats, only Mission Control, or both. The default is any. With any and both
-    kinds present, it is the chat 60 % of the time.
+The `kind` column says what a row is and when it plays. There are 16 kinds.
 
-Rules:
+### Kinds for your events
+
+These 4 kinds play when your mod calls `Trigger`.
+
+| Kind | What it is | Needs |
+|---|---|---|
+| `chat` | An event chat. The kerbal who did it says line 1, and another kerbal nearby answers. A chat of one line is for a kerbal alone. | `on=yourmod.event` on line 1 |
+| `event` | A Mission Control line about the event. `{kerbal}` is the kerbal who did it. | `on=yourmod.event` |
+| `reply` | The kerbal answers your `event` line, right after it. `to=rt_yourmod_*` answers every line whose id starts with that. | `to=<id of your event line>` |
+| `meta` | The settings of one event. It has no text. | `on=yourmod.event` |
+
+Chat ids are `rt_chat_<name>_<seq>`, with seq 1, 2, 3 and so on, one row per line. Only line 1 has a `when`. All
+lines of a chat go in one file. Only replies with your `to=` answer your `event` lines.
+
+The settings of `meta` are all optional:
+
+| Setting | What it does | Default |
+|---|---|---|
+| `cooldown=<seconds>` | The event plays at most once in that time. | 120 |
+| `priority=low\|normal\|high` | High skips the 30 s gap between two mod events, and still plays when the crew is stressed. | normal |
+| `who=crew\|mc\|any` | Only the event chats, only Mission Control, or both. With `any` and both kinds present, the chat plays 60 % of the time. | any |
+
+### Kinds Lonapse triggers itself
+
+These 12 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
+report. They play on those moments, never on your event. Your `{x_...}` slots never have a value there, so a row of
+these kinds cannot use them.
+
+| Kind | When it plays |
+|---|---|
+| `report` | Now and then: Mission Control reports on the vessel (orbit, fuel, power, crew and more). |
+| `dock` | After a docking approach call: the distance and closing speed to the target. |
+| `land` | Once per descent, low and coming down: the height and the speed. |
+| `science` | After an experiment, when its science value is not known. |
+| `science_pts` | After an experiment, with its science points. |
+| `contract_funds` | A contract is done and pays funds. |
+| `contract_done` | A contract is done without funds. |
+| `contract_failed` | A contract failed. |
+| `warp` | Now and then in time warp on rails. |
+| `sunrise` | Now and then at a sunrise in orbit. |
+| `eva` | Now and then: Mission Control to a kerbal on EVA. |
+| `flag` | Right after a flag is planted. |
+
+`chat` and `reply` also work without your event:
+- A `chat` without `on=` is a normal chat. It plays now and then on the intercom in one cabin. With `on_eva=1` it
+  plays on the suit radio between two EVA kerbals, and with `apart=1` on the radio between two vessels nearby.
+- A `reply` without `to=` can answer a `report`, `warp`, `sunrise` or `eva` line, or a recorded Mission Control line.
+
+## Rules
 
 - Ids start with `rt_` and are unique over all files, Lonapse's own too. Start yours with `rt_<yourmod>_`. A row
   with a used id is skipped and named in KSP.log.
