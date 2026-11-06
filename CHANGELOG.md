@@ -24,6 +24,7 @@
 - **Subtitle time on screen.** A new "Stay on screen" slider in the subtitle settings sets how long a subtitle stays after its line is spoken, from 0 to 10 s. The default is 0.6 s, as before. The countdown numbers keep the short time.
 
 ### Changed
+- **Back with a right click.** A button that steps through a list (the subtitle position, the probe wave and rhythm, the test pickers) goes forward with a left click and back with a right click.
 - **EVA fixes.** On EVA a line about the ship ("Stay close to ...") now says the ship nearby, not the name of the kerbal you control. "Leaving the hatch" and "Control, I'm outside" only come in the first 90 s of an EVA, and the lines about the hatch and the ship only within 100 m of it. A report about the ship ("Just one kerbal aboard") no longer plays on EVA, so a kerbal outside no longer answers it.
 - **Subtitles after a switch.** When you switch to another kerbal or vessel while a line plays, its subtitle stays on screen. A line meant for a kerbal who is no longer nearby after a switch is skipped. Before, another kerbal took it over with the wrong name.
 - **The voice says what the subtitle shows, for every line with a name or a value.** All 289 subtitle lines that fill in a word now have their own Spanish. Before, 228 of them played the general recording while the subtitle showed the other kerbal's name, your vessel, the body or the mission day.

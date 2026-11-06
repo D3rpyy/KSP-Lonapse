@@ -296,6 +296,7 @@ namespace Lonapse
         private const int TabGeneral = 0, TabSound = 1, TabCrew = 2, TabProbes = 3, TabSubtitles = 4, TabMods = 5, TabAdvanced = 6, TabDebug = 7;
         private int tab;
         private int pendingTab = -1;   // applied on the next Layout event
+        private int pendingModTools = -1;   // Mods tab: 1 open, 0 fold the tools for modders, on the next Layout event
         private string pendingPos;     // subtitle position preset, applied on the next Layout event (it shows or hides sliders)
         private string pendingSignalMode; // signal mode, applied on the next Layout event (fixed shows a slider)
         private readonly Vector2[] scrolls = new Vector2[8];
@@ -342,17 +343,39 @@ namespace Lonapse
         private string[] modEventIds;
         private string runtimeTestStatus;
 
-        /// <summary>Button that cycles <paramref name="value"/> through <paramref name="list"/>. Empty shows as "any".</summary>
+        /// <summary>A button that steps through a list: 1 on a left click (forward), -1 on a right click (back),
+        /// else 0.</summary>
+        private static int StepButton(string text, params GUILayoutOption[] options)
+        {
+            Rect r = GUILayoutUtility.GetRect(new GUIContent(text), GUI.skin.button, options);
+            Event e = Event.current;
+            if (e.button == 1 && r.Contains(e.mousePosition))
+            {
+                // the right button is handled here, so it never also counts as a press of the button
+                if (e.type == EventType.MouseDown) { e.Use(); return -1; }
+                if (e.type == EventType.MouseUp) e.Use();
+            }
+            return GUI.Button(r, text) ? 1 : 0;
+        }
+
+        /// <summary>The value dir steps after cur in list, wrapping around. An unknown cur gives the first (forward)
+        /// or the last (back) value.</summary>
+        private static string Step(string[] list, string cur, int dir)
+        {
+            int i = Array.IndexOf(list, cur);
+            if (i < 0) return dir < 0 ? list[list.Length - 1] : list[0];
+            return list[((i + dir) % list.Length + list.Length) % list.Length];
+        }
+
+        /// <summary>Button that cycles <paramref name="value"/> through <paramref name="list"/>: left click forward,
+        /// right click back. Empty shows as "any".</summary>
         private static string Cycle(string caption, string value, string[] list)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(caption, GUILayout.Width(60f));
             string shown = string.IsNullOrEmpty(value) ? "any" : value;
-            if (GUILayout.Button(shown))
-            {
-                int i = Array.IndexOf(list, value);
-                value = list[(i + 1) % list.Length];
-            }
+            int dir = StepButton(shown);
+            if (dir != 0 && list.Length > 0) value = Step(list, value, dir);
             GUILayout.EndHorizontal();
             return value;
         }
@@ -367,6 +390,11 @@ namespace Lonapse
                 if (Event.current.type == EventType.Layout)
                 {
                     if (pendingTab >= 0) { tab = pendingTab; pendingTab = -1; GUI.FocusControl(null); }
+                    if (pendingModTools >= 0)
+                    {
+                        s.modTools = pendingModTools == 1; pendingModTools = -1;
+                        host.settingsDirty = true; pendingSave = true;
+                    }
                     if (pendingPos != null)
                     {
                         s.subtitlePos = pendingPos; pendingPos = null;
@@ -648,21 +676,24 @@ namespace Lonapse
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Wave", GUILayout.Width(60f));
-            if (GUILayout.Button(have ? v.Wave : "-") && have) EditVoice(s).Wave = Next(ProbeVoiceSpec.Waves, v.Wave);
+            int wd = StepButton(have ? v.Wave : "-");
+            if (wd != 0 && have) EditVoice(s).Wave = Step(ProbeVoiceSpec.Waves, v.Wave, wd);
             GUILayout.Label("Rhythm", GUILayout.Width(52f));
-            if (GUILayout.Button(have ? v.Rhythm : "-") && have) EditVoice(s).Rhythm = Next(ProbeVoiceSpec.Rhythms, v.Rhythm);
+            int rd = StepButton(have ? v.Rhythm : "-");
+            if (rd != 0 && have) EditVoice(s).Rhythm = Step(ProbeVoiceSpec.Rhythms, v.Rhythm, rd);
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("Lines of", GUILayout.Width(60f));
-            if (GUILayout.Button(have ? ProbeCores.DisplayName(v.Lines) + " (" + v.Lines + ")" : "-") && have)
-                EditVoice(s).Lines = Next(ProbeCores.Keys, v.Lines);
+            int ld = StepButton(have ? ProbeCores.DisplayName(v.Lines) + " (" + v.Lines + ")" : "-");
+            if (ld != 0 && have) EditVoice(s).Lines = Step(ProbeCores.Keys, v.Lines, ld);
             GUILayout.EndHorizontal();
             Hint("Wave and rhythm shape the sound, glide slides from note to note. Lines of: whose phrase table lines the probe gets.");
             GUILayout.Label(have && v.Moods.Count > 0 ? "Own moods (from a config): " + string.Join(", ", new List<string>(v.Moods.Keys).ToArray())
                                                       : "Moods: stock patterns");   // always drawn
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button(ProbeCores.Moods[previewMood % ProbeCores.Moods.Length])) previewMood = (previewMood + 1) % ProbeCores.Moods.Length;
+            int md = StepButton(ProbeCores.Moods[previewMood % ProbeCores.Moods.Length]);
+            if (md != 0) previewMood = ((previewMood + md) % ProbeCores.Moods.Length + ProbeCores.Moods.Length) % ProbeCores.Moods.Length;
             if (GUILayout.Button("Play", GUILayout.Width(60f)) && have && host.director != null)
             {
                 try { voiceStatus = host.director.PreviewProbeVoice(v, ProbeCores.Moods[previewMood % ProbeCores.Moods.Length]); }
@@ -700,12 +731,6 @@ namespace Lonapse
             GUILayout.EndHorizontal();
             GUILayout.Label(string.IsNullOrEmpty(voiceStatus) ? " " : voiceStatus);   // always drawn
             Hint("A change to a stock or mod voice is saved in your settings and changes every probe with that voice. New voice makes a copy for this part only. Reset voice brings back the original.");
-        }
-
-        private static string Next(string[] list, string cur)
-        {
-            int i = Array.IndexOf(list, cur);
-            return list[(i + 1) % list.Length];
         }
 
         private static string PartTitle(string partName) { return LonapseAddon.PartTitle(partName); }
@@ -821,8 +846,8 @@ namespace Lonapse
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Position", GUILayout.Width(118f));
-            if (GUILayout.Button(SubtitleLayout.PresetCaption(pendingPos ?? s.subtitlePos)))
-                pendingPos = SubtitleLayout.NextPreset(pendingPos ?? s.subtitlePos);
+            int pd = StepButton(SubtitleLayout.PresetCaption(pendingPos ?? s.subtitlePos));
+            if (pd != 0) pendingPos = SubtitleLayout.StepPreset(pendingPos ?? s.subtitlePos, pd);
             GUILayout.EndHorizontal();
             if (s.subtitlePos == SubtitleLayout.Custom)
             {
@@ -941,6 +966,17 @@ namespace Lonapse
             else
             {
                 bool changed = false;
+                if (PhraseClips.modTemplateCounts.Count > 5)
+                {
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button("All on")) { PhraseClips.mutedMods.Clear(); changed = true; }
+                    if (GUILayout.Button("All off"))
+                    {
+                        foreach (var kv in PhraseClips.modTemplateCounts) PhraseClips.mutedMods.Add(kv.Key);
+                        changed = true;
+                    }
+                    GUILayout.EndHorizontal();
+                }
                 foreach (var kv in PhraseClips.modTemplateCounts)
                 {
                     bool on = !PhraseClips.mutedMods.Contains(kv.Key);
@@ -953,11 +989,15 @@ namespace Lonapse
                 {
                     PhraseClips.ApplyModMutes();
                     s.mutedMods = PhraseClips.MutedModsValue();
+                    host.settingsDirty = true; pendingSave = true;
                 }
                 Hint("Off: Lonapse never plays the lines that mod ships, and ignores its events.");
             }
 
             Header("For modders");
+            if (GUILayout.Button(s.modTools ? "Hide the tools for modders" : "Show the tools for modders"))
+                pendingModTools = s.modTools ? 0 : 1;
+            if (!s.modTools) return;
             if (GUILayout.Button("Reload lines (Lonapse and mods)"))
             {
                 try { modTestStatus = PhraseClips.ReloadRuntimeTemplates(); }
@@ -1079,10 +1119,12 @@ namespace Lonapse
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Force phase", GUILayout.Width(80f));
-                if (GUILayout.Button(d.forcePhase ?? "auto"))
+                int fd = StepButton(d.forcePhase ?? "auto");
+                if (fd != 0)
                 {
                     int i = Array.IndexOf(ForcePhases, d.forcePhase);
-                    d.forcePhase = ForcePhases[(i + 1) % ForcePhases.Length];
+                    if (i < 0) i = 0;
+                    d.forcePhase = ForcePhases[((i + fd) % ForcePhases.Length + ForcePhases.Length) % ForcePhases.Length];
                 }
                 GUILayout.EndHorizontal();
             }

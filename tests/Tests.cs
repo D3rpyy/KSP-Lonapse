@@ -3634,6 +3634,11 @@ public static class Tests
                 Check(p == SubtitleLayout.AboveNavball && seen.Count == 4 && new HashSet<string>(seen).Count == 4, "subtitle: NextPreset cycles through all 4 presets", string.Join(",", seen.ToArray()));
                 Check(SubtitleLayout.NextPreset("bogus") == SubtitleLayout.AboveNavball && SubtitleLayout.NextPreset(null) == SubtitleLayout.AboveNavball,
                       "subtitle: NextPreset of an unknown value gives the first preset", null);
+                string[] ps = SubtitleLayout.Presets;
+                Check(SubtitleLayout.StepPreset(ps[0], -1) == ps[ps.Length - 1] && SubtitleLayout.StepPreset(ps[ps.Length - 1], 1) == ps[0]
+                      && SubtitleLayout.StepPreset(ps[1], -1) == ps[0] && SubtitleLayout.StepPreset(ps[0], 1) == SubtitleLayout.NextPreset(ps[0])
+                      && SubtitleLayout.StepPreset("bogus", -1) == ps[ps.Length - 1] && SubtitleLayout.StepPreset(null, 1) == ps[0],
+                      "subtitle: StepPreset goes forward and back, wrapping both ways", null);
                 bool same = Settings.SubtitlePresets.Length == SubtitleLayout.Presets.Length;
                 for (int i = 0; same && i < SubtitleLayout.Presets.Length; i++) if (Settings.SubtitlePresets[i] != SubtitleLayout.Presets[i]) same = false;
                 Check(same && SubtitleLayout.IsPreset("custom") && !SubtitleLayout.IsPreset("Custom"), "subtitle: Settings and SubtitleLayout use the same preset strings", null);

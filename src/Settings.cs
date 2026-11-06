@@ -431,6 +431,8 @@ namespace Lonapse
         public bool runtimeReports = true;          // with runtimeVoice: Mission Control reads out real values now and then
         /// <summary>Mod folders (GameData/&lt;Mod&gt;/Lonapse) whose lines the player muted, split by commas.</summary>
         public string mutedMods = "";
+        /// <summary>The Mods tab shows the tools for modders (reload, test, the last events).</summary>
+        public bool modTools = false;
         public bool runtimeScience = true;          // with runtimeVoice: science points and contract funds
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
         public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
@@ -791,6 +793,7 @@ namespace Lonapse
                 n.TryGetValue("runtimeReports", ref s.runtimeReports);
                 n.TryGetValue("runtimeScience", ref s.runtimeScience);
                 n.TryGetValue("mutedMods", ref s.mutedMods);
+                n.TryGetValue("modTools", ref s.modTools);
                 n.TryGetValue("signalDropouts", ref s.signalDropouts);
                 n.TryGetValue("masterAlarm", ref s.masterAlarm);
                 n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
@@ -940,6 +943,7 @@ namespace Lonapse
                 n.AddValue("runtimeReports", runtimeReports);
                 n.AddValue("runtimeScience", runtimeScience);
                 n.AddValue("mutedMods", mutedMods ?? "");
+                n.AddValue("modTools", modTools);
                 n.AddValue("signalDropouts", signalDropouts);
                 n.AddValue("masterAlarm", masterAlarm);
                 n.AddValue("mouthAnimation", mouthAnimation);

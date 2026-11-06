@@ -105,6 +105,15 @@ namespace Lonapse
             return Presets[(i + 1) % Presets.Length];
         }
 
+        /// <summary>The preset dir steps after <paramref name="pos"/> (1 forward, -1 back), wrapping around. Unknown
+        /// values give the first preset forward and the last one back.</summary>
+        public static string StepPreset(string pos, int dir)
+        {
+            int i = Array.IndexOf(Presets, pos);
+            if (i < 0) return dir < 0 ? Presets[Presets.Length - 1] : Presets[0];
+            return Presets[((i + dir) % Presets.Length + Presets.Length) % Presets.Length];
+        }
+
         /// <summary>Short caption for the settings button.</summary>
         public static string PresetCaption(string pos)
         {

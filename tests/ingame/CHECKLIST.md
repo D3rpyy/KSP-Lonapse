@@ -15,7 +15,8 @@ handles that, but I don't know how every other mod reacts to it.
    - `[Lonapse] Lonapse: 32 mod templates from 1 file(s): ExampleMod (32)`
    - no `[Lonapse] Lonapse runtime:` line about `ExampleMod`
 4. Lonapse settings, General tab: "Speak names and new lines at runtime" and "Science points and contract funds" on.
-5. Lonapse window, Mods tab: `ExampleMod (32 lines)` with its toggle on.
+5. Lonapse window, Mods tab: `ExampleMod (32 lines)` with its toggle on. Press "Show the tools for modders" once.
+   The tools stay open after a restart. The event picker goes forward with a left click and back with a right click.
 
 Remove it all afterwards with `tests/ingame/install.sh --remove`.
 
@@ -64,7 +65,7 @@ The status counts 1 bad row, and KSP.log names the row. Undo the typo and reload
 
 1. Mods tab: turn ExampleMod off.
 2. Step 14: two PASS.
-3. The Mods tab lists no ExampleMod events under "For modders".
+3. The Mods tab lists no ExampleMod events in the event picker.
 4. Turn it on again. Step 1 is all PASS again. Restart KSP: the toggle keeps its state (`mutedMods` in settings.cfg).
 
 Before E and F: ExampleMod must be on again in the Mods tab (after D), and step 1 must be all PASS.
