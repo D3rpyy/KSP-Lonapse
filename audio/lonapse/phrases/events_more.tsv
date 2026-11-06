@@ -14,16 +14,16 @@ em_010_1	throttle_full	callout	none	crew	em_010	1	both	any	any	any	any	any	any		
 em_010_2	throttle_full	callout	none	mc	em_010	2	m	any	any	any	any	any	any		Copiado. Agarraos bien.	Copied. Hold on tight. | Copied. Hold on tight. | Copy. Hang on.	
 em_011	throttle_cut	callout	none	crew	em_011	1	both	any	any	any	any	any	any		Motor parado.	Engine stopped. | Engine stopped. | Engine is off.	
 em_012	throttle_cut	callout	none	crew	em_012	1	both	any	any	any	any	any	any		Corte de empuje.	Thrust cut. | Thrust cut. | Cutting thrust.	
-em_013	throttle_cut	callout	none	crew	em_013	1	both	any	any	any	any	any	any		Acelerador a cero.	Throttle to zero. | Throttle to zero. | Throttle at zero.	
+em_013	throttle_cut	callout	none	crew	em_013	1	both	any	any	any	any	any	any		Acelerador a cero.	Throttle to zero. | Throttle to zero. | Throttle at zero. | Throttle at zero. {fuel} percent fuel left.	 |  |  | Acelerador a cero. Queda el {fuel} por ciento de combustible.
 em_014	throttle_cut	callout	none	crew	em_014	1	both	any	any	any	any	any	any		Apagando motores.	Shutting down engines. | Shutting down engines. | Engines going off.	
 em_015	throttle_cut	callout	none	crew	em_015	1	both	any	any	any	any	any	any		Sin empuje.	No thrust. | No thrust. | Thrust is off.	
 em_016	throttle_cut	callout	none	crew	em_016	1	both	any	any	any	any	any	any		Y... parado.	And... stopped. | And... stopped. | And... off.	
 em_017	throttle_cut	callout	none	crew	em_017	1	both	any	any	any	any	any	any		Motor en silencio.	Engine quiet. | Engine quiet. | The engine is quiet.	
 em_018	throttle_cut	callout	none	crew	em_018	1	both	any	any	any	any	any	any		Corte confirmado.	Cutoff confirmed. | Cutoff confirmed. | Confirming cutoff.	
 em_019_1	throttle_cut	callout	none	crew	em_019	1	both	any	any	any	any	any	any		Motores apagados.	Engines off. | Engines off. | Engines are off.	
-em_019_2	throttle_cut	callout	none	mc	em_019	2	m	any	any	any	any	any	any		Recibido. Buen corte.	Copy. Good cutoff. | Copy. Good cutoff. | Copy. Clean cutoff.	
+em_019_2	throttle_cut	callout	none	mc	em_019	2	m	any	any	any	any	any	any		Recibido. Buen corte.	Copy. Good cutoff. | Copy. Good cutoff. | Copy. Clean cutoff. | Copy. Clean cutoff. {fuel} percent fuel left in the stage.	 |  |  | Recibido. Corte limpio. Queda el {fuel} por ciento de combustible en la etapa.
 em_020_1	throttle_cut	callout	none	crew	em_020	1	both	any	any	any	any	any	any		Fin del encendido.	End of burn. | End of burn. | Burn complete.	
-em_020_2	throttle_cut	callout	none	mc	em_020	2	m	any	any	any	any	any	any		Copiado. Motores en reposo.	Copied. Engines at rest. | Copied. Engines at rest. | Copy. Engines resting.	
+em_020_2	throttle_cut	callout	none	mc	em_020	2	m	any	any	any	any	any	any		Copiado. Motores en reposo.	Copied. Engines at rest. | Copied. Engines at rest. | Copy. Engines resting. | Copy. Engines resting. {fuel} percent fuel left.	 |  |  | Recibido. Motores en reposo. Queda el {fuel} por ciento de combustible.
 em_021	chute_semi	callout	none	crew	em_021	1	both	any	any	any	any	any	any		Paracaídas abriéndose.	Chutes opening. | Chutes opening. | The chutes are opening.	
 em_022	chute_semi	callout	none	crew	em_022	1	both	any	any	any	any	any	any		Paracaídas fuera.	Chutes out. | Chutes out. | Chutes are out.	
 em_023	chute_semi	callout	none	crew	em_023	1	both	any	any	any	any	any	any		¡Se abren!	They're opening! | They're opening! | Opening!	
@@ -59,23 +59,23 @@ em_050	staging	callout	none	crew	em_050	1	both	any	any	any	any	ignition	any		Ign
 em_051_1	power_ok	chatter	calm	crew	em_051	1	both	any	any	any	any	any	any		Las baterías se recuperan.	The batteries are recovering. | The batteries are recovering. | Batteries are charging again.	
 em_051_2	power_ok	chatter	calm	mc	em_051	2	m	any	any	any	any	any	any		Bien. Ya podéis encender la radio entera.	Good. You can turn the whole radio back on. | Good. You can turn the whole radio back on. | Good. Turn the radio fully on again.	
 em_052_1	power_ok	chatter	calm	crew	em_052	1	both	any	any	any	any	any	any		Vuelve la luz.	The light is back. | The light is back. | Lights are back.	
-em_052_2	power_ok	chatter	calm	mc	em_052	2	m	any	any	any	any	any	any		Recibido. Carga subiendo.	Copy. Charge rising. | Copy. Charge rising. | Copy. Charge going up.	
-em_053_1	power_ok	chatter	calm	mc	em_053	1	m	any	any	any	any	any	any		Vemos la carga subir. Buen trabajo.	We see the charge going up. Good work. | We see the charge going up. Good work. | The charge is rising. Nice work.	
+em_052_2	power_ok	chatter	calm	mc	em_052	2	m	any	any	any	any	any	any		Recibido. Carga subiendo.	Copy. Charge rising. | Copy. Charge rising. | Copy. Charge going up. | Copy. Charge is back up to {ec} percent.	 |  |  | Recibido. La carga ha vuelto al {ec} por ciento.
+em_053_1	power_ok	chatter	calm	mc	em_053	1	m	any	any	any	any	any	any		Vemos la carga subir. Buen trabajo.	We see the charge going up. Good work. | We see the charge going up. Good work. | The charge is rising. Nice work. | The charge is at {ec} percent and rising. Nice work.	 |  |  | La carga está al {ec} por ciento y subiendo. Buen trabajo.
 em_053_2	power_ok	chatter	calm	crew	em_053	2	both	any	any	any	any	any	any		Gracias. Ya no tengo frío.	Thanks. I'm not cold anymore. | Thanks. I'm not cold anymore. | Thanks. It's warm again.	
 em_054_1	power_ok	chatter	calm	crew	em_054	1	both	any	any	any	any	any	any		Energía estable. Por fin.	Power stable. Finally. | Power stable. Finally. | Stable power. At last.	
 em_054_2	power_ok	chatter	calm	mc	em_054	2	m	any	any	any	any	any	any		Copiado. Nada de tostadoras, por favor.	Copied. No toasters, please. | Copied. No toasters, please. | Copy. Still no toasters.	
 em_055_1	power_ok	chatter	calm	crew	em_055	1	both	any	any	any	any	any	any		Todo vuelve a funcionar.	Everything works again. | Everything works again. | It all works again.	
 em_055_2	power_ok	chatter	calm	mc	em_055	2	m	any	any	any	any	any	any		Perfecto. Respirad.	Perfect. Breathe. | Perfect. Breathe. | Great. Breathe.	
-em_056_1	power_ok	chatter	calm	crew	em_056	1	both	any	any	any	any	any	any		La carga vuelve a estar bien.	The charge is good again. | The charge is good again. | Charge is fine again.	
+em_056_1	power_ok	chatter	calm	crew	em_056	1	both	any	any	any	any	any	any		La carga vuelve a estar bien.	The charge is good again. | The charge is good again. | Charge is fine again. | Charge at {ec} percent. All good again.	 |  |  | Carga al {ec} por ciento. Todo bien otra vez.
 em_056_2	power_ok	chatter	calm	mc	em_056	2	m	any	any	any	any	any	any		Recibido. Os oímos mejor.	Copy. We hear you better. | Copy. We hear you better. | Copy. You sound clearer.	
 em_057_1	power_low	warning	tense	crew	em_057	1	both	any	any	any	any	any	any		Las baterías bajan rápido.	The batteries are dropping fast. | The batteries are dropping fast. | Battery is draining fast.	
-em_057_2	power_low	warning	tense	mc	em_057	2	m	any	any	any	any	any	any		Recibido. Apagad lo que no haga falta.	Copy. Turn off what you don't need. | Copy. Turn off what you don't need. | Copy. Switch off extras.	
-em_058_1	power_low	warning	tense	crew	em_058	1	both	any	any	any	any	any	any		Poca energía. Apago las luces.	Low power. Turning off the lights. | Low power. Turning off the lights. | Power is low. Lights off.	
+em_057_2	power_low	warning	tense	mc	em_057	2	m	any	any	any	any	any	any		Recibido. Apagad lo que no haga falta.	Copy. Turn off what you don't need. | Copy. Turn off what you don't need. | Copy. Switch off extras. | Copy. Battery at {ec} percent. Switch off extras.	 |  |  | Recibido. Batería al {ec} por ciento. Apagad lo que sobre.
+em_058_1	power_low	warning	tense	crew	em_058	1	both	any	any	any	any	any	any		Poca energía. Apago las luces.	Low power. Turning off the lights. | Low power. Turning off the lights. | Power is low. Lights off. | Power at {ec} percent. Lights off.	 |  |  | Energía al {ec} por ciento. Apago las luces.
 em_058_2	power_low	warning	tense	mc	em_058	2	m	any	any	any	any	any	any		Buena idea. La radio, encendida.	Good idea. Keep the radio on. | Good idea. Keep the radio on. | Good. Radio stays on.	
 em_059_1	power_low	warning	tense	mc	em_059	1	m	any	any	any	any	any	any		Os quedáis sin carga. Ahorrad.	You're running out of charge. Save it. | You're running out of charge. Save it. | Charge is low, {vessel}. Save it.	 |  | Os queda poca carga, {vessel}. Ahorrad.
 em_059_2	power_low	warning	tense	crew	em_059	2	both	any	any	any	any	any	any		Recibido. Nada de café.	Copy. No coffee. | Copy. No coffee. | Copy. No warm {food}.	 |  | Recibido. Nada de calentar {el food}.
 em_060_1	power_low	warning	tense	crew	em_060	1	both	any	any	any	any	any	any		Control, se me apagan las pantallas.	Control, my screens are going dark. | Control, my screens are going dark. | Control, screens are dimming.	
-em_060_2	power_low	warning	tense	mc	em_060	2	m	any	any	any	any	any	any		Es la batería. Ahorrad energía.	It's the battery. Save power. | It's the battery. Save power. | Battery. Save power.	
+em_060_2	power_low	warning	tense	mc	em_060	2	m	any	any	any	any	any	any		Es la batería. Ahorrad energía.	It's the battery. Save power. | It's the battery. Save power. | Battery. Save power. | It's the battery. {ec} percent left. Save power.	 |  |  | Es la batería. Queda el {ec} por ciento. Ahorrad.
 em_061_1	power_low	warning	tense	crew	em_061	1	both	any	any	any	any	solar	any		Poca carga. Hay que buscar el sol.	Low charge. We need to find the sun. | Low charge. We need to find the sun. | Low charge. We need sunlight.	
 em_061_2	power_low	warning	tense	mc	em_061	2	m	any	any	any	any	solar	any		Recibido. Orientad los paneles.	Copy. Point the panels. | Copy. Point the panels. | Copy. Panels to the sun.	
 em_062_1	signal_back	chatter	calm	crew	em_062	1	both	any	any	any	any	any	any		¿Control? ¿Hola?	Control? Hello? | Control? Hello? | Hello? Control?	
