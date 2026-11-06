@@ -48,13 +48,13 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
   - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
   - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
-  - **Your own lines.** Add a row to `Phrases/runtime.tsv` or a file in `Phrases/Extra/` and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
+  - **Your own lines.** Add a row or a file of your own to `Phrases/Runtime/` (the format is at the top of `reports.tsv`), or a file in `Phrases/Extra/`, and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
 - **English subtitles** with a colour per speaker. Most lines have several wordings, so a line you heard before can read differently. The number of subtitle lines, their size, width and position are fully customizable.
 - **Lots of lines.** 1896 recorded interactions with 6478 extra subtitle wordings, plus 53 runtime lines and 22 runtime chats. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
-1. Download `Lonapse-0.7.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
+1. Download `Lonapse-0.7.1.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).

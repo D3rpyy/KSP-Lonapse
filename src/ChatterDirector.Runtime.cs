@@ -3,7 +3,7 @@
 //            the partner's name
 //   bodies   a {body} line on a modded planet says that planet's name instead of "the planet"
 //   new rows rows without a clip (GameData/Lonapse/Phrases/Extra/*.tsv) are spoken at runtime
-//   reports  now and then Mission Control reads out real values (runtime.tsv): orbit, speed, fuel, power, the next
+//   reports  now and then Mission Control reads out real values (Phrases/Runtime): orbit, speed, fuel, power, the next
 //            burn, funds and more. Also once per descent (height, speed) and after a docking approach (distance)
 //   science  after a science reaction, the experiment, the body and the science points
 //   contract a completed contract with its funds, a failed one
@@ -543,7 +543,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Sometimes an intercom chat from runtime.tsv instead of the table: every line rendered in the voice of its
+        /// Sometimes an intercom chat from Phrases/Runtime instead of the table: every line rendered in the voice of its
         /// kerbal, queued as one chat once all lines are ready. True when one was started (the caller queues nothing).
         /// </summary>
         bool TryRuntimeChat(KerbalVoice a, KerbalVoice b)

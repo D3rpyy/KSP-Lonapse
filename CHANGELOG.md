@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.1
+
+### Changed
+- **The voice says what the subtitle shows, for every line with a name or a value.** All 289 subtitle lines that fill in a word now have their own Spanish. Before, 228 of them played the general recording while the subtitle showed the other kerbal's name, your vessel, the body or the mission day.
+- **Mission Control reads numbers in ordinary lines too.** With the runtime voice on, 32 event lines have a version with a real value: the battery when power runs low or comes back, the delta-v and time of a new maneuver node, the fuel left after a cutoff, the speed at staging, the parts and crew after docking, the science in the lab. Without the runtime voice these versions never show.
+- **More variety in the runtime reports.** Runtime lines can have several wordings, split by `|`. Lines with the same meaning are one row now, and 18 lines got new wordings.
+
+### For modders
+- `Phrases/runtime.tsv` is now the folder `Phrases/Runtime/` (reports, crew, docking and landing, science and contracts, chats). Every `.tsv` in it is read, so your own lines can go in a file of your own. The columns are found by name. The format is at the top of `reports.tsv`.
+- `Phrases/slots_es.tsv` is gone. The runtime Spanish of a line is the `spanish_rt` column of its row, and the Spanish of a pool value is the `spanish` column of `pools.tsv`. An English edit can no longer silently switch it off.
+- The install removes the old `runtime.tsv` and `slots_es.tsv`.
+
 ## 0.7.0 (2026-11-06)
 
 **Kerbals now say your names, and Mission Control reads your real numbers.** Until now every line was a recording made before release, so the voice could never say the name of your kerbal, your vessel or the place you are at. This version ships a small speech engine (Piper) with the same three voices, and it speaks new lines while you play. That adds 53 Mission Control lines and 22 crew chats (56 lines) with real values, on top of 6478 new subtitle versions, 29 scenes with subtitle slots and 138 new probe scenes. The voice still speaks loñapsE. Only names are said as they are.

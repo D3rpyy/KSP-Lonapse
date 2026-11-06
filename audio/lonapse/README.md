@@ -11,7 +11,7 @@ them out loud. The audio itself is not reversed, only the spelling.
 |---|---|
 | `phrases/*.tsv` | The source tables, one file per kind of event. I write these by hand. |
 | `bodies.tsv` | Body names for the `{body}` placeholder. |
-| `pools.tsv` | Experimental: values for the subtitle slots like `{thing}`. |
+| `pools.tsv` | Values for the subtitle slots like `{thing}`, with their Spanish for the runtime voice. |
 | `README.md` | This file. |
 
 The source files are:
@@ -151,12 +151,40 @@ The rules, checked by the script:
 
 - Slots only go in the English. The Spanish only knows `{body}`.
 - A slot name is `[a-z_]+`. A pool slot needs a pool in `pools.tsv`, and `{pool:n}` needs at least n values.
-- `body`, the flight slots and the person slots cannot be pool names.
+- `body` and every number, name and person slot of `src/Slots.cs` cannot be pool names.
 - A pool value has no `|` and no `{body}`. A pool cannot lead back to itself.
 - Versions (`|`) are all non-empty and cannot be used together with `{body}`.
 - A pool that can give `{other}` or `{self}` only works in intercom scenes.
 
 I keep the Spanish vague on purpose. "Who took my helmet?" and "Who took my sock?" both come from "¿Quién ha cogido mis cosas?". A slot that the game cannot fill shows `...` and goes to the log.
+
+## Runtime Spanish: `spanish_rt`
+
+With the runtime voice on, Piper can say the version the subtitle shows, with the filled words. That Spanish sits on the same row, in the optional column `spanish_rt`. I put it after `english`:
+
+```
+clip_key	...	spanish	english	spanish_rt
+```
+
+- `spanish_rt` holds one piece per English version, split by `|` and in the same order.
+- An empty piece means the recorded clip says that version. A row with an empty `spanish_rt` plays its recording for every version.
+- A piece uses the slots of its English version, or fewer. Leave out the `[conditions]`, they come from the English.
+- A pool value with an article: `{el thing}`, `{un thing}`, `{del thing}` and `{al thing}` give el/la/los/las and the like, by the gender of the value.
+- Body names that are not a slot are written backwards, like in `bodies.tsv`: "nibréK" is heard as Kérbin. `{here}` and `{vessel}` are said as names.
+- A file without the column still loads. An empty last cell may lose its tab, that is fine.
+
+The Spanish of a pool value is the `spanish` column of `pools.tsv`. Put `m:`, `f:`, `mp:` or `fp:` before it when a line uses the value with an article: `f:piedra de la suerte`.
+
+### Numbers on recorded lines
+
+A version can also use the numbers of the runtime reports: `{ec}`, `{fuel}`, `{node_dv}`, `{node_min}`, `{speed}`, `{sci_total}`, `{parts}`, `{crew}` and the rest of the list in `src/Slots.cs`. The recording cannot say a number, so such a version needs its `spanish_rt`. It is only picked when the runtime voice is on and KSP has the value. Then it takes its turn with the other versions. Without the runtime voice the subtitle never shows it.
+
+```
+english:     It's the battery. Save power. | It's the battery. Save power. | Battery. Save power. | It's the battery. {ec} percent left. Save power.
+spanish_rt:   |  |  | Es la batería. Queda el {ec} por ciento. Ahorrad.
+```
+
+The build checks it: the number of pieces, the slots in each piece, and that a version with a number has its piece. The tests fill every piece once and print how many slotted rows still have no `spanish_rt`.
 
 ## Probe mode
 
@@ -233,7 +261,11 @@ It shows how many lines each file has, and points you to every bad row as `phras
 
 5. Build. Only the new or changed lines are rendered, so this is quick.
 
-### Without rendering (runtime voice, experimental)
+### Without rendering (runtime voice)
+
+Lines with real values that have no recording at all go into `GameData/Lonapse/Phrases/Runtime/*.tsv`. The format is at the top of `Runtime/reports.tsv`. One row per line, and a row can hold several versions split by `|`. A file of your own in that folder is read too, so a new set of lines is a new file.
+
+### Extra rows in the source format
 
 With the runtime voice installed and the setting "Speak names and new lines at runtime" on, rows can also go into `GameData/Lonapse/Phrases/Extra/*.tsv` in the KSP install. Same columns as the files here, no build step. Piper speaks them in game, in loñapsE like every other line. `{body}` in such a row gets the current body name, also on a modded planet.
 

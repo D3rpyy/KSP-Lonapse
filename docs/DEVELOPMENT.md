@@ -55,7 +55,9 @@ This is what ends up in the game:
 GameData/Lonapse/
   Plugins/Lonapse.dll
   Sounds/...                (from the audio pipeline)
-  Phrases/phrases.tsv       (all scenes and subtitles, from the audio pipeline)
+  Phrases/phrases.tsv       (all scenes and subtitles, from the audio pipeline, with the spanish_rt column)
+  Phrases/pools.tsv         (subtitle slot values and their Spanish)
+  Phrases/Runtime/*.tsv     (runtime voice lines with real values, no audio)
   PluginData/Runtime/       (runtime voice: windows/, linux/, voices/, LICENSES/)
   PluginData/settings.cfg   (written by the plugin on first start)
 ```

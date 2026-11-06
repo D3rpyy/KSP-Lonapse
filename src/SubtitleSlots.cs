@@ -13,6 +13,9 @@
 // A version can start with conditions: "[landed] You're on the ground." When a line has versions whose conditions
 // all hold right now, only those are picked. Else only the versions without conditions. So every line of a scene
 // switches together, and a line that makes no sense on the ground can become a joke there.
+// Runtime voice: the spanish_rt column of a row holds the Spanish of each version (PhraseEntry.SpanishRt), so Piper
+// says the version the subtitle shows. A version with a number only the runtime voice can say ({fuel}, {ec} ...) is
+// only picked when the director gives that number, which it only does with the runtime voice on (Slots).
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
 using System.Collections.Generic;
