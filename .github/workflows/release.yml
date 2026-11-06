@@ -1,7 +1,9 @@
 name: Release workflow
 
 # Packs the committed GameData/Lonapse plus the runtime voice into Lonapse-<version>.zip and attaches it to the
-# release, together with Lonapse-<version>-runtime-source.zip (the GPL source of espeak-ng and Piper).
+# release. That is the only file on a version release, so CKAN always takes the right zip.
+# Lonapse-<version>-runtime-source.zip (the GPL source of espeak-ng and Piper) goes to the separate prerelease
+# runtime-source, made here when it is missing. CKAN skips prereleases, and this workflow does not run for one.
 # The DLL, sounds and phrase table are built locally with ./package.sh and committed. The workflow checks that they
 # belong to the release version. The runtime voice is not in git: fetch_runtime.sh downloads Piper and the original
 # voices, makes the int8 voices and checks every file against the pinned sha256, so the zip holds the tested files.
@@ -23,6 +25,8 @@ jobs:
   release:
     name: Package and publish Lonapse
     runs-on: ubuntu-24.04
+    # not for a prerelease (the runtime-source release, or a test): only a version release is packaged
+    if: ${{ github.event_name == 'workflow_dispatch' || !github.event.release.prerelease }}
     env:
       TAG: ${{ inputs.tag || github.event.release.tag_name }}
 
@@ -79,9 +83,20 @@ jobs:
       - name: Pack ZIP
         run: ./pack_zip.sh "$VERSION"
 
-      - name: Upload release ZIPs
+      - name: Upload the release ZIP
+        run: gh release upload "$TAG" "dist/Lonapse-$VERSION.zip" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Upload the runtime source to the runtime-source prerelease
         run: |
-          gh release upload "$TAG" "dist/Lonapse-$VERSION.zip" \
-            "audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip" --clobber
+          SRC="audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip"
+          [ -f "$SRC" ] || { echo "::error::$SRC is missing"; exit 1; }
+          if ! gh release view runtime-source >/dev/null 2>&1; then
+            gh release create runtime-source --prerelease --target "$(git rev-parse HEAD)" \
+              --title "Runtime voice source (GPL)" \
+              --notes "The source code of Piper, piper-phonemize and espeak-ng for the runtime voice that ships in Lonapse, one zip per Lonapse version. This is not a Lonapse release: download Lonapse from the version releases."
+          fi
+          gh release upload runtime-source "$SRC" --clobber
         env:
           GH_TOKEN: ${{ github.token }}

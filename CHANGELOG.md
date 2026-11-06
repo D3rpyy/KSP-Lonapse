@@ -18,6 +18,8 @@
 - **Many more science and contract lines.** Mission Control now has 47 new wordings after science and contracts (it had 14). A science line can say that this is the first data of its kind from a body, how much science is still left there, or how much the lab has banked. A finished contract can mention its science and reputation, the agency's funds and how many contracts are still open. A failed one says what it costs. There are 4 new crew chats about contracts, reputation, science and funds.
 - **Names the voice cannot say.** Vessel and docking target names in another alphabet are no longer said by the runtime voice. The subtitle still shows them, and the line plays as recorded.
 
+- **One zip per release.** A version release on GitHub now only has `Lonapse-<version>.zip`, so CKAN picks the right file. The source of the runtime voice (Piper, piper-phonemize, espeak-ng) moved to the separate GitHub release `runtime-source`.
+
 ### For modders
 - **The stock probe cores get `ModuleLonapse`** through a Module Manager patch, `Patches/Lonapse_StockCores.cfg`, with their own voice and priority -1. A patch of your own can run `:AFTER[Lonapse]` to change them. Module Manager stays optional: without it the patch does nothing and the stock cores sound the same as before.
 - `Phrases/runtime.tsv` is now the folder `Phrases/Runtime/` (reports, crew, docking and landing, science and contracts, chats). Every `.tsv` in it is read, so your own lines can go in a file of your own. The columns are found by name. The format is at the top of `reports.tsv`.

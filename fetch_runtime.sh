@@ -8,7 +8,7 @@
 # macOS: the Piper release for macOS has no .dylib files and cannot start, so there is no macos/ folder. Lonapse
 # then plays the recorded lines only.
 # Also downloads the source of Piper, piper-phonemize and espeak-ng at the pinned commits into
-# audio/build/runtime_source/, zipped for the GitHub release (the GPL asks for the espeak-ng source).
+# audio/build/runtime_source/, zipped for the runtime-source prerelease on GitHub (the GPL asks for the espeak-ng source).
 # Every download and every shipped voice is checked against a pinned sha256.
 # Usage: ./fetch_runtime.sh [--python <python with runtime/requirements.txt>]
 #   The python is only needed when the voices in audio/build/runtime_voices are missing or differ. They are then made
@@ -145,7 +145,7 @@ cp "$REPO/runtime/licenses/README.md" "$SRC_OUT/files/README.md"
 SZIP="$SRC_OUT/Lonapse-$VERSION-runtime-source.zip"
 rm -f "$SZIP"
 (cd "$SRC_OUT/files" && zip -q -X "$SZIP" ./*)
-echo "Source for the GitHub release: $SZIP"
+echo "Source for the runtime-source prerelease on GitHub: $SZIP"
 
 echo
 echo "sha256 of the shipped program files and voices (README, Runtime voice files):"

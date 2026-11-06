@@ -208,7 +208,8 @@ On a Mac, Lonapse plays the recorded lines only. I play KSP for Windows under Pr
 in the game.
 
 The licence texts and the source links are in `PluginData/Runtime/LICENSES`. The source code of Piper,
-piper-phonemize and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+piper-phonemize and espeak-ng is on the GitHub release [runtime-source](https://github.com/D3rpyy/KSP-Lonapse/releases/tag/runtime-source), as
+`Lonapse-<version>-runtime-source.zip` for every version.
 `./fetch_runtime.sh` in the repo downloads the Piper release, checks every file against these hashes and puts the
 runtime folder together.
 
@@ -242,4 +243,4 @@ The code is MIT licensed ([LICENSE](LICENSE)). The sounds and the phrase text ar
 ([LICENSE-CC-BY-4.0](LICENSE-CC-BY-4.0)). Which part has which license is in [docs/LICENSING.md](docs/LICENSING.md).
 The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
 piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng, [LICENSE-GPL-3.0](LICENSE-GPL-3.0)), and CC0, Apache-2.0 and the Unlicense (the voices).
-The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.
+The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is on the GitHub release [runtime-source](https://github.com/D3rpyy/KSP-Lonapse/releases/tag/runtime-source).

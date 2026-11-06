@@ -37,5 +37,5 @@ These files ship in `GameData/Lonapse/PluginData/Runtime/LICENSES`. They cover t
 
 The Piper release does not record the exact espeak-ng and piper-phonemize commits. Its build fetched the `master`
 branch of both. The commits above are the last ones on `master` before the Piper release was built
-(14 November 2023). A copy of these sources is attached to every Lonapse GitHub release that ships the runtime
-voice, as `Lonapse-<version>-runtime-source.zip`.
+(14 November 2023). A copy of these sources is on the Lonapse GitHub release `runtime-source`
+(https://github.com/D3rpyy/KSP-Lonapse/releases/tag/runtime-source), as `Lonapse-<version>-runtime-source.zip` for every version that ships the runtime voice.

@@ -23,7 +23,8 @@ part of Lonapse. Each part keeps its own licence. The texts are in `PluginData/R
 
 The program files are unchanged from the Piper release. The voices are changed: their weights are quantized to int8
 and the decoder is kept at float32 (`audio/quantize_runtime_voices.py`). The source code of Piper, piper-phonemize
-and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+and espeak-ng is on the GitHub release [runtime-source](https://github.com/D3rpyy/KSP-Lonapse/releases/tag/runtime-source), as `Lonapse-<version>-runtime-source.zip` for every
+version.
 
 ## Lonapse voices: Piper
 
