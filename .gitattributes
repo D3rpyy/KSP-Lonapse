@@ -1,0 +1,13 @@
+# Built by the audio scripts and refreshed by package.sh: collapsed in diffs, left out of the language stats on GitHub
+GameData/Lonapse/Sounds/** linguist-generated
+GameData/Lonapse/Phrases/phrases.tsv linguist-generated
+GameData/Lonapse/Phrases/pools.tsv linguist-generated
+
+# Tables and scripts keep LF line endings on every machine (the parsers split on \t and \n)
+*.tsv text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+
+*.ogg binary
+*.wav binary
+*.dll binary
