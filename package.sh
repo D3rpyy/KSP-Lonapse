@@ -28,18 +28,13 @@ for d in beeps static crew control; do
   [[ -d "$SOUNDS/$d" ]] || { echo "ERROR: $SOUNDS/$d is missing, build the audio first" >&2; exit 1; }
 done
 [[ -f "$TABLE" ]] || { echo "ERROR: $TABLE is missing, run audio/build_lonapse.py first" >&2; exit 1; }
-RUNTIME="$REPO/audio/build/runtime/Runtime"
-for f in windows/piper.exe linux/piper voices/es_ES-davefx-medium.onnx voices/es_MX-claude-high.onnx \
-         voices/es_MX-ald-medium.onnx LICENSES/README.md; do
-  [[ -f "$RUNTIME/$f" ]] || { echo "ERROR: $RUNTIME/$f is missing, run ./fetch_runtime.sh first" >&2; exit 1; }
-done
 
 echo "Running the offline tests"
 bash tests/run.sh >/dev/null || { echo "ERROR: tests failed, run tests/run.sh to see why" >&2; exit 1; }
 "$REPO/build.sh" --compile-only
 
-# Refresh GameData/Lonapse. PluginData in the repo (user settings) is never touched or packed. The runtime voice is
-# added to the zip from audio/build/runtime/Runtime, as GameData/Lonapse/PluginData/Runtime.
+# Refresh GameData/Lonapse. PluginData in the repo (user settings) is never touched or packed. pack_zip.sh adds the
+# runtime voice to the zip from audio/build/runtime/Runtime, as GameData/Lonapse/PluginData/Runtime.
 mkdir -p "$GD/Plugins" "$GD/Sounds" "$GD/Phrases"
 cp build/Lonapse.dll "$GD/Plugins/Lonapse.dll"
 # Only audio files. A .cfg under GameData would be parsed by KSP.
@@ -52,20 +47,8 @@ cp docs/LICENSING.md "$GD/LICENSING.md"
 cp README.md CHANGELOG.md "$GD/"
 cp audio/CREDITS.md "$GD/CREDITS.md"
 
-mkdir -p dist
-ZIP="$REPO/dist/Lonapse-$VERSION.zip"
-rm -f "$ZIP"
-zip -qr -X "$ZIP" GameData/Lonapse -x 'GameData/Lonapse/PluginData/*'
-STAGE="$(mktemp -d "$REPO/dist/runtime_stage.XXXXXX")"
-trap 'rm -rf "$STAGE"' EXIT
-mkdir -p "$STAGE/GameData/Lonapse/PluginData"
-cp -r "$RUNTIME" "$STAGE/GameData/Lonapse/PluginData/Runtime"
-(cd "$STAGE" && zip -qr -X "$ZIP" GameData)
-
-n=$(unzip -l "$ZIP" | grep -cE '\.(wav|ogg)$')
 echo "Updated: $GD"
-r=$(unzip -l "$ZIP" | grep -c 'PluginData/Runtime/')
-echo "Packed: $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files, $r runtime voice entries)"
+"$REPO/pack_zip.sh" "$VERSION"
 SRCZIP="$REPO/audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip"
 if [[ -f "$SRCZIP" ]]; then echo "Attach to the GitHub release too: $SRCZIP"
 else echo "WARNING: no $SRCZIP, run ./fetch_runtime.sh again after the version bump. It goes with the release (GPL source)." >&2; fi

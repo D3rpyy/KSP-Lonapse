@@ -1,8 +1,10 @@
 name: Release workflow
 
-# Packs the committed GameData/Lonapse into Lonapse-<version>.zip and attaches it to the release.
-# The DLL, sounds and phrase table are built locally with ./package.sh and committed. This workflow builds nothing,
-# it only checks that the committed files belong to the release version.
+# Packs the committed GameData/Lonapse plus the runtime voice into Lonapse-<version>.zip and attaches it to the
+# release, together with Lonapse-<version>-runtime-source.zip (the GPL source of espeak-ng and Piper).
+# The DLL, sounds and phrase table are built locally with ./package.sh and committed. The workflow checks that they
+# belong to the release version. The runtime voice is not in git: fetch_runtime.sh downloads Piper and the original
+# voices, makes the int8 voices and checks every file against the pinned sha256, so the zip holds the tested files.
 
 on:
   release:
@@ -55,7 +57,7 @@ jobs:
         run: |
           # package.sh copies these into GameData/Lonapse. A difference means it was not run before the commit.
           fail=0
-          for pair in "README.md:README.md" "CHANGELOG.md:CHANGELOG.md" "LICENSE:LICENSE.txt" "audio/CREDITS.md:CREDITS.md"; do
+          for pair in "README.md:README.md" "CHANGELOG.md:CHANGELOG.md" "LICENSE:LICENSE.txt" "LICENSE-CC-BY-4.0:LICENSE-CC-BY-4.0.txt" "docs/LICENSING.md:LICENSING.md" "audio/CREDITS.md:CREDITS.md"; do
             src="${pair%%:*}"; dst="GameData/Lonapse/${pair##*:}"
             if ! cmp -s "$src" "$dst"; then
               echo "::error::$dst differs from $src. Run ./package.sh locally and commit GameData/Lonapse."
@@ -64,16 +66,22 @@ jobs:
           done
           exit $fail
 
-      - name: Pack ZIP
-        run: |
-          mkdir -p dist
-          ZIP="dist/Lonapse-$VERSION.zip"
-          zip -qr -X "$ZIP" GameData/Lonapse -x 'GameData/Lonapse/PluginData/*'
-          n=$(unzip -l "$ZIP" | grep -cE '\.(wav|ogg)$')
-          echo "Packed $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files)"
-          unzip -l "$ZIP" | grep -q 'GameData/Lonapse/Plugins/Lonapse.dll' || { echo "::error::Lonapse.dll is missing from the ZIP"; exit 1; }
+      - name: Set up Python for the runtime voices
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
 
-      - name: Upload release ZIP
-        run: gh release upload "$TAG" "dist/Lonapse-$VERSION.zip" --clobber
+      - name: Fetch and check the runtime voice
+        run: |
+          python -m pip install --quiet -r runtime/requirements.txt
+          ./fetch_runtime.sh --python "$(command -v python)"
+
+      - name: Pack ZIP
+        run: ./pack_zip.sh "$VERSION"
+
+      - name: Upload release ZIPs
+        run: |
+          gh release upload "$TAG" "dist/Lonapse-$VERSION.zip" \
+            "audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip" --clobber
         env:
           GH_TOKEN: ${{ github.token }}

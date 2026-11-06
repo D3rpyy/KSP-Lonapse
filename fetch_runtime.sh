@@ -10,8 +10,9 @@
 # Also downloads the source of Piper, piper-phonemize and espeak-ng at the pinned commits into
 # audio/build/runtime_source/, zipped for the GitHub release (the GPL asks for the espeak-ng source).
 # Every download and every shipped voice is checked against a pinned sha256.
-# Usage: ./fetch_runtime.sh [--python <python with onnx and onnxruntime>]
-#   The python is only needed when the voices in audio/build/runtime_voices are missing or differ.
+# Usage: ./fetch_runtime.sh [--python <python with runtime/requirements.txt>]
+#   The python is only needed when the voices in audio/build/runtime_voices are missing or differ. They are then made
+#   from the original voices in audio/voices, which are downloaded from Hugging Face (pinned sha256) when missing.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -48,6 +49,14 @@ declare -A VOICE_SHA=(
   [es_ES-davefx-medium]=558ede4ebfd7bcb1c9cec4026a8575fff386d98de3afd372e78b722c08d8e034
   [es_MX-claude-high]=d6c55bd42f7b00a54d1ab18ac849c7940283764359890155988011386cff65fe
   [es_MX-ald-medium]=07cfd143e350cc5e6400f2da0b98409b8a16ca4524e3b26c11900d709c573468
+)
+
+# the original voices (audio/CREDITS.md), only downloaded when the runtime voices have to be made
+HF="https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es"
+ORIGINALS=(
+  "es_ES-davefx-medium|$HF/es_ES/davefx/medium|6658b03b1a6c316ee4c265a9896abc1393353c2d9e1bca7d66c2c442e222a917"
+  "es_MX-claude-high|$HF/es_MX/claude/high|3ef40a71ea63852cd8ab7e6fa7d2ecdcfa67a0b47c9c48e3f10e02ee02083ea0"
+  "es_MX-ald-medium|$HF/es_MX/ald/medium|019b3803293c93e34a206dd2e53a3889209a514e786fd7144f7b70196c579b63"
 )
 
 sha() { sha256sum "$1" | cut -d' ' -f1; }
@@ -102,6 +111,11 @@ voices_ok() {
 }
 if ! voices_ok; then
   [[ -n "$PY" ]] || { echo "ERROR: $VOICES is missing or differs. Make it with --python <python with onnx>" >&2; exit 1; }
+  for o in "${ORIGINALS[@]}"; do
+    IFS='|' read -r n u s <<<"$o"
+    fetch "$n.onnx" "$u/$n.onnx" "$s" "$REPO/audio/voices"
+    [[ -f "$REPO/audio/voices/$n.onnx.json" ]] || fetch "$n.onnx.json" "$u/$n.onnx.json" "" "$REPO/audio/voices"
+  done
   "$PY" -I "$REPO/audio/quantize_runtime_voices.py" --out "$VOICES"
   voices_ok || { echo "ERROR: the new voices differ from the pinned sha256 (other onnx or onnxruntime version?)" >&2; exit 1; }
 fi
