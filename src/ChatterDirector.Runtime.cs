@@ -562,6 +562,8 @@ namespace Lonapse
                 string tn = tv != null ? Names.Of(tv) : null;
                 string say = tn != null && !tn.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(tn) : null;
                 if (say != null) names["target"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(tn) };
+                string[] own = VesselNames();
+                if (own != null) names["vessel"] = own;
                 QueueKind("dock", SituationOf(v), nums, names, ResponseDelay(host.stress.stress) + 0.5f, false);
             }
             catch (Exception e) { Log.Debug("Runtime voice dock: " + e.Message); }
@@ -691,6 +693,8 @@ namespace Lonapse
             var names = new Dictionary<string, string[]>();
             string[] b = BodyNames(v.mainBody != null ? v.mainBody.bodyName : null);
             if (b != null) names["body"] = b;
+            string[] own = VesselNames();
+            if (own != null) names["vessel"] = own;
             QueueKind("land", SituationOf(v), nums, names, 0.2f, false);
         }
 
