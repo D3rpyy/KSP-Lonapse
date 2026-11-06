@@ -46,6 +46,7 @@ rt_examplemod_drill_dev	device	on=examplemod.drill id=exampleDrillRig	el taladro
 rt_chat_examplemod_drill_1	chat	on=examplemod.drill	{other}, {device} ya está montado.	{other}, {device} is set up.
 rt_chat_examplemod_drill_2	chat		¿Y si encuentra agua? | ¿Hace mucho ruido?	What if it finds water? | Is it loud?
 rt_chat_examplemod_drill_3	chat		Entonces somos ricos. | Solo un poco.	Then we're rich. | Only a little.
+rt_chat_examplemod_drillsolo_1	chat	on=examplemod.drill	Listo, {device} está montado. A ver si encuentra algo.	Done, {device} is set up. Let's see if it finds something.
 rt_sci_examplemod_drill	science	on=examplemod.drill	Llegan datos: {device} funciona.	Data is coming in: {device} works.
 # A contract type of your own (the class name of your Contract, ExampleSalvageContract). The contract row gives
 # {contract} its words. Contract lines with on=examplemod.salvage play only for that contract.
