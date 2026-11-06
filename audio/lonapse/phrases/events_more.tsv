@@ -72,8 +72,8 @@ em_057_1	power_low	warning	tense	crew	em_057	1	both	any	any	any	any	any	any		Las
 em_057_2	power_low	warning	tense	mc	em_057	2	m	any	any	any	any	any	any		Recibido. Apagad lo que no haga falta.	Copy. Turn off what you don't need. | Copy. Turn off what you don't need. | Copy. Switch off extras.	
 em_058_1	power_low	warning	tense	crew	em_058	1	both	any	any	any	any	any	any		Poca energía. Apago las luces.	Low power. Turning off the lights. | Low power. Turning off the lights. | Power is low. Lights off.	
 em_058_2	power_low	warning	tense	mc	em_058	2	m	any	any	any	any	any	any		Buena idea. La radio, encendida.	Good idea. Keep the radio on. | Good idea. Keep the radio on. | Good. Radio stays on.	
-em_059_1	power_low	warning	tense	mc	em_059	1	m	any	any	any	any	any	any		Os quedáis sin carga. Ahorrad.	You're running out of charge. Save it. | You're running out of charge. Save it. | Charge is low, {vessel}. Save it.	
-em_059_2	power_low	warning	tense	crew	em_059	2	both	any	any	any	any	any	any		Recibido. Nada de café.	Copy. No coffee. | Copy. No coffee. | Copy. No warm {food}.	Recibido. Nada de café. | Recibido. Nada de café. | Recibido. Nada de calentar {el food}.
+em_059_1	power_low	warning	tense	mc	em_059	1	m	any	any	any	any	any	any		Os quedáis sin carga. Ahorrad.	You're running out of charge. Save it. | You're running out of charge. Save it. | Charge is low, {vessel}. Save it.	 |  | Os queda poca carga, {vessel}. Ahorrad.
+em_059_2	power_low	warning	tense	crew	em_059	2	both	any	any	any	any	any	any		Recibido. Nada de café.	Copy. No coffee. | Copy. No coffee. | Copy. No warm {food}.	 |  | Recibido. Nada de calentar {el food}.
 em_060_1	power_low	warning	tense	crew	em_060	1	both	any	any	any	any	any	any		Control, se me apagan las pantallas.	Control, my screens are going dark. | Control, my screens are going dark. | Control, screens are dimming.	
 em_060_2	power_low	warning	tense	mc	em_060	2	m	any	any	any	any	any	any		Es la batería. Ahorrad energía.	It's the battery. Save power. | It's the battery. Save power. | Battery. Save power.	
 em_061_1	power_low	warning	tense	crew	em_061	1	both	any	any	any	any	solar	any		Poca carga. Hay que buscar el sol.	Low charge. We need to find the sun. | Low charge. We need to find the sun. | Low charge. We need sunlight.	
@@ -82,7 +82,7 @@ em_062_1	signal_back	chatter	calm	crew	em_062	1	both	any	any	any	any	any	any		¿
 em_062_2	signal_back	chatter	calm	mc	em_062	2	m	any	any	any	any	any	any		¡Hola! Os volvemos a oír.	Hello! We can hear you again. | Hello! We can hear you again. | Hi! We hear you again.	
 em_063_1	signal_back	chatter	calm	crew	em_063	1	both	any	any	any	any	any	any		¡Volvemos a tener radio!	We have radio again! | We have radio again! | Radio is back!	
 em_063_2	signal_back	chatter	calm	mc	em_063	2	m	any	any	any	any	any	any		Recibido. Qué alegría oíros.	Copy. So good to hear you. | Copy. So good to hear you. | Copy. Great to hear you.	
-em_064_1	signal_back	chatter	calm	mc	em_064	1	m	any	any	any	any	any	any		Señal recuperada. ¿Todo bien ahí?	Signal back. All good there? | Signal back. All good there? | Signal's back. Everything okay, {vessel}?	
+em_064_1	signal_back	chatter	calm	mc	em_064	1	m	any	any	any	any	any	any		Señal recuperada. ¿Todo bien ahí?	Signal back. All good there? | Signal back. All good there? | Signal's back. Everything okay, {vessel}?	 |  | Señal recuperada. ¿Todo bien, {vessel}?
 em_064_2	signal_back	chatter	calm	crew	em_064	2	both	any	any	any	any	any	any		Todo bien. Os echábamos de menos.	All good. We missed you. | All good. We missed you. | Fine. Missed you.	
 em_065_1	signal_back	chatter	calm	crew	em_065	1	both	any	any	any	any	any	any		Control, ¿nos habéis echado de menos?	Control, did you miss us? | Control, did you miss us? | Control, miss us?	
 em_065_2	signal_back	chatter	calm	mc	em_065	2	m	any	any	any	any	any	any		Un poquito. No se lo digáis al jefe.	A little bit. Don't tell the boss. | A little bit. Don't tell the boss. | A bit. Don't tell anyone.	
@@ -94,8 +94,8 @@ em_069	signal_lost	warning	tense	crew	em_069	1	both	any	any	any	any	any	any		Sol
 em_070	signal_lost	warning	tense	crew	em_070	1	both	any	any	any	any	any	any		Estamos solos. Por ahora.	We're alone. For now. | We're alone. For now. | Alone for now.	
 em_071	signal_lost	warning	tense	crew	em_071	1	both	any	any	any	any	any	any		La radio no contesta.	The radio doesn't answer. | The radio doesn't answer. | No answer on the radio.	
 em_072	touchdown	chatter	none	crew	em_072	1	both	any	any	any	any	any	any		¡Tocamos suelo!	Ground contact! | Ground contact! | Contact with the ground!	
-em_073_1	touchdown	chatter	none	crew	em_073	1	both	any	any	any	any	any	any		En el suelo. Todos bien.	On the ground. All fine. | On the ground. All fine. | Down on {here}. All good.	
-em_073_2	touchdown	chatter	none	mc	em_073	2	m	any	any	any	any	any	any		Recibido. Bienvenidos.	Copy. Welcome. | Copy. Welcome. | Copy. Welcome to {here}.	
+em_073_1	touchdown	chatter	none	crew	em_073	1	both	any	any	any	any	any	any		En el suelo. Todos bien.	On the ground. All fine. | On the ground. All fine. | Down on {here}. All good.	 |  | En el suelo de {here}. Todos bien.
+em_073_2	touchdown	chatter	none	mc	em_073	2	m	any	any	any	any	any	any		Recibido. Bienvenidos.	Copy. Welcome. | Copy. Welcome. | Copy. Welcome to {here}.	 |  | Recibido. Bienvenidos a {here}.
 em_074_1	touchdown	chatter	none	crew	em_074	1	both	any	any	any	any	any	any		Aterrizaje completado.	Landing complete. | Landing complete. | We have landed.	
 em_074_2	touchdown	chatter	none	mc	em_074	2	m	any	any	any	any	any	any		Confirmado. Buen trabajo.	Confirmed. Good work. | Confirmed. Good work. | Confirmed. Nice job.	
 em_075_1	touchdown	chatter	none	mc	em_075	1	m	any	any	any	any	any	any		¡Aterrizaje confirmado! Aquí aplauden todos.	Landing confirmed! Everyone here is clapping. | Landing confirmed! Everyone here is clapping. | Landed! The whole room is clapping.	
@@ -132,7 +132,7 @@ em_091_2	dock_hard	warning	tense	mc	em_091	2	m	any	any	any	any	any	any		Copiado.
 em_092	docked	chatter	none	crew	em_092	1	both	any	any	any	any	any	any		¡Acoplados!	Docked! | Docked! | We're docked!	
 em_093_1	docked	chatter	none	crew	em_093	1	both	any	any	any	any	any	any		Unidos. Buen trabajo.	Joined. Good work. | Joined. Good work. | Connected. Nice.	
 em_093_2	docked	chatter	none	mc	em_093	2	m	any	any	any	any	any	any		Confirmado. Acoplamiento completo.	Confirmed. Docking complete. | Confirmed. Docking complete. | Confirmed. Docked.	
-em_094_1	docked	chatter	none	mc	em_094	1	m	any	any	any	any	any	any		¡Acoplamiento confirmado! Bien hecho.	Docking confirmed! Well done. | Docking confirmed! Well done. | Docked! Nice work, {vessel}.	
+em_094_1	docked	chatter	none	mc	em_094	1	m	any	any	any	any	any	any		¡Acoplamiento confirmado! Bien hecho.	Docking confirmed! Well done. | Docking confirmed! Well done. | Docked! Nice work, {vessel}.	 |  | ¡Acoplados! Buen trabajo, {vessel}.
 em_094_2	docked	chatter	none	crew	em_094	2	both	any	any	any	any	any	any		Gracias. Ha sido suave.	Thanks. It was smooth. | Thanks. It was smooth. | Thanks. Smooth.	
 em_095	docked	chatter	none	crew	em_095	1	both	any	any	any	any	any	any		Ya estamos enganchados.	We're hooked up. | We're hooked up. | Hooked up.	
 em_096_1	dock_approach	chatter	calm	crew	em_096	1	both	any	any	any	any	any	any		Nos acercamos al puerto.	Approaching the port. | Approaching the port. | Moving toward the port.	
@@ -145,7 +145,7 @@ em_099	eva_fall	chatter	calm	crew	em_099	1	both	any	any	any	any	any	any		El suel
 em_100_1	eva_fall	chatter	calm	crew	em_100	1	both	any	any	any	any	any	any		Nadie ha visto eso.	Nobody saw that. | Nobody saw that. | That didn't happen.	
 em_100_2	eva_fall	chatter	calm	mc	em_100	2	m	any	any	any	any	any	any		Lo hemos visto todos.	We all saw that. | We all saw that. | Everyone saw it.	
 em_101	eva_fall	chatter	calm	crew	em_101	1	both	any	any	any	any	any	any		Me he caído. Con estilo.	I fell. With style. | I fell. With style. | Fell. Stylishly.	
-em_102_1	eva_fall	chatter	calm	crew	em_102	1	both	any	any	any	any	any	any		¡Uf! Este suelo es traicionero.	Oof! This ground is treacherous. | Oof! This ground is treacherous. | Oof! Sneaky ground on {here}.	
+em_102_1	eva_fall	chatter	calm	crew	em_102	1	both	any	any	any	any	any	any		¡Uf! Este suelo es traicionero.	Oof! This ground is treacherous. | Oof! This ground is treacherous. | Oof! Sneaky ground on {here}.	 |  | ¡Uf! El suelo de {here} es traicionero.
 em_102_2	eva_fall	chatter	calm	mc	em_102	2	m	any	any	any	any	any	any		Despacio. Paso a paso.	Slowly. Step by step. | Slowly. Step by step. | Slowly. One step at a time.	
 em_103_1	station_check	chatter	calm	mc	em_103	1	m	any	any	any	any	any	any		Aquí Control. ¿Qué tal la estación?	Control here. How's the station? | Control here. How's the station? | Control here. Station okay?	
 em_103_2	station_check	chatter	calm	crew	em_103	2	both	any	any	any	any	any	any		Todo en orden. Y limpio. Casi.	All in order. And clean. Almost. | All in order. And clean. Almost. | All fine. Mostly clean.	
@@ -154,7 +154,7 @@ em_104_2	station_check	chatter	calm	crew	em_104	2	both	any	any	any	any	any	any		
 em_105_1	station_check	chatter	calm	crew	em_105	1	both	any	any	any	any	any	any		Control, informe de la estación: todo verde.	Control, station report: all green. | Control, station report: all green. | Control, station is all green.	
 em_105_2	station_check	chatter	calm	mc	em_105	2	m	any	any	any	any	any	any		Recibido. Gracias.	Copy. Thanks. | Copy. Thanks. | Copy. Thank you.	
 em_106_1	station_check	chatter	calm	mc	em_106	1	m	any	any	any	any	any	any		Hola, estación. ¿Necesitáis algo?	Hello, station. Do you need anything? | Hello, station. Do you need anything? | Station, anything you need?	
-em_106_2	station_check	chatter	calm	crew	em_106	2	both	any	any	any	any	any	any		Más galletas. Siempre más galletas.	More cookies. Always more cookies. | More cookies. Always more cookies. | More {food}. Always more.	Más galletas. Siempre más galletas. | Más galletas. Siempre más galletas. | Más {food}. Siempre más.
+em_106_2	station_check	chatter	calm	crew	em_106	2	both	any	any	any	any	any	any		Más galletas. Siempre más galletas.	More cookies. Always more cookies. | More cookies. Always more cookies. | More {food}. Always more.	 |  | Más {food}. Siempre más.
 em_107_1	station_check	chatter	calm	mc	em_107	1	m	any	any	any	any	any	any		Control a estación. Os llamamos para saludar.	Control to station. Just calling to say hi. | Control to station. Just calling to say hi. | Control here. Just saying hi.	
 em_107_2	station_check	chatter	calm	crew	em_107	2	both	any	any	any	any	any	any		¡Hola, Control!	Hello, Control! | Hello, Control! | Hi, Control!	
 em_108	relief	chatter	none	crew	em_108	1	both	any	any	any	any	any	any		Uf. Ya pasó.	Phew. It's over. | Phew. It's over. | Phew. Done.	
