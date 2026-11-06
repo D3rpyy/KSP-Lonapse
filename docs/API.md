@@ -228,16 +228,16 @@ rt_con_yourmod_salvage	contract_funds	on=yourmod.salvage	Listo: {contract}. Os p
   callout.
 - In a busy moment, with high crew stress, low and normal events wait. High events still play, unless the stress
   is very high.
-- The Debug tab has a "Mod events" section. It shows the loaded mod files, a "Reload lines" button, a "Test mod
-  event" button and the last five mod events with what became of them.
-- The General tab has a toggle per mod under "Runtime voice". A player can turn off the lines of your mod there. Then
-  none of its rows play, and `Trigger` returns false.
+- The Lonapse window has a Mods tab. It lists every mod with lines and how many, with a toggle each. A player can
+  turn off the lines of your mod there. Then none of its rows play, and `Trigger` returns false.
+- The same tab has the tools for you: "Reload lines", "Test mod event" and the last five mod events with what became
+  of them.
 
 ## Testing your lines
 
 1. Put your file in `GameData/<YourMod>/Lonapse/` and start a flight.
 2. KSP.log shows `[Lonapse] Lonapse: N mod templates from M file(s): YourMod (N)`, and any bad rows.
-3. Open the Lonapse window, go to the Debug tab, pick your event under "Mod events" and press "Test mod event".
+3. Open the Lonapse window, go to the Mods tab, pick your event under "For modders" and press "Test mod event".
    The test fills a slot that is used in a check with the number 3, and any other slot with the name "Test".
-4. Changed your file? Press "Reload lines" in the same section. Lonapse reads every line file again, its own and
+4. Changed your file? Press "Reload lines" in the same tab. Lonapse reads every line file again, its own and
    those of all mods. KSP.log lists the bad rows again. You do not need to restart KSP.

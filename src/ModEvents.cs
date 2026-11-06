@@ -69,7 +69,7 @@ namespace Lonapse
             return info;
         }
 
-        /// <summary>The mod events with lines in the templates, sorted (for the Debug tab).</summary>
+        /// <summary>The mod events with lines in the templates, sorted (for the Mods tab).</summary>
         public static List<string> Ids(IList<RuntimeTemplate> all)
         {
             var r = new List<string>();

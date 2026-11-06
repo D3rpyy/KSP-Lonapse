@@ -292,13 +292,13 @@ namespace Lonapse
 
         // ------------------------------------------------ tabs
 
-        private static readonly string[] AllTabs = { "General", "Sound", "Crew", "Probes", "Subtitles", "Advanced", "Debug" };
-        private const int TabGeneral = 0, TabSound = 1, TabCrew = 2, TabProbes = 3, TabSubtitles = 4, TabAdvanced = 5, TabDebug = 6;
+        private static readonly string[] AllTabs = { "General", "Sound", "Crew", "Probes", "Subtitles", "Mods", "Advanced", "Debug" };
+        private const int TabGeneral = 0, TabSound = 1, TabCrew = 2, TabProbes = 3, TabSubtitles = 4, TabMods = 5, TabAdvanced = 6, TabDebug = 7;
         private int tab;
         private int pendingTab = -1;   // applied on the next Layout event
         private string pendingPos;     // subtitle position preset, applied on the next Layout event (it shows or hides sliders)
         private string pendingSignalMode; // signal mode, applied on the next Layout event (fixed shows a slider)
-        private readonly Vector2[] scrolls = new Vector2[7];
+        private readonly Vector2[] scrolls = new Vector2[8];
 
         // phrase test (Debug tab).
         private static readonly string[] TestEvents =
@@ -391,6 +391,7 @@ namespace Lonapse
                     case TabCrew: DrawCrew(s); break;
                     case TabProbes: DrawProbes(s); break;
                     case TabSubtitles: DrawSubtitles(s); break;
+                    case TabMods: DrawMods(s); break;
                     case TabAdvanced: DrawAdvanced(s); break;
                     default: DrawDebug(s); break;
                 }
@@ -506,26 +507,6 @@ namespace Lonapse
             Hint("Now and then: orbit, altitude, speed, fuel or the mission day, read out with the real values.");
             s.runtimeScience = Toggle(s.runtimeScience, "Science points and contract funds");
             Hint("After a science reaction or a finished contract, Mission Control says the numbers.");
-            if (PhraseClips.modTemplateCounts.Count > 0)
-            {
-                // other mods with lines for Lonapse (GameData/<Mod>/Lonapse): one toggle each
-                GUILayout.Label("Lines of other mods:");
-                bool changed = false;
-                foreach (var kv in PhraseClips.modTemplateCounts)
-                {
-                    bool on = !PhraseClips.mutedMods.Contains(kv.Key);
-                    bool non = Toggle(on, kv.Key + " (" + kv.Value + " lines)");
-                    if (non == on) continue;
-                    if (non) PhraseClips.mutedMods.Remove(kv.Key); else PhraseClips.mutedMods.Add(kv.Key);
-                    changed = true;
-                }
-                if (changed)
-                {
-                    PhraseClips.ApplyModMutes();
-                    s.mutedMods = PhraseClips.MutedModsValue();
-                }
-                Hint("Off: Lonapse never plays the lines that mod ships, and ignores its events.");
-            }
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -949,6 +930,59 @@ namespace Lonapse
             catch (Exception) { return null; }
         }
 
+        /// <summary>Mods tab: the other mods that ship lines for Lonapse (GameData/&lt;Mod&gt;/Lonapse), a toggle per
+        /// mod, and the tools for modders: reload the lines, test an event, the last mod events.</summary>
+        private void DrawMods(Settings s)
+        {
+            ChatterDirector d = host.director;
+            Header("Mods with lines for Lonapse");
+            if (PhraseClips.modTemplateCounts.Count == 0)
+                Hint("No other mod ships lines for Lonapse. A mod puts them in GameData/<Mod>/Lonapse/*.tsv (docs/API.md).");
+            else
+            {
+                bool changed = false;
+                foreach (var kv in PhraseClips.modTemplateCounts)
+                {
+                    bool on = !PhraseClips.mutedMods.Contains(kv.Key);
+                    bool non = Toggle(on, kv.Key + " (" + kv.Value + " lines)");
+                    if (non == on) continue;
+                    if (non) PhraseClips.mutedMods.Remove(kv.Key); else PhraseClips.mutedMods.Add(kv.Key);
+                    changed = true;
+                }
+                if (changed)
+                {
+                    PhraseClips.ApplyModMutes();
+                    s.mutedMods = PhraseClips.MutedModsValue();
+                }
+                Hint("Off: Lonapse never plays the lines that mod ships, and ignores its events.");
+            }
+
+            Header("For modders");
+            if (GUILayout.Button("Reload lines (Lonapse and mods)"))
+            {
+                try { modTestStatus = PhraseClips.ReloadRuntimeTemplates(); }
+                catch (Exception e) { modTestStatus = "reload error: " + e.Message; Log.Exception("ReloadRuntimeTemplates", e); }
+                // the event list follows at the next Layout pass (changing it now breaks the IMGUI layout)
+            }
+            Hint("Reads every line file again, so an edited file works without a restart. Bad rows go to KSP.log.");
+            if (modEventIds == null || Event.current.type == EventType.Layout)
+                modEventIds = ModEvents.Ids(PhraseClips.runtimeTemplates).ToArray();
+            if (modEventIds.Length > 0)
+            {
+                if (modTestEvent == null || Array.IndexOf(modEventIds, modTestEvent) < 0) modTestEvent = modEventIds[0];
+                modTestEvent = Cycle("Event", modTestEvent, modEventIds);
+            }
+            else GUILayout.Label("No mod events loaded.");
+            if (GUILayout.Button("Test mod event") && d != null && modEventIds.Length > 0)
+            {
+                try { modTestStatus = d.TestModEvent(modTestEvent); }
+                catch (Exception e) { modTestStatus = "error: " + e.Message; Log.Exception("TestModEvent", e); }
+            }
+            GUILayout.Label(string.IsNullOrEmpty(modTestStatus) ? " " : modTestStatus);
+            Header("Last mod events");
+            GUILayout.Label(d != null && d.modLog.Count > 0 ? string.Join("\n", d.modLog.ToArray()) : "No mod events yet.");
+        }
+
         private void DrawDebug(Settings s)
         {
             Tuning tu = s.tuning;
@@ -1005,33 +1039,6 @@ namespace Lonapse
             tu.faceWeight = Mathf.Round(Slider("Face expression weight", tu.faceWeight, 0f, 1f, "0.00") * 20f) / 20f;
             bool flip = Toggle(tu.faceExpressionSign < 0f, "Flip expression sign (grin vs fear)");
             tu.faceExpressionSign = flip ? -1f : 1f;
-
-            // --- events of other mods (LonapseApi) ---
-            Header("Mod events");
-            if (modEventIds == null || Event.current.type == EventType.Layout)
-                modEventIds = ModEvents.Ids(PhraseClips.runtimeTemplates).ToArray();
-            var per = new System.Text.StringBuilder();
-            foreach (var kv in PhraseClips.modTemplateCounts) per.Append(per.Length > 0 ? ", " : "").Append(kv.Key).Append(" (").Append(kv.Value).Append(')');
-            GUILayout.Label(per.Length > 0 ? "Lines from: " + per : "No mod lines loaded (GameData/<Mod>/Lonapse/*.tsv).");
-            if (GUILayout.Button("Reload lines (Lonapse and mods)"))
-            {
-                try { modTestStatus = PhraseClips.ReloadRuntimeTemplates(); }
-                catch (Exception e) { modTestStatus = "reload error: " + e.Message; Log.Exception("ReloadRuntimeTemplates", e); }
-                // the event list follows at the next Layout pass (changing it now breaks the IMGUI layout)
-            }
-            if (modEventIds.Length > 0)
-            {
-                if (modTestEvent == null || Array.IndexOf(modEventIds, modTestEvent) < 0) modTestEvent = modEventIds[0];
-                modTestEvent = Cycle("Event", modTestEvent, modEventIds);
-            }
-            else GUILayout.Label(" ");
-            if (GUILayout.Button("Test mod event") && d != null && modEventIds.Length > 0)
-            {
-                try { modTestStatus = d.TestModEvent(modTestEvent); }
-                catch (Exception e) { modTestStatus = "error: " + e.Message; Log.Exception("TestModEvent", e); }
-            }
-            GUILayout.Label(string.IsNullOrEmpty(modTestStatus) ? " " : modTestStatus);
-            GUILayout.Label(d != null && d.modLog.Count > 0 ? string.Join("\n", d.modLog.ToArray()) : "No mod events yet.");
 
             // --- phrase test ---
             Header("Phrase test");

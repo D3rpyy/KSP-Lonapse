@@ -118,7 +118,7 @@ namespace Lonapse
             Log.Info("Lonapse: " + status);
         }
 
-        /// <summary>Reads Phrases/Runtime and the mod line files again (the Debug tab, after editing a file). A
+        /// <summary>Reads Phrases/Runtime and the mod line files again (the Mods tab, after editing a file). A
         /// short result for the overlay, the bad rows go to KSP.log as at the start.</summary>
         public static string ReloadRuntimeTemplates()
         {
@@ -226,7 +226,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Templates per mod folder (other mods' Lonapse/*.tsv), for the log and the Debug tab.</summary>
+        /// <summary>Templates per mod folder (other mods' Lonapse/*.tsv), for the log and the Mods tab.</summary>
         public static readonly SortedDictionary<string, int> modTemplateCounts = new SortedDictionary<string, int>(StringComparer.Ordinal);
 
         /// <summary>The mod folder of a template from another mod ("ExampleMod/Lonapse/lines.tsv:3" gives

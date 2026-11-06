@@ -9,7 +9,7 @@ namespace Lonapse
     public partial class ChatterDirector
     {
         readonly ModEventQueue modQueue = new ModEventQueue();
-        /// <summary>The last mod events and what became of them, newest first (Debug tab).</summary>
+        /// <summary>The last mod events and what became of them, newest first (Mods tab).</summary>
         public readonly List<string> modLog = new List<string>();
         /// <summary>QueueRuntimeOnly shows the line as a subtitle instead of speaking it.</summary>
         bool runtimeTextOnly;
@@ -188,7 +188,7 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>Debug tab: plays a mod event now with the active kerbal and test values for its x_ slots, past the
+        /// <summary>Mods tab: plays a mod event now with the active kerbal and test values for its x_ slots, past the
         /// cooldown. The result for the overlay.</summary>
         public string TestModEvent(string id)
         {

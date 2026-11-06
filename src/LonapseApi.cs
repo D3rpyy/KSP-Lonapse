@@ -68,7 +68,12 @@ namespace Lonapse
         /// tables load with the first flight scene, so before that it is false.</summary>
         public static bool HasLines(string eventId)
         {
-            try { return ModEvents.Info(PhraseClips.runtimeTemplates, eventId).HasLines; }
+            try
+            {
+                // a registered topic (experiment, device, contract) is not an event for Trigger
+                return !ModEvents.IsRegisteredTopic(PhraseClips.runtimeTemplates, eventId)
+                       && ModEvents.Info(PhraseClips.runtimeTemplates, eventId).HasLines;
+            }
             catch (Exception) { return false; }
         }
     }

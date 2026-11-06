@@ -52,3 +52,4 @@ rt_sci_examplemod_drill	science	on=examplemod.drill	Llegan datos: {device} funci
 rt_examplemod_salvage_con	contract	on=examplemod.salvage id=ExampleSalvageContract	el rescate de chatarra	the salvage job
 rt_con_examplemod_salvage	contract_funds	on=examplemod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
 rt_con_examplemod_salvage_fail	contract_failed	on=examplemod.salvage	Hemos perdido {contract}. Otra vez será.	We lost {contract}. Maybe next time.
+rt_con_examplemod_salvage_done	contract_done	on=examplemod.salvage	Listo: {contract}. Buen trabajo.	Done: {contract}. Good work.

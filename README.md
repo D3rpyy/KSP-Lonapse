@@ -161,7 +161,7 @@ Lonapse picks who talks and fits it into the radio. Neither mod needs the other.
 [docs/API.md](docs/API.md), with a wrapper to copy and an example file in [docs/api](docs/api).
 
 A mod can also name its own experiments, Breaking Ground parts and contract types, so the lines use their real
-names. Players who do not like the lines of one mod can turn them off under "Runtime voice" in the General tab.
+names. Players who do not like the lines of one mod can turn them off in the Mods tab.
 
 ## Compatibility
 
