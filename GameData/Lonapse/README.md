@@ -7,7 +7,7 @@
 [![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE-CC-BY-4.0)
-[![Runtime voice: own licenses](https://img.shields.io/badge/runtime%20voice-own%20licenses-lightgrey)](runtime/licenses/README.md)
+[![Runtime voice: GPL-3.0 and others](https://img.shields.io/badge/runtime%20voice-GPL--3.0%20%2B%20MIT%20%2B%20others-lightgrey)](runtime/licenses/README.md)
 [![CKAN](https://img.shields.io/badge/CKAN-Indexed-green.svg)](https://github.com/KSP-CKAN/CKAN)
 [![SpaceDock](https://img.shields.io/badge/SpaceDock-Available-blue.svg)](https://spacedock.info/mod/4786/Lonapse#stats)
 
