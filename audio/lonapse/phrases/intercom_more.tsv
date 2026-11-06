@@ -1,267 +1,267 @@
 # Lonapse 0.6.0 lines (im_). Written as drafts, converted to this table.
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
-im_001_1	chatter	chatter	calm	crew	im_001	1	both	orbit	any	any	any	any	¿Quién se ha comido mi bocadillo?	Who ate my sandwich? | Where did my sandwich go? | {other}, who ate my sandwich?
-im_001_2	chatter	chatter	calm	crew	im_001	2	both	orbit	any	any	any	any	La gravedad.	Gravity did. | Gravity ate it. | Blame gravity.
-im_001_3	chatter	chatter	calm	crew	im_001	3	both	orbit	any	any	any	any	Aquí no hay gravedad.	There's no gravity here. | We don't have gravity here. | There is no gravity up here.
-im_001_4	chatter	chatter	calm	crew	im_001	4	both	orbit	any	any	any	any	Exacto.	Exactly. | Exactly. | My point exactly.
-im_002_1	chatter	chatter	calm	crew	im_002	1	both	goofy	any	any	any	any	¿Tú sabes para qué sirve este botón?	Do you know what this button does? | What does this button do? | {other}, any idea what this button does?
-im_002_2	chatter	chatter	calm	crew	im_002	2	both	goofy	any	any	any	any	No. ¿Y tú?	No. Do you? | No idea. You? | Not a clue. Do you?
-im_002_3	chatter	chatter	calm	crew	im_002	3	both	goofy	any	any	any	any	Tampoco. Dejémoslo así.	Me neither. Let's leave it. | Me neither. Leave it. | Same. Let's not touch it.
-im_003_1	chatter	chatter	calm	crew	im_003	1	both	coast	any	any	any	any	Me has dado una patada.	You kicked me. | Ow. You kicked me. | {other}, you just kicked me.
-im_003_2	chatter	chatter	calm	crew	im_003	2	both	coast	any	any	any	any	Ha sido sin querer. Estaba nadando.	It was an accident. I was swimming. | Sorry. I was swimming. | Accident. I was doing the breaststroke.
-im_003_3	chatter	chatter	calm	crew	im_003	3	both	coast	any	any	any	any	Aquí no hay agua.	There's no water here. | There's no water. | We don't have water to swim in.
-im_003_4	chatter	chatter	calm	crew	im_003	4	both	coast	any	any	any	any	Por eso nado tan mal.	That's why I swim so badly. | Which is why I'm so bad at it. | That's why my swimming is so bad.
-im_004_1	chatter	chatter	calm	crew	im_004	1	both	orbit	any	any	any	any	¿Juegas a las cartas?	Want to play cards? | Cards? | {other}, want to play cards?
-im_004_2	chatter	chatter	calm	crew	im_004	2	both	orbit	any	any	any	any	Las cartas se van flotando.	The cards float away. | The cards just float off. | They'll float away.
-im_004_3	chatter	chatter	calm	crew	im_004	3	both	orbit	any	any	any	any	Entonces gano yo.	Then I win. | So I win. | Then I'm the winner.
-im_004_4	chatter	chatter	calm	crew	im_004	4	both	orbit	any	any	any	any	¿Por qué?	Why? | How? | Why you?
-im_004_5	chatter	chatter	calm	crew	im_004	5	both	orbit	any	any	any	any	Porque lo digo yo.	Because I say so. | I say so. | Because I said so.
-im_005_1	chatter	chatter	calm	crew	im_005	1	both	goofy	any	any	any	any	¿Has oído eso?	Did you hear that? | What was that? | {other}, did you hear that noise?
-im_005_2	chatter	chatter	calm	crew	im_005	2	both	goofy	any	any	any	any	Mi estómago. Tiene opiniones.	My stomach. It has opinions. | My stomach. It has things to say. | That's my stomach. It's opinionated.
-im_005_3	chatter	chatter	calm	crew	im_005	3	both	goofy	any	any	any	any	Dile que baje la voz. La nave escucha.	Tell it to keep it down. The ship is listening. | Tell it to be quiet. The ship can hear. | Keep it down. The ship is listening.
-im_006_1	chatter	chatter	calm	crew	im_006	1	both	goofy	any	any	any	any	Te toca limpiar.	Your turn to clean. | You clean today. | {other}, your turn to clean.
-im_006_2	chatter	chatter	calm	crew	im_006	2	both	goofy	any	any	any	any	Limpié ayer.	I cleaned yesterday. | I did it yesterday. | I cleaned yesterday!
-im_006_3	chatter	chatter	calm	crew	im_006	3	both	goofy	any	any	any	any	Aquí arriba no hay ayer.	There's no yesterday up here. | Up here there is no yesterday. | Yesterday doesn't exist in orbit.
-im_006_4	chatter	chatter	calm	crew	im_006	4	both	goofy	any	any	any	any	Esa es la peor excusa que he oído.	That's the worst excuse I've ever heard. | Worst excuse ever. | That's the worst excuse I've heard.
-im_007_1	chatter	chatter	calm	crew	im_007	1	both	goofy	any	any	any	any	Estás en mi sitio.	You're in my spot. | That's my spot. | {other}, you're in my spot.
-im_007_2	chatter	chatter	calm	crew	im_007	2	both	goofy	any	any	any	any	Todos los sitios son iguales.	All the spots are the same. | Every spot is the same. | They're all the same spot.
-im_007_3	chatter	chatter	calm	crew	im_007	3	both	goofy	any	any	any	any	Pero este huele a mí.	But this one smells like me. | This one smells like me. | But this one has my smell.
-im_008_1	chatter	chatter	calm	crew	im_008	1	both	goofy	any	any	any	any	¿Cuál es tu planeta favorito?	What's your favorite planet? | Favorite planet? | {other}, which planet do you like best?
-im_008_2	chatter	chatter	calm	crew	im_008	2	both	goofy	any	any	any	any	El que tenga tienda de galletas.	The one with a cookie shop. | Whichever has a cookie shop. | The one with cookies for sale.
-im_008_3	chatter	chatter	calm	crew	im_008	3	both	goofy	any	any	any	any	Ninguno tiene.	None of them have one. | None have one. | There are no cookie shops out here.
-im_008_4	chatter	chatter	calm	crew	im_008	4	both	goofy	any	any	any	any	Entonces ninguno.	Then none of them. | Then none. | So, none of them.
-im_009_1	chatter	chatter	calm	crew	im_009	1	both	goofy	any	any	any	any	¿Tú roncas?	Do you snore? | Do you snore, {other}? | Be honest. Do you snore?
-im_009_2	chatter	chatter	calm	crew	im_009	2	both	goofy	any	any	any	any	Nunca.	Never. | Never. | Not ever.
-im_009_3	chatter	chatter	calm	crew	im_009	3	both	goofy	any	any	any	any	Pues alguien ha roncado toda la noche.	Well, someone snored all night. | Someone snored all night. | Then someone else snored all night.
-im_009_4	chatter	chatter	calm	crew	im_009	4	both	goofy	any	any	any	any	Sería la nave.	Must have been the ship. | The ship, probably. | Must have been the ship.
-im_010_1	chatter	chatter	calm	crew	im_010	1	both	goofy	any	any	any	any	Creo que me he dejado la llave de casa en el traje de entreno.	I think I left my house key in the training suit. | I left my house key in the training suit. | I think my key is in the training suit.
-im_010_2	chatter	chatter	calm	crew	im_010	2	both	goofy	any	any	any	any	¿Y cómo vas a entrar al volver?	So how will you get in when we're back? | How do you get home then? | So how will you get in at home?
-im_010_3	chatter	chatter	calm	crew	im_010	3	both	goofy	any	any	any	any	Por la ventana. Ya soy astronauta.	Through the window. I'm an astronaut now. | Window. I'm an astronaut now. | Through the window. Astronaut skills.
-im_011_1	chatter	chatter	calm	crew	im_011	1	both	goofy	any	any	any	any	Mira, una nube con forma de cohete.	Look, a cloud shaped like a rocket. | Look, a rocket-shaped cloud. | {other}, that cloud looks like a rocket.
-im_011_2	chatter	chatter	calm	crew	im_011	2	both	goofy	any	any	any	any	Estamos encima de las nubes. Todas parecen nubes.	We're above the clouds. They all look like clouds. | We're above the clouds. They all look like clouds. | From up here, every cloud looks like a cloud.
-im_012_1	chatter	chatter	calm	crew	im_012	1	both	coast	any	any	any	any	¿Me pasas la sal?	Pass me the salt? | Salt, please? | {other}, pass the salt?
-im_012_2	chatter	chatter	calm	crew	im_012	2	both	coast	any	any	any	any	Toma.	Here. | There. | Here you go.
-im_012_3	chatter	chatter	calm	crew	im_012	3	both	coast	any	any	any	any	Esa es la pimienta.	That's the pepper. | This is pepper. | That's pepper.
-im_012_4	chatter	chatter	calm	crew	im_012	4	both	coast	any	any	any	any	Ya está flotando. Cógela tú.	It's already floating. Catch it yourself. | It's floating already. Get it yourself. | Too late, it's floating. Catch it.
-im_013_1	chatter	chatter	calm	crew	im_013	1	both	goofy	any	any	any	any	¿Cuánto falta?	How much longer? | How long now? | {other}, how much longer?
-im_013_2	chatter	chatter	calm	crew	im_013	2	both	goofy	any	any	any	any	No preguntes eso cada cinco minutos.	Don't ask that every five minutes. | Stop asking every five minutes. | Not every five minutes, please.
-im_013_3	chatter	chatter	calm	crew	im_013	3	both	goofy	any	any	any	any	Vale. ¿Cuánto falta?	Okay. How much longer? | Fine. How much longer? | Okay. And now?
-im_014_1	chatter	chatter	calm	crew	im_014	1	both	goofy	any	any	any	any	He tenido una idea brillante.	I had a brilliant idea. | I've got a brilliant idea. | {other}, I had a great idea.
-im_014_2	chatter	chatter	calm	crew	im_014	2	both	goofy	any	any	any	any	Oh, no.	Oh, no. | Oh no. | Uh oh.
-im_014_3	chatter	chatter	calm	crew	im_014	3	both	goofy	any	any	any	any	¿Y si pintamos la nave de rosa?	What if we paint the ship pink? | Let's paint the ship pink. | Pink. The whole ship. What do you think?
-im_014_4	chatter	chatter	calm	crew	im_014	4	both	goofy	any	any	any	any	No tenemos pintura.	We have no paint. | There's no paint. | We don't have paint.
-im_014_5	chatter	chatter	calm	crew	im_014	5	both	goofy	any	any	any	any	Tengo un rotulador.	I have a marker. | I've got a marker. | I have a marker, though.
-im_015_1	chatter	chatter	calm	crew	im_015	1	both	goofy	any	any	any	any	¿Tú también sueñas que te caes?	Do you also dream that you're falling? | Do you dream about falling too? | {other}, ever dream you're falling?
-im_015_2	chatter	chatter	calm	crew	im_015	2	both	goofy	any	any	any	any	Aquí arriba estamos cayendo siempre.	Up here we're always falling. | We're always falling up here. | Up here we never stop falling.
-im_015_3	chatter	chatter	calm	crew	im_015	3	both	goofy	any	any	any	any	Ya. Por eso no duermo.	Right. That's why I can't sleep. | Oh. That's why I can't sleep. | Right. That explains my sleep.
-im_016_1	chatter	chatter	calm	crew	im_016	1	both	goofy	any	any	any	any	Has vuelto a dejar la tapa abierta.	You left the lid open again. | The lid is open again. | {other}, you left the lid open again.
-im_016_2	chatter	chatter	calm	crew	im_016	2	both	goofy	any	any	any	any	¿Qué tapa?	What lid? | Which lid? | What lid?
-im_016_3	chatter	chatter	calm	crew	im_016	3	both	goofy	any	any	any	any	La de la pasta de dientes. Está en mi pelo.	The toothpaste one. It's in my hair. | Toothpaste. It's in my hair. | The toothpaste lid. Now it's in my hair.
-im_017_1	chatter	chatter	calm	crew	im_017	1	both	goofy	any	any	any	any	Te apuesto un postre a que llego al otro lado sin tocar nada.	I bet you a dessert I can reach the other side without touching anything. | Bet a dessert I can cross without touching anything. | Dessert says I can float across and touch nothing.
-im_017_2	chatter	chatter	calm	crew	im_017	2	both	goofy	any	any	any	any	Trato hecho.	Deal. | You're on. | Deal.
-im_017_3	chatter	chatter	calm	crew	im_017	3	both	goofy	any	any	any	any	¡Uy!	Oops! | Whoops! | Oh no!
-im_017_4	chatter	chatter	calm	crew	im_017	4	both	goofy	any	any	any	any	Me debes un postre.	You owe me a dessert. | One dessert, please. | You owe me dessert.
-im_018_1	chatter	chatter	calm	crew	im_018	1	both	goofy	any	any	any	any	¿Quién apagó la luz?	Who turned off the light? | Who switched the light off? | {other}, who turned off the light?
-im_018_2	chatter	chatter	calm	crew	im_018	2	both	goofy	any	any	any	any	Fui yo. Con el codo.	Me. With my elbow. | Me. My elbow did it. | My elbow. Sorry.
-im_018_3	chatter	chatter	calm	crew	im_018	3	both	goofy	any	any	any	any	¿Y dónde está el interruptor?	And where's the switch? | Where's the switch? | So where is the switch?
-im_018_4	chatter	chatter	calm	crew	im_018	4	both	goofy	any	any	any	any	Esa es otra pregunta.	That's another question. | Good question. | Different question.
-im_019_1	chatter	chatter	calm	crew	im_019	1	both	goofy	any	any	any	any	¿Por qué hablas tan bajito?	Why are you whispering? | Why are you whispering? | {other}, why the whispering?
-im_019_2	chatter	chatter	calm	crew	im_019	2	both	goofy	any	any	any	any	Para no despertar al cohete.	So I don't wake the rocket. | I don't want to wake the rocket. | Shh. The rocket is asleep.
-im_019_3	chatter	chatter	calm	crew	im_019	3	both	goofy	any	any	any	any	Los cohetes no duermen.	Rockets don't sleep. | Rockets don't sleep. | A rocket can't sleep.
-im_019_4	chatter	chatter	calm	crew	im_019	4	both	goofy	any	any	any	any	Este sí. Lo oigo respirar.	This one does. I can hear it breathing. | This one does. Listen to it breathe. | This one can. Hear that breathing?
-im_020_1	chatter	chatter	calm	crew	im_020	1	both	goofy	any	any	any	any	¿Sabes silbar?	Can you whistle? | Can you whistle? | {other}, can you whistle?
-im_020_2	chatter	chatter	calm	crew	im_020	2	both	goofy	any	any	any	any	Claro.	Of course. | Sure. | Of course I can.
-im_020_3	chatter	chatter	calm	crew	im_020	3	both	goofy	any	any	any	any	A ver.	Let's hear it. | Go on then. | Show me.
-im_020_4	chatter	chatter	calm	crew	im_020	4	both	goofy	any	any	any	any	Aquí no se puede. Es el aire.	It doesn't work up here. It's the air. | Not up here. The air is wrong. | It doesn't work. Space air.
-im_021_1	chatter	chatter	calm	crew	im_021	1	both	goofy	any	any	any	any	¿Has visto el manual?	Have you seen the manual? | Where's the manual? | {other}, have you seen the manual?
-im_021_2	chatter	chatter	calm	crew	im_021	2	both	goofy	any	any	any	any	Lo usé de almohada.	I used it as a pillow. | I slept on it. | It was my pillow.
-im_021_3	chatter	chatter	calm	crew	im_021	3	both	goofy	any	any	any	any	¿Y ahora dónde está?	And where is it now? | And now? | And where is it now?
-im_021_4	chatter	chatter	calm	crew	im_021	4	both	goofy	any	any	any	any	Durmiendo en algún sitio.	Sleeping somewhere. | Asleep somewhere. | Napping somewhere.
-im_022_1	chatter	chatter	calm	crew	im_022	1	both	goofy	any	any	any	any	Me aburro.	I'm bored. | Bored. | I'm so bored, {other}.
-im_022_2	chatter	chatter	calm	crew	im_022	2	both	goofy	any	any	any	any	Cuenta estrellas.	Count stars. | Count the stars. | Go count stars.
-im_022_3	chatter	chatter	calm	crew	im_022	3	both	goofy	any	any	any	any	Ya lo hice.	Already did. | Did that. | Already done.
-im_022_4	chatter	chatter	calm	crew	im_022	4	both	goofy	any	any	any	any	¿Cuántas?	How many? | And? | How many?
-im_022_5	chatter	chatter	calm	crew	im_022	5	both	goofy	any	any	any	any	Siete. Luego me aburrí.	Seven. Then I got bored. | Seven. Then I got bored. | Seven. Then I was bored again.
-im_023_1	chatter	chatter	calm	crew	im_023	1	both	orbit	any	any	any	any	Creo que he crecido un poco.	I think I grew a bit. | I think I'm taller. | {other}, I think I grew.
-im_023_2	chatter	chatter	calm	crew	im_023	2	both	orbit	any	any	any	any	Es la falta de gravedad.	That's the zero gravity. | Zero gravity does that. | That's the weightlessness.
-im_023_3	chatter	chatter	calm	crew	im_023	3	both	orbit	any	any	any	any	Qué pena. Pensé que era el brócoli.	Shame. I thought it was the broccoli. | Too bad. I hoped it was the broccoli. | Shame. I thought the broccoli worked.
-im_024_1	chatter	chatter	calm	crew	im_024	1	both	goofy	any	any	any	any	¿Crees que hay alguien más ahí fuera?	Do you think anyone else is out there? | Is anyone else out there? | {other}, do you think we're alone out here?
-im_024_2	chatter	chatter	calm	crew	im_024	2	both	goofy	any	any	any	any	Espero que sí. Y que tengan cafetería.	I hope so. And that they have a cafeteria. | I hope so. With a cafeteria. | Hopefully. And they have a cafeteria.
-im_025_1	chatter	chatter	calm	crew	im_025	1	both	goofy	any	any	any	any	Si nos perdemos, ¿a quién llamamos?	If we get lost, who do we call? | Who do we call if we get lost? | {other}, if we're lost, who do we call?
-im_025_2	chatter	chatter	calm	crew	im_025	2	both	goofy	any	any	any	any	A Control.	Control. | Control. | We call Control.
-im_025_3	chatter	chatter	calm	crew	im_025	3	both	goofy	any	any	any	any	¿Y si Control también se pierde?	And if Control gets lost too? | What if Control is lost too? | And if Control gets lost?
-im_025_4	chatter	chatter	calm	crew	im_025	4	both	goofy	any	any	any	any	Entonces nos buscamos todos.	Then we all look for each other. | Then we all search for each other. | Then everybody looks for everybody.
-im_026_1	chatter	chatter	calm	crew	im_026	1	both	goofy	any	any	any	any	No mires, pero creo que te sigue un guante.	Don't look, but I think a glove is following you. | Don't look, but a glove is following you. | {other}, a glove is chasing you.
-im_026_2	chatter	chatter	calm	crew	im_026	2	both	goofy	any	any	any	any	¿Otra vez? Es el mío. Me quiere mucho.	Again? It's mine. It loves me. | Again? It's mine. It loves me. | That's my glove. It's attached to me.
-im_027_1	chatter	chatter	calm	crew	im_027	1	both	coast	any	any	any	any	¿Cuál es el plan para hoy?	What's the plan for today? | Plan for today? | {other}, what's today's plan?
-im_027_2	chatter	chatter	calm	crew	im_027	2	both	coast	any	any	any	any	Flotar. Comer. Flotar otra vez.	Float. Eat. Float again. | Float. Eat. Float. | Float, eat, then float more.
-im_027_3	chatter	chatter	calm	crew	im_027	3	both	coast	any	any	any	any	Me gusta este plan.	I like this plan. | Good plan. | I love this plan.
-im_028_1	chatter	chatter	calm	crew	im_028	1	both	goofy	any	any	any	any	Aquí huele fatal.	It stinks in here. | Something stinks. | It stinks in here, {other}.
-im_028_2	chatter	chatter	calm	crew	im_028	2	both	goofy	any	any	any	any	Ese eres tú.	That's you. | It's you. | That's you.
-im_028_3	chatter	chatter	calm	crew	im_028	3	both	goofy	any	any	any	any	No puede ser. Me lavé la semana pasada.	Can't be. I washed last week. | No way. I washed last week. | Impossible. I washed last week.
-im_029_1	chatter	chatter	calm	crew	im_029	1	both	goofy	any	any	any	any	¿Te acuerdas del entrenamiento?	Remember training? | Remember training? | {other}, remember training?
-im_029_2	chatter	chatter	calm	crew	im_029	2	both	goofy	any	any	any	any	Aquella vez que vomitaste en la centrifugadora.	That time you threw up in the centrifuge. | When you threw up in the centrifuge. | The centrifuge. You threw up.
-im_029_3	chatter	chatter	calm	crew	im_029	3	both	goofy	any	any	any	any	No hablábamos de eso.	We weren't talking about that. | Not that part. | We weren't talking about that.
-im_029_4	chatter	chatter	calm	crew	im_029	4	both	goofy	any	any	any	any	Yo sí.	I was. | I was. | Well, I was.
-im_030_1	chatter	chatter	calm	crew	im_030	1	both	goofy	any	any	any	any	He hecho una lista de cosas que quiero hacer al volver.	I made a list of things I want to do when we're back. | I wrote a list for when we're back. | {other}, I made a list for when we're home.
-im_030_2	chatter	chatter	calm	crew	im_030	2	both	goofy	any	any	any	any	¿Qué pone?	What does it say? | And? | What's on it?
-im_030_3	chatter	chatter	calm	crew	im_030	3	both	goofy	any	any	any	any	Ducha. Ducha. Ducha. Galletas.	Shower. Shower. Shower. Cookies. | Shower. Shower. Shower. Cookies. | Shower, shower, shower, then cookies.
-im_031_1	chatter	chatter	calm	crew	im_031	1	both	goofy	any	any	any	any	¿Quieres oír un chiste?	Want to hear a joke? | Want a joke? | {other}, want to hear a joke?
-im_031_2	chatter	chatter	calm	crew	im_031	2	both	goofy	any	any	any	any	No.	No. | No. | Nope.
-im_031_3	chatter	chatter	calm	crew	im_031	3	both	goofy	any	any	any	any	¿Por qué los cohetes van al colegio?	Why do rockets go to school? | Why do rockets go to school? | Why did the rocket go to school?
-im_031_4	chatter	chatter	calm	crew	im_031	4	both	goofy	any	any	any	any	Te he dicho que no.	I said no. | I said no. | Still no.
-im_031_5	chatter	chatter	calm	crew	im_031	5	both	goofy	any	any	any	any	Para despegar sus mentes.	To lift their minds. | To lift their minds. | To get their minds lifted.
-im_031_6	chatter	chatter	calm	crew	im_031	6	both	goofy	any	any	any	any	Ay.	Ugh. | Ugh. | Terrible.
-im_032_1	chatter	chatter	calm	crew	im_032	1	both	goofy	any	any	any	any	¿Por qué tienes tres relojes?	Why do you have three watches? | Why three watches? | {other}, why do you wear three watches?
-im_032_2	chatter	chatter	calm	crew	im_032	2	both	goofy	any	any	any	any	Uno para aquí, uno para casa, y uno por si acaso.	One for here, one for home, and one just in case. | Here, home, and just in case. | One for here, one for home, one spare.
-im_032_3	chatter	chatter	calm	crew	im_032	3	both	goofy	any	any	any	any	¿Y qué hora es?	So what time is it? | What time is it, then? | So what's the time?
-im_032_4	chatter	chatter	calm	crew	im_032	4	both	goofy	any	any	any	any	No tengo ni idea.	No idea. | No clue. | No idea.
-im_033_1	chatter	chatter	calm	crew	im_033	1	both	goofy	any	any	any	any	¿Has tocado mi cepillo de dientes?	Did you touch my toothbrush? | Did you use my toothbrush? | {other}, did you touch my toothbrush?
-im_033_2	chatter	chatter	calm	crew	im_033	2	both	goofy	any	any	any	any	Solo para rascarme la espalda.	Only to scratch my back. | Just to scratch my back. | Only for my back. It itched.
-im_033_3	chatter	chatter	calm	crew	im_033	3	both	goofy	any	any	any	any	¿Qué?	What? | What? | Excuse me?
-im_033_4	chatter	chatter	calm	crew	im_033	4	both	goofy	any	any	any	any	Es broma. Creo.	Kidding. I think. | Kidding. Probably. | Joking. I think.
-im_034_1	chatter	chatter	calm	crew	im_034	1	both	orbit	any	any	any	any	¿Por qué me miras así?	Why are you looking at me like that? | Why are you staring at me? | {other}, why that look?
-im_034_2	chatter	chatter	calm	crew	im_034	2	both	orbit	any	any	any	any	Tienes una miga en la nariz.	You have a crumb on your nose. | Crumb on your nose. | You've got a crumb on your nose.
-im_034_3	chatter	chatter	calm	crew	im_034	3	both	orbit	any	any	any	any	¿Dónde?	Where? | Where? | Where is it?
-im_034_4	chatter	chatter	calm	crew	im_034	4	both	orbit	any	any	any	any	Ya no. Se ha ido flotando.	Not anymore. It floated off. | Gone. It floated away. | It's gone. Floated off.
-im_035_1	chatter	chatter	calm	crew	im_035	1	both	goofy	any	any	any	any	Si fueras un planeta, ¿cuál serías?	If you were a planet, which one would you be? | If you were a planet, which one? | {other}, what planet would you be?
-im_035_2	chatter	chatter	calm	crew	im_035	2	both	goofy	any	any	any	any	Uno pequeño y simpático.	A small, friendly one. | Small and friendly. | A tiny friendly one.
-im_035_3	chatter	chatter	calm	crew	im_035	3	both	goofy	any	any	any	any	Yo uno con anillos. Para ir elegante.	I'd be one with rings. To look fancy. | One with rings. Very fancy. | Me? Rings. For style.
-im_036_1	chatter	chatter	calm	crew	im_036	1	both	goofy	any	any	any	any	Te cambio mi postre por tu turno de guardia.	I'll trade my dessert for your watch shift. | My dessert for your watch shift? | {other}, swap my dessert for your shift?
-im_036_2	chatter	chatter	calm	crew	im_036	2	both	goofy	any	any	any	any	¿Qué postre?	What dessert? | Which dessert? | What dessert?
-im_036_3	chatter	chatter	calm	crew	im_036	3	both	goofy	any	any	any	any	El que ya me he comido.	The one I already ate. | The one I ate already. | The one I already finished.
-im_036_4	chatter	chatter	calm	crew	im_036	4	both	goofy	any	any	any	any	No.	No. | No. | No deal.
-im_037_1	chatter	chatter	calm	crew	im_037	1	both	goofy	any	any	any	any	Creo que la nave me está hablando.	I think the ship is talking to me. | The ship is talking to me. | {other}, I think the ship talks to me.
-im_037_2	chatter	chatter	calm	crew	im_037	2	both	goofy	any	any	any	any	¿Qué dice?	What's it saying? | What does it say? | And what's it saying?
-im_037_3	chatter	chatter	calm	crew	im_037	3	both	goofy	any	any	any	any	Bip. Bip. Clic.	Beep. Beep. Click. | Beep. Beep. Click. | Beep, beep, click.
-im_037_4	chatter	chatter	calm	crew	im_037	4	both	goofy	any	any	any	any	Eso es la cafetera.	That's the coffee machine. | That's the coffee machine. | That's just the coffee machine.
-im_038_1	chatter	chatter	calm	crew	im_038	1	both	goofy	any	any	any	any	¿Has escrito a tu familia?	Have you written to your family? | Did you write home? | {other}, did you write to your family?
-im_038_2	chatter	chatter	calm	crew	im_038	2	both	goofy	any	any	any	any	Sí. Les he dicho que aquí hace frío.	Yes. I told them it's cold here. | Yes. I told them it's cold here. | I said it's freezing up here.
-im_038_3	chatter	chatter	calm	crew	im_038	3	both	goofy	any	any	any	any	No hace frío.	It's not cold. | It isn't cold. | It's not cold at all.
-im_038_4	chatter	chatter	calm	crew	im_038	4	both	goofy	any	any	any	any	Quería que se preocuparan un poco.	I wanted them to worry a little. | I want them to worry a bit. | They should worry a little.
-im_039_1	chatter	chatter	calm	crew	im_039	1	both	goofy	any	any	any	any	¿Cuántos días llevamos aquí?	How many days have we been here? | How long have we been here? | {other}, how many days now?
-im_039_2	chatter	chatter	calm	crew	im_039	2	both	goofy	any	any	any	any	Muchos.	Lots. | Many. | Lots of them.
-im_039_3	chatter	chatter	calm	crew	im_039	3	both	goofy	any	any	any	any	¿Cuántos son muchos?	How many is lots? | How many is many? | Define lots.
-im_039_4	chatter	chatter	calm	crew	im_039	4	both	goofy	any	any	any	any	Más que pocos.	More than a few. | More than a few. | More than some.
-im_040_1	chatter	chatter	calm	crew	im_040	1	both	goofy	any	any	any	any	¿Tú crees que Control nos escucha ahora?	Do you think Control is listening now? | Is Control listening right now? | {other}, can Control hear us?
-im_040_2	chatter	chatter	calm	crew	im_040	2	both	goofy	any	any	any	any	No. Esto es el intercomunicador.	No. This is the intercom. | No. It's the intercom. | Nope. Intercom only.
-im_040_3	chatter	chatter	calm	crew	im_040	3	both	goofy	any	any	any	any	Entonces puedo decirlo: el café de Control es horrible.	Then I can say it: Control's coffee is awful. | Then I'll say it: Control's coffee is terrible. | Finally. Control's coffee is awful.
-im_040_4	chatter	chatter	calm	crew	im_040	4	both	goofy	any	any	any	any	Totalmente.	Totally. | So true. | Completely.
-im_041_1	chatter	chatter	calm	crew	im_041	1	both	coast	any	any	any	any	Mira qué bien floto.	Look how well I float. | Watch me float. | Look how good I float, {other}.
-im_041_2	chatter	chatter	calm	crew	im_041	2	both	coast	any	any	any	any	Estás boca abajo.	You're upside down. | You're upside down. | You're the wrong way up.
-im_041_3	chatter	chatter	calm	crew	im_041	3	both	coast	any	any	any	any	Eso es lo bonito.	That's the beauty of it. | That's what makes it beautiful. | That's the art of it.
-im_042_1	chatter	chatter	calm	crew	im_042	1	both	goofy	any	any	any	any	¿Me ayudas con el traje?	Can you help me with the suit? | Help me with the suit? | {other}, can you help with my suit?
-im_042_2	chatter	chatter	calm	crew	im_042	2	both	goofy	any	any	any	any	Lo tienes al revés.	You've got it on backwards. | It's on backwards. | You're wearing it backwards.
-im_042_3	chatter	chatter	calm	crew	im_042	3	both	goofy	any	any	any	any	Lo sé. Es la moda.	I know. It's the fashion. | I know. Fashion. | It's the style now.
-im_043_1	chatter	chatter	calm	crew	im_043	1	both	goofy	any	any	any	any	Tengo una pregunta seria.	I have a serious question. | Serious question. | {other}, I need to ask something serious.
-im_043_2	chatter	chatter	calm	crew	im_043	2	both	goofy	any	any	any	any	Dime.	Go on. | Go ahead. | Okay. Ask.
-im_043_3	chatter	chatter	calm	crew	im_043	3	both	goofy	any	any	any	any	¿Las galletas cuentan como desayuno?	Do cookies count as breakfast? | Are cookies breakfast? | Do cookies count as breakfast?
-im_043_4	chatter	chatter	calm	crew	im_043	4	both	goofy	any	any	any	any	Aquí arriba, todo cuenta como desayuno.	Up here, everything counts as breakfast. | Up here, everything is breakfast. | Everything counts as breakfast in space.
-im_044_1	chatter	chatter	calm	crew	im_044	1	both	goofy	any	any	any	any	¿Te has dado cuenta de que aquí no se puede tropezar?	Did you notice you can't trip up here? | You can't trip up here, did you notice? | {other}, nobody can trip in space.
-im_044_2	chatter	chatter	calm	crew	im_044	2	both	goofy	any	any	any	any	Tú lo has hecho tres veces.	You've done it three times. | You did it three times. | You tripped three times already.
-im_044_3	chatter	chatter	calm	crew	im_044	3	both	goofy	any	any	any	any	Eso fue arte.	That was art. | That was art. | That was dance.
-im_045_1	chatter	chatter	calm	crew	im_045	1	both	goofy	any	any	any	any	Echo de menos la lluvia.	I miss the rain. | I miss rain. | {other}, I miss the rain.
-im_045_2	chatter	chatter	calm	crew	im_045	2	both	goofy	any	any	any	any	Yo echo de menos las sillas.	I miss chairs. | I miss chairs. | Chairs. I miss chairs.
-im_045_3	chatter	chatter	calm	crew	im_045	3	both	goofy	any	any	any	any	Yo echo de menos el suelo.	I miss the floor. | I miss floors. | I miss having a floor.
-im_045_4	chatter	chatter	calm	crew	im_045	4	both	goofy	any	any	any	any	Yo no echo de menos nada. Aquí estoy genial.	I don't miss anything. I'm great here. | I miss nothing. I love it here. | Not me. I'm happy here.
-im_046_1	chatter	chatter	calm	crew	im_046	1	both	goofy	any	any	any	any	¿Has visto mi lápiz?	Have you seen my pencil? | Where's my pencil? | {other}, have you seen my pencil?
-im_046_2	chatter	chatter	calm	crew	im_046	2	both	goofy	any	any	any	any	¿Otra vez el lápiz?	The pencil again? | Not the pencil again. | Again with the pencil?
-im_046_3	chatter	chatter	calm	crew	im_046	3	both	goofy	any	any	any	any	Es otro lápiz.	It's a different pencil. | This is another pencil. | A different pencil this time.
-im_046_4	chatter	chatter	calm	crew	im_046	4	both	goofy	any	any	any	any	Ese lápiz tiene que ser un espía.	That pencil must be a spy. | That pencil is a spy. | Those pencils are spies.
-im_047_1	chatter	chatter	calm	crew	im_047	1	both	goofy	any	any	any	any	¿Qué haces?	What are you doing? | What are you up to? | {other}, what are you doing?
-im_047_2	chatter	chatter	calm	crew	im_047	2	both	goofy	any	any	any	any	Hablo con la ventana.	Talking to the window. | I'm talking to the window. | Chatting with the window.
-im_047_3	chatter	chatter	calm	crew	im_047	3	both	goofy	any	any	any	any	¿Y te contesta?	Does it answer? | Does it talk back? | Any answer?
-im_047_4	chatter	chatter	calm	crew	im_047	4	both	goofy	any	any	any	any	Me pone cara de sol.	It makes a sun face at me. | It makes sun faces at me. | It gives me a sunny face.
-im_048_1	chatter	chatter	calm	crew	im_048	1	both	goofy	any	any	any	any	Me pica la nariz y estoy atado al asiento.	My nose itches and I'm strapped in. | My nose itches. I'm strapped in. | I'm buckled in and my nose itches.
-im_048_2	chatter	chatter	calm	crew	im_048	2	both	goofy	any	any	any	any	Mala suerte.	Bad luck. | Too bad. | Unlucky.
-im_048_3	chatter	chatter	calm	crew	im_048	3	both	goofy	any	any	any	any	Desde aquí no llego.	I can't reach from here. | I can't reach it. | Can't reach it from here.
-im_048_4	chatter	chatter	calm	crew	im_048	4	both	goofy	any	any	any	any	Desde fuera no puedo.	I can't from outside. | I can't from out here either. | Neither can I.
-im_049_1	chatter	chatter	calm	crew	im_049	1	both	goofy	any	any	any	any	¿Tú crees que las estrellas nos ven?	Do you think the stars can see us? | Can the stars see us? | {other}, do you think the stars watch us?
-im_049_2	chatter	chatter	calm	crew	im_049	2	both	goofy	any	any	any	any	Si nos ven, que no se rían.	If they can, I hope they don't laugh. | If so, I hope they're not laughing. | Hopefully they don't laugh at us.
-im_050_1	chatter	chatter	calm	crew	im_050	1	both	orbit	any	any	any	any	¿Has dormido bien?	Did you sleep well? | Sleep okay? | {other}, how did you sleep?
-im_050_2	chatter	chatter	calm	crew	im_050	2	both	orbit	any	any	any	any	Me he despertado pegado al techo.	I woke up stuck to the ceiling. | I woke up on the ceiling. | Woke up stuck to the ceiling.
-im_050_3	chatter	chatter	calm	crew	im_050	3	both	orbit	any	any	any	any	¿Y?	And? | And? | So?
-im_050_4	chatter	chatter	calm	crew	im_050	4	both	orbit	any	any	any	any	Ha sido la mejor noche de mi vida.	Best night of my life. | Best sleep ever. | Best night of my life.
-im_051_1	chatter	chatter	calm	crew	im_051	1	both	goofy	any	any	any	any	Te reto a no hablar en diez minutos.	I dare you not to talk for ten minutes. | Bet you can't stay quiet ten minutes. | {other}, I dare you: ten minutes of silence.
-im_051_2	chatter	chatter	calm	crew	im_051	2	both	goofy	any	any	any	any	Acepto.	Accepted. | Challenge accepted. | You're on.
-im_051_3	chatter	chatter	calm	crew	im_051	3	both	goofy	any	any	any	any	¿Ya?	Done yet? | Are we done? | Is it over yet?
-im_051_4	chatter	chatter	calm	crew	im_051	4	both	goofy	any	any	any	any	Has perdido tú.	You lost. | You lose. | And you lost.
-im_052_1	chatter	chatter	calm	crew	im_052	1	both	goofy	any	any	any	any	Creo que he visto un pájaro.	I think I saw a bird. | I saw a bird! | {other}, I think I saw a bird.
-im_052_2	chatter	chatter	calm	crew	im_052	2	both	goofy	any	any	any	any	No hay pájaros en el espacio.	There are no birds in space. | Space has no birds. | No birds up here.
-im_052_3	chatter	chatter	calm	crew	im_052	3	both	goofy	any	any	any	any	Entonces era un pájaro muy valiente.	Then it was a very brave bird. | A very brave bird, then. | Then that bird was very brave.
-im_053_1	chatter	chatter	calm	crew	im_053	1	both	goofy	any	any	any	any	Si encontramos marcianos, ¿qué les decimos?	If we meet aliens, what do we say? | What do we say to aliens? | {other}, what if we meet aliens?
-im_053_2	chatter	chatter	calm	crew	im_053	2	both	goofy	any	any	any	any	Hola.	Hello. | Hi. | Hello.
-im_053_3	chatter	chatter	calm	crew	im_053	3	both	goofy	any	any	any	any	¿Y luego?	And then? | Then what? | And after that?
-im_053_4	chatter	chatter	calm	crew	im_053	4	both	goofy	any	any	any	any	¿Tenéis galletas?	Got any cookies? | Do you have cookies? | Got any cookies?
-im_054_1	chatter	chatter	calm	crew	im_054	1	both	goofy	any	any	any	any	Este cable, ¿de qué es?	What's this cable for? | What does this cable do? | {other}, what's this cable for?
-im_054_2	chatter	chatter	calm	crew	im_054	2	both	goofy	any	any	any	any	No lo sé. Pero no lo toques.	No idea. But don't touch it. | No idea. Don't touch it. | Not sure. Hands off.
-im_054_3	chatter	chatter	calm	crew	im_054	3	both	goofy	any	any	any	any	Ya está tocado.	It's already touched. | Too late. Touched. | I already touched it.
-im_054_4	chatter	chatter	calm	crew	im_054	4	both	goofy	any	any	any	any	Pues no lo toques más.	Then don't touch it more. | Then don't touch it again. | Then stop touching it.
-im_055_1	chatter	chatter	calm	crew	im_055	1	both	coast	any	any	any	any	¿Sabes lo que me gusta del espacio?	You know what I like about space? | Know what I like about space? | {other}, you know the best part of space?
-im_055_2	chatter	chatter	calm	crew	im_055	2	both	coast	any	any	any	any	¿Qué?	What? | What? | Tell me.
-im_055_3	chatter	chatter	calm	crew	im_055	3	both	coast	any	any	any	any	Que nadie me pide que saque la basura.	Nobody asks me to take out the trash. | Nobody tells me to take out the trash. | No one makes me take out the trash.
-im_055_4	chatter	chatter	calm	crew	im_055	4	both	coast	any	any	any	any	La basura está flotando detrás de ti.	The trash is floating behind you. | The trash is floating behind you. | Turn around. The trash is right there.
-im_056_1	chatter	chatter	calm	crew	im_056	1	both	goofy	any	any	any	any	¿Has traído algo para leer?	Did you bring anything to read? | Did you bring something to read? | {other}, got anything to read?
-im_056_2	chatter	chatter	calm	crew	im_056	2	both	goofy	any	any	any	any	La lista de la compra.	My shopping list. | Just my shopping list. | My shopping list.
-im_056_3	chatter	chatter	calm	crew	im_056	3	both	goofy	any	any	any	any	¿Y está bien?	Is it good? | Any good? | Is it a good read?
-im_056_4	chatter	chatter	calm	crew	im_056	4	both	goofy	any	any	any	any	Tiene un final con queso.	It ends with cheese. | Ends with cheese. | Great ending. Cheese.
-im_057_1	chatter	chatter	calm	crew	im_057	1	both	goofy	any	any	any	any	¿Me oyes?	Can you hear me? | Can you hear me? | {other}, do you hear me?
-im_057_2	chatter	chatter	calm	crew	im_057	2	both	goofy	any	any	any	any	Estás a mi lado.	You're right next to me. | I'm right here. | You're next to me.
-im_057_3	chatter	chatter	calm	crew	im_057	3	both	goofy	any	any	any	any	Solo comprobaba la radio.	Just checking the radio. | Testing the radio. | Radio check.
-im_058_1	chatter	chatter	calm	crew	im_058	1	both	goofy	any	any	any	any	Cuando volvamos, ¿nos darán una medalla?	When we're back, will they give us a medal? | Will they give us medals? | {other}, do we get a medal when we're back?
-im_058_2	chatter	chatter	calm	crew	im_058	2	both	goofy	any	any	any	any	Seguro.	For sure. | Definitely. | Surely.
-im_058_3	chatter	chatter	calm	crew	im_058	3	both	goofy	any	any	any	any	¿De chocolate?	A chocolate one? | Chocolate ones? | Made of chocolate?
-im_058_4	chatter	chatter	calm	crew	im_058	4	both	goofy	any	any	any	any	Eso ya no lo sé.	That I don't know. | Don't know about that. | That I can't promise.
-im_059_1	chatter	chatter	calm	crew	im_059	1	both	goofy	any	any	any	any	Te he dibujado.	I drew you. | I made a drawing of you. | {other}, I drew you.
-im_059_2	chatter	chatter	calm	crew	im_059	2	both	goofy	any	any	any	any	¿Por qué tengo cuatro brazos?	Why do I have four arms? | Why four arms? | Why do I have four arms?
-im_059_3	chatter	chatter	calm	crew	im_059	3	both	goofy	any	any	any	any	Porque te mueves mucho.	Because you move a lot. | You move a lot. | Because you never stop moving.
-im_060_1	chatter	chatter	calm	crew	im_060	1	both	goofy	any	any	any	any	¿Tú cuántas veces has ido al espacio?	How many times have you been to space? | How many times have you been in space? | {other}, how often have you flown?
-im_060_2	chatter	chatter	calm	crew	im_060	2	both	goofy	any	any	any	any	Contando esta, una.	Counting this one, once. | Including now? Once. | This is my first time.
-im_060_3	chatter	chatter	calm	crew	im_060	3	both	goofy	any	any	any	any	Yo también. Somos expertos.	Me too. We're experts. | Same. We're experts. | Me too. Total experts.
-im_061_1	chatter	chatter	calm	crew	im_061	1	both	prelaunch	any	any	any	any	¿Nervioso?	Nervous? | Nervous? | {other}, are you nervous?
-im_061_2	chatter	chatter	calm	crew	im_061	2	both	prelaunch	any	any	any	any	Para nada.	Not at all. | Not a bit. | Nope.
-im_061_3	chatter	chatter	calm	crew	im_061	3	both	prelaunch	any	any	any	any	Entonces suelta mi mano.	Then let go of my hand. | Then let go of my hand. | Then why are you holding my hand?
-im_062_1	chatter	chatter	calm	crew	im_062	1	both	prelaunch	any	any	any	any	¿Has apagado el horno de casa?	Did you turn off the oven at home? | Is the oven off at home? | {other}, did you switch off the oven?
-im_062_2	chatter	chatter	calm	crew	im_062	2	both	prelaunch	any	any	any	any	¿Qué horno?	What oven? | Which oven? | We have an oven?
-im_062_3	chatter	chatter	calm	crew	im_062	3	both	prelaunch	any	any	any	any	Entonces no.	So no. | So, no. | That's a no.
-im_063_1	chatter	chatter	calm	crew	im_063	1	both	prelaunch	any	any	any	any	¿Por qué hay tantos botones?	Why are there so many buttons? | Why so many buttons? | {other}, why are there this many buttons?
-im_063_2	chatter	chatter	calm	crew	im_063	2	both	prelaunch	any	any	any	any	Para que parezca importante.	So it looks important. | To look important. | It looks important that way.
-im_064_1	chatter	chatter	calm	crew	im_064	1	both	prelaunch	any	any	any	any	Me sudan las manos.	My hands are sweaty. | Sweaty hands. | My hands are all sweaty.
-im_064_2	chatter	chatter	calm	crew	im_064	2	both	prelaunch	any	any	any	any	Llevas guantes.	You're wearing gloves. | You have gloves on. | You're in gloves.
-im_064_3	chatter	chatter	calm	crew	im_064	3	both	prelaunch	any	any	any	any	Pues me sudan los guantes.	Then my gloves are sweaty. | Sweaty gloves, then. | Then my gloves are sweaty.
-im_065_1	chatter	chatter	calm	crew	im_065	1	both	orbit	any	any	any	any	¿Te has fijado? Cada hora es de día y de noche.	Have you noticed? Every hour it's day and night. | It's day and night every hour, did you notice? | {other}, the sun comes up every hour here.
-im_065_2	chatter	chatter	calm	crew	im_065	2	both	orbit	any	any	any	any	Por eso tengo tanto sueño y tanta hambre.	That's why I'm so sleepy and so hungry. | That's why I'm sleepy and hungry. | No wonder I'm always tired and hungry.
-im_066_1	chatter	chatter	calm	crew	im_066	1	both	orbit	any	any	any	any	Desde aquí arriba no se ven las fronteras.	You can't see any borders from up here. | No borders from up here. | You can't see any borders up here.
-im_066_2	chatter	chatter	calm	crew	im_066	2	both	orbit	any	any	any	any	Ni los atascos.	Or traffic jams. | No traffic jams either. | Or traffic.
-im_066_3	chatter	chatter	calm	crew	im_066	3	both	orbit	any	any	any	any	Ni a mi jefe.	Or my boss. | Or my boss. | And no boss.
-im_067_1	chatter	chatter	calm	crew	im_067	1	both	orbit	any	any	any	any	¿Cuántas vueltas llevamos?	How many laps have we done? | How many orbits so far? | {other}, how many laps have we done?
-im_067_2	chatter	chatter	calm	crew	im_067	2	both	orbit	any	any	any	any	He perdido la cuenta en la tercera.	I lost count at the third. | I lost count at three. | I stopped counting at the third.
-im_067_3	chatter	chatter	calm	crew	im_067	3	both	orbit	any	any	any	any	Yo en la segunda.	I lost it at the second. | I lost it at two. | I gave up at the second.
-im_068_1	chatter	chatter	calm	crew	im_068	1	both	orbit	any	any	any	any	Mira, ahí abajo está nuestra casa.	Look, there's our home down there. | There's home, down there. | {other}, look. Home.
-im_068_2	chatter	chatter	calm	crew	im_068	2	both	orbit	any	any	any	any	¿Cuál?	Which one? | Where? | Which one?
-im_068_3	chatter	chatter	calm	crew	im_068	3	both	orbit	any	any	any	any	La azul. La grande. Toda.	The blue one. The big one. All of it. | The big blue one. All of it. | The blue one. The whole thing.
-im_069_1	chatter	chatter	calm	crew	im_069	1	both	coast	any	any	any	any	¿Sabes qué echo de menos?	You know what I miss? | You know what I miss? | {other}, guess what I miss.
-im_069_2	chatter	chatter	calm	crew	im_069	2	both	coast	any	any	any	any	¿Las ventanas con algo que ver?	Windows with something to look at? | A window with a view? | Windows with something in them?
-im_069_3	chatter	chatter	calm	crew	im_069	3	both	coast	any	any	any	any	Exacto.	Exactly. | Exactly. | That's it.
-im_070_1	chatter	chatter	calm	crew	im_070	1	both	coast	any	any	any	any	Vamos a jugar a algo.	Let's play something. | Game time. | {other}, let's play something.
-im_070_2	chatter	chatter	calm	crew	im_070	2	both	coast	any	any	any	any	¿A qué?	What? | What game? | What?
-im_070_3	chatter	chatter	calm	crew	im_070	3	both	coast	any	any	any	any	A quién aguanta más sin mirar la ventana.	Who can go longest without looking out the window. | Who lasts longest without looking out the window. | Whoever looks out the window first loses.
-im_070_4	chatter	chatter	calm	crew	im_070	4	both	coast	any	any	any	any	He perdido.	I lost. | I lost. | I already lost.
-im_071_1	chatter	chatter	calm	crew	im_071	1	both	coast	any	any	any	any	¿Cuánto falta para llegar?	How long until we arrive? | How long till we're there? | {other}, when do we arrive?
-im_071_2	chatter	chatter	calm	crew	im_071	2	both	coast	any	any	any	any	Lo mismo que hace una hora, menos una hora.	Same as an hour ago, minus an hour. | Same as an hour ago. Minus an hour. | An hour less than last time you asked.
-im_072_1	chatter	chatter	calm	crew	im_072	1	both	coast	any	any	any	any	Este viaje es largo.	This trip is long. | Long trip. | This trip takes forever.
-im_072_2	chatter	chatter	calm	crew	im_072	2	both	coast	any	any	any	any	Pero es bonito.	But it's pretty. | But a pretty one. | It's pretty, though.
-im_072_3	chatter	chatter	calm	crew	im_072	3	both	coast	any	any	any	any	Largo y bonito. Como yo.	Long and pretty. Like me. | Long and pretty. Just like me. | Long and pretty. Like me.
-im_073_1	chatter	chatter	calm	crew	im_073	1	both	landed	any	any	any	any	¿Quién sale primero?	Who goes out first? | Who goes out first? | {other}, who goes outside first?
-im_073_2	chatter	chatter	calm	crew	im_073	2	both	landed	any	any	any	any	El más valiente.	The bravest. | The bravest one. | Whoever is bravest.
-im_073_3	chatter	chatter	calm	crew	im_073	3	both	landed	any	any	any	any	Entonces tú.	So you. | You, then. | So that's you.
-im_073_4	chatter	chatter	calm	crew	im_073	4	both	landed	any	any	any	any	Entonces nadie.	So nobody. | So, nobody. | Then nobody goes.
-im_074_1	chatter	chatter	calm	crew	im_074	1	both	landed	any	any	any	any	El suelo se ve muy blando.	The ground looks very soft. | The ground looks really soft. | That ground looks so soft.
-im_074_2	chatter	chatter	calm	crew	im_074	2	both	landed	any	any	any	any	Es roca.	It's rock. | It's rock. | That's solid rock.
-im_074_3	chatter	chatter	calm	crew	im_074	3	both	landed	any	any	any	any	Blanda de mirar.	Soft to look at. | Soft to the eye. | It looks soft.
-im_075_1	chatter	chatter	calm	crew	im_075	1	both	landed	any	any	any	any	¡Hemos aterrizado!	We landed! | We're down! | We landed, {other}!
-im_075_2	chatter	chatter	calm	crew	im_075	2	both	landed	any	any	any	any	¿Lo celebramos?	Shall we celebrate? | Party? | Celebrate?
-im_075_3	chatter	chatter	calm	crew	im_075	3	both	landed	any	any	any	any	Con galletas.	With cookies. | With cookies. | Cookies, yes.
-im_075_4	chatter	chatter	calm	crew	im_075	4	both	landed	any	any	any	any	Con todas las galletas.	With all the cookies. | All of the cookies. | Every cookie we have.
-im_076_1	chatter	chatter	calm	crew	im_076	1	both	landed	any	any	any	any	Aquí estamos. En otro sitio.	Here we are. Somewhere else. | Here we are. Somewhere new. | Well. We're somewhere else now.
-im_076_2	chatter	chatter	calm	crew	im_076	2	both	landed	any	any	any	any	Se parece a casa, pero sin casa.	It looks like home, but without the home. | Like home, minus the home. | It looks like home. Just without home.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+im_001_1	chatter	chatter	calm	crew	im_001	1	both	orbit	any	any	any	any	¿Quién se ha comido mi bocadillo?	Who ate my sandwich? | Where did my sandwich go? | {other}, who ate my sandwich?	 |  | {other}, ¿quién se ha comido mi bocadillo?
+im_001_2	chatter	chatter	calm	crew	im_001	2	both	orbit	any	any	any	any	La gravedad.	Gravity did. | Gravity ate it. | Blame gravity.	
+im_001_3	chatter	chatter	calm	crew	im_001	3	both	orbit	any	any	any	any	Aquí no hay gravedad.	There's no gravity here. | We don't have gravity here. | There is no gravity up here.	
+im_001_4	chatter	chatter	calm	crew	im_001	4	both	orbit	any	any	any	any	Exacto.	Exactly. | Exactly. | My point exactly.	
+im_002_1	chatter	chatter	calm	crew	im_002	1	both	goofy	any	any	any	any	¿Tú sabes para qué sirve este botón?	Do you know what this button does? | What does this button do? | {other}, any idea what this button does?	 |  | {other}, ¿tienes idea de para qué sirve este botón?
+im_002_2	chatter	chatter	calm	crew	im_002	2	both	goofy	any	any	any	any	No. ¿Y tú?	No. Do you? | No idea. You? | Not a clue. Do you?	
+im_002_3	chatter	chatter	calm	crew	im_002	3	both	goofy	any	any	any	any	Tampoco. Dejémoslo así.	Me neither. Let's leave it. | Me neither. Leave it. | Same. Let's not touch it.	
+im_003_1	chatter	chatter	calm	crew	im_003	1	both	coast	any	any	any	any	Me has dado una patada.	You kicked me. | Ow. You kicked me. | {other}, you just kicked me.	 |  | {other}, me acabas de dar una patada.
+im_003_2	chatter	chatter	calm	crew	im_003	2	both	coast	any	any	any	any	Ha sido sin querer. Estaba nadando.	It was an accident. I was swimming. | Sorry. I was swimming. | Accident. I was doing the breaststroke.	
+im_003_3	chatter	chatter	calm	crew	im_003	3	both	coast	any	any	any	any	Aquí no hay agua.	There's no water here. | There's no water. | We don't have water to swim in.	
+im_003_4	chatter	chatter	calm	crew	im_003	4	both	coast	any	any	any	any	Por eso nado tan mal.	That's why I swim so badly. | Which is why I'm so bad at it. | That's why my swimming is so bad.	
+im_004_1	chatter	chatter	calm	crew	im_004	1	both	orbit	any	any	any	any	¿Juegas a las cartas?	Want to play cards? | Cards? | {other}, want to play cards?	 |  | {other}, ¿juegas a las cartas?
+im_004_2	chatter	chatter	calm	crew	im_004	2	both	orbit	any	any	any	any	Las cartas se van flotando.	The cards float away. | The cards just float off. | They'll float away.	
+im_004_3	chatter	chatter	calm	crew	im_004	3	both	orbit	any	any	any	any	Entonces gano yo.	Then I win. | So I win. | Then I'm the winner.	
+im_004_4	chatter	chatter	calm	crew	im_004	4	both	orbit	any	any	any	any	¿Por qué?	Why? | How? | Why you?	
+im_004_5	chatter	chatter	calm	crew	im_004	5	both	orbit	any	any	any	any	Porque lo digo yo.	Because I say so. | I say so. | Because I said so.	
+im_005_1	chatter	chatter	calm	crew	im_005	1	both	goofy	any	any	any	any	¿Has oído eso?	Did you hear that? | What was that? | {other}, did you hear that noise?	 |  | {other}, ¿has oído ese ruido?
+im_005_2	chatter	chatter	calm	crew	im_005	2	both	goofy	any	any	any	any	Mi estómago. Tiene opiniones.	My stomach. It has opinions. | My stomach. It has things to say. | That's my stomach. It's opinionated.	
+im_005_3	chatter	chatter	calm	crew	im_005	3	both	goofy	any	any	any	any	Dile que baje la voz. La nave escucha.	Tell it to keep it down. The ship is listening. | Tell it to be quiet. The ship can hear. | Keep it down. The ship is listening.	
+im_006_1	chatter	chatter	calm	crew	im_006	1	both	goofy	any	any	any	any	Te toca limpiar.	Your turn to clean. | You clean today. | {other}, your turn to clean.	 |  | {other}, te toca limpiar.
+im_006_2	chatter	chatter	calm	crew	im_006	2	both	goofy	any	any	any	any	Limpié ayer.	I cleaned yesterday. | I did it yesterday. | I cleaned yesterday!	
+im_006_3	chatter	chatter	calm	crew	im_006	3	both	goofy	any	any	any	any	Aquí arriba no hay ayer.	There's no yesterday up here. | Up here there is no yesterday. | Yesterday doesn't exist in orbit.	
+im_006_4	chatter	chatter	calm	crew	im_006	4	both	goofy	any	any	any	any	Esa es la peor excusa que he oído.	That's the worst excuse I've ever heard. | Worst excuse ever. | That's the worst excuse I've heard.	
+im_007_1	chatter	chatter	calm	crew	im_007	1	both	goofy	any	any	any	any	Estás en mi sitio.	You're in my spot. | That's my spot. | {other}, you're in my spot.	 |  | {other}, estás en mi sitio.
+im_007_2	chatter	chatter	calm	crew	im_007	2	both	goofy	any	any	any	any	Todos los sitios son iguales.	All the spots are the same. | Every spot is the same. | They're all the same spot.	
+im_007_3	chatter	chatter	calm	crew	im_007	3	both	goofy	any	any	any	any	Pero este huele a mí.	But this one smells like me. | This one smells like me. | But this one has my smell.	
+im_008_1	chatter	chatter	calm	crew	im_008	1	both	goofy	any	any	any	any	¿Cuál es tu planeta favorito?	What's your favorite planet? | Favorite planet? | {other}, which planet do you like best?	 |  | {other}, ¿qué planeta te gusta más?
+im_008_2	chatter	chatter	calm	crew	im_008	2	both	goofy	any	any	any	any	El que tenga tienda de galletas.	The one with a cookie shop. | Whichever has a cookie shop. | The one with cookies for sale.	
+im_008_3	chatter	chatter	calm	crew	im_008	3	both	goofy	any	any	any	any	Ninguno tiene.	None of them have one. | None have one. | There are no cookie shops out here.	
+im_008_4	chatter	chatter	calm	crew	im_008	4	both	goofy	any	any	any	any	Entonces ninguno.	Then none of them. | Then none. | So, none of them.	
+im_009_1	chatter	chatter	calm	crew	im_009	1	both	goofy	any	any	any	any	¿Tú roncas?	Do you snore? | Do you snore, {other}? | Be honest. Do you snore?	 | ¿Tú roncas, {other}? | 
+im_009_2	chatter	chatter	calm	crew	im_009	2	both	goofy	any	any	any	any	Nunca.	Never. | Never. | Not ever.	
+im_009_3	chatter	chatter	calm	crew	im_009	3	both	goofy	any	any	any	any	Pues alguien ha roncado toda la noche.	Well, someone snored all night. | Someone snored all night. | Then someone else snored all night.	
+im_009_4	chatter	chatter	calm	crew	im_009	4	both	goofy	any	any	any	any	Sería la nave.	Must have been the ship. | The ship, probably. | Must have been the ship.	
+im_010_1	chatter	chatter	calm	crew	im_010	1	both	goofy	any	any	any	any	Creo que me he dejado la llave de casa en el traje de entreno.	I think I left my house key in the training suit. | I left my house key in the training suit. | I think my key is in the training suit.	
+im_010_2	chatter	chatter	calm	crew	im_010	2	both	goofy	any	any	any	any	¿Y cómo vas a entrar al volver?	So how will you get in when we're back? | How do you get home then? | So how will you get in at home?	
+im_010_3	chatter	chatter	calm	crew	im_010	3	both	goofy	any	any	any	any	Por la ventana. Ya soy astronauta.	Through the window. I'm an astronaut now. | Window. I'm an astronaut now. | Through the window. Astronaut skills.	
+im_011_1	chatter	chatter	calm	crew	im_011	1	both	goofy	any	any	any	any	Mira, una nube con forma de cohete.	Look, a cloud shaped like a rocket. | Look, a rocket-shaped cloud. | {other}, that cloud looks like a rocket.	 |  | {other}, esa nube parece un cohete.
+im_011_2	chatter	chatter	calm	crew	im_011	2	both	goofy	any	any	any	any	Estamos encima de las nubes. Todas parecen nubes.	We're above the clouds. They all look like clouds. | We're above the clouds. They all look like clouds. | From up here, every cloud looks like a cloud.	
+im_012_1	chatter	chatter	calm	crew	im_012	1	both	coast	any	any	any	any	¿Me pasas la sal?	Pass me the salt? | Salt, please? | {other}, pass the salt?	 |  | {other}, ¿me pasas la sal?
+im_012_2	chatter	chatter	calm	crew	im_012	2	both	coast	any	any	any	any	Toma.	Here. | There. | Here you go.	
+im_012_3	chatter	chatter	calm	crew	im_012	3	both	coast	any	any	any	any	Esa es la pimienta.	That's the pepper. | This is pepper. | That's pepper.	
+im_012_4	chatter	chatter	calm	crew	im_012	4	both	coast	any	any	any	any	Ya está flotando. Cógela tú.	It's already floating. Catch it yourself. | It's floating already. Get it yourself. | Too late, it's floating. Catch it.	
+im_013_1	chatter	chatter	calm	crew	im_013	1	both	goofy	any	any	any	any	¿Cuánto falta?	How much longer? | How long now? | {other}, how much longer?	 |  | {other}, ¿cuánto falta?
+im_013_2	chatter	chatter	calm	crew	im_013	2	both	goofy	any	any	any	any	No preguntes eso cada cinco minutos.	Don't ask that every five minutes. | Stop asking every five minutes. | Not every five minutes, please.	
+im_013_3	chatter	chatter	calm	crew	im_013	3	both	goofy	any	any	any	any	Vale. ¿Cuánto falta?	Okay. How much longer? | Fine. How much longer? | Okay. And now?	
+im_014_1	chatter	chatter	calm	crew	im_014	1	both	goofy	any	any	any	any	He tenido una idea brillante.	I had a brilliant idea. | I've got a brilliant idea. | {other}, I had a great idea.	 |  | {other}, he tenido una idea genial.
+im_014_2	chatter	chatter	calm	crew	im_014	2	both	goofy	any	any	any	any	Oh, no.	Oh, no. | Oh no. | Uh oh.	
+im_014_3	chatter	chatter	calm	crew	im_014	3	both	goofy	any	any	any	any	¿Y si pintamos la nave de rosa?	What if we paint the ship pink? | Let's paint the ship pink. | Pink. The whole ship. What do you think?	
+im_014_4	chatter	chatter	calm	crew	im_014	4	both	goofy	any	any	any	any	No tenemos pintura.	We have no paint. | There's no paint. | We don't have paint.	
+im_014_5	chatter	chatter	calm	crew	im_014	5	both	goofy	any	any	any	any	Tengo un rotulador.	I have a marker. | I've got a marker. | I have a marker, though.	
+im_015_1	chatter	chatter	calm	crew	im_015	1	both	goofy	any	any	any	any	¿Tú también sueñas que te caes?	Do you also dream that you're falling? | Do you dream about falling too? | {other}, ever dream you're falling?	 |  | {other}, ¿nunca sueñas que te caes?
+im_015_2	chatter	chatter	calm	crew	im_015	2	both	goofy	any	any	any	any	Aquí arriba estamos cayendo siempre.	Up here we're always falling. | We're always falling up here. | Up here we never stop falling.	
+im_015_3	chatter	chatter	calm	crew	im_015	3	both	goofy	any	any	any	any	Ya. Por eso no duermo.	Right. That's why I can't sleep. | Oh. That's why I can't sleep. | Right. That explains my sleep.	
+im_016_1	chatter	chatter	calm	crew	im_016	1	both	goofy	any	any	any	any	Has vuelto a dejar la tapa abierta.	You left the lid open again. | The lid is open again. | {other}, you left the lid open again.	 |  | {other}, has vuelto a dejar la tapa abierta.
+im_016_2	chatter	chatter	calm	crew	im_016	2	both	goofy	any	any	any	any	¿Qué tapa?	What lid? | Which lid? | What lid?	
+im_016_3	chatter	chatter	calm	crew	im_016	3	both	goofy	any	any	any	any	La de la pasta de dientes. Está en mi pelo.	The toothpaste one. It's in my hair. | Toothpaste. It's in my hair. | The toothpaste lid. Now it's in my hair.	
+im_017_1	chatter	chatter	calm	crew	im_017	1	both	goofy	any	any	any	any	Te apuesto un postre a que llego al otro lado sin tocar nada.	I bet you a dessert I can reach the other side without touching anything. | Bet a dessert I can cross without touching anything. | Dessert says I can float across and touch nothing.	
+im_017_2	chatter	chatter	calm	crew	im_017	2	both	goofy	any	any	any	any	Trato hecho.	Deal. | You're on. | Deal.	
+im_017_3	chatter	chatter	calm	crew	im_017	3	both	goofy	any	any	any	any	¡Uy!	Oops! | Whoops! | Oh no!	
+im_017_4	chatter	chatter	calm	crew	im_017	4	both	goofy	any	any	any	any	Me debes un postre.	You owe me a dessert. | One dessert, please. | You owe me dessert.	
+im_018_1	chatter	chatter	calm	crew	im_018	1	both	goofy	any	any	any	any	¿Quién apagó la luz?	Who turned off the light? | Who switched the light off? | {other}, who turned off the light?	 |  | {other}, ¿quién apagó la luz?
+im_018_2	chatter	chatter	calm	crew	im_018	2	both	goofy	any	any	any	any	Fui yo. Con el codo.	Me. With my elbow. | Me. My elbow did it. | My elbow. Sorry.	
+im_018_3	chatter	chatter	calm	crew	im_018	3	both	goofy	any	any	any	any	¿Y dónde está el interruptor?	And where's the switch? | Where's the switch? | So where is the switch?	
+im_018_4	chatter	chatter	calm	crew	im_018	4	both	goofy	any	any	any	any	Esa es otra pregunta.	That's another question. | Good question. | Different question.	
+im_019_1	chatter	chatter	calm	crew	im_019	1	both	goofy	any	any	any	any	¿Por qué hablas tan bajito?	Why are you whispering? | Why are you whispering? | {other}, why the whispering?	 |  | {other}, ¿por qué hablas tan bajito?
+im_019_2	chatter	chatter	calm	crew	im_019	2	both	goofy	any	any	any	any	Para no despertar al cohete.	So I don't wake the rocket. | I don't want to wake the rocket. | Shh. The rocket is asleep.	
+im_019_3	chatter	chatter	calm	crew	im_019	3	both	goofy	any	any	any	any	Los cohetes no duermen.	Rockets don't sleep. | Rockets don't sleep. | A rocket can't sleep.	
+im_019_4	chatter	chatter	calm	crew	im_019	4	both	goofy	any	any	any	any	Este sí. Lo oigo respirar.	This one does. I can hear it breathing. | This one does. Listen to it breathe. | This one can. Hear that breathing?	
+im_020_1	chatter	chatter	calm	crew	im_020	1	both	goofy	any	any	any	any	¿Sabes silbar?	Can you whistle? | Can you whistle? | {other}, can you whistle?	 |  | {other}, ¿sabes silbar?
+im_020_2	chatter	chatter	calm	crew	im_020	2	both	goofy	any	any	any	any	Claro.	Of course. | Sure. | Of course I can.	
+im_020_3	chatter	chatter	calm	crew	im_020	3	both	goofy	any	any	any	any	A ver.	Let's hear it. | Go on then. | Show me.	
+im_020_4	chatter	chatter	calm	crew	im_020	4	both	goofy	any	any	any	any	Aquí no se puede. Es el aire.	It doesn't work up here. It's the air. | Not up here. The air is wrong. | It doesn't work. Space air.	
+im_021_1	chatter	chatter	calm	crew	im_021	1	both	goofy	any	any	any	any	¿Has visto el manual?	Have you seen the manual? | Where's the manual? | {other}, have you seen the manual?	 |  | {other}, ¿has visto el manual?
+im_021_2	chatter	chatter	calm	crew	im_021	2	both	goofy	any	any	any	any	Lo usé de almohada.	I used it as a pillow. | I slept on it. | It was my pillow.	
+im_021_3	chatter	chatter	calm	crew	im_021	3	both	goofy	any	any	any	any	¿Y ahora dónde está?	And where is it now? | And now? | And where is it now?	
+im_021_4	chatter	chatter	calm	crew	im_021	4	both	goofy	any	any	any	any	Durmiendo en algún sitio.	Sleeping somewhere. | Asleep somewhere. | Napping somewhere.	
+im_022_1	chatter	chatter	calm	crew	im_022	1	both	goofy	any	any	any	any	Me aburro.	I'm bored. | Bored. | I'm so bored, {other}.	 |  | Me aburro muchísimo, {other}.
+im_022_2	chatter	chatter	calm	crew	im_022	2	both	goofy	any	any	any	any	Cuenta estrellas.	Count stars. | Count the stars. | Go count stars.	
+im_022_3	chatter	chatter	calm	crew	im_022	3	both	goofy	any	any	any	any	Ya lo hice.	Already did. | Did that. | Already done.	
+im_022_4	chatter	chatter	calm	crew	im_022	4	both	goofy	any	any	any	any	¿Cuántas?	How many? | And? | How many?	
+im_022_5	chatter	chatter	calm	crew	im_022	5	both	goofy	any	any	any	any	Siete. Luego me aburrí.	Seven. Then I got bored. | Seven. Then I got bored. | Seven. Then I was bored again.	
+im_023_1	chatter	chatter	calm	crew	im_023	1	both	orbit	any	any	any	any	Creo que he crecido un poco.	I think I grew a bit. | I think I'm taller. | {other}, I think I grew.	 |  | {other}, creo que he crecido.
+im_023_2	chatter	chatter	calm	crew	im_023	2	both	orbit	any	any	any	any	Es la falta de gravedad.	That's the zero gravity. | Zero gravity does that. | That's the weightlessness.	
+im_023_3	chatter	chatter	calm	crew	im_023	3	both	orbit	any	any	any	any	Qué pena. Pensé que era el brócoli.	Shame. I thought it was the broccoli. | Too bad. I hoped it was the broccoli. | Shame. I thought the broccoli worked.	
+im_024_1	chatter	chatter	calm	crew	im_024	1	both	goofy	any	any	any	any	¿Crees que hay alguien más ahí fuera?	Do you think anyone else is out there? | Is anyone else out there? | {other}, do you think we're alone out here?	 |  | {other}, ¿crees que estamos solos aquí fuera?
+im_024_2	chatter	chatter	calm	crew	im_024	2	both	goofy	any	any	any	any	Espero que sí. Y que tengan cafetería.	I hope so. And that they have a cafeteria. | I hope so. With a cafeteria. | Hopefully. And they have a cafeteria.	
+im_025_1	chatter	chatter	calm	crew	im_025	1	both	goofy	any	any	any	any	Si nos perdemos, ¿a quién llamamos?	If we get lost, who do we call? | Who do we call if we get lost? | {other}, if we're lost, who do we call?	 |  | {other}, si nos perdemos, ¿a quién llamamos?
+im_025_2	chatter	chatter	calm	crew	im_025	2	both	goofy	any	any	any	any	A Control.	Control. | Control. | We call Control.	
+im_025_3	chatter	chatter	calm	crew	im_025	3	both	goofy	any	any	any	any	¿Y si Control también se pierde?	And if Control gets lost too? | What if Control is lost too? | And if Control gets lost?	
+im_025_4	chatter	chatter	calm	crew	im_025	4	both	goofy	any	any	any	any	Entonces nos buscamos todos.	Then we all look for each other. | Then we all search for each other. | Then everybody looks for everybody.	
+im_026_1	chatter	chatter	calm	crew	im_026	1	both	goofy	any	any	any	any	No mires, pero creo que te sigue un guante.	Don't look, but I think a glove is following you. | Don't look, but a glove is following you. | {other}, a glove is chasing you.	 |  | {other}, te persigue un guante.
+im_026_2	chatter	chatter	calm	crew	im_026	2	both	goofy	any	any	any	any	¿Otra vez? Es el mío. Me quiere mucho.	Again? It's mine. It loves me. | Again? It's mine. It loves me. | That's my glove. It's attached to me.	
+im_027_1	chatter	chatter	calm	crew	im_027	1	both	coast	any	any	any	any	¿Cuál es el plan para hoy?	What's the plan for today? | Plan for today? | {other}, what's today's plan?	 |  | {other}, ¿cuál es el plan de hoy?
+im_027_2	chatter	chatter	calm	crew	im_027	2	both	coast	any	any	any	any	Flotar. Comer. Flotar otra vez.	Float. Eat. Float again. | Float. Eat. Float. | Float, eat, then float more.	
+im_027_3	chatter	chatter	calm	crew	im_027	3	both	coast	any	any	any	any	Me gusta este plan.	I like this plan. | Good plan. | I love this plan.	
+im_028_1	chatter	chatter	calm	crew	im_028	1	both	goofy	any	any	any	any	Aquí huele fatal.	It stinks in here. | Something stinks. | It stinks in here, {other}.	 |  | Aquí huele fatal, {other}.
+im_028_2	chatter	chatter	calm	crew	im_028	2	both	goofy	any	any	any	any	Ese eres tú.	That's you. | It's you. | That's you.	
+im_028_3	chatter	chatter	calm	crew	im_028	3	both	goofy	any	any	any	any	No puede ser. Me lavé la semana pasada.	Can't be. I washed last week. | No way. I washed last week. | Impossible. I washed last week.	
+im_029_1	chatter	chatter	calm	crew	im_029	1	both	goofy	any	any	any	any	¿Te acuerdas del entrenamiento?	Remember training? | Remember training? | {other}, remember training?	 |  | {other}, ¿te acuerdas del entrenamiento?
+im_029_2	chatter	chatter	calm	crew	im_029	2	both	goofy	any	any	any	any	Aquella vez que vomitaste en la centrifugadora.	That time you threw up in the centrifuge. | When you threw up in the centrifuge. | The centrifuge. You threw up.	
+im_029_3	chatter	chatter	calm	crew	im_029	3	both	goofy	any	any	any	any	No hablábamos de eso.	We weren't talking about that. | Not that part. | We weren't talking about that.	
+im_029_4	chatter	chatter	calm	crew	im_029	4	both	goofy	any	any	any	any	Yo sí.	I was. | I was. | Well, I was.	
+im_030_1	chatter	chatter	calm	crew	im_030	1	both	goofy	any	any	any	any	He hecho una lista de cosas que quiero hacer al volver.	I made a list of things I want to do when we're back. | I wrote a list for when we're back. | {other}, I made a list for when we're home.	 |  | {other}, he hecho una lista para cuando volvamos a casa.
+im_030_2	chatter	chatter	calm	crew	im_030	2	both	goofy	any	any	any	any	¿Qué pone?	What does it say? | And? | What's on it?	
+im_030_3	chatter	chatter	calm	crew	im_030	3	both	goofy	any	any	any	any	Ducha. Ducha. Ducha. Galletas.	Shower. Shower. Shower. Cookies. | Shower. Shower. Shower. Cookies. | Shower, shower, shower, then cookies.	
+im_031_1	chatter	chatter	calm	crew	im_031	1	both	goofy	any	any	any	any	¿Quieres oír un chiste?	Want to hear a joke? | Want a joke? | {other}, want to hear a joke?	 |  | {other}, ¿quieres oír un chiste?
+im_031_2	chatter	chatter	calm	crew	im_031	2	both	goofy	any	any	any	any	No.	No. | No. | Nope.	
+im_031_3	chatter	chatter	calm	crew	im_031	3	both	goofy	any	any	any	any	¿Por qué los cohetes van al colegio?	Why do rockets go to school? | Why do rockets go to school? | Why did the rocket go to school?	
+im_031_4	chatter	chatter	calm	crew	im_031	4	both	goofy	any	any	any	any	Te he dicho que no.	I said no. | I said no. | Still no.	
+im_031_5	chatter	chatter	calm	crew	im_031	5	both	goofy	any	any	any	any	Para despegar sus mentes.	To lift their minds. | To lift their minds. | To get their minds lifted.	
+im_031_6	chatter	chatter	calm	crew	im_031	6	both	goofy	any	any	any	any	Ay.	Ugh. | Ugh. | Terrible.	
+im_032_1	chatter	chatter	calm	crew	im_032	1	both	goofy	any	any	any	any	¿Por qué tienes tres relojes?	Why do you have three watches? | Why three watches? | {other}, why do you wear three watches?	 |  | {other}, ¿por qué llevas tres relojes?
+im_032_2	chatter	chatter	calm	crew	im_032	2	both	goofy	any	any	any	any	Uno para aquí, uno para casa, y uno por si acaso.	One for here, one for home, and one just in case. | Here, home, and just in case. | One for here, one for home, one spare.	
+im_032_3	chatter	chatter	calm	crew	im_032	3	both	goofy	any	any	any	any	¿Y qué hora es?	So what time is it? | What time is it, then? | So what's the time?	
+im_032_4	chatter	chatter	calm	crew	im_032	4	both	goofy	any	any	any	any	No tengo ni idea.	No idea. | No clue. | No idea.	
+im_033_1	chatter	chatter	calm	crew	im_033	1	both	goofy	any	any	any	any	¿Has tocado mi cepillo de dientes?	Did you touch my toothbrush? | Did you use my toothbrush? | {other}, did you touch my toothbrush?	 |  | {other}, ¿has tocado mi cepillo de dientes?
+im_033_2	chatter	chatter	calm	crew	im_033	2	both	goofy	any	any	any	any	Solo para rascarme la espalda.	Only to scratch my back. | Just to scratch my back. | Only for my back. It itched.	
+im_033_3	chatter	chatter	calm	crew	im_033	3	both	goofy	any	any	any	any	¿Qué?	What? | What? | Excuse me?	
+im_033_4	chatter	chatter	calm	crew	im_033	4	both	goofy	any	any	any	any	Es broma. Creo.	Kidding. I think. | Kidding. Probably. | Joking. I think.	
+im_034_1	chatter	chatter	calm	crew	im_034	1	both	orbit	any	any	any	any	¿Por qué me miras así?	Why are you looking at me like that? | Why are you staring at me? | {other}, why that look?	 |  | {other}, ¿por qué me miras así?
+im_034_2	chatter	chatter	calm	crew	im_034	2	both	orbit	any	any	any	any	Tienes una miga en la nariz.	You have a crumb on your nose. | Crumb on your nose. | You've got a crumb on your nose.	
+im_034_3	chatter	chatter	calm	crew	im_034	3	both	orbit	any	any	any	any	¿Dónde?	Where? | Where? | Where is it?	
+im_034_4	chatter	chatter	calm	crew	im_034	4	both	orbit	any	any	any	any	Ya no. Se ha ido flotando.	Not anymore. It floated off. | Gone. It floated away. | It's gone. Floated off.	
+im_035_1	chatter	chatter	calm	crew	im_035	1	both	goofy	any	any	any	any	Si fueras un planeta, ¿cuál serías?	If you were a planet, which one would you be? | If you were a planet, which one? | {other}, what planet would you be?	 |  | {other}, ¿qué planeta serías tú?
+im_035_2	chatter	chatter	calm	crew	im_035	2	both	goofy	any	any	any	any	Uno pequeño y simpático.	A small, friendly one. | Small and friendly. | A tiny friendly one.	
+im_035_3	chatter	chatter	calm	crew	im_035	3	both	goofy	any	any	any	any	Yo uno con anillos. Para ir elegante.	I'd be one with rings. To look fancy. | One with rings. Very fancy. | Me? Rings. For style.	
+im_036_1	chatter	chatter	calm	crew	im_036	1	both	goofy	any	any	any	any	Te cambio mi postre por tu turno de guardia.	I'll trade my dessert for your watch shift. | My dessert for your watch shift? | {other}, swap my dessert for your shift?	 |  | {other}, ¿te cambio mi postre por tu turno?
+im_036_2	chatter	chatter	calm	crew	im_036	2	both	goofy	any	any	any	any	¿Qué postre?	What dessert? | Which dessert? | What dessert?	
+im_036_3	chatter	chatter	calm	crew	im_036	3	both	goofy	any	any	any	any	El que ya me he comido.	The one I already ate. | The one I ate already. | The one I already finished.	
+im_036_4	chatter	chatter	calm	crew	im_036	4	both	goofy	any	any	any	any	No.	No. | No. | No deal.	
+im_037_1	chatter	chatter	calm	crew	im_037	1	both	goofy	any	any	any	any	Creo que la nave me está hablando.	I think the ship is talking to me. | The ship is talking to me. | {other}, I think the ship talks to me.	 |  | {other}, creo que la nave me habla.
+im_037_2	chatter	chatter	calm	crew	im_037	2	both	goofy	any	any	any	any	¿Qué dice?	What's it saying? | What does it say? | And what's it saying?	
+im_037_3	chatter	chatter	calm	crew	im_037	3	both	goofy	any	any	any	any	Bip. Bip. Clic.	Beep. Beep. Click. | Beep. Beep. Click. | Beep, beep, click.	
+im_037_4	chatter	chatter	calm	crew	im_037	4	both	goofy	any	any	any	any	Eso es la cafetera.	That's the coffee machine. | That's the coffee machine. | That's just the coffee machine.	
+im_038_1	chatter	chatter	calm	crew	im_038	1	both	goofy	any	any	any	any	¿Has escrito a tu familia?	Have you written to your family? | Did you write home? | {other}, did you write to your family?	 |  | {other}, ¿has escrito a tu familia?
+im_038_2	chatter	chatter	calm	crew	im_038	2	both	goofy	any	any	any	any	Sí. Les he dicho que aquí hace frío.	Yes. I told them it's cold here. | Yes. I told them it's cold here. | I said it's freezing up here.	
+im_038_3	chatter	chatter	calm	crew	im_038	3	both	goofy	any	any	any	any	No hace frío.	It's not cold. | It isn't cold. | It's not cold at all.	
+im_038_4	chatter	chatter	calm	crew	im_038	4	both	goofy	any	any	any	any	Quería que se preocuparan un poco.	I wanted them to worry a little. | I want them to worry a bit. | They should worry a little.	
+im_039_1	chatter	chatter	calm	crew	im_039	1	both	goofy	any	any	any	any	¿Cuántos días llevamos aquí?	How many days have we been here? | How long have we been here? | {other}, how many days now?	 |  | {other}, ¿cuántos días llevamos ya?
+im_039_2	chatter	chatter	calm	crew	im_039	2	both	goofy	any	any	any	any	Muchos.	Lots. | Many. | Lots of them.	
+im_039_3	chatter	chatter	calm	crew	im_039	3	both	goofy	any	any	any	any	¿Cuántos son muchos?	How many is lots? | How many is many? | Define lots.	
+im_039_4	chatter	chatter	calm	crew	im_039	4	both	goofy	any	any	any	any	Más que pocos.	More than a few. | More than a few. | More than some.	
+im_040_1	chatter	chatter	calm	crew	im_040	1	both	goofy	any	any	any	any	¿Tú crees que Control nos escucha ahora?	Do you think Control is listening now? | Is Control listening right now? | {other}, can Control hear us?	 |  | {other}, ¿nos oye Control?
+im_040_2	chatter	chatter	calm	crew	im_040	2	both	goofy	any	any	any	any	No. Esto es el intercomunicador.	No. This is the intercom. | No. It's the intercom. | Nope. Intercom only.	
+im_040_3	chatter	chatter	calm	crew	im_040	3	both	goofy	any	any	any	any	Entonces puedo decirlo: el café de Control es horrible.	Then I can say it: Control's coffee is awful. | Then I'll say it: Control's coffee is terrible. | Finally. Control's coffee is awful.	
+im_040_4	chatter	chatter	calm	crew	im_040	4	both	goofy	any	any	any	any	Totalmente.	Totally. | So true. | Completely.	
+im_041_1	chatter	chatter	calm	crew	im_041	1	both	coast	any	any	any	any	Mira qué bien floto.	Look how well I float. | Watch me float. | Look how good I float, {other}.	 |  | Mira qué bien floto, {other}.
+im_041_2	chatter	chatter	calm	crew	im_041	2	both	coast	any	any	any	any	Estás boca abajo.	You're upside down. | You're upside down. | You're the wrong way up.	
+im_041_3	chatter	chatter	calm	crew	im_041	3	both	coast	any	any	any	any	Eso es lo bonito.	That's the beauty of it. | That's what makes it beautiful. | That's the art of it.	
+im_042_1	chatter	chatter	calm	crew	im_042	1	both	goofy	any	any	any	any	¿Me ayudas con el traje?	Can you help me with the suit? | Help me with the suit? | {other}, can you help with my suit?	 |  | {other}, ¿me ayudas con el traje?
+im_042_2	chatter	chatter	calm	crew	im_042	2	both	goofy	any	any	any	any	Lo tienes al revés.	You've got it on backwards. | It's on backwards. | You're wearing it backwards.	
+im_042_3	chatter	chatter	calm	crew	im_042	3	both	goofy	any	any	any	any	Lo sé. Es la moda.	I know. It's the fashion. | I know. Fashion. | It's the style now.	
+im_043_1	chatter	chatter	calm	crew	im_043	1	both	goofy	any	any	any	any	Tengo una pregunta seria.	I have a serious question. | Serious question. | {other}, I need to ask something serious.	 |  | {other}, tengo que preguntarte algo serio.
+im_043_2	chatter	chatter	calm	crew	im_043	2	both	goofy	any	any	any	any	Dime.	Go on. | Go ahead. | Okay. Ask.	
+im_043_3	chatter	chatter	calm	crew	im_043	3	both	goofy	any	any	any	any	¿Las galletas cuentan como desayuno?	Do cookies count as breakfast? | Are cookies breakfast? | Do cookies count as breakfast?	
+im_043_4	chatter	chatter	calm	crew	im_043	4	both	goofy	any	any	any	any	Aquí arriba, todo cuenta como desayuno.	Up here, everything counts as breakfast. | Up here, everything is breakfast. | Everything counts as breakfast in space.	
+im_044_1	chatter	chatter	calm	crew	im_044	1	both	goofy	any	any	any	any	¿Te has dado cuenta de que aquí no se puede tropezar?	Did you notice you can't trip up here? | You can't trip up here, did you notice? | {other}, nobody can trip in space.	 |  | {other}, en el espacio nadie puede tropezar.
+im_044_2	chatter	chatter	calm	crew	im_044	2	both	goofy	any	any	any	any	Tú lo has hecho tres veces.	You've done it three times. | You did it three times. | You tripped three times already.	
+im_044_3	chatter	chatter	calm	crew	im_044	3	both	goofy	any	any	any	any	Eso fue arte.	That was art. | That was art. | That was dance.	
+im_045_1	chatter	chatter	calm	crew	im_045	1	both	goofy	any	any	any	any	Echo de menos la lluvia.	I miss the rain. | I miss rain. | {other}, I miss the rain.	 |  | {other}, echo de menos la lluvia.
+im_045_2	chatter	chatter	calm	crew	im_045	2	both	goofy	any	any	any	any	Yo echo de menos las sillas.	I miss chairs. | I miss chairs. | Chairs. I miss chairs.	
+im_045_3	chatter	chatter	calm	crew	im_045	3	both	goofy	any	any	any	any	Yo echo de menos el suelo.	I miss the floor. | I miss floors. | I miss having a floor.	
+im_045_4	chatter	chatter	calm	crew	im_045	4	both	goofy	any	any	any	any	Yo no echo de menos nada. Aquí estoy genial.	I don't miss anything. I'm great here. | I miss nothing. I love it here. | Not me. I'm happy here.	
+im_046_1	chatter	chatter	calm	crew	im_046	1	both	goofy	any	any	any	any	¿Has visto mi lápiz?	Have you seen my pencil? | Where's my pencil? | {other}, have you seen my pencil?	 |  | {other}, ¿has visto mi lápiz?
+im_046_2	chatter	chatter	calm	crew	im_046	2	both	goofy	any	any	any	any	¿Otra vez el lápiz?	The pencil again? | Not the pencil again. | Again with the pencil?	
+im_046_3	chatter	chatter	calm	crew	im_046	3	both	goofy	any	any	any	any	Es otro lápiz.	It's a different pencil. | This is another pencil. | A different pencil this time.	
+im_046_4	chatter	chatter	calm	crew	im_046	4	both	goofy	any	any	any	any	Ese lápiz tiene que ser un espía.	That pencil must be a spy. | That pencil is a spy. | Those pencils are spies.	
+im_047_1	chatter	chatter	calm	crew	im_047	1	both	goofy	any	any	any	any	¿Qué haces?	What are you doing? | What are you up to? | {other}, what are you doing?	 |  | {other}, ¿qué haces?
+im_047_2	chatter	chatter	calm	crew	im_047	2	both	goofy	any	any	any	any	Hablo con la ventana.	Talking to the window. | I'm talking to the window. | Chatting with the window.	
+im_047_3	chatter	chatter	calm	crew	im_047	3	both	goofy	any	any	any	any	¿Y te contesta?	Does it answer? | Does it talk back? | Any answer?	
+im_047_4	chatter	chatter	calm	crew	im_047	4	both	goofy	any	any	any	any	Me pone cara de sol.	It makes a sun face at me. | It makes sun faces at me. | It gives me a sunny face.	
+im_048_1	chatter	chatter	calm	crew	im_048	1	both	goofy	any	any	any	any	Me pica la nariz y estoy atado al asiento.	My nose itches and I'm strapped in. | My nose itches. I'm strapped in. | I'm buckled in and my nose itches.	
+im_048_2	chatter	chatter	calm	crew	im_048	2	both	goofy	any	any	any	any	Mala suerte.	Bad luck. | Too bad. | Unlucky.	
+im_048_3	chatter	chatter	calm	crew	im_048	3	both	goofy	any	any	any	any	Desde aquí no llego.	I can't reach from here. | I can't reach it. | Can't reach it from here.	
+im_048_4	chatter	chatter	calm	crew	im_048	4	both	goofy	any	any	any	any	Desde fuera no puedo.	I can't from outside. | I can't from out here either. | Neither can I.	
+im_049_1	chatter	chatter	calm	crew	im_049	1	both	goofy	any	any	any	any	¿Tú crees que las estrellas nos ven?	Do you think the stars can see us? | Can the stars see us? | {other}, do you think the stars watch us?	 |  | {other}, ¿tú crees que las estrellas nos miran?
+im_049_2	chatter	chatter	calm	crew	im_049	2	both	goofy	any	any	any	any	Si nos ven, que no se rían.	If they can, I hope they don't laugh. | If so, I hope they're not laughing. | Hopefully they don't laugh at us.	
+im_050_1	chatter	chatter	calm	crew	im_050	1	both	orbit	any	any	any	any	¿Has dormido bien?	Did you sleep well? | Sleep okay? | {other}, how did you sleep?	 |  | {other}, ¿qué tal has dormido?
+im_050_2	chatter	chatter	calm	crew	im_050	2	both	orbit	any	any	any	any	Me he despertado pegado al techo.	I woke up stuck to the ceiling. | I woke up on the ceiling. | Woke up stuck to the ceiling.	
+im_050_3	chatter	chatter	calm	crew	im_050	3	both	orbit	any	any	any	any	¿Y?	And? | And? | So?	
+im_050_4	chatter	chatter	calm	crew	im_050	4	both	orbit	any	any	any	any	Ha sido la mejor noche de mi vida.	Best night of my life. | Best sleep ever. | Best night of my life.	
+im_051_1	chatter	chatter	calm	crew	im_051	1	both	goofy	any	any	any	any	Te reto a no hablar en diez minutos.	I dare you not to talk for ten minutes. | Bet you can't stay quiet ten minutes. | {other}, I dare you: ten minutes of silence.	 |  | {other}, te reto a diez minutos de silencio.
+im_051_2	chatter	chatter	calm	crew	im_051	2	both	goofy	any	any	any	any	Acepto.	Accepted. | Challenge accepted. | You're on.	
+im_051_3	chatter	chatter	calm	crew	im_051	3	both	goofy	any	any	any	any	¿Ya?	Done yet? | Are we done? | Is it over yet?	
+im_051_4	chatter	chatter	calm	crew	im_051	4	both	goofy	any	any	any	any	Has perdido tú.	You lost. | You lose. | And you lost.	
+im_052_1	chatter	chatter	calm	crew	im_052	1	both	goofy	any	any	any	any	Creo que he visto un pájaro.	I think I saw a bird. | I saw a bird! | {other}, I think I saw a bird.	 |  | {other}, creo que he visto un pájaro.
+im_052_2	chatter	chatter	calm	crew	im_052	2	both	goofy	any	any	any	any	No hay pájaros en el espacio.	There are no birds in space. | Space has no birds. | No birds up here.	
+im_052_3	chatter	chatter	calm	crew	im_052	3	both	goofy	any	any	any	any	Entonces era un pájaro muy valiente.	Then it was a very brave bird. | A very brave bird, then. | Then that bird was very brave.	
+im_053_1	chatter	chatter	calm	crew	im_053	1	both	goofy	any	any	any	any	Si encontramos marcianos, ¿qué les decimos?	If we meet aliens, what do we say? | What do we say to aliens? | {other}, what if we meet aliens?	 |  | {other}, ¿y si encontramos marcianos?
+im_053_2	chatter	chatter	calm	crew	im_053	2	both	goofy	any	any	any	any	Hola.	Hello. | Hi. | Hello.	
+im_053_3	chatter	chatter	calm	crew	im_053	3	both	goofy	any	any	any	any	¿Y luego?	And then? | Then what? | And after that?	
+im_053_4	chatter	chatter	calm	crew	im_053	4	both	goofy	any	any	any	any	¿Tenéis galletas?	Got any cookies? | Do you have cookies? | Got any cookies?	
+im_054_1	chatter	chatter	calm	crew	im_054	1	both	goofy	any	any	any	any	Este cable, ¿de qué es?	What's this cable for? | What does this cable do? | {other}, what's this cable for?	 |  | {other}, ¿de qué es este cable?
+im_054_2	chatter	chatter	calm	crew	im_054	2	both	goofy	any	any	any	any	No lo sé. Pero no lo toques.	No idea. But don't touch it. | No idea. Don't touch it. | Not sure. Hands off.	
+im_054_3	chatter	chatter	calm	crew	im_054	3	both	goofy	any	any	any	any	Ya está tocado.	It's already touched. | Too late. Touched. | I already touched it.	
+im_054_4	chatter	chatter	calm	crew	im_054	4	both	goofy	any	any	any	any	Pues no lo toques más.	Then don't touch it more. | Then don't touch it again. | Then stop touching it.	
+im_055_1	chatter	chatter	calm	crew	im_055	1	both	coast	any	any	any	any	¿Sabes lo que me gusta del espacio?	You know what I like about space? | Know what I like about space? | {other}, you know the best part of space?	 |  | {other}, ¿sabes qué es lo mejor del espacio?
+im_055_2	chatter	chatter	calm	crew	im_055	2	both	coast	any	any	any	any	¿Qué?	What? | What? | Tell me.	
+im_055_3	chatter	chatter	calm	crew	im_055	3	both	coast	any	any	any	any	Que nadie me pide que saque la basura.	Nobody asks me to take out the trash. | Nobody tells me to take out the trash. | No one makes me take out the trash.	
+im_055_4	chatter	chatter	calm	crew	im_055	4	both	coast	any	any	any	any	La basura está flotando detrás de ti.	The trash is floating behind you. | The trash is floating behind you. | Turn around. The trash is right there.	
+im_056_1	chatter	chatter	calm	crew	im_056	1	both	goofy	any	any	any	any	¿Has traído algo para leer?	Did you bring anything to read? | Did you bring something to read? | {other}, got anything to read?	 |  | {other}, ¿tienes algo para leer?
+im_056_2	chatter	chatter	calm	crew	im_056	2	both	goofy	any	any	any	any	La lista de la compra.	My shopping list. | Just my shopping list. | My shopping list.	
+im_056_3	chatter	chatter	calm	crew	im_056	3	both	goofy	any	any	any	any	¿Y está bien?	Is it good? | Any good? | Is it a good read?	
+im_056_4	chatter	chatter	calm	crew	im_056	4	both	goofy	any	any	any	any	Tiene un final con queso.	It ends with cheese. | Ends with cheese. | Great ending. Cheese.	
+im_057_1	chatter	chatter	calm	crew	im_057	1	both	goofy	any	any	any	any	¿Me oyes?	Can you hear me? | Can you hear me? | {other}, do you hear me?	 |  | {other}, ¿me oyes?
+im_057_2	chatter	chatter	calm	crew	im_057	2	both	goofy	any	any	any	any	Estás a mi lado.	You're right next to me. | I'm right here. | You're next to me.	
+im_057_3	chatter	chatter	calm	crew	im_057	3	both	goofy	any	any	any	any	Solo comprobaba la radio.	Just checking the radio. | Testing the radio. | Radio check.	
+im_058_1	chatter	chatter	calm	crew	im_058	1	both	goofy	any	any	any	any	Cuando volvamos, ¿nos darán una medalla?	When we're back, will they give us a medal? | Will they give us medals? | {other}, do we get a medal when we're back?	 |  | {other}, ¿nos darán una medalla al volver?
+im_058_2	chatter	chatter	calm	crew	im_058	2	both	goofy	any	any	any	any	Seguro.	For sure. | Definitely. | Surely.	
+im_058_3	chatter	chatter	calm	crew	im_058	3	both	goofy	any	any	any	any	¿De chocolate?	A chocolate one? | Chocolate ones? | Made of chocolate?	
+im_058_4	chatter	chatter	calm	crew	im_058	4	both	goofy	any	any	any	any	Eso ya no lo sé.	That I don't know. | Don't know about that. | That I can't promise.	
+im_059_1	chatter	chatter	calm	crew	im_059	1	both	goofy	any	any	any	any	Te he dibujado.	I drew you. | I made a drawing of you. | {other}, I drew you.	 |  | {other}, te he dibujado.
+im_059_2	chatter	chatter	calm	crew	im_059	2	both	goofy	any	any	any	any	¿Por qué tengo cuatro brazos?	Why do I have four arms? | Why four arms? | Why do I have four arms?	
+im_059_3	chatter	chatter	calm	crew	im_059	3	both	goofy	any	any	any	any	Porque te mueves mucho.	Because you move a lot. | You move a lot. | Because you never stop moving.	
+im_060_1	chatter	chatter	calm	crew	im_060	1	both	goofy	any	any	any	any	¿Tú cuántas veces has ido al espacio?	How many times have you been to space? | How many times have you been in space? | {other}, how often have you flown?	 |  | {other}, ¿cuántas veces has volado?
+im_060_2	chatter	chatter	calm	crew	im_060	2	both	goofy	any	any	any	any	Contando esta, una.	Counting this one, once. | Including now? Once. | This is my first time.	
+im_060_3	chatter	chatter	calm	crew	im_060	3	both	goofy	any	any	any	any	Yo también. Somos expertos.	Me too. We're experts. | Same. We're experts. | Me too. Total experts.	
+im_061_1	chatter	chatter	calm	crew	im_061	1	both	prelaunch	any	any	any	any	¿Nervioso?	Nervous? | Nervous? | {other}, are you nervous?	 |  | {other}, ¿estás nervioso?
+im_061_2	chatter	chatter	calm	crew	im_061	2	both	prelaunch	any	any	any	any	Para nada.	Not at all. | Not a bit. | Nope.	
+im_061_3	chatter	chatter	calm	crew	im_061	3	both	prelaunch	any	any	any	any	Entonces suelta mi mano.	Then let go of my hand. | Then let go of my hand. | Then why are you holding my hand?	
+im_062_1	chatter	chatter	calm	crew	im_062	1	both	prelaunch	any	any	any	any	¿Has apagado el horno de casa?	Did you turn off the oven at home? | Is the oven off at home? | {other}, did you switch off the oven?	 |  | {other}, ¿has apagado el horno?
+im_062_2	chatter	chatter	calm	crew	im_062	2	both	prelaunch	any	any	any	any	¿Qué horno?	What oven? | Which oven? | We have an oven?	
+im_062_3	chatter	chatter	calm	crew	im_062	3	both	prelaunch	any	any	any	any	Entonces no.	So no. | So, no. | That's a no.	
+im_063_1	chatter	chatter	calm	crew	im_063	1	both	prelaunch	any	any	any	any	¿Por qué hay tantos botones?	Why are there so many buttons? | Why so many buttons? | {other}, why are there this many buttons?	 |  | {other}, ¿por qué hay tantos botones?
+im_063_2	chatter	chatter	calm	crew	im_063	2	both	prelaunch	any	any	any	any	Para que parezca importante.	So it looks important. | To look important. | It looks important that way.	
+im_064_1	chatter	chatter	calm	crew	im_064	1	both	prelaunch	any	any	any	any	Me sudan las manos.	My hands are sweaty. | Sweaty hands. | My hands are all sweaty.	
+im_064_2	chatter	chatter	calm	crew	im_064	2	both	prelaunch	any	any	any	any	Llevas guantes.	You're wearing gloves. | You have gloves on. | You're in gloves.	
+im_064_3	chatter	chatter	calm	crew	im_064	3	both	prelaunch	any	any	any	any	Pues me sudan los guantes.	Then my gloves are sweaty. | Sweaty gloves, then. | Then my gloves are sweaty.	
+im_065_1	chatter	chatter	calm	crew	im_065	1	both	orbit	any	any	any	any	¿Te has fijado? Cada hora es de día y de noche.	Have you noticed? Every hour it's day and night. | It's day and night every hour, did you notice? | {other}, the sun comes up every hour here.	 |  | {other}, aquí sale el sol cada hora.
+im_065_2	chatter	chatter	calm	crew	im_065	2	both	orbit	any	any	any	any	Por eso tengo tanto sueño y tanta hambre.	That's why I'm so sleepy and so hungry. | That's why I'm sleepy and hungry. | No wonder I'm always tired and hungry.	
+im_066_1	chatter	chatter	calm	crew	im_066	1	both	orbit	any	any	any	any	Desde aquí arriba no se ven las fronteras.	You can't see any borders from up here. | No borders from up here. | You can't see any borders up here.	
+im_066_2	chatter	chatter	calm	crew	im_066	2	both	orbit	any	any	any	any	Ni los atascos.	Or traffic jams. | No traffic jams either. | Or traffic.	
+im_066_3	chatter	chatter	calm	crew	im_066	3	both	orbit	any	any	any	any	Ni a mi jefe.	Or my boss. | Or my boss. | And no boss.	
+im_067_1	chatter	chatter	calm	crew	im_067	1	both	orbit	any	any	any	any	¿Cuántas vueltas llevamos?	How many laps have we done? | How many orbits so far? | {other}, how many laps have we done?	 |  | {other}, ¿cuántas vueltas llevamos?
+im_067_2	chatter	chatter	calm	crew	im_067	2	both	orbit	any	any	any	any	He perdido la cuenta en la tercera.	I lost count at the third. | I lost count at three. | I stopped counting at the third.	
+im_067_3	chatter	chatter	calm	crew	im_067	3	both	orbit	any	any	any	any	Yo en la segunda.	I lost it at the second. | I lost it at two. | I gave up at the second.	
+im_068_1	chatter	chatter	calm	crew	im_068	1	both	orbit	any	any	any	any	Mira, ahí abajo está nuestra casa.	Look, there's our home down there. | There's home, down there. | {other}, look. Home.	 |  | {other}, mira. Nuestra casa.
+im_068_2	chatter	chatter	calm	crew	im_068	2	both	orbit	any	any	any	any	¿Cuál?	Which one? | Where? | Which one?	
+im_068_3	chatter	chatter	calm	crew	im_068	3	both	orbit	any	any	any	any	La azul. La grande. Toda.	The blue one. The big one. All of it. | The big blue one. All of it. | The blue one. The whole thing.	
+im_069_1	chatter	chatter	calm	crew	im_069	1	both	coast	any	any	any	any	¿Sabes qué echo de menos?	You know what I miss? | You know what I miss? | {other}, guess what I miss.	 |  | {other}, adivina qué echo de menos.
+im_069_2	chatter	chatter	calm	crew	im_069	2	both	coast	any	any	any	any	¿Las ventanas con algo que ver?	Windows with something to look at? | A window with a view? | Windows with something in them?	
+im_069_3	chatter	chatter	calm	crew	im_069	3	both	coast	any	any	any	any	Exacto.	Exactly. | Exactly. | That's it.	
+im_070_1	chatter	chatter	calm	crew	im_070	1	both	coast	any	any	any	any	Vamos a jugar a algo.	Let's play something. | Game time. | {other}, let's play something.	 |  | {other}, vamos a jugar a algo.
+im_070_2	chatter	chatter	calm	crew	im_070	2	both	coast	any	any	any	any	¿A qué?	What? | What game? | What?	
+im_070_3	chatter	chatter	calm	crew	im_070	3	both	coast	any	any	any	any	A quién aguanta más sin mirar la ventana.	Who can go longest without looking out the window. | Who lasts longest without looking out the window. | Whoever looks out the window first loses.	
+im_070_4	chatter	chatter	calm	crew	im_070	4	both	coast	any	any	any	any	He perdido.	I lost. | I lost. | I already lost.	
+im_071_1	chatter	chatter	calm	crew	im_071	1	both	coast	any	any	any	any	¿Cuánto falta para llegar?	How long until we arrive? | How long till we're there? | {other}, when do we arrive?	 |  | {other}, ¿cuándo llegamos?
+im_071_2	chatter	chatter	calm	crew	im_071	2	both	coast	any	any	any	any	Lo mismo que hace una hora, menos una hora.	Same as an hour ago, minus an hour. | Same as an hour ago. Minus an hour. | An hour less than last time you asked.	
+im_072_1	chatter	chatter	calm	crew	im_072	1	both	coast	any	any	any	any	Este viaje es largo.	This trip is long. | Long trip. | This trip takes forever.	
+im_072_2	chatter	chatter	calm	crew	im_072	2	both	coast	any	any	any	any	Pero es bonito.	But it's pretty. | But a pretty one. | It's pretty, though.	
+im_072_3	chatter	chatter	calm	crew	im_072	3	both	coast	any	any	any	any	Largo y bonito. Como yo.	Long and pretty. Like me. | Long and pretty. Just like me. | Long and pretty. Like me.	
+im_073_1	chatter	chatter	calm	crew	im_073	1	both	landed	any	any	any	any	¿Quién sale primero?	Who goes out first? | Who goes out first? | {other}, who goes outside first?	 |  | {other}, ¿quién sale primero?
+im_073_2	chatter	chatter	calm	crew	im_073	2	both	landed	any	any	any	any	El más valiente.	The bravest. | The bravest one. | Whoever is bravest.	
+im_073_3	chatter	chatter	calm	crew	im_073	3	both	landed	any	any	any	any	Entonces tú.	So you. | You, then. | So that's you.	
+im_073_4	chatter	chatter	calm	crew	im_073	4	both	landed	any	any	any	any	Entonces nadie.	So nobody. | So, nobody. | Then nobody goes.	
+im_074_1	chatter	chatter	calm	crew	im_074	1	both	landed	any	any	any	any	El suelo se ve muy blando.	The ground looks very soft. | The ground looks really soft. | That ground looks so soft.	
+im_074_2	chatter	chatter	calm	crew	im_074	2	both	landed	any	any	any	any	Es roca.	It's rock. | It's rock. | That's solid rock.	
+im_074_3	chatter	chatter	calm	crew	im_074	3	both	landed	any	any	any	any	Blanda de mirar.	Soft to look at. | Soft to the eye. | It looks soft.	
+im_075_1	chatter	chatter	calm	crew	im_075	1	both	landed	any	any	any	any	¡Hemos aterrizado!	We landed! | We're down! | We landed, {other}!	 |  | ¡Hemos aterrizado, {other}!
+im_075_2	chatter	chatter	calm	crew	im_075	2	both	landed	any	any	any	any	¿Lo celebramos?	Shall we celebrate? | Party? | Celebrate?	
+im_075_3	chatter	chatter	calm	crew	im_075	3	both	landed	any	any	any	any	Con galletas.	With cookies. | With cookies. | Cookies, yes.	
+im_075_4	chatter	chatter	calm	crew	im_075	4	both	landed	any	any	any	any	Con todas las galletas.	With all the cookies. | All of the cookies. | Every cookie we have.	
+im_076_1	chatter	chatter	calm	crew	im_076	1	both	landed	any	any	any	any	Aquí estamos. En otro sitio.	Here we are. Somewhere else. | Here we are. Somewhere new. | Well. We're somewhere else now.	
+im_076_2	chatter	chatter	calm	crew	im_076	2	both	landed	any	any	any	any	Se parece a casa, pero sin casa.	It looks like home, but without the home. | Like home, minus the home. | It looks like home. Just without home.	
