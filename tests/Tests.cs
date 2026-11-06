@@ -1612,11 +1612,12 @@ public static class Tests
                         "rt_somemod_onelang\tevent\ton=somemod.thing\tD {x_n}.\tD.",
                         "rt_somemod_meta\tmeta\ton=somemod.thing cooldown=abc\t\t",
                         "rt_orbit\tevent\ton=somemod.thing\tE.\tE.",
-                        "rt_somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF." }));
+                        "rt_somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF.",
+                        "rt_somemod_sci\tscience\ton=somemod.thing\tG.\tG." }));
                 List<RuntimeTemplate> badRows = RuntimeLines.ParseAll(badFiles, badErr)
                     .FindAll(t => t.Where.StartsWith("SomeMod/", StringComparison.Ordinal));
-                Check(badRows.Count == 2 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check" && badErr.Count == 6,
-                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id)",
+                Check(badRows.Count == 2 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check" && badErr.Count == 7,
+                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a mod event on a science line)",
                       badErr.Count + ": " + string.Join(" ; ", badErr.ToArray()));
                 Check(ModEvents.ValidId("examplemod.repair_done") && ModEvents.ValidId("m2.e_1") && !ModEvents.ValidId("flag")
                       && !ModEvents.ValidId("a.b.c") && !ModEvents.ValidId(".x") && !ModEvents.ValidId("x.") && !ModEvents.ValidId("Mod.Event")

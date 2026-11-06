@@ -101,7 +101,8 @@ The settings of `meta` are all optional:
 ### Kinds Lonapse triggers itself
 
 These 12 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
-report. They play on those moments, never on your event. Your `{x_...}` slots never have a value there, so a row of
+report. They play on those moments, never on your event. A `science` or `science_pts` row with `on=yourmod.event` is
+an error, because it could never play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of
 these kinds cannot use them.
 
 | Kind | When it plays |

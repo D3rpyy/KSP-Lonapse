@@ -278,6 +278,8 @@ namespace Lonapse
                         if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "event" && t.Kind != "meta")
                             bad.Add("'" + tok + "' only works in a chat, a science line, an event or a meta row");
                         else if ((t.Kind == "event" || t.Kind == "meta") && !mod) bad.Add("an event or meta row needs a mod event mod.event, not '" + ev + "'");
+                        else if ((t.Kind == "science" || t.Kind == "science_pts") && mod)
+                            bad.Add("a science line only plays after a stock experiment, never on '" + ev + "': use kind event for a mod event");
                         else if (!mod && Array.IndexOf(Events, ev) < 0) bad.Add("unknown event '" + ev + "' (" + string.Join(" ", Events) + ", or a mod event mod.event)");
                         else t.On.Add(ev);
                         continue;
