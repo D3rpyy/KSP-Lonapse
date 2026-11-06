@@ -1581,6 +1581,27 @@ public static class Tests
                           && RuntimeLines.Answers(t, "rt_examplemod_repair", "event")),
                       "mod API: a mod event only fits its own lines, and only its own replies answer it", "");
 
+                // a mod experiment through stock science: the experiment row names its topic and the words of {exp}
+                RuntimeTemplate soilSci = withMod.Find(t => t.Id == "rt_sci_examplemod_soil");
+                RuntimeTemplate stockSci = withMod.Find(t => t.On.Contains("science"));
+                RuntimeTemplate soilChat = withMod.Find(t => t.Id == "rt_chat_examplemod_soil_1");
+                string soilTopic = RuntimeLines.ScienceTopic(withMod, "exampleSoil@KerbinSrfLandedShores");
+                bool soilSciFits = RuntimeLines.IsScienceTopic(withMod, soilTopic);
+                Check(soilTopic == "examplemod.soil" && RuntimeLines.ScienceTopic(withMod, "crewReport@KerbinFlyingLow") == "crewreport"
+                      && RuntimeLines.ModExperiment(withMod, "examplesoil") != null
+                      && RuntimeLines.ExperimentWords(withMod, "exampleSoil")[1] == "soil analysis"
+                      && RuntimeLines.ExperimentWords(withMod, "otherModThing")[1] == "experiment"
+                      && soilSciFits && !RuntimeLines.IsScienceTopic(withMod, "examplemod.repair_done")
+                      && soilSci != null && RuntimeLines.OnFits(soilSci, soilTopic, soilSciFits)
+                      && !RuntimeLines.OnFits(soilSci, "crewreport", true)
+                      && stockSci != null && RuntimeLines.OnFits(stockSci, soilTopic, soilSciFits)
+                      && !RuntimeLines.OnFits(stockSci, "examplemod.repair_done", false)
+                      && soilChat != null && RuntimeLines.OnFits(soilChat, soilTopic, soilSciFits)
+                      && !modIds.Contains("examplemod.soil") && ModEvents.IsExperimentTopic(withMod, "examplemod.soil")
+                      && !ModEvents.IsExperimentTopic(withMod, "examplemod.repair_done"),
+                      "mod API: an experiment row gives a mod experiment its topic and {exp} words, on=science fits it, Trigger never lists it",
+                      soilTopic + " " + (stockSci != null ? stockSci.Id : "no on=science line"));
+
                 // x_ slots: numbers in Spanish words and digits, names as "spanish|english", checks on x_ values
                 var xn = new Dictionary<string, double> { { "x_days", 4 } };
                 var xs = new Dictionary<string, string[]> { { "other", new[] { "Bil", "Bill" } } };
@@ -1613,11 +1634,18 @@ public static class Tests
                         "rt_somemod_meta\tmeta\ton=somemod.thing cooldown=abc\t\t",
                         "rt_orbit\tevent\ton=somemod.thing\tE.\tE.",
                         "rt_somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF.",
-                        "rt_somemod_sci\tscience\ton=somemod.thing\tG.\tG." }));
+                        "rt_somemod_sci\tscience\ton=somemod.thing\tG.\tG.",
+                        "rt_somemod_exp\texperiment\ton=somemod.scan id=someScan\tescaneo\tscan",
+                        "rt_somemod_scan\tscience\ton=somemod.scan\tEl {exp}.\tThe {exp}.",
+                        "rt_somemod_stockexp\texperiment\ton=somemod.crew id=crewReport\tinforme\treport",
+                        "rt_somemod_noid\texperiment\ton=somemod.noid\tH\tH",
+                        "rt_somemod_slotexp\texperiment\ton=somemod.slot id=slotScan\t{x_n}\t{x_n}",
+                        "rt_somemod_twice\texperiment\ton=somemod.other id=someScan\tI\tI" }));
                 List<RuntimeTemplate> badRows = RuntimeLines.ParseAll(badFiles, badErr)
                     .FindAll(t => t.Where.StartsWith("SomeMod/", StringComparison.Ordinal));
-                Check(badRows.Count == 2 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check" && badErr.Count == 7,
-                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a mod event on a science line)",
+                Check(badRows.Count == 4 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check"
+                      && badRows[2].Id == "rt_somemod_exp" && badRows[3].Id == "rt_somemod_scan" && badErr.Count == 11,
+                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a science line on an unregistered topic, a stock experiment id, no id=, slots in the words, an id registered twice)",
                       badErr.Count + ": " + string.Join(" ; ", badErr.ToArray()));
                 Check(ModEvents.ValidId("examplemod.repair_done") && ModEvents.ValidId("m2.e_1") && !ModEvents.ValidId("flag")
                       && !ModEvents.ValidId("a.b.c") && !ModEvents.ValidId(".x") && !ModEvents.ValidId("x.") && !ModEvents.ValidId("Mod.Event")

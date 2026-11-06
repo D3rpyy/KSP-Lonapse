@@ -49,6 +49,8 @@ namespace Lonapse
                                     IDictionary<string, string> names)
         {
             if (!ModEvents.ValidId(id)) return ModDrop(id ?? "(null)", "the id is not mod.event (a-z 0-9 _)");
+            if (ModEvents.IsExperimentTopic(PhraseClips.runtimeTemplates, id))
+                return ModDrop(id, "it is the topic of an experiment row, its lines play after the experiment itself");
             ModEventInfo info = ModEvents.Info(PhraseClips.runtimeTemplates, id);
             if (!info.HasLines) return ModDrop(id, "no lines for it are loaded");
             Vessel av = ActiveVessel;

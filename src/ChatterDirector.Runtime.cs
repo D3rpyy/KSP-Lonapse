@@ -601,7 +601,8 @@ namespace Lonapse
             {
                 // a science line with on= only for its experiment, the rest for any experiment (not a deployed part)
                 string topic = runtimeTopic;
-                fit.RemoveAll(t => t.On.Count > 0 ? !RuntimeLines.OnFits(t, topic) : topic == "deploy");
+                bool sci = RuntimeLines.IsScienceTopic(PhraseClips.runtimeTemplates, topic);
+                fit.RemoveAll(t => t.On.Count > 0 ? !RuntimeLines.OnFits(t, topic, sci) : topic == "deploy");
                 var own = fit.FindAll(t => t.On.Contains(topic ?? ""));
                 if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
             }
@@ -785,7 +786,8 @@ namespace Lonapse
         /// <summary>{exp} for a science line: the Spanish words go in reversed, like the rest of the text.</summary>
         static string[] ExpNames(string subjectId)
         {
-            string[] w = RuntimeLines.ExperimentWords(RuntimeLines.ExperimentId(subjectId));
+            // a mod's experiment row gives the words of its own experiment
+            string[] w = RuntimeLines.ExperimentWords(PhraseClips.runtimeTemplates, RuntimeLines.ExperimentId(subjectId));
             return new[] { LonapseText.ReverseText(w[0]), w[1] };
         }
 
@@ -797,7 +799,7 @@ namespace Lonapse
         public bool RuntimeScienceTakeover(string subjectId, float dataAmount, string bodyName)
         {
             if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled) return false;
-            string topic = EventWatchers.ExperimentId(subjectId);
+            string topic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId);
             bool reach = !McUnreachable && host.signal.connected;
             bool eva = Array.IndexOf(EvaScience, topic) >= 0;
             if (reach && (!eva || rng.NextDouble() >= EvaScienceChance)) return false;
@@ -1002,11 +1004,12 @@ namespace Lonapse
             PairValues(b, a, numsB, namesB);
             if (!solo && way != ChatWay.Intercom) { numsA["apart"] = 1; numsB["apart"] = 1; }
             var fit = new List<KeyValuePair<List<RuntimeTemplate>, bool>>();
+            bool evSci = RuntimeLines.IsScienceTopic(PhraseClips.runtimeTemplates, ev);
             foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
             {
                 if (recentRuntime.Contains(c[0].Id)) continue;
                 // an event chat: only the chats about ev. A kerbal alone says a one-line one, two kerbals a real chat.
-                if (ev != null ? !RuntimeLines.OnFits(c[0], ev) || solo != (c.Count == 1) : c[0].IsEvent) continue;
+                if (ev != null ? !RuntimeLines.OnFits(c[0], ev, evSci) || solo != (c.Count == 1) : c[0].IsEvent) continue;
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
                 // an event chat starts with the kerbal who did it: never swapped
                 else if (ev == null && RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
@@ -1255,7 +1258,7 @@ namespace Lonapse
             if (b != null) { names["body"] = b; names["here"] = b; }
             // after the reaction scene: it is queued first, this waits behind it
             float delay = ResponseDelay(host.stress.stress) + 0.8f;
-            runtimeTopic = EventWatchers.ExperimentId(subjectId);
+            runtimeTopic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId);
             try
             {
                 if (!(nums.ContainsKey("sci") && QueueKind("science_pts", null, nums, names, delay, false)))

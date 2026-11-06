@@ -42,6 +42,13 @@ namespace Lonapse
 
         public static int PriorityOf(string p) { return p == "low" ? 0 : p == "high" ? 2 : 1; }
 
+        /// <summary>The topic belongs to a mod's experiment row: it plays after that experiment, not by Trigger.</summary>
+        public static bool IsExperimentTopic(IList<RuntimeTemplate> all, string id)
+        {
+            if (all != null) foreach (RuntimeTemplate t in all) if (t.Kind == "experiment" && t.On.Contains(id)) return true;
+            return false;
+        }
+
         /// <summary>The settings and lines of event id in the loaded templates.</summary>
         public static ModEventInfo Info(IList<RuntimeTemplate> all, string id)
         {
@@ -70,6 +77,10 @@ namespace Lonapse
                 foreach (RuntimeTemplate t in all)
                     foreach (string o in t.On)
                         if (RuntimeLines.IsModEvent(o) && !r.Contains(o)) r.Add(o);
+            // an experiment topic plays after its experiment, never by Trigger
+            if (all != null)
+                foreach (RuntimeTemplate t in all)
+                    if (t.Kind == "experiment") r.Remove(t.On[0]);
             r.Sort(StringComparer.Ordinal);
             return r;
         }

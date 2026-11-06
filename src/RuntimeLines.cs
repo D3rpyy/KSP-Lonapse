@@ -40,6 +40,9 @@ namespace Lonapse
         /// high, null: normal) and who talks (crew mc any, null: any).</summary>
         public double Cooldown = -1;
         public string Priority, Who;
+        /// <summary>Experiment row of a mod: the experiment id of KSP (plantGrowth, the part of a subject id before
+        /// the @). Its text holds the words for {exp}, its on= the topic of its science lines.</summary>
+        public string ExpId;
 
         /// <summary>An event chat: a chat with on=.</summary>
         public bool IsEvent { get { return Kind == "chat" && On.Count > 0; } }
@@ -93,9 +96,9 @@ namespace Lonapse
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
                                                   "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag",
-                                                  "event", "meta" };
+                                                  "event", "meta", "experiment" };
         /// <summary>Kinds only other mods use (Lonapse itself ships no rows of them).</summary>
-        public static readonly string[] ModKinds = { "event", "meta" };
+        public static readonly string[] ModKinds = { "event", "meta", "experiment" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
@@ -152,6 +155,34 @@ namespace Lonapse
         static readonly Regex ToRe = new Regex(@"^to=(rt_[a-z0-9_]*\*?)$");
         static readonly Regex OnRe = new Regex(@"^on=([a-z0-9_]+(?:\.[a-z0-9_]+)?)$");
         static readonly Regex MetaRe = new Regex(@"^(cooldown|priority|who)=([a-z0-9.]+)$");
+        static readonly Regex ExpIdRe = new Regex(@"^id=([A-Za-z0-9_]+)$");
+
+        /// <summary>The experiment row of a mod for an experiment id (case does not matter), null when none.</summary>
+        public static RuntimeTemplate ModExperiment(IList<RuntimeTemplate> all, string experimentId)
+        {
+            if (all == null || string.IsNullOrEmpty(experimentId)) return null;
+            foreach (RuntimeTemplate t in all)
+                if (t.Kind == "experiment" && string.Equals(t.ExpId, experimentId, StringComparison.OrdinalIgnoreCase)) return t;
+            return null;
+        }
+
+        /// <summary>The topic of a science result: the on= of a mod's experiment row for its experiment, else the
+        /// stock topic (EventWatchers.ExperimentId: crewreport, roc, other ...).</summary>
+        public static string ScienceTopic(IList<RuntimeTemplate> all, string subjectId)
+        {
+            RuntimeTemplate m = ModExperiment(all, ExperimentId(subjectId));
+            return m != null && m.On.Count > 0 ? m.On[0] : EventWatchers.ExperimentId(subjectId);
+        }
+
+        /// <summary>The topic is a science result: a stock topic (not flag or deploy), or the topic of a mod's
+        /// experiment row.</summary>
+        public static bool IsScienceTopic(IList<RuntimeTemplate> all, string topic)
+        {
+            if (topic == null || topic == "flag" || topic == "deploy") return false;
+            if (!IsModEvent(topic)) return true;
+            if (all != null) foreach (RuntimeTemplate t in all) if (t.Kind == "experiment" && t.On.Contains(topic)) return true;
+            return false;
+        }
 
         /// <summary>An event of another mod: a namespaced id, mod.event (examplemod.repair_done).</summary>
         public static bool IsModEvent(string ev) { return ev != null && ev.IndexOf('.') > 0; }
@@ -166,9 +197,16 @@ namespace Lonapse
         /// is a science topic (not flag or deploy). A line without on= fits no event.</summary>
         public static bool OnFits(RuntimeTemplate t, string ev)
         {
+            return OnFits(t, ev, ev != null && ev != "flag" && ev != "deploy" && !IsModEvent(ev));
+        }
+
+        /// <summary>OnFits, where science says the event is a science result (so on=science fits it). A mod's
+        /// experiment topic is a science result too (IsScienceTopic).</summary>
+        public static bool OnFits(RuntimeTemplate t, string ev, bool science)
+        {
             if (t == null || ev == null) return false;
             foreach (string o in t.On)
-                if (o == ev || (o == "science" && ev != "flag" && ev != "deploy" && !IsModEvent(ev))) return true;
+                if (o == ev || (o == "science" && science)) return true;
             return false;
         }
 
@@ -189,6 +227,33 @@ namespace Lonapse
             var seen = new HashSet<string>();
             foreach (var file in files)
                 ParseFile(file.Key, file.Value, errors, seen, r);
+            // a science line with a mod topic needs the experiment row of that topic (in any file), and a topic
+            // or experiment id has one experiment row
+            var topics = new HashSet<string>();
+            var expIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var dropExp = new HashSet<RuntimeTemplate>();
+            foreach (RuntimeTemplate t in r)
+            {
+                if (t.Kind != "experiment") continue;
+                if (!topics.Add(t.On[0]) || !expIds.Add(t.ExpId))
+                {
+                    if (errors != null) errors.Add(t.Where + " (" + t.Id + "): the topic " + t.On[0] + " or the id " + t.ExpId + " already has an experiment row");
+                    dropExp.Add(t);
+                }
+            }
+            foreach (RuntimeTemplate t in r)
+            {
+                if (t.Kind != "science" && t.Kind != "science_pts") continue;
+                foreach (string o in t.On)
+                    if (IsModEvent(o) && !topics.Contains(o))
+                    {
+                        if (errors != null) errors.Add(t.Where + " (" + t.Id + "): a science line only plays after an experiment. on=" + o
+                                                       + " needs an experiment row with on=" + o + " id=<experiment id>, or use kind event for a mod event");
+                        dropExp.Add(t);
+                        break;
+                    }
+            }
+            r.RemoveAll(t => dropExp.Contains(t));
             // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only
             var groups = new Dictionary<string, List<RuntimeTemplate>>();
             var drop = new HashSet<RuntimeTemplate>();
@@ -275,13 +340,22 @@ namespace Lonapse
                     {
                         string ev = on.Groups[1].Value;
                         bool mod = IsModEvent(ev);
-                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "event" && t.Kind != "meta")
-                            bad.Add("'" + tok + "' only works in a chat, a science line, an event or a meta row");
-                        else if ((t.Kind == "event" || t.Kind == "meta") && !mod) bad.Add("an event or meta row needs a mod event mod.event, not '" + ev + "'");
-                        else if ((t.Kind == "science" || t.Kind == "science_pts") && mod)
-                            bad.Add("a science line only plays after a stock experiment, never on '" + ev + "': use kind event for a mod event");
+                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "event" && t.Kind != "meta"
+                            && t.Kind != "experiment")
+                            bad.Add("'" + tok + "' only works in a chat, a science line, an event, a meta or an experiment row");
+                        else if ((t.Kind == "event" || t.Kind == "meta" || t.Kind == "experiment") && !mod)
+                            bad.Add("an event, meta or experiment row needs a mod event mod.event, not '" + ev + "'");
                         else if (!mod && Array.IndexOf(Events, ev) < 0) bad.Add("unknown event '" + ev + "' (" + string.Join(" ", Events) + ", or a mod event mod.event)");
                         else t.On.Add(ev);
+                        continue;
+                    }
+                    Match xi = ExpIdRe.Match(tok);
+                    if (xi.Success && t.Kind == "experiment")
+                    {
+                        if (t.ExpId != null) bad.Add("an experiment row has one id=");
+                        else if (Experiments.ContainsKey(xi.Groups[1].Value) || Array.IndexOf(EventWatchers.KnownExperiments, xi.Groups[1].Value.ToLowerInvariant()) >= 0)
+                            bad.Add("id=" + xi.Groups[1].Value + " is a stock experiment, Lonapse has its own words for it");
+                        else t.ExpId = xi.Groups[1].Value;
                         continue;
                     }
                     Match mt = MetaRe.Match(tok);
@@ -332,6 +406,12 @@ namespace Lonapse
                     continue;
                 }
                 if (t.Kind == "event" && t.On.Count == 0) bad.Add("an event line needs on=mod.event");
+                if (t.Kind == "experiment")
+                {
+                    if (t.On.Count != 1 || t.ExpId == null) bad.Add("an experiment row needs one on=mod.topic and one id=<experiment id>");
+                    if (t.Versions.Count != 1) bad.Add("an experiment row has one version: the words for {exp}, no |");
+                    else if (Slot.IsMatch(t.Versions[0][0]) || Slot.IsMatch(t.Versions[0][1])) bad.Add("the words of an experiment have no slots");
+                }
                 int nEs = f[col["spanish"]].Split(SubtitleSlots.VersionSep).Length, nEn = f[col["english"]].Split(SubtitleSlots.VersionSep).Length;
                 if (nEs != nEn) bad.Add(nEs + " spanish versions for " + nEn + " english, split both by | in the same order");
                 for (int v = 0; v < t.Versions.Count && bad.Count == 0; v++)
@@ -559,6 +639,14 @@ namespace Lonapse
 
         /// <summary>Spanish and English words of an experiment. Unknown (modded) ids: "los datos" style generic words.
         /// Comet samples (cometSample_short ...) share one entry.</summary>
+        /// <summary>ExperimentWords, where a mod's experiment row (kind experiment) gives the words of its own id.</summary>
+        public static string[] ExperimentWords(IList<RuntimeTemplate> all, string experimentId)
+        {
+            RuntimeTemplate m = ModExperiment(all, experimentId);
+            if (m != null && m.Versions.Count > 0) return new[] { m.Versions[0][0], m.Versions[0][1] };
+            return ExperimentWords(experimentId);
+        }
+
         public static string[] ExperimentWords(string experimentId)
         {
             string[] w;

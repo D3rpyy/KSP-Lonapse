@@ -15,7 +15,7 @@ The API is new in 0.8.0 and has API version 1. I have tested it with the example
 2. `LonapseWrapper.cs` copied into your mod (from `docs/api/` in the Lonapse repository).
 3. One call where your event happens.
 
-The full example is `docs/api/example_mod.tsv`. It is a made-up mod, `examplemod`, with three events.
+The full example is `docs/api/example_mod.tsv`. It is a made-up mod, `examplemod`, with three events and one experiment of its own.
 
 ## The call
 
@@ -74,7 +74,7 @@ rt_yourmod_repair_meta	meta	on=yourmod.repair_done cooldown=180 priority=normal 
 
 ## Kinds
 
-The `kind` column says what a row is and when it plays. There are 16 kinds.
+The `kind` column says what a row is and when it plays. There are 17 kinds.
 
 ### Kinds for your events
 
@@ -86,6 +86,12 @@ These 4 kinds play when your mod calls `Trigger`.
 | `event` | A Mission Control line about the event. `{kerbal}` is the kerbal who did it. | `on=yourmod.event` |
 | `reply` | The kerbal answers your `event` line, right after it. `to=rt_yourmod_*` answers every line whose id starts with that. | `to=<id of your event line>` |
 | `meta` | The settings of one event. It has no text. | `on=yourmod.event` |
+
+One more kind is for an experiment of your mod. It does not need `Trigger`, see [Your own experiments](#your-own-experiments).
+
+| Kind | What it is | Needs |
+|---|---|---|
+| `experiment` | Registers an experiment of your mod. The text is its name for `{exp}`. It has one version and no slots. | `on=yourmod.topic id=<experiment id>` |
 
 Chat ids are `rt_chat_<name>_<seq>`, with seq 1, 2, 3 and so on, one row per line. Only line 1 has a `when`. All
 lines of a chat go in one file. Only replies with your `to=` answer your `event` lines.
@@ -101,9 +107,9 @@ The settings of `meta` are all optional:
 ### Kinds Lonapse triggers itself
 
 These 12 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
-report. They play on those moments, never on your event. A `science` or `science_pts` row with `on=yourmod.event` is
-an error, because it could never play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of
-these kinds cannot use them.
+report. They play on those moments, never on your event. A `science` or `science_pts` row may only have
+`on=yourmod.topic` when an `experiment` row registers that topic. Otherwise it is an error, because it could never
+play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of these kinds cannot use them.
 
 | Kind | When it plays |
 |---|---|
@@ -124,6 +130,31 @@ these kinds cannot use them.
 - A `chat` without `on=` is a normal chat. It plays now and then on the intercom in one cabin. With `on_eva=1` it
   plays on the suit radio between two EVA kerbals, and with `apart=1` on the radio between two vessels nearby.
 - A `reply` without `to=` can answer a `report`, `warp`, `sunrise` or `eva` line, or a recorded Mission Control line.
+
+## Your own experiments
+
+Does your mod add an experiment that runs through the KSP science system, a `ModuleScienceExperiment` with its own
+`experimentID`? Then Lonapse sees it like a stock experiment. You do not call `Trigger` for it. Without help Lonapse
+calls it "the experiment", and only the general science lines play. An `experiment` row fixes that:
+
+```
+rt_yourmod_soil_exp	experiment	on=yourmod.soil id=yourSoilScan	análisis del suelo	soil analysis
+rt_sci_yourmod_soil	science	on=yourmod.soil	Recibimos el {exp}.	We have the {exp}.
+rt_chat_yourmod_soilsolo_1	chat	on=yourmod.soil	Ya tengo el {exp}.	I have the {exp}.
+```
+
+- `id=` is the `experimentID` of your experiment, the part of the subject id before the `@`. Case does not matter.
+  A stock id is an error, Lonapse has its own words for those.
+- `on=` names its topic. Each topic and each id has one `experiment` row.
+- `{exp}` now says "soil analysis" in the subtitle and "análisis del suelo" in the voice.
+- `science` and `science_pts` lines with `on=yourmod.soil` play only after this experiment, most of the time when
+  there is one. The general science lines can still play for it too.
+- Event chats with `on=yourmod.soil` play when the kerbals talk about it themselves: without a link to Mission
+  Control. Event chats with `on=science` can play for it too.
+
+Do not call `Trigger` for an experiment that already goes through the KSP science system. Lonapse would play two
+lines for one result. `Trigger` refuses the topic of an `experiment` row, and KSP.log says why. Use `Trigger` and kind
+`event` for an experiment that does not use the KSP science system, like `examplemod.experiment_done` in the example.
 
 ## Rules
 

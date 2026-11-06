@@ -31,3 +31,12 @@ rt_examplemod_supplies_one	event	on=examplemod.supplies_low x_days<2	Solo queda 
 # examplemod.experiment_done, sent with x_experiment as "spanish|english". who=mc: only Mission Control.
 rt_examplemod_experiment	event	on=examplemod.experiment_done	Experimento de {x_experiment} terminado. Los científicos ya miran los datos. | Recibido: {x_experiment}, completo. Buen trabajo, {kerbal}.	The {x_experiment} experiment is done. The scientists are looking at the data. | Copy: {x_experiment}, complete. Good work, {kerbal}.
 rt_re_examplemod_experiment	reply	to=rt_examplemod_experiment	Ha sido fácil. Casi. | Gracias. El manual ayudó mucho.	That was easy. Almost. | Thanks. The manual helped a lot.
+# An experiment of your own that runs through the KSP science system (a ModuleScienceExperiment with experimentID
+# exampleSoil). Lonapse sees it like a stock experiment, so do not call Trigger for it. The experiment row gives {exp}
+# its words and names its topic. Science lines and event chats with on=examplemod.soil only play for it.
+rt_examplemod_soil_exp	experiment	on=examplemod.soil id=exampleSoil	análisis del suelo	soil analysis
+rt_sci_examplemod_soil	science	on=examplemod.soil	Recibimos el {exp}. Mucha tierra, pocas sorpresas. | Ya tenemos el {exp}. Los geólogos están contentos.	We have the {exp}. Lots of dirt, few surprises. | The {exp} is in. The geologists are happy.
+rt_chat_examplemod_soil_1	chat	on=examplemod.soil	{other}, el {exp} está listo. Es tierra.	{other}, the {exp} is done. It's dirt.
+rt_chat_examplemod_soil_2	chat		¿Solo tierra? | ¿Tierra buena, al menos?	Just dirt? | Good dirt, at least?
+rt_chat_examplemod_soil_3	chat		Tierra muy científica.	Very scientific dirt.
+rt_chat_examplemod_soilsolo_1	chat	on=examplemod.soil	Ya tengo el {exp}. Es tierra, sobre todo.	I have the {exp}. It's mostly dirt.

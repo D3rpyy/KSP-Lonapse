@@ -30,6 +30,8 @@
 #          experiment) evareport surfacesample roc crewreport mysterygoo and the other stock experiment ids.
 #          Or an event of another mod: on=yourmod.event (docs/API.md). Then also kind event (a Mission Control
 #          line about it), kind meta (cooldown= priority= who=, no text) and your own slots {x_name}.
+#          A mod experiment that runs through KSP science: kind experiment with on=yourmod.topic id=<experiment id>
+#          and the words of {exp}. Then science lines and event chats may use on=yourmod.topic.
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
 #          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
 # english  the subtitle. A number slot shows digits, a name slot the name.
