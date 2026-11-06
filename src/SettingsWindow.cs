@@ -506,6 +506,26 @@ namespace Lonapse
             Hint("Now and then: orbit, altitude, speed, fuel or the mission day, read out with the real values.");
             s.runtimeScience = Toggle(s.runtimeScience, "Science points and contract funds");
             Hint("After a science reaction or a finished contract, Mission Control says the numbers.");
+            if (PhraseClips.modTemplateCounts.Count > 0)
+            {
+                // other mods with lines for Lonapse (GameData/<Mod>/Lonapse): one toggle each
+                GUILayout.Label("Lines of other mods:");
+                bool changed = false;
+                foreach (var kv in PhraseClips.modTemplateCounts)
+                {
+                    bool on = !PhraseClips.mutedMods.Contains(kv.Key);
+                    bool non = Toggle(on, kv.Key + " (" + kv.Value + " lines)");
+                    if (non == on) continue;
+                    if (non) PhraseClips.mutedMods.Remove(kv.Key); else PhraseClips.mutedMods.Add(kv.Key);
+                    changed = true;
+                }
+                if (changed)
+                {
+                    PhraseClips.ApplyModMutes();
+                    s.mutedMods = PhraseClips.MutedModsValue();
+                }
+                Hint("Off: Lonapse never plays the lines that mod ships, and ignores its events.");
+            }
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -993,6 +1013,12 @@ namespace Lonapse
             var per = new System.Text.StringBuilder();
             foreach (var kv in PhraseClips.modTemplateCounts) per.Append(per.Length > 0 ? ", " : "").Append(kv.Key).Append(" (").Append(kv.Value).Append(')');
             GUILayout.Label(per.Length > 0 ? "Lines from: " + per : "No mod lines loaded (GameData/<Mod>/Lonapse/*.tsv).");
+            if (GUILayout.Button("Reload lines (Lonapse and mods)"))
+            {
+                try { modTestStatus = PhraseClips.ReloadRuntimeTemplates(); }
+                catch (Exception e) { modTestStatus = "reload error: " + e.Message; Log.Exception("ReloadRuntimeTemplates", e); }
+                // the event list follows at the next Layout pass (changing it now breaks the IMGUI layout)
+            }
             if (modEventIds.Length > 0)
             {
                 if (modTestEvent == null || Array.IndexOf(modEventIds, modTestEvent) < 0) modTestEvent = modEventIds[0];

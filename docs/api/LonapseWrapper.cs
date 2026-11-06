@@ -19,7 +19,7 @@ namespace YourMod
     public static class LonapseWrapper
     {
         static bool searched;
-        static MethodInfo trigger, hasLines;
+        static MethodInfo trigger, hasLines, cancel;
         static PropertyInfo available, apiVersion;
 
         static void Find()
@@ -37,12 +37,13 @@ namespace YourMod
                         new[] { typeof(string), typeof(Vessel), typeof(ProtoCrewMember),
                                 typeof(IDictionary<string, double>), typeof(IDictionary<string, string>) }, null);
                     hasLines = t.GetMethod("HasLines", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+                    cancel = t.GetMethod("Cancel", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
                     available = t.GetProperty("Available", BindingFlags.Public | BindingFlags.Static);
                     apiVersion = t.GetProperty("ApiVersion", BindingFlags.Public | BindingFlags.Static);
                     break;
                 }
             }
-            catch (Exception) { trigger = null; hasLines = null; available = null; apiVersion = null; }
+            catch (Exception) { trigger = null; hasLines = null; cancel = null; available = null; apiVersion = null; }
         }
 
         /// <summary>Lonapse is installed (any state). Use Available to know if it can talk now.</summary>
@@ -79,6 +80,16 @@ namespace YourMod
             Find();
             if (trigger == null) return false;
             try { return (bool)trigger.Invoke(null, new object[] { eventId, vessel, kerbal, numbers, names }); }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>Drops your event when it still waits for the radio, for example when the problem is solved
+        /// before Lonapse said it. A line that already plays is not cut. True when one was waiting.</summary>
+        public static bool Cancel(string eventId)
+        {
+            Find();
+            if (cancel == null) return false;
+            try { return (bool)cancel.Invoke(null, new object[] { eventId }); }
             catch (Exception) { return false; }
         }
 

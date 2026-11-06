@@ -1586,21 +1586,47 @@ public static class Tests
                 RuntimeTemplate stockSci = withMod.Find(t => t.On.Contains("science"));
                 RuntimeTemplate soilChat = withMod.Find(t => t.Id == "rt_chat_examplemod_soil_1");
                 string soilTopic = RuntimeLines.ScienceTopic(withMod, "exampleSoil@KerbinSrfLandedShores");
-                bool soilSciFits = RuntimeLines.IsScienceTopic(withMod, soilTopic);
+                string soilGen = RuntimeLines.GeneralOf(withMod, soilTopic);
                 Check(soilTopic == "examplemod.soil" && RuntimeLines.ScienceTopic(withMod, "crewReport@KerbinFlyingLow") == "crewreport"
                       && RuntimeLines.ModExperiment(withMod, "examplesoil") != null
                       && RuntimeLines.ExperimentWords(withMod, "exampleSoil")[1] == "soil analysis"
                       && RuntimeLines.ExperimentWords(withMod, "otherModThing")[1] == "experiment"
-                      && soilSciFits && !RuntimeLines.IsScienceTopic(withMod, "examplemod.repair_done")
-                      && soilSci != null && RuntimeLines.OnFits(soilSci, soilTopic, soilSciFits)
-                      && !RuntimeLines.OnFits(soilSci, "crewreport", true)
-                      && stockSci != null && RuntimeLines.OnFits(stockSci, soilTopic, soilSciFits)
-                      && !RuntimeLines.OnFits(stockSci, "examplemod.repair_done", false)
-                      && soilChat != null && RuntimeLines.OnFits(soilChat, soilTopic, soilSciFits)
-                      && !modIds.Contains("examplemod.soil") && ModEvents.IsExperimentTopic(withMod, "examplemod.soil")
-                      && !ModEvents.IsExperimentTopic(withMod, "examplemod.repair_done"),
+                      && soilGen == "science" && RuntimeLines.GeneralOf(withMod, "examplemod.repair_done") == null
+                      && soilSci != null && RuntimeLines.OnFits(soilSci, soilTopic, soilGen)
+                      && !RuntimeLines.OnFits(soilSci, "crewreport", "science")
+                      && stockSci != null && RuntimeLines.OnFits(stockSci, soilTopic, soilGen)
+                      && !RuntimeLines.OnFits(stockSci, "examplemod.repair_done", null)
+                      && soilChat != null && RuntimeLines.OnFits(soilChat, soilTopic, soilGen)
+                      && !modIds.Contains("examplemod.soil") && ModEvents.IsRegisteredTopic(withMod, "examplemod.soil")
+                      && !ModEvents.IsRegisteredTopic(withMod, "examplemod.repair_done"),
                       "mod API: an experiment row gives a mod experiment its topic and {exp} words, on=science fits it, Trigger never lists it",
                       soilTopic + " " + (stockSci != null ? stockSci.Id : "no on=science line"));
+
+                // a mod's Breaking Ground part and contract type: the device and contract rows
+                string drill = RuntimeLines.DeviceTopic(withMod, "exampleDrillRig");
+                string drillGen = RuntimeLines.GeneralOf(withMod, drill);
+                RuntimeTemplate deployChat = withMod.Find(t => t.Kind == "chat" && t.On.Contains("deploy"));
+                RuntimeTemplate drillSci = withMod.Find(t => t.Id == "rt_sci_examplemod_drill");
+                RuntimeTemplate salvage = withMod.Find(t => t.Id == "rt_con_examplemod_salvage");
+                Check(drill == "examplemod.drill" && drillGen == "deploy" && RuntimeLines.DeviceTopic(withMod, "DeployedRTG") == "deploy"
+                      && RuntimeLines.DeviceWords(withMod, "exampleDrillRig", "part")[1] == "the drill rig"
+                      && RuntimeLines.DeviceWords(withMod, "DeployedRTG", "power")[1] == "the generator"
+                      && deployChat != null && RuntimeLines.OnFits(deployChat, drill, drillGen)
+                      && !RuntimeLines.OnFits(deployChat, soilTopic, soilGen)
+                      && drillSci != null && RuntimeLines.OnFits(drillSci, drill, drillGen)
+                      && RuntimeLines.ContractTopic(withMod, "ExampleSalvageContract") == "examplemod.salvage"
+                      && RuntimeLines.ContractTopic(withMod, "PartTest") == null
+                      && RuntimeLines.ContractWords(withMod, "examplesalvagecontract")[1] == "the salvage job"
+                      && RuntimeLines.ContractWords(withMod, "PartTest") == null
+                      && RuntimeLines.GeneralOf(withMod, "examplemod.salvage") == null
+                      && salvage != null && salvage.On.Contains("examplemod.salvage")
+                      && RuntimeLines.FillableVersions(salvage, new Dictionary<string, double> { { "funds", 5000 } },
+                             new Dictionary<string, string[]> { { "contract", new[] { "x", "the salvage job" } } }).Count == 1
+                      && RuntimeLines.FillableVersions(salvage, new Dictionary<string, double> { { "funds", 5000 } },
+                             new Dictionary<string, string[]>()).Count == 0
+                      && !modIds.Contains("examplemod.drill") && !modIds.Contains("examplemod.salvage"),
+                      "mod API: device and contract rows give a mod's part and contract type a topic and words, on=deploy fits the part",
+                      drill + " " + drillGen + " " + (deployChat != null ? deployChat.Id : "no on=deploy chat"));
 
                 // x_ slots: numbers in Spanish words and digits, names as "spanish|english", checks on x_ values
                 var xn = new Dictionary<string, double> { { "x_days", 4 } };
@@ -1640,12 +1666,21 @@ public static class Tests
                         "rt_somemod_stockexp\texperiment\ton=somemod.crew id=crewReport\tinforme\treport",
                         "rt_somemod_noid\texperiment\ton=somemod.noid\tH\tH",
                         "rt_somemod_slotexp\texperiment\ton=somemod.slot id=slotScan\t{x_n}\t{x_n}",
-                        "rt_somemod_twice\texperiment\ton=somemod.other id=someScan\tI\tI" }));
+                        "rt_somemod_twice\texperiment\ton=somemod.other id=someScan\tI\tI",
+                        "rt_somemod_dev\tdevice\ton=somemod.rig id=someRig\tel equipo\tthe rig",
+                        "rt_somemod_rigsci\tscience\ton=somemod.rig\tJ.\tJ.",
+                        "rt_somemod_stockdev\tdevice\ton=somemod.rtg id=DeployedRTG\tK\tK",
+                        "rt_somemod_con\tcontract\ton=somemod.job id=SomeJob\tel trabajo\tthe job",
+                        "rt_somemod_jobdone\tcontract_done\ton=somemod.job\tHecho {contract}.\tDone: {contract}.",
+                        "rt_somemod_jobsci\tscience\ton=somemod.job\tL.\tL.",
+                        "rt_somemod_rigcon\tcontract_done\ton=somemod.rig\tM.\tM.",
+                        "rt_somemod_stockcon\tcontract_done\ton=flag\tN.\tN." }));
                 List<RuntimeTemplate> badRows = RuntimeLines.ParseAll(badFiles, badErr)
                     .FindAll(t => t.Where.StartsWith("SomeMod/", StringComparison.Ordinal));
-                Check(badRows.Count == 4 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check"
-                      && badRows[2].Id == "rt_somemod_exp" && badRows[3].Id == "rt_somemod_scan" && badErr.Count == 11,
-                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a science line on an unregistered topic, a stock experiment id, no id=, slots in the words, an id registered twice)",
+                var badIds = badRows.ConvertAll(t => t.Id);
+                Check(string.Join(",", badIds.ToArray()) == "rt_somemod_ok,rt_somemod_check,rt_somemod_exp,rt_somemod_scan,rt_somemod_dev,rt_somemod_rigsci,rt_somemod_con,rt_somemod_jobdone"
+                      && badErr.Count == 15,
+                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a science line on an unregistered topic, a stock experiment id, no id=, slots in the words, an id registered twice, a stock part, a science line on a contract topic, a contract line on a device topic or a stock event)",
                       badErr.Count + ": " + string.Join(" ; ", badErr.ToArray()));
                 Check(ModEvents.ValidId("examplemod.repair_done") && ModEvents.ValidId("m2.e_1") && !ModEvents.ValidId("flag")
                       && !ModEvents.ValidId("a.b.c") && !ModEvents.ValidId(".x") && !ModEvents.ValidId("x.") && !ModEvents.ValidId("Mod.Event")
@@ -1670,6 +1705,10 @@ public static class Tests
                 for (int i = 0; i < 8; i++) q.Offer("m.e" + i, 0, 0, 400, null);
                 okQ &= q.Count == ModEvents.MaxPending && q.Offer("m.z", 2, 0, 400, null) == "queue full";
                 Check(okQ, "mod API: pending mod events keep their cooldowns, the gap between events, priorities, max age and the cap", "");
+                var qc = new ModEventQueue();
+                bool okC = qc.Offer("m.a", 1, 120, 0, null) == null && qc.Cancel("m.a") && !qc.Cancel("m.a") && qc.Count == 0
+                           && !qc.Cancel("m.none") && qc.Offer("m.a", 1, 120, 1, null) == null;   // a cancelled event has no cooldown
+                Check(okC, "mod API: Cancel drops a waiting event, without starting its cooldown", "");
             }
             Check(DcMath.WarpFactor(1f, 0.4f, 2.5f) == 1f && Math.Abs(DcMath.WarpFactor(100f, 0.4f, 2.5f) - 1.8f) < 1e-4f
                   && DcMath.WarpFactor(100000f, 0.4f, 2.5f) == 2.5f && DcMath.WarpFactor(1000f, 0f, 2.5f) == 1f

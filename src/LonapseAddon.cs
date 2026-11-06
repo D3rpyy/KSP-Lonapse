@@ -258,6 +258,7 @@ namespace Lonapse
                 rng = new System.Random(Environment.TickCount);
                 Log.Info("Lonapse " + Version + " starting, settings: " + Settings.FilePath);
                 ClipLibrary.Build();
+                PhraseClips.SetMutedMods(settings.mutedMods);
                 PhraseClips.Build();
                 RebuildProbeVoices();
 

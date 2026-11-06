@@ -160,6 +160,9 @@ finished. That mod ships its lines in `GameData/<ItsMod>/Lonapse/*.tsv` and tell
 Lonapse picks who talks and fits it into the radio. Neither mod needs the other. How it works is in
 [docs/API.md](docs/API.md), with a wrapper to copy and an example file in [docs/api](docs/api).
 
+A mod can also name its own experiments, Breaking Ground parts and contract types, so the lines use their real
+names. Players who do not like the lines of one mod can turn them off under "Runtime voice" in the General tab.
+
 ## Compatibility
 
 - Built and tested on KSP 1.12.5. Other 1.12 versions should work but I have not tried them.

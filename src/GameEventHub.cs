@@ -222,7 +222,9 @@ namespace Lonapse
                             : m is ModuleGroundExperiment ? "experiment" : m.PowerUnitsProduced > 0 ? "power" : "part";
                 string name = m.part.partInfo != null ? m.part.partInfo.name : m.part.name;
                 Log.Info("Event deploy: " + name + " (" + kind + ")");
-                host.director.RuntimeDeploy(RuntimeLines.DeviceWords(name, kind));
+                // a mod's device row gives its own part a topic and words
+                host.director.RuntimeDeploy(RuntimeLines.DeviceWords(PhraseClips.runtimeTemplates, name, kind),
+                                            RuntimeLines.DeviceTopic(PhraseClips.runtimeTemplates, name));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnGroundPartDeployed", e); }
         }
@@ -233,7 +235,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
-                host.director.RuntimeContract(true, c.FundsCompletion, c.ScienceCompletion, c.ReputationCompletion);
+                host.director.RuntimeContract(true, c.FundsCompletion, c.ScienceCompletion, c.ReputationCompletion, c.GetType().Name);
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnContractCompleted", e); }
         }
@@ -243,7 +245,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
-                host.director.RuntimeContract(false, Math.Abs(c.FundsFailure), 0, Math.Abs(c.ReputationFailure));
+                host.director.RuntimeContract(false, Math.Abs(c.FundsFailure), 0, Math.Abs(c.ReputationFailure), c.GetType().Name);
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnContractFailed", e); }
         }

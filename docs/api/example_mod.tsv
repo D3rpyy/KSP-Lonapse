@@ -40,3 +40,15 @@ rt_chat_examplemod_soil_1	chat	on=examplemod.soil	{other}, el {exp} está listo.
 rt_chat_examplemod_soil_2	chat		¿Solo tierra? | ¿Tierra buena, al menos?	Just dirt? | Good dirt, at least?
 rt_chat_examplemod_soil_3	chat		Tierra muy científica.	Very scientific dirt.
 rt_chat_examplemod_soilsolo_1	chat	on=examplemod.soil	Ya tengo el {exp}. Es tierra, sobre todo.	I have the {exp}. It's mostly dirt.
+# A Breaking Ground part of your own (a ModuleGroundSciencePart, part name exampleDrillRig). Lonapse sees the deploy
+# itself. The device row gives {device} its words and names its topic. Chats with on=deploy play for it too.
+rt_examplemod_drill_dev	device	on=examplemod.drill id=exampleDrillRig	el taladro	the drill rig
+rt_chat_examplemod_drill_1	chat	on=examplemod.drill	{other}, {device} ya está montado.	{other}, {device} is set up.
+rt_chat_examplemod_drill_2	chat		¿Y si encuentra agua? | ¿Hace mucho ruido?	What if it finds water? | Is it loud?
+rt_chat_examplemod_drill_3	chat		Entonces somos ricos. | Solo un poco.	Then we're rich. | Only a little.
+rt_sci_examplemod_drill	science	on=examplemod.drill	Llegan datos: {device} funciona.	Data is coming in: {device} works.
+# A contract type of your own (the class name of your Contract, ExampleSalvageContract). The contract row gives
+# {contract} its words. Contract lines with on=examplemod.salvage play only for that contract.
+rt_examplemod_salvage_con	contract	on=examplemod.salvage id=ExampleSalvageContract	el rescate de chatarra	the salvage job
+rt_con_examplemod_salvage	contract_funds	on=examplemod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
+rt_con_examplemod_salvage_fail	contract_failed	on=examplemod.salvage	Hemos perdido {contract}. Otra vez será.	We lost {contract}. Maybe next time.

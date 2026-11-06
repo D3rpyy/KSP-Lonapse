@@ -49,8 +49,10 @@ namespace Lonapse
                                     IDictionary<string, string> names)
         {
             if (!ModEvents.ValidId(id)) return ModDrop(id ?? "(null)", "the id is not mod.event (a-z 0-9 _)");
-            if (ModEvents.IsExperimentTopic(PhraseClips.runtimeTemplates, id))
-                return ModDrop(id, "it is the topic of an experiment row, its lines play after the experiment itself");
+            RuntimeTemplate reg = RuntimeLines.RegisteredTopic(PhraseClips.runtimeTemplates, id);
+            if (reg != null)
+                return ModDrop(id, "it is the topic of " + (reg.Kind == "experiment" ? "an " : "a ") + reg.Kind + " row, its lines play on that moment itself");
+            if (PhraseClips.MutedEvent(id)) return ModDrop(id, "the player muted the lines of this mod");
             ModEventInfo info = ModEvents.Info(PhraseClips.runtimeTemplates, id);
             if (!info.HasLines) return ModDrop(id, "no lines for it are loaded");
             Vessel av = ActiveVessel;
@@ -92,6 +94,15 @@ namespace Lonapse
         void IgnoredValue(string id, string key)
         {
             if (modDropSaid.Add(id + "|value " + key)) Log.Info("Mod event " + id + ": value " + key + " ignored, a mod value starts with x_");
+        }
+
+        /// <summary>LonapseApi.Cancel: drops a waiting mod event that has not played yet. True when one was waiting.</summary>
+        public bool CancelModEvent(string id)
+        {
+            if (id == null || !modQueue.Cancel(id)) return false;
+            Log.Info("Mod event " + id + " cancelled by its mod");
+            NoteMod(id + ": cancelled");
+            return true;
         }
 
         /// <summary>Every frame: plays one waiting mod event when the air is free.</summary>

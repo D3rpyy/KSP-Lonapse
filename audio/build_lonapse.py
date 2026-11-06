@@ -183,7 +183,7 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
                 "link", "apart", "a_eva", "b_eva"]
-NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device"]
+NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
 FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km"]

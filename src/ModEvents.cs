@@ -42,11 +42,11 @@ namespace Lonapse
 
         public static int PriorityOf(string p) { return p == "low" ? 0 : p == "high" ? 2 : 1; }
 
-        /// <summary>The topic belongs to a mod's experiment row: it plays after that experiment, not by Trigger.</summary>
-        public static bool IsExperimentTopic(IList<RuntimeTemplate> all, string id)
+        /// <summary>The topic belongs to a mod's experiment, device or contract row: it plays on that moment
+        /// (the experiment, the deployed part, the contract), not by Trigger.</summary>
+        public static bool IsRegisteredTopic(IList<RuntimeTemplate> all, string id)
         {
-            if (all != null) foreach (RuntimeTemplate t in all) if (t.Kind == "experiment" && t.On.Contains(id)) return true;
-            return false;
+            return RuntimeLines.RegisteredTopic(all, id) != null;
         }
 
         /// <summary>The settings and lines of event id in the loaded templates.</summary>
@@ -77,10 +77,10 @@ namespace Lonapse
                 foreach (RuntimeTemplate t in all)
                     foreach (string o in t.On)
                         if (RuntimeLines.IsModEvent(o) && !r.Contains(o)) r.Add(o);
-            // an experiment topic plays after its experiment, never by Trigger
+            // a registered topic (experiment, device, contract) plays on its own moment, never by Trigger
             if (all != null)
                 foreach (RuntimeTemplate t in all)
-                    if (t.Kind == "experiment") r.Remove(t.On[0]);
+                    if (RuntimeLines.IsRegKind(t.Kind)) r.Remove(t.On[0]);
             r.Sort(StringComparer.Ordinal);
             return r;
         }
@@ -155,6 +155,12 @@ namespace Lonapse
         }
 
         public double LastAny { get { return lastAny; } }
+
+        /// <summary>Removes a waiting event (it has not played yet). True when one was waiting.</summary>
+        public bool Cancel(string id)
+        {
+            return pending.RemoveAll(e => e.Id == id) > 0;
+        }
 
         void Expire(double now)
         {

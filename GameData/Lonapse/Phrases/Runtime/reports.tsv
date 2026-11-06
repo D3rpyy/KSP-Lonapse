@@ -31,7 +31,9 @@
 #          Or an event of another mod: on=yourmod.event (docs/API.md). Then also kind event (a Mission Control
 #          line about it), kind meta (cooldown= priority= who=, no text) and your own slots {x_name}.
 #          A mod experiment that runs through KSP science: kind experiment with on=yourmod.topic id=<experiment id>
-#          and the words of {exp}. Then science lines and event chats may use on=yourmod.topic.
+#          and the words of {exp}. Then science lines and event chats may use on=yourmod.topic. The same for a
+#          mod's Breaking Ground part (kind device, id=<part name>, words of {device}) and its contract type
+#          (kind contract, id=<class name>, words of {contract}, for contract lines with on=yourmod.topic).
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
 #          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
 # english  the subtitle. A number slot shows digits, a name slot the name.
@@ -53,7 +55,7 @@
 #   apart a_eva b_eva (radio chats between two vessels: apart is 1, a_eva is 1 when kerbal A is on EVA, b_eva the
 #   same for kerbal B, for checks only, see radio_chats.tsv)
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), device (a deployed part with its article),
+# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), device (a deployed part with its article), contract (a registered contract type of a mod),
 #   my_ship and their_ship (in a chat between two vessels: the ship of the speaker and of the one spoken to), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.
 # Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.

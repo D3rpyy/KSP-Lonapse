@@ -26,6 +26,11 @@ namespace Lonapse
         /// <summary>Runtime voice: the runtime-only templates from every Phrases/Runtime/*.tsv, empty without the folder.</summary>
         public const string RuntimeRel = "GameData/Lonapse/Phrases/Runtime";
         public static List<RuntimeTemplate> runtimeTemplates = new List<RuntimeTemplate>();
+        /// <summary>Every parsed runtime template, the muted mods included. runtimeTemplates is this without the
+        /// templates of the muted mods (ApplyModMutes).</summary>
+        public static List<RuntimeTemplate> allRuntimeTemplates = new List<RuntimeTemplate>();
+        /// <summary>The mod folders whose lines the player muted (Settings.mutedMods).</summary>
+        public static readonly HashSet<string> mutedMods = new HashSet<string>(StringComparer.Ordinal);
         /// <summary>Set by the director: true when a row without a clip can be spoken at runtime.</summary>
         public static Func<PhraseEntry, bool> runtimeCanSpeak;
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
@@ -113,9 +118,69 @@ namespace Lonapse
             Log.Info("Lonapse: " + status);
         }
 
+        /// <summary>Reads Phrases/Runtime and the mod line files again (the Debug tab, after editing a file). A
+        /// short result for the overlay, the bad rows go to KSP.log as at the start.</summary>
+        public static string ReloadRuntimeTemplates()
+        {
+            LoadRuntimeTemplates();
+            int mods = 0;
+            foreach (var kv in modTemplateCounts) mods += kv.Value;
+            return "Reloaded: " + (allRuntimeTemplates.Count - mods) + " Lonapse and " + mods + " mod templates, "
+                   + lastRuntimeErrors + " bad row(s) (see KSP.log)";
+        }
+
+        static int lastRuntimeErrors;
+
+        /// <summary>runtimeTemplates from allRuntimeTemplates without the templates of the muted mods.</summary>
+        public static void ApplyModMutes()
+        {
+            var r = new List<RuntimeTemplate>(allRuntimeTemplates.Count);
+            foreach (RuntimeTemplate t in allRuntimeTemplates)
+            {
+                string mod = ModOf(t.Where);
+                if (mod == null || !mutedMods.Contains(mod)) r.Add(t);
+            }
+            runtimeTemplates = r;
+        }
+
+        /// <summary>The muted mods from the setting ("A,B"), applied to runtimeTemplates.</summary>
+        public static void SetMutedMods(string csv)
+        {
+            mutedMods.Clear();
+            if (!string.IsNullOrEmpty(csv))
+                foreach (string m in csv.Split(','))
+                    if (m.Trim().Length > 0) mutedMods.Add(m.Trim());
+            ApplyModMutes();
+        }
+
+        /// <summary>The setting value of the muted mods, sorted.</summary>
+        public static string MutedModsValue()
+        {
+            var l = new List<string>(mutedMods);
+            l.Sort(StringComparer.Ordinal);
+            return string.Join(",", l.ToArray());
+        }
+
+        /// <summary>A mod event that only has lines in muted mods (Trigger then says why it is dropped).</summary>
+        public static bool MutedEvent(string id)
+        {
+            if (mutedMods.Count == 0 || id == null) return false;
+            bool muted = false;
+            foreach (RuntimeTemplate t in allRuntimeTemplates)
+            {
+                if (!t.On.Contains(id)) continue;
+                string mod = ModOf(t.Where);
+                if (mod == null || !mutedMods.Contains(mod)) return false;
+                muted = true;
+            }
+            return muted;
+        }
+
         static void LoadRuntimeTemplates()
         {
             runtimeTemplates = new List<RuntimeTemplate>();
+            allRuntimeTemplates = runtimeTemplates;
+            lastRuntimeErrors = 0;
             try
             {
                 string dir = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeRel);
@@ -130,12 +195,14 @@ namespace Lonapse
                 var modFiles = ModLineFiles();
                 files.AddRange(modFiles);
                 var rerr = new List<string>();
-                runtimeTemplates = RuntimeLines.ParseAll(files, rerr);
+                allRuntimeTemplates = RuntimeLines.ParseAll(files, rerr);
+                lastRuntimeErrors = rerr.Count;
+                ApplyModMutes();
                 for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse runtime: " + rerr[i]);
                 if (rerr.Count > 10) Log.Warn("Lonapse runtime: " + (rerr.Count - 10) + " more error(s)");
                 // per mod: the templates of its files
                 modTemplateCounts.Clear();
-                foreach (RuntimeTemplate t in runtimeTemplates)
+                foreach (RuntimeTemplate t in allRuntimeTemplates)
                 {
                     string mod = ModOf(t.Where);
                     if (mod == null) continue;
@@ -146,11 +213,17 @@ namespace Lonapse
                 int modCount = 0;
                 var per = new List<string>();
                 foreach (var kv in modTemplateCounts) { modCount += kv.Value; per.Add(kv.Key + " (" + kv.Value + ")"); }
-                Log.Info("Lonapse: " + (runtimeTemplates.Count - modCount) + " runtime voice templates from " + own + " file(s) in Phrases/Runtime");
+                Log.Info("Lonapse: " + (allRuntimeTemplates.Count - modCount) + " runtime voice templates from " + own + " file(s) in Phrases/Runtime");
                 if (modFiles.Count > 0)
-                    Log.Info("Lonapse: " + modCount + " mod templates from " + modFiles.Count + " file(s): " + string.Join(", ", per.ToArray()));
+                    Log.Info("Lonapse: " + modCount + " mod templates from " + modFiles.Count + " file(s): " + string.Join(", ", per.ToArray())
+                             + (mutedMods.Count > 0 ? ", muted by the player: " + string.Join(", ", new List<string>(mutedMods).ToArray()) : ""));
             }
-            catch (Exception e) { Log.Warn("Lonapse Phrases/Runtime: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
+            catch (Exception e)
+            {
+                Log.Warn("Lonapse Phrases/Runtime: read failed: " + e.Message);
+                runtimeTemplates = new List<RuntimeTemplate>();
+                allRuntimeTemplates = runtimeTemplates;
+            }
         }
 
         /// <summary>Templates per mod folder (other mods' Lonapse/*.tsv), for the log and the Debug tab.</summary>

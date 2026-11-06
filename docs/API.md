@@ -15,7 +15,8 @@ The API is new in 0.8.0 and has API version 1. I have tested it with the example
 2. `LonapseWrapper.cs` copied into your mod (from `docs/api/` in the Lonapse repository).
 3. One call where your event happens.
 
-The full example is `docs/api/example_mod.tsv`. It is a made-up mod, `examplemod`, with three events and one experiment of its own.
+The full example is `docs/api/example_mod.tsv`. It is a made-up mod, `examplemod`, with three events, an experiment, a Breaking Ground part and a contract type of its
+own.
 
 ## The call
 
@@ -42,6 +43,8 @@ seconds. It is dropped when it waited 90 s. `Trigger` returns false when:
 - no lines for the event are loaded
 - the vessel or kerbal is not the active one or close to it
 - the event is still in its cooldown
+- the player muted the lines of your mod
+- the id is the topic of an `experiment`, `device` or `contract` row (those play on their own moment)
 
 KSP.log says why, on a line that starts with `[Lonapse] Mod event`.
 
@@ -50,6 +53,9 @@ Other calls:
 - `LonapseWrapper.Available`: Lonapse is running in flight.
 - `LonapseWrapper.ApiVersion`: 1, or 0 without Lonapse.
 - `LonapseWrapper.HasLines(eventId)`: lines for the event are loaded. This only works after the first flight scene.
+- `LonapseWrapper.Cancel(eventId)`: drops your event while it still waits for the radio. Use it when the problem is
+  solved before Lonapse said it, for example the supplies were refilled. A line that already plays is not cut. It
+  returns true when the event was waiting. A cancelled event does not start its cooldown.
 
 Call it from the main thread, like any KSP API. None of the calls throw.
 
@@ -74,7 +80,7 @@ rt_yourmod_repair_meta	meta	on=yourmod.repair_done cooldown=180 priority=normal 
 
 ## Kinds
 
-The `kind` column says what a row is and when it plays. There are 17 kinds.
+The `kind` column says what a row is and when it plays. There are 19 kinds.
 
 ### Kinds for your events
 
@@ -87,11 +93,15 @@ These 4 kinds play when your mod calls `Trigger`.
 | `reply` | The kerbal answers your `event` line, right after it. `to=rt_yourmod_*` answers every line whose id starts with that. | `to=<id of your event line>` |
 | `meta` | The settings of one event. It has no text. | `on=yourmod.event` |
 
-One more kind is for an experiment of your mod. It does not need `Trigger`, see [Your own experiments](#your-own-experiments).
+3 more kinds register a thing of your mod that Lonapse already notices itself. They do not need `Trigger`, see
+[Your own experiments, parts and contracts](#your-own-experiments-parts-and-contracts). Each has one version of text
+without slots: the words for its slot.
 
-| Kind | What it is | Needs |
-|---|---|---|
-| `experiment` | Registers an experiment of your mod. The text is its name for `{exp}`. It has one version and no slots. | `on=yourmod.topic id=<experiment id>` |
+| Kind | What it registers | Its slot | Needs |
+|---|---|---|---|
+| `experiment` | An experiment that runs through KSP science | `{exp}` | `on=yourmod.topic id=<experimentID>` |
+| `device` | A Breaking Ground part you can deploy | `{device}` | `on=yourmod.topic id=<part name>` |
+| `contract` | A contract type | `{contract}` | `on=yourmod.topic id=<contract class name>` |
 
 Chat ids are `rt_chat_<name>_<seq>`, with seq 1, 2, 3 and so on, one row per line. Only line 1 has a `when`. All
 lines of a chat go in one file. Only replies with your `to=` answer your `event` lines.
@@ -108,8 +118,9 @@ The settings of `meta` are all optional:
 
 These 12 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
 report. They play on those moments, never on your event. A `science` or `science_pts` row may only have
-`on=yourmod.topic` when an `experiment` row registers that topic. Otherwise it is an error, because it could never
-play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of these kinds cannot use them.
+`on=yourmod.topic` when an `experiment` or `device` row registers that topic. A `contract_funds`, `contract_done` or
+`contract_failed` row may only have it when a `contract` row registers it. Otherwise it is an error, because it could
+never play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of these kinds cannot use them.
 
 | Kind | When it plays |
 |---|---|
@@ -131,7 +142,9 @@ play: use `event` for that. Your `{x_...}` slots never have a value there, so a 
   plays on the suit radio between two EVA kerbals, and with `apart=1` on the radio between two vessels nearby.
 - A `reply` without `to=` can answer a `report`, `warp`, `sunrise` or `eva` line, or a recorded Mission Control line.
 
-## Your own experiments
+## Your own experiments, parts and contracts
+
+### Experiments
 
 Does your mod add an experiment that runs through the KSP science system, a `ModuleScienceExperiment` with its own
 `experimentID`? Then Lonapse sees it like a stock experiment. You do not call `Trigger` for it. Without help Lonapse
@@ -155,6 +168,39 @@ rt_chat_yourmod_soilsolo_1	chat	on=yourmod.soil	Ya tengo el {exp}.	I have the {e
 Do not call `Trigger` for an experiment that already goes through the KSP science system. Lonapse would play two
 lines for one result. `Trigger` refuses the topic of an `experiment` row, and KSP.log says why. Use `Trigger` and kind
 `event` for an experiment that does not use the KSP science system, like `examplemod.experiment_done` in the example.
+
+### Breaking Ground parts
+
+Does your mod add a part with a `ModuleGroundSciencePart`, one that a kerbal on EVA deploys? Lonapse notices the
+deploy itself. Without help it calls the part by what it does ("the antenna", "the generator", "the gadget"). A
+`device` row gives it its own words and a topic:
+
+```
+rt_yourmod_drill_dev	device	on=yourmod.drill id=yourDrillRig	el taladro	the drill rig
+rt_chat_yourmod_drillsolo_1	chat	on=yourmod.drill	{device} ya está montado.	Done, {device} is set up.
+```
+
+- `id=` is the part name, the `name` in the part's cfg. A stock Breaking Ground part is an error.
+- `{device}` says "the drill rig". The words include the article, because the slot stands for the whole thing.
+- Event chats with `on=yourmod.drill` play after it is deployed. Event chats with `on=deploy` play for it too.
+- A `science` line with `on=yourmod.drill` is what Mission Control says after it, when there is a link.
+
+### Contract types
+
+Does your mod add contracts? Lonapse already says something when a contract is done or failed. A `contract` row lets
+your contract type have its own lines:
+
+```
+rt_yourmod_salvage_con	contract	on=yourmod.salvage id=YourSalvageContract	el rescate de chatarra	the salvage job
+rt_con_yourmod_salvage	contract_funds	on=yourmod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
+```
+
+- `id=` is the class name of your contract, the C# type that derives from `Contracts.Contract`.
+- `{contract}` says "the salvage job". A line with `{contract}` only plays for a registered contract type.
+- `contract_funds`, `contract_done` and `contract_failed` lines with `on=yourmod.salvage` play only for that type. The
+  general contract lines can still play for it too.
+- Contracts made from a cfg by a contract mod all share the class of that mod, not a class of their own. Then the
+  row registers all of them at once. I have not tested this with a contract mod.
 
 ## Rules
 
@@ -182,8 +228,10 @@ lines for one result. `Trigger` refuses the topic of an `experiment` row, and KS
   callout.
 - In a busy moment, with high crew stress, low and normal events wait. High events still play, unless the stress
   is very high.
-- The Debug tab has a "Mod events" section. It shows the loaded mod files, a "Test mod event" button and the last
-  five mod events with what became of them.
+- The Debug tab has a "Mod events" section. It shows the loaded mod files, a "Reload lines" button, a "Test mod
+  event" button and the last five mod events with what became of them.
+- The General tab has a toggle per mod under "Runtime voice". A player can turn off the lines of your mod there. Then
+  none of its rows play, and `Trigger` returns false.
 
 ## Testing your lines
 
@@ -191,3 +239,5 @@ lines for one result. `Trigger` refuses the topic of an `experiment` row, and KS
 2. KSP.log shows `[Lonapse] Lonapse: N mod templates from M file(s): YourMod (N)`, and any bad rows.
 3. Open the Lonapse window, go to the Debug tab, pick your event under "Mod events" and press "Test mod event".
    The test fills a slot that is used in a check with the number 3, and any other slot with the name "Test".
+4. Changed your file? Press "Reload lines" in the same section. Lonapse reads every line file again, its own and
+   those of all mods. KSP.log lists the bad rows again. You do not need to restart KSP.

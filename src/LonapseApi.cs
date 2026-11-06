@@ -52,6 +52,18 @@ namespace Lonapse
             return Trigger(eventId, vessel, kerbal, null, null);
         }
 
+        /// <summary>Drops a waiting event that has not played yet, for example when the problem is solved before
+        /// Lonapse could say it. A line that already plays is not cut. True when one was waiting.</summary>
+        public static bool Cancel(string eventId)
+        {
+            try
+            {
+                LonapseAddon a = LonapseAddon.Instance;
+                return a != null && a.director != null && a.director.CancelModEvent(eventId);
+            }
+            catch (Exception e) { Log.Exception("LonapseApi.Cancel", e); return false; }
+        }
+
         /// <summary>True when lines for the event are loaded (an event chat or a Mission Control event line). The
         /// tables load with the first flight scene, so before that it is false.</summary>
         public static bool HasLines(string eventId)

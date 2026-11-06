@@ -599,11 +599,20 @@ namespace Lonapse
             List<RuntimeTemplate> fit = RuntimeLines.Fitting(PhraseClips.runtimeTemplates, kind, sit, nums, names);
             if (kind == "science" || kind == "science_pts")
             {
-                // a science line with on= only for its experiment, the rest for any experiment (not a deployed part)
+                // a science line with on= only for its experiment or part (on=science any experiment, on=deploy any
+                // deployed part), the rest for any experiment (not a deployed part)
                 string topic = runtimeTopic;
-                bool sci = RuntimeLines.IsScienceTopic(PhraseClips.runtimeTemplates, topic);
-                fit.RemoveAll(t => t.On.Count > 0 ? !RuntimeLines.OnFits(t, topic, sci) : topic == "deploy");
+                string gen = RuntimeLines.GeneralOf(PhraseClips.runtimeTemplates, topic);
+                fit.RemoveAll(t => t.On.Count > 0 ? !RuntimeLines.OnFits(t, topic, gen) : gen == "deploy");
                 var own = fit.FindAll(t => t.On.Contains(topic ?? ""));
+                if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
+            }
+            // a contract line with on= only for its contract type (a mod's contract row), the rest for any contract
+            if (kind == "contract_funds" || kind == "contract_done" || kind == "contract_failed")
+            {
+                string topic = runtimeTopic;
+                fit.RemoveAll(t => t.On.Count > 0 && (topic == null || !t.On.Contains(topic)));
+                var own = fit.FindAll(t => topic != null && t.On.Contains(topic));
                 if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
             }
             // a mod event line: only the lines of that event
@@ -818,8 +827,9 @@ namespace Lonapse
         /// <summary>From GameEventHub: a kerbal on EVA deployed a Breaking Ground part. device is { spanish,
         /// english } with the article ("el sismógrafo", "the seismometer"). The kerbal says something about it (alone
         /// or with a kerbal nearby), and with a link Mission Control answers (science lines with on=deploy).</summary>
-        public void RuntimeDeploy(string[] device)
+        public void RuntimeDeploy(string[] device, string topic = "deploy")
         {
+            if (topic == null) topic = "deploy";
             if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled || device == null) return;
             Vessel v = ActiveVessel;
             if (v == null || !v.isEVA || clock - lastDeployClock < 20f) return;
@@ -839,13 +849,13 @@ namespace Lonapse
                 var nums = new Dictionary<string, double>();
                 var names = new Dictionary<string, string[]>(extra);
                 CollectValues(av, sit, nums, names, false);
-                runtimeTopic = "deploy";
+                runtimeTopic = topic;
                 try { QueueKind("science", sit, nums, names, ResponseDelay(host.stress.stress) + 0.4f, false); }
                 finally { runtimeTopic = null; }
             };
-            bool ok = EventChat("deploy", k, partner, extra, reach ? mc : null)
-                      || (partner != null && EventChat("deploy", k, null, extra, reach ? mc : null));
-            Log.Info("Runtime voice: deployed " + device[1] + (ok ? ", chat queued" : ", no chat fits"));
+            bool ok = EventChat(topic, k, partner, extra, reach ? mc : null)
+                      || (partner != null && EventChat(topic, k, null, extra, reach ? mc : null));
+            Log.Info("Runtime voice: deployed " + device[1] + (topic != "deploy" ? " (" + topic + ")" : "") + (ok ? ", chat queued" : ", no chat fits"));
             if (!ok && reach) mc();
         }
 
@@ -1004,12 +1014,12 @@ namespace Lonapse
             PairValues(b, a, numsB, namesB);
             if (!solo && way != ChatWay.Intercom) { numsA["apart"] = 1; numsB["apart"] = 1; }
             var fit = new List<KeyValuePair<List<RuntimeTemplate>, bool>>();
-            bool evSci = RuntimeLines.IsScienceTopic(PhraseClips.runtimeTemplates, ev);
+            string evGen = RuntimeLines.GeneralOf(PhraseClips.runtimeTemplates, ev);
             foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
             {
                 if (recentRuntime.Contains(c[0].Id)) continue;
                 // an event chat: only the chats about ev. A kerbal alone says a one-line one, two kerbals a real chat.
-                if (ev != null ? !RuntimeLines.OnFits(c[0], ev, evSci) || solo != (c.Count == 1) : c[0].IsEvent) continue;
+                if (ev != null ? !RuntimeLines.OnFits(c[0], ev, evGen) || solo != (c.Count == 1) : c[0].IsEvent) continue;
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
                 // an event chat starts with the kerbal who did it: never swapped
                 else if (ev == null && RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
@@ -1269,7 +1279,7 @@ namespace Lonapse
 
         /// <summary>From GameEventHub: a contract was completed or failed. funds, sci and rep are the rewards of a
         /// completed contract, or the funds and reputation a failed one costs (positive numbers).</summary>
-        public void RuntimeContract(bool completed, double funds, double sci, double rep)
+        public void RuntimeContract(bool completed, double funds, double sci, double rep, string contractType = null)
         {
             if (!RuntimeOn || !host.settings.runtimeScience) return;
             var nums = new Dictionary<string, double>();
@@ -1278,9 +1288,17 @@ namespace Lonapse
             if (funds >= 1) nums["funds"] = funds;
             if (completed && sci >= 0.05) nums["con_sci"] = sci;
             if (rep >= 0.5) nums["con_rep"] = rep;
+            // a contract type of a mod (its contract row): its own lines and the words for {contract}
+            string[] cw = RuntimeLines.ContractWords(PhraseClips.runtimeTemplates, contractType);
+            if (cw != null) names["contract"] = new[] { LonapseText.ReverseText(cw[0]), cw[1] };
             string kind = !completed ? "contract_failed" : nums.ContainsKey("funds") ? "contract_funds" : "contract_done";
-            if (!QueueKind(kind, null, nums, names, ResponseDelay(host.stress.stress), false) && kind == "contract_funds")
-                QueueKind("contract_done", null, nums, names, ResponseDelay(host.stress.stress), false);
+            runtimeTopic = RuntimeLines.ContractTopic(PhraseClips.runtimeTemplates, contractType);
+            try
+            {
+                if (!QueueKind(kind, null, nums, names, ResponseDelay(host.stress.stress), false) && kind == "contract_funds")
+                    QueueKind("contract_done", null, nums, names, ResponseDelay(host.stress.stress), false);
+            }
+            finally { runtimeTopic = null; }
         }
 
         /// <summary>The values of the active vessel for a science or contract line: the totals, the day, the
