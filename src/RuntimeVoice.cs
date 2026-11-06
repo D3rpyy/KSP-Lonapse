@@ -35,6 +35,8 @@ namespace Lonapse
             public float piperMs;
             public float[] samples;
             public string error;
+            public int generation;
+            public string warmKind;   // a warm-up line: the kind it loads
         }
 
         sealed class Worker
@@ -51,7 +53,7 @@ namespace Lonapse
 
         /// <summary>Piper processes besides calm Mission Control running at once (one per kind and delivery band, see
         /// RuntimeDelivery.KindFor). Each holds its own copy of the model in memory, so the least recently used one
-        /// stops when another is needed. 6 fits what loads at the flight start with a mixed crew: mc.tense,
+        /// stops when another is needed. 6 fits what RuntimeVoiceHost loads at the save start: mc.tense,
         /// mc.mc_panic, m, m.tense, f, f.tense.</summary>
         public const int MaxCrewWorkers = 6;
         long useCounter;
@@ -84,6 +86,31 @@ namespace Lonapse
         }
 
         public RuntimeVoice() { Init(); }
+
+        static RuntimeVoice shared;
+        /// <summary>The one Piper set of the game session. It lives across scenes (RuntimeVoiceHost loads it when a
+        /// save opens), so a flight finds its voices loaded. Main thread only.</summary>
+        public static RuntimeVoice Shared { get { if (shared == null || shared.disposed) shared = new RuntimeVoice(); return shared; } }
+        /// <summary>Stops the shared processes (the game quits).</summary>
+        public static void DisposeShared() { if (shared != null) shared.Dispose(); shared = null; }
+
+        int generation;
+        readonly HashSet<string> warmPending = new HashSet<string>();
+
+        /// <summary>A scene that asked for lines ends: their done callbacks are dropped, the lines still in Piper
+        /// finish without a clip. Main thread.</summary>
+        public void DropCallbacks() { generation++; }
+
+        /// <summary>The Piper process of a kind runs (or its warm-up line is on the way).</summary>
+        public bool Loaded(string kind)
+        {
+            if (warmPending.Contains(kind)) return true;
+            lock (workers)
+            {
+                Worker w;
+                return workers.TryGetValue(kind, out w) && !w.dead && w.proc != null && !w.proc.HasExited;
+            }
+        }
 
         public static string Root { get { Init(); return root; } }
         public static string TempDir { get { Init(); return tempDir; } }
@@ -127,7 +154,9 @@ namespace Lonapse
         /// away, so the model is loaded before the first real line.</summary>
         public void Warm(string kind)
         {
-            if (Missing(kind) == null) Request(kind, "Hola.", null);
+            if (Missing(kind) != null || Loaded(kind)) return;
+            warmPending.Add(kind);
+            Request(kind, "Hola.", null, kind);
         }
 
         /// <summary>
@@ -135,10 +164,12 @@ namespace Lonapse
         /// the main thread (from Tick) with the clip, or with an error. done null: a warm-up line, no clip is made.
         /// Never blocks: the Piper process starts and gets the line on the dispatcher thread.
         /// </summary>
-        public void Request(string kind, string spanishTemplate, Action<Result> done)
+        public void Request(string kind, string spanishTemplate, Action<Result> done) { Request(kind, spanishTemplate, done, null); }
+
+        void Request(string kind, string spanishTemplate, Action<Result> done, string warmKind)
         {
             var job = new Job { id = "rt" + Interlocked.Increment(ref counter), spoken = RuntimeSpeech.Spoken(spanishTemplate),
-                                done = done, sw = Stopwatch.StartNew() };
+                                done = done, sw = Stopwatch.StartNew(), generation = generation, warmKind = warmKind };
             if (disposed) return;
             lock (requests)
             {
@@ -342,6 +373,8 @@ namespace Lonapse
             {
                 Job j;
                 lock (gate) { if (finished.Count == 0) return; j = finished.Dequeue(); }
+                if (j.warmKind != null) warmPending.Remove(j.warmKind);
+                if (j.generation != generation) j.done = null; // asked by a scene that has ended
                 var r = new Result { error = j.error, spoken = j.spoken, piperMs = j.piperMs };
                 if (j.error == null && j.samples != null && j.done != null) // no clip for a warm-up line
                 {

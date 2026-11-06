@@ -30,7 +30,7 @@ namespace Lonapse
         public VoiceChannel[] allChannels = new VoiceChannel[0];
 
         public ChatterDirector director;
-        public RuntimeVoice runtimeVoice;  // experimental: lines spoken at runtime by Piper (Debug tab test)
+        public RuntimeVoice runtimeVoice;  // lines spoken at runtime by Piper: RuntimeVoice.Shared, kept across scenes
         public BeepDirector beeps;
         public BlackoutMachine blackout;
         private SettingsWindow window;
@@ -218,6 +218,7 @@ namespace Lonapse
         private void Awake()
         {
             Instance = this;
+            Log.SetMainThread();
             try
             {
                 settings = Settings.Load();
@@ -302,11 +303,13 @@ namespace Lonapse
 
         private void OnDestroy()
         {
+            Log.Flush();
             if (ReferenceEquals(Instance, this)) Instance = null;
             started = false;
             gateOpen = false;
             RestoreListener();
-            try { if (runtimeVoice != null) runtimeVoice.Dispose(); runtimeVoice = null; }
+            // the Piper processes stay for the next flight (RuntimeVoiceHost), only this flight's callbacks go
+            try { if (runtimeVoice != null) runtimeVoice.DropCallbacks(); runtimeVoice = null; }
             catch (Exception e) { Log.Exception("OnDestroy.runtimeVoice", e); }
             try
             {
@@ -686,6 +689,7 @@ namespace Lonapse
 
         private void Update()
         {
+            Log.Flush(); // the lines the Piper threads logged
             if (!started) return;
             try
             {

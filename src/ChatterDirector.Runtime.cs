@@ -83,7 +83,7 @@ namespace Lonapse
             }
         }
 
-        RuntimeVoice Voice { get { if (host.runtimeVoice == null) host.runtimeVoice = new RuntimeVoice(); return host.runtimeVoice; } }
+        RuntimeVoice Voice { get { if (host.runtimeVoice == null) host.runtimeVoice = RuntimeVoice.Shared; return host.runtimeVoice; } }
 
         /// <summary>The Piper voice of a kerbal: m or f, like the recorded clips. The kerbal's own pitch, timbre and
         /// tremolo come from the playback, the same for recorded and runtime lines.</summary>
@@ -329,9 +329,9 @@ namespace Lonapse
             PhraseClips.runtimeCanSpeak = RuntimeCanSpeak;
             if (!RuntimeOn) return;
             WarmOnce("mc");
-            // every voice a crewed flight can need loads at the start, while KSP still settles the scene, not in the
-            // middle of a tense scene where the model load costs frames: Mission Control calm, tense and panic, and
-            // the calm and tense voice of each gender aboard (crew panic lines are recorded clips)
+            // RuntimeVoiceHost loads these when the save opens, so here Warm finds them running and does nothing. Only
+            // after a quickload straight into a flight, or with runtime voice switched on in flight, they load here:
+            // Mission Control calm, tense and panic, and the calm and tense voice of each gender aboard
             if (host.roster.voices.Count > 0)
             {
                 WarmOnce("mc.tense");
