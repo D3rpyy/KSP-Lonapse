@@ -6,6 +6,7 @@
 # id       a-z 0-9 _, starts with rt_, unique over all files
 # kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),
 #          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed
+#          warp: Mission Control in time warp on rails, now and then in place of the usual exchange (warp.tsv)
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
@@ -24,8 +25,9 @@
 # Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
 #   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
 #   at_home flight_no missions stars visits landings (crew history, see below)
-#   (km, min, deg, ms and sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, kerbal in a report, and in a chat self (the speaker) and other (the one
+#   warp (the warp rate, only in time warp) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
+#   (km, min, h, deg, ms and sci get one decimal below 10, the rest whole numbers)
+# Name slots: vessel body here exp target, next (the body after soi_h), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.
 # Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
 #   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions

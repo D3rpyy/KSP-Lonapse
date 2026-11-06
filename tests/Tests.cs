@@ -1417,6 +1417,29 @@ public static class Tests
                 new KeyValuePair<string, IList<string>>("b.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_2\tchat\t\tS.\tS." }) }, dupErr);
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
+        {
+            // time warp: warp lines and warp chats only fit with the warp rate, which the director only gives in warp
+            var wv = new Dictionary<string, double> { { "warp", 1000 }, { "node_h", 5.2 }, { "node_min", 312 }, { "soi_h", 12.4 }, { "day", 9 } };
+            var wn = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "next", new[] { "Duna", "Duna" } },
+                                                        { "other", new[] { "Bil", "Bill" } } };
+            var wIds = new List<string>();
+            foreach (RuntimeTemplate t in RuntimeLines.Fitting(rtAll, "warp", "orbit", wv, wn)) wIds.Add(t.Id);
+            var noWarp = new Dictionary<string, double>(wv);
+            noWarp.Remove("warp");
+            int chatsWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", wv, wn).FindAll(t => t.Id.StartsWith("rt_chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
+            int chatsNoWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", noWarp, wn).FindAll(t => t.Id.StartsWith("rt_chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
+            RuntimeTemplate soi = rtAll.Find(t => t.Id == "rt_warp_soi");
+            string ws, we;
+            bool soiOk = soi != null && RuntimeLines.Fill(soi, 0, wv, wn, out ws, out we) && we == "You reach Duna in 12 hours."
+                         && RuntimeSpeech.Unmarked(ws) == "Llegáis a Duna en doce horas." && RuntimeSpeech.Spoken(ws).Contains(" Duna ");
+            Check(wIds.Contains("rt_warp_high") && wIds.Contains("rt_warp_node_h") && wIds.Contains("rt_warp_soi") && wIds.Contains("rt_warp_orbit")
+                  && !wIds.Contains("rt_warp_node") && !wIds.Contains("rt_warp_soi_soon") && !wIds.Contains("rt_warp_landed")
+                  && !RuntimeLines.Fitting(rtAll, "warp", "orbit", noWarp, wn).Exists(t => t.Id == "rt_warp_rate")
+                  && chatsWarp >= 4 && chatsNoWarp == 0 && soiOk,
+                  "runtime voice: warp lines fit the warp rate, the burn and the next body, warp chats only in warp",
+                  string.Join(", ", wIds.ToArray()) + " / chats " + chatsWarp + " and " + chatsNoWarp + " without warp / soi "
+                  + (soi != null && RuntimeLines.Fill(soi, 0, wv, wn, out ws, out we) ? RuntimeSpeech.Spoken(ws) + " / " + we : "no fill"));
+        }
         // runtime chats: rt_chat_<name>_<seq>, two kerbals take turns, self and other per speaker
         var chats = RuntimeLines.Chats(rtAll);
         var nA = new Dictionary<string, string[]>(fullN);

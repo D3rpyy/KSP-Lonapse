@@ -113,10 +113,14 @@ Mission Control about it, at most once every 45 s (`evaFallCooldown`).
 When nobody is left on board (EVA, a crew transfer, switching to another vessel) everything fades out within 0.3 s.
 When the vessel is destroyed the sound stops at once. The pause menu pauses all sounds. Map view keeps playing.
 
-During time warp on rails everything is silent. Physics warp plays normally. When you come out of warp a short ping
-tells you the radio is back, and the voices follow a few seconds later. If you tap warp on and off a lot, the ping
-waits at least 15 s between two warps (`warpPingCooldown`). All timers run in real time, so warp can never cause a
-burst of calls.
+During time warp on rails the calm talk goes on ("Chatter during time warp", on by default). The radio and the
+intercom keep their normal pace in real seconds. Events wait until the warp ends, and the alarm and the rover moments
+stay off. With the runtime voice on, Mission Control often talks about the warp itself: the warp rate, the hours to
+the next burn, the hours to the next body (`Phrases/Runtime/warp.tsv`). A few crew chats there only fit in warp.
+With the setting off, warp on rails is silent as before. When you come out of warp a short ping tells you the radio
+is back, and the voices follow a few seconds later. If you tap warp on and off a lot, the ping waits at least 15 s
+between two warps (`warpPingCooldown`). Physics warp plays normally. All timers run in real time, so warp can never
+cause a burst of calls.
 
 ## Settings
 

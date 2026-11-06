@@ -348,7 +348,7 @@ namespace Lonapse
                 {
                     ManeuverNode n = v.patchedConicSolver.maneuverNodes[0];
                     double dt = n.UT - Planetarium.GetUniversalTime();
-                    if (dt > 0) { nums["node_min"] = dt / 60.0; nums["node_dv"] = n.DeltaV.magnitude; }
+                    if (dt > 0) { nums["node_min"] = dt / 60.0; nums["node_h"] = dt / 3600.0; nums["node_dv"] = n.DeltaV.magnitude; }
                 }
             }
             catch (Exception) { }
@@ -375,6 +375,21 @@ namespace Lonapse
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
+            // time warp: the rate, and the time to the next body when the orbit leaves this one
+            if (host.warpChatter) try { nums["warp"] = Math.Round(TimeWarp.CurrentRate); } catch (Exception) { }
+            try
+            {
+                if (o != null && (o.patchEndTransition == Orbit.PatchTransitionType.ENCOUNTER
+                                  || o.patchEndTransition == Orbit.PatchTransitionType.ESCAPE))
+                {
+                    double left = o.EndUT - Planetarium.GetUniversalTime();
+                    CelestialBody nb = o.nextPatch != null ? o.nextPatch.referenceBody : null;
+                    if (left > 0) nums["soi_h"] = left / 3600.0;
+                    string[] nn = nb != null ? BodyNames(nb.bodyName) : null;
+                    if (left > 0 && nn != null) names["next"] = nn;
+                }
+            }
+            catch (Exception) { }
         }
 
         static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
@@ -479,7 +494,7 @@ namespace Lonapse
             List<RuntimeTemplate> fit = RuntimeLines.Fitting(PhraseClips.runtimeTemplates, kind, sit, nums, names);
             List<RuntimeTemplate> fresh = fit.FindAll(t => !recentRuntime.Contains(t.Id));
             if (fresh.Count > 0) fit = fresh;
-            else if (kind == "report") return false;   // a report can wait, an answer to an event may repeat
+            else if (kind == "report" || kind == "warp") return false;   // a report can wait, an answer to an event may repeat
             if (fit.Count == 0) return false;
             QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, delay, report);
             return true;
@@ -505,6 +520,24 @@ namespace Lonapse
                 if (kn != null) { names["kerbal"] = kn; CrewValues(k, v, nums); }
             }
             return QueueKind("report", sit, nums, names, 0.3f, true);
+        }
+
+        /// <summary>Share of radio turns in time warp that are a warp line (kind warp), when one fits.</summary>
+        const double WarpLineChance = 0.5;
+
+        /// <summary>Time warp chatter: a warp line from Mission Control (rate, time to the node or the next body).
+        /// False when the runtime voice is off, the radio is cut or none fits: the usual exchange plays then.</summary>
+        bool QueueWarpLine()
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports || reportPending || radioSilent || mcBlackout
+                || !host.signal.connected || !host.settings.radioEnabled) return false;
+            Vessel v = ActiveVessel;
+            if (v == null) return false;
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            string sit = SituationOf(v) ?? "other";
+            CollectValues(v, sit, nums, names);
+            return QueueKind("warp", sit, nums, names, U(0f, 0.3f), true);
         }
 
         /// <summary>After the docking approach call: distance and closing speed to the target.</summary>

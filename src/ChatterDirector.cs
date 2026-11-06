@@ -1401,6 +1401,8 @@ namespace Lonapse
         private bool Fire(bool appendOverlap)
         {
             if (!TakeToken()) return false;
+            // time warp: often a runtime line about the warp instead of the usual exchange
+            if (!appendOverlap && host.warpChatter && rng.NextDouble() < WarpLineChance && QueueWarpLine()) return true;
             if (host.probeMode) return FireProbe(appendOverlap); // plan v5: pet talk instead of crew exchanges
             float s = host.stress.stress;
             Tuning tu = Tu;

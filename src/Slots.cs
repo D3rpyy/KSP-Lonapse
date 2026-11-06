@@ -18,8 +18,8 @@ namespace Lonapse
         public static readonly string[] Numbers = { "alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
             "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
             "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
-            "at_home", "flight_no", "missions", "stars", "visits", "landings" };
-        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target" };
+            "at_home", "flight_no", "missions", "stars", "visits", "landings", "warp", "node_h", "soi_h" };
+        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next" };
         public static readonly string[] Persons = { "other", "self", "kerbal" };
         /// <summary>Values the director gives every recorded line, with or without the runtime voice.</summary>
         public static readonly string[] Flight = { "day", "here", "vessel", "alt_km" };
@@ -35,10 +35,10 @@ namespace Lonapse
         /// <summary>Not a pool: every number, name and person slot.</summary>
         public static bool IsReserved(string name) { return IsNumber(name) || IsName(name) || IsPerson(name); }
 
-        /// <summary>Keys said with one decimal below 10: km, min, deg, m/s and science points.</summary>
+        /// <summary>Keys said with one decimal below 10: km, min, h, deg, m/s and science points.</summary>
         public static bool HasDecimals(string key)
         {
-            return key.EndsWith("_km", StringComparison.Ordinal) || key.EndsWith("_min", StringComparison.Ordinal)
+            return key.EndsWith("_km", StringComparison.Ordinal) || key.EndsWith("_min", StringComparison.Ordinal) || key.EndsWith("_h", StringComparison.Ordinal)
                    || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key == "sci";
         }
     }

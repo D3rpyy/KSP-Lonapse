@@ -398,6 +398,7 @@ namespace Lonapse
         public string stationStyle = "auto";        // req 9: auto | check | exchange
         public string radioProfile = "auto";        // req 16: auto | station | ship | eva
         public bool evaRadio = true;                // req 15
+        public bool warpChatter = true;             // calm chatter during rails warp, events wait for the end of it
         public bool evaRelay = true;                // v6: the EVA suit radio reaches MC through a nearby ship
         public float evaRadioVolume = 0.8f;         // req 15, 0..1
         public bool planChatter = true;             // req 18
@@ -754,6 +755,7 @@ namespace Lonapse
                 n.TryGetValue("stationStyle", ref s.stationStyle);
                 n.TryGetValue("radioProfile", ref s.radioProfile);
                 n.TryGetValue("evaRadio", ref s.evaRadio);
+                n.TryGetValue("warpChatter", ref s.warpChatter);
                 n.TryGetValue("evaRelay", ref s.evaRelay);
                 n.TryGetValue("evaRadioVolume", ref s.evaRadioVolume);
                 n.TryGetValue("planChatter", ref s.planChatter);
@@ -900,6 +902,7 @@ namespace Lonapse
                 n.AddValue("stationStyle", stationStyle);
                 n.AddValue("radioProfile", radioProfile);
                 n.AddValue("evaRadio", evaRadio);
+                n.AddValue("warpChatter", warpChatter);
                 n.AddValue("evaRelay", evaRelay);
                 n.AddValue("evaRadioVolume", F(evaRadioVolume));
                 n.AddValue("planChatter", planChatter);

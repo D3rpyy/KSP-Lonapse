@@ -56,6 +56,10 @@ namespace Lonapse
 
         public bool stationMode;          // active vessel type is Station or Base
         public bool railsWarp;
+        /// <summary>Rails warp with "Chatter during time warp" on: the gate stays open, calm chatter only. Events wait
+        /// for the end of the warp, the alarm and the rover moments stay off.</summary>
+        public bool warpChatter;
+        private bool lastWarpChatter;
         public readonly DockingWatcher docking = new DockingWatcher();
         public readonly DockingGeometry dockGeo = new DockingGeometry();
         public readonly CalloutGate callouts = new CalloutGate();
@@ -734,6 +738,11 @@ namespace Lonapse
                 if (!ReferenceEquals(reason, gateReason))
                     Log.Info(open ? "Gate open" : "Gate closed: " + reason);
                 gateReason = reason;
+                if (warpChatter != lastWarpChatter)
+                {
+                    lastWarpChatter = warpChatter;
+                    Log.Info(warpChatter ? "Time warp: calm chatter goes on, events wait" : "Time warp chatter ended");
+                }
                 if (open && silenced)
                 {
                     silenced = false;
@@ -1067,7 +1076,7 @@ namespace Lonapse
             Tuning tu = settings.tuning;
             try
             {
-                if (gateOpen && settings.probeRover)
+                if (gateOpen && !warpChatter && settings.probeRover)
                 {
                     bool rover = v.vesselType == VesselType.Rover;
                     string moment = roverMoments.Update(dt, rover, sample.landed, (float)sample.srfSpeed, sample.roverAirTime, sample.roverTilt, tu);
@@ -1104,6 +1113,7 @@ namespace Lonapse
 
         private string EvaluateGate(Vessel v)
         {
+            warpChatter = false;
             evaMode = false;
             probeMode = false;
             if (!settings.enabled) return RDisabled;
@@ -1122,7 +1132,8 @@ namespace Lonapse
                 if (!settings.probeMode || probeCoreKey == null) return RNoCrew;
                 probeMode = true;
             }
-            if (railsWarp) return RWarp;
+            if (railsWarp && !settings.warpChatter) return RWarp;
+            warpChatter = railsWarp;
             evaMode = eva;
             return GateOpenReason;
         }
@@ -1248,7 +1259,7 @@ namespace Lonapse
         private void UpdateAlarm(float dt)
         {
             Tuning tu = settings.tuning;
-            bool panic = gateOpen && settings.masterAlarm && !evaMode && stress != null && stress.stress >= tu.alarmStress;
+            bool panic = gateOpen && settings.masterAlarm && !evaMode && !warpChatter && stress != null && stress.stress >= tu.alarmStress;
             if (panic) alarmHoldLeft = tu.alarmHold;
             else alarmHoldLeft -= dt;
             bool want = settings.masterAlarm && gateOpen && (panic || alarmHoldLeft > 0f) && ClipLibrary.CountOf("beeps/master_alarm") > 0;

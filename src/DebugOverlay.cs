@@ -62,7 +62,7 @@ namespace Lonapse
             if (host.stationMode)
                 sb.Append("station MC check-in in ").Append(host.director.stationMcLeft.ToString("0", Inv)).Append(" s\n");
             sb.Append("mode: ").Append(host.stationMode ? "station/base" : "normal")
-              .Append("  rails warp ").Append(host.railsWarp).Append('\n');
+              .Append("  rails warp ").Append(host.railsWarp).Append(host.warpChatter ? " (chatter)" : "").Append('\n');
             DockingWatcher dw = host.docking;
             if (dw.hasTarget)
                 sb.Append("docking: target ").Append(dw.distance.ToString("0.0", Inv)).Append(" m (port ")

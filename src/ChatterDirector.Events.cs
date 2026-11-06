@@ -497,6 +497,8 @@ namespace Lonapse
             bool soi = ev == EventWatchers.SoiEnter;
             bool upbeat = soi || ev == EventWatchers.Science;
             if (!EventEnabled(ev)) { why = "disabled"; return EvGo.Drop; }
+            // time warp chatter: an event waits for the end of the warp, as it did with the gate closed
+            if (host.warpChatter) { why = "time warp"; return EvGo.Wait; }
             if (host.probeMode) return TryProbeEvent(r, out why); // plan v5: probe scenes, crew_lost dropped
             if (!host.settings.radioEnabled) { why = "radio disabled"; return EvGo.Drop; }
             if (!host.CanStartAudio) { why = "gate " + host.gateReason; return EvGo.Wait; }

@@ -45,7 +45,7 @@ namespace Lonapse
     public static class RuntimeLines
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed", "chat" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
