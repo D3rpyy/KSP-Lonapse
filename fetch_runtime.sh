@@ -7,8 +7,6 @@
 #   LICENSES/ runtime/licenses from the repo
 # macOS: the Piper release for macOS has no .dylib files and cannot start, so there is no macos/ folder. Lonapse
 # then plays the recorded lines only.
-# Also downloads the source of Piper, piper-phonemize and espeak-ng at the pinned commits into
-# audio/build/runtime_source/, zipped for the runtime-source prerelease on GitHub (the GPL asks for the espeak-ng source).
 # Every download and every shipped voice is checked against a pinned sha256.
 # Usage: ./fetch_runtime.sh [--python <python with runtime/requirements.txt>]
 #   The python is only needed when the voices in audio/build/runtime_voices are missing or differ. They are then made
@@ -26,10 +24,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-VERSION="$(sed -n 's/.*const string Version = "\([0-9.]*\)".*/\1/p' src/LonapseAddon.cs)"
 DL="$REPO/audio/build/runtime_download"
 OUT="$REPO/audio/build/runtime/Runtime"
-SRC_OUT="$REPO/audio/build/runtime_source"
 VOICES="$REPO/audio/build/runtime_voices"
 PIPER="https://github.com/rhasspy/piper/releases/download/2023.11.14-2"
 
@@ -37,12 +33,6 @@ PIPER="https://github.com/rhasspy/piper/releases/download/2023.11.14-2"
 DOWNLOADS=(
   "piper_windows_amd64.zip|$PIPER/piper_windows_amd64.zip|f3c58906402b24f3a96d92145f58acba6d86c9b5db896d207f78dc80811efcea"
   "piper_linux_x86_64.tar.gz|$PIPER/piper_linux_x86_64.tar.gz|a50cb45f355b7af1f6d758c1b360717877ba0a398cc8cbe6d2a7a3a26e225992"
-)
-# source archives: the sha256 is checked when it is filled in, else printed so it can be pinned
-SOURCES=(
-  "piper-2023.11.14-2.zip|https://github.com/rhasspy/piper/archive/refs/tags/2023.11.14-2.zip|"
-  "piper-phonemize-fccd4f3.zip|https://github.com/rhasspy/piper-phonemize/archive/fccd4f335aa68ac0b72600822f34d84363daa2bf.zip|"
-  "espeak-ng-0f65aa3.zip|https://github.com/rhasspy/espeak-ng/archive/0f65aa301e0d6bae5e172cc74197d32a6182200f.zip|"
 )
 # the voices as they ship (README, Runtime voice files)
 declare -A VOICE_SHA=(
@@ -138,14 +128,6 @@ echo "Checked: the three voices"
 
 # ---- licences ----
 cp "$REPO"/runtime/licenses/* "$OUT/LICENSES/"
-
-# ---- source for the release ----
-for d in "${SOURCES[@]}"; do IFS='|' read -r n u s <<<"$d"; fetch "$n" "$u" "$s" "$SRC_OUT/files"; done
-cp "$REPO/runtime/licenses/README.md" "$SRC_OUT/files/README.md"
-SZIP="$SRC_OUT/Lonapse-$VERSION-runtime-source.zip"
-rm -f "$SZIP"
-(cd "$SRC_OUT/files" && zip -q -X "$SZIP" ./*)
-echo "Source for the runtime-source prerelease on GitHub: $SZIP"
 
 echo
 echo "sha256 of the shipped program files and voices (README, Runtime voice files):"

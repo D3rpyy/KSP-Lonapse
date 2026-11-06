@@ -49,6 +49,3 @@ cp audio/CREDITS.md "$GD/CREDITS.md"
 
 echo "Updated: $GD"
 "$REPO/pack_zip.sh" "$VERSION"
-SRCZIP="$REPO/audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip"
-if [[ -f "$SRCZIP" ]]; then echo "The release workflow uploads the source to the runtime-source prerelease (not to the version release): $SRCZIP"
-else echo "WARNING: no $SRCZIP, run ./fetch_runtime.sh again after the version bump. It goes to the runtime-source prerelease (GPL source)." >&2; fi
