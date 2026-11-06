@@ -29,7 +29,7 @@ pc_011_3	probe_crew	chatter	calm	crew	pc_011	3	both	goofy	any	any	any	any	any		Y
 pc_012_1	probe_crew	chatter	calm	probe	pc_012	1	both	goofy	any	any	any	any	any	proud		[beeps a long report]	
 pc_012_2	probe_crew	chatter	calm	crew	pc_012	2	both	goofy	any	any	any	any	any		Más despacio, que tomo notas.	Slower, I'm taking notes. | Slower, I'm taking notes. | Slow down. I'm writing.	
 pc_012_3	probe_crew	chatter	calm	probe	pc_012	3	both	goofy	any	any	any	any	any	offended		[beeps even faster]	
-pc_013_1	probe_crew	chatter	calm	crew	pc_013	1	both	goofy	any	any	any	any	any		¿Tú qué opinas de la comida?	What do you think of the food? | What do you think of the food? | How do you like the {food}?	¿Tú qué opinas de la comida? | ¿Tú qué opinas de la comida? | ¿Tú qué opinas {del food}?
+pc_013_1	probe_crew	chatter	calm	crew	pc_013	1	both	goofy	any	any	any	any	any		¿Tú qué opinas de la comida?	What do you think of the food? | What do you think of the food? | How do you like the {food}?	 |  | ¿Tú qué opinas {del food}?
 pc_013_2	probe_crew	chatter	calm	probe	pc_013	2	both	goofy	any	any	any	any	any	happy		[beeps cheerfully]	
 pc_013_3	probe_crew	chatter	calm	crew	pc_013	3	both	goofy	any	any	any	any	any		Claro, tú no la tienes que comer.	Sure, you don't have to eat it. | Sure, you don't have to eat it. | Easy for you. You don't eat it.	
 pc_014_1	probe_crew	chatter	calm	probe	pc_014	1	both	goofy	any	any	any	any	any	curious		[beeps at the snacks]	
@@ -64,7 +64,7 @@ pc_025_1	probe_crew	chatter	calm	crew	pc_025	1	both	goofy	any	any	any	any	any		E
 pc_025_2	probe_crew	chatter	calm	probe	pc_025	2	both	goofy	any	any	any	any	any	offended		[beeps loudly]	
 pc_025_3	probe_crew	chatter	calm	crew	pc_025	3	both	goofy	any	any	any	any	any		Bueno. No tan callado.	Well. Not that quiet. | Well. Not that quiet. | Okay. Not so quiet.	
 pc_026_1	probe_crew	chatter	calm	probe	pc_026	1	both	orbit	any	any	any	any	any	curious		[beeps at the planet]	
-pc_026_2	probe_crew	chatter	calm	crew	pc_026	2	both	orbit	any	any	any	any	any		Sí, es enorme. Y damos vueltas a su alrededor.	Yes, it's huge. And we go round and round it. | Yes, it's huge. And we go round and round it. | Yes, {here} is huge. Round and round we go.	
+pc_026_2	probe_crew	chatter	calm	crew	pc_026	2	both	orbit	any	any	any	any	any		Sí, es enorme. Y damos vueltas a su alrededor.	Yes, it's huge. And we go round and round it. | Yes, it's huge. And we go round and round it. | Yes, {here} is huge. Round and round we go.	 |  | Sí, {here} es enorme. Y damos vueltas y vueltas.
 pc_027_1	probe_crew	chatter	calm	crew	pc_027	1	both	orbit	any	any	any	any	any		Otra vuelta más, compañero.	Another lap, buddy. | Another lap, buddy. | One more lap, buddy.	
 pc_027_2	probe_crew	chatter	calm	probe	pc_027	2	both	orbit	any	any	any	any	any	bored		[beeps very slowly]	
 pc_028_1	probe_crew	chatter	calm	probe	pc_028	1	both	coast	any	any	any	any	any	bored		[beeps a long sigh]	
@@ -72,7 +72,7 @@ pc_028_2	probe_crew	chatter	calm	crew	pc_028	2	both	coast	any	any	any	any	any		L
 pc_029_1	probe_crew	chatter	calm	probe	pc_029	1	both	landed	any	any	any	any	any	happy		[beeps with joy]	
 pc_029_2	probe_crew	chatter	calm	crew	pc_029	2	both	landed	any	any	any	any	any		¡Sí! ¡Hemos llegado! ¡Lo hemos hecho juntos!	Yes! We made it! We did it together! | Yes! We made it! We did it together! | We made it! Together!	
 pc_030_1	probe_crew	chatter	calm	probe	pc_030	1	both	landed	any	any	any	any	any	curious		[beeps at the ground]	
-pc_030_2	probe_crew	chatter	calm	crew	pc_030	2	both	landed	any	any	any	any	any		Es roca. Mucha roca. Bienvenido.	It's rock. Lots of rock. Welcome. | It's rock. Lots of rock. Welcome. | Rock. Lots of it. Welcome to {here}.	
+pc_030_2	probe_crew	chatter	calm	crew	pc_030	2	both	landed	any	any	any	any	any		Es roca. Mucha roca. Bienvenido.	It's rock. Lots of rock. Welcome. | It's rock. Lots of rock. Welcome. | Rock. Lots of it. Welcome to {here}.	 |  | Roca. Mucha roca. Bienvenido a {here}.
 pc_031_1	probe_crew	chatter	calm	probe	pc_031	1	both	goofy	any	engineer	any	any	any	proud		[beeps a status report]	
 pc_031_2	probe_crew	chatter	calm	crew	pc_031	2	both	goofy	any	engineer	any	any	any		Voltaje bien, temperatura bien. Buen trabajo.	Voltage good, temperature good. Good job. | Voltage good, temperature good. Good job. | Good voltage, good temperature. Nice.	
 pc_032_1	probe_crew	chatter	calm	probe	pc_032	1	both	goofy	any	engineer	any	any	any	offended		[beeps an error]	
@@ -123,7 +123,7 @@ pc_049_2	probe_crew	chatter	calm	probe	pc_049	2	both	goofy	any	any	any	any	any	p
 pc_049_3	probe_crew	chatter	calm	crew	pc_049	3	both	goofy	any	any	any	any	any		Con un sí o un no me valía.	A yes or no was fine. | A yes or no was fine. | Yes or no would have been enough.	
 pc_050_1	probe_crew	chatter	calm	probe	pc_050	1	both	goofy	any	any	any	any	any	offended		[beeps at the snacks]	
 pc_050_2	probe_crew	chatter	calm	crew	pc_050	2	both	goofy	any	any	any	any	any		Las migas no te van a hacer daño. Creo.	The crumbs won't hurt you. I think. | The crumbs won't hurt you. I think. | Crumbs are harmless. Probably.	
-pc_051_1	probe_crew	chatter	calm	crew	pc_051	1	both	goofy	any	any	any	any	any		Te voy a enseñar a jugar a las cartas.	I'm going to teach you to play cards. | I'm going to teach you to play cards. | Let me teach you {game}.	Te voy a enseñar a jugar a las cartas. | Te voy a enseñar a jugar a las cartas. | Te voy a enseñar a jugar a {game}.
+pc_051_1	probe_crew	chatter	calm	crew	pc_051	1	both	goofy	any	any	any	any	any		Te voy a enseñar a jugar a las cartas.	I'm going to teach you to play cards. | I'm going to teach you to play cards. | Let me teach you {game}.	 |  | Te voy a enseñar a jugar a {game}.
 pc_051_2	probe_crew	chatter	calm	probe	pc_051	2	both	goofy	any	any	any	any	any	curious		[beeps eagerly]	
 pc_051_3	probe_crew	chatter	calm	crew	pc_051	3	both	goofy	any	any	any	any	any		Ya has ganado. ¿Cómo has ganado?	You already won. How did you win? | You already won. How did you win? | You won already? How?	
 pc_051_4	probe_crew	chatter	calm	probe	pc_051	4	both	goofy	any	any	any	any	any	proud		[beeps innocently]	
@@ -182,7 +182,7 @@ pc_074_2	probe_crew	chatter	calm	probe	pc_074	2	both	coast	any	any	any	any	any	h
 pc_074_3	probe_crew	chatter	calm	crew	pc_074	3	both	coast	any	any	any	any	any		No vale decirlo.	You're not supposed to say it. | You're not supposed to say it. | You can't say it out loud.	
 pc_075_1	probe_crew	chatter	calm	probe	pc_075	1	both	coast	any	any	any	any	any	curious		[beeps at the stars]	
 pc_075_2	probe_crew	chatter	calm	crew	pc_075	2	both	coast	any	any	any	any	any		Sí, siguen ahí. Todas.	Yes, they're still there. All of them. | Yes, they're still there. All of them. | Yes, all still there.	
-pc_076_1	probe_crew	chatter	calm	crew	pc_076	1	both	landed	any	any	any	any	any		Bueno, compañero. Hemos llegado. ¿Qué te parece?	Well, buddy. We made it. What do you think? | Well, buddy. We made it. What do you think? | So, buddy. We're on {here}. Thoughts?	
+pc_076_1	probe_crew	chatter	calm	crew	pc_076	1	both	landed	any	any	any	any	any		Bueno, compañero. Hemos llegado. ¿Qué te parece?	Well, buddy. We made it. What do you think? | Well, buddy. We made it. What do you think? | So, buddy. We're on {here}. Thoughts?	 |  | Bueno, compañero. Estamos en {here}. ¿Qué te parece?
 pc_076_2	probe_crew	chatter	calm	probe	pc_076	2	both	landed	any	any	any	any	any	happy		[beeps with delight]	
 pc_077_1	probe_crew	chatter	calm	probe	pc_077	1	both	landed	any	any	any	any	any	curious		[beeps at a rock]	
 pc_077_2	probe_crew	chatter	calm	crew	pc_077	2	both	landed	any	any	any	any	any		¿Quieres que te la traiga?	Want me to bring it to you? | Want me to bring it to you? | Shall I bring it here?	
