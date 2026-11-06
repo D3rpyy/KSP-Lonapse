@@ -278,8 +278,9 @@ What stress changes:
   calm to full stress) and rougher, and the pitch goes up by at most half a semitone (`crewStressSemitones`, total
   pitch capped by `crewPitchMax`). Panic clips get neither: the panic is already in the recording. Above personal
   stress 0.85 other lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
-- **Faces**: above stress 0.3 a kerbal looks more and more scared, a straight face at 0.65 and full fear at 1, also
-  between lines. Badass kerbals keep a bit more room.
+- **Faces**: they follow the kerbal's own thresholds, the same that switch the voice. Below `tenseAt` the face is
+  free, from there it gets more and more scared, clearly scared at `panicAt` and full fear at stress 1, also between
+  lines. A brave or badass kerbal has later thresholds, so it keeps a calm face longer.
 - **Mission Control**: gets calmer and slower the more stressed the crew is, at a steady volume.
 - **Every kerbal is different**: the name sets a fixed pitch, wobble and timbre, so Jeb always sounds like Jeb.
   Courage and stupidity change how strongly a kerbal reacts and when they move to tense or panic. Badass kerbals stay

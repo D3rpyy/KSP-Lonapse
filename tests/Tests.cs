@@ -4331,26 +4331,31 @@ public static class Tests
                 Check(MouthMath.EnvelopeOpen(0.1f) == 0f && MouthMath.EnvelopeOpen(0.8f) == 1f && MouthMath.EnvelopeOpen(1f) == 1f
                       && Math.Abs(MouthMath.EnvelopeOpen(0.46f) - 0.5f) < 1e-4,
                       "mouth track: closed in pauses, wide on the loud syllables", "");
-                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, false) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, false) == -1f
-                      && FaceMath.HeldMood(0.8f, 0f, 0.1f, false) == 0.8f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.65f, false)) < 1e-5
-                      && FaceMath.HeldMood(0.8f, 0f, 1f, false) == -1f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.65f, true) - 0.4f) < 1e-5
-                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, false) == -0.5f,
+                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, 0.3f, 0.7f) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, 0.3f, 0.7f) == -1f
+                      && FaceMath.HeldMood(0.8f, 0f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.HeldMood(0.8f, 0f, 1f, 0.3f, 0.7f) == -1f
+                      && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.7f, 0.3f, 0.7f) - FaceMath.FaceAtPanic) < 1e-5
+                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, 0.3f, 0.7f) == -0.5f,
                       "face: a calm line keeps a scared face scared, stress caps the grin, a fearful line still shows", "");
-                Check(FaceMath.StressCap(0f, false) == 1f && FaceMath.StressCap(0.3f, false) == 1f
-                      && Math.Abs(FaceMath.StressCap(0.65f, false)) < 1e-5 && FaceMath.StressCap(1f, false) == -1f
-                      && Math.Abs(FaceMath.StressCap(1f, true) + 0.6f) < 1e-5 && FaceMath.StressCap(float.NaN, false) == 1f,
-                      "face: stress scale, free to 0.3, straight at 0.65, full fear at 1, badass 0.4 more room", "");
+                // the thresholds of a real test crew (KSP.log 2026-11-06): Sidfrod 0.29/0.66, Mae (badass) 0.35/0.83
+                Check(FaceMath.StressCap(0.2f, 0.29f, 0.66f) == 1f && FaceMath.StressCap(0.29f, 0.29f, 0.66f) == 1f
+                      && Math.Abs(FaceMath.StressCap(0.66f, 0.29f, 0.66f) + 0.5f) < 1e-5 && FaceMath.StressCap(1f, 0.29f, 0.66f) == -1f
+                      && Math.Abs(FaceMath.StressCap(0.83f, 0.35f, 0.83f) + 0.5f) < 1e-5,
+                      "face: free below the own tenseAt, clearly scared at the own panicAt, full fear at 1", "");
+                Check(FaceMath.StressCap(0.66f, 0.35f, 0.83f) > FaceMath.StressCap(0.66f, 0.29f, 0.66f) + 0.4f,
+                      "face: at the same stress a braver kerbal (later thresholds) looks less scared", "");
                 bool down = true; float prevCap = 2f;
-                for (int i = 0; i <= 20; i++) { float c = FaceMath.StressCap(i / 20f, false); if (c > prevCap + 1e-6f) down = false; prevCap = c; }
-                Check(down && FaceMath.StressCap(0.5f, false) > FaceMath.StressCap(0.8f, false),
-                      "face: fear grows step by step with stress (never less scared at more stress)", "");
-                Check(FaceMath.IdleMood(0.8f, 0.1f, false) == 0.8f && FaceMath.IdleMood(0.8f, 1f, false) == -1f
-                      && FaceMath.IdleMood(-0.5f, 0.4f, false) == -0.5f && Math.Abs(FaceMath.IdleMood(0.8f, 0.65f, false)) < 1e-5,
+                for (int i = 0; i <= 40; i++) { float c = FaceMath.StressCap(i / 40f, 0.31f, 0.69f); if (c > prevCap + 1e-6f) down = false; prevCap = c; }
+                Check(down, "face: fear grows step by step with stress (never less scared at more stress)", "");
+                Check(FaceMath.StressCap(0.5f, float.NaN, float.NaN) <= 1f && FaceMath.StressCap(float.NaN, 0.3f, 0.7f) == 1f
+                      && FaceMath.StressCap(1f, 0.3f, 1.05f) >= -1f && FaceMath.StressCap(0.9f, 0.5f, 0.5f) < FaceMath.FaceAtPanic + 1e-5f,
+                      "face: bad or crossed thresholds (escalated panicAt over 1, panicAt = tenseAt) stay sane", "");
+                Check(FaceMath.IdleMood(0.8f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.IdleMood(0.8f, 1f, 0.3f, 0.7f) == -1f
+                      && FaceMath.IdleMood(-0.8f, 0.4f, 0.3f, 0.7f) == -0.8f && Math.Abs(FaceMath.IdleMood(0.8f, 0.7f, 0.3f, 0.7f) + 0.5f) < 1e-5,
                       "face: between lines a grinning stock face is capped by stress, a scared one stays scared", "");
-                Check(Math.Abs(FaceMath.FaceMood(-1f, 0f, 0.5f, 0.1f, false) - 0.5f) < 1e-5
-                      && Math.Abs(FaceMath.FaceMood(-1f, 1f, 0.5f, 0.1f, false) + 1f) < 1e-5
-                      && Math.Abs(FaceMath.FaceMood(-1f, 0.5f, 0.5f, 0.1f, false) + 0.25f) < 1e-5
-                      && Math.Abs(FaceMath.FaceMood(0.8f, 0f, 0.8f, 1f, false) + 1f) < 1e-5,
+                Check(Math.Abs(FaceMath.FaceMood(-1f, 0f, 0.5f, 0.1f, 0.3f, 0.7f) - 0.5f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(-1f, 1f, 0.5f, 0.1f, 0.3f, 0.7f) + 1f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(-1f, 0.5f, 0.5f, 0.1f, 0.3f, 0.7f) + 0.25f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(0.8f, 0f, 0.8f, 1f, 0.3f, 0.7f) + 1f) < 1e-5,
                       "face: no stress is the old stock to line blend, high stress holds the fear between lines", "");
                 float fa = 0f, sl = 0f, peak = 0f, steady = 0f;
                 for (int i = 0; i < 30; i++) peak = Math.Max(peak, FaceMath.Accent(ref fa, ref sl, 1f, 0.01f));

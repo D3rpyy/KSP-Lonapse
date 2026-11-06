@@ -184,8 +184,14 @@ namespace Lonapse
         public void UpdateStress(float vesselStress, Band maxBand, float panicOffset)
         {
             sk = PersonalStress(vesselStress, exponent);
-            band = NextBand(band, sk, tenseAt, Math.Min(1.05f, panicAt + Math.Max(0f, panicOffset)), maxBand);
+            panicNow = Math.Min(1.05f, panicAt + Math.Max(0f, panicOffset));
+            band = NextBand(band, sk, tenseAt, panicNow, maxBand);
         }
+
+        /// <summary>The panic threshold in effect (panicAt plus the escalation offset), set by UpdateStress. The face
+        /// scale uses it, so the face turns scared where the voice does.</summary>
+        public float PanicNow { get { return panicNow > 0f ? panicNow : panicAt; } }
+        private float panicNow;
 
         public string BandName { get { return BandNames[(int)band]; } }
 

@@ -8,8 +8,8 @@
 // reliable for a plugin assembly loaded at runtime). It sets the same parameter again: the
 // stock value moved toward the mood of the line by a weight (faceWeight). The stock field itself is never written, so
 // the stock lerp goes on undisturbed and the face returns to it when the weight eases back to 0 after the line.
-// Between lines the stress still caps the face (FaceMath.IdleMood): above stress 0.3 a kerbal looks more and more
-// scared, up to full fear at 1, even while stock KSP would grin at speed and G.
+// Between lines the stress still caps the face (FaceMath.IdleMood): from the kerbal's own tenseAt it looks more and
+// more scared, clearly scared at its panicAt and full fear at 1, even while stock KSP would grin at speed and G.
 // Listeners in the same vessel get half the mood. LateUpdate reads the parameter back (after the Animator) and the
 // status shows "override ok" or "override lost" when the value is not ours.
 //
@@ -64,6 +64,7 @@ namespace Lonapse
             public float moodTarget;           // kept while the weight eases out
             public float stress;               // the kerbal's own stress (KerbalVoice.sk), caps the happy side
             public float faceStress;           // stress smoothed for the face (FaceMath.StressCap)
+            public float tenseAt, panicAt;     // the kerbal's own thresholds, so the face turns scared with the voice
             public bool badass;
             public float moodW;
             public float lastExpr;
@@ -294,6 +295,8 @@ namespace Lonapse
                 // smoothed for the face, so a short stress jump does not make it twitch (about 0.7 s to follow)
                 f.faceStress = FaceMath.Follow(f.faceStress, f.stress, dt, 1.5f);
                 f.badass = kv != null && kv.BadassEffective;
+                f.tenseAt = kv != null ? kv.tenseAt : 0.3f;
+                f.panicAt = kv != null ? kv.PanicNow : 0.7f;
                 f.moodW = FaceMath.Ramp(f.moodW, engaged || test, dt, MoodRise, MoodFall);
                 if (test) f.moodTarget = testMood; // the fade after the test starts from the last test value
             }
@@ -320,7 +323,7 @@ namespace Lonapse
                 {
                     // between lines the stress still caps the face, so it does not grin between two scared lines
                     float lw = FaceMath.Smooth01(f.moodW);
-                    mood = FaceMath.FaceMood(f.moodTarget, lw, stockMood, f.faceStress, f.badass);
+                    mood = FaceMath.FaceMood(f.moodTarget, lw, stockMood, f.faceStress, f.tenseAt, f.panicAt);
                     if (lw <= 0f && mood >= stockMood - 1e-4f) continue;   // nothing to change: leave the stock face
                     w = exprWeight;
                 }
