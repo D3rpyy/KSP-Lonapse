@@ -42,6 +42,8 @@ namespace Lonapse
         // --- Phase 2: station and base mode ---
         // EVA: more radio, like a real EVA with constant comms (rate factor on the talk interval)
         public float evaRateFactor = 1.6f;
+        // time warp: more talk and faster voices with the warp rate (per factor 10 of the rate, capped)
+        public float warpRateGain = 0.4f, warpRateMax = 2.5f, warpPitchGain = 0.04f, warpPitchMax = 1.18f;
         public float stationRateFactor = 0.5f, stationMcFactor = 1.0f, stationCalmBias = 0.6f, stationPingFactor = 2.0f;
         // periodic MC-initiated "station, Houston" exchange on stations and bases
         public float stationMcMin = 150f, stationMcMax = 300f;
@@ -252,6 +254,10 @@ namespace Lonapse
             intercomStressPeak = DcMath.Clamp(intercomStressPeak, 0.05f, 1f);
             if (stationRateFactor < 0.05f) stationRateFactor = 0.05f;
             evaRateFactor = DcMath.Clamp(evaRateFactor, 0.25f, 4f);
+            warpRateGain = DcMath.Clamp(warpRateGain, 0f, 2f);
+            warpRateMax = DcMath.Clamp(warpRateMax, 1f, 5f);
+            warpPitchGain = DcMath.Clamp(warpPitchGain, 0f, 0.2f);
+            warpPitchMax = DcMath.Clamp(warpPitchMax, 1f, 1.5f);
             if (stationPingFactor < 0.1f) stationPingFactor = 0.1f;
             if (intercomStationBoost < 0.1f) intercomStationBoost = 0.1f;
             if (intercomQuietBoost < 0.1f) intercomQuietBoost = 0.1f;
@@ -409,7 +415,7 @@ namespace Lonapse
         public string radioProfile = "auto";        // req 16: auto | station | ship | eva
         public bool evaRadio = true;                // req 15
         public bool warpChatter = true;             // calm chatter during rails warp, events wait for the end of it
-        public bool evaGroup = true;                // on EVA: other EVA kerbals nearby join the radio
+        public bool evaGroup = true;                // kerbals nearby (EVA, other ships) join the radio
         public bool evaRelay = true;                // v6: the EVA suit radio reaches MC through a nearby ship
         public float evaRadioVolume = 0.8f;         // req 15, 0..1
         public bool planChatter = true;             // req 18

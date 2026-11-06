@@ -663,9 +663,15 @@ namespace Lonapse
             return e != null && e.ClipKey != null && e.ClipKey.StartsWith("rt_re_", StringComparison.Ordinal);
         }
 
+        /// <summary>Voice pitch in a time warp (the kerbals and Mission Control sound sped up), else 1.</summary>
+        private float WarpPitch
+        {
+            get { return host.warpChatter ? DcMath.WarpFactor(host.warpRate, Tu.warpPitchGain, Tu.warpPitchMax) : 1f; }
+        }
+
         private bool CanChat(KerbalVoice k)
         {
-            return k != null && !k.outDueToG && host.roster.voices.Contains(k);
+            return k != null && !k.outDueToG && host.roster.InGroup(k);
         }
 
         private void Dequeue()
@@ -840,11 +846,13 @@ namespace Lonapse
                     KerbalVoice sp = u.speaker;
                     // a line queued for one kerbal never moves to another: after a switch the subtitle, the name
                     // slots and the scene all belong to that kerbal, so skip it when they left the roster
-                    if (sp != null && !host.roster.voices.Contains(sp))
+                    if (sp != null && !host.roster.InGroup(sp))
                     {
                         Log.Info("Runtime voice: " + (u.entry != null ? u.entry.ClipKey : "crew line") + " skipped, " + sp.displayName + " is no longer nearby");
                         return StartResult.Skip;
                     }
+                    // a kerbal of another vessel is never replaced by one of the cabin
+                    if (sp != null && sp.outDueToG && host.roster.radio.Contains(sp)) return StartResult.Skip;
                     if (sp == null || sp.outDueToG) sp = host.roster.PickSpeaker(rng);
                     if (sp == null) return StartResult.Skip;
                     AudioClip rtClip;
@@ -874,7 +882,7 @@ namespace Lonapse
                     if (clip == null) { if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped, its clip is gone"); return StartResult.Skip; }
                     if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " plays (" + sp.displayName + ")");
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
+                    float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax) * WarpPitch;
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(false, tu);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -921,7 +929,7 @@ namespace Lonapse
                                                      : ClipLibrary.NextFor(u.folder ?? CrewFolder(sp, s), sp.isFemale, sp.rng));
                     if (clip == null) return StartResult.Skip;
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
+                    float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax) * WarpPitch;
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -1010,7 +1018,7 @@ namespace Lonapse
                     if (clip == null) return StartResult.Skip;
                     // v3 req 7: no runtime pitch drop under stress, the panic delivery sounds like the calm one.
                     // 0.6.0: one controller, like a real CAPCOM. The livelier sound is in the clips.
-                    float pitch = 1f;
+                    float pitch = WarpPitch;   // time warp: everybody sounds sped up
                     float vol = DcMath.Lerp(0.80f, 0.60f, s);
                     RadioProfile p = Profile;
                     c.SetBand(p.HighPassHz, p.LowPassHz);
@@ -1443,6 +1451,12 @@ namespace Lonapse
                 {
                     // a real EVA has constant comms: mostly talk, a runtime EVA line now and then for variety
                     double r = rng.NextDouble();
+                    if (McUnreachable)
+                    {
+                        // no link to Mission Control: the suit radio still works between the kerbals nearby
+                        if (r < 0.6) TryEvaChat();
+                        return true;
+                    }
                     if (r < 0.15) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
                     else if (r < 0.45 && TryEvaChat()) { }   // two kerbals of an EVA group on the suit radio
                     else if (r < 0.7 && QueueEvaLine()) { }
@@ -1478,6 +1492,10 @@ namespace Lonapse
                 if (u != null && e1 != null) { u.entry = e1; StampScream(one, extra); }
                 return true;
             }
+
+            // kerbals of other vessels nearby (a kerbal outside, a lander): now and then a radio chat with them.
+            // It needs no link to Mission Control.
+            if (s < tu.quietBand && HasRadioPartners && rng.NextDouble() < (McUnreachable ? 0.5 : 0.3) && TryEvaChat()) return true;
 
             if (s < tu.quietBand && rng.NextDouble() < 0.3)
             {
@@ -1964,7 +1982,8 @@ namespace Lonapse
             Tuning tu = Tu;
             float s = host.stress.stress;
             float rate = host.settings.rateMultiplier * (host.stationMode ? tu.stationRateFactor : 1f)
-                         * (host.evaMode ? tu.evaRateFactor : 1f);
+                         * (host.evaMode ? tu.evaRateFactor : 1f)
+                         * (host.warpChatter ? DcMath.WarpFactor(host.warpRate, tu.warpRateGain, tu.warpRateMax) : 1f);
             currentInterval = DcMath.MeanInterval(s, tu.tQuiet, tu.tManic, rate);
             if (host.probeMode) currentInterval *= tu.probeRateFactor; // plan v5: fewer pet talk lines
 

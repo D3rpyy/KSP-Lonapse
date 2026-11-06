@@ -91,6 +91,16 @@ namespace Lonapse
         }
 
         /// <summary>
+        /// Time warp factor: 1 + gain x log10(rate), from 1 up to max. 1 at rate 1 or below. Used for the talk rate
+        /// (more chats in a long warp) and the voice pitch (the kerbals sound sped up).
+        /// </summary>
+        public static float WarpFactor(float warpRate, float gain, float max)
+        {
+            if (!(warpRate > 1f) || gain <= 0f) return 1f;
+            return Clamp(1f + gain * (float)Math.Log10(warpRate), 1f, Math.Max(1f, max));
+        }
+
+        /// <summary>
         /// Mean interval between intercom chats: more frequent on stations/bases and on long quiet coasts.
         /// Deliberately independent of the radio rate multiplier and of the crew count.
         /// </summary>

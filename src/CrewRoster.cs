@@ -15,8 +15,13 @@ namespace Lonapse
         public string name;           // raw name: the voice hash uses this, so voices stay stable
         public string displayName;    // localized for logs and the overlay (#autoLOC_... names of stock kerbals)
         public bool isPilot;
-        /// <summary>A kerbal on EVA near the active EVA kerbal (evaGroup), not the one in control.</summary>
-        public bool nearbyEva;
+        /// <summary>Not on the active vessel: a kerbal of the EVA group (in voices) or of another vessel nearby
+        /// (in CrewRoster.radio). Set by CrewRoster.Rebuild.</summary>
+        public bool away;
+        /// <summary>On EVA (its vessel is an EVA kerbal).</summary>
+        public bool onEva;
+        /// <summary>Its vessel. Two kerbals with the same id share a cabin (intercom), else they use the radio.</summary>
+        public Guid vesselId;
         public float courage, stupidity;
         public bool isBadass;
         public bool outDueToG;
@@ -372,8 +377,27 @@ namespace Lonapse
 
     public class CrewRoster
     {
+        /// <summary>The kerbals who speak the scenes: the crew of the active vessel, and on EVA the EVA group.</summary>
         public readonly List<KerbalVoice> voices = new List<KerbalVoice>();
         private readonly List<ProtoCrewMember> members = new List<ProtoCrewMember>();
+        /// <summary>Kerbals of other vessels nearby (a ship, a lander, an EVA kerbal further out). They only talk
+        /// over the radio with the kerbals of voices, never in the scenes of the active vessel.</summary>
+        public readonly List<KerbalVoice> radio = new List<KerbalVoice>();
+        private readonly List<ProtoCrewMember> radioMembers = new List<ProtoCrewMember>();
+
+        /// <summary>The kerbal is in voices or radio.</summary>
+        public bool InGroup(KerbalVoice k) { return k != null && (voices.Contains(k) || radio.Contains(k)); }
+
+        /// <summary>A kerbal of voices or radio by raw name, null when none.</summary>
+        public KerbalVoice Find(string name)
+        {
+            if (name == null) return null;
+            KerbalVoice k = voices.Find(x => x != null && x.name == name);
+            return k ?? radio.Find(x => x != null && x.name == name);
+        }
+
+        /// <summary>voices and radio together.</summary>
+        public int GroupCount { get { return voices.Count + radio.Count; } }
         public bool dirty = true;
         public KerbalVoice lastSpeaker;
         /// <summary>Band ceiling for UpdateStress (launch cap). Set it from LaunchMaxBand each tick. Panic means no cap.</summary>
@@ -408,53 +432,78 @@ namespace Lonapse
         {
             voices.Clear();
             members.Clear();
+            radio.Clear();
+            radioMembers.Clear();
             lastSpeaker = null;
             dirty = true;
         }
 
         /// <summary>Rebuild from the vessel crew. Returns true when the set of crew names changed.</summary>
-        public bool Rebuild(Vessel v) { return Rebuild(v, null); }
+        public bool Rebuild(Vessel v) { return Rebuild(v, null, null); }
 
         /// <summary>The kerbal in control: the first voice that is not a nearby EVA kerbal. Null without crew.</summary>
         public KerbalVoice Own
         {
             get
             {
-                for (int i = 0; i < voices.Count; i++) if (!voices[i].nearbyEva) return voices[i];
+                for (int i = 0; i < voices.Count; i++) if (!voices[i].away) return voices[i];
                 return null;
             }
         }
 
         /// <summary>Rebuild from the vessel crew plus the kerbals of <paramref name="nearby"/> (other EVA kerbals close
-        /// to an active EVA kerbal, may be null). Returns true when the set of crew names changed.</summary>
-        public bool Rebuild(Vessel v, IList<Vessel> nearby)
+        /// to an active EVA kerbal, they speak the scenes too) and of <paramref name="radioOnly"/> (other vessels
+        /// nearby, they only use the radio). Both may be null. Returns true when the set of crew names changed.</summary>
+        public bool Rebuild(Vessel v, IList<Vessel> nearby, IList<Vessel> radioOnly)
         {
             dirty = false;
             List<KerbalVoice> old = new List<KerbalVoice>(voices);
+            old.AddRange(radio);
             voices.Clear();
             members.Clear();
+            radio.Clear();
+            radioMembers.Clear();
             if (v == null) return old.Count > 0;
-            List<ProtoCrewMember> crew = null;
-            try { crew = v.GetVesselCrew(); }
-            catch (Exception e) { Log.Exception("CrewRoster.Rebuild", e); }
-            if (crew == null) return old.Count > 0;
-            int own = crew.Count;
-            if (nearby != null)
+            bool changed = false;
+            if (!AddCrew(v, false, voices, members, old, ref changed)) return old.Count > 0;
+            if (nearby != null) foreach (Vessel n in nearby) AddCrew(n, true, voices, members, old, ref changed);
+            if (radioOnly != null) foreach (Vessel n in radioOnly) AddCrew(n, true, radio, radioMembers, old, ref changed);
+            SpreadVoices();
+            if (!voices.Contains(lastSpeaker)) lastSpeaker = null;
+            // same count and no new name: the same set (names are unique)
+            if (voices.Count + radio.Count != old.Count) changed = true;
+            if (changed)
             {
-                crew = new List<ProtoCrewMember>(crew);
-                foreach (Vessel n in nearby)
+                if (voices.Count == 0) Log.Info("Roster: no crew on " + Names.Of(v));
+                else
                 {
-                    try { if (n != null) crew.AddRange(n.GetVesselCrew()); }
-                    catch (Exception) { }
+                    Log.Info("Roster for " + Names.Of(v) + ": " + voices.Count + " kerbal(s)");
+                    for (int i = 0; i < voices.Count; i++)
+                        Log.Info("  voice " + voices[i].Describe() + (voices[i].away ? ", nearby on EVA" : ", aboard") + " pitch " + voices[i].Pitch.ToString("0.000"));
+                    for (int i = 0; i < radio.Count; i++)
+                        Log.Info("  voice " + radio[i].Describe() + (radio[i].onEva ? ", on EVA" : ", in another vessel") + " nearby, radio only, pitch " + radio[i].Pitch.ToString("0.000"));
                 }
             }
+            return changed;
+        }
 
-            bool changed = false;
+        /// <summary>Adds the crew of vessel v to list (and its members). Reuses the voice of a kerbal from old, so its
+        /// rng and stress stay. False when the crew cannot be read.</summary>
+        private bool AddCrew(Vessel v, bool away, List<KerbalVoice> list, List<ProtoCrewMember> mem, List<KerbalVoice> old, ref bool changed)
+        {
+            if (v == null) return false;
+            List<ProtoCrewMember> crew = null;
+            bool eva = false;
+            Guid id = Guid.Empty;
+            try { crew = v.GetVesselCrew(); eva = v.isEVA; id = v.id; }
+            catch (Exception e) { Log.Exception("CrewRoster.Rebuild", e); }
+            if (crew == null) return false;
             for (int i = 0; i < crew.Count; i++)
             {
                 ProtoCrewMember pcm = crew[i];
                 if (pcm == null) continue;
                 string nm = pcm.name;
+                if (voices.Exists(x => x.name == nm) || radio.Exists(x => x.name == nm)) continue;
                 KerbalVoice kv = null;
                 for (int j = 0; j < old.Count; j++)
                     if (old[j].name == nm) { kv = old[j]; break; }
@@ -471,25 +520,13 @@ namespace Lonapse
                 try { p = new Persona(pcm.courage, pcm.stupidity, pcm.isBadass, pcm.veteran, pcm.trait); }
                 catch (Exception e) { Log.Exception("CrewRoster.Persona", e); p = new Persona(kv.courage, kv.stupidity, kv.isBadass, false, null); }
                 kv.ApplyPersona(p, personalityEffects);
-                kv.nearbyEva = i >= own;
-                voices.Add(kv);
-                members.Add(pcm);
+                kv.away = away;
+                kv.onEva = eva;
+                kv.vesselId = id;
+                list.Add(kv);
+                mem.Add(pcm);
             }
-            SpreadVoices();
-            if (!voices.Contains(lastSpeaker)) lastSpeaker = null;
-            // same count and no new name: the same set (names are unique)
-            if (voices.Count != old.Count) changed = true;
-            if (changed)
-            {
-                if (voices.Count == 0) Log.Info("Roster: no crew on " + Names.Of(v));
-                else
-                {
-                    Log.Info("Roster for " + Names.Of(v) + ": " + voices.Count + " kerbal(s)");
-                    for (int i = 0; i < voices.Count; i++)
-                        Log.Info("  voice " + voices[i].Describe() + (voices[i].nearbyEva ? ", nearby on EVA" : ", aboard") + " pitch " + voices[i].Pitch.ToString("0.000"));
-                }
-            }
-            return changed;
+            return true;
         }
 
         /// <summary>Minimum pitch gap between two kerbals of the same gender aboard (about 1.5 semitones).</summary>
@@ -502,6 +539,7 @@ namespace Lonapse
             foreach (bool f in new[] { false, true })
             {
                 var group = voices.FindAll(k => k.isFemale == f);
+                group.AddRange(radio.FindAll(k => k.isFemale == f));
                 var pitch = new float[group.Count];
                 for (int i = 0; i < group.Count; i++) pitch[i] = group[i].basePitch;
                 float[] mul = DcMath.SpreadPitches(pitch, CrewPitchGap, 0.82f, 1.28f);
@@ -516,6 +554,12 @@ namespace Lonapse
                 voices[i].UpdateStress(stress, maxBand, panicOffset);
                 try { voices[i].outDueToG = members[i] != null && members[i].outDueToG; }
                 catch (Exception) { voices[i].outDueToG = false; }
+            }
+            for (int i = 0; i < radio.Count; i++)
+            {
+                radio[i].UpdateStress(stress, maxBand, panicOffset);
+                try { radio[i].outDueToG = radioMembers[i] != null && radioMembers[i].outDueToG; }
+                catch (Exception) { radio[i].outDueToG = false; }
             }
         }
 

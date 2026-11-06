@@ -1,0 +1,79 @@
+# Runtime voice: event chats, a chat with on= in the when of line 1. The format is explained at the top of reports.tsv.
+# An event chat only plays on its event, never as a normal chat: on=flag (a flag planted), on=deploy (a Breaking
+# Ground part deployed on EVA), on=evareport, on=surfacesample, on=roc and the other science topics, on=science (any
+# experiment). The kerbal who did it says line 1. With another kerbal nearby (aboard, on EVA or in a vessel close
+# by) it is a chat of two or more lines. A kerbal alone says a chat of one line. link is 1 with a link to Mission
+# Control, else 0: without a link the kerbals talk among themselves and no line to Mission Control plays. A line
+# with the word Control is dropped when the link is gone, so a line without a link never says Control.
+# With a link, after an EVA experiment or a deployed part Mission Control answers with a science line. A science
+# line with on= only plays for its experiment and is picked before the lines for any experiment.
+id	kind	when	spanish	english
+# Flags: the kerbal who planted it starts. flag is the name of the flag when the voice can say it.
+rt_chat_fflag_1	chat	on=flag	{other}, mira. Bandera plantada. | {other}, ¿qué te parece la bandera?	{other}, look. Flag planted. | {other}, what do you think of the flag?
+rt_chat_fflag_2	chat		Está torcida. | Preciosa. Un poco torcida, pero preciosa.	It's crooked. | Beautiful. A bit crooked, but beautiful.
+rt_chat_fflag_3	chat		Es el suelo, que está torcido. | Es estilo. No lo entenderías.	It's the ground that's crooked. | It's style. You wouldn't understand.
+rt_chat_fflagname_1	chat	on=flag	La he llamado {flag}. | {other}, esta bandera se llama {flag}.	I named it {flag}. | {other}, this flag is called {flag}.
+rt_chat_fflagname_2	chat		¿{flag}? Bonito nombre. | ¿Y por qué {flag}?	{flag}? Nice name. | And why {flag}?
+rt_chat_fflagname_3	chat		Me costó tres días pensarlo. | Sonaba importante.	Took me three days to think of it. | It sounded important.
+rt_chat_fflagbody_1	chat	on=flag landed at_home=0	Una bandera en {here}. Esto es historia. | {other}, acabamos de reclamar {here}.	A flag on {here}. This is history. | {other}, we just claimed {here}.
+rt_chat_fflagbody_2	chat		Que alguien haga una foto. | Historia y polvo. Mucho polvo.	Someone take a picture. | History and dust. Lots of dust.
+rt_chat_fflagbody_3	chat		Yo salgo en la foto. | Tú sujeta la bandera, yo poso.	I'm in the picture. | You hold the flag, I'll pose.
+rt_chat_fflagbiome_1	chat	on=flag landed	{other}, bandera en {biome}. ¿Buen sitio? | {other}, he elegido {biome} para la bandera.	{other}, flag in {biome}. Good spot? | {other}, I picked {biome} for the flag.
+rt_chat_fflagbiome_2	chat		Perfecto. Aquí no molesta a nadie. | Buena elección. Bueno, la única elección.	Perfect. It's not bothering anyone here. | Good choice. Well, the only choice.
+rt_chat_fflagbiome_3	chat		Eso pensaba yo. | Exacto. Lo dicho.	That's what I thought. | Exactly. Like I said.
+rt_chat_fflaghome_1	chat	on=flag at_home=1	Bandera plantada. En casa. | {other}, he plantado una bandera en {here}.	Flag planted. At home. | {other}, I planted a flag on {here}.
+rt_chat_fflaghome_2	chat		¿En casa? Si esto ya era nuestro. | Muy patriótico. El jardinero no estará contento.	At home? This was already ours. | Very patriotic. The gardener won't be happy.
+rt_chat_fflaghome_3	chat		Ahora es todavía más nuestro. | Que se aguante. Es por la ciencia.	Now it's even more ours. | Too bad. It's for science.
+rt_chat_fflagnolink_1	chat	on=flag link=0	{other}, bandera plantada. Y nadie en casa lo sabe. | {other}, sin señal con casa. Tendrás que ser mi testigo.	{other}, flag planted. And nobody at home knows. | {other}, no signal home. You'll have to be my witness.
+rt_chat_fflagnolink_2	chat		Yo lo he visto. Lo juro. | Testigo oficial. Lo apunto.	I saw it. I swear. | Official witness. Writing it down.
+rt_chat_fflagnolink_3	chat		Gracias. Se lo contamos al volver. | Bien. Que conste en acta.	Thanks. We'll tell them when we're back. | Good. Put it on the record.
+# A kerbal alone (one line): only without a link, with a link Mission Control talks about the flag.
+rt_chat_fsolo_1	chat	on=flag link=0	Bandera plantada. No me oye nadie, pero queda muy bien. | Sin señal con casa. Bueno, la bandera la planto igual. | Bandera plantada. Buen trabajo, yo. | Esta bandera es para mí. Bueno, para todos. Pero nadie lo sabe todavía.	Flag planted. Nobody can hear me, but it looks great. | No signal home. Well, I'm planting the flag anyway. | Flag planted. Good job, me. | This flag is for me. Well, for everyone. But nobody knows yet.
+rt_chat_fsoloname_1	chat	on=flag link=0	Bandera {flag}, plantada. Bienvenida al mundo. | Te llamas {flag}. Un placer. Soy tu kerbal.	Flag {flag}, planted. Welcome to the world. | Your name is {flag}. A pleasure. I'm your kerbal.
+# EVA report. With a link the kerbal alone talks to Control, and Mission Control gives the science after it.
+rt_chat_sevarep_1	chat	on=evareport landed link=1	Informe de paseo desde {biome}. Todo en orden. | Control, informe desde fuera. Aquí en {here} hace un día precioso. | Informe de paseo: el traje aguanta y {biome} se ve de maravilla. | Control, notas tomadas en {biome}. Letra clara, lo prometo.	EVA report from {biome}. All in order. | Control, report from outside. It's a lovely day here on {here}. | EVA report: the suit holds and {biome} looks amazing. | Control, notes taken in {biome}. Neat handwriting, I promise.
+rt_chat_sevarepsky_1	chat	on=evareport orbit suborbital escape flight link=1	Control, informe desde fuera. {here} se ve enorme desde aquí. | Informe de paseo. No me suelto, tranquilos. | Control, informe hecho. Las vistas son de otro mundo. Literalmente.	Control, report from outside. {here} looks huge from here. | EVA report. I'm not letting go, relax. | Control, report done. The view is out of this world. Literally.
+rt_chat_sevarepnolink_1	chat	on=evareport link=0	Informe de paseo, para nadie. Sin señal. Lo guardo. | Notas desde fuera. Ya las mandaré cuando haya señal. | Informe hecho. Nadie lo oye, pero queda muy profesional.	EVA report, for nobody. No signal. I'll keep it. | Notes from outside. I'll send them when there's a signal. | Report done. Nobody hears it, but it sounds very professional.
+rt_chat_sevarep2_1	chat	on=evareport	{other}, estoy haciendo un informe. Di algo inteligente. | {other}, informe de paseo. ¿Quieres salir en él?	{other}, I'm doing a report. Say something smart. | {other}, EVA report. Want to be in it?
+rt_chat_sevarep2_2	chat		Algo inteligente. | Sí. Pon que soy muy valiente.	Something smart. | Yes. Write that I'm very brave.
+rt_chat_sevarep2_3	chat		Apuntado. | Anotado. Más o menos.	Noted. | Written down. More or less.
+rt_chat_sevarepb_1	chat	on=evareport landed	{other}, ¿cómo describirías {biome}? | {other}, necesito una palabra para {biome}.	{other}, how would you describe {biome}? | {other}, I need a word for {biome}.
+rt_chat_sevarepb_2	chat		Polvoriento. | Grande. Y con piedras.	Dusty. | Big. And with rocks.
+rt_chat_sevarepb_3	chat		Muy científico. Lo pongo. | Perfecto. Eso va en el informe.	Very scientific. I'll put that. | Perfect. That's going in the report.
+# Surface sample.
+rt_chat_ssample_1	chat	on=surfacesample link=1	Control, muestra de {biome} en la bolsa. | Muestra tomada en {here}. Una piedra muy de {here}. | Control, tengo un trozo de {biome}. Bolsa etiquetada. | Muestra de suelo recogida. Huele a {biome}.	Control, {biome} sample in the bag. | Sample taken on {here}. A very {here} kind of rock. | Control, I have a piece of {biome}. Bag labeled. | Surface sample collected. Smells like {biome}.
+rt_chat_ssamplenolink_1	chat	on=surfacesample link=0	Muestra de {biome} guardada. Ya se la enseñaré a alguien. | Muestra tomada. Sin señal, así que se lo cuento a la piedra. | Tierra de {here} en la bolsa. Nadie lo oye, pero qué bien huele.	{biome} sample stored. I'll show it to someone later. | Sample taken. No signal, so I'm telling the rock. | {here} dirt in the bag. Nobody hears it, but it smells great.
+rt_chat_ssample2_1	chat	on=surfacesample	{other}, mira qué muestra de {biome}. | {other}, tengo un trozo de {here} en la bolsa.	{other}, look at this {biome} sample. | {other}, I have a piece of {here} in the bag.
+rt_chat_ssample2_2	chat		Parece una piedra. | ¿Eso es ciencia o es basura?	Looks like a rock. | Is that science or trash?
+rt_chat_ssample2_3	chat		Es una piedra científica. | Es ciencia. Ciencia con polvo.	It's a scientific rock. | It's science. Science with dust.
+rt_chat_sweight_1	chat	on=surfacesample at_home=0	{other}, ¿cuánto pesa una piedra de {here}? | {other}, toma, sujeta esta muestra de {biome}.	{other}, how much does a {here} rock weigh? | {other}, here, hold this {biome} sample.
+rt_chat_sweight_2	chat		Menos que en casa. Pero no me la des a mí. | Ni hablar. Yo ya llevo bastante.	Less than at home. But don't give it to me. | No way. I'm carrying enough already.
+rt_chat_sweight_3	chat		Vale, la llevo yo. | Pues la llevo yo. Como siempre.	Okay, I'll carry it. | Then I'll carry it. As always.
+# Surface features (Breaking Ground rock and crater science).
+rt_chat_sroc_1	chat	on=roc link=1	Control, estoy estudiando una roca rara en {biome}. | Control, aquí hay una formación curiosa. La analizo ahora. | Una roca interesante en {here}. Creo que me está mirando.	Control, studying an odd rock in {biome}. | Control, there's a strange formation here. Analyzing it now. | An interesting rock on {here}. I think it's looking at me.
+rt_chat_srocnolink_1	chat	on=roc link=0	Roca curiosa. Sin señal, así que la estudio para mí. | Esta roca de {biome} es preciosa. Y solo la veo yo.	Curious rock. No signal, so I'm studying it for myself. | This {biome} rock is beautiful. And only I get to see it.
+rt_chat_sroc2_1	chat	on=roc	{other}, esta roca tiene una forma muy rara. | {other}, ven a ver esta formación.	{other}, this rock has a really odd shape. | {other}, come look at this formation.
+rt_chat_sroc2_2	chat		Parece una cara. | Parece un sándwich gigante.	It looks like a face. | It looks like a giant sandwich.
+rt_chat_sroc2_3	chat		Lo apunto tal cual. | Interesante. Lo pongo en el informe.	I'll write that down exactly. | Interesting. Going in the report.
+# Breaking Ground parts deployed on EVA. device is the part with its article (the seismometer, the antenna).
+rt_chat_sdeploy_1	chat	on=deploy link=1	Control, {device} ya está en su sitio. | Control, he montado {device}. Funciona. Creo. | Control, {device} ya funciona en {biome}.	Control, {device} is in place. | Control, I set up {device}. It works. I think. | Control, {device} is running in {biome}.
+rt_chat_sdeploynolink_1	chat	on=deploy link=0	Listo: {device} en su sitio. Ya se enterarán en casa. | He montado {device}. Sin señal, pero con mucho estilo.	Done: {device} is in place. They'll find out at home. | I set up {device}. No signal, but lots of style.
+rt_chat_sdeploy2_1	chat	on=deploy	{other}, {device} ya está en su sitio. | {other}, he montado {device}. ¿Qué tal ha quedado?	{other}, {device} is in place. | {other}, I set up {device}. How does it look?
+rt_chat_sdeploy2_2	chat		Le falta un tornillo. | Muy profesional. Casi parece que sabes lo que haces.	It's missing a screw. | Very professional. You almost look like you know what you're doing.
+rt_chat_sdeploy2_3	chat		Es a propósito. | Es tecnología avanzada. No preguntes.	That's on purpose. | It's advanced technology. Don't ask.
+# Any experiment without a link to Mission Control (aboard too): the data stays with the crew.
+rt_chat_snolink_1	chat	on=science link=0	Tengo los datos de {exp}. Sin señal, se quedan aquí. | Experimento hecho. Sin señal, así que me lo apunto. | Datos de {exp} guardados. En casa tendrán que esperar.	Got the {exp} data. No signal, so it stays here. | Experiment done. No signal, so I'm writing it down. | The {exp} data is stored. Home will have to wait.
+rt_chat_snolink2_1	chat	on=science link=0	{other}, tengo los datos de {exp}, pero no hay señal. | {other}, sin señal con casa. Los datos de {exp} se quedan aquí.	{other}, I have the {exp} data, but there's no signal. | {other}, no signal home. The {exp} data stays here.
+rt_chat_snolink2_2	chat		Guárdalos bien. | Pues los llevamos a mano.	Keep it safe. | Then we carry it home by hand.
+rt_chat_snolink2_3	chat		Vale. En el bolsillo bueno. | Como en los viejos tiempos.	Okay. In the good pocket. | Like the old days.
+rt_chat_snolink3_1	chat	on=science link=0	{other}, ¿hacemos ciencia aunque nadie nos oiga? | {other}, otro experimento para nadie.	{other}, do we do science even if nobody hears us? | {other}, another experiment for nobody.
+rt_chat_snolink3_2	chat		Claro. La ciencia no necesita público. | Para nosotros. Eso cuenta.	Of course. Science doesn't need an audience. | For us. That counts.
+rt_chat_snolink3_3	chat		Bien dicho. | Tienes razón. Lo apunto.	Well said. | You're right. Writing it down.
+# Mission Control after an EVA experiment or a deployed part (science lines with on=, see science_contracts.tsv).
+rt_sci_evarep	science	on=evareport	Informe recibido. Bonitas vistas, por lo que cuentas. | Informe de paseo anotado. Vuelve pronto. | Recibido. Un informe de paseo desde {biome}. Muy turístico.	Report received. Nice views, from what you say. | EVA report logged. Come back soon. | Copy. An EVA report from {biome}. Very touristy.
+rt_sci_evarep_pts	science_pts	on=evareport	Informe de paseo desde {biome}: {sci} puntos. | El informe vale {sci} puntos. Habla más a menudo. | {sci} puntos por un paseo. Ojalá todo fuera así de fácil.	EVA report from {biome}: {sci} points. | The report is worth {sci} points. Talk more often. | {sci} points for a walk. If only everything were this easy.
+rt_sci_sample	science	on=surfacesample	Muestra recibida. Los geólogos ya se pelean por ella. | Bien hecho. Una muestra de {here} para el museo. | Recibido. Etiqueta la bolsa: {biome}.	Sample received. The geologists are already fighting over it. | Well done. A {here} sample for the museum. | Copy. Label the bag: {biome}.
+rt_sci_sample_pts	science_pts	on=surfacesample	Muestra de {biome}: {sci} puntos de ciencia. Buena piedra. | La muestra de {here} vale {sci} puntos. No la pierdas. | {sci} puntos por un puñado de {biome}. Los geólogos aplauden.	{biome} sample: {sci} science points. Good rock. | The {here} sample is worth {sci} points. Don't lose it. | {sci} points for a handful of {biome}. The geologists applaud.
+rt_sci_roc	science	on=roc	Datos de la roca recibidos. Los geólogos piden más fotos. | Recibido. Esa formación nos tiene intrigados.	Rock data received. The geologists want more photos. | Copy. That formation has us intrigued.
+rt_sci_roc_pts	science_pts	on=roc	La roca vale {sci} puntos. Trátala con respeto. | {sci} puntos por mirar una piedra en {biome}. Gran trabajo.	The rock is worth {sci} points. Treat it with respect. | {sci} points for looking at a rock in {biome}. Great work.
+rt_sci_deploy	science	on=deploy	Recibido. Vemos {device} en el mapa. | Perfecto. Ya nos llega señal de {device}. | Buen trabajo. Que no se vuele {device} con el viento.	Copy. We see {device} on the map. | Perfect. We're getting a signal from {device}. | Good work. Don't let the wind take {device}.

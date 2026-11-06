@@ -15,6 +15,10 @@
 #          eva: Mission Control to a kerbal on EVA, also the report on EVA. flag: after a flag is planted (eva_flag.tsv)
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
+#          A chat with on_eva=1 is for two EVA kerbals (eva_chats.tsv), one with apart=1 for two kerbals of different
+#          vessels nearby (radio_chats.tsv). Both play over the radio, the others only in one cabin.
+#          An event chat has on= in the when (on=flag on=surfacesample ...): it only plays on that event and may have
+#          one line, for a kerbal alone (event_chats.tsv).
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
 #          or node_min>=2. Several situations: one must match. Every check must hold.
 #          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).
@@ -22,6 +26,8 @@
 #          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.
 #          Personas work the same way: badass brave nervous dim veteran (a=dim b=veteran). Several for one kerbal
 #          (a=pilot a=brave): all must hold.
+#          on=: the event of an event chat, or the experiment of a science line: flag deploy science (any
+#          experiment) evareport surfacesample roc crewreport mysterygoo and the other stock experiment ids.
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
 #          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
 # english  the subtitle. A number slot shows digits, a name slot the name.
@@ -39,8 +45,12 @@
 #   jet ship_m eva_mins (on EVA: jetpack percent, meters to the ship, minutes outside, see eva_flag.tsv)
 #   on_eva (1 on EVA, for checks only: a chat with on_eva=1 plays on the suit radio) pair_m (meters between two
 #   kerbals in an EVA chat, see eva_chats.tsv)
+#   link (1 with a link to Mission Control, 0 without one or in a blackout, for checks only)
+#   apart a_eva b_eva (radio chats between two vessels: apart is 1, a_eva is 1 when kerbal A is on EVA, b_eva the
+#   same for kerbal B, for checks only, see radio_chats.tsv)
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), kerbal in a report, and in a chat self (the speaker) and other (the one
+# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), device (a deployed part with its article),
+#   my_ship and their_ship (in a chat between two vessels: the ship of the speaker and of the one spoken to), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.
 # Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
 #   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions

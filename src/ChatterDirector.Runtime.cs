@@ -457,6 +457,8 @@ namespace Lonapse
             // time warp chatter (only for checks, the rate is never said), and the time to the next body when the
             // orbit leaves this one
             if (host.warpChatter) nums["in_warp"] = 1;
+            // 1 when Mission Control can hear the crew, 0 without a link or in a blackout (the kerbals talk among themselves)
+            nums["link"] = McUnreachable ? 0 : 1;
             try
             {
                 if (o != null && (o.patchEndTransition == Orbit.PatchTransitionType.ENCOUNTER
@@ -595,6 +597,14 @@ namespace Lonapse
                        double replyChance = ReplyChance)
         {
             List<RuntimeTemplate> fit = RuntimeLines.Fitting(PhraseClips.runtimeTemplates, kind, sit, nums, names);
+            if (kind == "science" || kind == "science_pts")
+            {
+                // a science line with on= only for its experiment, the rest for any experiment (not a deployed part)
+                string topic = runtimeTopic;
+                fit.RemoveAll(t => t.On.Count > 0 ? !RuntimeLines.OnFits(t, topic) : topic == "deploy");
+                var own = fit.FindAll(t => t.On.Contains(topic ?? ""));
+                if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
+            }
             List<RuntimeTemplate> fresh = fit.FindAll(t => !recentRuntime.Contains(t.Id));
             if (fresh.Count > 0) fit = fresh;
             else if (kind == "report" || kind == "warp" || kind == "eva") return false;   // a report can wait, an answer to an event may repeat
@@ -716,19 +726,29 @@ namespace Lonapse
         /// planted it nearly always answers. {flag} is the flag's name when the voice can say it.</summary>
         public void RuntimeFlag(string placedBy, string flagName)
         {
-            if (!RuntimeOn || !host.settings.runtimeReports || radioSilent || mcBlackout || !host.signal.connected
-                || !host.settings.radioEnabled) return;
+            if (!RuntimeOn || !host.settings.runtimeReports || radioSilent || !host.settings.radioEnabled) return;
             Vessel v = ActiveVessel;
             if (v == null) return;
             string sit = SituationOf(v) ?? "landed";
             var nums = new Dictionary<string, double>();
             var names = new Dictionary<string, string[]>();
             CollectValues(v, sit, nums, names);
+            var extra = new Dictionary<string, string[]>();
             string say = !string.IsNullOrEmpty(flagName) && !flagName.StartsWith("#", StringComparison.Ordinal)
                          ? RuntimeLines.VesselSpeakable(flagName) : null;
-            if (say != null) names["flag"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(flagName) };
-            KerbalVoice k = placedBy != null ? host.roster.voices.Find(x => x != null && x.name == placedBy) : null;
+            if (say != null) names["flag"] = extra["flag"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(flagName) };
+            KerbalVoice k = placedBy != null ? host.roster.Find(placedBy) : null;
             if (k == null) k = host.roster.Own;
+            // no link to Mission Control: the kerbals nearby talk about it among themselves (or the kerbal alone).
+            // With a link and someone nearby, now and then too.
+            bool reach = !McUnreachable && host.signal.connected;
+            KerbalVoice partner = k != null ? PartnerOf(k) : null;
+            if (k != null && (!reach || (partner != null && rng.NextDouble() < FlagChatChance)))
+            {
+                if (EventChat("flag", k, partner, extra, null)) { Log.Info("Runtime voice: flag chat queued" + (partner == null ? " (alone)" : "")); return; }
+                if (!reach) { Log.Info("Runtime voice: no flag chat fits, and Mission Control is out of reach"); return; }
+            }
+            if (!reach) return;
             string[] kn = k != null ? FirstNames(k) : null;
             if (kn != null) { names["kerbal"] = kn; reportKerbal = k; }
             try
@@ -738,6 +758,94 @@ namespace Lonapse
             }
             finally { reportKerbal = null; }
         }
+
+        const double FlagChatChance = 0.4;
+
+        // ---------------- science on EVA, deployed parts, no link ----------------
+
+        /// <summary>The experiment of the science line being picked (QueueKind filters the science lines with on=).</summary>
+        string runtimeTopic;
+        /// <summary>Experiments done by a kerbal outside: a runtime chat about them instead of a recorded scene.</summary>
+        static readonly string[] EvaScience = { "evareport", "surfacesample", "roc" };
+        const double EvaScienceChance = 0.7, EventSoloChance = 0.5;
+        float lastDeployClock = -999f;
+
+        /// <summary>The kerbal who did an experiment: the kerbal outside on EVA, aboard mostly a scientist.</summary>
+        KerbalVoice ScienceKerbal()
+        {
+            Vessel v = ActiveVessel;
+            if (v != null && v.isEVA) return host.roster.Own;
+            var sci = host.roster.voices.FindAll(k => CanChat(k) && k.persona != null && k.persona.trait == "scientist");
+            if (sci.Count > 0 && rng.NextDouble() < 0.7) return sci[rng.Next(sci.Count)];
+            return PickRested();
+        }
+
+        /// <summary>{exp} for a science line: the Spanish words go in reversed, like the rest of the text.</summary>
+        static string[] ExpNames(string subjectId)
+        {
+            string[] w = RuntimeLines.ExperimentWords(RuntimeLines.ExperimentId(subjectId));
+            return new[] { LonapseText.ReverseText(w[0]), w[1] };
+        }
+
+        /// <summary>From GameEventHub, before the science event: true when the runtime voice takes it over. An EVA
+        /// report, a surface sample or a surface feature (EvaScienceChance): the kerbal says something about it with
+        /// the biome and the body (alone, or with a kerbal nearby), then Mission Control gives the science. Without a
+        /// link to Mission Control every experiment: the kerbals talk about it among themselves. False: the
+        /// recorded science scene plays as before.</summary>
+        public bool RuntimeScienceTakeover(string subjectId, float dataAmount, string bodyName)
+        {
+            if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled) return false;
+            string topic = EventWatchers.ExperimentId(subjectId);
+            bool reach = !McUnreachable && host.signal.connected;
+            bool eva = Array.IndexOf(EvaScience, topic) >= 0;
+            if (reach && (!eva || rng.NextDouble() >= EvaScienceChance)) return false;
+            KerbalVoice k = ScienceKerbal();
+            if (k == null) return false;
+            KerbalVoice partner = PartnerOf(k);
+            if (reach && rng.NextDouble() < EventSoloChance) partner = null;   // often the kerbal alone reports to Control
+            var extra = new Dictionary<string, string[]> { { "exp", ExpNames(subjectId) } };
+            Action after = null;
+            if (reach) after = () => RuntimeScience(subjectId, dataAmount, bodyName, true);
+            bool ok = EventChat(topic, k, partner, extra, after) || (partner != null && EventChat(topic, k, null, extra, after));
+            Log.Info("Runtime voice: science " + topic + (ok ? " chat queued" + (reach ? ", Mission Control after it" : ", no link") : ": no chat fits"));
+            return ok;
+        }
+
+        /// <summary>From GameEventHub: a kerbal on EVA deployed a Breaking Ground part. device is { spanish,
+        /// english } with the article ("el sismógrafo", "the seismometer"). The kerbal says something about it (alone
+        /// or with a kerbal nearby), and with a link Mission Control answers (science lines with on=deploy).</summary>
+        public void RuntimeDeploy(string[] device)
+        {
+            if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled || device == null) return;
+            Vessel v = ActiveVessel;
+            if (v == null || !v.isEVA || clock - lastDeployClock < 20f) return;
+            lastDeployClock = clock;
+            KerbalVoice k = host.roster.Own;
+            if (k == null) return;
+            bool reach = !McUnreachable && host.signal.connected;
+            KerbalVoice partner = PartnerOf(k);
+            if (reach && rng.NextDouble() < EventSoloChance) partner = null;
+            var extra = new Dictionary<string, string[]> { { "device", new[] { LonapseText.ReverseText(device[0]), device[1] } } };
+            Action mc = () =>
+            {
+                if (McUnreachable || !host.signal.connected) return;
+                Vessel av = ActiveVessel;
+                if (av == null) return;
+                string sit = SituationOf(av) ?? "landed";
+                var nums = new Dictionary<string, double>();
+                var names = new Dictionary<string, string[]>(extra);
+                CollectValues(av, sit, nums, names, false);
+                runtimeTopic = "deploy";
+                try { QueueKind("science", sit, nums, names, ResponseDelay(host.stress.stress) + 0.4f, false); }
+                finally { runtimeTopic = null; }
+            };
+            bool ok = EventChat("deploy", k, partner, extra, reach ? mc : null)
+                      || (partner != null && EventChat("deploy", k, null, extra, reach ? mc : null));
+            Log.Info("Runtime voice: deployed " + device[1] + (ok ? ", chat queued" : ", no chat fits"));
+            if (!ok && reach) mc();
+        }
+
+
 
         const double FlagReplyChance = 0.9;
 
@@ -815,21 +923,64 @@ namespace Lonapse
             return string.IsNullOrEmpty(first) ? null : new[] { RuntimeSpeech.Respell(first), first };
         }
 
+        /// <summary>How two kerbals hear each other: the intercom of one cabin, the suit radio between two EVA
+        /// kerbals, or the radio between two vessels (a ship and a kerbal outside, a ship and a lander).</summary>
+        enum ChatWay { Intercom, Eva, Apart }
+
+        static ChatWay WayOf(KerbalVoice a, KerbalVoice b)
+        {
+            if (a.onEva && b.onEva) return ChatWay.Eva;
+            if (a.vesselId == b.vesselId && !a.onEva) return ChatWay.Intercom;
+            return ChatWay.Apart;
+        }
+
         /// <summary>
         /// Sometimes an intercom chat from Phrases/Runtime instead of the table: every line rendered in the voice of its
         /// kerbal, queued as one chat once all lines are ready. True when one was started (the caller queues nothing).
+        /// Kerbals of one cabin use the intercom chats. Two EVA kerbals use the suit radio chats (on_eva) and the
+        /// radio chats (apart), kerbals of two vessels only the radio chats.
         /// </summary>
-        bool TryRuntimeChat(KerbalVoice a, KerbalVoice b, bool eva = false)
+        bool TryRuntimeChat(KerbalVoice a, KerbalVoice b, bool radio = false)
         {
-            double chance = eva ? 1.0 : host.warpChatter ? WarpChatChance : RuntimeChatChance;
+            double chance = radio ? 1.0 : host.warpChatter ? WarpChatChance : RuntimeChatChance;
             if (!RuntimeOn || runtimeChatPending || a == null || b == null || (!debugForce && rng.NextDouble() >= chance)) return false;
+            return StartRuntimeChat(a, b, null, null, null);
+        }
+
+        /// <summary>An event chat (a chat with on=) about ev: a is the kerbal who did it, b a partner nearby or null
+        /// (then a one-line chat, the kerbal alone). extra: more names (flag, device). after runs once the chat is
+        /// queued or dropped, also when its clips fail. False when none fits: after does not run then.</summary>
+        bool EventChat(string ev, KerbalVoice a, KerbalVoice b, Dictionary<string, string[]> extra, Action after)
+        {
+            if (!RuntimeOn || runtimeChatPending || a == null || !CanChat(a)) return false;
+            if (b != null && (ReferenceEquals(a, b) || !CanChat(b))) b = null;
+            return StartRuntimeChat(a, b, ev, extra, after);
+        }
+
+        /// <summary>A partner for kerbal a: another kerbal of the group who can talk (the radio partners too). Null
+        /// when there is none.</summary>
+        KerbalVoice PartnerOf(KerbalVoice a)
+        {
+            var all = new List<KerbalVoice>(host.roster.voices);
+            all.AddRange(host.roster.radio);
+            all.RemoveAll(k => ReferenceEquals(k, a) || !CanChat(k));
+            return all.Count > 0 ? all[rng.Next(all.Count)] : null;
+        }
+
+        bool StartRuntimeChat(KerbalVoice a, KerbalVoice b, string ev, Dictionary<string, string[]> extra, Action after)
+        {
+            bool solo = b == null;
+            if (solo) b = a;
             if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
             Vessel v = ActiveVessel;
             if (v == null) return false;
+            ChatWay way = solo ? (a.onEva ? ChatWay.Eva : ChatWay.Apart) : WayOf(a, b);
+            bool radio = solo || way != ChatWay.Intercom;
             string sit = SituationOf(v) ?? "other";
             var nums = new Dictionary<string, double>();
             var common = new Dictionary<string, string[]>();
             CollectValues(v, sit, nums, common);
+            if (extra != null) foreach (var kv in extra) common[kv.Key] = kv.Value;
             string[] na = FirstNames(a), nb = FirstNames(b);
             if (na == null || nb == null) return false;
             var namesA = new Dictionary<string, string[]>(common) { { "self", na }, { "other", nb } };
@@ -841,26 +992,39 @@ namespace Lonapse
             var numsB = new Dictionary<string, double>(nums);
             CrewValues(a, v, numsA);
             CrewValues(b, v, numsB);
-            if (eva)
-            {
-                // on EVA the jetpack and the ship distance are the speaker's own, pair_m the meters between the two
-                EvaValues(a, b, numsA);
-                EvaValues(b, a, numsB);
-            }
+            // each kerbal's own jetpack, ship distance and ship name, and the meters between the two
+            PairValues(a, b, numsA, namesA);
+            PairValues(b, a, numsB, namesB);
+            if (!solo && way != ChatWay.Intercom) { numsA["apart"] = 1; numsB["apart"] = 1; }
             var fit = new List<KeyValuePair<List<RuntimeTemplate>, bool>>();
             foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
             {
                 if (recentRuntime.Contains(c[0].Id)) continue;
+                // an event chat: only the chats about ev. A kerbal alone says a one-line one, two kerbals a real chat.
+                if (ev != null ? !RuntimeLines.OnFits(c[0], ev) || solo != (c.Count == 1) : c[0].IsEvent) continue;
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
-                else if (RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
+                // an event chat starts with the kerbal who did it: never swapped
+                else if (ev == null && RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
             }
-            // on EVA only the suit radio chats, inside never those
-            fit.RemoveAll(c => c.Key[0].AboutEva != eva);
-            // in time warp a chat about the warp when one fits
-            if (host.warpChatter && !eva)
+            if (ev == null)
             {
-                var warpFit = fit.FindAll(c => c.Key[0].AboutWarp);
-                if (warpFit.Count > 0) fit = warpFit;
+                // the intercom chats in one cabin, the suit radio chats between two EVA kerbals, the radio chats
+                // between two vessels (and between two EVA kerbals too)
+                fit.RemoveAll(c => way == ChatWay.Intercom ? c.Key[0].AboutEva || c.Key[0].AboutApart
+                                 : way == ChatWay.Eva ? !c.Key[0].AboutEva && !c.Key[0].AboutApart
+                                 : !c.Key[0].AboutApart);
+                // in time warp a chat about the warp when one fits
+                if (host.warpChatter && way == ChatWay.Intercom)
+                {
+                    var warpFit = fit.FindAll(c => c.Key[0].AboutWarp);
+                    if (warpFit.Count > 0) fit = warpFit;
+                }
+            }
+            else
+            {
+                // the chats about this experiment before the ones about any science
+                var own = fit.FindAll(c => c.Key[0].On.Contains(ev));
+                if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
             }
             if (fit.Count == 0) return false;
             var pick = fit[rng.Next(fit.Count)];
@@ -909,29 +1073,36 @@ namespace Lonapse
                     if (--left > 0) return;
                     runtimeChatPending = false;
                     bool ok = !failed && CanChat(a) && CanChat(b) && !Somber
-                              && (eva ? host.settings.radioEnabled && !radioSilent && host.evaMode : host.settings.intercomEnabled);
+                              && (radio ? host.settings.radioEnabled && !radioSilent : host.settings.intercomEnabled);
                     if (ok)
                     {
                         for (int k = 0; k < entries.Count; k++) PhraseClips.SetRuntimeClip(entries[k], clips[k]);
-                        ok = eva ? QueueRadioChat(a, b, entries) : QueueChatTurns(a, b, entries, entries.Count, null, false);
+                        ok = radio ? QueueRadioChat(a, b, entries) : QueueChatTurns(a, b, entries, entries.Count, null, false);
                     }
                     if (!ok)
                     {
                         if (failed) runtimeFailed++;
                         foreach (var c in clips) if (c != null) UnityEngine.Object.Destroy(c);
                         Log.Info("Runtime voice: chat " + chat[0].Id + " dropped (" + (failed ? "Piper failed" : "the chat cannot start now") + ")");
-                        return;
                     }
-                    runtimeOnly++;
-                    Log.Info("Runtime voice: chat " + chat[0].Id + " (" + a.displayName + ", " + b.displayName + ") ready in "
-                             + r.queueToReadyMs.ToString("0") + " ms");
+                    else
+                    {
+                        runtimeOnly++;
+                        Log.Info("Runtime voice: chat " + chat[0].Id + " (" + a.displayName + (solo ? "" : ", " + b.displayName) + ", "
+                                 + (radio ? "radio" : "intercom") + ") ready in " + r.queueToReadyMs.ToString("0") + " ms");
+                    }
+                    if (after != null)
+                    {
+                        try { after(); }
+                        catch (Exception e) { Log.Exception("Runtime voice event chat", e); }
+                    }
                 });
             }
             return true;
         }
 
-        /// <summary>An EVA chat over the suit radio: each line keyed like a crew radio line (click, line, beep,
-        /// squelch), the two kerbals in turn. False when the queue has no room.</summary>
+        /// <summary>A radio chat (suit radio, ship to ship): each line keyed like a crew radio line (click, line,
+        /// beep, squelch), the two kerbals in turn. False when the queue has no room.</summary>
         bool QueueRadioChat(KerbalVoice a, KerbalVoice b, List<PhraseEntry> entries)
         {
             if (count + 4 * entries.Count > Capacity) return false;
@@ -940,8 +1111,8 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>The loaded EVA vessel of a kerbal (the active one or a nearby one), null when not on EVA.</summary>
-        static Vessel EvaVesselOf(KerbalVoice k)
+        /// <summary>The loaded vessel of a kerbal (the active one or one nearby), null when it is not loaded.</summary>
+        static Vessel VesselOf(KerbalVoice k)
         {
             if (k == null) return null;
             try
@@ -950,41 +1121,68 @@ namespace Lonapse
                 for (int i = 0; i < loaded.Count; i++)
                 {
                     Vessel o = loaded[i];
-                    if (o == null || !o.isEVA) continue;
-                    foreach (ProtoCrewMember pcm in o.GetVesselCrew()) if (pcm != null && pcm.name == k.name) return o;
+                    if (o == null || o.id != k.vesselId) continue;
+                    return o;
                 }
             }
             catch (Exception) { }
             return null;
         }
 
-        /// <summary>EVA values of kerbal k for a suit radio chat: its own jetpack and ship distance, and pair_m to
-        /// the other kerbal.</summary>
-        void EvaValues(KerbalVoice k, KerbalVoice other, Dictionary<string, double> nums)
+        /// <summary>The values of kerbal k for a chat with other: on EVA its own jetpack and ship distance, a_eva and
+        /// b_eva (1 on EVA, else 0), pair_m between the two vessels, and my_ship and their_ship (the ship each one is
+        /// in, not set for a kerbal on EVA).</summary>
+        void PairValues(KerbalVoice k, KerbalVoice other, Dictionary<string, double> nums, Dictionary<string, string[]> names)
         {
-            Vessel kv = EvaVesselOf(k), ov = EvaVesselOf(other);
-            if (kv == null) return;
-            double jet = ResourcePercent(kv, "EVA Propellant");
-            if (double.IsNaN(jet)) jet = ResourcePercent(kv, "MonoPropellant");
+            nums["a_eva"] = k.onEva ? 1 : 0;
+            nums["b_eva"] = other.onEva ? 1 : 0;
+            Vessel kv = VesselOf(k), ov = VesselOf(other);
             nums.Remove("jet");
-            Put(nums, "jet", jet);
-            double sd;
             nums.Remove("ship_m");
-            if (ShipNear(kv, out sd) != null) nums["ship_m"] = Math.Round(sd);
-            try { if (ov != null) nums["pair_m"] = Math.Round(Vector3d.Distance(kv.GetWorldPos3D(), ov.GetWorldPos3D())); }
+            names.Remove("my_ship");
+            names.Remove("their_ship");
+            if (kv != null && k.onEva)
+            {
+                double jet = ResourcePercent(kv, "EVA Propellant");
+                if (double.IsNaN(jet)) jet = ResourcePercent(kv, "MonoPropellant");
+                Put(nums, "jet", jet);
+                double sd;
+                if (ShipNear(kv, out sd) != null) nums["ship_m"] = Math.Round(sd);
+            }
+            string[] mine = kv != null && !k.onEva ? NamesOfVessel(kv) : null;
+            string[] theirs = ov != null && !other.onEva ? NamesOfVessel(ov) : null;
+            if (mine != null) names["my_ship"] = mine;
+            if (theirs != null) names["their_ship"] = theirs;
+            try
+            {
+                if (kv != null && ov != null && !ReferenceEquals(kv, ov))
+                    nums["pair_m"] = Math.Round(Vector3d.Distance(kv.GetWorldPos3D(), ov.GetWorldPos3D()));
+            }
             catch (Exception) { }
         }
 
-        /// <summary>Two kerbals of an EVA group talk over the suit radio (a runtime EVA chat). False when there are
-        /// not two who can talk, or no chat fits.</summary>
+        /// <summary>Two kerbals on the radio: on EVA two of the EVA group (suit radio) or one and a radio partner
+        /// (a ship nearby). On a ship one of the crew and a radio partner (an EVA kerbal, another ship). False when
+        /// there are not two who can talk, or no chat fits.</summary>
         bool TryEvaChat()
         {
-            if (!host.evaMode || host.roster.SpeakableCount() < 2) return false;
             KerbalVoice a = PickRested();
             if (!CanChat(a)) return false;
-            var others = host.roster.voices.FindAll(k => !ReferenceEquals(k, a) && CanChat(k));
+            var others = new List<KerbalVoice>(host.roster.radio);
+            if (host.evaMode) others.AddRange(host.roster.voices);
+            others.RemoveAll(k => ReferenceEquals(k, a) || !CanChat(k) || WayOf(a, k) == ChatWay.Intercom);
             if (others.Count == 0) return false;
             return TryRuntimeChat(a, others[rng.Next(others.Count)], true);
+        }
+
+        /// <summary>Radio partners nearby: kerbals of other vessels the crew can call.</summary>
+        bool HasRadioPartners
+        {
+            get
+            {
+                foreach (KerbalVoice k in host.roster.radio) if (CanChat(k)) return true;
+                return host.evaMode && host.roster.SpeakableCount() >= 2;
+            }
         }
 
         bool landSaid;
@@ -1012,9 +1210,9 @@ namespace Lonapse
 
         /// <summary>From GameEventHub after a science reaction was sent: sometimes Mission Control follows up with the
         /// experiment, the body and the science points.</summary>
-        public void RuntimeScience(string subjectId, float dataAmount, string bodyName)
+        public void RuntimeScience(string subjectId, float dataAmount, string bodyName, bool always = false)
         {
-            if (!RuntimeOn || !host.settings.runtimeScience || rng.NextDouble() >= RuntimeScienceChance) return;
+            if (!RuntimeOn || !host.settings.runtimeScience || McUnreachable || (!always && rng.NextDouble() >= RuntimeScienceChance)) return;
             var nums = new Dictionary<string, double>();
             var names = new Dictionary<string, string[]>();
             FlightValues(nums, names);
@@ -1038,15 +1236,19 @@ namespace Lonapse
             if (!double.IsNaN(pts) && pts >= 0.05) nums["sci"] = pts;
             if (!double.IsNaN(left)) nums["sci_left"] = Math.Max(0, left);
             if (!double.IsNaN(pts)) nums["sci_first"] = first ? 1 : 0;
-            string[] w = RuntimeLines.ExperimentWords(RuntimeLines.ExperimentId(subjectId));
             // the experiment words are Spanish: reversed like the rest, so they go in a raw mark already reversed
-            names["exp"] = new[] { LonapseText.ReverseText(w[0]), w[1] };
+            names["exp"] = ExpNames(subjectId);
             string[] b = BodyNames(bodyName);
             if (b != null) { names["body"] = b; names["here"] = b; }
             // after the reaction scene: it is queued first, this waits behind it
             float delay = ResponseDelay(host.stress.stress) + 0.8f;
-            if (!(nums.ContainsKey("sci") && QueueKind("science_pts", null, nums, names, delay, false)))
-                QueueKind("science", null, nums, names, delay, false);
+            runtimeTopic = EventWatchers.ExperimentId(subjectId);
+            try
+            {
+                if (!(nums.ContainsKey("sci") && QueueKind("science_pts", null, nums, names, delay, false)))
+                    QueueKind("science", null, nums, names, delay, false);
+            }
+            finally { runtimeTopic = null; }
         }
 
         /// <summary>From GameEventHub: a contract was completed or failed. funds, sci and rep are the rewards of a

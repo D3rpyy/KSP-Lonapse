@@ -45,6 +45,7 @@ namespace Lonapse
             {
                 GameEvents.onVesselSOIChanged.Add(OnSoiChanged);
                 GameEvents.OnExperimentDeployed.Add(OnExperimentDeployed);
+                GameEvents.onGroundSciencePartDeployed.Add(OnGroundPartDeployed);
                 GameEvents.onPartDie.Add(OnPartDie);
                 GameEvents.onKerbalStatusChange.Add(OnKerbalStatusChange);
                 GameEvents.onCrewKilled.Add(OnCrewKilled);
@@ -63,6 +64,7 @@ namespace Lonapse
             {
                 GameEvents.onVesselSOIChanged.Remove(OnSoiChanged);
                 GameEvents.OnExperimentDeployed.Remove(OnExperimentDeployed);
+                GameEvents.onGroundSciencePartDeployed.Remove(OnGroundPartDeployed);
                 GameEvents.onPartDie.Remove(OnPartDie);
                 GameEvents.onKerbalStatusChange.Remove(OnKerbalStatusChange);
                 GameEvents.onCrewKilled.Remove(OnCrewKilled);
@@ -194,6 +196,9 @@ namespace Lonapse
                                          EventWatchers.MaxAgeFor(EventWatchers.Science, tu.eventMaxAge, tu.eventMaxAge), out r))
                 {
                     Log.Info("Event science: " + data.subjectID + " -> topic " + r.topic);
+                    // runtime voice: an EVA experiment, or any without a link, as a chat with the biome and the body
+                    if (host.director != null && host.director.RuntimeScienceTakeover(data.subjectID, data.dataAmount,
+                                                                                       v.mainBody != null ? v.mainBody.bodyName : null)) return;
                     Send(r);
                     // experimental runtime voice: sometimes the numbers after the reaction
                     if (host.director != null)
@@ -202,6 +207,24 @@ namespace Lonapse
                 else Log.Debug("Science " + data.subjectID + (science.QueuedCount > 0 ? " queued or skipped (" + science.QueuedCount + " waiting)" : " skipped (cooldown)"));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnExperimentDeployed", e); }
+        }
+
+        /// <summary>Breaking Ground: a kerbal on EVA deployed a ground science part close by.</summary>
+        private void OnGroundPartDeployed(ModuleGroundSciencePart m)
+        {
+            try
+            {
+                if (!Enabled || !host.settings.eventScience || m == null || m.part == null || host.director == null) return;
+                Vessel v = FlightGlobals.ActiveVessel;
+                if (v == null || !v.isEVA || m.part.vessel == null) return;
+                if (Vector3d.Distance(m.part.vessel.GetWorldPos3D(), v.GetWorldPos3D()) > 50.0) return;
+                string kind = m is ModuleGroundExpControl ? "station" : m is ModuleGroundCommsPart ? "comms"
+                            : m is ModuleGroundExperiment ? "experiment" : m.PowerUnitsProduced > 0 ? "power" : "part";
+                string name = m.part.partInfo != null ? m.part.partInfo.name : m.part.name;
+                Log.Info("Event deploy: " + name + " (" + kind + ")");
+                host.director.RuntimeDeploy(RuntimeLines.DeviceWords(name, kind));
+            }
+            catch (Exception e) { Log.Exception("GameEventHub.OnGroundPartDeployed", e); }
         }
 
         // experimental runtime voice: Mission Control on a finished or failed contract, only in flight

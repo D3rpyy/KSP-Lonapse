@@ -1,0 +1,54 @@
+# Runtime voice: radio chats between kerbals of two vessels nearby: a ship and a kerbal outside, a ship and a
+# lander, two EVA kerbals further apart. The format is explained at the top of reports.tsv.
+# A chat with apart=1 in the when of line 1 only plays between two kerbals of different vessels within 2.3 km. It
+# sounds like the radio and needs no link to Mission Control. Line 1 has the values of the kerbal who starts it:
+# a_eva is 1 when that kerbal is on EVA (else 0), b_eva the same for the other. pair_m is the meters between the
+# two vessels, jet and ship_m are the starter's own on EVA. my_ship is the ship the speaker is in, their_ship the
+# ship of the one spoken to (not set for a kerbal on EVA). link is 1 with a link to Mission Control, else 0.
+# Each wording of a line must fit each wording of the line before and after it: the wordings are picked one by one.
+id	kind	when	spanish	english
+rt_chat_rshipeva_1	chat	apart=1 a_eva=0 b_eva=1	{other}, ¿qué tal ahí fuera? | {other}, ¿cómo va el paseo?	{other}, how's it out there? | {other}, how's the walk?
+rt_chat_rshipeva_2	chat		Precioso. Deberías salir. | Bien. El traje aprieta un poco.	Gorgeous. You should come out. | Fine. The suit's a bit tight.
+rt_chat_rshipeva_3	chat		Aquí dentro tenemos café. | Pues aquí dentro se está calentito.	We have coffee in here. | Well, it's nice and warm in here.
+rt_chat_rpeek_1	chat	apart=1 a_eva=0 b_eva=1 pair_m<100	{other}, te veo por la ventana. | {other}, te estoy viendo por la ventanilla.	{other}, I can see you through the window. | {other}, I'm watching you through the porthole.
+rt_chat_rpeek_2	chat		Hola. Estoy saludando. | ¿Me ves? Estoy haciendo el pino.	Hi. I'm waving. | Can you see me? I'm doing a handstand.
+rt_chat_rpeek_3	chat		Ya. Parece que te estás ahogando. | Muy bonito. Ahora vuelve dentro.	Yeah. It looks like you're drowning. | Very nice. Now come back in.
+rt_chat_rfar_1	chat	apart=1 a_eva=0 b_eva=1 pair_m>=60	{other}, estás a {pair_m} metros de la nave. | {other}, ya vas por {pair_m} metros.	{other}, you're {pair_m} meters from the ship. | {other}, that's {pair_m} meters already.
+rt_chat_rfar_2	chat		Solo voy a mirar una cosa. | Lo sé. Desde aquí la nave parece de juguete.	Just checking something. | I know. The ship looks like a toy from here.
+rt_chat_rfar_3	chat		Vale. Pero vuelve antes de que oscurezca. | Vale. No traigas nada raro.	Okay. But be back before dark. | Okay. Don't bring anything weird back.
+rt_chat_rcomein_1	chat	apart=1 a_eva=0 b_eva=1 eva_mins>=10	{other}, llevas {eva_mins} minutos fuera. | {other}, ¿piensas volver algún día?	{other}, you've been out {eva_mins} minutes. | {other}, are you ever coming back?
+rt_chat_rcomein_2	chat		Cinco minutos más. | Cuando se me acabe el aire. Es broma.	Five more minutes. | When I run out of air. Just kidding.
+rt_chat_rcomein_3	chat		Eso dijiste hace un rato. | Muy gracioso. Te guardo la cena.	You said that a while ago. | Very funny. I'll save you dinner.
+rt_chat_rjet_1	chat	apart=1 a_eva=1 b_eva=0 jet<40	{other}, me queda el {jet} por ciento de propulsor. | {other}, aviso: mochila al {jet} por ciento.	{other}, I have {jet} percent propellant left. | {other}, heads up: jetpack at {jet} percent.
+rt_chat_rjet_2	chat		Pues vuelve antes de que se acabe. | Recibido. Dejo la escotilla abierta.	Then come back before it runs out. | Copy. I'll leave the hatch open.
+rt_chat_rjet_3	chat		Voy. Despacito. | Gracias. Ya voy.	On my way. Slowly. | Thanks. Coming.
+rt_chat_rinside_1	chat	apart=1 a_eva=1 b_eva=0	{other}, ¿qué haces ahí dentro? | {other}, ¿me echas de menos?	{other}, what are you doing in there? | {other}, do you miss me?
+rt_chat_rinside_2	chat		Mirar botones. Muy emocionante. | Nada. Comerme tu postre.	Looking at buttons. Very exciting. | Nothing. Eating your dessert.
+rt_chat_rinside_3	chat		Qué envidia. Aquí fuera no hay nada que hacer. | Pues yo tengo mejores vistas.	So jealous. There's nothing to do out here. | Well, I have the better view.
+rt_chat_rship_1	chat	apart=1 a_eva=1 b_eva=0	{other}, ¿qué tal {their_ship} desde dentro? | {other}, desde aquí la nave se ve muy pequeña.	{other}, how's {their_ship} from the inside? | {other}, the ship looks really small from here.
+rt_chat_rship_2	chat		Igual que siempre. Huele a calcetín. | No digas eso. Te está oyendo.	Same as always. Smells like socks. | Don't say that. It can hear you.
+rt_chat_rship_3	chat		Ya me acuerdo. Me quedo fuera un rato más. | Perdón. Es muy bonita. Muy grande.	Now I remember. I'll stay out a bit longer. | Sorry. It's very pretty. Very big.
+rt_chat_rlander_1	chat	apart=1 a_eva=0 b_eva=0	{their_ship}, aquí {my_ship}. ¿Me recibes? | {other}, ¿me oyes desde ahí?	{their_ship}, this is {my_ship}. Do you copy? | {other}, can you hear me over there?
+rt_chat_rlander_2	chat		Alto y claro. Te veo por la ventana. | Te oigo. Estás muy cerca, por cierto.	Loud and clear. I can see you out the window. | I hear you. You're very close, by the way.
+rt_chat_rlander_3	chat		Bien. Ni se te ocurra chocar. | Perfecto. Mantén la distancia.	Good. Don't you dare bump into us. | Perfect. Keep your distance.
+rt_chat_rsmall_1	chat	apart=1 a_eva=0 b_eva=0	{other}, ¿qué tal la nave pequeña? | {other}, ¿cómo va todo en {their_ship}?	{other}, how's the little ship? | {other}, how's everything on {their_ship}?
+rt_chat_rsmall_2	chat		Pequeña pero mía. | Estrecha. Pero tiene ventana.	Small but mine. | Cramped. But it has a window.
+rt_chat_rsmall_3	chat		Cuídala. La necesitamos entera. | Pues disfruta. Nos vemos a la vuelta.	Take care of it. We need it in one piece. | Enjoy it, then. See you when you're back.
+rt_chat_rdist_1	chat	apart=1 a_eva=0 b_eva=0 pair_m>=200	{other}, te tengo a {pair_m} metros. | {other}, estás a {pair_m} metros de nosotros.	{other}, I have you at {pair_m} meters. | {other}, you're {pair_m} meters from us.
+rt_chat_rdist_2	chat		Recibido. Todo en orden aquí. | Lo sé. Te saludo desde aquí.	Copy. All good here. | I know. Waving at you from here.
+rt_chat_rdist_3	chat		Bien. Seguimos en contacto. | Te veo. Más o menos.	Good. Stay in touch. | I see you. More or less.
+rt_chat_rdown_1	chat	apart=1 a_eva=0 b_eva=0 landed	{other}, ¿qué tal el suelo de {here}? | {other}, ¿cómo se está ahí abajo?	{other}, how's the ground on {here}? | {other}, how is it down there?
+rt_chat_rdown_2	chat		Firme. Más o menos. | Todo bien. No se mueve nada. Casi nada.	Solid. More or less. | All good. Nothing's moving. Almost nothing.
+rt_chat_rdown_3	chat		Me alegro. Yo sigo aquí, mirando. | Bien. Avísame si algo se mueve.	Glad to hear. I'm still here, watching. | Good. Tell me if anything moves.
+rt_chat_rcheck_1	chat	apart=1	{other}, prueba de radio. | {other}, ¿sigues ahí?	{other}, radio check. | {other}, are you still there?
+rt_chat_rcheck_2	chat		Aquí sigo. Te oigo bien. | Te recibo. ¿Qué pasa?	Still here. I hear you fine. | I copy. What's up?
+rt_chat_rcheck_3	chat		Nada. Solo quería oír una voz. | Nada. Comprobaba que no te habías ido.	Nothing. I just wanted to hear a voice. | Nothing. Checking you hadn't left.
+rt_chat_rnolink_1	chat	apart=1 link=0	{other}, el centro espacial no contesta. | {other}, no tenemos señal con casa.	{other}, KSC isn't answering. | {other}, we have no signal home.
+rt_chat_rnolink_2	chat		Pues hablamos entre nosotros. | Mejor. Así nadie nos manda nada.	Then we talk among ourselves. | Better. Nobody can tell us what to do.
+rt_chat_rnolink_3	chat		Vale. ¿Tú qué tal? | Me gusta cómo piensas.	Okay. How are you doing? | I like how you think.
+rt_chat_rquiet_1	chat	apart=1 link=0	{other}, sin casa en la radio esto está muy tranquilo. | {other}, ¿te has dado cuenta? Nadie nos dice qué hacer.	{other}, with no home on the radio it's very quiet. | {other}, have you noticed? Nobody's telling us what to do.
+rt_chat_rquiet_2	chat		Demasiado tranquilo. | Lo sé. Es un poco raro.	Too quiet. | I know. It's a bit strange.
+rt_chat_rquiet_3	chat		Pues te cuento un chiste. | Disfrútalo mientras dure.	Then I'll tell you a joke. | Enjoy it while it lasts.
+rt_chat_rbrave_1	chat	apart=1 a=brave b=nervous	{other}, voy a acercarme un poco más. | {other}, ¿y si nos acercamos un poco?	{other}, I'm going to get a bit closer. | {other}, what if we get a little closer?
+rt_chat_rbrave_2	chat		¿Más? Ya estamos bastante cerca. | Por favor, no. Así está perfecto.	Closer? We're close enough already. | Please don't. This is perfect.
+rt_chat_rbrave_3	chat		Tranquilidad. Tengo un plan. | Vale, vale. Me quedo aquí.	Relax. I have a plan. | Okay, okay. I'll stay here.

@@ -424,8 +424,14 @@ namespace Lonapse
             s.beepsEnabled = Toggle(s.beepsEnabled, "Telemetry beeps");
             s.warpChatter = Toggle(s.warpChatter, "Chatter during time warp");
             Hint("Calm talk goes on in time warp. Events wait until the warp ends. With the runtime voice Mission Control also talks about the warp.");
-            s.evaGroup = Toggle(s.evaGroup, "Nearby EVA kerbals join the radio");
-            Hint("On EVA, other kerbals on EVA within 150 m talk with Mission Control too.");
+            if (s.warpChatter)
+            {
+                s.tuning.warpRateGain = Mathf.Round(Slider("Warp: more talk per 10x", s.tuning.warpRateGain, 0f, 2f, "0.00") * 20f) / 20f;
+                s.tuning.warpPitchGain = Mathf.Round(Slider("Warp: faster voices per 10x", s.tuning.warpPitchGain, 0f, 0.2f, "0.00") * 100f) / 100f;
+                Hint("The faster the warp, the more the crew talks and the faster they sound. 0 turns it off.");
+            }
+            s.evaGroup = Toggle(s.evaGroup, "Nearby kerbals join the radio (EVA, other ships)");
+            Hint("On EVA, other kerbals on EVA within 150 m talk with Mission Control too. Kerbals in other vessels within 2.3 km (a kerbal outside, a lander) talk with the crew over the radio, also without a link to Mission Control.");
             s.rateMultiplier = Mathf.Round(Row("Radio amount", s.rateMultiplier, 0.25f, 4f, s.rateMultiplier, "0.0#'x'") * 20f) / 20f;
             Hint("How often the crew and Mission Control talk. 2x is twice as often.");
             Tuning tu = s.tuning;

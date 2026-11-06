@@ -1504,7 +1504,62 @@ public static class Tests
                 bool insideFits = evaChats.Exists(c => RuntimeLines.ChatFits(c, "landed", inside, na, nb, "pilot brave", "scientist nervous"));
                 Check(evaChats.Count >= 12 && evaFits && !insideFits,
                       "runtime voice: EVA suit radio chats fit on EVA with their values, never inside", evaChats.Count + " EVA chats");
+
+                // radio chats between two vessels: only with apart, and the a_eva/b_eva checks pick the right side
+                var allChats = RuntimeLines.Chats(rtAll);
+                var apartChats = allChats.FindAll(c => c[0].AboutApart);
+                var shipToEva = new Dictionary<string, double> { { "apart", 1 }, { "a_eva", 0 }, { "b_eva", 1 }, { "pair_m", 80 }, { "link", 1 }, { "eva_mins", 12 } };
+                var evaToShip = new Dictionary<string, double> { { "apart", 1 }, { "a_eva", 1 }, { "b_eva", 0 }, { "pair_m", 80 }, { "jet", 20 }, { "link", 1 } };
+                var na2 = new Dictionary<string, string[]>(na) { { "my_ship", new[] { "Kerbal X", "Kerbal X" } } };
+                var nb2 = new Dictionary<string, string[]>(nb) { { "their_ship", new[] { "Kerbal X", "Kerbal X" } } };
+                var se = apartChats.FindAll(c => RuntimeLines.ChatFits(c, "landed", shipToEva, na2, nb2)).ConvertAll(c => c[0].Id);
+                var es = apartChats.FindAll(c => RuntimeLines.ChatFits(c, "landed", evaToShip, nb2, na2)).ConvertAll(c => c[0].Id);
+                bool noApartInside = !apartChats.Exists(c => RuntimeLines.ChatFits(c, "landed", inside, na, nb));
+                Check(apartChats.Count >= 12 && se.Contains("rt_chat_rshipeva_1") && !se.Contains("rt_chat_rjet_1")
+                      && es.Contains("rt_chat_rjet_1") && !es.Contains("rt_chat_rshipeva_1") && !se.Contains("rt_chat_rnolink_1") && noApartInside
+                      && !apartChats.Exists(c => c[0].AboutEva || c[0].IsEvent),
+                      "runtime voice: radio chats between two vessels fit the side of each kerbal, never in one cabin",
+                      apartChats.Count + " radio chats, ship to EVA " + string.Join(",", se.ToArray()) + " / EVA to ship " + string.Join(",", es.ToArray()));
+
+                // event chats: only on their event, one line for a kerbal alone, link picks Control or not
+                var ev = allChats.FindAll(c => c[0].IsEvent);
+                Func<string, bool, double, List<string>> evFit = (e, alone, link) => ev.FindAll(c => RuntimeLines.OnFits(c[0], e) && alone == (c.Count == 1)
+                    && RuntimeLines.ChatFits(c, "landed", new Dictionary<string, double> { { "link", link }, { "at_home", 0 } },
+                        new Dictionary<string, string[]>(na) { { "here", new[] { "la Mun", "Mun" } }, { "exp", new[] { "x", "surface sample" } },
+                                                               { "device", new[] { "x", "the antenna" } } }, nb)).ConvertAll(c => c[0].Id);
+                List<string> sampleLink = evFit("surfacesample", true, 1), sampleNo = evFit("surfacesample", true, 0),
+                             flagAloneLink = evFit("flag", true, 1), flagAloneNo = evFit("flag", true, 0), flagPair = evFit("flag", false, 1),
+                             deploy = evFit("deploy", true, 1), tempNo = evFit("temperaturescan", true, 0);
+                bool noControlWithoutLink = !ev.Exists(c => c[0].Checks.Exists(k => k.Key == "link" && k.Value.Value == 0)
+                                                            && c.Exists(l => l.Versions.Exists(vv => System.Text.RegularExpressions.Regex.IsMatch(vv[1], @"\bControl\b"))));
+                Check(ev.Count >= 15 && sampleLink.Contains("rt_chat_ssample_1") && !sampleLink.Contains("rt_chat_ssamplenolink_1")
+                      && sampleNo.Contains("rt_chat_ssamplenolink_1") && flagAloneLink.Count == 0 && flagAloneNo.Contains("rt_chat_fsolo_1")
+                      && flagPair.Contains("rt_chat_fflag_1") && deploy.Contains("rt_chat_sdeploy_1") && tempNo.Contains("rt_chat_snolink_1")
+                      && !tempNo.Contains("rt_chat_ssamplenolink_1") && noControlWithoutLink
+                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "rt_chat_snolink_1")[0], "flag")
+                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "rt_chat_snolink_1")[0], "deploy"),
+                      "runtime voice: event chats play on their event, alone one line, without a link never to Control",
+                      ev.Count + " event chats; sample " + string.Join(",", sampleLink.ToArray()) + " / " + string.Join(",", sampleNo.ToArray())
+                      + "; flag " + string.Join(",", flagAloneNo.ToArray()) + " / " + string.Join(",", flagPair.ToArray()));
+                var sciOn = rtAll.FindAll(t => (t.Kind == "science" || t.Kind == "science_pts") && t.On.Count > 0).ConvertAll(t => t.Id);
+                Check(sciOn.Contains("rt_sci_sample_pts") && sciOn.Contains("rt_sci_deploy") && sciOn.Contains("rt_sci_evarep"),
+                      "runtime voice: Mission Control has science lines for the EVA experiments and deployed parts", string.Join(",", sciOn.ToArray()));
+                var oneErr = new List<string>();
+                var one = RuntimeLines.ParseAll(new[] { new KeyValuePair<string, IList<string>>("a.tsv", new List<string> {
+                    "id\tkind\twhen\tspanish\tenglish", "rt_chat_ok_1\tchat\ton=flag\tA.\tA.", "rt_chat_bad_1\tchat\t\tB.\tB.",
+                    "rt_x\treport\ton=flag\tX.\tX.", "rt_chat_ev_1\tchat\ton=nothing\tE.\tE." }) }, oneErr);
+                Check(one.Count == 1 && one[0].Id == "rt_chat_ok_1" && oneErr.Count == 3,
+                      "runtime voice: an event chat may have one line, a normal chat not, on= only on chats and science, known events only",
+                      string.Join(" ; ", oneErr.ToArray()));
             }
+            Check(DcMath.WarpFactor(1f, 0.4f, 2.5f) == 1f && Math.Abs(DcMath.WarpFactor(100f, 0.4f, 2.5f) - 1.8f) < 1e-4f
+                  && DcMath.WarpFactor(100000f, 0.4f, 2.5f) == 2.5f && DcMath.WarpFactor(1000f, 0f, 2.5f) == 1f
+                  && Math.Abs(DcMath.WarpFactor(10f, 0.04f, 1.18f) - 1.04f) < 1e-4f && DcMath.WarpFactor(1e6f, 0.04f, 1.18f) == 1.18f,
+                  "time warp: more talk and faster voices with the warp rate, capped", "");
+            Check(RuntimeLines.DeviceWords("DeployedSeismicSensor", "experiment")[1] == "the seismometer"
+                  && RuntimeLines.DeviceWords("SomeModdedThing", "comms")[1] == "the antenna"
+                  && RuntimeLines.DeviceWords(null, "part")[1] == "the gadget",
+                  "deployed parts: words by part name, else by kind", "");
             Check(Persona.JobFor("staging") == "pilot" && Persona.JobFor("touchdown") == "pilot" && Persona.JobFor("power_low") == "engineer"
                   && Persona.JobFor("science") == "scientist" && Persona.JobFor("chatter") == null && Persona.JobFor(null) == null
                   && Persona.JobForLine("rt_fuel_low") == "pilot" && Persona.JobForLine("rt_ec_ok") == "engineer"
@@ -1562,7 +1617,7 @@ public static class Tests
         var badChat = new List<string>();
         foreach (var c in chats)
         {
-            if (c.Count < 2) badChat.Add(c[0].Id + " has one line");
+            if (c.Count < 2 && !c[0].IsEvent) badChat.Add(c[0].Id + " has one line");
             string sit = c[0].Situations.Count > 0 ? c[0].Situations[0] : "orbit";
             // a value that meets each check of line 1
             var cv = new Dictionary<string, double>(full);

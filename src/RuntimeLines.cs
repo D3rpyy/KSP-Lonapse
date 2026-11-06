@@ -31,6 +31,24 @@ namespace Lonapse
         public readonly List<string> To = new List<string>();
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
+        /// <summary>Event chats and science lines: the events it is about (on=flag on=surfacesample in the when
+        /// column). A chat with on= only plays on that event, never as a normal chat, and may be one line long (a
+        /// kerbal alone). A science line with on= only plays for that experiment. Empty: no event.</summary>
+        public readonly List<string> On = new List<string>();
+
+        /// <summary>An event chat: a chat with on=.</summary>
+        public bool IsEvent { get { return Kind == "chat" && On.Count > 0; } }
+
+        /// <summary>A chat between two kerbals of different vessels nearby (a check on apart): it plays over the
+        /// radio.</summary>
+        public bool AboutApart
+        {
+            get
+            {
+                foreach (var c in Checks) if (c.Key == "apart") return true;
+                return false;
+            }
+        }
 
         /// <summary>A chat for kerbals on EVA (a check on on_eva): it plays over the suit radio.</summary>
         public bool AboutEva
@@ -124,6 +142,23 @@ namespace Lonapse
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
         static readonly Regex ToRe = new Regex(@"^to=(rt_[a-z0-9_]*\*?)$");
+        static readonly Regex OnRe = new Regex(@"^on=([a-z_]+)$");
+
+        /// <summary>The events of on=: flag (a flag planted), deploy (a Breaking Ground part deployed), science
+        /// (any experiment) and the science topics of EventWatchers (evareport, surfacesample, roc ...).</summary>
+        public static readonly string[] Events = { "flag", "deploy", "science", "evareport", "surfacesample", "roc",
+            "crewreport", "mysterygoo", "mobilematerialslab", "temperaturescan", "barometerscan", "seismicscan",
+            "gravityscan", "atmosphereanalysis", "asteroidsample", "cometsample", "infraredtelescope", "magnetometer", "other" };
+
+        /// <summary>A line with on= fits this event: one of its on= is the event, or it is on=science and the event
+        /// is a science topic (not flag or deploy). A line without on= fits no event.</summary>
+        public static bool OnFits(RuntimeTemplate t, string ev)
+        {
+            if (t == null || ev == null) return false;
+            foreach (string o in t.On)
+                if (o == ev || (o == "science" && ev != "flag" && ev != "deploy")) return true;
+            return false;
+        }
 
         /// <summary>Parses one runtime file (the tests, a single table).</summary>
         public static List<RuntimeTemplate> Parse(IList<string> lines, List<string> errors)
@@ -158,13 +193,13 @@ namespace Lonapse
             {
                 kv.Value.Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y)));
                 string why = null;
-                if (kv.Value.Count < 2) why = "a chat needs at least 2 lines";
+                if (kv.Value.Count < 2 && kv.Value[0].On.Count == 0) why = "a chat needs at least 2 lines (an event chat with on= may have 1)";
                 string file0 = FileOf(kv.Value[0].Where);
                 for (int i = 0; i < kv.Value.Count && why == null; i++)
                 {
                     if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
                     else if (FileOf(kv.Value[i].Where) != file0) why = "all lines of a chat go in one file";
-                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0
+                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0 || kv.Value[i].On.Count > 0
                                        || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null)) why = "only line 1 has a when";
                 }
                 if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
@@ -223,6 +258,14 @@ namespace Lonapse
                 {
                     if (tok == "any") continue;
                     if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
+                    Match on = OnRe.Match(tok);
+                    if (on.Success)
+                    {
+                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts") bad.Add("'" + tok + "' only works in a chat or a science line");
+                        else if (Array.IndexOf(Events, on.Groups[1].Value) < 0) bad.Add("unknown event '" + on.Groups[1].Value + "' (" + string.Join(" ", Events) + ")");
+                        else t.On.Add(on.Groups[1].Value);
+                        continue;
+                    }
                     Match to = ToRe.Match(tok);
                     if (to.Success)
                     {
@@ -438,6 +481,33 @@ namespace Lonapse
             { "infraredTelescope", new[] { "telescopio", "telescope" } },
             { "magnetometer", new[] { "campo magnético", "magnetometer" } },
         };
+
+        /// <summary>Breaking Ground parts by part name: { spanish, english } with the article, for {device}.</summary>
+        static readonly Dictionary<string, string[]> Devices = new Dictionary<string, string[]> {
+            { "DeployedCentralStation", new[] { "la estación central", "the central station" } },
+            { "DeployedSeismicSensor", new[] { "el sismógrafo", "the seismometer" } },
+            { "DeployedWeatherStn", new[] { "la estación del tiempo", "the weather station" } },
+            { "DeployedIONExp", new[] { "el colector de iones", "the ion collector" } },
+            { "DeployedGoExOb", new[] { "el observatorio de moco", "the goo observatory" } },
+            { "DeployedSolarPanel", new[] { "el panel solar", "the solar panel" } },
+            { "DeployedRTG", new[] { "el generador", "the generator" } },
+            { "DeployedSatDish", new[] { "la antena", "the antenna" } },
+        };
+
+        /// <summary>The words for a deployed part: by part name, else by kind (station comms experiment power).</summary>
+        public static string[] DeviceWords(string partName, string kind)
+        {
+            string[] w;
+            if (partName != null && Devices.TryGetValue(partName, out w)) return w;
+            switch (kind)
+            {
+                case "station": return new[] { "la estación central", "the central station" };
+                case "comms": return new[] { "la antena", "the antenna" };
+                case "experiment": return new[] { "el experimento", "the experiment" };
+                case "power": return new[] { "el generador", "the generator" };
+                default: return new[] { "el aparato", "the gadget" };
+            }
+        }
 
         /// <summary>Experiment id from a subject id ("temperatureScan@KerbinSrfLanded" gives "temperatureScan").</summary>
         public static string ExperimentId(string subjectId)

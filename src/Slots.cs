@@ -19,8 +19,9 @@ namespace Lonapse
             "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
             "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
             "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
-            "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m" };
-        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag" };
+            "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
+            "link", "apart", "a_eva", "b_eva" };
+        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device" };
         public static readonly string[] Persons = { "other", "self", "kerbal" };
         /// <summary>Values the director gives every recorded line, with or without the runtime voice.</summary>
         public static readonly string[] Flight = { "day", "here", "vessel", "alt_km" };

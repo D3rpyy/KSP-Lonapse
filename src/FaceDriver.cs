@@ -286,7 +286,7 @@ namespace Lonapse
             foreach (Face f in faces.Values)
             {
                 bool engaged = f.speaking || f.listening;
-                KerbalVoice kv = host.roster != null ? host.roster.voices.Find(x => x != null && x.name == f.name) : null;
+                KerbalVoice kv = host.roster != null ? host.roster.Find(f.name) : null;
                 f.stress = kv != null ? kv.sk : 0f;
                 f.badass = kv != null && kv.BadassEffective;
                 f.moodW = FaceMath.Ramp(f.moodW, engaged || test, dt, MoodRise, MoodFall);

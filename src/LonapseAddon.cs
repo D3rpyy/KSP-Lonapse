@@ -56,6 +56,8 @@ namespace Lonapse
 
         public bool stationMode;          // active vessel type is Station or Base
         public bool railsWarp;
+        /// <summary>The time warp rate in a rails warp, else 1.</summary>
+        public float warpRate = 1f;
         /// <summary>Rails warp with "Chatter during time warp" on: the gate stays open, calm chatter only. Events wait
         /// for the end of the warp, the alarm and the rover moments stay off.</summary>
         public bool warpChatter;
@@ -684,6 +686,7 @@ namespace Lonapse
                 float rawDt = Math.Max(0f, Time.unscaledDeltaTime); // unclamped: the gate fade must never take longer than gateFadeTime
                 float dt = Math.Min(rawDt, 0.1f);
                 railsWarp = ReadRailsWarp(); // every frame, for the gate and the overlay
+                try { warpRate = railsWarp ? TimeWarp.CurrentRate : 1f; } catch (Exception) { warpRate = 1f; }
                 HandleHotkey();
                 if (runtimeVoice != null) runtimeVoice.Tick();
                 if (window != null && (!window.Visible || uiHidden)) window.ReleaseLock();
@@ -705,6 +708,7 @@ namespace Lonapse
                     stress.StartWarmup();
                     roster.dirty = true;
                     director.ResetPacing(evaHop);
+                    evaScanLeft = 0f;   // the group of the new vessel at once
                     if (throttle != null) throttle.Reset();
                     if (countdown != null) countdown.Abort("vessel change");
                     plan.Reset();
@@ -720,7 +724,7 @@ namespace Lonapse
                 // decouple/undock does not always fire a crew event, and onPartCouple fires before the merge,
                 // so compare counts every frame as well
                 ScanEvaGroup(v, dt);
-                try { if (v != null && v.GetCrewCount() + evaNearby.Count != roster.Count) roster.dirty = true; }
+                try { if (v != null && v.GetCrewCount() + GroupCrew() != roster.GroupCount) roster.dirty = true; }
                 catch (Exception) { roster.dirty = true; }
                 if (vesselChanged) { probeSleep.Reset(); probeSleepState = ProbeSleepState.Awake; roverMoments.Reset(); dataBeeps.Reset(); }
                 UpdateProbeScan(v, vesselChanged || roster.dirty, dt);
@@ -729,7 +733,7 @@ namespace Lonapse
                     // roster.dirty also fires on onVesselWasModified (staging, decouple, part loss). The mouth rigs
                     // are only re-resolved on a vessel change or a real crew change. A rig whose bones were destroyed
                     // is dropped by MouthDriver.GetRig and the Tick loop on their own.
-                    bool crewChanged = roster.Rebuild(v, evaNearby.Count > 0 ? evaNearby : null);
+                    bool crewChanged = roster.Rebuild(v, evaNearby.Count > 0 ? evaNearby : null, radioNearby.Count > 0 ? radioNearby : null);
                     if (vesselChanged || crewChanged)
                     {
                         if (mouth != null) mouth.CrewChanged();
@@ -1433,44 +1437,87 @@ namespace Lonapse
         }
         private const double EvaHopDistance = 2500.0;   // m, about the physics range around the active vessel
 
-        // evaGroup: other EVA kerbals near the active EVA kerbal join the roster, so they talk with Mission Control
+        // evaGroup: other EVA kerbals near the active EVA kerbal join the roster, so they talk with Mission Control.
+        // Kerbals of other vessels nearby (a ship, a lander, an EVA kerbal further out, or EVA kerbals near the
+        // active ship) join as radio partners: they only talk over the radio with the kerbals of the active vessel.
         private readonly List<Vessel> evaNearby = new List<Vessel>();
+        private readonly List<Vessel> radioNearby = new List<Vessel>();
         private readonly List<Vessel> evaScan = new List<Vessel>();
+        private readonly List<Vessel> radioScan = new List<Vessel>();
         private float evaScanLeft;
-        private const double EvaGroupRange = 150.0;   // m
+        private const double EvaGroupRange = 150.0;    // m
+        private const double RadioGroupRange = 2300.0; // m, inside the physics range
+        private const int RadioGroupMax = 6;           // kerbals, the nearest first
 
-        /// <summary>Once a second on EVA: the other EVA kerbals within EvaGroupRange. A change marks the roster dirty.</summary>
+        /// <summary>Crew count of the scanned group vessels (for the roster count check).</summary>
+        private int GroupCrew()
+        {
+            int n = 0;
+            try
+            {
+                foreach (Vessel o in evaNearby) if (o != null) n += o.GetCrewCount();
+                foreach (Vessel o in radioNearby) if (o != null) n += o.GetCrewCount();
+            }
+            catch (Exception) { }
+            return n;
+        }
+
+        /// <summary>Once a second: on EVA the other EVA kerbals within EvaGroupRange, and the crewed vessels within
+        /// RadioGroupRange as radio partners. A change marks the roster dirty.</summary>
         private void ScanEvaGroup(Vessel v, float dt)
         {
-            bool on = v != null && v.isEVA && settings.evaGroup && !probeMode;
+            bool on = v != null && settings.evaGroup && !probeMode;
             if (!on)
             {
-                if (evaNearby.Count > 0) { evaNearby.Clear(); roster.dirty = true; }
+                if (evaNearby.Count > 0 || radioNearby.Count > 0) { evaNearby.Clear(); radioNearby.Clear(); roster.dirty = true; }
                 return;
             }
             evaScanLeft -= dt;
             if (evaScanLeft > 0f) return;
             evaScanLeft = 1f;
             evaScan.Clear();
+            radioScan.Clear();
             try
             {
+                bool eva = v.isEVA;
+                Vector3d here = v.GetWorldPos3D();
+                var dist = new Dictionary<Vessel, double>();
                 List<Vessel> loaded = FlightGlobals.VesselsLoaded;
                 for (int i = 0; i < loaded.Count; i++)
                 {
                     Vessel o = loaded[i];
-                    if (o == null || ReferenceEquals(o, v) || !o.isEVA || o.GetCrewCount() != 1) continue;
-                    if (Vector3d.Distance(o.GetWorldPos3D(), v.GetWorldPos3D()) > EvaGroupRange) continue;
-                    evaScan.Add(o);
+                    if (o == null || ReferenceEquals(o, v) || o.GetCrewCount() <= 0) continue;
+                    double d = Vector3d.Distance(o.GetWorldPos3D(), here);
+                    if (d > RadioGroupRange) continue;
+                    if (eva && o.isEVA && o.GetCrewCount() == 1 && d <= EvaGroupRange) evaScan.Add(o);
+                    else { radioScan.Add(o); dist[o] = d; }
+                }
+                radioScan.Sort((x, y) => dist[x].CompareTo(dist[y]));
+                int crew = 0;
+                for (int i = 0; i < radioScan.Count; i++)
+                {
+                    crew += radioScan[i].GetCrewCount();
+                    if (crew > RadioGroupMax) { radioScan.RemoveRange(i, radioScan.Count - i); break; }
                 }
             }
-            catch (Exception e) { Log.WarnOnce("evagroup", "EVA group scan failed: " + e.Message); evaScan.Clear(); }
-            bool same = evaScan.Count == evaNearby.Count;
-            for (int i = 0; same && i < evaScan.Count; i++) same = evaNearby.Contains(evaScan[i]);
-            if (same) return;
+            catch (Exception e) { Log.WarnOnce("evagroup", "EVA group scan failed: " + e.Message); evaScan.Clear(); radioScan.Clear(); }
+            if (SameSet(evaScan, evaNearby) && SameSet(radioScan, radioNearby)) return;
+            bool evaSame = SameSet(evaScan, evaNearby);
             evaNearby.Clear();
             evaNearby.AddRange(evaScan);
+            radioNearby.Clear();
+            radioNearby.AddRange(radioScan);
             roster.dirty = true;
-            Log.Info("EVA group: " + evaNearby.Count + " other kerbal(s) on EVA within " + EvaGroupRange.ToString("0") + " m");
+            if (!evaSame || evaNearby.Count > 0)
+                Log.Info("EVA group: " + evaNearby.Count + " other kerbal(s) on EVA within " + EvaGroupRange.ToString("0") + " m");
+            Log.Info("Radio group: " + radioNearby.Count + " other vessel(s) with crew within " + RadioGroupRange.ToString("0") + " m");
+        }
+
+        private static bool SameSet(List<Vessel> a, List<Vessel> b)
+        {
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++) if (!b.Contains(a[i])) return false;
+            return true;
         }
 
         private static int SafeStage(Vessel v)
