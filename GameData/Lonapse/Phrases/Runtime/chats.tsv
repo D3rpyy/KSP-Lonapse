@@ -56,3 +56,11 @@ rt_chat_newbody_2	chat		Pues ya lo puedes contar, {other}.	Well, now you can tel
 rt_chat_oldhand_1	chat	missions>=5	{other}, este es mi vuelo número {flight_no}.	{other}, this is flight number {flight_no} for me.
 rt_chat_oldhand_2	chat		¿Y todavía te mareas?	And you still get sick?
 rt_chat_oldhand_3	chat		Cada vez.	Every time.
+rt_chat_conleft_1	chat	contracts>=3	{other}, ¿cuántos contratos tenemos abiertos?	{other}, how many contracts do we have open?
+rt_chat_conleft_2	chat		{contracts}. Y todos los quieren para ayer.	{contracts}. And they all want them yesterday.
+rt_chat_rep_1	chat	rep>=50	Dicen que nuestra reputación está en {rep}.	They say our reputation is at {rep}.
+rt_chat_rep_2	chat		{other}, eso es gracias a mí.	{other}, that's thanks to me.
+rt_chat_scilab_1	chat	sci_total>=100 a=scientist	Con {sci_total} puntos de ciencia ya podemos investigar algo nuevo.	With {sci_total} science points we can research something new.
+rt_chat_scilab_2	chat		¿Algo como asientos más cómodos?	Something like comfier seats?
+rt_chat_fundsrich_1	chat	funds_total>=500000	{other}, la agencia tiene {funds_total} fondos.	{other}, the agency has {funds_total} funds.
+rt_chat_fundsrich_2	chat		¿Y aun así nos dan estos asientos?	And they still give us these seats?

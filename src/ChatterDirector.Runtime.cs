@@ -698,40 +698,64 @@ namespace Lonapse
         public void RuntimeScience(string subjectId, float dataAmount, string bodyName)
         {
             if (!RuntimeOn || !host.settings.runtimeScience || rng.NextDouble() >= RuntimeScienceChance) return;
-            double pts = double.NaN;
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            FlightValues(nums, names);
+            double pts = double.NaN, left = double.NaN;
+            bool first = false;
             try
             {
                 if (ResearchAndDevelopment.Instance != null)
                 {
                     ScienceSubject sub = ResearchAndDevelopment.GetSubjectByID(subjectId);
                     if (sub != null)
-                        pts = ResearchAndDevelopment.GetScienceValue(dataAmount, sub, 1f)
-                              * HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
+                    {
+                        float mul = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
+                        pts = ResearchAndDevelopment.GetScienceValue(dataAmount, sub, 1f) * mul;
+                        first = sub.science < 0.01f;
+                        left = (sub.scienceCap - sub.science) * mul - pts;
+                    }
                 }
             }
-            catch (Exception) { pts = double.NaN; }
-            var nums = new Dictionary<string, double>();
+            catch (Exception) { pts = left = double.NaN; }
             if (!double.IsNaN(pts) && pts >= 0.05) nums["sci"] = pts;
+            if (!double.IsNaN(left)) nums["sci_left"] = Math.Max(0, left);
+            if (!double.IsNaN(pts)) nums["sci_first"] = first ? 1 : 0;
             string[] w = RuntimeLines.ExperimentWords(RuntimeLines.ExperimentId(subjectId));
             // the experiment words are Spanish: reversed like the rest, so they go in a raw mark already reversed
-            var names = new Dictionary<string, string[]> { { "exp", new[] { LonapseText.ReverseText(w[0]), w[1] } } };
+            names["exp"] = new[] { LonapseText.ReverseText(w[0]), w[1] };
             string[] b = BodyNames(bodyName);
-            if (b != null) names["body"] = b;
+            if (b != null) { names["body"] = b; names["here"] = b; }
             // after the reaction scene: it is queued first, this waits behind it
             float delay = ResponseDelay(host.stress.stress) + 0.8f;
             if (!(nums.ContainsKey("sci") && QueueKind("science_pts", null, nums, names, delay, false)))
                 QueueKind("science", null, nums, names, delay, false);
         }
 
-        /// <summary>From GameEventHub: a contract was completed (with its funds) or failed.</summary>
-        public void RuntimeContract(bool completed, double funds)
+        /// <summary>From GameEventHub: a contract was completed or failed. funds, sci and rep are the rewards of a
+        /// completed contract, or the funds and reputation a failed one costs (positive numbers).</summary>
+        public void RuntimeContract(bool completed, double funds, double sci, double rep)
         {
             if (!RuntimeOn || !host.settings.runtimeScience) return;
             var nums = new Dictionary<string, double>();
-            if (completed && funds >= 1) nums["funds"] = funds;
-            string kind = !completed ? "contract_failed" : nums.Count > 0 ? "contract_funds" : "contract_done";
-            if (!QueueKind(kind, null, nums, null, ResponseDelay(host.stress.stress), false) && kind == "contract_funds")
-                QueueKind("contract_done", null, nums, null, ResponseDelay(host.stress.stress), false);
+            var names = new Dictionary<string, string[]>();
+            FlightValues(nums, names);
+            if (funds >= 1) nums["funds"] = funds;
+            if (completed && sci >= 0.05) nums["con_sci"] = sci;
+            if (rep >= 0.5) nums["con_rep"] = rep;
+            string kind = !completed ? "contract_failed" : nums.ContainsKey("funds") ? "contract_funds" : "contract_done";
+            if (!QueueKind(kind, null, nums, names, ResponseDelay(host.stress.stress), false) && kind == "contract_funds")
+                QueueKind("contract_done", null, nums, names, ResponseDelay(host.stress.stress), false);
+        }
+
+        /// <summary>The values of the active vessel for a science or contract line: the totals, the day, the
+        /// vessel and the body. Nothing without a vessel. Quiet: no fuel log line.</summary>
+        void FlightValues(Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            try { CollectValues(v, SituationOf(v) ?? "other", nums, names, false); }
+            catch (Exception e) { Log.Debug("Runtime voice values: " + e.Message); }
         }
 
         /// <summary>

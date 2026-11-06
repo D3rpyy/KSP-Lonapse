@@ -210,7 +210,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
-                host.director.RuntimeContract(true, c.FundsCompletion);
+                host.director.RuntimeContract(true, c.FundsCompletion, c.ScienceCompletion, c.ReputationCompletion);
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnContractCompleted", e); }
         }
@@ -220,7 +220,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || c == null || !HighLogic.LoadedSceneIsFlight || host.director == null) return;
-                host.director.RuntimeContract(false, 0);
+                host.director.RuntimeContract(false, Math.Abs(c.FundsFailure), 0, Math.Abs(c.ReputationFailure));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnContractFailed", e); }
         }

@@ -1418,6 +1418,24 @@ public static class Tests
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
         {
+            // science and contracts: the extra values pick their own lines
+            var sn = new Dictionary<string, string[]> { { "exp", new[] { "arutarepmet", "temperature" } }, { "body", new[] { "la Mun", "Mun" } },
+                                                        { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
+            var sFirst = new Dictionary<string, double> { { "sci", 8.5 }, { "sci_first", 1 }, { "sci_left", 20 }, { "at_home", 0 } };
+            var sDone = new Dictionary<string, double> { { "sci", 0.4 }, { "sci_first", 0 }, { "sci_left", 0.2 }, { "at_home", 0 } };
+            var idsF = RuntimeLines.Fitting(rtAll, "science_pts", null, sFirst, sn).ConvertAll(t => t.Id);
+            var idsD = RuntimeLines.Fitting(rtAll, "science_pts", null, sDone, sn).ConvertAll(t => t.Id);
+            var cFail = new Dictionary<string, double> { { "funds", 12000 }, { "con_rep", 15 }, { "contracts", 0 } };
+            var idsC = RuntimeLines.Fitting(rtAll, "contract_failed", null, cFail, sn).ConvertAll(t => t.Id);
+            var idsP = RuntimeLines.Fitting(rtAll, "contract_funds", null, cFail, sn).ConvertAll(t => t.Id);
+            Check(idsF.Contains("rt_sci_first") && idsF.Contains("rt_sci_left") && idsF.Contains("rt_sci_far") && !idsF.Contains("rt_sci_repeat")
+                  && idsD.Contains("rt_sci_repeat") && idsD.Contains("rt_sci_small") && !idsD.Contains("rt_sci_first") && !idsD.Contains("rt_sci_pts_more")
+                  && idsC.Contains("rt_con_fail_cost") && idsC.Contains("rt_con_fail_rep") && !idsC.Contains("rt_con_fail_left")
+                  && idsP.Contains("rt_con_last") && !idsP.Contains("rt_con_left") && !idsP.Contains("rt_con_one"),
+                  "runtime voice: science and contract lines fit the first data, what is left, the penalty and the open contracts",
+                  string.Join(",", idsF.ToArray()) + " / " + string.Join(",", idsD.ToArray()) + " / " + string.Join(",", idsC.ToArray()) + " / " + string.Join(",", idsP.ToArray()));
+        }
+        {
             // time warp: warp chats only fit with in_warp, which the director only gives in warp
             var wv = new Dictionary<string, double> { { "in_warp", 1 }, { "node_h", 5.2 }, { "node_min", 312 }, { "soi_h", 12.4 }, { "day", 9 } };
             var wn = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "next", new[] { "Duna", "Duna" } },
