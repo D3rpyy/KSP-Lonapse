@@ -928,7 +928,7 @@ namespace Lonapse
             probePollLeft -= dt;
             if (probePollLeft > 0f) return;
             probePollLeft = 0.25f;
-            dayLength = DayLength();
+            dayLength = DayLengthLogged();
             try { missionTime = v != null ? v.missionTime : 0.0; } catch (Exception) { missionTime = 0.0; }
             if (probeCoreKey == null || !settings.probeSleep)
             {
@@ -1197,14 +1197,39 @@ namespace Lonapse
         /// rescale packs count their own day. Without a formatter the game setting picks 6 h or 24 h.</summary>
         public static double DayLength()
         {
+            string from;
+            return DayLength(out from);
+        }
+
+        /// <summary>DayLength, with where it came from for the log: the game clock (its formatter type) or the
+        /// game setting.</summary>
+        public static double DayLength(out string from)
+        {
             try
             {
                 var f = KSPUtil.dateTimeFormatter;
-                if (f != null && f.Day > 0) return ProbeRules.SaneDay(f.Day);
+                if (f != null && f.Day > 0) { from = "game clock " + f.GetType().Name; return ProbeRules.SaneDay(f.Day); }
             }
             catch (Exception) { }
+            from = "game setting";
             try { return GameSettings.KERBIN_TIME ? ProbeRules.KerbinDay : ProbeRules.EarthDay; }
             catch (Exception) { return ProbeRules.KerbinDay; }
+        }
+
+        private static double loggedDay = double.NaN;
+
+        /// <summary>The day length, logged once and again when it changes (the calendar setting).</summary>
+        private static double DayLengthLogged()
+        {
+            string from;
+            double d = DayLength(out from);
+            if (d != loggedDay)
+            {
+                loggedDay = d;
+                Log.Info("Day length: " + (d / 3600.0).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
+                         + " h (from the " + from + ")");
+            }
+            return d;
         }
 
         private static bool OnlyTourists(Vessel v)
