@@ -1,66 +1,84 @@
 # Runtime voice: intercom chats between two kerbals with real values. The format is explained at the top of reports.tsv.
 id	kind	when	spanish	english
-rt_chat_fuel_1	chat	fuel>=25	{other}, nos queda el {fuel} por ciento de combustible.	{other}, we have {fuel} percent fuel left.
-rt_chat_fuel_2	chat		¿Y eso es mucho o poco?	Is that a lot or a little?
-rt_chat_fuel_3	chat		Depende de a quién preguntes.	Depends on who you ask.
-rt_chat_fuellow_1	chat	fuel>0 fuel<25	Solo queda el {fuel} por ciento de combustible.	Only {fuel} percent fuel left.
-rt_chat_fuellow_2	chat		Pues no lo gastes todo de golpe, {other}.	Then don't spend it all at once, {other}.
-rt_chat_day_1	chat	day>=2	{other}, ¿sabes qué día es hoy?	{other}, do you know what day it is?
-rt_chat_day_2	chat		Día {day}. Lo voy apuntando en la pared.	Day {day}. I'm marking it on the wall.
-rt_chat_day_3	chat		Eso es la pintura de la nave, {other}.	That's the ship's paint, {other}.
-rt_chat_alt_1	chat	orbit	Estamos a {alt_km} kilómetros de altura.	We're {alt_km} km up.
-rt_chat_alt_2	chat		No mires abajo, {other}.	Don't look down, {other}.
-rt_chat_alt_3	chat		Ya he mirado. Ha sido un error.	I already did. Big mistake.
-rt_chat_speed_1	chat	orbit	¿Sabías que vamos a {speed} metros por segundo?	Did you know we're doing {speed} m/s?
-rt_chat_speed_2	chat		Por eso no abro la ventana.	That's why I don't open the window.
-rt_chat_body_1	chat	orbit	{other}, mira por la ventana. Eso es {body}.	{other}, look out the window. That's {body}.
-rt_chat_body_2	chat		Pensaba que sería más grande.	I thought it would be bigger.
-rt_chat_landed_1	chat	landed	Bueno, {other}. Ya estamos en {body}.	Well, {other}. We're on {body}.
-rt_chat_landed_2	chat		¿Quién sale primero?	Who goes out first?
-rt_chat_landed_3	chat		Tú. Siempre tú.	You. Always you.
-rt_chat_vessel_1	chat		¿Quién le puso {vessel} a esta nave?	Who named this ship {vessel}?
-rt_chat_vessel_2	chat		Fuiste tú, {other}.	You did, {other}.
-rt_chat_vessel_3	chat		Ah. Pues es un nombre precioso.	Oh. Well, it's a lovely name.
-rt_chat_parts_1	chat	parts>=30	Esta nave tiene {parts} piezas.	This ship has {parts} parts.
-rt_chat_parts_2	chat		¿Y cuántas sobran?	And how many are extra?
-rt_chat_parts_3	chat		Eso lo sabremos pronto.	We'll find out soon.
-rt_chat_ec_1	chat	ec<30	{other}, la batería está al {ec} por ciento.	{other}, the battery is at {ec} percent.
-rt_chat_ec_2	chat		Vale. Apago la música.	Okay. I'll turn off the music.
-rt_chat_node_1	chat	node_min>=2	La próxima maniobra es dentro de {node_min} minutos.	The next burn is in {node_min} minutes.
-rt_chat_node_2	chat		Me da tiempo a comer un bocadillo.	I have time for a sandwich.
-rt_chat_node_3	chat		No te da tiempo, {other}.	You don't, {other}.
-rt_chat_period_1	chat	orbit period_min>=2	Una vuelta entera dura {period_min} minutos.	One full orbit takes {period_min} minutes.
-rt_chat_period_2	chat		Entonces hoy ya he visto amanecer tres veces.	Then I've seen three sunrises today already.
-rt_chat_sci_1	chat	sci_total>=2	En casa tienen {sci_total} puntos de ciencia.	Back home they have {sci_total} science points.
-rt_chat_sci_2	chat		¿Y cuántos son nuestros, {other}?	And how many are ours, {other}?
-rt_chat_sci_3	chat		Todos. Evidentemente.	All of them. Obviously.
-rt_chat_crew_1	chat	crew>=3	Somos {crew} aquí dentro. Hace calor.	There are {crew} of us in here. It's hot.
-rt_chat_crew_2	chat		Eres tú, {other}. Siempre eres tú.	It's you, {other}. It's always you.
-rt_chat_funds_1	chat	funds_total>=2	¿Sabes cuánto dinero le queda a la agencia? {funds_total} fondos.	Know how much money the agency has left? {funds_total} funds.
-rt_chat_funds_2	chat		Entonces no rompas nada, {other}.	Then don't break anything, {other}.
-rt_chat_pilotnode_1	chat	node_min>=2 a=pilot	{other}, la maniobra es dentro de {node_min} minutos. Agárrate.	{other}, the burn is in {node_min} minutes. Hold on.
-rt_chat_pilotnode_2	chat		¿Puedo conducir yo?	Can I drive?
-rt_chat_pilotnode_3	chat		No.	No.
-rt_chat_engfuel_1	chat	fuel>0 fuel<25 a=engineer	Según mis cálculos, queda el {fuel} por ciento de combustible.	By my numbers we have {fuel} percent fuel left.
-rt_chat_engfuel_2	chat		¿Y según los míos?	And by mine?
-rt_chat_engfuel_3	chat		Tú no haces cálculos, {other}.	You don't do numbers, {other}.
-rt_chat_scipts_1	chat	sci_total>=2 a=scientist	{other}, en casa ya tienen {sci_total} puntos de ciencia.	{other}, back home they have {sci_total} science points.
-rt_chat_scipts_2	chat		¿Eso es bueno?	Is that good?
-rt_chat_scipts_3	chat		Es ciencia. Siempre es bueno.	It's science. It's always good.
-rt_chat_tourist_1	chat	orbit alt_km>=2 a=tourist b=pilot	¿De verdad estamos a {alt_km} kilómetros de casa?	Are we really {alt_km} km from home?
-rt_chat_tourist_2	chat		Sí. Y no, no paramos para hacer fotos.	Yes. And no, we're not stopping for photos.
-rt_chat_firstflight_1	chat	flight_no=1	{other}, es mi primer vuelo. ¿Se nota?	{other}, this is my first flight. Can you tell?
-rt_chat_firstflight_2	chat		Solo porque te agarras a todo.	Only because you're holding on to everything.
-rt_chat_newbody_1	chat	at_home=0 visits=0	Nunca había estado en {body}.	I've never been to {body} before.
-rt_chat_newbody_2	chat		Pues ya lo puedes contar, {other}.	Well, now you can tell everyone, {other}.
-rt_chat_oldhand_1	chat	missions>=5	{other}, este es mi vuelo número {flight_no}.	{other}, this is flight number {flight_no} for me.
-rt_chat_oldhand_2	chat		¿Y todavía te mareas?	And you still get sick?
-rt_chat_oldhand_3	chat		Cada vez.	Every time.
-rt_chat_conleft_1	chat	contracts>=3	{other}, ¿cuántos contratos tenemos abiertos?	{other}, how many contracts do we have open?
-rt_chat_conleft_2	chat		{contracts}. Y todos los quieren para ayer.	{contracts}. And they all want them yesterday.
-rt_chat_rep_1	chat	rep>=50	Dicen que nuestra reputación está en {rep}.	They say our reputation is at {rep}.
-rt_chat_rep_2	chat		{other}, eso es gracias a mí.	{other}, that's thanks to me.
-rt_chat_scilab_1	chat	sci_total>=100 a=scientist	Con {sci_total} puntos de ciencia ya podemos investigar algo nuevo.	With {sci_total} science points we can research something new.
-rt_chat_scilab_2	chat		¿Algo como asientos más cómodos?	Something like comfier seats?
-rt_chat_fundsrich_1	chat	funds_total>=500000	{other}, la agencia tiene {funds_total} fondos.	{other}, the agency has {funds_total} funds.
-rt_chat_fundsrich_2	chat		¿Y aun así nos dan estos asientos?	And they still give us these seats?
+rt_chat_fuel_1	chat	fuel>=25	{other}, nos queda el {fuel} por ciento de combustible. | {other}, el combustible está al {fuel} por ciento.	{other}, we have {fuel} percent fuel left. | {other}, fuel is at {fuel} percent.
+rt_chat_fuel_2	chat		¿Y eso es mucho o poco? | ¿Eso nos llega para volver?	Is that a lot or a little? | Is that enough to get back?
+rt_chat_fuel_3	chat		Depende de a quién preguntes. | Si no preguntas más, sí. | Pregúntamelo cuando lleguemos.	Depends on who you ask. | If you stop asking, yes. | Ask me when we get there.
+rt_chat_fuellow_1	chat	fuel>0 fuel<25	Solo queda el {fuel} por ciento de combustible. | Nos queda el {fuel} por ciento. No es mucho.	Only {fuel} percent fuel left. | We're down to {fuel} percent. Not much.
+rt_chat_fuellow_2	chat		Pues no lo gastes todo de golpe, {other}. | Entonces nada de maniobras bonitas, {other}. | Vale. Pedaleo más fuerte, {other}.	Then don't spend it all at once, {other}. | Then no fancy maneuvers, {other}. | Okay. I'll pedal harder, {other}.
+rt_chat_day_1	chat	day>=2	{other}, ¿sabes qué día es hoy? | {other}, ¿cuántos días llevamos aquí?	{other}, do you know what day it is? | {other}, how many days have we been up here?
+rt_chat_day_2	chat		Día {day}. Lo voy apuntando en la pared. | Día {day}. Hago una raya en la pared cada mañana.	Day {day}. I'm marking it on the wall. | Day {day}. I scratch a line on the wall every morning.
+rt_chat_day_3	chat		Eso es la pintura de la nave, {other}. | Esas rayas no se van a borrar, {other}.	That's the ship's paint, {other}. | Those marks won't come off, {other}.
+rt_chat_alt_1	chat	orbit	Estamos a {alt_km} kilómetros de altura. | {alt_km} kilómetros sobre el suelo. Más o menos.	We're {alt_km} km up. | {alt_km} km above the ground. Give or take.
+rt_chat_alt_2	chat		No mires abajo, {other}. | Mejor no mires abajo, {other}.	Don't look down, {other}. | Better not look down, {other}.
+rt_chat_alt_3	chat		Ya he mirado. Ha sido un error. | Demasiado tarde. Ya he mirado dos veces.	I already did. Big mistake. | Too late. I've looked twice.
+rt_chat_speed_1	chat	orbit	¿Sabías que vamos a {speed} metros por segundo? | Vamos a {speed} metros por segundo. Ni me he despeinado.	Did you know we're doing {speed} m/s? | We're doing {speed} m/s. Not a hair out of place.
+rt_chat_speed_2	chat		Por eso no abro la ventana. | Y yo sin cinturón. | ¿Hay multas por exceso de velocidad aquí arriba?	That's why I don't open the window. | And me without a seatbelt. | Do they give speeding tickets up here?
+rt_chat_body_1	chat	orbit	{other}, mira por la ventana. Eso es {body}. | {other}, ¿ves eso de ahí? Es {body}.	{other}, look out the window. That's {body}. | {other}, see that over there? That's {body}.
+rt_chat_body_2	chat		Pensaba que sería más grande. | Desde aquí parece de juguete. | ¿Seguro? En el mapa era azul.	I thought it would be bigger. | It looks like a toy from here. | Are you sure? It was blue on the map.
+rt_chat_landed_1	chat	landed	Bueno, {other}. Ya estamos en {body}. | {other}, hemos llegado a {body}. Enteros.	Well, {other}. We're on {body}. | {other}, we made it to {body}. In one piece.
+rt_chat_landed_2	chat		¿Quién sale primero? | ¿Quién abre la escotilla?	Who goes out first? | Who opens the hatch?
+rt_chat_landed_3	chat		Tú. Siempre tú. | El que lleve el casco puesto. Tú.	You. Always you. | Whoever has their helmet on. You.
+rt_chat_vessel_1	chat		¿Quién le puso {vessel} a esta nave? | {vessel}. ¿Qué clase de nombre es ese?	Who named this ship {vessel}? | {vessel}. What kind of name is that?
+rt_chat_vessel_2	chat		Fuiste tú, {other}. | Lo elegiste tú, {other}.	You did, {other}. | You picked it, {other}.
+rt_chat_vessel_3	chat		Ah. Pues es un nombre precioso. | Pues ahora me parece genial.	Oh. Well, it's a lovely name. | Well, now I think it's great.
+rt_chat_parts_1	chat	parts>=30	Esta nave tiene {parts} piezas. | {parts} piezas, y yo las he apretado todas. Creo.	This ship has {parts} parts. | {parts} parts, and I tightened all of them. I think.
+rt_chat_parts_2	chat		¿Y cuántas sobran? | ¿Y cuántas hacen falta de verdad?	And how many are extra? | And how many do we actually need?
+rt_chat_parts_3	chat		Eso lo sabremos pronto. | Todas menos las que se caigan.	We'll find out soon. | All except the ones that fall off.
+rt_chat_ec_1	chat	ec<30	{other}, la batería está al {ec} por ciento. | {other}, nos queda el {ec} por ciento de batería.	{other}, the battery is at {ec} percent. | {other}, we're at {ec} percent battery.
+rt_chat_ec_2	chat		Vale. Apago la música. | Pues nada de cafetera. | Apago la luz. Ah, no veo nada.	Okay. I'll turn off the music. | Then no coffee maker. | Lights off. Oh, I can't see a thing.
+rt_chat_node_1	chat	node_min>=2	La próxima maniobra es dentro de {node_min} minutos. | Faltan {node_min} minutos para la maniobra.	The next burn is in {node_min} minutes. | {node_min} minutes until the burn.
+rt_chat_node_2	chat		Me da tiempo a comer un bocadillo. | Me da tiempo a una siesta.	I have time for a sandwich. | Time for a nap.
+rt_chat_node_3	chat		No te da tiempo, {other}. | Ni lo sueñes, {other}.	You don't, {other}. | Don't even dream about it, {other}.
+rt_chat_period_1	chat	orbit period_min>=2	Una vuelta entera dura {period_min} minutos. | Damos una vuelta cada {period_min} minutos.	One full orbit takes {period_min} minutes. | We go around once every {period_min} minutes.
+rt_chat_period_2	chat		Entonces hoy ya he visto amanecer tres veces. | Por eso no sé si es de día o de noche. | Y yo sigo sin saber dónde está el norte.	Then I've seen three sunrises today already. | That's why I never know if it's day or night. | And I still don't know where north is.
+rt_chat_sci_1	chat	sci_total>=2	En casa tienen {sci_total} puntos de ciencia. | El laboratorio tiene {sci_total} puntos de ciencia.	Back home they have {sci_total} science points. | The lab has {sci_total} science points.
+rt_chat_sci_2	chat		¿Y cuántos son nuestros, {other}? | ¿Cuántos hemos traído nosotros, {other}?	And how many are ours, {other}? | How many did we bring, {other}?
+rt_chat_sci_3	chat		Todos. Evidentemente. | La mayoría. Más o menos.	All of them. Obviously. | Most of them. Roughly.
+rt_chat_crew_1	chat	crew>=3	Somos {crew} aquí dentro. Hace calor. | {crew} kerbals aquí dentro. No cabe ni un bocadillo.	There are {crew} of us in here. It's hot. | {crew} kerbals in here. Not even room for a sandwich.
+rt_chat_crew_2	chat		Eres tú, {other}. Siempre eres tú. | Y tú tienes el codo en mi oreja, {other}.	It's you, {other}. It's always you. | And your elbow is in my ear, {other}.
+rt_chat_funds_1	chat	funds_total>=2	¿Sabes cuánto dinero le queda a la agencia? {funds_total} fondos. | La agencia tiene {funds_total} fondos en la caja.	Know how much money the agency has left? {funds_total} funds. | The agency has {funds_total} funds in the bank.
+rt_chat_funds_2	chat		Entonces no rompas nada, {other}. | Entonces este cohete lo pagamos nosotros, {other}.	Then don't break anything, {other}. | So we're paying for this rocket, {other}.
+rt_chat_pilotnode_1	chat	node_min>=2 a=pilot	{other}, la maniobra es dentro de {node_min} minutos. Agárrate. | Maniobra en {node_min} minutos, {other}. Cinturones.	{other}, the burn is in {node_min} minutes. Hold on. | Burn in {node_min} minutes, {other}. Seatbelts.
+rt_chat_pilotnode_2	chat		¿Puedo conducir yo? | ¿Me dejas apretar el botón?	Can I drive? | Can I press the button?
+rt_chat_pilotnode_3	chat		No. | Tampoco.	No. | Also no.
+rt_chat_engfuel_1	chat	fuel>0 fuel<25 a=engineer	Según mis cálculos, queda el {fuel} por ciento de combustible. | He hecho las cuentas. Queda el {fuel} por ciento de combustible.	By my numbers we have {fuel} percent fuel left. | I did the math. {fuel} percent fuel left.
+rt_chat_engfuel_2	chat		¿Y según los míos? | ¿Has contado bien?	And by mine? | Did you count right?
+rt_chat_engfuel_3	chat		Tú no haces cálculos, {other}. | Mejor que tú, {other}.	You don't do numbers, {other}. | Better than you, {other}.
+rt_chat_scipts_1	chat	sci_total>=2 a=scientist	{other}, en casa ya tienen {sci_total} puntos de ciencia. | {other}, el laboratorio ya va por {sci_total} puntos de ciencia.	{other}, back home they have {sci_total} science points. | {other}, the lab is up to {sci_total} science points.
+rt_chat_scipts_2	chat		¿Eso es bueno? | ¿Y eso se come?	Is that good? | Can you eat that?
+rt_chat_scipts_3	chat		Es ciencia. Siempre es bueno. | Mejor que la comida de aquí, seguro.	It's science. It's always good. | Better than the food up here, for sure.
+rt_chat_tourist_1	chat	orbit alt_km>=2 a=tourist b=pilot	¿De verdad estamos a {alt_km} kilómetros de casa? | ¿Seguro que estamos a {alt_km} kilómetros? Parece más.	Are we really {alt_km} km from home? | Are we sure we're {alt_km} km up? Feels like more.
+rt_chat_tourist_2	chat		Sí. Y no, no paramos para hacer fotos. | Seguro. Y guarda la cámara.	Yes. And no, we're not stopping for photos. | Sure. And put the camera away.
+rt_chat_firstflight_1	chat	flight_no=1	{other}, es mi primer vuelo. ¿Se nota? | {other}, primer vuelo. Tengo las manos sudadas.	{other}, this is my first flight. Can you tell? | {other}, first flight. My hands are sweaty.
+rt_chat_firstflight_2	chat		Solo porque te agarras a todo. | Se nota. Has mojado los mandos.	Only because you're holding on to everything. | I can tell. The controls are wet.
+rt_chat_newbody_1	chat	at_home=0 visits=0	Nunca había estado en {body}. | Primera vez en {body}. Qué emoción.	I've never been to {body} before. | First time at {body}. How exciting.
+rt_chat_newbody_2	chat		Pues ya lo puedes contar, {other}. | No toques nada, {other}. Por si acaso.	Well, now you can tell everyone, {other}. | Don't touch anything, {other}. Just in case.
+rt_chat_oldhand_1	chat	missions>=5	{other}, este es mi vuelo número {flight_no}. | Vuelo número {flight_no}, {other}. Ya lo hago con los ojos cerrados.	{other}, this is flight number {flight_no} for me. | Flight number {flight_no}, {other}. I do this with my eyes closed now.
+rt_chat_oldhand_2	chat		¿Y todavía te mareas? | ¿Y todavía te pierdes en la nave?	And you still get sick? | And you still get lost on the ship?
+rt_chat_oldhand_3	chat		Cada vez. | Siempre. Es parte del encanto.	Every time. | Always. It's part of the charm.
+rt_chat_conleft_1	chat	contracts>=3	{other}, ¿cuántos contratos tenemos abiertos? | {other}, ¿sabes cuánto trabajo tenemos pendiente?	{other}, how many contracts do we have open? | {other}, do you know how much work we have waiting?
+rt_chat_conleft_2	chat		{contracts}. Y todos los quieren para ayer. | {contracts} contratos. No pienso contarlos otra vez.	{contracts}. And they all want them yesterday. | {contracts} contracts. I'm not counting them again.
+rt_chat_rep_1	chat	rep>=50	Dicen que nuestra reputación está en {rep}. | Nuestra reputación está en {rep}. Somos famosos.	They say our reputation is at {rep}. | Our reputation is at {rep}. We're famous.
+rt_chat_rep_2	chat		{other}, eso es gracias a mí. | {other}, nadie sabe cómo te llamas.	{other}, that's thanks to me. | {other}, nobody knows your name.
+rt_chat_scilab_1	chat	sci_total>=100 a=scientist	Con {sci_total} puntos de ciencia ya podemos investigar algo nuevo. | {sci_total} puntos de ciencia. Ya podemos comprar un nodo nuevo.	With {sci_total} science points we can research something new. | {sci_total} science points. We can buy a new node.
+rt_chat_scilab_2	chat		¿Algo como asientos más cómodos? | ¿Un nodo con cafetera?	Something like comfier seats? | A node with a coffee maker?
+rt_chat_fundsrich_1	chat	funds_total>=500000	{other}, la agencia tiene {funds_total} fondos. | La agencia está nadando en dinero. {funds_total} fondos.	{other}, the agency has {funds_total} funds. | The agency is swimming in money. {funds_total} funds.
+rt_chat_fundsrich_2	chat		¿Y aun así nos dan estos asientos? | Pues el bocadillo de hoy no lo parecía.	And they still give us these seats? | Today's sandwich didn't look like it.
+rt_chat_mono_1	chat	mono>0 mono<30	{other}, queda el {mono} por ciento de monopropelente. | Monopropelente al {mono} por ciento. Nada de dar vueltas.	{other}, we have {mono} percent monoprop left. | Monoprop at {mono} percent. No spinning around.
+rt_chat_mono_2	chat		¿Ni una vueltecita? | Pero si es lo más divertido.	Not even one little spin? | But that's the best part.
+rt_chat_mono_3	chat		Ni una, {other}.	Not one, {other}.
+rt_chat_inc_1	chat	orbit inc_deg>=80 inc_deg<=100	Esta órbita pasa por los dos polos.	This orbit goes over both poles.
+rt_chat_inc_2	chat		¿Y nadie ha traído abrigo? | Despiértame cuando veamos un oso, {other}.	And nobody brought a coat? | Wake me up when we see a bear, {other}.
+rt_chat_bigday_1	chat	day>=30	Día {day}. Ya no me acuerdo de cómo es una ducha. | {other}, llevamos {day} días aquí dentro.	Day {day}. I don't remember what a shower is like. | {other}, we've been in here for {day} days.
+rt_chat_bigday_2	chat		Lo sé. Lo huelo, {other}. | Y se nota, {other}.	I know. I can smell it, {other}. | And it shows, {other}.
+rt_chat_farland_1	chat	landed at_home=0	{other}, mira el cielo de {body}. | Qué silencio hay en {body}.	{other}, look at the sky on {body}. | It's so quiet on {body}.
+rt_chat_farland_2	chat		Es igual que en casa, pero sin pájaros. | Disfrútalo. Luego hay que volver.	Just like home, but without birds. | Enjoy it. We have to go back later.
+rt_chat_ecok_1	chat	ec>=90	Batería al {ec} por ciento, {other}.	Battery at {ec} percent, {other}.
+rt_chat_ecok_2	chat		¡Por fin! Enciendo la cafetera. | Entonces pon música. La buena.	Finally! I'm turning the coffee maker on. | Then put some music on. The good stuff.
+rt_chat_ecok_3	chat		En esta nave no hay nada bueno, {other}.	Nothing on this ship is good, {other}.
+rt_chat_nodedv_1	chat	node_dv>=100 node_min>=2	{other}, la maniobra pide {node_dv} metros por segundo.	{other}, the burn needs {node_dv} m/s.
+rt_chat_nodedv_2	chat		Eso suena a mucho empujón. | ¿Lo hacemos en dos veces?	That sounds like a big shove. | Can we do it in two goes?
+rt_chat_nodedv_3	chat		Agárrate bien y ya está.	Just hold on tight.
+rt_chat_veteran_1	chat	missions>=10	Llevo {missions} misiones y nunca había visto esto.	{missions} missions and I've never seen this.
+rt_chat_veteran_2	chat		¿Ver qué, {other}?	Seen what, {other}?
+rt_chat_veteran_3	chat		Una nave tan ordenada. Es preocupante. | Un piloto que lee el manual.	A ship this tidy. It's worrying. | A pilot who reads the manual.
