@@ -8,16 +8,16 @@ pe_sci_stayputnik_a_2	science	chatter	calm	probe	pe_sci_stayputnik_a	2	both	any	
 pe_sci_stayputnik_b_1	science	chatter	calm	mc	pe_sci_stayputnik_b	1	m	any	any	any	any	any	stayputnik		Stayputnik, ¿cómo has medido eso?	Stayputnik, how did you even measure that? | Stayputnik, how did you even measure that? | How did you measure that, Stayputnik?	
 pe_sci_stayputnik_b_2	science	chatter	calm	probe	pe_sci_stayputnik_b	2	both	any	any	any	any	any	stayputnik	proud		[beeps mysteriously]	
 pe_sci_stayputnik_c_1	science	chatter	calm	probe	pe_sci_stayputnik_c	1	both	any	any	any	any	any	stayputnik	happy		[beeps delightedly]	
-pe_sci_stayputnik_c_2	science	chatter	calm	mc	pe_sci_stayputnik_c	2	m	any	any	any	any	any	stayputnik		Sí, Stayputnik, ya lo tenemos.	Yes, Stayputnik, we got it. | Yes, Stayputnik, we got it. | Got it, Stayputnik.	
+pe_sci_stayputnik_c_2	science	chatter	calm	mc	pe_sci_stayputnik_c	2	m	any	any	any	any	any	stayputnik		Sí, Stayputnik, ya lo tenemos.	Yes, Stayputnik, we got it. | Yes, Stayputnik, we got it. | Got it, Stayputnik. | Got it, Stayputnik. That makes {sci_total} science points.	 |  |  | Recibido, Stayputnik. Ya son {sci_total} puntos de ciencia.
 pe_sci_stayputnik_c_3	science	chatter	calm	probe	pe_sci_stayputnik_c	3	both	any	any	any	any	any	stayputnik	proud		[beeps once more]	
-pe_sci_okto_a_1	science	chatter	calm	mc	pe_sci_okto_a	1	m	any	any	any	any	any	okto		Excelente medición, Okto.	Excellent measurement, Okto. | Excellent measurement, Okto. | Great measurement, Okto.	
+pe_sci_okto_a_1	science	chatter	calm	mc	pe_sci_okto_a	1	m	any	any	any	any	any	okto		Excelente medición, Okto.	Excellent measurement, Okto. | Excellent measurement, Okto. | Great measurement, Okto. | Great measurement, Okto. {sci_total} science points in the lab.	 |  |  | Gran medida, Okto. {sci_total} puntos de ciencia en el laboratorio.
 pe_sci_okto_a_2	science	chatter	calm	probe	pe_sci_okto_a	2	both	any	any	any	any	any	okto	proud		[beeps smugly]	
 pe_sci_okto_b_1	science	chatter	calm	mc	pe_sci_okto_b	1	m	any	any	any	any	any	okto		Okto, ¿has hecho la ciencia o la has corregido?	Okto, did you do the science or correct it? | Okto, did you do the science or correct it? | Okto, science or corrections?	
 pe_sci_okto_b_2	science	chatter	calm	probe	pe_sci_okto_b	2	both	any	any	any	any	any	okto	proud		[beeps very smugly]	
 pe_sci_okto_c_1	science	chatter	calm	mc	pe_sci_okto_c	1	m	any	any	any	any	any	okto		Estos datos son demasiado buenos, Okto.	This data is too good, Okto. | This data is too good, Okto. | Too good, this data, Okto.	
 pe_sci_okto_c_2	science	chatter	calm	probe	pe_sci_okto_c	2	both	any	any	any	any	any	okto	proud		[beeps casually]	
 pe_sci_okto_c_3	science	chatter	calm	mc	pe_sci_okto_c	3	m	any	any	any	any	any	okto		Claro que sí.	Of course it is. | Of course it is. | Naturally.	
-pe_sci_hecs_a_1	science	chatter	calm	mc	pe_sci_hecs_a	1	m	any	any	any	any	any	hecs		Datos recibidos, HECS. Perfectos.	Data received, HECS. Perfect. | Data received, HECS. Perfect. | Got the data, HECS. Perfect.	
+pe_sci_hecs_a_1	science	chatter	calm	mc	pe_sci_hecs_a	1	m	any	any	any	any	any	hecs		Datos recibidos, HECS. Perfectos.	Data received, HECS. Perfect. | Data received, HECS. Perfect. | Got the data, HECS. Perfect. | Got the data, HECS. The lab is at {sci_total} points now.	 |  |  | Datos recibidos, HECS. El laboratorio ya tiene {sci_total} puntos.
 pe_sci_hecs_a_2	science	chatter	calm	probe	pe_sci_hecs_a	2	both	any	any	any	any	any	hecs	scared		[beeps anxiously]	
 pe_sci_hecs_a_3	science	chatter	calm	mc	pe_sci_hecs_a	3	m	any	any	any	any	any	hecs		No hace falta repetir.	No need to redo it. | No need to redo it. | You don't have to do it again.	
 pe_sci_hecs_b_1	science	chatter	calm	mc	pe_sci_hecs_b	1	m	any	any	any	any	any	hecs		HECS, has enviado el informe tres veces.	HECS, you sent the report three times. | HECS, you sent the report three times. | Three copies of the report, HECS?	
