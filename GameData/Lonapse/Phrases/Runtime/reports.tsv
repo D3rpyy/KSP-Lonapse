@@ -25,7 +25,7 @@
 # Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
 #   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
 #   at_home flight_no missions stars visits landings (crew history, see below)
-#   warp (the warp rate, only in time warp) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
+#   in_warp (1 in time warp, for checks only) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
 #   (km, min, h, deg, ms and sci get one decimal below 10, the rest whole numbers)
 # Name slots: vessel body here exp target, next (the body after soi_h), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.

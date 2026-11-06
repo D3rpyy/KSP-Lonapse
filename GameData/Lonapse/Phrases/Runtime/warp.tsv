@@ -1,12 +1,10 @@
 # Runtime voice: lines for time warp on rails. The format is explained at the top of reports.tsv.
 # kind warp: Mission Control, now and then in place of the usual exchange while the warp runs.
-# The chats below are normal intercom chats that only fit in warp (a check on warp).
-# warp is the warp rate (only there in time warp), node_h the hours to the next burn,
+# The chats below are normal intercom chats that only fit in warp (the check in_warp=1).
+# in_warp is 1 in time warp, for checks only. node_h is the hours to the next burn,
 # soi_h the hours until the orbit leaves this body, next the body after that.
 id	kind	when	spanish	english
 rt_warp	warp		Aceleración temporal activa. Aquí abajo el café se enfría muy rápido. | Seguimos aquí. Avisad cuando lleguéis. | El tiempo vuela. Literalmente. | Nada que hacer más que esperar. Disfrutad de las vistas. | {vessel}, os vemos correr por el mapa.	Time warp is on. Down here the coffee goes cold very fast. | We're still here. Let us know when you get there. | Time flies. Literally. | Nothing to do but wait. Enjoy the view. | {vessel}, we see you racing across the map.
-rt_warp_rate	warp	warp>=2	Vais a {warp} veces la velocidad normal. Que no se maree nadie. | Aceleración por {warp}. Nuestros relojes no dan abasto.	You're running at {warp} times normal speed. Nobody get dizzy. | Warp times {warp}. Our clocks can't keep up.
-rt_warp_high	warp	warp>=1000	Por {warp}. Os perdemos de vista entre parpadeo y parpadeo. | {warp} veces más rápido. Ni el plan de vuelo va tan deprisa.	Times {warp}. We lose you between blinks. | {warp} times faster. Not even the flight plan moves that fast.
 rt_warp_node	warp	node_min>=2 node_min<60	Maniobra en {node_min} minutos. Preparad los motores. | Faltan {node_min} minutos para la maniobra. Os despertamos a tiempo.	Burn in {node_min} minutes. Get the engines ready. | {node_min} minutes to the burn. We'll wake you in time.
 rt_warp_node_h	warp	node_h>=2	Próxima maniobra en {node_h} horas. Hay tiempo para una siesta. | La maniobra es dentro de {node_h} horas. Tranquilos.	Next burn in {node_h} hours. Time for a nap. | The burn is {node_h} hours away. Relax.
 rt_warp_soi	warp	soi_h>=2	Llegáis a {next} en {soi_h} horas. | {next} os espera. Faltan {soi_h} horas.	You reach {next} in {soi_h} hours. | {next} is waiting for you. {soi_h} hours to go.
@@ -16,14 +14,12 @@ rt_warp_orbit	warp	orbit	Vuelta tras vuelta alrededor de {body}. Los de navegaci
 rt_warp_landed	warp	landed	Las sombras corren por la superficie de {body}. | Esperando en la superficie de {body}. Buen sitio para pasar el rato.	The shadows are racing across {body}. | Waiting on the surface of {body}. Good spot to pass the time.
 rt_warp_escape	warp	escape	Os alejáis de {body} a toda prisa.	You're leaving {body} behind in a hurry.
 rt_warp_ec	warp	ec<30	La batería está al {ec} por ciento. Vigiladla durante la espera.	Battery is at {ec} percent. Keep an eye on it while you wait.
-rt_chat_warp_1	chat	warp>=2	{other}, ¿ves las estrellas? Se mueven.	{other}, see the stars? They're moving.
+rt_chat_warp_1	chat	in_warp=1	{other}, ¿ves las estrellas? Se mueven.	{other}, see the stars? They're moving.
 rt_chat_warp_2	chat		Somos nosotros los que nos movemos.	We're the ones moving.
 rt_chat_warp_3	chat		Ah. Eso tiene más sentido.	Oh. That makes more sense.
-rt_chat_warprate_1	chat	warp>=100	Vamos a {warp} veces la velocidad normal, {other}.	We're at {warp} times normal speed, {other}.
-rt_chat_warprate_2	chat		Y aun así la comida no llega antes.	And dinner still doesn't come any sooner.
-rt_chat_warpnode_1	chat	warp>=2 node_h>=2	{other}, la maniobra es en {node_h} horas. ¿Echamos una partida?	{other}, the burn is in {node_h} hours. Fancy a game?
+rt_chat_warpnode_1	chat	in_warp=1 node_h>=2	{other}, la maniobra es en {node_h} horas. ¿Echamos una partida?	{other}, the burn is in {node_h} hours. Fancy a game?
 rt_chat_warpnode_2	chat		Solo si no haces trampas otra vez.	Only if you don't cheat again.
-rt_chat_warpsoi_1	chat	warp>=2 soi_h>=2	{soi_h} horas hasta {next}. ¿Hemos llegado ya?	{soi_h} hours to {next}. Are we there yet?
+rt_chat_warpsoi_1	chat	in_warp=1 soi_h>=2	{soi_h} horas hasta {next}. ¿Hemos llegado ya?	{soi_h} hours to {next}. Are we there yet?
 rt_chat_warpsoi_2	chat		{other}, llevas preguntando eso cada hora.	{other}, you've asked that every hour.
-rt_chat_warpday_1	chat	warp>=2 day>=2	Ya es el día {day}. ¿Cuándo ha pasado eso?	It's day {day} already. When did that happen?
+rt_chat_warpday_1	chat	in_warp=1 day>=2	Ya es el día {day}. ¿Cuándo ha pasado eso?	It's day {day} already. When did that happen?
 rt_chat_warpday_2	chat		Mientras dormías, {other}.	While you were asleep, {other}.

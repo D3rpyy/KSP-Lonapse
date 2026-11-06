@@ -375,8 +375,9 @@ namespace Lonapse
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
-            // time warp: the rate, and the time to the next body when the orbit leaves this one
-            if (host.warpChatter) try { nums["warp"] = Math.Round(TimeWarp.CurrentRate); } catch (Exception) { }
+            // time warp chatter (only for checks, the rate is never said), and the time to the next body when the
+            // orbit leaves this one
+            if (host.warpChatter) nums["in_warp"] = 1;
             try
             {
                 if (o != null && (o.patchEndTransition == Orbit.PatchTransitionType.ENCOUNTER
@@ -525,7 +526,7 @@ namespace Lonapse
         /// <summary>Share of radio turns in time warp that are a warp line (kind warp), when one fits.</summary>
         const double WarpLineChance = 0.5;
 
-        /// <summary>Time warp chatter: a warp line from Mission Control (rate, time to the node or the next body).
+        /// <summary>Time warp chatter: a warp line from Mission Control (time to the node or the next body).
         /// False when the runtime voice is off, the radio is cut or none fits: the usual exchange plays then.</summary>
         bool QueueWarpLine()
         {
