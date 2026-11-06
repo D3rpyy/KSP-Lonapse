@@ -10,17 +10,17 @@ throttle_cut_02	throttle_cut	callout	none	crew	throttle_cut_02	1	both	any	any	Co
 staging_any_01	staging	callout	none	crew	staging_any_01	1	both	any	any	¡Etapa!	Stage! | Stage! | Staging!	
 staging_04	staging	callout	none	crew	staging_04	1	both	any	any	¡Fuera!	Away! | Away! | Gone!	
 staging_s1_1	staging	callout	none	crew	staging_s1	1	both	any	any	¡Separación!	Separation! | Separation! | Separated!	
-staging_s1_2	staging	callout	none	mc	staging_s1	2	m	any	any	Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation.	
+staging_s1_2	staging	callout	none	mc	staging_s1	2	m	any	any	Separación confirmada.	Separation confirmed. | Separation confirmed. | We confirm separation. | Separation confirmed at {speed} m/s.	 |  |  | Separación confirmada a {speed} metros por segundo.
 staging_s2_1	staging	callout	none	crew	staging_s2	1	both	any	any	Etapa fuera.	Stage away. | Stage away. | Stage is gone.	
 staging_s2_2	staging	callout	none	mc	staging_s2	2	m	any	any	Recibido, buena separación.	Copy, good separation. | Copy, good separation. | Copy. Nice separation.	
 staging_ign_s1_1	staging	callout	none	crew	staging_ign_s1	1	both	any	any	Encendido de la siguiente etapa.	Next stage ignition. | Next stage ignition. | Igniting the next stage.	
-staging_ign_s1_2	staging	callout	none	mc	staging_ign_s1	2	m	any	any	Confirmado, empuje nominal.	Confirmed, thrust nominal. | Confirmed, thrust nominal. | Confirmed. Thrust looks good.	
+staging_ign_s1_2	staging	callout	none	mc	staging_ign_s1	2	m	any	any	Confirmado, empuje nominal.	Confirmed, thrust nominal. | Confirmed, thrust nominal. | Confirmed. Thrust looks good. | Confirmed. Thrust looks good. {speed} m/s and climbing.	 |  |  | Confirmado. Buen empuje. {speed} metros por segundo y subiendo.
 throttle_full_03	throttle_full	callout	none	crew	throttle_full_03	1	both	any	any	¡A tope!	Full power! | Full power! | All power!	
 throttle_full_s1_1	throttle_full	callout	none	crew	throttle_full_s1	1	both	any	any	Potencia máxima.	Maximum power. | Maximum power. | Power to max.	
 throttle_full_s1_2	throttle_full	callout	none	mc	throttle_full_s1	2	m	any	any	Recibido, potencia máxima.	Copy, maximum power. | Copy, maximum power. | Copy. Max power.	
 throttle_cut_03	throttle_cut	callout	none	crew	throttle_cut_03	1	both	any	any	Corte.	Cutoff. | Cutoff. | Engine cutoff.	
 throttle_cut_s1_1	throttle_cut	callout	none	crew	throttle_cut_s1	1	both	any	any	Motores apagados.	Engines off. | Engines off. | Engines are off.	
-throttle_cut_s1_2	throttle_cut	callout	none	mc	throttle_cut_s1	2	m	any	any	Confirmado, apagado del motor.	Confirmed, engine shutdown. | Confirmed, engine shutdown. | Confirmed. Engines shut down.	
+throttle_cut_s1_2	throttle_cut	callout	none	mc	throttle_cut_s1	2	m	any	any	Confirmado, apagado del motor.	Confirmed, engine shutdown. | Confirmed, engine shutdown. | Confirmed. Engines shut down. | Confirmed. Engines off at {speed} m/s.	 |  |  | Confirmado. Motores apagados a {speed} metros por segundo.
 # Launch countdown. It counts up in Spanish because Lonapse reverses: onU, soD ... zeiD, then liftoff.
 # The build gives Piper the countdown text with only the first letter as a capital (build_lonapse.py spoken_text).
 # Two numbers are spelled for the voice: Sinko is spoken "Oknis" (Cinco gave "Ocnic", over 1 s with the end stop),
@@ -117,5 +117,5 @@ la_stg_sep_1	staging	callout	none	crew	staging_sep_la1	1	both	any	any	Desacople.
 la_stg_sep_s2_1	staging	callout	none	crew	staging_sep_la2	1	both	any	any	Etapa separada.	Stage separated. | Stage separated. | Stage is off.	
 la_stg_sep_s2_2	staging	callout	none	mc	staging_sep_la2	2	m	any	any	Confirmado, separación limpia.	Confirmed, clean separation. | Confirmed, clean separation. | Confirmed. Clean.	
 la_stg_ign_s1_1	staging	callout	none	crew	staging_ign_la1	1	both	any	any	Ignición de etapa.	Stage ignition. | Stage ignition. | Stage lit.	
-la_stg_ign_s1_2	staging	callout	none	mc	staging_ign_la1	2	m	any	any	Recibido, empuje estable.	Copy, steady thrust. | Copy, steady thrust. | Copy. Thrust is steady.	
+la_stg_ign_s1_2	staging	callout	none	mc	staging_ign_la1	2	m	any	any	Recibido, empuje estable.	Copy, steady thrust. | Copy, steady thrust. | Copy. Thrust is steady. | Copy. Steady thrust. You're doing {speed} m/s.	 |  |  | Recibido. Empuje estable. Vais a {speed} metros por segundo.
 la_stg_any_1	staging	callout	none	crew	staging_any_la1	1	both	any	any	Activando etapa.	Staging. | Staging. | Stage.	
