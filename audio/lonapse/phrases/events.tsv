@@ -15,10 +15,10 @@ relief_01	relief	chatter	none	crew	relief_01	1	both	any	any	Menos mal.	Thank goo
 relief_02	relief	chatter	none	crew	relief_02	1	both	any	any	Ya está, respiro.	That's it, I can breathe. | That's it, I can breathe. | Okay. Breathing again.	
 relief_03	relief	chatter	none	crew	relief_03	1	m	any	any	Estoy listo, sigo.	I'm ready, carrying on. | I'm ready, carrying on. | Ready. Continuing.	
 relief_04	relief	chatter	none	crew	relief_04	1	f	any	any	Estoy lista, sigo.	I'm ready, carrying on. | I'm ready, carrying on. | All set. Moving on.	
-plan_node_01	plan_node	chatter	calm	mc	plan_node_01	1	m	any	any	Nuevo nodo en el plan de vuelo.	New node in the flight plan. | New node in the flight plan. | The flight plan has a new node.	
+plan_node_01	plan_node	chatter	calm	mc	plan_node_01	1	m	any	any	Nuevo nodo en el plan de vuelo.	New node in the flight plan. | New node in the flight plan. | The flight plan has a new node. | New node in the flight plan: {node_dv} m/s.	 |  |  | Nodo nuevo en el plan de vuelo: {node_dv} metros por segundo.
 plan_node_02	plan_node	chatter	calm	mc	plan_node_02	1	m	any	any	Hay una maniobra planeada.	There's a maneuver planned. | There's a maneuver planned. | A maneuver is planned, {vessel}.	 |  | Hay una maniobra planeada, {vessel}.
 burn_soon_01	burn_soon	warning	tense	mc	burn_soon_01	1	m	any	any	Maniobra en menos de un minuto.	Maneuver in less than a minute. | Maneuver in less than a minute. | Under a minute to the maneuver.	
-burn_soon_02	burn_soon	warning	tense	mc	burn_soon_02	1	m	any	any	Preparaos para la maniobra.	Get ready for the maneuver. | Get ready for the maneuver. | Prepare for the maneuver.	
+burn_soon_02	burn_soon	warning	tense	mc	burn_soon_02	1	m	any	any	Preparaos para la maniobra.	Get ready for the maneuver. | Get ready for the maneuver. | Prepare for the maneuver. | Get ready. The burn is {node_dv} m/s.	 |  |  | Preparaos. La maniobra es de {node_dv} metros por segundo.
 station_check_01	station_check	chatter	calm	mc	station_check_01	1	m	any	any	¿Todo en orden en la estación?	Everything in order on the station? | Everything in order on the station? | All good on the station?	
 station_check_01_2	station_check	chatter	calm	crew	station_check_01	2	both	any	any	Todo en orden aquí arriba.	All in order up here. | All in order up here. | Everything is fine up here.	
 station_check_02	station_check	chatter	calm	mc	station_check_02	1	m	any	any	Revisión de estación. Confirmad.	Station check. Please confirm. | Station check. Please confirm. | Station, please confirm status.	
@@ -32,14 +32,14 @@ relief_06	relief	chatter	none	crew	relief_06	1	both	any	any	Ya pasó lo peor.	Th
 relief_s1_1	relief	chatter	none	crew	relief_s1	1	both	any	any	Ya estamos bien.	We're fine now. | We're fine now. | All good now.	
 relief_s1_2	relief	chatter	none	mc	relief_s1	2	m	any	any	Nos alegra oírlo.	Glad to hear it. | Glad to hear it. | Good to hear, {vessel}.	 |  | Nos alegra oírlo, {vessel}.
 docked_s1_1	docked	chatter	none	crew	docked_s1	1	both	any	any	Captura completa.	Capture complete. | Capture complete. | Captured.	
-docked_s1_2	docked	chatter	none	mc	docked_s1	2	m	any	any	Acoplamiento firme, bien hecho.	Hard dock, well done. | Hard dock, well done. | Hard dock. Nice work.	
+docked_s1_2	docked	chatter	none	mc	docked_s1	2	m	any	any	Acoplamiento firme, bien hecho.	Hard dock, well done. | Hard dock, well done. | Hard dock. Nice work. | Hard dock. Together that's {parts} parts.	 |  |  | Acoplamiento firme. Juntos son {parts} piezas.
 dock_approach_c_1	dock_approach	chatter	calm	crew	dock_approach_c	1	both	any	any	Cien metros, velocidad baja.	A hundred meters, low speed. | A hundred meters, low speed. | Hundred meters. Slow.	
 dock_approach_c_2	dock_approach	chatter	calm	mc	dock_approach_c	2	m	any	any	Recibido, aproximación limpia.	Copy, clean approach. | Copy, clean approach. | Copy. Nice and clean.	
 dock_close_b_1	dock_close	chatter	tense	crew	dock_close_b	1	both	any	any	Diez metros.	Ten meters. | Ten meters. | Ten meters left.	
 dock_close_b_2	dock_close	chatter	tense	mc	dock_close_b	2	m	any	any	Despacio, muy despacio.	Slowly, very slowly. | Slowly, very slowly. | Gently. Very gently.	
 dock_hard_b_1	dock_hard	warning	tense	crew	dock_hard_b	1	both	any	any	¡Ese golpe fue fuerte!	That was a hard hit! | That was a hard hit! | Ouch, hard contact!	
 dock_hard_b_2	dock_hard	warning	tense	mc	dock_hard_b	2	m	any	any	Comprobad el puerto y la estructura.	Check the port and the structure. | Check the port and the structure. | Look at the port and structure.	
-plan_node_s1_1	plan_node	chatter	calm	mc	plan_node_s1	1	m	any	any	Hemos subido un nuevo nodo.	We've uploaded a new node. | We've uploaded a new node. | New node sent up.	
+plan_node_s1_1	plan_node	chatter	calm	mc	plan_node_s1	1	m	any	any	Hemos subido un nuevo nodo.	We've uploaded a new node. | We've uploaded a new node. | New node sent up. | New node sent up. {node_dv} m/s in {node_min} minutes.	 |  |  | Nodo nuevo enviado. {node_dv} metros por segundo en {node_min} minutos.
 plan_node_s1_2	plan_node	chatter	calm	crew	plan_node_s1	2	both	any	any	Recibido, lo vemos en el mapa.	Copy, we see it on the map. | Copy, we see it on the map. | Copy. It's on the map.	
 plan_node_03	plan_node	chatter	calm	crew	plan_node_03	1	both	any	any	Preparando la maniobra.	Preparing the maneuver. | Preparing the maneuver. | Getting the maneuver ready.	
 burn_soon_s1_1	burn_soon	warning	tense	mc	burn_soon_s1	1	m	any	any	Encendido en un minuto.	Burn in one minute. | Burn in one minute. | One minute to the burn.	
@@ -86,8 +86,8 @@ ev_dkd_02_1	docked	chatter	none	mc	ev_dkd_02	1	m	any	any	Vemos el acoplamiento. 
 ev_dkd_02_2	docked	chatter	none	crew	ev_dkd_02	2	both	any	any	Gracias. Ha sido suave.	Thanks. That was smooth. | Thanks. That was smooth. | Thanks. Smooth one.	
 ev_dkd_03_1	docked	chatter	none	crew	ev_dkd_03	1	both	any	any	Estamos unidos. Igualando presión.	We're joined. Equalizing pressure. | We're joined. Equalizing pressure. | Connected. Equalizing pressure.	
 ev_dkd_03_2	docked	chatter	none	mc	ev_dkd_03	2	m	any	any	Recibido. Tomaos un momento.	Copy. Take a moment. | Copy. Take a moment. | Copy. Take your time.	
-ev_dkd_04	docked	chatter	none	mc	ev_dkd_04	1	m	any	any	Acoplamiento completo. Bienvenidos.	Docking complete. Welcome. | Docking complete. Welcome. | Docked. Welcome aboard.	
-ev_dkd_05	docked	chatter	none	mc	ev_dkd_05	1	m	any	any	Dos naves, ahora una. Bien hecho.	Two ships, now one. Well done. | Two ships, now one. Well done. | Two became one. Nice work.	
+ev_dkd_04	docked	chatter	none	mc	ev_dkd_04	1	m	any	any	Acoplamiento completo. Bienvenidos.	Docking complete. Welcome. | Docking complete. Welcome. | Docked. Welcome aboard. | Docking complete. Now there are {crew} kerbals aboard.	 |  |  | Acoplamiento completo. Ahora hay {crew} kerbals a bordo.
+ev_dkd_05	docked	chatter	none	mc	ev_dkd_05	1	m	any	any	Dos naves, ahora una. Bien hecho.	Two ships, now one. Well done. | Two ships, now one. Well done. | Two became one. Nice work. | Two ships, now one. {parts} parts in total.	 |  |  | Dos naves, ahora una. {parts} piezas en total.
 ev_dkd_06	docked	chatter	none	crew	ev_dkd_06	1	both	any	any	Enganchados. ¡Qué bonito!	Latched. How lovely! | Latched. How lovely! | Latched! Lovely.	
 ev_dkd_07	docked	chatter	none	crew	ev_dkd_07	1	both	any	any	Contacto y captura.	Contact and capture. | Contact and capture. | Contact. Capture.	
 # More relief after the blackout. Single MC lines open a crew-only relief line.
@@ -105,25 +105,25 @@ ev_rel_09_2	relief	chatter	none	crew	ev_rel_09	2	both	any	any	Seguimos aquí, y 
 ev_rel_10	relief	chatter	none	crew	ev_rel_10	1	both	any	any	Qué susto. Ya pasó.	What a scare. It's over. | What a scare. It's over. | That was scary. It's done.	
 # More maneuver nodes (calm).
 ev_pln_01	plan_node	chatter	calm	mc	ev_pln_01	1	m	any	any	Tenemos una maniobra nueva para vosotros.	We have a new maneuver for you. | We have a new maneuver for you. | New maneuver for you, {vessel}.	 |  | Maniobra nueva para vosotros, {vessel}.
-ev_pln_02	plan_node	chatter	calm	mc	ev_pln_02	1	m	any	any	Revisad el nodo en el mapa.	Check the node on the map. | Check the node on the map. | Look at the node on the map.	
-ev_pln_03	plan_node	chatter	calm	mc	ev_pln_03	1	m	any	any	Plan de vuelo actualizado.	Flight plan updated. | Flight plan updated. | New flight plan.	
+ev_pln_02	plan_node	chatter	calm	mc	ev_pln_02	1	m	any	any	Revisad el nodo en el mapa.	Check the node on the map. | Check the node on the map. | Look at the node on the map. | Check the node on the map. It asks for {node_dv} m/s.	 |  |  | Mirad el nodo en el mapa. Pide {node_dv} metros por segundo.
+ev_pln_03	plan_node	chatter	calm	mc	ev_pln_03	1	m	any	any	Plan de vuelo actualizado.	Flight plan updated. | Flight plan updated. | New flight plan. | Flight plan updated. Burn in {node_min} minutes.	 |  |  | Plan de vuelo actualizado. Maniobra en {node_min} minutos.
 ev_pln_04_1	plan_node	chatter	calm	crew	ev_pln_04	1	both	any	any	Control, hemos puesto un nodo.	Control, we've set a node. | Control, we've set a node. | Control, node placed.	
 ev_pln_04_2	plan_node	chatter	calm	mc	ev_pln_04	2	m	any	any	Lo vemos. Parece bueno.	We see it. Looks good. | We see it. Looks good. | Copy. Looks fine.	
 ev_pln_05_1	plan_node	chatter	calm	mc	ev_pln_05	1	m	any	any	¿Habéis visto el nodo nuevo?	Have you seen the new node? | Have you seen the new node? | Did you see the new node?	
 ev_pln_05_2	plan_node	chatter	calm	crew	ev_pln_05	2	both	any	any	Sí. Calculando el tiempo.	Yes. Working out the timing. | Yes. Working out the timing. | Yes. Checking the timing.	
 ev_pln_06_1	plan_node	chatter	calm	crew	ev_pln_06	1	both	any	any	Nuevo plan. ¿Lo comprobáis?	New plan. Can you check it? | New plan. Can you check it? | New plan. Check it for us?	
-ev_pln_06_2	plan_node	chatter	calm	mc	ev_pln_06	2	m	any	any	Comprobado. Los números cuadran.	Checked. The numbers add up. | Checked. The numbers add up. | Checked. Numbers look right.	
+ev_pln_06_2	plan_node	chatter	calm	mc	ev_pln_06	2	m	any	any	Comprobado. Los números cuadran.	Checked. The numbers add up. | Checked. The numbers add up. | Checked. Numbers look right. | Checked. {node_dv} m/s. The numbers add up.	 |  |  | Comprobado. {node_dv} metros por segundo. Los números cuadran.
 ev_pln_07	plan_node	chatter	calm	crew	ev_pln_07	1	both	any	any	Otro nodo. Me encantan los nodos.	Another node. I love nodes. | Another node. I love nodes. | More nodes. My favourite.	
 ev_pln_08	plan_node	chatter	calm	crew	ev_pln_08	1	both	any	any	Apuntando la maniobra en mi libreta.	Writing the maneuver in my notebook. | Writing the maneuver in my notebook. | The maneuver goes in my notebook.	
 # More burn warnings (warning, tense).
 ev_brn_01	burn_soon	warning	tense	mc	ev_brn_01	1	m	any	any	Maniobra en breve. Orientad la nave.	Maneuver soon. Point the ship. | Maneuver soon. Point the ship. | Maneuver soon. Point {vessel}.	 |  | Maniobra en breve. Orientad la {vessel}.
-ev_brn_02	burn_soon	warning	tense	mc	ev_brn_02	1	m	any	any	Atentos, maniobra inminente.	Heads up, maneuver coming up. | Heads up, maneuver coming up. | Attention, maneuver soon.	
+ev_brn_02	burn_soon	warning	tense	mc	ev_brn_02	1	m	any	any	Atentos, maniobra inminente.	Heads up, maneuver coming up. | Heads up, maneuver coming up. | Attention, maneuver soon. | Heads up. {node_dv} m/s coming up.	 |  |  | Atención. Vienen {node_dv} metros por segundo.
 ev_brn_03	burn_soon	warning	tense	mc	ev_brn_03	1	m	any	any	Faltan pocos segundos para la maniobra.	A few seconds to the maneuver. | A few seconds to the maneuver. | Seconds to the maneuver.	
 ev_brn_04_1	burn_soon	warning	tense	mc	ev_brn_04	1	m	any	any	Maniobra pronto. ¿Estáis orientados?	Maneuver soon. Are you pointed? | Maneuver soon. Are you pointed? | Maneuver coming. Pointed?	
 ev_brn_04_2	burn_soon	warning	tense	crew	ev_brn_04	2	both	any	any	Orientados. Esperando la marca.	Pointed. Waiting for the mark. | Pointed. Waiting for the mark. | Ready. Waiting for the mark.	
 ev_brn_05_1	burn_soon	warning	tense	crew	ev_brn_05	1	both	any	any	Control, maniobra a la vista.	Control, maneuver coming up. | Control, maneuver coming up. | Control, maneuver soon.	
 ev_brn_05_2	burn_soon	warning	tense	mc	ev_brn_05	2	m	any	any	Recibido. Empuje a su hora.	Copy. Thrust right on time. | Copy. Thrust right on time. | Copy. Thrust on time.	
-ev_brn_06_1	burn_soon	warning	tense	mc	ev_brn_06	1	m	any	any	Preparad el acelerador.	Get the throttle ready. | Get the throttle ready. | Hand near the throttle.	
+ev_brn_06_1	burn_soon	warning	tense	mc	ev_brn_06	1	m	any	any	Preparad el acelerador.	Get the throttle ready. | Get the throttle ready. | Hand near the throttle. | Hand on the throttle. {node_dv} m/s to burn.	 |  |  | La mano en el acelerador. {node_dv} metros por segundo por quemar.
 ev_brn_06_2	burn_soon	warning	tense	crew	ev_brn_06	2	both	any	any	Mano en el acelerador.	Hand on the throttle. | Hand on the throttle. | Ready on the throttle.	
 ev_brn_07	burn_soon	warning	tense	crew	ev_brn_07	1	both	any	any	Apuntando al marcador de maniobra.	Pointing at the maneuver marker. | Pointing at the maneuver marker. | Aiming at the marker.	
 ev_brn_08	burn_soon	warning	tense	crew	ev_brn_08	1	both	any	any	Casi es la hora.	It's almost time. | It's almost time. | Nearly time.	
