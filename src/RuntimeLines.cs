@@ -26,6 +26,9 @@ namespace Lonapse
         /// <summary>Chat only: the job kerbal A and kerbal B must have (a=pilot b=scientist in the when column).
         /// Null: any job.</summary>
         public string TraitA, TraitB;
+        /// <summary>Reply only: the Mission Control lines it answers, ids or prefixes ending in * (to=rt_fuel* in the
+        /// when column). Empty: any report or warp line.</summary>
+        public readonly List<string> To = new List<string>();
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
 
@@ -45,7 +48,7 @@ namespace Lonapse
     public static class RuntimeLines
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
@@ -99,6 +102,7 @@ namespace Lonapse
         static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
+        static readonly Regex ToRe = new Regex(@"^to=(rt_[a-z0-9_]*\*?)$");
 
         /// <summary>Parses one runtime file (the tests, a single table).</summary>
         public static List<RuntimeTemplate> Parse(IList<string> lines, List<string> errors)
@@ -198,6 +202,13 @@ namespace Lonapse
                 {
                     if (tok == "any") continue;
                     if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
+                    Match to = ToRe.Match(tok);
+                    if (to.Success)
+                    {
+                        if (t.Kind != "reply") bad.Add("'" + tok + "' only works in a reply");
+                        else t.To.Add(to.Groups[1].Value);
+                        continue;
+                    }
                     Match tm = TraitCheck.Match(tok);
                     if (tm.Success)
                     {
@@ -317,6 +328,31 @@ namespace Lonapse
             if (all == null) return r;
             foreach (RuntimeTemplate t in all)
                 if (t.Kind == kind && Holds(t, situation, nums) && FillableVersions(t, nums, names).Count > 0) r.Add(t);
+            return r;
+        }
+
+        /// <summary>A reply answers this Mission Control line: one of its to= ids or prefixes matches, or it has none
+        /// and the line is a report or a warp line.</summary>
+        public static bool Answers(RuntimeTemplate reply, string lineId, string lineKind)
+        {
+            if (reply == null || reply.Kind != "reply" || string.IsNullOrEmpty(lineId)) return false;
+            if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp";
+            foreach (string p in reply.To)
+            {
+                if (p.EndsWith("*", StringComparison.Ordinal) ? lineId.StartsWith(p.Substring(0, p.Length - 1), StringComparison.Ordinal)
+                                                              : lineId == p) return true;
+            }
+            return false;
+        }
+
+        /// <summary>The replies that fit after a Mission Control line: they answer it (Answers), and their when and
+        /// slots fit like any template (Fitting).</summary>
+        public static List<RuntimeTemplate> Replies(IList<RuntimeTemplate> all, RuntimeTemplate line, string situation,
+                                                    Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            var r = Fitting(all, "reply", situation, nums, names);
+            if (line == null) { r.Clear(); return r; }
+            r.RemoveAll(t => !Answers(t, line.Id, line.Kind));
             return r;
         }
 

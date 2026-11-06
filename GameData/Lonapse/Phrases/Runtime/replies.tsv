@@ -1,0 +1,36 @@
+# Runtime voice: the crew answers a Mission Control runtime line. The format is explained at the top of reports.tsv.
+# kind reply: spoken by a kerbal aboard right after the MC line, sometimes. The kerbal a report talks to answers it.
+# to=<id> in the when column: the MC lines it answers. An id, or a prefix with * (to=rt_orbit* answers rt_orbit,
+#   rt_orbit_inc ...). Several to= : any of them. Without to= a reply answers any report or warp line.
+# The values and names of the MC line are there too, self is the kerbal who answers.
+id	kind	when	spanish	english
+rt_re_any	reply		Recibido, Control. Lo apuntamos en algún sitio. | Gracias, Control. ¿Eso entra en el examen? | Entendido. No sé qué significa, pero entendido. | Recibido. La próxima vez, más despacio. | Control, ¿podéis mandar eso también por escrito? | Anotado. En la pared, porque no tenemos papel.	Copy, Control. We'll write that down somewhere. | Thanks, Control. Will that be on the test? | Understood. No idea what it means, but understood. | Copy. Slower next time. | Control, can you send that in writing too? | Noted. On the wall, because we're out of paper.
+rt_re_vessel	reply		{vessel} recibe. Alto y claro. | Aquí {vessel}. Todo tranquilo por aquí arriba.	{vessel} copies. Loud and clear. | {vessel} here. All quiet up here.
+rt_re_self	reply		{self} al habla. Seguimos de una pieza. | Aquí {self}. Recibido, y sin tocar nada.	{self} speaking. Still in one piece. | {self} here. Copy, and not touching anything.
+rt_re_orbit	reply	to=rt_orbit*	Lo sabemos. Llevamos un rato dando vueltas. | Desde aquí arriba todo se ve muy pequeño. | ¿Otra vuelta? Me estoy mareando.	We know. We've been going round for a while. | Everything looks very small from up here. | Another lap? I'm getting dizzy.
+rt_re_flight	reply	to=rt_flight to=rt_sub*	Recibido. Seguimos subiendo, creo. | Vale. Avisad si nos caemos.	Copy. Still going up, I think. | Okay. Let us know if we're falling.
+rt_re_landed	reply	to=rt_landed	Gracias. El sitio lo elegimos con los ojos cerrados. | Buen sitio, sí. Bastante plano, para variar.	Thanks. We picked the spot with our eyes closed. | Nice spot, yes. Fairly flat, for a change.
+rt_re_escape	reply	to=rt_escape	Adiós, {body}. Te escribiremos. | No miréis atrás. Bueno, un poco.	Bye, {body}. We'll write. | Don't look back. Well, maybe a little.
+rt_re_fuel	reply	to=rt_fuel	Si se acaba, empujamos. | Perfecto. Así no hay que parar a repostar.	If it runs out, we'll push. | Great. No need to stop for gas.
+rt_re_fuel_low	reply	to=rt_fuel_low	¿Y si soplamos todos hacia atrás? | Entendido. Remos preparados.	What if we all blow backwards? | Copy. Oars ready.
+rt_re_ec_low	reply	to=rt_ec_low	Apagando la radio. Ah, espera. | Vale, desenchufo la cafetera.	Turning off the radio. Oh, wait. | Fine, I'm unplugging the coffee maker.
+rt_re_ec_ok	reply	to=rt_ec_ok	Bien. La cafetera sigue encendida.	Good. The coffee maker stays on.
+rt_re_mono	reply	to=rt_mono	Con calma, sí. Díselo al piloto.	Easy, yes. Tell the pilot.
+rt_re_parts	reply	to=rt_parts	Las contamos esta mañana. Faltaba una, pero era un tornillo. | Casi todas. Una está flotando por aquí dentro.	We counted them this morning. One was missing, but it was a bolt. | Almost all of them. One is floating around in here.
+rt_re_crew	reply	to=rt_crew	Todos presentes. Uno se esconde en el baño. | Somos {crew}, sí. Y solo hay un sándwich.	All present. One is hiding in the bathroom. | {crew} of us, yes. And only one sandwich.
+rt_re_day	reply	to=rt_day*	¿Ya? Se nos ha pasado volando. | Pues aquí nadie se ha cambiado de calcetines.	Already? It flew by. | Well, nobody up here has changed socks.
+rt_re_vesselcall	reply	to=rt_vessel	Os oímos. ¿Llamabais solo para saludar? | Hola, Control. Aquí todo bien, gracias por preguntar.	We hear you. Just calling to say hi? | Hi, Control. All good here, thanks for asking.
+rt_re_node	reply	to=rt_node*	Recibido. Que alguien despierte al piloto. | Maniobra anotada. Esta vez apuntamos hacia el lado bueno.	Copy. Someone wake up the pilot. | Burn noted. This time we'll point the right way.
+rt_re_funds	reply	to=rt_funds*	¿Nos llega para unos asientos nuevos? | Guardad algo para el viaje de vuelta, por favor.	Is it enough for new seats? | Save some for the trip home, please.
+rt_re_sci_total	reply	to=rt_sci_total	Y nosotros sin saber qué es un punto de ciencia.	And we still don't know what a science point is.
+rt_re_rep	reply	to=rt_rep	Ya lo sabíamos. Somos geniales. | Que nos quieran es lo normal.	We knew. We're great. | Being loved is normal for us.
+rt_re_rep_low	reply	to=rt_rep_low	Eso es por la última vez. No volverá a pasar. Seguramente.	That's because of last time. It won't happen again. Probably.
+rt_re_contracts	reply	to=rt_contracts	¿Todos para nosotros? Necesitamos vacaciones.	All for us? We need a holiday.
+rt_re_crew_first	reply	to=rt_crew_first	¿Se nota mucho? | Primer vuelo, sí. Por eso no suelto este botón.	Is it that obvious? | First flight, yes. That's why I'm holding this button.
+rt_re_crew_veteran	reply	to=rt_crew_veteran to=rt_crew_stars	Y ni una sola multa. | La experiencia es saber qué botón no tocar.	And not a single ticket. | Experience is knowing which button not to press.
+rt_re_crew_new	reply	to=rt_crew_newbody	Primera vez aquí. Huele raro. | Nuevo sitio. Traed el álbum de fotos.	First time here. Smells odd. | New place. Bring the photo album.
+rt_re_crew_back	reply	to=rt_crew_visits to=rt_crew_landedbefore	Sí, ya conozco el camino. | Volver siempre es más fácil. Menos sustos.	Yes, I know the way by now. | Coming back is always easier. Fewer scares.
+rt_re_sci	reply	to=rt_sci*	De nada. ¿Qué es lo que hemos medido? | Ciencia hecha. ¿Y la comida? | Los científicos, siempre contentos con poco.	You're welcome. What did we measure? | Science done. Now, lunch? | Scientists, always happy with little.
+rt_re_con	reply	to=rt_con_funds to=rt_con_big to=rt_con_more to=rt_con_total to=rt_con_sci to=rt_con_rep to=rt_con_day to=rt_con_done*	¿Y nosotros cobramos algo? | Decidle al cliente que de nada. | Otro más. ¿Nos dan una medalla?	Do we get a cut? | Tell the client they're welcome. | Another one. Do we get a medal?
+rt_re_con_fail	reply	to=rt_con_fail*	Eso no ha sido culpa nuestra. Creo. | Ups.	That wasn't our fault. I think. | Oops.
+rt_re_warp	reply	to=rt_warp*	Despertadnos cuando lleguemos. | Las estrellas se ven raras desde aquí. | ¿Alguien ha visto mi estómago? Se ha quedado atrás.	Wake us when we get there. | The stars look weird from here. | Has anyone seen my stomach? It got left behind.

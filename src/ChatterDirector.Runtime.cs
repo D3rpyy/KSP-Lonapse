@@ -518,9 +518,10 @@ namespace Lonapse
                                 && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
                                 : host.roster.voices[rng.Next(host.roster.voices.Count)];
                 string[] kn = FirstNames(k);
-                if (kn != null) { names["kerbal"] = kn; CrewValues(k, v, nums); }
+                if (kn != null) { names["kerbal"] = kn; CrewValues(k, v, nums); reportKerbal = k; }
             }
-            return QueueKind("report", sit, nums, names, 0.3f, true);
+            try { return QueueKind("report", sit, nums, names, 0.3f, true); }
+            finally { reportKerbal = null; }
         }
 
         /// <summary>Share of radio turns in time warp that are a warp line (kind warp), when one fits.</summary>
@@ -778,22 +779,107 @@ namespace Lonapse
             };
             e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
             if (report) reportPending = true;
+            // a crew reply, rendered at the same time: it plays right after the MC line, or not at all
+            Reply rp = PlanReply(t, nums, names);
+            bool mcDone = false, mcQueued = false;
+            Action reply = () =>
+            {
+                if (rp == null || !mcDone || !rp.done) return;
+                Reply x = rp;
+                rp = null;
+                if (x.clip == null) return;
+                if (!mcQueued || !CanChat(x.speaker) || count + 4 > Capacity || radioSilent || !host.signal.connected || !host.settings.radioEnabled)
+                {
+                    UnityEngine.Object.Destroy(x.clip);
+                    return;
+                }
+                PhraseClips.SetRuntimeClip(x.entry, x.clip);
+                runtimeOnly++;
+                EnqueueCrew(x.entry.Folder, ResponseDelay(host.stress.stress), 0f, x.speaker, x.entry);
+                Log.Info("Runtime voice: reply " + x.entry.ClipKey + " (" + x.speaker.displayName + ") to " + t.Id);
+            };
+            if (rp != null)
+                Voice.Request(KindFor(rp.speaker), rp.spanish, r =>
+                {
+                    if (rp == null) { if (r.clip != null) UnityEngine.Object.Destroy(r.clip); return; }
+                    rp.clip = r.clip;
+                    rp.done = true;
+                    if (r.clip == null) runtimeFailed++;
+                    reply();
+                });
             Voice.Request("mc", spanish, r =>
             {
                 if (report) reportPending = false;
-                if (r.clip == null) { runtimeFailed++; return; }
+                mcDone = true;
+                if (r.clip == null) { runtimeFailed++; reply(); return; }
                 if (count + 7 > Capacity || radioSilent || mcBlackout || !host.signal.connected || !host.settings.radioEnabled)
                 {
                     UnityEngine.Object.Destroy(r.clip);
                     Log.Info("Runtime voice: " + e.ClipKey + " dropped, the radio is busy or cut");
+                    reply();
                     return;
                 }
                 PhraseClips.SetRuntimeClip(e, r.clip);
                 runtimeOnly++;
                 EnqueueMc(e.Folder, delay, e);
+                mcQueued = true;
                 Log.Info("Runtime voice: " + e.ClipKey + " \"" + r.spoken + "\" ready in " + r.queueToReadyMs.ToString("0")
                          + " ms (Piper " + r.piperMs.ToString("0") + " ms), " + r.clip.length.ToString("0.00") + " s");
+                reply();
             });
+        }
+
+        /// <summary>Share of Mission Control runtime lines the crew answers, when a reply fits.</summary>
+        const double ReplyChance = 0.45;
+        /// <summary>The kerbal a report talks to ({kerbal}), set while QueueReport queues it: that kerbal answers.</summary>
+        KerbalVoice reportKerbal;
+        readonly Queue<string> recentReplies = new Queue<string>();
+
+        sealed class Reply
+        {
+            public KerbalVoice speaker;
+            public PhraseEntry entry;
+            public string spanish;
+            public UnityEngine.AudioClip clip;
+            public bool done;
+        }
+
+        /// <summary>
+        /// Sometimes a crew reply to a Mission Control runtime line (kind reply): a kerbal aboard, the one the report
+        /// talked to when there is one. Null when there is no crew, the stress is up, the dice say no or none fits.
+        /// </summary>
+        Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
+                || Somber || rng.NextDouble() >= ReplyChance) return null;
+            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : PickRested();
+            if (!CanChat(k) || RuntimeVoice.Missing(KindFor(k)) != null) return null;
+            string[] kn = FirstNames(k);
+            if (kn == null) return null;
+            Vessel v = ActiveVessel;
+            string sit = v != null ? SituationOf(v) ?? "other" : "other";
+            var rn = new Dictionary<string, string[]>(names ?? new Dictionary<string, string[]>());
+            rn["self"] = kn;
+            rn["kerbal"] = kn;
+            var nn = new Dictionary<string, double>(nums ?? new Dictionary<string, double>());
+            if (!ReferenceEquals(k, reportKerbal)) CrewValues(k, v, nn);
+            List<RuntimeTemplate> fit = RuntimeLines.Replies(PhraseClips.runtimeTemplates, line, sit, nn, rn);
+            List<RuntimeTemplate> fresh = fit.FindAll(x => !recentReplies.Contains(x.Id));
+            if (fresh.Count == 0) return null;
+            RuntimeTemplate t = fresh[rng.Next(fresh.Count)];
+            string sp, en;
+            List<int> vs = RuntimeLines.FillableVersions(t, nn, rn);
+            if (vs.Count == 0 || !RuntimeLines.Fill(t, vs[rng.Next(vs.Count)], nn, rn, out sp, out en)) return null;
+            recentReplies.Enqueue(t.Id);
+            while (recentReplies.Count > 8) recentReplies.Dequeue();
+            var e = new PhraseEntry
+            {
+                ClipKey = t.Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
+                Scene = line.Id, Seq = 2, Gender = "both", Phase = "any", Cause = "any",
+                Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
+            };
+            e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
+            return new Reply { speaker = k, entry = e, spanish = sp };
         }
 
         // ---------------- Debug tab ----------------

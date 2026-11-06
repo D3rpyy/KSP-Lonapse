@@ -9,6 +9,7 @@
 
 - **Chatter during time warp.** Time warp on rails is no longer dead silent. The calm radio and intercom talk goes on at its normal pace. Events wait until the warp ends, as before. With the runtime voice on, Mission Control also talks about the warp: the hours to the next burn and the hours to the next body. 10 new Mission Control lines and 4 crew chats only play in warp (`Phrases/Runtime/warp.tsv`). Turn it off with "Chatter during time warp" in the General tab.
 - **Many more science and contract lines.** Mission Control now has 47 new wordings after science and contracts (it had 14). A science line can say that this is the first data of its kind from a body, how much science is still left there, or how much the lab has banked. A finished contract can mention its science and reputation, the agency's funds and how many contracts are still open. A failed one says what it costs. There are 4 new crew chats about contracts, reputation, science and funds.
+- **The crew answers Mission Control.** With the runtime voice on, a kerbal now and then replies to a Mission Control report, a warp line, a science or a contract line, mostly with a joke. The kerbal the report talks to is the one who answers. 30 replies with 63 wordings (`Phrases/Runtime/replies.tsv`), some for any report, most for one kind of report.
 - **Subtitle time on screen.** A new "Stay on screen" slider in the subtitle settings sets how long a subtitle stays after its line is spoken, from 0 to 10 s. The default is 0.6 s, as before. The countdown numbers keep the short time.
 
 ### For modders
@@ -17,6 +18,7 @@
 - `Phrases/slots_es.tsv` is gone. The runtime Spanish of a line is the `spanish_rt` column of its row, and the Spanish of a pool value is the `spanish` column of `pools.tsv`. An English edit can no longer silently switch it off.
 - The install removes the old `runtime.tsv` and `slots_es.tsv`.
 - New runtime kind `warp`, new number slots `in_warp` (1 in time warp, for checks), `node_h` and `soi_h`, and the name slot `next` (the body after `soi_h`).
+- New runtime kind `reply`: a crew answer to a Mission Control line. `to=<id>` in the when column says which lines it answers, a prefix with `*` works too.
 - New number slots for science and contract lines: `sci_left`, `sci_first`, `con_sci` and `con_rep`. Science and contract lines now also get the flight values (`vessel`, `day`, `sci_total`, `funds_total`, `contracts` ...). For a failed contract, `funds` and `con_rep` are what it costs.
 
 ## 0.7.0 (2026-11-06)

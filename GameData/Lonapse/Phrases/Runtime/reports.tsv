@@ -7,6 +7,9 @@
 # kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),
 #          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed
 #          warp: Mission Control in time warp on rails, now and then in place of the usual exchange (warp.tsv)
+#          reply: a kerbal answers a Mission Control line right after it, sometimes. to=rt_fuel_low in the when
+#          column: the MC lines it answers (a prefix with *: to=rt_orbit*). Without to=: any report or warp line.
+#          self is the kerbal who answers (replies.tsv)
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25

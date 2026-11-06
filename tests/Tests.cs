@@ -1418,6 +1418,27 @@ public static class Tests
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
         {
+            // crew replies: a reply answers its to= lines, or any report and warp line without one
+            var rn = new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } },
+                                                        { "body", new[] { "Kérbin", "Kerbin" } } };
+            var rv = new Dictionary<string, double> { { "fuel", 12 }, { "crew", 3 } };
+            RuntimeTemplate fuelLow = rtAll.Find(t => t.Id == "rt_fuel_low"), dockFar = rtAll.Find(t => t.Id == "rt_dock_far"),
+                            orbitInc = rtAll.Find(t => t.Id == "rt_orbit_inc"), sciPts = rtAll.Find(t => t.Id == "rt_sci_pts");
+            var rFuel = RuntimeLines.Replies(rtAll, fuelLow, "orbit", rv, rn).ConvertAll(t => t.Id);
+            var rDock = RuntimeLines.Replies(rtAll, dockFar, "orbit", rv, rn).ConvertAll(t => t.Id);
+            var rOrbit = RuntimeLines.Replies(rtAll, orbitInc, "orbit", rv, rn).ConvertAll(t => t.Id);
+            var rSci = RuntimeLines.Replies(rtAll, sciPts, "orbit", rv, rn).ConvertAll(t => t.Id);
+            var toErr = new List<string>();
+            RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_r1\treport\tto=rt_fuel\tA.\tA.",
+                "rt_r2\treply\tto=fuel\tB.\tB.", "rt_r3\treply\tto=rt_fuel* to=rt_ec\tC.\tC." }, toErr);
+            Check(rFuel.Contains("rt_re_fuel_low") && rFuel.Contains("rt_re_any") && rFuel.Contains("rt_re_self") && !rFuel.Contains("rt_re_fuel")
+                  && rDock.Count == 0 && rOrbit.Contains("rt_re_orbit") && rSci.Contains("rt_re_sci") && !rSci.Contains("rt_re_any")
+                  && toErr.Count == 2,
+                  "runtime voice: crew replies answer their own MC lines, the general ones any report",
+                  string.Join(",", rFuel.ToArray()) + " / dock " + rDock.Count + " / " + string.Join(",", rOrbit.ToArray()) + " / " + string.Join(",", rSci.ToArray())
+                  + " / " + string.Join(" ; ", toErr.ToArray()));
+        }
+        {
             // science and contracts: the extra values pick their own lines
             var sn = new Dictionary<string, string[]> { { "exp", new[] { "arutarepmet", "temperature" } }, { "body", new[] { "la Mun", "Mun" } },
                                                         { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
