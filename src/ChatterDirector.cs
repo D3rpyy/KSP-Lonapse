@@ -1364,6 +1364,7 @@ namespace Lonapse
                 if (e.Role == "mc") EnqueueMc(e.Folder, d, e, sc.CrewLines > 0 ? sp : null);
                 else EnqueueCrew(e.Folder, d, 0f, sp, e);
             }
+            RecordedReply(sc, lines[lines.Count - 1], sc.CrewLines > 0 ? sp : null);
             Log.Debug("Scene " + sc.Id + " (" + sc.Event + ", " + sc.Band + ") queued" + (sp != null ? " for " + sp.displayName : ""));
             return true;
         }

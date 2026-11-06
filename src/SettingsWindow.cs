@@ -407,6 +407,12 @@ namespace Lonapse
 
         // ------------------------------------------------ tab contents
 
+        private void RuntimeTest(ChatterDirector d, Func<ChatterDirector, string> test, string what)
+        {
+            try { runtimeTestStatus = d != null ? test(d) : "no director"; }
+            catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception(what, e); }
+        }
+
         private void DrawGeneral(Settings s)
         {
             s.enabled = Toggle(s.enabled, "Enabled");
@@ -992,6 +998,12 @@ namespace Lonapse
                 try { runtimeTestStatus = d != null ? d.DebugRuntimeReport() : "no director"; }
                 catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeReport", e); }
             }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Test chat")) RuntimeTest(d, x => x.DebugRuntimeChat(), "DebugRuntimeChat");
+            if (GUILayout.Button("Test reply")) RuntimeTest(d, x => x.DebugRuntimeReply(), "DebugRuntimeReply");
+            if (GUILayout.Button("Test warp line")) RuntimeTest(d, x => x.DebugWarpLine(), "DebugWarpLine");
+            if (GUILayout.Button("Test sunrise")) RuntimeTest(d, x => x.DebugSunrise(), "DebugSunrise");
+            GUILayout.EndHorizontal();
             GUILayout.Label(string.IsNullOrEmpty(runtimeTestStatus) ? " " : runtimeTestStatus);   // always drawn: keeps the control count stable
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));

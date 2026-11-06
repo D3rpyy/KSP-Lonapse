@@ -288,6 +288,7 @@ namespace Lonapse
                 if (host.roster.voices[i] != null) WarmOnce(KindFor(host.roster.voices[i]));
             if (!host.settings.runtimeReports) return;
             RuntimeLandCheck();
+            SunriseTick();
             if (nextReport < 0f) nextReport = clock + U(ReportFirstMin, ReportFirstMax);
             if (clock < nextReport || reportPending) return;
             if (count > 0 || host.stress.stress > ReportMaxStress || !host.signal.connected || radioSilent || mcBlackout
@@ -375,6 +376,19 @@ namespace Lonapse
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
+            // the biome under the vessel, said as a name (Kerbin's "Water" reads badly in a sentence, left out)
+            try
+            {
+                CelestialBody mb = v.mainBody;
+                if (mb != null && mb.BiomeMap != null && sit != "escape")
+                {
+                    string bn = ScienceUtil.GetExperimentBiomeLocalized(mb, v.latitude, v.longitude);
+                    string say = !string.IsNullOrEmpty(bn) && bn != "Water" ? RuntimeLines.VesselSpeakable(bn) : null;
+                    if (say != null) names["biome"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(bn) };
+                }
+            }
+            catch (Exception) { }
+            if (sunrises > 0 && v.id == sunVessel) nums["sunrises"] = sunrises;
             // time warp chatter (only for checks, the rate is never said), and the time to the next body when the
             // orbit leaves this one
             if (host.warpChatter) nums["in_warp"] = 1;
@@ -585,7 +599,7 @@ namespace Lonapse
         /// </summary>
         bool TryRuntimeChat(KerbalVoice a, KerbalVoice b)
         {
-            if (!RuntimeOn || runtimeChatPending || a == null || b == null || rng.NextDouble() >= RuntimeChatChance) return false;
+            if (!RuntimeOn || runtimeChatPending || a == null || b == null || (!debugForce && rng.NextDouble() >= RuntimeChatChance)) return false;
             if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
             Vessel v = ActiveVessel;
             if (v == null) return false;
@@ -598,7 +612,7 @@ namespace Lonapse
             var namesA = new Dictionary<string, string[]>(common) { { "self", na }, { "other", nb } };
             var namesB = new Dictionary<string, string[]>(common) { { "self", nb }, { "other", na } };
             // a chat with jobs (a=pilot b=scientist) also fits with A and B swapped: then B starts it
-            string jobA = a.persona.trait, jobB = b.persona.trait;
+            string jobA = a.persona.ChatKeys, jobB = b.persona.ChatKeys;
             // the crew history values (flight_no, visits ...) are those of the kerbal who starts the chat
             var numsA = new Dictionary<string, double>(nums);
             var numsB = new Dictionary<string, double>(nums);
@@ -852,10 +866,10 @@ namespace Lonapse
         /// Sometimes a crew reply to a Mission Control runtime line (kind reply): a kerbal aboard, the one the report
         /// talked to when there is one. Null when there is no crew, the stress is up, the dice say no or none fits.
         /// </summary>
-        Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names, double chance = ReplyChance)
         {
             if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
-                || Somber || rng.NextDouble() >= ReplyChance) return null;
+                || Somber || (!debugForce && rng.NextDouble() >= chance)) return null;
             KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : PickRested();
             if (!CanChat(k) || RuntimeVoice.Missing(KindFor(k)) != null) return null;
             string[] kn = FirstNames(k);
@@ -886,7 +900,167 @@ namespace Lonapse
             return new Reply { speaker = k, entry = e, spanish = sp };
         }
 
+        // ---------------- sunrise ----------------
+
+        Guid sunVessel;
+        int sunrises;
+        bool sunKnown, wasLit;
+        float sunCheckAt, lastSunriseLine = -1000f;
+        /// <summary>Real seconds between two sunrise lines, and the share of sunrises that get one.</summary>
+        const float SunriseGap = 600f;
+        const double SunriseChance = 0.5;
+
+        /// <summary>Once a second: the vessel came out of the shadow of its body. In orbit that is a sunrise: it is
+        /// counted ({sunrises} for this flight), and sometimes Mission Control says so (kind sunrise). Not in warp.</summary>
+        void SunriseTick()
+        {
+            if (clock < sunCheckAt) return;
+            sunCheckAt = clock + 1f;
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            if (v.id != sunVessel) { sunVessel = v.id; sunrises = 0; sunKnown = false; }
+            bool lit;
+            try
+            {
+                CelestialBody sun = Planetarium.fetch != null ? Planetarium.fetch.Sun : null, b = v.mainBody;
+                if (sun == null || b == null || ReferenceEquals(sun, b)) { sunKnown = false; return; }
+                Vector3d p = v.GetWorldPos3D() - b.position, s = sun.position - b.position;
+                lit = !DcMath.InShadow(p.x, p.y, p.z, s.x, s.y, s.z, b.Radius);
+            }
+            catch (Exception) { return; }
+            bool rose = sunKnown && !wasLit && lit;
+            sunKnown = true;
+            wasLit = lit;
+            if (!rose || v.situation != Vessel.Situations.ORBITING) return;
+            sunrises++;
+            if (!debugForce && (host.warpChatter || clock - lastSunriseLine < SunriseGap || rng.NextDouble() >= SunriseChance)) return;
+            QueueSunrise(v);
+        }
+
+        bool QueueSunrise(Vessel v)
+        {
+            if (count > 0 || reportPending || host.stress.stress > ReportMaxStress || !host.signal.connected || radioSilent
+                || mcBlackout || !host.settings.radioEnabled) return false;
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            CollectValues(v, "orbit", nums, names);
+            if (!QueueKind("sunrise", "orbit", nums, names, 0.3f, true)) return false;
+            lastSunriseLine = clock;
+            return true;
+        }
+
+        // ---------------- replies to recorded MC lines ----------------
+
+        /// <summary>Share of calm chatter scenes that end with Mission Control and get a runtime crew reply.</summary>
+        const double RecordedReplyChance = 0.2;
+        /// <summary>A reply that is not ready this many real seconds after its scene was queued is dropped.</summary>
+        const float RecordedReplyMaxWait = 8f;
+
+        /// <summary>
+        /// After a calm chatter scene that ends with a Mission Control statement (not a question): sometimes a kerbal
+        /// answers with a general reply (replies.tsv without to=). The scene's crew speaker answers when there is one.
+        /// </summary>
+        void RecordedReply(PhraseScene sc, PhraseEntry last, KerbalVoice sp)
+        {
+            if (!RuntimeOn || sc == null || last == null || last.Role != "mc" || sc.IsProbe || sc.Event != "chatter" || sc.Band != "calm") return;
+            string es = (last.Spanish ?? "").Trim();
+            if (es.Length == 0 || es.EndsWith("?", StringComparison.Ordinal)) return;
+            if (!debugForce && rng.NextDouble() >= RecordedReplyChance) return;   // before the values: they walk the parts
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            try { CollectValues(v, SituationOf(v) ?? "other", nums, names, false); }
+            catch (Exception) { return; }
+            reportKerbal = sp;
+            Reply rp;
+            try { rp = PlanReply(new RuntimeTemplate(sc.Id, RuntimeLines.RecordedKind, "", ""), nums, names, 1.0); }
+            finally { reportKerbal = null; }
+            if (rp == null) return;
+            float asked = clock;
+            Voice.Request(KindFor(rp.speaker), rp.spanish, r =>
+            {
+                if (r.clip == null) { runtimeFailed++; return; }
+                if (clock - asked > RecordedReplyMaxWait || !CanChat(rp.speaker) || count + 4 > Capacity || radioSilent
+                    || !host.signal.connected || !host.settings.radioEnabled)
+                {
+                    UnityEngine.Object.Destroy(r.clip);
+                    return;
+                }
+                PhraseClips.SetRuntimeClip(rp.entry, r.clip);
+                runtimeOnly++;
+                EnqueueCrew(rp.entry.Folder, ResponseDelay(host.stress.stress), 0f, rp.speaker, rp.entry);
+                Log.Info("Runtime voice: reply " + rp.entry.ClipKey + " (" + rp.speaker.displayName + ") to the recorded scene " + sc.Id);
+            });
+        }
+
         // ---------------- Debug tab ----------------
+
+        /// <summary>Debug tab: the next chance checks pass (chat, reply, sunrise), so a test plays at once.</summary>
+        bool debugForce;
+
+        string DebugCheck()
+        {
+            string why = RuntimeVoice.Missing("mc");
+            if (why != null) return "runtime voice: " + why;
+            if (ActiveVessel == null) return "no vessel";
+            recentRuntime.Clear();
+            recentReplies.Clear();
+            return null;
+        }
+
+        /// <summary>Debug tab: a runtime crew chat now, between two kerbals aboard.</summary>
+        public string DebugRuntimeChat()
+        {
+            string why = DebugCheck();
+            if (why != null) return why;
+            if (host.roster.voices.Count < 2) return "a chat needs two kerbals aboard";
+            debugForce = true;
+            try
+            {
+                KerbalVoice a = host.roster.voices[rng.Next(host.roster.voices.Count)], b;
+                do b = host.roster.voices[rng.Next(host.roster.voices.Count)]; while (ReferenceEquals(a, b));
+                return TryRuntimeChat(a, b) ? "chat requested (" + a.displayName + ", " + b.displayName + ")" : "no chat fits here";
+            }
+            finally { debugForce = false; }
+        }
+
+        /// <summary>Debug tab: a report with a crew reply.</summary>
+        public string DebugRuntimeReply()
+        {
+            string why = DebugCheck();
+            if (why != null) return why;
+            if (host.roster.voices.Count == 0 || host.probeMode) return "a reply needs crew aboard";
+            debugForce = true;
+            try { return QueueReport() ? "report and reply requested" : "no report fits here (on the pad, or no vessel)"; }
+            finally { debugForce = false; }
+        }
+
+        /// <summary>Debug tab: a warp line, as if the warp was on.</summary>
+        public string DebugWarpLine()
+        {
+            string why = DebugCheck();
+            if (why != null) return why;
+            Vessel v = ActiveVessel;
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            string sit = SituationOf(v) ?? "other";
+            CollectValues(v, sit, nums, names);
+            nums["in_warp"] = 1;
+            return QueueKind("warp", sit, nums, names, 0.3f, true) ? "warp line requested" : "no warp line fits here";
+        }
+
+        /// <summary>Debug tab: a sunrise line now (in orbit).</summary>
+        public string DebugSunrise()
+        {
+            string why = DebugCheck();
+            if (why != null) return why;
+            Vessel v = ActiveVessel;
+            if (v.situation != Vessel.Situations.ORBITING) return "only in orbit";
+            if (v.id != sunVessel) { sunVessel = v.id; sunrises = 0; sunKnown = false; }
+            sunrises++;
+            return QueueSunrise(v) ? "sunrise line requested (sunrise " + sunrises + ")" : "the radio is busy, try again";
+        }
 
         /// <summary>Debug tab: a report right now (any template that fits), to hear the numbers.</summary>
         public string DebugRuntimeReport()

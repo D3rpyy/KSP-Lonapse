@@ -91,3 +91,22 @@ rt_chat_newname_1	chat		{other}, esta nave necesita un nombre. | Se me ha ocurri
 rt_chat_newname_2	chat		Ya lo tiene. {vessel}. Está escrito en un lado. | {vessel}. Ese es su nombre. Lo elegí yo.	It has one. {vessel}. It's written on the side. | {vessel}. That's its name. I picked it.
 rt_chat_newname_3	chat		¿{vessel}? ¿En serio? | ¿Y por qué {vessel}?	{vessel}? Really? | And why {vessel}?
 rt_chat_newname_4	chat		Lo saqué de un sombrero. Había dos papeles. | Porque suena a alguien que vuelve a casa. | Sonaba mejor en la plataforma. | Los ingenieros dijeron que trae suerte. Uno de ellos.	I pulled it out of a hat. There were two notes. | Because it sounds like someone who comes home. | It sounded better on the launch pad. | The engineers said it's lucky. One of them did.
+# chats with a persona: a=dim b=brave and so on (badass brave nervous dim veteran)
+rt_chat_dimbtn_1	chat	a=dim	{other}, ¿para qué sirve este botón? | Voy a pulsar este botón.	{other}, what does this button do? | I'm going to press this button.
+rt_chat_dimbtn_2	chat		¡No lo toques! | {other}, aparta la mano de ahí.	Don't touch it! | {other}, move your hand away from there.
+rt_chat_dimbtn_3	chat		Demasiado tarde. | Vale. Pero era rojo y bonito.	Too late. | Fine. But it was red and pretty.
+rt_chat_nervous_1	chat	a=nervous	{other}, ¿eso que suena es normal? | ¿Tú también has oído ese ruido?	{other}, is that noise normal? | Did you hear that noise too?
+rt_chat_nervous_2	chat		Es la cafetera. Respira. | Es la nave haciendo cosas de nave.	It's the coffee maker. Breathe. | It's the ship doing ship things.
+rt_chat_nervous_3	chat		Vale. Respiro. Respiro mucho.	Okay. Breathing. Breathing a lot.
+rt_chat_bravewalk_1	chat	a=brave b=nervous	{other}, ¿y si salimos a dar un paseo?	{other}, how about we go out for a walk?
+rt_chat_bravewalk_2	chat		¿Fuera? ¿Donde no hay aire?	Outside? Where there's no air?
+rt_chat_bravewalk_3	chat		Exacto. Más sitio para nosotros.	Exactly. More room for us.
+rt_chat_vetshake_1	chat	a=veteran b=nervous	{other}, la primera vez yo también temblaba.	{other}, I was shaking my first time too.
+rt_chat_vetshake_2	chat		¿Y cuándo se te pasó?	And when did it stop?
+rt_chat_vetshake_3	chat		Todavía no. Pero ahora lo disimulo.	It hasn't. I just hide it better now.
+rt_chat_badass_1	chat	a=badass	Este cohete va demasiado despacio. | {other}, ¿podemos ir más rápido?	This rocket is too slow. | {other}, can we go faster?
+rt_chat_badass_2	chat		Vamos a la velocidad del plan de vuelo. | No. Y suelta el acelerador.	We're going at flight plan speed. | No. And let go of the throttle.
+rt_chat_badass_3	chat		El plan de vuelo es para cobardes.	Flight plans are for cowards.
+rt_chat_dimdim_1	chat	a=dim b=dim	{other}, ¿la Mun está hecha de queso?	{other}, is the Mun made of cheese?
+rt_chat_dimdim_2	chat		Claro. ¿Por qué crees que es amarilla?	Of course. Why do you think it's yellow?
+rt_chat_dimdim_3	chat		Pensaba que era por la luz. Ahora tengo hambre.	I thought it was the light. Now I'm hungry.

@@ -1418,6 +1418,35 @@ public static class Tests
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
         {
+            // shadow: behind the body inside its cylinder is dark, in front or beside it is lit
+            bool shadowOk = DcMath.InShadow(-700, 0, 0, 1e9, 0, 0, 600) && !DcMath.InShadow(700, 0, 0, 1e9, 0, 0, 600)
+                            && !DcMath.InShadow(-700, 650, 0, 1e9, 0, 0, 600) && DcMath.InShadow(-5000, 100, 100, 1, 0, 0, 600)
+                            && !DcMath.InShadow(-700, 0, 0, 0, 0, 0, 600);
+            // personas in chats: a=dim b=brave, several keys for one kerbal must all hold
+            var pErr = new List<string>();
+            var pChats = RuntimeLines.Chats(RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
+                "rt_chat_p_1\tchat\ta=dim a=pilot b=brave\tP.\tP.", "rt_chat_p_2\tchat\t\tP.\tP.",
+                "rt_chat_q_1\tchat\ta=clever\tQ.\tQ.", "rt_chat_q_2\tchat\t\tQ.\tQ." }, pErr));
+            var pc = pChats.Count == 1 ? pChats[0] : null;
+            var pn = new Dictionary<string, double>();
+            bool personaOk = pc != null && pErr.Count == 2
+                && RuntimeLines.ChatFits(pc, "orbit", pn, fullN, fullN, "pilot dim nervous", "engineer brave")
+                && !RuntimeLines.ChatFits(pc, "orbit", pn, fullN, fullN, "pilot nervous", "engineer brave")
+                && !RuntimeLines.ChatFits(pc, "orbit", pn, fullN, fullN, "scientist dim", "engineer brave")
+                && new Persona(0.9f, 0.9f, false, false, "Pilot").ChatKeys == "pilot brave dim";
+            // sunrise lines and recorded MC lines get the general replies, a to= reply only its own lines
+            var rec = new RuntimeTemplate("cm_001", RuntimeLines.RecordedKind, "", "");
+            var rRec = RuntimeLines.Replies(rtAll, rec, "orbit", new Dictionary<string, double>(),
+                new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } } }).ConvertAll(t => t.Id);
+            RuntimeTemplate sunT = rtAll.Find(t => t.Id == "rt_sunrise_count");
+            var rSun = RuntimeLines.Replies(rtAll, sunT, "orbit", new Dictionary<string, double>(),
+                new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } } }).ConvertAll(t => t.Id);
+            Check(shadowOk && personaOk && rRec.Contains("rt_re_any") && !rRec.Contains("rt_re_fuel") && !rRec.Contains("rt_re_sunrise")
+                  && rSun.Contains("rt_re_sunrise") && rSun.Contains("rt_re_any"),
+                  "runtime voice: sunrise shadow test, persona checks in chats, replies to sunrise and recorded MC lines",
+                  "shadow " + shadowOk + " persona " + personaOk + " (" + string.Join(" ; ", pErr.ToArray()) + ") / " + string.Join(",", rRec.ToArray()) + " / " + string.Join(",", rSun.ToArray()));
+        }
+        {
             // crew replies: a reply answers its to= lines, or any report and warp line without one
             var rn = new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } },
                                                         { "body", new[] { "Kérbin", "Kerbin" } } };

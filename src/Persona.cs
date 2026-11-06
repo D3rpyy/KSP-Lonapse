@@ -110,5 +110,17 @@ namespace Lonapse
         }
 
         public override string ToString() { return trait + " / " + FlagText(); }
+
+        /// <summary>For the a= and b= checks of a runtime chat: the trait key and the flags, like "pilot brave dim".</summary>
+        public string ChatKeys
+        {
+            get
+            {
+                string s = trait;
+                for (int i = 0; i < PersonaKeys.Length; i++)
+                    if (Has(PersonaKeys[i])) s += " " + PersonaKeys[i];
+                return s;
+            }
+        }
     }
 }

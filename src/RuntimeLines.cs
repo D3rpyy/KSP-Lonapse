@@ -48,7 +48,7 @@ namespace Lonapse
     public static class RuntimeLines
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
@@ -214,9 +214,10 @@ namespace Lonapse
                     {
                         string job = tm.Groups[2].Value;
                         if (t.Kind != "chat") bad.Add("'" + tok + "' only works in a chat");
-                        else if (Array.IndexOf(Persona.TraitKeys, job) < 0) bad.Add("unknown job '" + job + "' (pilot engineer scientist tourist)");
-                        else if (tm.Groups[1].Value == "a") t.TraitA = job;
-                        else t.TraitB = job;
+                        else if (Array.IndexOf(Persona.TraitKeys, job) < 0 && Array.IndexOf(Persona.PersonaKeys, job) < 0)
+                            bad.Add("unknown job or persona '" + job + "' (pilot engineer scientist tourist, badass brave nervous dim veteran)");
+                        else if (tm.Groups[1].Value == "a") t.TraitA = t.TraitA == null ? job : t.TraitA + " " + job;
+                        else t.TraitB = t.TraitB == null ? job : t.TraitB + " " + job;
                         continue;
                     }
                     Match m = Check.Match(tok);
@@ -303,12 +304,16 @@ namespace Lonapse
             return false;
         }
 
-        /// <summary>The job a chat asks for (null: any) and the job of the kerbal (null: not checked). A kerbal with an
-        /// unknown job (any) only fits a chat that asks for none.</summary>
+        /// <summary>The jobs and personas a chat asks for (null: any, else keys split by spaces, all must hold) and the
+        /// keys of the kerbal (null: not checked), like "pilot brave dim" (Persona.ChatKeys). A kerbal with an unknown
+        /// job (any) and no flags only fits a chat that asks for none.</summary>
         public static bool JobOk(string want, string have)
         {
             if (want == null || have == null) return true;
-            return string.Equals(want, have, StringComparison.Ordinal);
+            string[] keys = have.Split(' ');
+            foreach (string w in want.Split(' '))
+                if (w.Length > 0 && Array.IndexOf(keys, w) < 0) return false;
+            return true;
         }
 
         static string SlotSet(string text)
@@ -331,12 +336,15 @@ namespace Lonapse
             return r;
         }
 
+        /// <summary>The kind of a recorded Mission Control line (a calm chatter scene that ends with MC) for Answers.</summary>
+        public const string RecordedKind = "recorded";
+
         /// <summary>A reply answers this Mission Control line: one of its to= ids or prefixes matches, or it has none
-        /// and the line is a report or a warp line.</summary>
+        /// and the line is a report, a warp or sunrise line, or a recorded calm MC line.</summary>
         public static bool Answers(RuntimeTemplate reply, string lineId, string lineKind)
         {
             if (reply == null || reply.Kind != "reply" || string.IsNullOrEmpty(lineId)) return false;
-            if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp";
+            if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp" || lineKind == "sunrise" || lineKind == RecordedKind;
             foreach (string p in reply.To)
             {
                 if (p.EndsWith("*", StringComparison.Ordinal) ? lineId.StartsWith(p.Substring(0, p.Length - 1), StringComparison.Ordinal)

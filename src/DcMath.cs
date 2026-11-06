@@ -72,6 +72,18 @@ namespace Lonapse
             return (float)(Math.Exp(lq + (lm - lq) * s) / rateMultiplier);
         }
 
+        /// <summary>The point p (relative to the body center) is in the shadow of a body with radius r, with the sun in
+        /// direction s (relative to the body center, any length): behind the body and inside its shadow cylinder.</summary>
+        public static bool InShadow(double px, double py, double pz, double sx, double sy, double sz, double r)
+        {
+            double sl = Math.Sqrt(sx * sx + sy * sy + sz * sz);
+            if (sl <= 0 || r <= 0) return false;
+            double t = (px * sx + py * sy + pz * sz) / sl;
+            if (t >= 0) return false;
+            double perp2 = px * px + py * py + pz * pz - t * t;
+            return perp2 < r * r;
+        }
+
         /// <summary>On-rails ("HIGH") warp above 1x silences everything. Physics ("LOW") warp does not.</summary>
         public static bool IsRailsWarp(bool modeIsHigh, float rate)
         {

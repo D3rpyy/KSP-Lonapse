@@ -9,7 +9,9 @@
 #          warp: Mission Control in time warp on rails, now and then in place of the usual exchange (warp.tsv)
 #          reply: a kerbal answers a Mission Control line right after it, sometimes. to=rt_fuel_low in the when
 #          column: the MC lines it answers (a prefix with *: to=rt_orbit*). Without to=: any report or warp line.
-#          self is the kerbal who answers (replies.tsv)
+#          self is the kerbal who answers (replies.tsv). Without to= it can also follow a sunrise line, or a
+#          recorded calm chatter scene that ends with a Mission Control statement.
+#          sunrise: Mission Control at a sunrise in orbit, now and then (sunrise_biome.tsv)
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
@@ -17,6 +19,8 @@
 #          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).
 #          Jobs: pilot engineer scientist tourist. The chat only plays when the two kerbals have those jobs, in
 #          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.
+#          Personas work the same way: badass brave nervous dim veteran (a=dim b=veteran). Several for one kerbal
+#          (a=pilot a=brave): all must hold.
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
 #          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
 # english  the subtitle. A number slot shows digits, a name slot the name.
@@ -30,8 +34,9 @@
 #   at_home flight_no missions stars visits landings (crew history, see below)
 #   in_warp (1 in time warp, for checks only) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
 #   sci_left sci_first con_sci con_rep (science and contract lines, see science_contracts.tsv)
+#   sunrises (sunrises in orbit this flight)
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, next (the body after soi_h), kerbal in a report, and in a chat self (the speaker) and other (the one
+# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.
 # Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
 #   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions
