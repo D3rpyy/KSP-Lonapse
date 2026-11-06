@@ -1405,7 +1405,7 @@ public static class Tests
                     if (sa && sb) tourPair++; else if (sa) tourA++; else if (sb) tourB++;
                 }
             }
-            Check(careerOpen.Count == 0 && tourReports >= 5 && tourReplies >= 6 && tourA >= 4 && tourB >= 3 && tourPair >= 4,
+            Check(careerOpen.Count == 0 && tourReports >= 5 && tourReplies >= 6 && tourA >= 24 && tourB >= 23 && tourPair >= 24,
                   "runtime voice: career lines skip tourists, tourists have own reports (" + tourReports + "), answers (" + tourReplies
                   + ") and chats (" + tourA + " tourist to crew, " + tourB + " crew to tourist, " + tourPair + " two tourists)",
                   string.Join(" ", careerOpen.ToArray()));

@@ -137,3 +137,156 @@ rt_chat_tourtour_day_1	chat	day>=2 a=tourist b=tourist	{other}, día {day}. ¿T�
 rt_chat_tourtour_day_2	chat		Echo de menos el suelo.	I miss the floor.
 rt_chat_tourtour_landed_1	chat	landed at_home=0 a=tourist b=tourist	{other}, estamos en {body}. Sonríe para la foto.	{other}, we're on {body}. Smile for the photo.
 rt_chat_tourtour_landed_2	chat		Espera, que tengo el pelo aplastado del casco.	Wait, my hair is flat from the helmet.
+#				
+# Tourists: 20 chats a tourist starts with a crew member (a=tourist), 20 a crew member starts with a tourist				
+# (b=tourist) and 20 between two tourists (a=tourist b=tourist). A tourist never takes a chat without a=tourist or b=tourist.				
+rt_chat_tc_sunrise_1	chat	orbit sunrises>=2 a=tourist	{other}, ya llevo {sunrises} amaneceres. ¿Esto es normal?	{other}, I've seen {sunrises} sunrises already. Is that normal?
+rt_chat_tc_sunrise_2	chat		En órbita, sí. Uno cada vuelta.	In orbit, yes. One every orbit.
+rt_chat_tc_sunrise_3	chat		Pues mi reloj no lo sabe.	Well, my watch doesn't know that.
+rt_chat_tc_period_1	chat	orbit period_min>=2 a=tourist	{other}, ¿de verdad damos la vuelta entera en {period_min} minutos?	{other}, do we really go all the way around in {period_min} minutes?
+rt_chat_tc_period_2	chat		De verdad. Sin paradas.	Really. No stops.
+rt_chat_tc_flight_1	chat	flight a=tourist	{other}, ¿esto ya es el espacio?	{other}, is this space yet?
+rt_chat_tc_flight_2	chat		Todavía no. Estamos a {alt_km} kilómetros.	Not yet. We're at {alt_km} km.
+rt_chat_tc_flight_3	chat		Pues a mí ya me parece mucho.	It already feels like a lot to me.
+rt_chat_tc_sub_1	chat	suborbital a=tourist	{other}, ¿por qué ya no empujan los motores?	{other}, why have the engines stopped pushing?
+rt_chat_tc_sub_2	chat		Ahora subimos sin ellos. Luego bajamos.	We're coasting up now. Then we come down.
+rt_chat_tc_sub_3	chat		¿Y eso estaba en el plan?	And that was in the plan?
+rt_chat_tc_ap_1	chat	suborbital t_ap_min>=2 a=tourist	{other}, ¿qué pasa dentro de {t_ap_min} minutos?	{other}, what happens in {t_ap_min} minutes?
+rt_chat_tc_ap_2	chat		Llegamos a lo más alto.	We reach the highest point.
+rt_chat_tc_ap_3	chat		Voy preparando la cámara.	I'll get the camera ready.
+rt_chat_tc_escape_1	chat	escape a=tourist	{other}, ¿nos estamos yendo de {body}?	{other}, are we leaving {body}?
+rt_chat_tc_escape_2	chat		Sí. Despídete por la ventana.	Yes. Wave goodbye through the window.
+rt_chat_tc_escape_3	chat		¡Adiós! ¡Gracias por todo!	Bye! Thanks for everything!
+rt_chat_tc_home_1	chat	landed at_home=1 a=tourist	{other}, ¿ya se ha acabado?	{other}, is it over already?
+rt_chat_tc_home_2	chat		Ya estamos en casa. Enteros.	We're home. In one piece.
+rt_chat_tc_home_3	chat		Quiero que me devuelvan el dinero. Para pagarlo otra vez.	I want my money back. To pay for it again.
+rt_chat_tc_biome_1	chat	landed at_home=0 a=tourist	{other}, ¿cómo se llama este sitio?	{other}, what's this place called?
+rt_chat_tc_biome_2	chat		{biome}. Más o menos.	{biome}. Roughly.
+rt_chat_tc_biome_3	chat		Suena a sitio caro.	Sounds expensive.
+rt_chat_tc_vessel_1	chat	a=tourist	{other}, ¿por qué la nave se llama {vessel}?	{other}, why is the ship called {vessel}?
+rt_chat_tc_vessel_2	chat		No lo sé. Ya venía con ese nombre.	I don't know. It came with that name.
+rt_chat_tc_crew_1	chat	crew>=3 a=tourist	{other}, somos {crew}. ¿Quién cocina?	{other}, there are {crew} of us. Who's cooking?
+rt_chat_tc_crew_2	chat		Nadie. Todo viene en bolsitas.	Nobody. It all comes in pouches.
+rt_chat_tc_parts_1	chat	parts>=20 a=tourist	{other}, ¿{parts} piezas? ¿Y todas sirven para algo?	{other}, {parts} parts? And they all do something?
+rt_chat_tc_parts_2	chat		Casi todas.	Almost all.
+rt_chat_tc_parts_3	chat		No quiero saber cuáles no.	I don't want to know which ones don't.
+rt_chat_tc_eclow_1	chat	ec<30 a=tourist	{other}, ¿por qué hay menos luz aquí dentro?	{other}, why is it darker in here?
+rt_chat_tc_eclow_2	chat		Batería al {ec} por ciento. Ahorramos.	Battery at {ec} percent. We're saving power.
+rt_chat_tc_eclow_3	chat		Entonces apago mi linterna.	Then I'll turn off my flashlight.
+rt_chat_tc_fuellow_1	chat	fuel>0 fuel<25 a=tourist	{other}, Control ha dicho {fuel} por ciento de combustible. ¿Es grave?	{other}, Control said {fuel} percent fuel. Is that bad?
+rt_chat_tc_fuellow_2	chat		Es poco. Pero nos llega.	It's low. But it's enough.
+rt_chat_tc_fuellow_3	chat		Dilo otra vez. Con más ganas.	Say that again. With more conviction.
+rt_chat_tc_day_1	chat	day>=3 a=tourist	{other}, día {day}. ¿Cuándo es la excursión?	{other}, day {day}. When's the excursion?
+rt_chat_tc_day_2	chat		Esto es la excursión.	This is the excursion.
+rt_chat_tc_inc_1	chat	orbit inc_deg>=10 a=tourist	{other}, ¿vamos torcidos?	{other}, are we flying crooked?
+rt_chat_tc_inc_2	chat		Un poco. {inc_deg} grados. Es a propósito.	A bit. {inc_deg} degrees. On purpose.
+rt_chat_tc_inc_3	chat		Ah. Pues queda bonito.	Oh. It looks nice.
+rt_chat_tc_warp_1	chat	in_warp=1 a=tourist	{other}, ¿por qué todo va tan rápido de repente?	{other}, why is everything so fast all of a sudden?
+rt_chat_tc_warp_2	chat		Aceleramos el tiempo. Para no aburrirnos.	We're speeding up time. So we don't get bored.
+rt_chat_tc_warp_3	chat		¿Eso se puede hacer con las vacaciones?	Can you do that with holidays?
+rt_chat_tc_nolink_1	chat	link=0 a=tourist	{other}, Control no contesta. ¿Se han olvidado de nosotros?	{other}, Control isn't answering. Did they forget us?
+rt_chat_tc_nolink_2	chat		No hay señal. Ya volverán.	No signal. They'll be back.
+rt_chat_tc_nolink_3	chat		Si no vuelven, me quedo con tu asiento.	If they don't, I get your seat.
+rt_chat_tc_fast_1	chat	flight speed>=300 a=tourist	{other}, ¿{speed} metros por segundo? ¿Eso es legal?	{other}, {speed} meters per second? Is that legal?
+rt_chat_tc_fast_2	chat		Aquí arriba no hay policía.	There are no police up here.
+rt_chat_tc_pe_1	chat	orbit at_home=1 pe_km>=70 a=tourist	{other}, ¿qué es eso del periapsis que dice todo el mundo?	{other}, what's this periapsis everyone talks about?
+rt_chat_tc_pe_2	chat		El punto más bajo de la órbita. Ahora, {pe_km} kilómetros.	The lowest point of the orbit. Right now {pe_km} km.
+rt_chat_tc_pe_3	chat		Me lo apunto para presumir.	I'm writing that down to show off.
+rt_chat_tc_rcs_1	chat	has_rcs=1 mono>0 a=tourist	{other}, ¿qué son esos soplidos de fuera?	{other}, what are those puffs outside?
+rt_chat_tc_rcs_2	chat		Los propulsores pequeños. Para girar.	The small thrusters. For turning.
+rt_chat_tc_rcs_3	chat		Qué monos.	How cute.
+rt_chat_ct_sunrise_1	chat	orbit sunrises>=2 b=tourist	{other}, otro amanecer. Ya van {sunrises}.	{other}, another sunrise. That's {sunrises}.
+rt_chat_ct_sunrise_2	chat		¡Foto! ¡Foto!	Photo! Photo!
+rt_chat_ct_sunrise_3	chat		Ya tienes {sunrises} fotos iguales.	You already have {sunrises} identical photos.
+rt_chat_ct_flight_1	chat	flight b=tourist	{other}, estamos a {alt_km} kilómetros. Respira normal.	{other}, we're at {alt_km} km. Breathe normally.
+rt_chat_ct_flight_2	chat		Estoy respirando normal. Muy deprisa, pero normal.	I am breathing normally. Very fast, but normally.
+rt_chat_ct_sub_1	chat	suborbital b=tourist	{other}, ahora vas a flotar un rato.	{other}, you'll float for a while now.
+rt_chat_ct_sub_2	chat		¿Un rato cuánto?	How long is a while?
+rt_chat_ct_sub_3	chat		Lo justo para perder el bocadillo.	Just long enough to lose your sandwich.
+rt_chat_ct_period_1	chat	orbit period_min>=2 b=tourist	{other}, cada {period_min} minutos pasamos más o menos por encima de tu casa.	{other}, every {period_min} minutes we pass roughly over your house.
+rt_chat_ct_period_2	chat		¡Voy a saludar!	I'll wave!
+rt_chat_ct_escape_1	chat	escape b=tourist	{other}, nos alejamos de {body}. ¿Lo llevas todo?	{other}, we're leaving {body} behind. Got everything?
+rt_chat_ct_escape_2	chat		Creo que me dejé la plancha encendida.	I think I left the iron on.
+rt_chat_ct_home_1	chat	landed at_home=1 b=tourist	{other}, ya puedes soltar el asiento.	{other}, you can let go of the seat now.
+rt_chat_ct_home_2	chat		No puedo. Se me han quedado los dedos así.	I can't. My fingers are stuck like this.
+rt_chat_ct_away_1	chat	landed at_home=0 b=tourist	{other}, estás en {body}. Muy poca gente puede decir eso.	{other}, you're on {body}. Very few people can say that.
+rt_chat_ct_away_2	chat		Pues yo lo voy a decir mucho.	Well, I'm going to say it a lot.
+rt_chat_ct_fuel_1	chat	fuel>=50 b=tourist	{other}, combustible al {fuel} por ciento. Todo bien.	{other}, fuel at {fuel} percent. All good.
+rt_chat_ct_fuel_2	chat		No sé qué significa, pero gracias.	I don't know what that means, but thanks.
+rt_chat_ct_ecok_1	chat	ec>=90 b=tourist	{other}, si quieres, carga tu cámara. Batería al {ec} por ciento.	{other}, charge your camera if you like. Battery at {ec} percent.
+rt_chat_ct_ecok_2	chat		¡Por fin! Llevo horas sin hacer fotos.	Finally! I haven't taken a photo in hours.
+rt_chat_ct_day_1	chat	day>=2 b=tourist	{other}, día {day}. ¿Cómo lo llevas?	{other}, day {day}. How are you holding up?
+rt_chat_ct_day_2	chat		Bien. Echo de menos las sillas normales.	Fine. I miss normal chairs.
+rt_chat_ct_body_1	chat	orbit at_home=0 b=tourist	{other}, eso de ahí abajo es {body}. Nadie de tu barrio lo ha visto.	{other}, that down there is {body}. Nobody from your street has seen it.
+rt_chat_ct_body_2	chat		Mi vecino dice que lo ha visto.	My neighbor says they have.
+rt_chat_ct_body_3	chat		Tu vecino miente.	Your neighbor is lying.
+rt_chat_ct_speed_1	chat	orbit b=tourist	{other}, vamos a {speed} metros por segundo. No te asomes.	{other}, we're doing {speed} meters per second. Don't lean out.
+rt_chat_ct_speed_2	chat		No podría. La ventana no se abre.	I couldn't. The window doesn't open.
+rt_chat_ct_speed_3	chat		Por eso.	Exactly.
+rt_chat_ct_crew_1	chat	crew>=3 b=tourist	{other}, somos {crew} aquí dentro. Cuidado con los codos.	{other}, there are {crew} of us in here. Watch the elbows.
+rt_chat_ct_crew_2	chat		Perdón. Es que hablo con las manos.	Sorry. I talk with my hands.
+rt_chat_ct_nolink_1	chat	link=0 b=tourist	{other}, hemos perdido a Control un rato. No pasa nada.	{other}, we lost Control for a bit. It's fine.
+rt_chat_ct_nolink_2	chat		¿Y quién nos dice qué hacer?	Then who tells us what to do?
+rt_chat_ct_nolink_3	chat		Yo. Como siempre.	Me. As always.
+rt_chat_ct_warp_1	chat	in_warp=1 b=tourist	{other}, ahora el tiempo va a pasar muy deprisa. No te asustes.	{other}, time is going to pass very fast now. Don't be scared.
+rt_chat_ct_warp_2	chat		¿Me voy a hacer mayor?	Will I get older?
+rt_chat_ct_warp_3	chat		Solo un poquito.	Just a little.
+rt_chat_ct_polar_1	chat	orbit inc_deg>=60 b=tourist	{other}, esta órbita pasa por encima de los polos.	{other}, this orbit goes over the poles.
+rt_chat_ct_polar_2	chat		¿Veremos osos?	Will we see bears?
+rt_chat_ct_polar_3	chat		Desde aquí, no.	Not from here.
+rt_chat_ct_small_1	chat	parts>=2 parts<10 b=tourist	{other}, esta nave tiene solo {parts} piezas. Trátala bien.	{other}, this ship has only {parts} parts. Be gentle with it.
+rt_chat_ct_small_2	chat		¿Solo? ¿Y cuál de ellas es el baño?	Only? And which one is the bathroom?
+rt_chat_ct_biome_1	chat	landed at_home=0 b=tourist	{other}, mira por la ventana. Eso es {biome}.	{other}, look out the window. That's {biome}.
+rt_chat_ct_biome_2	chat		Se parece a mi pueblo. Sin gente.	It looks like my hometown. Without the people.
+rt_chat_ct_ap_1	chat	orbit ap_km>=100 b=tourist	{other}, en lo más alto de la órbita estaremos a {ap_km} kilómetros.	{other}, at the top of the orbit we'll be at {ap_km} km.
+rt_chat_ct_ap_2	chat		¿Allí hay mirador?	Is there a viewing deck there?
+rt_chat_ct_ap_3	chat		Toda la nave es un mirador.	The whole ship is a viewing deck.
+rt_chat_ct_climb_1	chat	suborbital alt_km>=2 b=tourist	{other}, {alt_km} kilómetros y subiendo. ¿Qué tal el estómago?	{other}, {alt_km} km and climbing. How's your stomach?
+rt_chat_ct_climb_2	chat		Subiendo también.	Climbing too.
+rt_chat_tt_sunrise_1	chat	orbit sunrises>=2 a=tourist b=tourist	{other}, ¿cuántos amaneceres llevamos?	{other}, how many sunrises have we had?
+rt_chat_tt_sunrise_2	chat		{sunrises}. Los he contado todos.	{sunrises}. I counted every one.
+rt_chat_tt_sunrise_3	chat		Yo me dormí en dos.	I slept through two.
+rt_chat_tt_period_1	chat	orbit period_min>=2 a=tourist b=tourist	{other}, dicen que una vuelta dura {period_min} minutos.	{other}, they say one orbit takes {period_min} minutes.
+rt_chat_tt_period_2	chat		Pues el autobús de mi pueblo tarda más.	The bus in my town takes longer.
+rt_chat_tt_flight_1	chat	flight a=tourist b=tourist	{other}, ¿tú sabes adónde vamos?	{other}, do you know where we're going?
+rt_chat_tt_flight_2	chat		Hacia arriba. Con eso me basta.	Up. That's enough for me.
+rt_chat_tt_sub_1	chat	suborbital a=tourist b=tourist	{other}, ¡estoy flotando!	{other}, I'm floating!
+rt_chat_tt_sub_2	chat		¡Y yo! ¡Y mi zapato!	Me too! And my shoe!
+rt_chat_tt_escape_1	chat	escape a=tourist b=tourist	{other}, nos vamos de {body}.	{other}, we're leaving {body}.
+rt_chat_tt_escape_2	chat		¿Nos van a sellar el pasaporte?	Will they stamp our passports?
+rt_chat_tt_home_1	chat	landed at_home=1 a=tourist b=tourist	{other}, ya estamos en casa.	{other}, we're home.
+rt_chat_tt_home_2	chat		Qué pena. Ya me había acostumbrado a flotar.	Shame. I'd just got used to floating.
+rt_chat_tt_home_3	chat		Yo me caigo cada vez que me levanto.	I fall over every time I stand up.
+rt_chat_tt_biome_1	chat	landed at_home=0 a=tourist b=tourist	{other}, dicen que esto es {biome}.	{other}, they say this is {biome}.
+rt_chat_tt_biome_2	chat		Pues no hay ni un cartel.	There isn't a single sign.
+rt_chat_tt_speed_1	chat	orbit a=tourist b=tourist	{other}, vamos a {speed} metros por segundo.	{other}, we're doing {speed} meters per second.
+rt_chat_tt_speed_2	chat		¿Y por qué no se nota?	Then why can't I feel it?
+rt_chat_tt_speed_3	chat		Será que los asientos son buenos.	Must be the good seats.
+rt_chat_tt_shop_1	chat	orbit alt_km>=2 a=tourist b=tourist	{other}, estamos a {alt_km} kilómetros de cualquier tienda.	{other}, we're {alt_km} km from the nearest shop.
+rt_chat_tt_shop_2	chat		Y yo sin cepillo de dientes.	And me without a toothbrush.
+rt_chat_tt_day_1	chat	day>=3 a=tourist b=tourist	{other}, ya es el día {day}. ¿Tú te has duchado?	{other}, it's day {day}. Have you showered?
+rt_chat_tt_day_2	chat		¿Aquí hay ducha?	There's a shower here?
+rt_chat_tt_day_3	chat		Eso me temía.	That's what I was afraid of.
+rt_chat_tt_crew_1	chat	crew>=3 a=tourist b=tourist	{other}, somos {crew}. ¿Quién de nosotros conduce?	{other}, there are {crew} of us. Which of us is driving?
+rt_chat_tt_crew_2	chat		Espero que ni tú ni yo.	I hope it's neither of us.
+rt_chat_tt_eclow_1	chat	ec<30 a=tourist b=tourist	{other}, ¿has notado que hay menos luz?	{other}, have you noticed it's darker?
+rt_chat_tt_eclow_2	chat		Será el ambiente romántico.	Must be the romantic mood.
+rt_chat_tt_eclow_3	chat		Batería al {ec} por ciento. Muy romántico.	Battery at {ec} percent. Very romantic.
+rt_chat_tt_fuellow_1	chat	fuel>0 fuel<25 a=tourist b=tourist	{other}, el combustible está al {fuel} por ciento.	{other}, the fuel is at {fuel} percent.
+rt_chat_tt_fuellow_2	chat		¿Hay alguna gasolinera por aquí?	Is there a gas station around here?
+rt_chat_tt_nolink_1	chat	link=0 a=tourist b=tourist	{other}, Control ya no contesta.	{other}, Control isn't answering anymore.
+rt_chat_tt_nolink_2	chat		Será que les caemos mal.	Maybe they don't like us.
+rt_chat_tt_nolink_3	chat		Pues a mí me caían bien.	Well, I liked them.
+rt_chat_tt_warp_1	chat	in_warp=1 a=tourist b=tourist	{other}, ¿por qué las estrellas van tan deprisa?	{other}, why are the stars moving so fast?
+rt_chat_tt_warp_2	chat		Han acelerado el tiempo. Para ahorrar.	They sped up time. To save money.
+rt_chat_tt_polar_1	chat	orbit inc_deg>=60 a=tourist b=tourist	{other}, ¿estamos pasando por encima del polo?	{other}, are we passing over the pole?
+rt_chat_tt_polar_2	chat		Eso dicen. Abrígate.	So they say. Wrap up warm.
+rt_chat_tt_vessel_1	chat	a=tourist b=tourist	{other}, ¿te gusta el nombre {vessel}?	{other}, do you like the name {vessel}?
+rt_chat_tt_vessel_2	chat		Yo la habría llamado como mi gato.	I'd have named it after my cat.
+rt_chat_tt_away_1	chat	landed at_home=0 a=tourist b=tourist	{other}, estamos en {body}. ¿Y ahora qué hacemos?	{other}, we're on {body}. Now what?
+rt_chat_tt_away_2	chat		Mirar por la ventana. Es lo que pagamos.	Look out the window. That's what we paid for.
+rt_chat_tt_top_1	chat	suborbital t_ap_min>=2 a=tourist b=tourist	{other}, en {t_ap_min} minutos llegamos a lo más alto.	{other}, in {t_ap_min} minutes we reach the top.
+rt_chat_tt_top_2	chat		¿Y luego?	And then?
+rt_chat_tt_top_3	chat		Luego mejor no lo pienses.	Then better not to think about it.
+rt_chat_tt_parts_1	chat	parts>=30 a=tourist b=tourist	{other}, esta nave tiene {parts} piezas.	{other}, this ship has {parts} parts.
+rt_chat_tt_parts_2	chat		Yo conté {parts} y un tornillo suelto.	I counted {parts} and one loose bolt.
