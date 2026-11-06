@@ -70,15 +70,17 @@ It is a tab separated text file, UTF-8, with the columns `id kind when spanish e
 the Lonapse runtime lines. It is explained at the top of `GameData/Lonapse/Phrases/Runtime/reports.tsv`. Lonapse reads
 every `.tsv` in your `Lonapse` folder at the first flight scene. KSP itself ignores `.tsv` files.
 
-```
-id	kind	when	spanish	english
-rt_chat_yourmod_repair_1	chat	on=yourmod.repair_done	{other}, ya está arreglado: {x_part}.	{other}, it's fixed: {x_part}.
-rt_chat_yourmod_repair_2	chat		Buen trabajo. ¿Has usado cinta?	Good work. Did you use tape?
-rt_chat_yourmod_repairsolo_1	chat	on=yourmod.repair_done	Reparación terminada.	Repair done.
-rt_yourmod_repair	event	on=yourmod.repair_done	{kerbal}, buen trabajo.	{kerbal}, good work.
-rt_re_yourmod_repair	reply	to=rt_yourmod_repair	Gracias.	Thanks.
-rt_yourmod_repair_meta	meta	on=yourmod.repair_done cooldown=180 priority=normal who=any
-```
+| id | kind | when | spanish | english |
+|---|---|---|---|---|
+| `rt_chat_yourmod_repair_1` | `chat` | `on=yourmod.repair_done` | {other}, ya está arreglado: {x_part}. | {other}, it's fixed: {x_part}. |
+| `rt_chat_yourmod_repair_2` | `chat` |  | Buen trabajo. ¿Has usado cinta? | Good work. Did you use tape? |
+| `rt_chat_yourmod_repairsolo_1` | `chat` | `on=yourmod.repair_done` | Reparación terminada. | Repair done. |
+| `rt_yourmod_repair` | `event` | `on=yourmod.repair_done` | {kerbal}, buen trabajo. | {kerbal}, good work. |
+| `rt_re_yourmod_repair` | `reply` | `to=rt_yourmod_repair` | Gracias. | Thanks. |
+| `rt_yourmod_repair_meta` | `meta` | `on=yourmod.repair_done cooldown=180 priority=normal who=any` |  |  |
+
+In the file itself the columns are separated by tabs, and the header row comes first. To start your own
+file, copy [docs/api/example_mod.tsv](api/example_mod.tsv) rather than these tables.
 
 ## Kinds
 
@@ -152,11 +154,11 @@ Does your mod add an experiment that runs through the KSP science system, a `Mod
 `experimentID`? Then Lonapse sees it like a stock experiment. You do not call `Trigger` for it. Without help Lonapse
 calls it "the experiment", and only the general science lines play. An `experiment` row fixes that:
 
-```
-rt_yourmod_soil_exp	experiment	on=yourmod.soil id=yourSoilScan	análisis del suelo	soil analysis
-rt_sci_yourmod_soil	science	on=yourmod.soil	Recibimos el {exp}.	We have the {exp}.
-rt_chat_yourmod_soilsolo_1	chat	on=yourmod.soil	Ya tengo el {exp}.	I have the {exp}.
-```
+| id | kind | when | spanish | english |
+|---|---|---|---|---|
+| `rt_yourmod_soil_exp` | `experiment` | `on=yourmod.soil id=yourSoilScan` | análisis del suelo | soil analysis |
+| `rt_sci_yourmod_soil` | `science` | `on=yourmod.soil` | Recibimos el {exp}. | We have the {exp}. |
+| `rt_chat_yourmod_soilsolo_1` | `chat` | `on=yourmod.soil` | Ya tengo el {exp}. | I have the {exp}. |
 
 - `id=` is the `experimentID` of your experiment, the part of the subject id before the `@`. Case does not matter.
   A stock id is an error, Lonapse has its own words for those.
@@ -177,10 +179,10 @@ Does your mod add a part with a `ModuleGroundSciencePart`, one that a kerbal on 
 deploy itself. Without help it calls the part by what it does ("the antenna", "the generator", "the gadget"). A
 `device` row gives it its own words and a topic:
 
-```
-rt_yourmod_drill_dev	device	on=yourmod.drill id=yourDrillRig	el taladro	the drill rig
-rt_chat_yourmod_drillsolo_1	chat	on=yourmod.drill	{device} ya está montado.	Done, {device} is set up.
-```
+| id | kind | when | spanish | english |
+|---|---|---|---|---|
+| `rt_yourmod_drill_dev` | `device` | `on=yourmod.drill id=yourDrillRig` | el taladro | the drill rig |
+| `rt_chat_yourmod_drillsolo_1` | `chat` | `on=yourmod.drill` | {device} ya está montado. | Done, {device} is set up. |
 
 - `id=` is the part name, the `name` in the part's cfg. A stock Breaking Ground part is an error.
 - `{device}` says "the drill rig". The words include the article, because the slot stands for the whole thing.
@@ -192,10 +194,10 @@ rt_chat_yourmod_drillsolo_1	chat	on=yourmod.drill	{device} ya está montado.	Don
 Does your mod add contracts? Lonapse already says something when a contract is done or failed. A `contract` row lets
 your contract type have its own lines:
 
-```
-rt_yourmod_salvage_con	contract	on=yourmod.salvage id=YourSalvageContract	el rescate de chatarra	the salvage job
-rt_con_yourmod_salvage	contract_funds	on=yourmod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
-```
+| id | kind | when | spanish | english |
+|---|---|---|---|---|
+| `rt_yourmod_salvage_con` | `contract` | `on=yourmod.salvage id=YourSalvageContract` | el rescate de chatarra | the salvage job |
+| `rt_con_yourmod_salvage` | `contract_funds` | `on=yourmod.salvage` | Listo: {contract}. Os pagan {funds} fondos. | Done: {contract}. It pays {funds} funds. |
 
 - `id=` is the class name of your contract, the C# type that derives from `Contracts.Contract`.
 - `{contract}` says "the salvage job". A line with `{contract}` only plays for a registered contract type.
