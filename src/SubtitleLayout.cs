@@ -372,7 +372,7 @@ namespace Lonapse
         }
 
         /// <summary>Settings.subtitleHold: how long a subtitle stays after its line, default and most (user request).</summary>
-        public const float DefaultHold = 0.6f, MaxHold = 8f;
+        public const float DefaultHold = 0.6f, MaxHold = 10f;
 
         /// <summary>On screen for the line plus <paramref name="hold"/> s (0 .. MaxHold), at least 1.2 s.</summary>
         public static float Duration(float seconds, float hold)

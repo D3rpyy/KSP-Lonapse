@@ -436,7 +436,7 @@ namespace Lonapse
         public float subtitleOpacity = 0.55f;       // panel opacity 0 .. 1
         public int subtitleMaxEntries = 2;          // 1 .. 4
         public float subtitleWidth = 1.0f;          // 0.6.0: 0.5 .. 1.6, times the width of the position preset
-        public float subtitleHold = SubtitleLayout.DefaultHold; // 0.7.1: s a subtitle stays after its line ends, 0 .. 8
+        public float subtitleHold = SubtitleLayout.DefaultHold; // 0.7.1: s a subtitle stays after its line ends, 0 .. 10
         public float radioStatic = 0.5f;            // 0.6.0: 0..1, static under every radio line at any signal (DcMath.StaticCurve)
         public bool intercomRadioFx = false;        // 0.6.0: crew-to-crew lines get the radio sound, not the cabin sound
         // --- v5: probe mode ---

@@ -3250,8 +3250,8 @@ public static class Tests
                 Check(SubtitleLayout.Duration(2f) == 2.6f && SubtitleLayout.Duration(0.1f) == 1.2f && SubtitleLayout.Duration(float.NaN) == 1.2f, "subtitle: Duration line + 0.6 s, min 1.2 s", null);
                 Check(SubtitleLayout.Duration(2f, 3f) == 5f && SubtitleLayout.Duration(2f, 0f) == 2f && SubtitleLayout.Duration(0.1f, 0f) == 1.2f
                       && SubtitleLayout.Duration(2f, 99f) == 2f + SubtitleLayout.MaxHold && SubtitleLayout.Duration(2f, float.NaN) == 2.6f,
-                      "subtitle: the hold setting adds its seconds after the line, 0 to 8 s, at least 1.2 s on screen", null);
-                var sh = new Settings { subtitleHold = 20f };
+                      "subtitle: the hold setting adds its seconds after the line, 0 to 10 s, at least 1.2 s on screen", null);
+                var sh = new Settings { subtitleHold = 25f };
                 sh.Clamp();
                 var sh2 = new Settings { subtitleHold = float.NaN };
                 sh2.Clamp();
