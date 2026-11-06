@@ -60,6 +60,20 @@ namespace Lonapse
         }
 
         /// <summary>
+        /// The mood a listener moves to: the speaker's line mood at ListenerScale, but a listener is never more scared
+        /// than its own stress allows. A calm kerbal no longer takes over the fear of a panicking one. A happy line
+        /// still makes a listener smile. Stress is the listener's own, tenseAt and panicAt its own thresholds.
+        /// </summary>
+        public static float ListenerMood(float speakerMood, float stress, float tenseAt, float panicAt)
+        {
+            if (float.IsNaN(speakerMood) || float.IsInfinity(speakerMood)) speakerMood = 0f;
+            float m = speakerMood * ListenerScale;
+            if (m >= 0f) return Clamp(m, -1f, 1f);
+            float ownFear = Math.Min(0f, StressCap(stress, tenseAt, panicAt));
+            return Clamp(Math.Max(m, ownFear), -1f, 1f);
+        }
+
+        /// <summary>
         /// The mood a talking or listening face moves to. The line mood, but a line never makes the face happier than
         /// it is: a fearful stock face (stockMood below FearFace) keeps its fear on a calm line, a fearful line may
         /// deepen it. The stress caps how happy the face can look (StressCap).

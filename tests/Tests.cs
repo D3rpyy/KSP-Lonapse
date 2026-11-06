@@ -4349,6 +4349,20 @@ public static class Tests
                 Check(FaceMath.StressCap(0.5f, float.NaN, float.NaN) <= 1f && FaceMath.StressCap(float.NaN, 0.3f, 0.7f) == 1f
                       && FaceMath.StressCap(1f, 0.3f, 1.05f) >= -1f && FaceMath.StressCap(0.9f, 0.5f, 0.5f) < FaceMath.FaceAtPanic + 1e-5f,
                       "face: bad or crossed thresholds (escalated panicAt over 1, panicAt = tenseAt) stay sane", "");
+                Check(FaceMath.ListenerMood(-1f, 0.1f, 0.35f, 0.83f) == 0f
+                      && Math.Abs(FaceMath.ListenerMood(-1f, 0.83f, 0.35f, 0.83f) + 0.5f) < 1e-5
+                      && Math.Abs(FaceMath.ListenerMood(-0.5f, 1f, 0.35f, 0.83f) + 0.25f) < 1e-5
+                      && Math.Abs(FaceMath.ListenerMood(0.8f, 0.9f, 0.35f, 0.83f) - 0.4f) < 1e-5,
+                      "face: a calm listener does not copy a panicking speaker's fear, a stressed one may, a grin still passes", "");
+                Check(DcMath.CrewDistortion(1f, 0f, true) == 0f && Math.Abs(DcMath.CrewDistortion(1f, 1f, true) - 0.1f) < 1e-5
+                      && Math.Abs(DcMath.CrewDistortion(1f, 0f, false) - 0.3f) < 1e-5 && DcMath.CrewDistortion(0.4f, 0f, false) == 0f,
+                      "voice: a recorded panic clip gets no stress distortion on top, a calm line none, a stressed one at most 0.3", "");
+                Check(PhraseTable.PartTopicOk("prechute", false, false, true, false) && !PhraseTable.PartTopicOk("prechute", false, false, true, true)
+                      && !PhraseTable.PartTopicOk("prechute", false, false, false, false) && PhraseTable.PartTopicOk("chuteopen", false, false, false, true)
+                      && !PhraseTable.PartTopicOk("chuteopen", false, false, true, false) && !PhraseTable.PartTopicOk("heatshield", true, false, true, true)
+                      && PhraseTable.PartTopicOk("heatshield", false, true, false, false) && !PhraseTable.PartTopicOk("solar", false, true, true, true)
+                      && PhraseTable.PartTopicOk("any", false, false, false, false),
+                      "parts: arm-the-chutes talk only before any chute opens, chute-open talk only after, shield talk only with a shield", "");
                 Check(FaceMath.IdleMood(0.8f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.IdleMood(0.8f, 1f, 0.3f, 0.7f) == -1f
                       && FaceMath.IdleMood(-0.8f, 0.4f, 0.3f, 0.7f) == -0.8f && Math.Abs(FaceMath.IdleMood(0.8f, 0.7f, 0.3f, 0.7f) + 0.5f) < 1e-5,
                       "face: between lines a grinning stock face is capped by stress, a scared one stays scared", "");

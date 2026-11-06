@@ -589,7 +589,7 @@ namespace Lonapse
         {
             string phase = CurrentPhase;
             return PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
-                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
+                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && PartsOk(sc)
                       && (sc.IsIntercom || BlackoutOk(sc)) && sc.PlaysAt(Body) && filter(sc) && SlotsOk(sc));
         }
 

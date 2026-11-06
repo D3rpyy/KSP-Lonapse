@@ -1,114 +1,114 @@
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
-# Return: reentry, descent, chutes, touchdown and splashdown. New keys: re_												
-# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
-chute_semi_01	chute_semi	callout	none	crew	chute_semi_01	1	both	any	any	Semiabierto	Semi-deployed | Semi-deployed | Partly open	
-chute_semi_02	chute_semi	callout	none	crew	chute_semi_02	1	both	any	any	Paracaídas a medias	Chutes halfway out | Chutes halfway out | Halfway open	
-chute_full_01	chute_full	callout	none	crew	chute_full_01	1	both	any	any	Desplegado	Deployed | Deployed | Fully deployed	
-chute_full_02	chute_full	callout	none	crew	chute_full_02	1	both	any	any	Paracaídas abiertos	Chutes open | Chutes open | Open chutes	
-touchdown_01	touchdown	chatter	none	mc	touchdown_01	1	m	any	any	Habéis tocado suelo. Todo bien.	You're down. All good. | You're down. All good. | Down safely, {vessel}.	 |  | Habéis bajado bien, {vessel}.
-touchdown_02	touchdown	chatter	none	crew	touchdown_02	1	both	any	any	Estamos en tierra.	We're on the ground. | We're on the ground. | On the ground.	
-splashdown_01	splashdown	chatter	none	mc	splashdown_01	1	m	any	any	Amerizaje confirmado.	Splashdown confirmed. | Splashdown confirmed. | We confirm splashdown.	
-splashdown_02	splashdown	chatter	none	crew	splashdown_02	1	both	any	any	Estamos en el agua.	We're in the water. | We're in the water. | In the water.	
-chute_semi_03	chute_semi	callout	none	crew	chute_semi_03	1	both	any	any	Paracaídas fuera.	Chutes out. | Chutes out. | Chutes are out.	
-chute_full_03	chute_full	callout	none	crew	chute_full_03	1	both	any	any	¡Se abrió!	It opened! | It opened! | Open!	
-touchdown_03	touchdown	chatter	none	crew	touchdown_03	1	both	any	any	Suave como una pluma.	Soft as a feather. | Soft as a feather. | Feather soft.	
-touchdown_s1_1	touchdown	chatter	none	crew	touchdown_s1	1	both	any	any	¡Contacto!	Contact! | Contact! | Ground contact!	
-touchdown_s1_2	touchdown	chatter	none	mc	touchdown_s1	2	m	any	any	Contacto confirmado. Bienvenidos.	Contact confirmed. Welcome. | Contact confirmed. Welcome. | Confirmed. Welcome to {here}.	 |  | Confirmado. Bienvenidos a {here}.
-splashdown_03	splashdown	chatter	none	crew	splashdown_03	1	both	any	any	Flotamos bien.	We're floating fine. | We're floating fine. | Floating nicely.	
-# Serious launch and return radio, procedural. Calm mostly, tense lines name their cause.												
-re_orb_s1_1	chatter	chatter	calm	mc	re_orb_s1	1	m	orbit	any	Preparad la maniobra de desorbitación.	Prepare the deorbit maneuver. | Prepare the deorbit maneuver. | Get ready to deorbit.	
-re_orb_s1_2	chatter	chatter	calm	crew	re_orb_s1	2	both	orbit	any	Recibido, orientando al retrógrado.	Copy, pointing retrograde. | Copy, pointing retrograde. | Copy. Going retrograde.	
-re_ent_s3_1	chatter	chatter	calm	crew	re_ent_s3	1	both	reentry	any	Interfaz de entrada.	Entry interface. | Entry interface. | We're at entry interface.	
-re_ent_s3_2	chatter	chatter	calm	mc	re_ent_s3	2	m	reentry	any	Recibido. Mantened la actitud.	Copy. Hold attitude. | Copy. Hold attitude. | Copy. Keep that attitude.	
-re_ent_s4_1	chatter	chatter	calm	mc	re_ent_s4	1	m	reentry	any	Escudo térmico hacia delante.	Heat shield forward. | Heat shield forward. | Shield to the front.	
-re_ent_s4_2	chatter	chatter	calm	crew	re_ent_s4	2	both	reentry	any	Confirmado, escudo delante.	Confirmed, shield forward. | Confirmed, shield forward. | Confirmed. Shield in front.	
-re_ent_s5_1	chatter	chatter	calm	crew	re_ent_s5	1	both	reentry	any	Ya notamos el aire.	We can feel the air. | We can feel the air. | The air is grabbing us.	
-re_ent_s5_2	chatter	chatter	calm	mc	re_ent_s5	2	m	reentry	any	Recibido, empieza el frenado.	Copy, braking begins. | Copy, braking begins. | Copy. Braking starts.	
-re_ent_s6_1	chatter	chatter	calm	mc	re_ent_s6	1	m	reentry	any	Perderemos la señal pronto.	We'll lose signal soon. | We'll lose signal soon. | Signal goes soon.	
-re_ent_s6_2	chatter	chatter	calm	crew	re_ent_s6	2	both	reentry	any	Recibido. Hablamos al otro lado.	Copy. Talk to you on the other side. | Copy. Talk to you on the other side. | Copy. See you on the other side.	
-re_ent_s7_1	chatter	chatter	calm	crew	re_ent_s7	1	both	reentry	any	Control, ¿nos recibís?	Control, do you read? | Control, do you read? | Control, hear us?	
-re_ent_s7_2	chatter	chatter	calm	mc	re_ent_s7	2	m	reentry	any	Os recibimos. Bienvenidos de vuelta.	We read you. Welcome back. | We read you. Welcome back. | Loud and clear. Welcome back.	
-re_ent_s9_1	chatter	chatter	calm	mc	re_ent_s9	1	m	reentry	gforce	Ahora sube la aceleración.	G-load builds now. | G-load builds now. | The g's are coming.	
-re_ent_s9_2	chatter	chatter	calm	crew	re_ent_s9	2	both	reentry	gforce	Recibido, bien sujetos.	Copy, strapped in tight. | Copy, strapped in tight. | Copy. Belts tight.	
-re_ent_s10_1	chatter	chatter	calm	crew	re_ent_s10	1	both	reentry	heat	Temperatura del escudo estable.	Shield temperature steady. | Shield temperature steady. | Shield temperature is stable.	
-re_ent_s10_2	chatter	chatter	calm	mc	re_ent_s10	2	m	reentry	heat	Recibido, dentro de márgenes.	Copy, within margins. | Copy, within margins. | Copy. Inside the margins.	
-re_ent_s12_1	chatter	chatter	calm	mc	re_ent_s12	1	m	reentry	any	Sondeo de reentrada. ¿Estado?	Reentry poll. Status? | Reentry poll. Status? | Reentry check. Status?	
-re_ent_s12_2	chatter	chatter	calm	crew	re_ent_s12	2	both	reentry	any	Cabina estable, tripulación bien.	Cabin stable, crew fine. | Cabin stable, crew fine. | Cabin good. Crew good.	
-re_ent_s12_3	chatter	chatter	calm	mc	re_ent_s12	3	m	reentry	any	Recibido. Seguid el perfil.	Copy. Follow the profile. | Copy. Follow the profile. | Copy. Stick to the profile.	
-re_ent_s13_1	chatter	chatter	calm	crew	re_ent_s13	1	both	reentry	plasma	Salimos del apagón de radio.	Out of the radio blackout. | Out of the radio blackout. | Radio blackout is over.	
-re_ent_s13_2	chatter	chatter	calm	mc	re_ent_s13	2	m	reentry	plasma	Bienvenidos. Señal limpia.	Welcome back. Clean signal. | Welcome back. Clean signal. | Welcome back. Good signal.	
-re_ent_01	chatter	chatter	calm	crew	re_ent_01	1	both	reentry	any	Entrando en la atmósfera.	Entering the atmosphere. | Entering the atmosphere. | Into the atmosphere.	
-re_ent_02	chatter	chatter	calm	mc	re_ent_02	1	m	reentry	any	Ángulo de entrada correcto.	Entry angle good. | Entry angle good. | Good entry angle.	
-re_ent_03	chatter	chatter	calm	crew	re_ent_03	1	both	reentry	plasma	Brillo en las ventanas.	Glow on the windows. | Glow on the windows. | The windows are glowing.	
-re_ent_04	chatter	chatter	calm	mc	re_ent_04	1	m	reentry	any	Trayectoria de entrada nominal.	Entry trajectory nominal. | Entry trajectory nominal. | Entry path looks good.	
-re_ent_07	chatter	chatter	calm	crew	re_ent_07	1	both	reentry	gforce	Sube la aceleración, todo bien.	G-load rising, all fine. | G-load rising, all fine. | More g's. All good.	
-re_ent_08	chatter	chatter	calm	mc	re_ent_08	1	m	reentry	any	Os tenemos en el radar.	We have you on radar. | We have you on radar. | You're on radar, {vessel}.	 |  | Os tenemos en el radar, {vessel}.
-re_ten_s1_1	chatter	chatter	tense	crew	re_ten_s1	1	both	reentry	heat	Control, la temperatura sube rápido.	Control, temperature rising fast. | Control, temperature rising fast. | Control, it's heating up fast.	
-re_ten_s1_2	chatter	chatter	tense	mc	re_ten_s1	2	m	reentry	heat	Recibido. Escudo siempre delante.	Copy. Keep the shield forward. | Copy. Keep the shield forward. | Copy. Shield in front.	
-re_ten_s2_1	chatter	chatter	tense	mc	re_ten_s2	1	m	reentry	gforce	Aceleración alta. ¿Estáis bien?	High g-load. Are you okay? | High g-load. Are you okay? | Lots of g's. You okay?	
-re_ten_s2_2	chatter	chatter	tense	crew	re_ten_s2	2	both	reentry	gforce	Aguantando. Cuesta respirar.	Holding on. Hard to breathe. | Holding on. Hard to breathe. | Hanging on. Breathing is hard.	
-re_ten_s3_1	chatter	chatter	tense	crew	re_ten_s3	1	both	reentry	plasma	Mucho brillo fuera. Señal débil.	Lots of glow outside. Weak signal. | Lots of glow outside. Weak signal. | Bright glow outside. Signal is weak.	
-re_ten_s3_2	chatter	chatter	tense	mc	re_ten_s3	2	m	reentry	plasma	Recibido. Os perdemos un rato.	Copy. We'll lose you for a while. | Copy. We'll lose you for a while. | Copy. You'll be gone for a bit.	
-re_ten_s4_1	chatter	chatter	tense	crew	re_ten_s4	1	both	reentry	spin	Estamos girando.	We're spinning. | We're spinning. | We spin.	
-re_ten_s4_2	chatter	chatter	tense	mc	re_ten_s4	2	m	reentry	spin	Recibido. Estabilizad con los mandos.	Copy. Stabilize with the controls. | Copy. Stabilize with the controls. | Copy. Use the controls to stabilize.	
-re_ten_s5_1	chatter	chatter	tense	mc	re_ten_s5	1	m	reentry	heat	Temperatura del escudo alta.	Shield temperature high. | Shield temperature high. | The shield is very hot.	
-re_ten_s5_2	chatter	chatter	tense	crew	re_ten_s5	2	both	reentry	heat	La vemos. Seguimos el perfil.	We see it. Staying on profile. | We see it. Staying on profile. | Copy. We stay on profile.	
-re_ten_01	chatter	chatter	tense	crew	re_ten_01	1	both	reentry	heat	La temperatura no para de subir.	The temperature keeps rising. | The temperature keeps rising. | It keeps getting hotter.	
-re_ten_02	chatter	chatter	tense	crew	re_ten_02	1	both	reentry	gforce	La aceleración aplasta.	The g-load is crushing. | The g-load is crushing. | The g's are crushing me.	
-re_ten_04	chatter	chatter	tense	mc	re_ten_04	1	m	reentry	plasma	Señal entrecortada por el plasma.	Signal breaking up in the plasma. | Signal breaking up in the plasma. | The plasma breaks up your signal.	
-re_ten_05	chatter	chatter	tense	crew	re_ten_05	1	both	reentry	spin	La cápsula oscila mucho.	The capsule is swaying a lot. | The capsule is swaying a lot. | Lots of swaying in the capsule.	
-re_des_s1_1	chatter	chatter	calm	mc	re_des_s1	1	m	descent	any	Pronto, altura de paracaídas.	Chute altitude soon. | Chute altitude soon. | Almost at chute altitude.	
-re_des_s1_2	chatter	chatter	calm	crew	re_des_s1	2	both	descent	any	Recibido, listos para armar.	Copy, ready to arm. | Copy, ready to arm. | Copy. Ready to arm them.	
-re_des_s2_1	chatter	chatter	calm	crew	re_des_s2	1	both	descent	any	Paracaídas armados.	Chutes armed. | Chutes armed. | Parachutes are armed.	
-re_des_s2_2	chatter	chatter	calm	mc	re_des_s2	2	m	descent	any	Recibido, se abrirán solos.	Copy, they'll open on their own. | Copy, they'll open on their own. | Copy. They open by themselves.	
-re_des_s3_1	chatter	chatter	calm	crew	re_des_s3	1	both	descent	any	Por debajo de la velocidad del sonido.	Below the speed of sound. | Below the speed of sound. | Subsonic now.	
-re_des_s3_2	chatter	chatter	calm	mc	re_des_s3	2	m	descent	any	Recibido, descenso nominal.	Copy, descent nominal. | Copy, descent nominal. | Copy. Good descent.	
-re_des_s4_1	chatter	chatter	calm	mc	re_des_s4	1	m	descent	any	Os tenemos a la vista.	We have you in sight. | We have you in sight. | We can see you.	
-re_des_s4_2	chatter	chatter	calm	crew	re_des_s4	2	both	descent	any	Recibido, bajando suave.	Copy, coming down easy. | Copy, coming down easy. | Copy. Easy descent.	
-re_des_s5_1	chatter	chatter	calm	mc	re_des_s5	1	m	descent	any	Equipos de rescate en camino.	Recovery teams on the way. | Recovery teams on the way. | The recovery team is coming.	
-re_des_s5_2	chatter	chatter	calm	crew	re_des_s5	2	both	descent	any	Recibido, aquí los esperamos.	Copy, we will wait for them here. | Copy, we will wait for them here. | Copy. We'll wait right here.	
-re_des_s11_1	chatter	chatter	calm	crew	re_des_s11	1	both	descent	any	Fin del salto, bajando.	End of the hop, coming down. | End of the hop, coming down. | Hop is over. Coming down.	
-re_des_s11_2	chatter	chatter	calm	mc	re_des_s11	2	m	descent	any	Recibido. Buen vuelo corto.	Copy. Good short flight. | Copy. Good short flight. | Copy. Nice little flight.	
-re_des_01	chatter	chatter	calm	crew	re_des_01	1	both	descent	any	Descenso estable.	Stable descent. | Stable descent. | Descent is stable.	
-re_des_02	chatter	chatter	calm	mc	re_des_02	1	m	descent	any	Zona de aterrizaje despejada.	Landing zone clear. | Landing zone clear. | The landing zone is clear.	
-re_des_03	chatter	chatter	calm	crew	re_des_03	1	both	descent	any	Veo el suelo.	I see the ground. | I see the ground. | Ground in sight.	
-re_des_04	chatter	chatter	calm	mc	re_des_04	1	m	descent	any	Velocidad de caída nominal.	Fall rate nominal. | Fall rate nominal. | Descent rate looks good.	
-re_des_08	chatter	chatter	calm	mc	re_des_08	1	m	descent	any	El rescate os espera abajo.	Recovery is waiting below. | Recovery is waiting below. | Recovery is ready down there.	
-re_dten_s1_1	chatter	chatter	tense	mc	re_dten_s1	1	m	descent	ground	Bajáis demasiado rápido.	You're coming down too fast. | You're coming down too fast. | Too fast, {vessel}.	 |  | Demasiado rápido, {vessel}.
-re_dten_s1_2	chatter	chatter	tense	crew	re_dten_s1	2	both	descent	ground	¡Recibido, lo sabemos!	Copy, we know! | Copy, we know! | We know! We know!	
-re_dten_s2_1	chatter	chatter	tense	crew	re_dten_s2	1	both	descent	ground	El suelo se acerca rápido.	The ground is coming up fast. | The ground is coming up fast. | Ground is coming fast.	
-re_dten_s2_2	chatter	chatter	tense	mc	re_dten_s2	2	m	descent	ground	Recibido. Preparaos para el golpe.	Copy. Brace for impact. | Copy. Brace for impact. | Copy. Brace yourselves.	
-re_dten_s3_1	chatter	chatter	tense	crew	re_dten_s3	1	both	descent	spin	Giramos bajo los paracaídas.	We're spinning under the chutes. | We're spinning under the chutes. | Spinning under the chutes.	
-re_dten_s3_2	chatter	chatter	tense	mc	re_dten_s3	2	m	descent	spin	Recibido, se calmará pronto.	Copy, it will settle soon. | Copy, it will settle soon. | Copy. It'll calm down soon.	
-re_dten_s4_1	chatter	chatter	tense	crew	re_dten_s4	1	both	descent	impulse	¡Fuerte tirón del paracaídas!	Hard jolt from the chute! | Hard jolt from the chute! | The chute gave a hard jolt!	
-re_dten_s4_2	chatter	chatter	tense	mc	re_dten_s4	2	m	descent	impulse	Recibido. ¿Todos bien?	Copy. Everyone okay? | Copy. Everyone okay? | Copy. All okay?	
-re_dten_s4_3	chatter	chatter	tense	crew	re_dten_s4	3	both	descent	impulse	Sí, todos bien. Solo el susto.	Yes, all fine. Just a scare. | Yes, all fine. Just a scare. | Fine. Just scared.	
-re_dten_02	chatter	chatter	tense	mc	re_dten_02	1	m	descent	ground	Altura baja, velocidad alta.	Low altitude, high speed. | Low altitude, high speed. | Low and fast.	
-re_dten_03	chatter	chatter	tense	crew	re_dten_03	1	both	descent	impulse	Qué sacudida.	What a jolt. | What a jolt. | Big jolt.	
-re_chs_1	chute_semi	callout	none	crew	re_chs_1	1	both	descent	any	Paracaídas de frenado fuera.	Drogues out. | Drogues out. | Drogue chutes out.	
-re_chs_s2_1	chute_semi	callout	none	crew	re_chs_s2	1	both	descent	any	Paracaídas de frenado abiertos.	Drogue chutes open. | Drogue chutes open. | Drogues are open.	
-re_chs_s2_2	chute_semi	callout	none	mc	re_chs_s2	2	m	descent	any	Recibido, buen despliegue.	Copy, good deployment. | Copy, good deployment. | Copy. Nice deployment.	
-re_chs_3	chute_semi	callout	none	crew	re_chs_3	1	both	descent	any	Despliegue parcial.	Partial deployment. | Partial deployment. | Partly deployed.	
-re_chf_1	chute_full	callout	none	crew	re_chf_1	1	both	descent	any	Principales abiertos.	Mains open. | Mains open. | Main chutes open.	
-re_chf_s2_1	chute_full	callout	none	crew	re_chf_s2	1	both	descent	any	Paracaídas principales desplegados.	Main chutes deployed. | Main chutes deployed. | Mains deployed.	
-re_chf_s2_2	chute_full	callout	none	mc	re_chf_s2	2	m	descent	any	Confirmado, principales buenos.	Confirmed, good mains. | Confirmed, good mains. | Confirmed. Mains look good.	
-re_chf_s4_1	chute_full	callout	none	crew	re_chf_s4	1	both	descent	any	Frenando fuerte. Paracaídas llenos.	Braking hard. Chutes full. | Braking hard. Chutes full. | Full chutes. Strong braking.	
-re_chf_s4_2	chute_full	callout	none	mc	re_chf_s4	2	m	descent	any	Recibido, velocidad segura.	Copy, safe speed. | Copy, safe speed. | Copy. Speed is safe.	
-re_td_s1_1	touchdown	chatter	none	crew	re_td_s1	1	both	landed	any	Contacto con el suelo.	Ground contact. | Ground contact. | Contact with the ground.	
-re_td_s1_2	touchdown	chatter	none	mc	re_td_s1	2	m	landed	any	Confirmado. Buen aterrizaje.	Confirmed. Good landing. | Confirmed. Good landing. | Confirmed. Nice landing.	
-re_td_s2_1	touchdown	chatter	none	mc	re_td_s2	1	m	landed	any	Aterrizaje confirmado.	Touchdown confirmed. | Touchdown confirmed. | We confirm touchdown.	
-re_td_s2_2	touchdown	chatter	none	crew	re_td_s2	2	both	landed	any	Tripulación bien. Asegurando la nave.	Crew fine. Securing the ship. | Crew fine. Securing the ship. | Crew okay. Securing {vessel}.	 |  | Tripulación bien. Asegurando la {vessel}.
-re_td_s3_1	touchdown	chatter	none	crew	re_td_s3	1	both	landed	any	Estamos abajo. Todo estable.	We're down. All stable. | We're down. All stable. | Down. Stable.	
-re_td_s3_2	touchdown	chatter	none	mc	re_td_s3	2	m	landed	any	Recibido. Buen trabajo, equipo.	Copy. Good work, team. | Copy. Good work, team. | Copy. Nice work, everyone.	
-re_td_s4_1	touchdown	chatter	none	mc	re_td_s4	1	m	landed	any	Os vemos en tierra.	We see you on the ground. | We see you on the ground. | You're on the ground, we see.	
-re_td_s4_2	touchdown	chatter	none	crew	re_td_s4	2	both	landed	any	Confirmado, nave en pie.	Confirmed, ship upright. | Confirmed, ship upright. | Confirmed. Still upright.	
-re_td_01	touchdown	chatter	none	crew	re_td_01	1	both	landed	any	Aterrizados.	Landed. | Landed. | We landed.	
-re_td_02	touchdown	chatter	none	mc	re_td_02	1	m	landed	any	Contacto. Apagad los sistemas.	Contact. Power down the systems. | Contact. Power down the systems. | Contact. Shut down the systems.	
-re_sd_s1_1	splashdown	chatter	none	crew	re_sd_s1	1	both	landed	any	Amerizaje.	Splashdown. | Splashdown. | We splashed down.	
-re_sd_s1_2	splashdown	chatter	none	mc	re_sd_s1	2	m	landed	any	Confirmado. Rescate en camino.	Confirmed. Recovery on the way. | Confirmed. Recovery on the way. | Confirmed. Recovery is coming.	
-re_sd_s2_1	splashdown	chatter	none	mc	re_sd_s2	1	m	landed	any	Os vemos en el agua.	We see you in the water. | We see you in the water. | You're in the water, we see.	
-re_sd_s2_2	splashdown	chatter	none	crew	re_sd_s2	2	both	landed	any	Flotando, tripulación bien.	Floating, crew fine. | Floating, crew fine. | Floating. Crew okay.	
-re_sd_s3_1	splashdown	chatter	none	crew	re_sd_s3	1	both	landed	any	Agua tranquila aquí.	Calm water here. | Calm water here. | The water is calm.	
-re_sd_s3_2	splashdown	chatter	none	mc	re_sd_s3	2	m	landed	any	Recibido. Llegan los barcos.	Copy. Ships are coming. | Copy. Ships are coming. | Copy. Boats on the way.	
-re_sd_01	splashdown	chatter	none	crew	re_sd_01	1	both	landed	any	Estamos a flote.	We're afloat. | We're afloat. | Floating.	
-re_sd_02	splashdown	chatter	none	mc	re_sd_02	1	m	landed	any	Amerizaje limpio.	Clean splashdown. | Clean splashdown. | Nice splashdown.	
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	topic	spanish	english	spanish_rt
+# Return: reentry, descent, chutes, touchdown and splashdown. New keys: re_													
+# Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.													
+chute_semi_01	chute_semi	callout	none	crew	chute_semi_01	1	both	any	any	any	Semiabierto	Semi-deployed | Semi-deployed | Partly open	
+chute_semi_02	chute_semi	callout	none	crew	chute_semi_02	1	both	any	any	any	Paracaídas a medias	Chutes halfway out | Chutes halfway out | Halfway open	
+chute_full_01	chute_full	callout	none	crew	chute_full_01	1	both	any	any	any	Desplegado	Deployed | Deployed | Fully deployed	
+chute_full_02	chute_full	callout	none	crew	chute_full_02	1	both	any	any	any	Paracaídas abiertos	Chutes open | Chutes open | Open chutes	
+touchdown_01	touchdown	chatter	none	mc	touchdown_01	1	m	any	any	any	Habéis tocado suelo. Todo bien.	You're down. All good. | You're down. All good. | Down safely, {vessel}.	 |  | Habéis bajado bien, {vessel}.
+touchdown_02	touchdown	chatter	none	crew	touchdown_02	1	both	any	any	any	Estamos en tierra.	We're on the ground. | We're on the ground. | On the ground.	
+splashdown_01	splashdown	chatter	none	mc	splashdown_01	1	m	any	any	any	Amerizaje confirmado.	Splashdown confirmed. | Splashdown confirmed. | We confirm splashdown.	
+splashdown_02	splashdown	chatter	none	crew	splashdown_02	1	both	any	any	any	Estamos en el agua.	We're in the water. | We're in the water. | In the water.	
+chute_semi_03	chute_semi	callout	none	crew	chute_semi_03	1	both	any	any	any	Paracaídas fuera.	Chutes out. | Chutes out. | Chutes are out.	
+chute_full_03	chute_full	callout	none	crew	chute_full_03	1	both	any	any	any	¡Se abrió!	It opened! | It opened! | Open!	
+touchdown_03	touchdown	chatter	none	crew	touchdown_03	1	both	any	any	any	Suave como una pluma.	Soft as a feather. | Soft as a feather. | Feather soft.	
+touchdown_s1_1	touchdown	chatter	none	crew	touchdown_s1	1	both	any	any	any	¡Contacto!	Contact! | Contact! | Ground contact!	
+touchdown_s1_2	touchdown	chatter	none	mc	touchdown_s1	2	m	any	any	any	Contacto confirmado. Bienvenidos.	Contact confirmed. Welcome. | Contact confirmed. Welcome. | Confirmed. Welcome to {here}.	 |  | Confirmado. Bienvenidos a {here}.
+splashdown_03	splashdown	chatter	none	crew	splashdown_03	1	both	any	any	any	Flotamos bien.	We're floating fine. | We're floating fine. | Floating nicely.	
+# Serious launch and return radio, procedural. Calm mostly, tense lines name their cause.													
+re_orb_s1_1	chatter	chatter	calm	mc	re_orb_s1	1	m	orbit	any	any	Preparad la maniobra de desorbitación.	Prepare the deorbit maneuver. | Prepare the deorbit maneuver. | Get ready to deorbit.	
+re_orb_s1_2	chatter	chatter	calm	crew	re_orb_s1	2	both	orbit	any	any	Recibido, orientando al retrógrado.	Copy, pointing retrograde. | Copy, pointing retrograde. | Copy. Going retrograde.	
+re_ent_s3_1	chatter	chatter	calm	crew	re_ent_s3	1	both	reentry	any	any	Interfaz de entrada.	Entry interface. | Entry interface. | We're at entry interface.	
+re_ent_s3_2	chatter	chatter	calm	mc	re_ent_s3	2	m	reentry	any	any	Recibido. Mantened la actitud.	Copy. Hold attitude. | Copy. Hold attitude. | Copy. Keep that attitude.	
+re_ent_s4_1	chatter	chatter	calm	mc	re_ent_s4	1	m	reentry	any	heatshield	Escudo térmico hacia delante.	Heat shield forward. | Heat shield forward. | Shield to the front.	
+re_ent_s4_2	chatter	chatter	calm	crew	re_ent_s4	2	both	reentry	any	heatshield	Confirmado, escudo delante.	Confirmed, shield forward. | Confirmed, shield forward. | Confirmed. Shield in front.	
+re_ent_s5_1	chatter	chatter	calm	crew	re_ent_s5	1	both	reentry	any	any	Ya notamos el aire.	We can feel the air. | We can feel the air. | The air is grabbing us.	
+re_ent_s5_2	chatter	chatter	calm	mc	re_ent_s5	2	m	reentry	any	any	Recibido, empieza el frenado.	Copy, braking begins. | Copy, braking begins. | Copy. Braking starts.	
+re_ent_s6_1	chatter	chatter	calm	mc	re_ent_s6	1	m	reentry	any	any	Perderemos la señal pronto.	We'll lose signal soon. | We'll lose signal soon. | Signal goes soon.	
+re_ent_s6_2	chatter	chatter	calm	crew	re_ent_s6	2	both	reentry	any	any	Recibido. Hablamos al otro lado.	Copy. Talk to you on the other side. | Copy. Talk to you on the other side. | Copy. See you on the other side.	
+re_ent_s7_1	chatter	chatter	calm	crew	re_ent_s7	1	both	reentry	any	any	Control, ¿nos recibís?	Control, do you read? | Control, do you read? | Control, hear us?	
+re_ent_s7_2	chatter	chatter	calm	mc	re_ent_s7	2	m	reentry	any	any	Os recibimos. Bienvenidos de vuelta.	We read you. Welcome back. | We read you. Welcome back. | Loud and clear. Welcome back.	
+re_ent_s9_1	chatter	chatter	calm	mc	re_ent_s9	1	m	reentry	gforce	any	Ahora sube la aceleración.	G-load builds now. | G-load builds now. | The g's are coming.	
+re_ent_s9_2	chatter	chatter	calm	crew	re_ent_s9	2	both	reentry	gforce	any	Recibido, bien sujetos.	Copy, strapped in tight. | Copy, strapped in tight. | Copy. Belts tight.	
+re_ent_s10_1	chatter	chatter	calm	crew	re_ent_s10	1	both	reentry	heat	heatshield	Temperatura del escudo estable.	Shield temperature steady. | Shield temperature steady. | Shield temperature is stable.	
+re_ent_s10_2	chatter	chatter	calm	mc	re_ent_s10	2	m	reentry	heat	heatshield	Recibido, dentro de márgenes.	Copy, within margins. | Copy, within margins. | Copy. Inside the margins.	
+re_ent_s12_1	chatter	chatter	calm	mc	re_ent_s12	1	m	reentry	any	any	Sondeo de reentrada. ¿Estado?	Reentry poll. Status? | Reentry poll. Status? | Reentry check. Status?	
+re_ent_s12_2	chatter	chatter	calm	crew	re_ent_s12	2	both	reentry	any	any	Cabina estable, tripulación bien.	Cabin stable, crew fine. | Cabin stable, crew fine. | Cabin good. Crew good.	
+re_ent_s12_3	chatter	chatter	calm	mc	re_ent_s12	3	m	reentry	any	any	Recibido. Seguid el perfil.	Copy. Follow the profile. | Copy. Follow the profile. | Copy. Stick to the profile.	
+re_ent_s13_1	chatter	chatter	calm	crew	re_ent_s13	1	both	reentry	plasma	any	Salimos del apagón de radio.	Out of the radio blackout. | Out of the radio blackout. | Radio blackout is over.	
+re_ent_s13_2	chatter	chatter	calm	mc	re_ent_s13	2	m	reentry	plasma	any	Bienvenidos. Señal limpia.	Welcome back. Clean signal. | Welcome back. Clean signal. | Welcome back. Good signal.	
+re_ent_01	chatter	chatter	calm	crew	re_ent_01	1	both	reentry	any	any	Entrando en la atmósfera.	Entering the atmosphere. | Entering the atmosphere. | Into the atmosphere.	
+re_ent_02	chatter	chatter	calm	mc	re_ent_02	1	m	reentry	any	any	Ángulo de entrada correcto.	Entry angle good. | Entry angle good. | Good entry angle.	
+re_ent_03	chatter	chatter	calm	crew	re_ent_03	1	both	reentry	plasma	any	Brillo en las ventanas.	Glow on the windows. | Glow on the windows. | The windows are glowing.	
+re_ent_04	chatter	chatter	calm	mc	re_ent_04	1	m	reentry	any	any	Trayectoria de entrada nominal.	Entry trajectory nominal. | Entry trajectory nominal. | Entry path looks good.	
+re_ent_07	chatter	chatter	calm	crew	re_ent_07	1	both	reentry	gforce	any	Sube la aceleración, todo bien.	G-load rising, all fine. | G-load rising, all fine. | More g's. All good.	
+re_ent_08	chatter	chatter	calm	mc	re_ent_08	1	m	reentry	any	any	Os tenemos en el radar.	We have you on radar. | We have you on radar. | You're on radar, {vessel}.	 |  | Os tenemos en el radar, {vessel}.
+re_ten_s1_1	chatter	chatter	tense	crew	re_ten_s1	1	both	reentry	heat	heatshield	Control, la temperatura sube rápido.	Control, temperature rising fast. | Control, temperature rising fast. | Control, it's heating up fast.	
+re_ten_s1_2	chatter	chatter	tense	mc	re_ten_s1	2	m	reentry	heat	heatshield	Recibido. Escudo siempre delante.	Copy. Keep the shield forward. | Copy. Keep the shield forward. | Copy. Shield in front.	
+re_ten_s2_1	chatter	chatter	tense	mc	re_ten_s2	1	m	reentry	gforce	any	Aceleración alta. ¿Estáis bien?	High g-load. Are you okay? | High g-load. Are you okay? | Lots of g's. You okay?	
+re_ten_s2_2	chatter	chatter	tense	crew	re_ten_s2	2	both	reentry	gforce	any	Aguantando. Cuesta respirar.	Holding on. Hard to breathe. | Holding on. Hard to breathe. | Hanging on. Breathing is hard.	
+re_ten_s3_1	chatter	chatter	tense	crew	re_ten_s3	1	both	reentry	plasma	any	Mucho brillo fuera. Señal débil.	Lots of glow outside. Weak signal. | Lots of glow outside. Weak signal. | Bright glow outside. Signal is weak.	
+re_ten_s3_2	chatter	chatter	tense	mc	re_ten_s3	2	m	reentry	plasma	any	Recibido. Os perdemos un rato.	Copy. We'll lose you for a while. | Copy. We'll lose you for a while. | Copy. You'll be gone for a bit.	
+re_ten_s4_1	chatter	chatter	tense	crew	re_ten_s4	1	both	reentry	spin	any	Estamos girando.	We're spinning. | We're spinning. | We spin.	
+re_ten_s4_2	chatter	chatter	tense	mc	re_ten_s4	2	m	reentry	spin	any	Recibido. Estabilizad con los mandos.	Copy. Stabilize with the controls. | Copy. Stabilize with the controls. | Copy. Use the controls to stabilize.	
+re_ten_s5_1	chatter	chatter	tense	mc	re_ten_s5	1	m	reentry	heat	heatshield	Temperatura del escudo alta.	Shield temperature high. | Shield temperature high. | The shield is very hot.	
+re_ten_s5_2	chatter	chatter	tense	crew	re_ten_s5	2	both	reentry	heat	heatshield	La vemos. Seguimos el perfil.	We see it. Staying on profile. | We see it. Staying on profile. | Copy. We stay on profile.	
+re_ten_01	chatter	chatter	tense	crew	re_ten_01	1	both	reentry	heat	any	La temperatura no para de subir.	The temperature keeps rising. | The temperature keeps rising. | It keeps getting hotter.	
+re_ten_02	chatter	chatter	tense	crew	re_ten_02	1	both	reentry	gforce	any	La aceleración aplasta.	The g-load is crushing. | The g-load is crushing. | The g's are crushing me.	
+re_ten_04	chatter	chatter	tense	mc	re_ten_04	1	m	reentry	plasma	any	Señal entrecortada por el plasma.	Signal breaking up in the plasma. | Signal breaking up in the plasma. | The plasma breaks up your signal.	
+re_ten_05	chatter	chatter	tense	crew	re_ten_05	1	both	reentry	spin	any	La cápsula oscila mucho.	The capsule is swaying a lot. | The capsule is swaying a lot. | Lots of swaying in the capsule.	
+re_des_s1_1	chatter	chatter	calm	mc	re_des_s1	1	m	descent	any	prechute	Pronto, altura de paracaídas.	Chute altitude soon. | Chute altitude soon. | Almost at chute altitude.	
+re_des_s1_2	chatter	chatter	calm	crew	re_des_s1	2	both	descent	any	prechute	Recibido, listos para armar.	Copy, ready to arm. | Copy, ready to arm. | Copy. Ready to arm them.	
+re_des_s2_1	chatter	chatter	calm	crew	re_des_s2	1	both	descent	any	prechute	Paracaídas armados.	Chutes armed. | Chutes armed. | Parachutes are armed.	
+re_des_s2_2	chatter	chatter	calm	mc	re_des_s2	2	m	descent	any	prechute	Recibido, se abrirán solos.	Copy, they'll open on their own. | Copy, they'll open on their own. | Copy. They open by themselves.	
+re_des_s3_1	chatter	chatter	calm	crew	re_des_s3	1	both	descent	any	any	Por debajo de la velocidad del sonido.	Below the speed of sound. | Below the speed of sound. | Subsonic now.	
+re_des_s3_2	chatter	chatter	calm	mc	re_des_s3	2	m	descent	any	any	Recibido, descenso nominal.	Copy, descent nominal. | Copy, descent nominal. | Copy. Good descent.	
+re_des_s4_1	chatter	chatter	calm	mc	re_des_s4	1	m	descent	any	any	Os tenemos a la vista.	We have you in sight. | We have you in sight. | We can see you.	
+re_des_s4_2	chatter	chatter	calm	crew	re_des_s4	2	both	descent	any	any	Recibido, bajando suave.	Copy, coming down easy. | Copy, coming down easy. | Copy. Easy descent.	
+re_des_s5_1	chatter	chatter	calm	mc	re_des_s5	1	m	descent	any	any	Equipos de rescate en camino.	Recovery teams on the way. | Recovery teams on the way. | The recovery team is coming.	
+re_des_s5_2	chatter	chatter	calm	crew	re_des_s5	2	both	descent	any	any	Recibido, aquí los esperamos.	Copy, we will wait for them here. | Copy, we will wait for them here. | Copy. We'll wait right here.	
+re_des_s11_1	chatter	chatter	calm	crew	re_des_s11	1	both	descent	any	any	Fin del salto, bajando.	End of the hop, coming down. | End of the hop, coming down. | Hop is over. Coming down.	
+re_des_s11_2	chatter	chatter	calm	mc	re_des_s11	2	m	descent	any	any	Recibido. Buen vuelo corto.	Copy. Good short flight. | Copy. Good short flight. | Copy. Nice little flight.	
+re_des_01	chatter	chatter	calm	crew	re_des_01	1	both	descent	any	any	Descenso estable.	Stable descent. | Stable descent. | Descent is stable.	
+re_des_02	chatter	chatter	calm	mc	re_des_02	1	m	descent	any	any	Zona de aterrizaje despejada.	Landing zone clear. | Landing zone clear. | The landing zone is clear.	
+re_des_03	chatter	chatter	calm	crew	re_des_03	1	both	descent	any	any	Veo el suelo.	I see the ground. | I see the ground. | Ground in sight.	
+re_des_04	chatter	chatter	calm	mc	re_des_04	1	m	descent	any	any	Velocidad de caída nominal.	Fall rate nominal. | Fall rate nominal. | Descent rate looks good.	
+re_des_08	chatter	chatter	calm	mc	re_des_08	1	m	descent	any	any	El rescate os espera abajo.	Recovery is waiting below. | Recovery is waiting below. | Recovery is ready down there.	
+re_dten_s1_1	chatter	chatter	tense	mc	re_dten_s1	1	m	descent	ground	any	Bajáis demasiado rápido.	You're coming down too fast. | You're coming down too fast. | Too fast, {vessel}.	 |  | Demasiado rápido, {vessel}.
+re_dten_s1_2	chatter	chatter	tense	crew	re_dten_s1	2	both	descent	ground	any	¡Recibido, lo sabemos!	Copy, we know! | Copy, we know! | We know! We know!	
+re_dten_s2_1	chatter	chatter	tense	crew	re_dten_s2	1	both	descent	ground	any	El suelo se acerca rápido.	The ground is coming up fast. | The ground is coming up fast. | Ground is coming fast.	
+re_dten_s2_2	chatter	chatter	tense	mc	re_dten_s2	2	m	descent	ground	any	Recibido. Preparaos para el golpe.	Copy. Brace for impact. | Copy. Brace for impact. | Copy. Brace yourselves.	
+re_dten_s3_1	chatter	chatter	tense	crew	re_dten_s3	1	both	descent	spin	chuteopen	Giramos bajo los paracaídas.	We're spinning under the chutes. | We're spinning under the chutes. | Spinning under the chutes.	
+re_dten_s3_2	chatter	chatter	tense	mc	re_dten_s3	2	m	descent	spin	chuteopen	Recibido, se calmará pronto.	Copy, it will settle soon. | Copy, it will settle soon. | Copy. It'll calm down soon.	
+re_dten_s4_1	chatter	chatter	tense	crew	re_dten_s4	1	both	descent	impulse	chuteopen	¡Fuerte tirón del paracaídas!	Hard jolt from the chute! | Hard jolt from the chute! | The chute gave a hard jolt!	
+re_dten_s4_2	chatter	chatter	tense	mc	re_dten_s4	2	m	descent	impulse	chuteopen	Recibido. ¿Todos bien?	Copy. Everyone okay? | Copy. Everyone okay? | Copy. All okay?	
+re_dten_s4_3	chatter	chatter	tense	crew	re_dten_s4	3	both	descent	impulse	chuteopen	Sí, todos bien. Solo el susto.	Yes, all fine. Just a scare. | Yes, all fine. Just a scare. | Fine. Just scared.	
+re_dten_02	chatter	chatter	tense	mc	re_dten_02	1	m	descent	ground	any	Altura baja, velocidad alta.	Low altitude, high speed. | Low altitude, high speed. | Low and fast.	
+re_dten_03	chatter	chatter	tense	crew	re_dten_03	1	both	descent	impulse	any	Qué sacudida.	What a jolt. | What a jolt. | Big jolt.	
+re_chs_1	chute_semi	callout	none	crew	re_chs_1	1	both	descent	any	any	Paracaídas de frenado fuera.	Drogues out. | Drogues out. | Drogue chutes out.	
+re_chs_s2_1	chute_semi	callout	none	crew	re_chs_s2	1	both	descent	any	any	Paracaídas de frenado abiertos.	Drogue chutes open. | Drogue chutes open. | Drogues are open.	
+re_chs_s2_2	chute_semi	callout	none	mc	re_chs_s2	2	m	descent	any	any	Recibido, buen despliegue.	Copy, good deployment. | Copy, good deployment. | Copy. Nice deployment.	
+re_chs_3	chute_semi	callout	none	crew	re_chs_3	1	both	descent	any	any	Despliegue parcial.	Partial deployment. | Partial deployment. | Partly deployed.	
+re_chf_1	chute_full	callout	none	crew	re_chf_1	1	both	descent	any	any	Principales abiertos.	Mains open. | Mains open. | Main chutes open.	
+re_chf_s2_1	chute_full	callout	none	crew	re_chf_s2	1	both	descent	any	any	Paracaídas principales desplegados.	Main chutes deployed. | Main chutes deployed. | Mains deployed.	
+re_chf_s2_2	chute_full	callout	none	mc	re_chf_s2	2	m	descent	any	any	Confirmado, principales buenos.	Confirmed, good mains. | Confirmed, good mains. | Confirmed. Mains look good.	
+re_chf_s4_1	chute_full	callout	none	crew	re_chf_s4	1	both	descent	any	any	Frenando fuerte. Paracaídas llenos.	Braking hard. Chutes full. | Braking hard. Chutes full. | Full chutes. Strong braking.	
+re_chf_s4_2	chute_full	callout	none	mc	re_chf_s4	2	m	descent	any	any	Recibido, velocidad segura.	Copy, safe speed. | Copy, safe speed. | Copy. Speed is safe.	
+re_td_s1_1	touchdown	chatter	none	crew	re_td_s1	1	both	landed	any	any	Contacto con el suelo.	Ground contact. | Ground contact. | Contact with the ground.	
+re_td_s1_2	touchdown	chatter	none	mc	re_td_s1	2	m	landed	any	any	Confirmado. Buen aterrizaje.	Confirmed. Good landing. | Confirmed. Good landing. | Confirmed. Nice landing.	
+re_td_s2_1	touchdown	chatter	none	mc	re_td_s2	1	m	landed	any	any	Aterrizaje confirmado.	Touchdown confirmed. | Touchdown confirmed. | We confirm touchdown.	
+re_td_s2_2	touchdown	chatter	none	crew	re_td_s2	2	both	landed	any	any	Tripulación bien. Asegurando la nave.	Crew fine. Securing the ship. | Crew fine. Securing the ship. | Crew okay. Securing {vessel}.	 |  | Tripulación bien. Asegurando la {vessel}.
+re_td_s3_1	touchdown	chatter	none	crew	re_td_s3	1	both	landed	any	any	Estamos abajo. Todo estable.	We're down. All stable. | We're down. All stable. | Down. Stable.	
+re_td_s3_2	touchdown	chatter	none	mc	re_td_s3	2	m	landed	any	any	Recibido. Buen trabajo, equipo.	Copy. Good work, team. | Copy. Good work, team. | Copy. Nice work, everyone.	
+re_td_s4_1	touchdown	chatter	none	mc	re_td_s4	1	m	landed	any	any	Os vemos en tierra.	We see you on the ground. | We see you on the ground. | You're on the ground, we see.	
+re_td_s4_2	touchdown	chatter	none	crew	re_td_s4	2	both	landed	any	any	Confirmado, nave en pie.	Confirmed, ship upright. | Confirmed, ship upright. | Confirmed. Still upright.	
+re_td_01	touchdown	chatter	none	crew	re_td_01	1	both	landed	any	any	Aterrizados.	Landed. | Landed. | We landed.	
+re_td_02	touchdown	chatter	none	mc	re_td_02	1	m	landed	any	any	Contacto. Apagad los sistemas.	Contact. Power down the systems. | Contact. Power down the systems. | Contact. Shut down the systems.	
+re_sd_s1_1	splashdown	chatter	none	crew	re_sd_s1	1	both	landed	any	any	Amerizaje.	Splashdown. | Splashdown. | We splashed down.	
+re_sd_s1_2	splashdown	chatter	none	mc	re_sd_s1	2	m	landed	any	any	Confirmado. Rescate en camino.	Confirmed. Recovery on the way. | Confirmed. Recovery on the way. | Confirmed. Recovery is coming.	
+re_sd_s2_1	splashdown	chatter	none	mc	re_sd_s2	1	m	landed	any	any	Os vemos en el agua.	We see you in the water. | We see you in the water. | You're in the water, we see.	
+re_sd_s2_2	splashdown	chatter	none	crew	re_sd_s2	2	both	landed	any	any	Flotando, tripulación bien.	Floating, crew fine. | Floating, crew fine. | Floating. Crew okay.	
+re_sd_s3_1	splashdown	chatter	none	crew	re_sd_s3	1	both	landed	any	any	Agua tranquila aquí.	Calm water here. | Calm water here. | The water is calm.	
+re_sd_s3_2	splashdown	chatter	none	mc	re_sd_s3	2	m	landed	any	any	Recibido. Llegan los barcos.	Copy. Ships are coming. | Copy. Ships are coming. | Copy. Boats on the way.	
+re_sd_01	splashdown	chatter	none	crew	re_sd_01	1	both	landed	any	any	Estamos a flote.	We're afloat. | We're afloat. | Floating.	
+re_sd_02	splashdown	chatter	none	mc	re_sd_02	1	m	landed	any	any	Amerizaje limpio.	Clean splashdown. | Clean splashdown. | Nice splashdown.	

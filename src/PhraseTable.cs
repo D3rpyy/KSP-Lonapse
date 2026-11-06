@@ -311,8 +311,24 @@ namespace Lonapse
         public static readonly string[] MilestoneTopics = { "any", "day1", "day10", "day100", "day365", "orbit", "landing" };
         public static readonly string[] RoverTopics = { "any", "fast", "air", "tilt", "idle" };
         // A scene about solar panels (chatter, power_low, power_ok) only plays on a ship that has one.
+        // Chatter also has part topics: prechute (a chute is still packed and none is open), chuteopen (a chute
+        // is open) and heatshield (the ship has a heat shield).
         public const string SolarTopic = "solar";
+        public const string PreChuteTopic = "prechute";
+        public const string ChuteOpenTopic = "chuteopen";
+        public const string HeatShieldTopic = "heatshield";
         public static readonly string[] SolarTopics = { "any", SolarTopic };
+        public static readonly string[] ChatterTopics = { "any", SolarTopic, PreChuteTopic, ChuteOpenTopic, HeatShieldTopic };
+
+        /// <summary>A part topic only plays when the ship has that part in that state. Other topics always pass.</summary>
+        public static bool PartTopicOk(string topic, bool hasSolar, bool hasShield, bool chuteStowed, bool chuteOpen)
+        {
+            if (topic == SolarTopic) return hasSolar;
+            if (topic == HeatShieldTopic) return hasShield;
+            if (topic == PreChuteTopic) return chuteStowed && !chuteOpen;
+            if (topic == ChuteOpenTopic) return chuteOpen;
+            return true;
+        }
 
         /// <summary>
         /// Topic cycle for the Debug tab phrase test: "" (any) first, then every science topic and the soi_enter
@@ -357,7 +373,8 @@ namespace Lonapse
             if (ev == "staging") return StagingTopics;
             if (ev == "probe_milestone") return MilestoneTopics;
             if (ev == "probe_rover") return RoverTopics;
-            if (ev == "chatter" || ev == "power_low" || ev == "power_ok") return SolarTopics;
+            if (ev == "chatter") return ChatterTopics;
+            if (ev == "power_low" || ev == "power_ok") return SolarTopics;
             return new string[] { Any };
         }
 

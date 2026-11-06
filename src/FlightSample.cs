@@ -33,6 +33,9 @@ namespace Lonapse
         public bool engineOut;      // an engine flamed out while it still had propellant (launch cap)
         public double ecFrac;       // power events: connected ElectricCharge amount / max, 1 when max is 0
         public bool hasSolar;       // the vessel has a solar panel (ModuleDeployableSolarPanel, fixed panels too), 1 Hz
+        public bool hasShield;      // the vessel has a heat shield (ModuleAblator), 1 Hz
+        public bool chuteStowed;    // a parachute is still packed or armed (STOWED or ACTIVE), 1 Hz
+        public bool chuteOpen;      // a parachute is open or half open (SEMIDEPLOYED or DEPLOYED), 1 Hz
         public double ecMax;        // connected ElectricCharge capacity (power events need ecMax >= powerMinMax)
         // EVA. Defaults are the neutral values for a ship.
         public bool eva;            // Kerbal on EVA
@@ -153,7 +156,7 @@ namespace Lonapse
         public const float EngineOutHold = 20f;
         private double evaPropFrac = 1.0, evaEcFrac = 1.0, crewDist = double.PositiveInfinity;
         private double ecFrac = 1.0, ecMax;
-        private bool hasSolar;
+        private bool hasSolar, hasShield, chuteStowed, chuteOpen;
 
         // rover roughness and air time, reset with the vessel
         private RollingStat roverAccel = new RollingStat(1f);
@@ -180,7 +183,7 @@ namespace Lonapse
             flameoutSince.Clear();
             evaPropFrac = 1.0; evaEcFrac = 1.0; crewDist = double.PositiveInfinity;
             ecFrac = 1.0; ecMax = 0;
-            hasSolar = false;
+            hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false;
             roverAccel = new RollingStat(1f);
             hasLastVs = false;
             airTime = 0f;
@@ -290,6 +293,9 @@ namespace Lonapse
             s.engineOut = engineOut;
             s.ecFrac = ecFrac;
             s.hasSolar = hasSolar;
+            s.hasShield = hasShield;
+            s.chuteStowed = chuteStowed;
+            s.chuteOpen = chuteOpen;
             s.ecMax = ecMax;
             s.eva = false;
             try { s.eva = v.isEVA; } catch (Exception e) { Log.Exception("FlightSampler.eva", e); }
@@ -473,14 +479,24 @@ namespace Lonapse
         /// <summary>Connected ElectricCharge of the vessel (1 Hz). Fraction 1 when there is no capacity.</summary>
         private void SampleCharge(Vessel v)
         {
-            hasSolar = false;
+            hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false;
             try
             {
                 List<Part> parts = v.parts;
-                for (int i = 0; parts != null && i < parts.Count && !hasSolar; i++)
-                    if (parts[i] != null && parts[i].FindModuleImplementing<ModuleDeployableSolarPanel>() != null) hasSolar = true;
+                for (int i = 0; parts != null && i < parts.Count; i++)
+                {
+                    Part p = parts[i];
+                    if (p == null) continue;
+                    if (!hasSolar && p.FindModuleImplementing<ModuleDeployableSolarPanel>() != null) hasSolar = true;
+                    if (!hasShield && p.FindModuleImplementing<ModuleAblator>() != null) hasShield = true;
+                    ModuleParachute chute = p.FindModuleImplementing<ModuleParachute>();
+                    if (chute == null) continue;
+                    var st = chute.deploymentState;
+                    if (st == ModuleParachute.deploymentStates.STOWED || st == ModuleParachute.deploymentStates.ACTIVE) chuteStowed = true;
+                    else if (st == ModuleParachute.deploymentStates.SEMIDEPLOYED || st == ModuleParachute.deploymentStates.DEPLOYED) chuteOpen = true;
+                }
             }
-            catch (Exception e) { hasSolar = false; Log.Exception("FlightSampler.solar", e); }
+            catch (Exception e) { hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false; Log.Exception("FlightSampler.parts", e); }
             ecFrac = 1.0;
             ecMax = 0;
             if (ecResId < 0) return;

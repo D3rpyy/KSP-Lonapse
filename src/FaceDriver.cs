@@ -268,7 +268,8 @@ namespace Lonapse
                     // head turn: the first speaker in the same part
                     if (f.lookAt == null && SamePart(f, sp)) { f.lookAt = sp; f.lookScale = 1f; }
                 }
-                if (heard) { f.listening = true; f.moodTarget = mood * FaceMath.ListenerScale; }
+                // a listener reacts to the line, but not with more fear than its own stress gives
+                if (heard) { f.listening = true; f.moodTarget = FaceMath.ListenerMood(mood, f.faceStress, f.tenseAt, f.panicAt); }
             }
             // the speaker glances at the nearest listener in the same part
             for (int i = 0; i < speakers.Count; i++)

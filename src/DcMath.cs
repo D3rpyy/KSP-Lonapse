@@ -200,6 +200,18 @@ namespace Lonapse
         /// 0.55 to 1.0 (5 dB), which made panic lines much louder than the rest.</summary>
         public static float CrewVolume(float sk) { return Lerp(0.70f, 0.90f, Clamp01(sk)); }
 
+        /// <summary>Extra gain on a recorded panic clip: 2 dB down. It is much denser than a calm clip at the same
+        /// loudness (peak to RMS 11 dB against 15 dB), so it hit the soft clipper behind the voice boost and sounded harsh.</summary>
+        public const float PanicClipGain = 0.8f;
+
+        /// <summary>Radio distortion on a crew line: up to 0.3 with stress (was 0.5) and 0.1 with G strain. A recorded
+        /// panic clip already has its drive in the recording, so it only gets the G part.</summary>
+        public static float CrewDistortion(float sk, float gStrain, bool recordedPanic)
+        {
+            float g = 0.1f * Clamp01(gStrain);
+            return recordedPanic ? g : 0.3f * Smooth(sk, 0.5, 1.0) + g;
+        }
+
         /// <summary>Crew callout volume: the same 2 dB range, a little higher (was 0.65 to 1.0).</summary>
         public static float CalloutVolume(float sk) { return Lerp(0.75f, 0.95f, Clamp01(sk)); }
 

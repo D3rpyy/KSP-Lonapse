@@ -897,9 +897,10 @@ namespace Lonapse
                     // a recorded panic clip gets no stress pitch on top (a runtime voice render has no panic delivery)
                     bool recordedPanic = panic && rtClip == null;
                     float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
-                    float vol = DcMath.CrewVolume(sk);
+                    float vol = DcMath.CrewVolume(sk) * (recordedPanic ? DcMath.PanicClipGain : 1f);
                     c.SetPreset(false, tu);
                     c.Play(clip, vol, pitch, false, 0f);
+                    c.recordedPanic = recordedPanic;
                     c.speaker = sp;
                     c.boost = VoiceBoost;
                     c.compressor = cfg.voiceCompressor;
@@ -946,9 +947,10 @@ namespace Lonapse
                     float sk = sp.sk, gs = host.stress.gStrain;
                     bool recordedPanic = rtClip == null && (u.entry != null ? u.entry.Band == "panic" : icFolder == "crew/panic");
                     float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
-                    float vol = DcMath.CrewVolume(sk);
+                    float vol = DcMath.CrewVolume(sk) * (recordedPanic ? DcMath.PanicClipGain : 1f);
                     c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);
+                    c.recordedPanic = recordedPanic;
                     c.speaker = sp;
                     c.boost = VoiceBoost;
                     c.compressor = cfg.voiceCompressor;
@@ -1259,8 +1261,13 @@ namespace Lonapse
             return StressModel.Names[best];
         }
 
-        /// <summary>A solar panel scene only on a ship with a solar panel.</summary>
-        private bool SolarOk(PhraseScene sc) { return sc.Topic != PhraseTable.SolarTopic || host.sample.hasSolar; }
+        /// <summary>A part scene only when the part is there: a solar panel scene on a ship with a panel, a chute
+        /// scene before or after the chutes open, a heat shield scene on a ship with a shield.</summary>
+        private bool PartsOk(PhraseScene sc)
+        {
+            var s = host.sample;
+            return PhraseTable.PartTopicOk(sc.Topic, s.hasSolar, s.hasShield, s.chuteStowed, s.chuteOpen);
+        }
 
         private PhraseScene PickCore(string ev, string band, string cause, bool intercom, Predicate<PhraseScene> filter)
         {
@@ -1285,7 +1292,7 @@ namespace Lonapse
             // phase is checked here (radio and intercom rules differ), cause by the table
             var list = PhraseClips.table.ScenesFor(ev, band, null, cause, sc => PhraseClips.Playable(sc)
                 && (intercom ? IntercomPhaseOk(sc, phase) : RadioPhaseOk(sc, phase))
-                && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && SolarOk(sc)
+                && !sc.IsProbe && CrewCanVoice(sc) && !SomberBlocks(sc) && PartsOk(sc)
                 && (intercom || BlackoutOk(sc)) && sc.PlaysAt(Body)
                 && (filter == null || filter(sc)) && SlotsOk(sc));
             bool stressBand = !intercom && (band == "tense" || band == "panic");
