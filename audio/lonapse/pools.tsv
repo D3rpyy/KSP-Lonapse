@@ -2,197 +2,197 @@
 # The audio never says these words. One pool per name, one value per row. A value may hold slots itself,
 # so a pool can be a list of whole sentences. Every value must read well in every sentence that uses the
 # pool (the comment above a pool shows a few). Things from KSP work best. Used by build_lonapse.py and the plugin.
-pool	english
+pool	english	spanish
 # thing: Who took my X? / Next to my X. / Bet you my X. / You still owe me a X. (singular, no vowel at the start)
-thing	lucky rock
-thing	rubber duck
-thing	space pen
-thing	sample bag
-thing	flag
-thing	flight log
-thing	camera
-thing	toothbrush
-thing	favorite spoon
-thing	spare strut
-thing	[goo] jar of Mystery Goo
-thing	snack bar
-thing	rover key
-thing	sandwich
-thing	pillow
-thing	lucky wrench
-thing	comic book
+thing	lucky rock	f:piedra de la suerte
+thing	rubber duck	m:pato de goma
+thing	space pen	m:bolígrafo espacial
+thing	sample bag	f:bolsa de muestras
+thing	flag	f:bandera
+thing	flight log	m:diario de vuelo
+thing	camera	f:cámara
+thing	toothbrush	m:cepillo de dientes
+thing	favorite spoon	f:cuchara favorita
+thing	spare strut	m:puntal de repuesto
+thing	[goo] jar of Mystery Goo	m:bote de Moco Misterioso
+thing	snack bar	f:barrita
+thing	rover key	f:llave del róver
+thing	sandwich	m:bocadillo
+thing	pillow	f:almohada
+thing	lucky wrench	f:llave inglesa de la suerte
+thing	comic book	m:cómic
 # spot: Look behind the X. / Try the X. / Last time it was under the X. (inside the cabin, in reach)
-spot	seat
-spot	control panel
-spot	snack locker
-spot	air vent
-spot	toilet
-spot	headrest
-spot	cup holder
-spot	sleeping bag
-spot	storage net
-spot	first aid kit
-spot	window
-spot	life support panel
+spot	seat	m:asiento
+spot	control panel	m:panel de control
+spot	snack locker	m:armario de aperitivos
+spot	air vent	f:rejilla de ventilación
+spot	toilet	m:váter
+spot	headrest	m:reposacabezas
+spot	cup holder	m:posavasos
+spot	sleeping bag	m:saco de dormir
+spot	storage net	f:red de almacenaje
+spot	first aid kit	m:botiquín
+spot	window	f:ventana
+spot	life support panel	m:panel de soporte vital
 # part: The X came loose again. / Tape it, like the X. / That was the X. (inside the cabin, in reach)
-part	hatch handle
-part	radio knob
-part	window seal
-part	seat belt
-part	toilet lid
-part	cabin light
-part	air vent cover
-part	throttle lever
-part	cup holder
-part	snack locker door
-part	headrest
+part	hatch handle	f:manija de la escotilla
+part	radio knob	m:botón de la radio
+part	window seal	f:junta de la ventana
+part	seat belt	m:cinturón
+part	toilet lid	f:tapa del váter
+part	cabin light	f:luz de la cabina
+part	air vent cover	f:tapa de la rejilla
+part	throttle lever	f:palanca de gases
+part	cup holder	m:posavasos
+part	snack locker door	f:puerta del armario de aperitivos
+part	headrest	m:reposacabezas
 # outside_part: It's the X. Probably. / Control, the X is shaking. (outside: only when the vessel has one)
-outside_part	[solar] solar panel
-outside_part	[antenna] antenna
-outside_part	[legs] landing leg
-outside_part	[ladder] ladder
-outside_part	[docking] docking port
-outside_part	[heatshield] heat shield
-outside_part	[chute] parachute
-outside_part	[engine] engine
-outside_part	[strut] strut
+outside_part	[solar] solar panel	m:panel solar
+outside_part	[antenna] antenna	f:antena
+outside_part	[legs] landing leg	f:pata de aterrizaje
+outside_part	[ladder] ladder	f:escalera
+outside_part	[docking] docking port	m:puerto de atraque
+outside_part	[heatshield] heat shield	m:escudo térmico
+outside_part	[chute] parachute	m:paracaídas
+outside_part	[engine] engine	m:motor
+outside_part	[strut] strut	m:puntal
 # beeper: Why is the X beeping?
-beeper	fuel gauge
-beeper	life support panel
-beeper	toilet
-beeper	snack locker
-beeper	radio
-beeper	control panel
-beeper	[probe] probe core
-beeper	[goo] Mystery Goo
-beeper	[sciencejr] Science Jr.
+beeper	fuel gauge	m:indicador de combustible
+beeper	life support panel	m:panel de soporte vital
+beeper	toilet	m:váter
+beeper	snack locker	m:armario de aperitivos
+beeper	radio	f:radio
+beeper	control panel	m:panel de control
+beeper	[probe] probe core	m:núcleo de la sonda
+beeper	[goo] Mystery Goo	m:Moco Misterioso
+beeper	[sciencejr] Science Jr.	m:laboratorio Science Jr
 # food: Is that X? / Someone ate all the X. / Eat the X. It builds character. / Can you send us some X?
-food	snack paste
-food	tube cheese
-food	freeze-dried noodles
-food	space beans
-food	Jeb's famous chili
-food	powdered eggs
-food	mystery stew
-food	algae bars
-food	emergency rations
-food	reheated soup
-food	dehydrated fish
-food	cold pizza
+food	snack paste	f:pasta de aperitivo
+food	tube cheese	m:queso en tubo
+food	freeze-dried noodles	mp:fideos liofilizados
+food	space beans	fp:alubias espaciales
+food	Jeb's famous chili	m:famoso chile de Jeb
+food	powdered eggs	mp:huevos en polvo
+food	mystery stew	m:guiso misterioso
+food	algae bars	fp:barritas de algas
+food	emergency rations	fp:raciones de emergencia
+food	reheated soup	f:sopa recalentada
+food	dehydrated fish	m:pescado deshidratado
+food	cold pizza	f:pizza fría
 # creature: Last night I dreamt about X. It knew my name.
-creature	the Kraken
-creature	a giant space whale
-creature	a Mun made of cheese
-creature	a strut that could talk
-creature	a rover with feelings
-creature	a booster that wanted a hug
-creature	Mission Control, but they were all ducks
-creature	Gene, but he was a goat
-creature	a probe core that would not stop beeping
+creature	the Kraken	el Kraken
+creature	a giant space whale	una ballena espacial gigante
+creature	a Mun made of cheese	una nuM de queso
+creature	a strut that could talk	un puntal que hablaba
+creature	a rover with feelings	un róver con sentimientos
+creature	a booster that wanted a hug	un propulsor que quería un abrazo
+creature	Mission Control, but they were all ducks	Control de Misión, pero eran todos patos
+creature	Gene, but he was a goat	Gene, pero era una cabra
+creature	a probe core that would not stop beeping	un núcleo de sonda que no paraba de pitar
 # not_me: X Look behind the toilet. (a whole sentence)
-not_me	Not me.
-not_me	Don't look at me.
-not_me	I didn't touch it.
-not_me	Wasn't me this time.
-not_me	Why do you always ask me?
-not_me	I was asleep.
-not_me	[probe] Ask the probe.
+not_me	Not me.	Yo no.
+not_me	Don't look at me.	No me mires a mí.
+not_me	I didn't touch it.	Yo no lo he tocado.
+not_me	Wasn't me this time.	Esta vez no he sido yo.
+not_me	Why do you always ask me?	¿Por qué siempre me preguntas a mí?
+not_me	I was asleep.	Yo estaba dormido.
+not_me	[probe] Ask the probe.	Pregúntale a la sonda.
 # silly_name: It was that or X.
-silly_name	Rocky McRocketface
-silly_name	Big Tube 2
-silly_name	Untitled Craft 3
-silly_name	Jeb's Revenge
-silly_name	The Flying Pickle
-silly_name	Definitely Safe
-silly_name	Boom Mk1
-silly_name	Dave
+silly_name	Rocky McRocketface	‹Rocky McRocketface›
+silly_name	Big Tube 2	Tubo Grande 2
+silly_name	Untitled Craft 3	Nave Sin Título 3
+silly_name	Jeb's Revenge	La Venganza de Jeb
+silly_name	The Flying Pickle	El Pepinillo Volador
+silly_name	Definitely Safe	Segurísimo
+silly_name	Boom Mk1	Pum Mk1
+silly_name	Dave	‹Dave›
 # chore: Whose turn is it to X? / Loser has to X. / You X tomorrow.
-chore	clean the toilet
-chore	clean the windows
-chore	count the snacks
-chore	talk to Control
-chore	[goo] feed the Mystery Goo
-chore	wipe the helmets
-chore	sort the rocks
-chore	fix the cup holder
-chore	read the manual out loud
+chore	clean the toilet	limpiar el váter
+chore	clean the windows	limpiar las ventanas
+chore	count the snacks	contar los aperitivos
+chore	talk to Control	hablar con Control
+chore	[goo] feed the Mystery Goo	dar de comer al Moco Misterioso
+chore	wipe the helmets	limpiar los cascos
+chore	sort the rocks	ordenar las piedras
+chore	fix the cup holder	arreglar el posavasos
+chore	read the manual out loud	leer el manual en voz alta
 # noise: Did you hear that X? / There it is again. That X.
-noise	clank
-noise	squeak
-noise	hiss
-noise	knock
-noise	long groan
-noise	beep
-noise	rattle
-noise	pop
+noise	clank	golpe
+noise	squeak	chirrido
+noise	hiss	silbido
+noise	knock	toque
+noise	long groan	crujido largo
+noise	beep	pitido
+noise	rattle	traqueteo
+noise	pop	chasquido
 # rumor: Did you hear? X / Don't tell anyone, but X (lowercase unless a name)
-rumor	Gene sleeps under his desk.
-rumor	the intern launched a pizza last week.
-rumor	Wernher strapped a booster to his chair.
-rumor	Control lost the manual. Again.
-rumor	the new rocket is just three old rockets.
-rumor	Gene cried at the last launch.
-rumor	the snack budget is bigger than the fuel budget.
+rumor	Gene sleeps under his desk.	Gene duerme debajo de su mesa.
+rumor	the intern launched a pizza last week.	el becario lanzó una pizza la semana pasada.
+rumor	Wernher strapped a booster to his chair.	Wernher se ató un propulsor a la silla.
+rumor	Control lost the manual. Again.	Control ha perdido el manual. Otra vez.
+rumor	the new rocket is just three old rockets.	el cohete nuevo son tres cohetes viejos.
+rumor	Gene cried at the last launch.	Gene lloró en el último lanzamiento.
+rumor	the snack budget is bigger than the fuel budget.	hay más dinero para aperitivos que para combustible.
 # song: Can you stop humming X?
-song	the countdown song
-song	the snack song
-song	that jingle from the ads
-song	Kerbin, Sweet Kerbin
-song	the theme from the safety video
+song	the countdown song	la canción de la cuenta atrás
+song	the snack song	la canción de los aperitivos
+song	that jingle from the ads	esa musiquilla de los anuncios
+song	Kerbin, Sweet Kerbin	nibréK, dulce nibréK
+song	the theme from the safety video	la música del vídeo de seguridad
 # experiment: Control, the X is doing something weird. (only experiments on the vessel)
-experiment	[goo] Mystery Goo
-experiment	[thermometer] thermometer
-experiment	[barometer] barometer
-experiment	[seismic] seismic sensor
-experiment	[gravity] gravity sensor
-experiment	[sciencejr] Science Jr.
-experiment	[magnetometer] magnetometer
+experiment	[goo] Mystery Goo	m:Moco Misterioso
+experiment	[thermometer] thermometer	m:termómetro
+experiment	[barometer] barometer	m:barómetro
+experiment	[seismic] seismic sensor	m:sensor sísmico
+experiment	[gravity] gravity sensor	m:sensor de gravedad
+experiment	[sciencejr] Science Jr.	m:laboratorio Science Jr.
+experiment	[magnetometer] magnetometer	m:magnetómetro
 # mc_excuse: That's not in the budget. X (a whole sentence)
-mc_excuse	Budget cuts.
-mc_excuse	Gene says no.
-mc_excuse	The intern spent it on boosters.
-mc_excuse	Maybe next year.
-mc_excuse	Fill out form 27B first.
-mc_excuse	We spent it on snacks.
+mc_excuse	Budget cuts.	Recortes de presupuesto.
+mc_excuse	Gene says no.	‹Gene› dice que no.
+mc_excuse	The intern spent it on boosters.	El becario se lo gastó en propulsores.
+mc_excuse	Maybe next year.	Quizá el año que viene.
+mc_excuse	Fill out form 27B first.	Primero rellenad el formulario veintisiete be.
+mc_excuse	We spent it on snacks.	Nos lo gastamos en aperitivos.
 # status: Control, day 3 report: X (lowercase sentence)
-status	the snacks are holding up.
-status	nobody has cried today.
-status	the toilet works again.
-status	we only lost one glove.
-status	[goo] the Mystery Goo is looking at us.
-status	morale is high. Mostly.
+status	the snacks are holding up.	los aperitivos aguantan.
+status	nobody has cried today.	hoy nadie ha llorado.
+status	the toilet works again.	el váter vuelve a funcionar.
+status	we only lost one glove.	solo hemos perdido un guante.
+status	[goo] the Mystery Goo is looking at us.	el Moco Misterioso nos está mirando.
+status	morale is high. Mostly.	la moral está alta. Casi siempre.
 # home_thing: I miss X. / I miss Kerbin. Even X.
-home_thing	real gravity
-home_thing	rain
-home_thing	the KSC cafeteria
-home_thing	my own bed
-home_thing	grass
-home_thing	showers
-home_thing	Mom's mystery stew
-home_thing	pizza that isn't frozen
+home_thing	real gravity	la gravedad de verdad
+home_thing	rain	la lluvia
+home_thing	the KSC cafeteria	la cafetería del centro espacial
+home_thing	my own bed	mi propia cama
+home_thing	grass	la hierba
+home_thing	showers	las duchas
+home_thing	Mom's mystery stew	el guiso misterioso de mamá
+home_thing	pizza that isn't frozen	la pizza que no está congelada
 # jeb_idea: Probably X.
-jeb_idea	add more boosters
-jeb_idea	do a flip
-jeb_idea	eat the Mystery Goo
-jeb_idea	go faster
-jeb_idea	lick the window
-jeb_idea	push the big red button
+jeb_idea	add more boosters	poner más propulsores
+jeb_idea	do a flip	dar una voltereta
+jeb_idea	eat the Mystery Goo	comerse el Moco Misterioso
+jeb_idea	go faster	ir más rápido
+jeb_idea	lick the window	lamer la ventana
+jeb_idea	push the big red button	pulsar el gran botón rojo
 # cure: Try X.
-cure	drinking upside down
-cure	thinking about taxes
-cure	staring at the fuel gauge
-cure	talking to the probe
-cure	holding your nose and humming
+cure	drinking upside down	beber boca abajo
+cure	thinking about taxes	pensar en los impuestos
+cure	staring at the fuel gauge	mirar fijamente el indicador de combustible
+cure	talking to the probe	hablar con la sonda
+cure	holding your nose and humming	taparte la nariz y tararear
 # loud_thing: You snore like X. (with a or an)
-loud_thing	a Mainsail
-loud_thing	a broken vacuum
-loud_thing	an angry goat
-loud_thing	a rusty hatch
-loud_thing	a rocket on the pad
-loud_thing	a Kraken with a cold
+loud_thing	a Mainsail	un motor Mainsail
+loud_thing	a broken vacuum	una aspiradora rota
+loud_thing	an angry goat	una cabra enfadada
+loud_thing	a rusty hatch	una escotilla oxidada
+loud_thing	a rocket on the pad	un cohete en la plataforma
+loud_thing	a Kraken with a cold	un Kraken resfriado
 # game: Let's play X.
-game	I spy
-game	rock paper scissors
-game	twenty questions
-game	who can float the longest
-game	guess the snack
+game	I spy	veo veo
+game	rock paper scissors	piedra, papel o tijera
+game	twenty questions	las veinte preguntas
+game	who can float the longest	quién flota más tiempo
+game	guess the snack	adivinar el aperitivo

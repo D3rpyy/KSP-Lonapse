@@ -323,7 +323,7 @@ namespace Lonapse
 
         /// <summary>Every value a template can use, as far as KSP gives it here. A value KSP does not have (no
         /// node, sandbox funds, no fuel tanks) is left out, so the templates that need it do not fit.</summary>
-        void CollectValues(Vessel v, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        void CollectValues(Vessel v, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names, bool log = true)
         {
             nums["alt_km"] = v.altitude / 1000.0;
             nums["speed"] = sit == "orbit" || sit == "escape" ? v.obt_speed : v.srfSpeed;
@@ -336,7 +336,7 @@ namespace Lonapse
                 if (sit == "orbit") { nums["period_min"] = o.period / 60.0; nums["t_pe_min"] = o.timeToPe / 60.0; }
                 if (o.ApA > 0 && o.timeToAp > 0) nums["t_ap_min"] = o.timeToAp / 60.0;
             }
-            Put(nums, "fuel", StageFuelPercent(v));
+            Put(nums, "fuel", StageFuelPercent(v, log));
             Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
             Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
             try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
@@ -366,16 +366,40 @@ namespace Lonapse
             catch (Exception) { }
             string day;
             double dd;
-            if (SlotFlightValues().TryGetValue("day", out day) && double.TryParse(day, System.Globalization.NumberStyles.Any,
+            if (BaseFlightValues().TryGetValue("day", out day) && double.TryParse(day, System.Globalization.NumberStyles.Any,
                 System.Globalization.CultureInfo.InvariantCulture, out dd)) nums["day"] = dd;
             string[] b = BodyNames(v.mainBody != null ? v.mainBody.bodyName : null);
-            if (b != null) names["body"] = b;
+            if (b != null) { names["body"] = b; names["here"] = b; }
             string[] vn = VesselNames();
             if (vn != null) names["vessel"] = vn;
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
         }
 
         static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
+
+        Dictionary<string, double> rtNumbers;
+        float rtNumbersAt = -100f;
+        Guid rtNumbersId;
+        /// <summary>How often the numbers for recorded lines are worked out, in s. CanFill asks every frame and
+        /// CollectValues walks every part.</summary>
+        const float RuntimeNumbersEvery = 2f;
+
+        /// <summary>The numbers of CollectValues for recorded lines with a number version ({fuel}, {ec} ...), null
+        /// with the runtime voice off or without a vessel. Without crew history: that belongs to one kerbal.</summary>
+        Dictionary<string, double> RuntimeNumbers()
+        {
+            if (!RuntimeOn) return null;
+            Vessel v = ActiveVessel;
+            if (v == null) return null;
+            if (rtNumbers != null && v.id == rtNumbersId && clock - rtNumbersAt < RuntimeNumbersEvery) return rtNumbers;
+            var nums = new Dictionary<string, double>();
+            try { CollectValues(v, SituationOf(v) ?? "other", nums, new Dictionary<string, string[]>(), false); }
+            catch (Exception e) { Log.Debug("Runtime voice numbers: " + e.Message); }
+            rtNumbers = nums;
+            rtNumbersAt = clock;
+            rtNumbersId = v.id;
+            return nums;
+        }
 
         /// <summary>The crew history of a kerbal aboard (RuntimeLines.CrewHistory) into nums. Nothing for an unknown
         /// kerbal: templates that need these values then do not fit.</summary>
@@ -401,7 +425,7 @@ namespace Lonapse
         /// set), like the stage view of the KSP resource panel (user report: 73 % was said with 530 of 1125 in the
         /// stage, the full upper stage tanks were counted too). No running engine: the whole vessel.
         /// </summary>
-        static double StageFuelPercent(Vessel v)
+        static double StageFuelPercent(Vessel v, bool log)
         {
             var feed = new HashSet<Part>();
             try
@@ -425,11 +449,11 @@ namespace Lonapse
                     if (r.resourceName == "LiquidFuel") { have += r.amount; max += r.maxAmount; }
             if (max > 0.01)
             {
-                Log.Info("Runtime voice: fuel " + have.ToString("0") + " / " + max.ToString("0") + " in the burning stage (" + feed.Count + " parts)");
+                if (log) Log.Info("Runtime voice: fuel " + have.ToString("0") + " / " + max.ToString("0") + " in the burning stage (" + feed.Count + " parts)");
                 return 100.0 * have / max;
             }
             double all = ResourcePercent(v, "LiquidFuel");
-            if (!double.IsNaN(all)) Log.Info("Runtime voice: fuel " + all.ToString("0") + " % of the whole vessel (no engine running)");
+            if (log && !double.IsNaN(all)) Log.Info("Runtime voice: fuel " + all.ToString("0") + " % of the whole vessel (no engine running)");
             return all;
         }
 
@@ -565,7 +589,9 @@ namespace Lonapse
             for (int i = 0; i < chat.Count; i++)
             {
                 string sp, en;
-                if (!RuntimeLines.Fill(chat[i], nums, i % 2 == 0 ? namesA : namesB, out sp, out en)) return false;
+                Dictionary<string, string[]> who = i % 2 == 0 ? namesA : namesB;
+                List<int> vs = RuntimeLines.FillableVersions(chat[i], nums, who);
+                if (vs.Count == 0 || !RuntimeLines.Fill(chat[i], vs[rng.Next(vs.Count)], nums, who, out sp, out en)) return false;
                 var e = new PhraseEntry
                 {
                     ClipKey = chat[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
@@ -680,7 +706,8 @@ namespace Lonapse
                               float delay, bool report)
         {
             string spanish, english;
-            if (!RuntimeLines.Fill(t, nums, names, out spanish, out english)) return;
+            List<int> vs = RuntimeLines.FillableVersions(t, nums, names);
+            if (vs.Count == 0 || !RuntimeLines.Fill(t, vs[rng.Next(vs.Count)], nums, names, out spanish, out english)) return;
             recentRuntime.Enqueue(t.Id);
             while (recentRuntime.Count > 4) recentRuntime.Dequeue();
             var e = new PhraseEntry

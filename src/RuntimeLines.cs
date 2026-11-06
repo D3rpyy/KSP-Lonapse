@@ -1,5 +1,5 @@
 // Experimental (runtime voice): lines that only exist at runtime, because they hold real values. The templates are in
-// GameData/Lonapse/Phrases/runtime.tsv (reports, docking, landing, science, contracts). This file parses them, picks
+// GameData/Lonapse/Phrases/Runtime/*.tsv (reports, docking, landing, science, contracts, chats). This file parses them, picks
 // the ones that fit and fills them. Also the Spanish words for numbers and the spoken names of bodies and vessels.
 // Pure: no Unity, no KSP, so the offline tests cover it. The director fills the values and sends the Spanish to Piper.
 // In the Spanish a number becomes words, and those words are reversed like every other word (loñapsE).
@@ -14,7 +14,10 @@ namespace Lonapse
 {
     public sealed class RuntimeTemplate
     {
-        public string Id, Kind, Spanish, English;
+        public string Id, Kind;
+        /// <summary>The versions of the line: { spanish, english } pairs, split by | in the file, in the same order.
+        /// One is picked per play from the versions whose slots all have a value.</summary>
+        public readonly List<string[]> Versions = new List<string[]>();
         /// <summary>Situations of the "when" column (orbit flight suborbital landed escape), empty: any.</summary>
         public readonly List<string> Situations = new List<string>();
         /// <summary>Checks of the "when" column: value key, operator (&lt; &lt;= &gt; &gt;= =), number.</summary>
@@ -23,24 +26,40 @@ namespace Lonapse
         /// <summary>Chat only: the job kerbal A and kerbal B must have (a=pilot b=scientist in the when column).
         /// Null: any job.</summary>
         public string TraitA, TraitB;
+        /// <summary>Where the row is: "reports.tsv:12".</summary>
+        public string Where = "";
+
+        /// <summary>The first version (the tests and the log use it).</summary>
+        public string Spanish { get { return Versions.Count > 0 ? Versions[0][0] : ""; } }
+        public string English { get { return Versions.Count > 0 ? Versions[0][1] : ""; } }
 
         public RuntimeTemplate(string id, string kind, string spanish, string english)
         {
-            Id = id; Kind = kind; Spanish = spanish; English = english;
+            Id = id; Kind = kind;
+            string[] es = (spanish ?? "").Split(SubtitleSlots.VersionSep), en = (english ?? "").Split(SubtitleSlots.VersionSep);
+            for (int i = 0; i < Math.Max(es.Length, en.Length); i++)
+                Versions.Add(new[] { i < es.Length ? es[i].Trim() : "", i < en.Length ? en[i].Trim() : "" });
         }
     }
 
     public static class RuntimeLines
     {
-        public const string FileRel = "GameData/Lonapse/Phrases/runtime.tsv";
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
                                                   "contract_funds", "contract_done", "contract_failed", "chat" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
-        public static readonly string[] NumberSlots = { "alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
-            "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
-            "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
-            "at_home", "flight_no", "missions", "stars", "visits", "landings" };
-        public static readonly string[] NameSlots = { "vessel", "body", "exp", "target", "self", "other", "kerbal" };
+        /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
+        public static readonly string[] NumberSlots = Slots.Numbers;
+        public static readonly string[] NameSlots = Concat(Slots.Names, Slots.Persons);
+        /// <summary>Columns every runtime file must have, found by name. Other columns are ignored.</summary>
+        public static readonly string[] Columns = { "id", "kind", "when", "spanish", "english" };
+
+        static string[] Concat(string[] a, string[] b)
+        {
+            var r = new string[a.Length + b.Length];
+            a.CopyTo(r, 0);
+            b.CopyTo(r, a.Length);
+            return r;
+        }
 
         /// <summary>Career log types that count as a visit to their target body.</summary>
         static readonly string[] VisitTypes = { "Flyby", "Orbit", "Suborbit", "Land", "Flight", "Escape" };
@@ -81,35 +100,101 @@ namespace Lonapse
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
 
-        /// <summary>Parses runtime.tsv: header "id kind when spanish english", # comments. Bad rows go to errors and
-        /// are skipped.</summary>
+        /// <summary>Parses one runtime file (the tests, a single table).</summary>
         public static List<RuntimeTemplate> Parse(IList<string> lines, List<string> errors)
+        {
+            return ParseAll(new[] { new KeyValuePair<string, IList<string>>("runtime", lines) }, errors);
+        }
+
+        /// <summary>
+        /// Parses the files of Phrases/Runtime (name, lines) as one set: ids are unique over all files, and a chat may
+        /// not be split over two files. Each file has its own header with at least id, kind, when, spanish, english
+        /// (any order, other columns are ignored). # starts a comment. Bad rows go to errors and are skipped.
+        /// </summary>
+        public static List<RuntimeTemplate> ParseAll(IEnumerable<KeyValuePair<string, IList<string>>> files, List<string> errors)
         {
             var r = new List<RuntimeTemplate>();
             var seen = new HashSet<string>();
-            bool header = false;
+            foreach (var file in files)
+                ParseFile(file.Key, file.Value, errors, seen, r);
+            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only
+            var groups = new Dictionary<string, List<RuntimeTemplate>>();
+            var drop = new HashSet<RuntimeTemplate>();
+            foreach (RuntimeTemplate t in r)
+            {
+                if (t.Kind != "chat") continue;
+                Match m = ChatId.Match(t.Id);
+                if (!m.Success) { if (errors != null) errors.Add(t.Where + " (" + t.Id + "): a chat id is rt_chat_<name>_<seq>"); drop.Add(t); continue; }
+                List<RuntimeTemplate> g;
+                if (!groups.TryGetValue(m.Groups[1].Value, out g)) groups[m.Groups[1].Value] = g = new List<RuntimeTemplate>();
+                g.Add(t);
+            }
+            foreach (var kv in groups)
+            {
+                kv.Value.Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y)));
+                string why = null;
+                if (kv.Value.Count < 2) why = "a chat needs at least 2 lines";
+                string file0 = FileOf(kv.Value[0].Where);
+                for (int i = 0; i < kv.Value.Count && why == null; i++)
+                {
+                    if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
+                    else if (FileOf(kv.Value[i].Where) != file0) why = "all lines of a chat go in one file";
+                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0
+                                       || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null)) why = "only line 1 has a when";
+                }
+                if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
+            }
+            r.RemoveAll(t => drop.Contains(t));
+            return r;
+        }
+
+        static string FileOf(string where)
+        {
+            int c = (where ?? "").LastIndexOf(':');
+            return c > 0 ? where.Substring(0, c) : where ?? "";
+        }
+
+        static void ParseFile(string name, IList<string> lines, List<string> errors, HashSet<string> seen, List<RuntimeTemplate> r)
+        {
+            Dictionary<string, int> col = null;
+            int width = 0;
+            if (lines == null) return;
             for (int i = 0; i < lines.Count; i++)
             {
-                string line = lines[i];
-                if (line == null || line.Trim().Length == 0 || line.TrimStart().StartsWith("#", StringComparison.Ordinal)) continue;
+                string line = (lines[i] ?? "").TrimEnd('\r');
+                if (line.Trim().Length == 0 || line.TrimStart().StartsWith("#", StringComparison.Ordinal)) continue;
                 string[] f = line.Split('\t');
-                if (!header)
+                for (int k = 0; k < f.Length; k++) f[k] = f[k].Trim();
+                string where = name + ":" + (i + 1);
+                if (col == null)
                 {
-                    header = true;
-                    if (f.Length != 5 || f[0] != "id" || f[1] != "kind" || f[2] != "when" || f[3] != "spanish" || f[4] != "english")
+                    col = new Dictionary<string, int>();
+                    for (int k = 0; k < f.Length; k++) if (!col.ContainsKey(f[k])) col[f[k]] = k;
+                    var missing = new List<string>();
+                    foreach (string c in Columns) if (!col.ContainsKey(c)) missing.Add(c);
+                    if (missing.Count > 0)
                     {
-                        if (errors != null) errors.Add("runtime line " + (i + 1) + ": header must be id, kind, when, spanish, english");
-                        return r;
+                        if (errors != null) errors.Add(where + ": header needs the columns " + string.Join(", ", Columns) + " (missing " + string.Join(" ", missing.ToArray()) + ")");
+                        return;
                     }
+                    width = f.Length;
                     continue;
                 }
+                int need = 0;
+                foreach (string c in Columns) need = Math.Max(need, col[c] + 1);
+                if (f.Length > width || f.Length < need)
+                {
+                    if (errors != null) errors.Add(where + ": expected " + width + " columns, got " + f.Length);
+                    continue;
+                }
+                if (f.Length < width) { var pad = new string[width]; f.CopyTo(pad, 0); for (int k = f.Length; k < width; k++) pad[k] = ""; f = pad; }
                 var bad = new List<string>();
-                if (f.Length != 5) { if (errors != null) errors.Add("runtime line " + (i + 1) + ": expected 5 columns, got " + f.Length); continue; }
-                var t = new RuntimeTemplate(f[0].Trim(), f[1].Trim(), f[3].Trim(), f[4].Trim());
+                var t = new RuntimeTemplate(f[col["id"]], f[col["kind"]], f[col["spanish"]], f[col["english"]]);
+                t.Where = where;
                 if (!IdRe.IsMatch(t.Id)) bad.Add("id '" + t.Id + "' must match rt_[a-z0-9_]+");
                 else if (!seen.Add(t.Id)) bad.Add("duplicate id " + t.Id);
                 if (Array.IndexOf(Kinds, t.Kind) < 0) bad.Add("unknown kind '" + t.Kind + "'");
-                foreach (string tok in f[2].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string tok in f[col["when"]].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (tok == "any") continue;
                     if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
@@ -132,45 +217,22 @@ namespace Lonapse
                     }
                     bad.Add("bad condition '" + tok + "'");
                 }
-                if (t.Spanish.Length == 0 || t.English.Length == 0) bad.Add("spanish and english must not be empty");
-                foreach (string text in new[] { t.Spanish, t.English })
-                    foreach (Match m in Slot.Matches(text))
-                        if (Array.IndexOf(NumberSlots, m.Groups[1].Value) < 0 && Array.IndexOf(NameSlots, m.Groups[1].Value) < 0)
-                            bad.Add("unknown slot {" + m.Groups[1].Value + "}");
-                if (SlotSet(t.Spanish) != SlotSet(t.English)) bad.Add("spanish and english must use the same slots");
-                if (bad.Count > 0) { if (errors != null) errors.Add("runtime line " + (i + 1) + " (" + t.Id + "): " + string.Join("; ", bad.ToArray())); continue; }
+                int nEs = f[col["spanish"]].Split(SubtitleSlots.VersionSep).Length, nEn = f[col["english"]].Split(SubtitleSlots.VersionSep).Length;
+                if (nEs != nEn) bad.Add(nEs + " spanish versions for " + nEn + " english, split both by | in the same order");
+                for (int v = 0; v < t.Versions.Count && bad.Count == 0; v++)
+                {
+                    string es = t.Versions[v][0], en = t.Versions[v][1], vn = t.Versions.Count > 1 ? " (version " + (v + 1) + ")" : "";
+                    if (es.Length == 0 || en.Length == 0) { bad.Add("spanish and english must not be empty" + vn); continue; }
+                    foreach (string text in new[] { es, en })
+                        foreach (Match m in Slot.Matches(text))
+                            if (Array.IndexOf(NumberSlots, m.Groups[1].Value) < 0 && Array.IndexOf(NameSlots, m.Groups[1].Value) < 0)
+                                bad.Add("unknown slot {" + m.Groups[1].Value + "}" + vn);
+                    if (SlotSet(es) != SlotSet(en)) bad.Add("spanish and english must use the same slots" + vn);
+                }
+                if (bad.Count > 0) { if (errors != null) errors.Add(where + " (" + t.Id + "): " + string.Join("; ", bad.ToArray())); continue; }
                 r.Add(t);
             }
-            if (!header && errors != null) errors.Add("runtime: no header");
-            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only
-            var groups = new Dictionary<string, List<RuntimeTemplate>>();
-            foreach (RuntimeTemplate t in r)
-            {
-                if (t.Kind != "chat") continue;
-                Match m = ChatId.Match(t.Id);
-                if (!m.Success) { if (errors != null) errors.Add("runtime (" + t.Id + "): a chat id is rt_chat_<name>_<seq>"); continue; }
-                List<RuntimeTemplate> g;
-                if (!groups.TryGetValue(m.Groups[1].Value, out g)) groups[m.Groups[1].Value] = g = new List<RuntimeTemplate>();
-                g.Add(t);
-            }
-            var drop = new HashSet<RuntimeTemplate>();
-            foreach (var kv in groups)
-            {
-                kv.Value.Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y)));
-                string why = null;
-                if (kv.Value.Count < 2) why = "a chat needs at least 2 lines";
-                for (int i = 0; i < kv.Value.Count && why == null; i++)
-                {
-                    if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
-                    else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0
-                                       || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null)) why = "only line 1 has a when";
-                }
-                if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
-            }
-            foreach (RuntimeTemplate t in r)
-                if (t.Kind == "chat" && !ChatId.IsMatch(t.Id)) drop.Add(t);
-            r.RemoveAll(t => drop.Contains(t));
-            return r;
+            if (col == null && errors != null) errors.Add(name + ": no header");
         }
 
         static int ChatSeq(RuntimeTemplate t)
@@ -199,24 +261,19 @@ namespace Lonapse
             return r;
         }
 
-        /// <summary>Line 1 of a chat fits (situation, checks and the jobs of A and B), and every line fills with the
-        /// names of its speaker: line i is spoken by A when i is even. namesA and namesB hold self and other for each
-        /// speaker. jobA and jobB are the trait keys of the two kerbals (Persona.trait). Null: the job is not checked.</summary>
+        /// <summary>Line 1 of a chat fits (situation, checks and the jobs of A and B), and every line has a version
+        /// that fills with the names of its speaker: line i is spoken by A when i is even. namesA and namesB hold self
+        /// and other for each speaker. jobA and jobB are the trait keys of the two kerbals (Persona.trait). Null: the
+        /// job is not checked.</summary>
         public static bool ChatFits(List<RuntimeTemplate> chat, string situation, Dictionary<string, double> nums,
                                     Dictionary<string, string[]> namesA, Dictionary<string, string[]> namesB,
                                     string jobA = null, string jobB = null)
         {
             if (chat == null || chat.Count == 0) return false;
             if (!JobOk(chat[0].TraitA, jobA) || !JobOk(chat[0].TraitB, jobB)) return false;
-            var head = new List<RuntimeTemplate> { new RuntimeTemplate(chat[0].Id, "chat", chat[0].Spanish, chat[0].English) };
-            head[0].Situations.AddRange(chat[0].Situations);
-            head[0].Checks.AddRange(chat[0].Checks);
-            if (Fitting(head, "chat", situation, nums, namesA).Count == 0) return false;
+            if (!Holds(chat[0], situation, nums) || FillableVersions(chat[0], nums, namesA).Count == 0) return false;
             for (int i = 1; i < chat.Count; i++)
-            {
-                string s, e;
-                if (!Fill(chat[i], nums, i % 2 == 0 ? namesA : namesB, out s, out e)) return false;
-            }
+                if (FillableVersions(chat[i], nums, i % 2 == 0 ? namesA : namesB).Count == 0) return false;
             return true;
         }
 
@@ -252,34 +309,49 @@ namespace Lonapse
         }
 
         /// <summary>The templates of a kind that fit: the situation matches (or the template has none), every check
-        /// holds and every slot has a value.</summary>
+        /// holds and at least one version has a value for every slot.</summary>
         public static List<RuntimeTemplate> Fitting(IList<RuntimeTemplate> all, string kind, string situation,
                                                     Dictionary<string, double> nums, Dictionary<string, string[]> names)
         {
             var r = new List<RuntimeTemplate>();
             if (all == null) return r;
             foreach (RuntimeTemplate t in all)
+                if (t.Kind == kind && Holds(t, situation, nums) && FillableVersions(t, nums, names).Count > 0) r.Add(t);
+            return r;
+        }
+
+        /// <summary>The situation and the checks of the when column hold.</summary>
+        static bool Holds(RuntimeTemplate t, string situation, Dictionary<string, double> nums)
+        {
+            if (t.Situations.Count > 0 && !t.Situations.Contains(situation ?? "")) return false;
+            foreach (var c in t.Checks)
             {
-                if (t.Kind != kind) continue;
-                if (t.Situations.Count > 0 && !t.Situations.Contains(situation ?? "")) continue;
-                bool ok = true;
-                foreach (var c in t.Checks)
+                double v;
+                if (nums == null || !nums.TryGetValue(c.Key, out v) || double.IsNaN(v)) return false;
+                double rv = Rounded(c.Key, v), n = c.Value.Value;
+                bool ok;
+                switch (c.Value.Key)
                 {
-                    double v;
-                    if (nums == null || !nums.TryGetValue(c.Key, out v) || double.IsNaN(v)) { ok = false; break; }
-                    double rv = Rounded(c.Key, v), n = c.Value.Value;
-                    switch (c.Value.Key)
-                    {
-                        case "<": ok = rv < n; break;
-                        case "<=": ok = rv <= n; break;
-                        case ">": ok = rv > n; break;
-                        case ">=": ok = rv >= n; break;
-                        default: ok = rv == n; break;
-                    }
-                    if (!ok) break;
+                    case "<": ok = rv < n; break;
+                    case "<=": ok = rv <= n; break;
+                    case ">": ok = rv > n; break;
+                    case ">=": ok = rv >= n; break;
+                    default: ok = rv == n; break;
                 }
+                if (!ok) return false;
+            }
+            return true;
+        }
+
+        /// <summary>The indices of the versions whose slots all have a value now.</summary>
+        public static List<int> FillableVersions(RuntimeTemplate t, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            var r = new List<int>();
+            if (t == null) return r;
+            for (int v = 0; v < t.Versions.Count; v++)
+            {
                 string s, e;
-                if (ok && Fill(t, nums, names, out s, out e)) r.Add(t);
+                if (Fill(t, v, nums, names, out s, out e)) r.Add(v);
             }
             return r;
         }
@@ -407,11 +479,7 @@ namespace Lonapse
             return !double.IsNaN(v) && Math.Abs(Rounded(key, v)) >= 1000000.0;
         }
 
-        static bool HasDecimals(string key)
-        {
-            return key.EndsWith("_km", StringComparison.Ordinal) || key.EndsWith("_min", StringComparison.Ordinal)
-                   || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key == "sci";
-        }
+        static bool HasDecimals(string key) { return Slots.HasDecimals(key); }
 
         /// <summary>Subtitle digits: "1,234", "7.5", "15 million", "2.5 million".</summary>
         public static string Digits(string key, double v)
@@ -533,10 +601,26 @@ namespace Lonapse
         public static bool Fill(RuntimeTemplate t, Dictionary<string, double> nums, Dictionary<string, string[]> names,
                                 out string spanish, out string english)
         {
+            return Fill(t, 0, nums, names, out spanish, out english);
+        }
+
+        /// <summary>Fill with one version of the template (an index into Versions).</summary>
+        public static bool Fill(RuntimeTemplate t, int version, Dictionary<string, double> nums, Dictionary<string, string[]> names,
+                                out string spanish, out string english)
+        {
             spanish = null; english = null;
-            if (t == null) return false;
+            if (t == null || version < 0 || version >= t.Versions.Count) return false;
+            return FillText(t.Versions[version][0], t.Versions[version][1], nums, names, out spanish, out english);
+        }
+
+        /// <summary>Fills a Spanish and an English text with the same values (also used for recorded lines with
+        /// number slots). False when a slot has no value.</summary>
+        public static bool FillText(string es, string en, Dictionary<string, double> nums, Dictionary<string, string[]> names,
+                                    out string spanish, out string english)
+        {
+            spanish = null; english = null;
             bool ok = true;
-            spanish = Slot.Replace(Singular(t.Spanish, nums, SpanishPlurals), m =>
+            spanish = Slot.Replace(Singular(es ?? "", nums, SpanishPlurals), m =>
             {
                 string k = m.Groups[1].Value;
                 double v;
@@ -546,7 +630,7 @@ namespace Lonapse
                 ok = false;
                 return m.Value;
             });
-            english = Slot.Replace(Singular(t.English, nums, EnglishPlurals), m =>
+            english = Slot.Replace(Singular(en ?? "", nums, EnglishPlurals), m =>
             {
                 string k = m.Groups[1].Value;
                 double v;
@@ -574,6 +658,11 @@ namespace Lonapse
 
         /// <summary>A value that is 1 (after rounding) takes the singular noun right after its slot: "un kilómetro",
         /// "1 minute". In Spanish a value in millions gets "de" before its noun. Applied to the template before it is filled.</summary>
+        public static string Singular(string template, Dictionary<string, double> nums, bool spanish)
+        {
+            return Singular(template, nums, spanish ? SpanishPlurals : EnglishPlurals);
+        }
+
         static string Singular(string template, Dictionary<string, double> nums, Dictionary<string, string> plurals)
         {
             if (nums == null || string.IsNullOrEmpty(template)) return template;

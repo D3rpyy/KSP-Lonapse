@@ -1,0 +1,8 @@
+# Runtime voice: docking approach and landing calls. The format is explained at the top of reports.tsv.
+id	kind	when	spanish	english
+rt_dock_far	dock	dist_m>=100 close_ms>0	Objetivo a {dist_m} metros. Os acercáis a {close_ms} metros por segundo. | Distancia al objetivo, {dist_m} metros.	Target at {dist_m} meters. Closing at {close_ms} m/s. | Distance to target, {dist_m} meters.
+rt_dock_near	dock	dist_m>=2 dist_m<100	Solo {dist_m} metros hasta {target}. Despacio. | {dist_m} metros. Ya casi, despacio.	Only {dist_m} meters to {target}. Slowly. | {dist_m} meters. Almost there, slowly.
+rt_dock_fast	dock	close_ms>=5	Vais a {close_ms} metros por segundo hacia {target}. Frenad un poco.	You're closing on {target} at {close_ms} m/s. Slow down a bit.
+rt_land	land	vspeed_ms>=2	Altura {height_m} metros, bajando a {vspeed_ms} metros por segundo. | Altura {height_m} metros. Velocidad de bajada {vspeed_ms} metros por segundo.	Height {height_m} meters, coming down at {vspeed_ms} m/s. | Height {height_m} meters. Coming down at {vspeed_ms} m/s.
+rt_land_fast	land	vspeed_ms>=30	Bajáis a {vspeed_ms} metros por segundo. Eso es mucho. Frenad.	Coming down at {vspeed_ms} m/s. That's a lot. Brake.
+rt_land_body	land	height_m>=2	Faltan {height_m} metros para {body}. Suerte.	{height_m} meters to {body}. Good luck.

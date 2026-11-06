@@ -1,149 +1,149 @@
 # Lonapse 0.6.0 lines (tm_). Written as drafts, converted to this table.
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english
-tm_001	chatter	chatter	tense	mc	tm_001	1	m	any	any	any	any	any	Os estamos vigilando de cerca.	We're watching you closely. | We're watching you closely. | All eyes on you, {vessel}.
-tm_002	chatter	chatter	tense	mc	tm_002	1	m	any	any	any	any	any	Calma. Lo tenemos en pantalla.	Easy. We have it on screen. | Easy. We have it on screen. | Calm. It's on our screens.
-tm_003	chatter	chatter	tense	mc	tm_003	1	m	any	any	any	any	any	Despacio. Paso a paso.	Slowly. One step at a time. | Slowly. One step at a time. | Step by step. No hurry.
-tm_004	chatter	chatter	tense	mc	tm_004	1	m	any	any	any	any	any	Seguimos con vosotros. No estáis solos.	We're with you. You're not alone. | We're with you. You're not alone. | You're not alone up there, {vessel}.
-tm_005	chatter	chatter	tense	mc	tm_005	1	m	any	any	any	any	any	Las lecturas se mueven. Atentos.	The readings are moving. Stay sharp. | The readings are moving. Stay sharp. | Numbers are changing. Stay alert.
-tm_006	chatter	chatter	tense	mc	tm_006	1	m	any	any	any	any	any	Tranquilos. Ya lo hemos visto antes.	Easy. We've seen this before. | Easy. We've seen this before. | Calm. Not the first time we've seen this.
-tm_007	chatter	chatter	tense	mc	tm_007	1	m	any	any	any	any	any	Mantened la calma y seguid el plan.	Stay calm and follow the plan. | Stay calm and follow the plan. | Calm. Stick to the plan.
-tm_008	chatter	chatter	tense	mc	tm_008	1	m	any	any	any	any	any	Lo estamos mirando. Dadnos un momento.	We're looking at it. Give us a moment. | We're looking at it. Give us a moment. | Checking. One moment, {vessel}.
-tm_009	chatter	chatter	tense	mc	tm_009	1	m	any	any	any	any	any	Toda la sala está con vosotros.	The whole room is with you. | The whole room is with you. | Everyone down here is with you.
-tm_010	chatter	chatter	tense	mc	tm_010	1	m	any	any	any	any	any	No toquéis nada que no haga falta.	Don't touch anything you don't need to. | Don't touch anything you don't need to. | Hands off anything you don't need.
-tm_011	chatter	chatter	tense	mc	tm_011	1	m	any	any	any	any	any	Respirad hondo. Seguimos.	Deep breath. We carry on. | Deep breath. We carry on. | Breathe. Then we keep going.
-tm_012	chatter	chatter	tense	mc	tm_012	1	m	any	any	any	any	any	Esto se puede arreglar. Seguid con nosotros.	This can be fixed. Stay with us. | This can be fixed. Stay with us. | We can fix this. Stay with us.
-tm_013	chatter	chatter	tense	mc	tm_013	1	m	any	any	any	any	any	Despacio con los mandos.	Gently on the controls. | Gently on the controls. | Soft hands on the controls.
-tm_014	chatter	chatter	tense	mc	tm_014	1	m	any	any	any	any	any	Vemos lo mismo que vosotros. Ojo.	We see what you see. Careful. | We see what you see. Careful. | Same view down here. Careful.
-tm_015	chatter	chatter	tense	mc	tm_015	1	m	any	any	any	any	any	Ahora toca concentrarse.	Time to focus now. | Time to focus now. | Focus time, {vessel}.
-tm_016	chatter	chatter	tense	mc	tm_016	1	m	any	any	any	any	any	Pinta raro, pero aguanta.	It looks odd, but it's holding. | It looks odd, but it's holding. | Strange, but it holds.
-tm_017	chatter	chatter	tense	mc	tm_017	1	m	any	any	any	any	any	Los ingenieros ya están mirando.	The engineers are already on it. | The engineers are already on it. | Engineering is working on it.
-tm_018	chatter	chatter	tense	mc	tm_018	1	m	any	any	any	any	any	Seguid hablando con nosotros.	Keep talking to us. | Keep talking to us. | Keep the radio going, {vessel}.
-tm_019	chatter	chatter	tense	mc	tm_019	1	m	any	any	any	any	any	Nada de prisas. Con cabeza.	No rush. Use your head. | No rush. Use your head. | Take your time. Think.
-tm_020	chatter	chatter	tense	mc	tm_020	1	m	any	any	any	any	any	Un ojo en los números, otro en la ventana.	One eye on the numbers, one on the window. | One eye on the numbers, one on the window. | Watch the numbers. And the window.
-tm_021	chatter	chatter	tense	mc	tm_021	1	m	any	any	any	any	any	Paso a paso. Lo estáis haciendo bien.	One step at a time. You're doing fine. | One step at a time. You're doing fine. | You're doing well. Step by step.
-tm_022	chatter	chatter	tense	mc	tm_022	1	m	any	any	any	any	any	Seguimos en verde. Por poco.	Still green. Just about. | Still green. Just about. | Green. Barely.
-tm_023	chatter	chatter	tense	mc	tm_023	1	m	any	any	any	any	any	Si empeora, avisad enseguida.	If it gets worse, tell us right away. | If it gets worse, tell us right away. | Worse? Tell us at once.
-tm_024	chatter	chatter	tense	mc	tm_024	1	m	any	any	any	any	any	Vamos a salir de esta.	We'll get through this. | We'll get through this. | We'll make it through.
-tm_025	chatter	chatter	tense	mc	tm_025	1	m	any	any	any	any	any	El jefe de vuelo ha dejado el café. Esto va en serio.	The flight director put down his coffee. This is serious. | The flight director put down his coffee. This is serious. | The flight director stopped eating {food}. That's serious.
-tm_026	chatter	chatter	tense	mc	tm_026	1	m	any	any	any	any	any	Concentrados. Luego hablamos de esto.	Focus. We'll talk about this later. | Focus. We'll talk about this later. | Focus now. Talk later.
-tm_027	chatter	chatter	tense	mc	tm_027	1	m	any	any	any	any	any	Nadie toca el botón grande. Nadie.	Nobody touches the big button. Nobody. | Nobody touches the big button. Nobody. | The big button stays untouched. By everyone.
-tm_028	chatter	chatter	tense	mc	tm_028	1	m	any	any	any	any	any	Estamos aquí. Hablad cuando queráis.	We're here. Talk whenever you need. | We're here. Talk whenever you need. | We're listening. Talk any time.
-tm_029	chatter	chatter	tense	mc	tm_029	1	m	any	any	any	any	any	Esto no es bonito, pero es normal. Creo.	This isn't pretty, but it's normal. I think. | This isn't pretty, but it's normal. I think. | Not pretty. Normal, though. Probably.
-tm_030	chatter	chatter	tense	mc	tm_030	1	m	any	any	any	any	any	Bien. Seguid así. Sin sustos.	Good. Keep it like that. No surprises. | Good. Keep it like that. No surprises. | Good. Hold it there. No surprises.
-tm_031	chatter	chatter	tense	crew	tm_031	1	both	any	any	any	any	any	Control, esto no me gusta nada.	Control, I don't like this at all. | Control, I don't like this at all. | Control, I really don't like this.
-tm_032	chatter	chatter	tense	crew	tm_032	1	both	any	any	any	any	any	Esto se está poniendo feo.	This is getting ugly. | This is getting ugly. | It's getting ugly.
-tm_033	chatter	chatter	tense	crew	tm_033	1	both	any	any	any	any	any	Control, ¿lo estáis viendo?	Control, are you seeing this? | Control, are you seeing this? | Control, do you see this?
-tm_034	chatter	chatter	tense	crew	tm_034	1	both	any	any	any	any	any	Tengo las manos en los mandos.	I've got my hands on the controls. | I've got my hands on the controls. | Hands on the controls.
-tm_035	chatter	chatter	tense	crew	tm_035	1	both	any	any	any	any	any	Algo no va bien.	Something's not right. | Something's not right. | Something is wrong.
-tm_036	chatter	chatter	tense	crew	tm_036	1	both	any	any	any	any	any	Esto no estaba en el entrenamiento.	This wasn't in training. | This wasn't in training. | Training never showed us this.
-tm_037	chatter	chatter	tense	crew	tm_037	1	both	any	any	any	any	any	Vale. Calma. Calma.	Okay. Calm. Calm. | Okay. Calm. Calm. | Calm. Stay calm.
-tm_038	chatter	chatter	tense	crew	tm_038	1	both	any	any	any	any	any	Aguanta, nave. Aguanta.	Hold on, ship. Hold on. | Hold on, ship. Hold on. | Hold together, {vessel}. Please.
-tm_039	chatter	chatter	tense	crew	tm_039	1	both	any	any	any	any	any	Las luces del panel se han puesto nerviosas.	The panel lights got nervous. | The panel lights got nervous. | The lights on the panel look nervous.
-tm_040	chatter	chatter	tense	crew	tm_040	1	both	any	any	any	any	any	Control, necesito buenas noticias.	Control, I need some good news. | Control, I need some good news. | Control, tell me something good.
-tm_041	chatter	chatter	tense	crew	tm_041	1	both	any	any	any	any	any	Esto pinta mal. Seguimos.	This looks bad. We carry on. | This looks bad. We carry on. | Bad, but we keep going.
-tm_042	chatter	chatter	tense	crew	tm_042	1	both	any	any	any	any	any	Me estoy agarrando a todo.	I'm holding on to everything. | I'm holding on to everything. | Holding on to anything I can.
-tm_043	chatter	chatter	tense	crew	tm_043	1	both	any	any	any	any	any	Concentración. Solo concentración.	Focus. Just focus. | Focus. Just focus. | Just focus.
-tm_044	chatter	chatter	tense	crew	tm_044	1	both	any	any	any	any	any	Control, decidme que esto es normal.	Control, tell me this is normal. | Control, tell me this is normal. | Control, please say this is normal.
-tm_045	chatter	chatter	tense	crew	tm_045	1	both	any	any	any	any	any	Lo tengo. Creo que lo tengo.	I've got it. I think I've got it. | I've got it. I think I've got it. | Got it. I think.
-tm_046	chatter	chatter	tense	crew	tm_046	1	both	any	any	any	any	any	No me hace gracia esto.	I don't find this funny. | I don't find this funny. | This isn't funny.
-tm_047	chatter	chatter	tense	crew	tm_047	1	both	any	any	any	any	any	Control, ¿algún consejo?	Control, any advice? | Control, any advice? | Control, any tips?
-tm_048	chatter	chatter	tense	crew	tm_048	1	both	any	any	any	any	any	Seguimos aquí. Más o menos enteros.	Still here. More or less in one piece. | Still here. More or less in one piece. | Still in one piece. Mostly.
-tm_049	chatter	chatter	tense	crew	tm_049	1	both	any	any	any	any	any	Esto ya no es divertido.	This isn't fun anymore. | This isn't fun anymore. | The fun part is over.
-tm_050	chatter	chatter	tense	crew	tm_050	1	both	any	any	any	any	any	Despacio, despacio.	Easy, easy. | Easy, easy. | Gently, gently.
-tm_051_1	chatter	chatter	tense	crew	tm_051	1	both	any	any	any	any	any	Control, ¿seguimos bien?	Control, are we still okay? | Control, are we still okay? | Control, still good?
-tm_051_2	chatter	chatter	tense	mc	tm_051	2	m	any	any	any	any	any	Por ahora, sí. No os relajéis.	For now, yes. Don't relax. | For now, yes. Don't relax. | Yes, for now. Stay sharp.
-tm_052_1	chatter	chatter	tense	crew	tm_052	1	both	any	any	any	any	any	Control, esto se mueve mucho.	Control, this is moving a lot. | Control, this is moving a lot. | Control, lots of movement.
-tm_052_2	chatter	chatter	tense	mc	tm_052	2	m	any	any	any	any	any	Lo vemos. Aguantad.	We see it. Hold on. | We see it. Hold on. | Copy. Hang on.
-tm_053_1	chatter	chatter	tense	mc	tm_053	1	m	any	any	any	any	any	Nave, informe rápido.	Ship, quick report. | Ship, quick report. | {vessel}, quick status.
-tm_053_2	chatter	chatter	tense	crew	tm_053	2	both	any	any	any	any	any	Aquí seguimos. No muy contentos.	Still here. Not very happy. | Still here. Not very happy. | Here. Not happy.
-tm_053_3	chatter	chatter	tense	mc	tm_053	3	m	any	any	any	any	any	Con estar ahí nos basta.	Being there is enough for us. | Being there is enough for us. | Here is good enough.
-tm_054_1	chatter	chatter	tense	crew	tm_054	1	both	any	any	any	any	any	Control, ¿qué hacemos?	Control, what do we do? | Control, what do we do? | Control, what now?
-tm_054_2	chatter	chatter	tense	mc	tm_054	2	m	any	any	any	any	any	Seguir el plan. Despacio.	Follow the plan. Slowly. | Follow the plan. Slowly. | The plan. Slowly.
-tm_054_3	chatter	chatter	tense	crew	tm_054	3	both	any	any	any	any	any	Recibido. Despacio.	Copy. Slowly. | Copy. Slowly. | Slowly. Copy.
-tm_055_1	chatter	chatter	tense	mc	tm_055	1	m	any	any	any	any	any	¿Cómo os sentís?	How are you feeling? | How are you feeling? | How do you feel up there?
-tm_055_2	chatter	chatter	tense	crew	tm_055	2	both	any	any	any	any	any	Como en una lavadora.	Like in a washing machine. | Like in a washing machine. | Like a sock in a washing machine.
-tm_055_3	chatter	chatter	tense	mc	tm_055	3	m	any	any	any	any	any	Aguantad. Ya casi está.	Hold on. Almost there. | Hold on. Almost there. | Hang on. Nearly done.
-tm_056_1	chatter	chatter	tense	crew	tm_056	1	both	any	any	any	any	any	Control, prometedme que esto acaba bien.	Control, promise me this ends well. | Control, promise me this ends well. | Control, tell me this ends well.
-tm_056_2	chatter	chatter	tense	mc	tm_056	2	m	any	any	any	any	any	Estamos en ello.	We're working on it. | We're working on it. | Working on it.
-tm_057_1	chatter	chatter	tense	crew	tm_057	1	both	any	any	any	any	any	Control, ¿os parece normal?	Control, does this look normal to you? | Control, does this look normal to you? | Control, is this normal?
-tm_057_2	chatter	chatter	tense	mc	tm_057	2	m	any	any	any	any	any	Normal no. Controlable sí.	Not normal. Manageable. | Not normal. Manageable. | Not normal. But we can handle it.
-tm_058_1	chatter	chatter	tense	mc	tm_058	1	m	any	any	any	any	any	Nave, ¿todos enteros?	Ship, everyone in one piece? | Ship, everyone in one piece? | {vessel}, all in one piece?
-tm_058_2	chatter	chatter	tense	crew	tm_058	2	both	any	any	any	any	any	Enteros. Nerviosos, pero enteros.	In one piece. Nervous, but in one piece. | In one piece. Nervous, but in one piece. | One piece. Nervous piece.
-tm_059_1	chatter	chatter	tense	crew	tm_059	1	both	any	any	any	any	any	Control, voy a tocar algo.	Control, I'm going to touch something. | Control, I'm going to touch something. | Control, I need to touch something.
-tm_059_2	chatter	chatter	tense	mc	tm_059	2	m	any	any	any	any	any	¿El qué?	What? | What? | Touch what?
-tm_059_3	chatter	chatter	tense	crew	tm_059	3	both	any	any	any	any	any	Madera.	Wood. | Wood. | Wood. For luck.
-tm_059_4	chatter	chatter	tense	mc	tm_059	4	m	any	any	any	any	any	Aquí también.	Us too. | Us too. | Same here.
-tm_060_1	chatter	chatter	tense	mc	tm_060	1	m	any	any	any	any	any	Calma, equipo. Esto ya lo hemos ensayado.	Calm, team. We've rehearsed this. | Calm, team. We've rehearsed this. | Calm, everyone. We practiced this.
-tm_060_2	chatter	chatter	tense	crew	tm_060	2	both	any	any	any	any	any	¿De verdad?	Really? | Really? | We did?
-tm_060_3	chatter	chatter	tense	mc	tm_060	3	m	any	any	any	any	any	Más o menos.	More or less. | More or less. | Sort of.
-tm_061_1	chatter	chatter	tense	crew	tm_061	1	both	any	any	any	any	any	Control, se me ha olvidado todo el entrenamiento.	Control, I forgot all my training. | Control, I forgot all my training. | Control, my training is gone. All of it.
-tm_061_2	chatter	chatter	tense	mc	tm_061	2	m	any	any	any	any	any	Nosotros te lo recordamos. Paso uno: respira.	We'll remind you. Step one: breathe. | We'll remind you. Step one: breathe. | We'll help. First step: breathe.
-tm_062_1	chatter	chatter	tense	crew	tm_062	1	both	any	any	any	any	any	Control, hablad conmigo.	Control, talk to me. | Control, talk to me. | Control, say something.
-tm_062_2	chatter	chatter	tense	mc	tm_062	2	m	any	any	any	any	any	Aquí estamos. Lo estás haciendo bien.	We're here. You're doing fine. | We're here. You're doing fine. | Here. You're doing well.
-tm_063_1	chatter	chatter	tense	mc	tm_063	1	m	any	any	any	any	any	Nave, ¿nos copiáis?	Ship, do you copy? | Ship, do you copy? | {vessel}, do you read?
-tm_063_2	chatter	chatter	tense	crew	tm_063	2	both	any	any	any	any	any	Os copio. Ocupado, pero os copio.	Copy. Busy, but copy. | Copy. Busy, but copy. | Busy. But copy.
-tm_064_1	chatter	chatter	tense	crew	tm_064	1	both	any	any	any	any	any	Control, esto no sale en los folletos.	Control, this isn't in the brochures. | Control, this isn't in the brochures. | Control, the brochure never mentioned this.
-tm_064_2	chatter	chatter	tense	mc	tm_064	2	m	any	any	any	any	any	Los folletos mienten. Seguid.	The brochures lie. Carry on. | The brochures lie. Carry on. | Brochures always lie. Keep going.
-tm_065_1	chatter	chatter	tense	crew	tm_065	1	both	any	any	any	any	any	Control, ¿me oís? Esto hace mucho ruido.	Control, do you hear me? It's very loud here. | Control, do you hear me? It's very loud here. | Control, can you hear me? So loud here.
-tm_065_2	chatter	chatter	tense	mc	tm_065	2	m	any	any	any	any	any	Te oímos. Grita si hace falta.	We hear you. Shout if you need to. | We hear you. Shout if you need to. | Loud and clear. Shout if needed.
-tm_066_1	chatter	chatter	tense	mc	tm_066	1	m	any	any	any	any	any	Nave, ¿necesitáis algo?	Ship, do you need anything? | Ship, do you need anything? | {vessel}, need anything?
-tm_066_2	chatter	chatter	tense	crew	tm_066	2	both	any	any	any	any	any	Un poco de suerte.	A bit of luck. | A bit of luck. | Some luck, please.
-tm_066_3	chatter	chatter	tense	mc	tm_066	3	m	any	any	any	any	any	Os mandamos toda la que tenemos.	Sending you all we've got. | Sending you all we've got. | All our luck is on the way.
-tm_067_1	chatter	chatter	tense	crew	tm_067	1	both	any	any	any	any	any	Control, si salimos de esta, invito yo.	Control, if we get out of this, drinks are on me. | Control, if we get out of this, drinks are on me. | Control, if this works, I'm buying.
-tm_067_2	chatter	chatter	tense	mc	tm_067	2	m	any	any	any	any	any	Trato hecho. Ahora concéntrate.	Deal. Now focus. | Deal. Now focus. | Deal. Focus.
-tm_068_1	chatter	chatter	tense	crew	tm_068	1	both	any	any	any	any	any	Control, ¿cuánto dura esto?	Control, how long does this last? | Control, how long does this last? | Control, how much longer?
-tm_068_2	chatter	chatter	tense	mc	tm_068	2	m	any	any	any	any	any	Poco. Aguantad un poco más.	Not long. Hold on a bit more. | Not long. Hold on a bit more. | Almost over. Hang on.
-tm_069_1	chatter	chatter	tense	crew	tm_069	1	both	any	any	any	any	any	Control, creo que estoy sudando dentro del traje.	Control, I think I'm sweating inside my suit. | Control, I think I'm sweating inside my suit. | Control, my suit is getting sweaty.
-tm_069_2	chatter	chatter	tense	mc	tm_069	2	m	any	any	any	any	any	Normal. Nosotros también.	Normal. So are we. | Normal. So are we. | Normal. We're sweating too.
-tm_070_1	chatter	chatter	tense	mc	tm_070	1	m	any	any	any	any	any	Ojo, nave. Los datos cambian rápido.	Careful, ship. The data is changing fast. | Careful, ship. The data is changing fast. | Careful, {vessel}. Data moving fast.
-tm_070_2	chatter	chatter	tense	crew	tm_070	2	both	any	any	any	any	any	Lo noto. Lo noto mucho.	I can feel it. I can really feel it. | I can feel it. I can really feel it. | Feeling it. Really feeling it.
-tm_071_1	chatter	chatter	tense	crew	tm_071	1	both	any	spin	any	any	any	Control, damos vueltas como una peonza.	Control, we're spinning like a top. | Control, we're spinning like a top. | Control, we're a spinning top.
-tm_071_2	chatter	chatter	tense	mc	tm_071	2	m	any	spin	any	any	any	Lo vemos. Corrige con suavidad.	We see it. Correct gently. | We see it. Correct gently. | Copy. Gentle corrections.
-tm_072	chatter	chatter	tense	crew	tm_072	1	both	any	spin	any	any	any	Todo gira. Hasta mi desayuno.	Everything's spinning. Even my breakfast. | Everything's spinning. Even my breakfast. | It all spins. My breakfast too.
-tm_073	chatter	chatter	tense	mc	tm_073	1	m	any	spin	any	any	any	Ese giro no nos gusta. Paradlo poco a poco.	We don't like that spin. Stop it slowly. | We don't like that spin. Stop it slowly. | That spin worries us. Stop it gently.
-tm_074_1	chatter	chatter	tense	crew	tm_074	1	both	any	spin	any	any	any	Control, ¿cuál es el lado de arriba?	Control, which side is up? | Control, which side is up? | Control, which way is up?
-tm_074_2	chatter	chatter	tense	mc	tm_074	2	m	any	spin	any	any	any	Cualquiera. Primero parad el giro.	Any of them. Stop the spin first. | Any of them. Stop the spin first. | Doesn't matter. Stop spinning first.
-tm_075	chatter	chatter	tense	crew	tm_075	1	both	any	spin	any	any	any	La cabeza me da vueltas.	My head is spinning. | My head is spinning. | My head spins.
-tm_076	chatter	chatter	tense	crew	tm_076	1	both	any	gforce	any	any	any	Me pesan hasta las orejas.	Even my ears feel heavy. | Even my ears feel heavy. | My ears weigh a ton.
-tm_077	chatter	chatter	tense	mc	tm_077	1	m	any	gforce	any	any	any	Mucha carga. Aguantad, ya baja.	Heavy load. Hold on, it's dropping. | Heavy load. Hold on, it's dropping. | Lots of g's. It gets better soon.
-tm_078_1	chatter	chatter	tense	crew	tm_078	1	both	any	gforce	any	any	any	Control, me estoy hundiendo en el asiento.	Control, I'm sinking into my seat. | Control, I'm sinking into my seat. | Control, the seat is swallowing me.
-tm_078_2	chatter	chatter	tense	mc	tm_078	2	m	any	gforce	any	any	any	Normal. Respira por la barriga.	Normal. Breathe from the belly. | Normal. Breathe from the belly. | Normal. Belly breathing.
-tm_079	chatter	chatter	tense	crew	tm_079	1	both	any	gforce	any	any	any	No puedo levantar el brazo. Ni quiero.	I can't lift my arm. Don't want to either. | I can't lift my arm. Don't want to either. | My arm won't lift. It doesn't want to.
-tm_080_1	chatter	chatter	tense	crew	tm_080	1	both	any	q	any	any	any	Control, esto tiembla como un tren viejo.	Control, this shakes like an old train. | Control, this shakes like an old train. | Control, it's like an old train in here.
-tm_080_2	chatter	chatter	tense	mc	tm_080	2	m	any	q	any	any	any	Presión alta. Ya casi pasa.	High pressure. It's nearly over. | High pressure. It's nearly over. | Max pressure. Almost through it.
-tm_081	chatter	chatter	tense	crew	tm_081	1	both	any	q	any	any	any	Los dientes me castañetean.	My teeth are chattering. | My teeth are chattering. | My teeth are rattling.
-tm_082	chatter	chatter	tense	mc	tm_082	1	m	any	q	any	any	any	Mucha presión. Suave con el acelerador.	Lots of pressure. Easy on the throttle. | Lots of pressure. Easy on the throttle. | High pressure. Gentle throttle.
-tm_083	chatter	chatter	tense	crew	tm_083	1	both	any	q	any	any	any	Todo vibra. Hasta mis ideas.	Everything's shaking. Even my thoughts. | Everything's shaking. Even my thoughts. | It all shakes. My thoughts too.
-tm_084_1	chatter	chatter	tense	crew	tm_084	1	both	any	ground	any	any	any	Control, el suelo tiene mucha prisa por vernos.	Control, the ground is in a real hurry to meet us. | Control, the ground is in a real hurry to meet us. | Control, the ground wants to meet us. Fast.
-tm_084_2	chatter	chatter	tense	mc	tm_084	2	m	any	ground	any	any	any	Lo vemos. Frenad ya.	We see it. Slow down now. | We see it. Slow down now. | Copy. Slow down.
-tm_085	chatter	chatter	tense	crew	tm_085	1	both	any	ground	any	any	any	Mucho suelo. Muy cerca.	Lots of ground. Very close. | Lots of ground. Very close. | So much ground. So close.
-tm_086	chatter	chatter	tense	mc	tm_086	1	m	any	ground	any	any	any	Ojo con la altura. Subid o frenad.	Watch your altitude. Climb or slow down. | Watch your altitude. Climb or slow down. | Mind the altitude. Climb or brake.
-tm_087_1	chatter	chatter	tense	crew	tm_087	1	both	any	ground	any	any	any	Control, prefiero el suelo un poco más lejos.	Control, I'd like the ground a bit further away. | Control, I'd like the ground a bit further away. | Control, can the ground move back a little?
-tm_087_2	chatter	chatter	tense	mc	tm_087	2	m	any	ground	any	any	any	Nosotros también. Corrige.	So would we. Correct. | So would we. Correct. | Us too. Correct it.
-tm_088_1	chatter	chatter	tense	crew	tm_088	1	both	any	heat	any	any	any	Control, aquí dentro hace calor. Mucho calor.	Control, it's hot in here. Very hot. | Control, it's hot in here. Very hot. | Control, very hot in here.
-tm_088_2	chatter	chatter	tense	mc	tm_088	2	m	any	heat	any	any	any	Lo vemos. El escudo aguanta.	We see it. The shield is holding. | We see it. The shield is holding. | Copy. The shield holds.
-tm_089	chatter	chatter	tense	crew	tm_089	1	both	any	heat	any	any	any	Huele a tostada. Y no hay tostadas.	It smells like toast. And there's no toast. | It smells like toast. And there's no toast. | Smells like toast. No toast here.
-tm_090	chatter	chatter	tense	mc	tm_090	1	m	any	heat	any	any	any	La temperatura sube. Vigilad las piezas.	Temperature's rising. Watch the parts. | Temperature's rising. Watch the parts. | It's getting hotter. Watch the parts.
-tm_091	chatter	chatter	tense	crew	tm_091	1	both	any	heat	any	any	any	El casco está caliente. No me gusta.	The hull is hot. I don't like it. | The hull is hot. I don't like it. | Hot hull. Not a fan.
-tm_092_1	chatter	chatter	tense	crew	tm_092	1	both	reentry	plasma	any	any	any	Control, fuera todo brilla como un horno.	Control, it's glowing like an oven outside. | Control, it's glowing like an oven outside. | Control, it's an oven out there.
-tm_092_2	chatter	chatter	tense	mc	tm_092	2	m	reentry	plasma	any	any	any	Es el plasma. Normal. Casi normal.	That's the plasma. Normal. Almost normal. | That's the plasma. Normal. Almost normal. | Plasma. Normal. Mostly.
-tm_093	chatter	chatter	tense	crew	tm_093	1	both	reentry	plasma	any	any	any	La ventana brilla mucho. Muy naranja.	The window is glowing. Very orange. | The window is glowing. Very orange. | Very orange window.
-tm_094	chatter	chatter	tense	mc	tm_094	1	m	reentry	plasma	any	any	any	Vais a perder la radio pronto. Os esperamos al otro lado.	You'll lose the radio soon. We'll wait for you on the other side. | You'll lose the radio soon. We'll wait for you on the other side. | Radio goes quiet soon. See you on the other side.
-tm_095_1	chatter	chatter	tense	crew	tm_095	1	both	any	fuel	any	any	any	Control, el indicador de combustible no para de bajar.	Control, the fuel gauge won't stop dropping. | Control, the fuel gauge won't stop dropping. | Control, the fuel keeps dropping.
-tm_095_2	chatter	chatter	tense	mc	tm_095	2	m	any	fuel	any	any	any	Lo vemos. Nada de gastos extra.	We see it. No extra spending. | We see it. No extra spending. | Copy. No wasting fuel.
-tm_096	chatter	chatter	tense	crew	tm_096	1	both	any	fuel	any	any	any	Quedan pocas gotas. Muy pocas.	Only a few drops left. Very few. | Only a few drops left. Very few. | A few drops. That's it.
-tm_097	chatter	chatter	tense	mc	tm_097	1	m	any	fuel	any	any	any	Combustible justo. Cada gota cuenta.	Fuel is tight. Every drop counts. | Fuel is tight. Every drop counts. | Tight on fuel. Every drop matters.
-tm_098_1	chatter	chatter	tense	crew	tm_098	1	both	any	fuel	any	any	any	Control, ¿cuánto se puede andar con un depósito vacío?	Control, how far can you go on an empty tank? | Control, how far can you go on an empty tank? | Control, how far does an empty tank get us?
-tm_098_2	chatter	chatter	tense	mc	tm_098	2	m	any	fuel	any	any	any	Nada. No lo pruebes.	Nowhere. Don't try it. | Nowhere. Don't try it. | Not far. Don't test it.
-tm_099_1	chatter	chatter	tense	crew	tm_099	1	both	any	impulse	any	any	any	¡Uf! Ese golpe lo he notado.	Oof! I felt that bump. | Oof! I felt that bump. | Oof! That bump!
-tm_099_2	chatter	chatter	tense	mc	tm_099	2	m	any	impulse	any	any	any	Nosotros también. ¿Todo bien?	So did we. All good? | So did we. All good? | We felt it too. Okay?
-tm_099_3	chatter	chatter	tense	crew	tm_099	3	both	any	impulse	any	any	any	Creo que sí.	I think so. | I think so. | Probably.
-tm_100	chatter	chatter	tense	crew	tm_100	1	both	any	impulse	any	any	any	Algo ha dado un tirón.	Something jerked. | Something jerked. | Something jolted.
-tm_101	chatter	chatter	tense	mc	tm_101	1	m	any	impulse	any	any	any	Mucho movimiento. Sujetaos bien.	Lots of movement. Hold on tight. | Lots of movement. Hold on tight. | Big movements. Hang on.
-tm_102	chatter	chatter	tense	crew	tm_102	1	both	any	impulse	any	any	any	Me he dado con la cabeza en el panel.	I bumped my head on the panel. | I bumped my head on the panel. | Ow. My head hit the panel.
-tm_103_1	chatter	chatter	tense	crew	tm_103	1	both	any	engine_out	any	any	any	Control, el motor se ha callado.	Control, the engine went quiet. | Control, the engine went quiet. | Control, engine is silent.
-tm_103_2	chatter	chatter	tense	mc	tm_103	2	m	any	engine_out	any	any	any	Lo vemos. Seguid la lista de fallos.	We see it. Follow the failure checklist. | We see it. Follow the failure checklist. | Copy. Failure checklist.
-tm_104	chatter	chatter	tense	crew	tm_104	1	both	any	engine_out	any	any	any	Sin motor. Esto se pone interesante.	No engine. This is getting interesting. | No engine. This is getting interesting. | Engine's gone. Interesting.
-tm_105	chatter	chatter	tense	mc	tm_105	1	m	any	engine_out	any	any	any	Motor apagado. Calma, tenemos opciones.	Engine out. Calm, we have options. | Engine out. Calm, we have options. | Lost the engine. We still have options.
-tm_106_1	chatter	chatter	tense	crew	tm_106	1	both	any	engine_out	any	any	any	Control, ¿alguien ha visto el motor? Ya no suena.	Control, has anyone seen the engine? It's not making noise anymore. | Control, has anyone seen the engine? It's not making noise anymore. | Control, the engine stopped humming. Seen it anywhere?
-tm_106_2	chatter	chatter	tense	mc	tm_106	2	m	any	engine_out	any	any	any	Comprobad el combustible y la etapa.	Check the fuel and the stage. | Check the fuel and the stage. | Look at fuel and staging.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
+tm_001	chatter	chatter	tense	mc	tm_001	1	m	any	any	any	any	any	Os estamos vigilando de cerca.	We're watching you closely. | We're watching you closely. | All eyes on you, {vessel}.	
+tm_002	chatter	chatter	tense	mc	tm_002	1	m	any	any	any	any	any	Calma. Lo tenemos en pantalla.	Easy. We have it on screen. | Easy. We have it on screen. | Calm. It's on our screens.	
+tm_003	chatter	chatter	tense	mc	tm_003	1	m	any	any	any	any	any	Despacio. Paso a paso.	Slowly. One step at a time. | Slowly. One step at a time. | Step by step. No hurry.	
+tm_004	chatter	chatter	tense	mc	tm_004	1	m	any	any	any	any	any	Seguimos con vosotros. No estáis solos.	We're with you. You're not alone. | We're with you. You're not alone. | You're not alone up there, {vessel}.	
+tm_005	chatter	chatter	tense	mc	tm_005	1	m	any	any	any	any	any	Las lecturas se mueven. Atentos.	The readings are moving. Stay sharp. | The readings are moving. Stay sharp. | Numbers are changing. Stay alert.	
+tm_006	chatter	chatter	tense	mc	tm_006	1	m	any	any	any	any	any	Tranquilos. Ya lo hemos visto antes.	Easy. We've seen this before. | Easy. We've seen this before. | Calm. Not the first time we've seen this.	
+tm_007	chatter	chatter	tense	mc	tm_007	1	m	any	any	any	any	any	Mantened la calma y seguid el plan.	Stay calm and follow the plan. | Stay calm and follow the plan. | Calm. Stick to the plan.	
+tm_008	chatter	chatter	tense	mc	tm_008	1	m	any	any	any	any	any	Lo estamos mirando. Dadnos un momento.	We're looking at it. Give us a moment. | We're looking at it. Give us a moment. | Checking. One moment, {vessel}.	
+tm_009	chatter	chatter	tense	mc	tm_009	1	m	any	any	any	any	any	Toda la sala está con vosotros.	The whole room is with you. | The whole room is with you. | Everyone down here is with you.	
+tm_010	chatter	chatter	tense	mc	tm_010	1	m	any	any	any	any	any	No toquéis nada que no haga falta.	Don't touch anything you don't need to. | Don't touch anything you don't need to. | Hands off anything you don't need.	
+tm_011	chatter	chatter	tense	mc	tm_011	1	m	any	any	any	any	any	Respirad hondo. Seguimos.	Deep breath. We carry on. | Deep breath. We carry on. | Breathe. Then we keep going.	
+tm_012	chatter	chatter	tense	mc	tm_012	1	m	any	any	any	any	any	Esto se puede arreglar. Seguid con nosotros.	This can be fixed. Stay with us. | This can be fixed. Stay with us. | We can fix this. Stay with us.	
+tm_013	chatter	chatter	tense	mc	tm_013	1	m	any	any	any	any	any	Despacio con los mandos.	Gently on the controls. | Gently on the controls. | Soft hands on the controls.	
+tm_014	chatter	chatter	tense	mc	tm_014	1	m	any	any	any	any	any	Vemos lo mismo que vosotros. Ojo.	We see what you see. Careful. | We see what you see. Careful. | Same view down here. Careful.	
+tm_015	chatter	chatter	tense	mc	tm_015	1	m	any	any	any	any	any	Ahora toca concentrarse.	Time to focus now. | Time to focus now. | Focus time, {vessel}.	
+tm_016	chatter	chatter	tense	mc	tm_016	1	m	any	any	any	any	any	Pinta raro, pero aguanta.	It looks odd, but it's holding. | It looks odd, but it's holding. | Strange, but it holds.	
+tm_017	chatter	chatter	tense	mc	tm_017	1	m	any	any	any	any	any	Los ingenieros ya están mirando.	The engineers are already on it. | The engineers are already on it. | Engineering is working on it.	
+tm_018	chatter	chatter	tense	mc	tm_018	1	m	any	any	any	any	any	Seguid hablando con nosotros.	Keep talking to us. | Keep talking to us. | Keep the radio going, {vessel}.	
+tm_019	chatter	chatter	tense	mc	tm_019	1	m	any	any	any	any	any	Nada de prisas. Con cabeza.	No rush. Use your head. | No rush. Use your head. | Take your time. Think.	
+tm_020	chatter	chatter	tense	mc	tm_020	1	m	any	any	any	any	any	Un ojo en los números, otro en la ventana.	One eye on the numbers, one on the window. | One eye on the numbers, one on the window. | Watch the numbers. And the window.	
+tm_021	chatter	chatter	tense	mc	tm_021	1	m	any	any	any	any	any	Paso a paso. Lo estáis haciendo bien.	One step at a time. You're doing fine. | One step at a time. You're doing fine. | You're doing well. Step by step.	
+tm_022	chatter	chatter	tense	mc	tm_022	1	m	any	any	any	any	any	Seguimos en verde. Por poco.	Still green. Just about. | Still green. Just about. | Green. Barely.	
+tm_023	chatter	chatter	tense	mc	tm_023	1	m	any	any	any	any	any	Si empeora, avisad enseguida.	If it gets worse, tell us right away. | If it gets worse, tell us right away. | Worse? Tell us at once.	
+tm_024	chatter	chatter	tense	mc	tm_024	1	m	any	any	any	any	any	Vamos a salir de esta.	We'll get through this. | We'll get through this. | We'll make it through.	
+tm_025	chatter	chatter	tense	mc	tm_025	1	m	any	any	any	any	any	El jefe de vuelo ha dejado el café. Esto va en serio.	The flight director put down his coffee. This is serious. | The flight director put down his coffee. This is serious. | The flight director stopped eating {food}. That's serious.	El jefe de vuelo ha dejado el café. Esto va en serio. | El jefe de vuelo ha dejado el café. Esto va en serio. | El jefe de vuelo ha dejado de comer {el food}. Eso es serio.
+tm_026	chatter	chatter	tense	mc	tm_026	1	m	any	any	any	any	any	Concentrados. Luego hablamos de esto.	Focus. We'll talk about this later. | Focus. We'll talk about this later. | Focus now. Talk later.	
+tm_027	chatter	chatter	tense	mc	tm_027	1	m	any	any	any	any	any	Nadie toca el botón grande. Nadie.	Nobody touches the big button. Nobody. | Nobody touches the big button. Nobody. | The big button stays untouched. By everyone.	
+tm_028	chatter	chatter	tense	mc	tm_028	1	m	any	any	any	any	any	Estamos aquí. Hablad cuando queráis.	We're here. Talk whenever you need. | We're here. Talk whenever you need. | We're listening. Talk any time.	
+tm_029	chatter	chatter	tense	mc	tm_029	1	m	any	any	any	any	any	Esto no es bonito, pero es normal. Creo.	This isn't pretty, but it's normal. I think. | This isn't pretty, but it's normal. I think. | Not pretty. Normal, though. Probably.	
+tm_030	chatter	chatter	tense	mc	tm_030	1	m	any	any	any	any	any	Bien. Seguid así. Sin sustos.	Good. Keep it like that. No surprises. | Good. Keep it like that. No surprises. | Good. Hold it there. No surprises.	
+tm_031	chatter	chatter	tense	crew	tm_031	1	both	any	any	any	any	any	Control, esto no me gusta nada.	Control, I don't like this at all. | Control, I don't like this at all. | Control, I really don't like this.	
+tm_032	chatter	chatter	tense	crew	tm_032	1	both	any	any	any	any	any	Esto se está poniendo feo.	This is getting ugly. | This is getting ugly. | It's getting ugly.	
+tm_033	chatter	chatter	tense	crew	tm_033	1	both	any	any	any	any	any	Control, ¿lo estáis viendo?	Control, are you seeing this? | Control, are you seeing this? | Control, do you see this?	
+tm_034	chatter	chatter	tense	crew	tm_034	1	both	any	any	any	any	any	Tengo las manos en los mandos.	I've got my hands on the controls. | I've got my hands on the controls. | Hands on the controls.	
+tm_035	chatter	chatter	tense	crew	tm_035	1	both	any	any	any	any	any	Algo no va bien.	Something's not right. | Something's not right. | Something is wrong.	
+tm_036	chatter	chatter	tense	crew	tm_036	1	both	any	any	any	any	any	Esto no estaba en el entrenamiento.	This wasn't in training. | This wasn't in training. | Training never showed us this.	
+tm_037	chatter	chatter	tense	crew	tm_037	1	both	any	any	any	any	any	Vale. Calma. Calma.	Okay. Calm. Calm. | Okay. Calm. Calm. | Calm. Stay calm.	
+tm_038	chatter	chatter	tense	crew	tm_038	1	both	any	any	any	any	any	Aguanta, nave. Aguanta.	Hold on, ship. Hold on. | Hold on, ship. Hold on. | Hold together, {vessel}. Please.	
+tm_039	chatter	chatter	tense	crew	tm_039	1	both	any	any	any	any	any	Las luces del panel se han puesto nerviosas.	The panel lights got nervous. | The panel lights got nervous. | The lights on the panel look nervous.	
+tm_040	chatter	chatter	tense	crew	tm_040	1	both	any	any	any	any	any	Control, necesito buenas noticias.	Control, I need some good news. | Control, I need some good news. | Control, tell me something good.	
+tm_041	chatter	chatter	tense	crew	tm_041	1	both	any	any	any	any	any	Esto pinta mal. Seguimos.	This looks bad. We carry on. | This looks bad. We carry on. | Bad, but we keep going.	
+tm_042	chatter	chatter	tense	crew	tm_042	1	both	any	any	any	any	any	Me estoy agarrando a todo.	I'm holding on to everything. | I'm holding on to everything. | Holding on to anything I can.	
+tm_043	chatter	chatter	tense	crew	tm_043	1	both	any	any	any	any	any	Concentración. Solo concentración.	Focus. Just focus. | Focus. Just focus. | Just focus.	
+tm_044	chatter	chatter	tense	crew	tm_044	1	both	any	any	any	any	any	Control, decidme que esto es normal.	Control, tell me this is normal. | Control, tell me this is normal. | Control, please say this is normal.	
+tm_045	chatter	chatter	tense	crew	tm_045	1	both	any	any	any	any	any	Lo tengo. Creo que lo tengo.	I've got it. I think I've got it. | I've got it. I think I've got it. | Got it. I think.	
+tm_046	chatter	chatter	tense	crew	tm_046	1	both	any	any	any	any	any	No me hace gracia esto.	I don't find this funny. | I don't find this funny. | This isn't funny.	
+tm_047	chatter	chatter	tense	crew	tm_047	1	both	any	any	any	any	any	Control, ¿algún consejo?	Control, any advice? | Control, any advice? | Control, any tips?	
+tm_048	chatter	chatter	tense	crew	tm_048	1	both	any	any	any	any	any	Seguimos aquí. Más o menos enteros.	Still here. More or less in one piece. | Still here. More or less in one piece. | Still in one piece. Mostly.	
+tm_049	chatter	chatter	tense	crew	tm_049	1	both	any	any	any	any	any	Esto ya no es divertido.	This isn't fun anymore. | This isn't fun anymore. | The fun part is over.	
+tm_050	chatter	chatter	tense	crew	tm_050	1	both	any	any	any	any	any	Despacio, despacio.	Easy, easy. | Easy, easy. | Gently, gently.	
+tm_051_1	chatter	chatter	tense	crew	tm_051	1	both	any	any	any	any	any	Control, ¿seguimos bien?	Control, are we still okay? | Control, are we still okay? | Control, still good?	
+tm_051_2	chatter	chatter	tense	mc	tm_051	2	m	any	any	any	any	any	Por ahora, sí. No os relajéis.	For now, yes. Don't relax. | For now, yes. Don't relax. | Yes, for now. Stay sharp.	
+tm_052_1	chatter	chatter	tense	crew	tm_052	1	both	any	any	any	any	any	Control, esto se mueve mucho.	Control, this is moving a lot. | Control, this is moving a lot. | Control, lots of movement.	
+tm_052_2	chatter	chatter	tense	mc	tm_052	2	m	any	any	any	any	any	Lo vemos. Aguantad.	We see it. Hold on. | We see it. Hold on. | Copy. Hang on.	
+tm_053_1	chatter	chatter	tense	mc	tm_053	1	m	any	any	any	any	any	Nave, informe rápido.	Ship, quick report. | Ship, quick report. | {vessel}, quick status.	
+tm_053_2	chatter	chatter	tense	crew	tm_053	2	both	any	any	any	any	any	Aquí seguimos. No muy contentos.	Still here. Not very happy. | Still here. Not very happy. | Here. Not happy.	
+tm_053_3	chatter	chatter	tense	mc	tm_053	3	m	any	any	any	any	any	Con estar ahí nos basta.	Being there is enough for us. | Being there is enough for us. | Here is good enough.	
+tm_054_1	chatter	chatter	tense	crew	tm_054	1	both	any	any	any	any	any	Control, ¿qué hacemos?	Control, what do we do? | Control, what do we do? | Control, what now?	
+tm_054_2	chatter	chatter	tense	mc	tm_054	2	m	any	any	any	any	any	Seguir el plan. Despacio.	Follow the plan. Slowly. | Follow the plan. Slowly. | The plan. Slowly.	
+tm_054_3	chatter	chatter	tense	crew	tm_054	3	both	any	any	any	any	any	Recibido. Despacio.	Copy. Slowly. | Copy. Slowly. | Slowly. Copy.	
+tm_055_1	chatter	chatter	tense	mc	tm_055	1	m	any	any	any	any	any	¿Cómo os sentís?	How are you feeling? | How are you feeling? | How do you feel up there?	
+tm_055_2	chatter	chatter	tense	crew	tm_055	2	both	any	any	any	any	any	Como en una lavadora.	Like in a washing machine. | Like in a washing machine. | Like a sock in a washing machine.	
+tm_055_3	chatter	chatter	tense	mc	tm_055	3	m	any	any	any	any	any	Aguantad. Ya casi está.	Hold on. Almost there. | Hold on. Almost there. | Hang on. Nearly done.	
+tm_056_1	chatter	chatter	tense	crew	tm_056	1	both	any	any	any	any	any	Control, prometedme que esto acaba bien.	Control, promise me this ends well. | Control, promise me this ends well. | Control, tell me this ends well.	
+tm_056_2	chatter	chatter	tense	mc	tm_056	2	m	any	any	any	any	any	Estamos en ello.	We're working on it. | We're working on it. | Working on it.	
+tm_057_1	chatter	chatter	tense	crew	tm_057	1	both	any	any	any	any	any	Control, ¿os parece normal?	Control, does this look normal to you? | Control, does this look normal to you? | Control, is this normal?	
+tm_057_2	chatter	chatter	tense	mc	tm_057	2	m	any	any	any	any	any	Normal no. Controlable sí.	Not normal. Manageable. | Not normal. Manageable. | Not normal. But we can handle it.	
+tm_058_1	chatter	chatter	tense	mc	tm_058	1	m	any	any	any	any	any	Nave, ¿todos enteros?	Ship, everyone in one piece? | Ship, everyone in one piece? | {vessel}, all in one piece?	
+tm_058_2	chatter	chatter	tense	crew	tm_058	2	both	any	any	any	any	any	Enteros. Nerviosos, pero enteros.	In one piece. Nervous, but in one piece. | In one piece. Nervous, but in one piece. | One piece. Nervous piece.	
+tm_059_1	chatter	chatter	tense	crew	tm_059	1	both	any	any	any	any	any	Control, voy a tocar algo.	Control, I'm going to touch something. | Control, I'm going to touch something. | Control, I need to touch something.	
+tm_059_2	chatter	chatter	tense	mc	tm_059	2	m	any	any	any	any	any	¿El qué?	What? | What? | Touch what?	
+tm_059_3	chatter	chatter	tense	crew	tm_059	3	both	any	any	any	any	any	Madera.	Wood. | Wood. | Wood. For luck.	
+tm_059_4	chatter	chatter	tense	mc	tm_059	4	m	any	any	any	any	any	Aquí también.	Us too. | Us too. | Same here.	
+tm_060_1	chatter	chatter	tense	mc	tm_060	1	m	any	any	any	any	any	Calma, equipo. Esto ya lo hemos ensayado.	Calm, team. We've rehearsed this. | Calm, team. We've rehearsed this. | Calm, everyone. We practiced this.	
+tm_060_2	chatter	chatter	tense	crew	tm_060	2	both	any	any	any	any	any	¿De verdad?	Really? | Really? | We did?	
+tm_060_3	chatter	chatter	tense	mc	tm_060	3	m	any	any	any	any	any	Más o menos.	More or less. | More or less. | Sort of.	
+tm_061_1	chatter	chatter	tense	crew	tm_061	1	both	any	any	any	any	any	Control, se me ha olvidado todo el entrenamiento.	Control, I forgot all my training. | Control, I forgot all my training. | Control, my training is gone. All of it.	
+tm_061_2	chatter	chatter	tense	mc	tm_061	2	m	any	any	any	any	any	Nosotros te lo recordamos. Paso uno: respira.	We'll remind you. Step one: breathe. | We'll remind you. Step one: breathe. | We'll help. First step: breathe.	
+tm_062_1	chatter	chatter	tense	crew	tm_062	1	both	any	any	any	any	any	Control, hablad conmigo.	Control, talk to me. | Control, talk to me. | Control, say something.	
+tm_062_2	chatter	chatter	tense	mc	tm_062	2	m	any	any	any	any	any	Aquí estamos. Lo estás haciendo bien.	We're here. You're doing fine. | We're here. You're doing fine. | Here. You're doing well.	
+tm_063_1	chatter	chatter	tense	mc	tm_063	1	m	any	any	any	any	any	Nave, ¿nos copiáis?	Ship, do you copy? | Ship, do you copy? | {vessel}, do you read?	
+tm_063_2	chatter	chatter	tense	crew	tm_063	2	both	any	any	any	any	any	Os copio. Ocupado, pero os copio.	Copy. Busy, but copy. | Copy. Busy, but copy. | Busy. But copy.	
+tm_064_1	chatter	chatter	tense	crew	tm_064	1	both	any	any	any	any	any	Control, esto no sale en los folletos.	Control, this isn't in the brochures. | Control, this isn't in the brochures. | Control, the brochure never mentioned this.	
+tm_064_2	chatter	chatter	tense	mc	tm_064	2	m	any	any	any	any	any	Los folletos mienten. Seguid.	The brochures lie. Carry on. | The brochures lie. Carry on. | Brochures always lie. Keep going.	
+tm_065_1	chatter	chatter	tense	crew	tm_065	1	both	any	any	any	any	any	Control, ¿me oís? Esto hace mucho ruido.	Control, do you hear me? It's very loud here. | Control, do you hear me? It's very loud here. | Control, can you hear me? So loud here.	
+tm_065_2	chatter	chatter	tense	mc	tm_065	2	m	any	any	any	any	any	Te oímos. Grita si hace falta.	We hear you. Shout if you need to. | We hear you. Shout if you need to. | Loud and clear. Shout if needed.	
+tm_066_1	chatter	chatter	tense	mc	tm_066	1	m	any	any	any	any	any	Nave, ¿necesitáis algo?	Ship, do you need anything? | Ship, do you need anything? | {vessel}, need anything?	
+tm_066_2	chatter	chatter	tense	crew	tm_066	2	both	any	any	any	any	any	Un poco de suerte.	A bit of luck. | A bit of luck. | Some luck, please.	
+tm_066_3	chatter	chatter	tense	mc	tm_066	3	m	any	any	any	any	any	Os mandamos toda la que tenemos.	Sending you all we've got. | Sending you all we've got. | All our luck is on the way.	
+tm_067_1	chatter	chatter	tense	crew	tm_067	1	both	any	any	any	any	any	Control, si salimos de esta, invito yo.	Control, if we get out of this, drinks are on me. | Control, if we get out of this, drinks are on me. | Control, if this works, I'm buying.	
+tm_067_2	chatter	chatter	tense	mc	tm_067	2	m	any	any	any	any	any	Trato hecho. Ahora concéntrate.	Deal. Now focus. | Deal. Now focus. | Deal. Focus.	
+tm_068_1	chatter	chatter	tense	crew	tm_068	1	both	any	any	any	any	any	Control, ¿cuánto dura esto?	Control, how long does this last? | Control, how long does this last? | Control, how much longer?	
+tm_068_2	chatter	chatter	tense	mc	tm_068	2	m	any	any	any	any	any	Poco. Aguantad un poco más.	Not long. Hold on a bit more. | Not long. Hold on a bit more. | Almost over. Hang on.	
+tm_069_1	chatter	chatter	tense	crew	tm_069	1	both	any	any	any	any	any	Control, creo que estoy sudando dentro del traje.	Control, I think I'm sweating inside my suit. | Control, I think I'm sweating inside my suit. | Control, my suit is getting sweaty.	
+tm_069_2	chatter	chatter	tense	mc	tm_069	2	m	any	any	any	any	any	Normal. Nosotros también.	Normal. So are we. | Normal. So are we. | Normal. We're sweating too.	
+tm_070_1	chatter	chatter	tense	mc	tm_070	1	m	any	any	any	any	any	Ojo, nave. Los datos cambian rápido.	Careful, ship. The data is changing fast. | Careful, ship. The data is changing fast. | Careful, {vessel}. Data moving fast.	
+tm_070_2	chatter	chatter	tense	crew	tm_070	2	both	any	any	any	any	any	Lo noto. Lo noto mucho.	I can feel it. I can really feel it. | I can feel it. I can really feel it. | Feeling it. Really feeling it.	
+tm_071_1	chatter	chatter	tense	crew	tm_071	1	both	any	spin	any	any	any	Control, damos vueltas como una peonza.	Control, we're spinning like a top. | Control, we're spinning like a top. | Control, we're a spinning top.	
+tm_071_2	chatter	chatter	tense	mc	tm_071	2	m	any	spin	any	any	any	Lo vemos. Corrige con suavidad.	We see it. Correct gently. | We see it. Correct gently. | Copy. Gentle corrections.	
+tm_072	chatter	chatter	tense	crew	tm_072	1	both	any	spin	any	any	any	Todo gira. Hasta mi desayuno.	Everything's spinning. Even my breakfast. | Everything's spinning. Even my breakfast. | It all spins. My breakfast too.	
+tm_073	chatter	chatter	tense	mc	tm_073	1	m	any	spin	any	any	any	Ese giro no nos gusta. Paradlo poco a poco.	We don't like that spin. Stop it slowly. | We don't like that spin. Stop it slowly. | That spin worries us. Stop it gently.	
+tm_074_1	chatter	chatter	tense	crew	tm_074	1	both	any	spin	any	any	any	Control, ¿cuál es el lado de arriba?	Control, which side is up? | Control, which side is up? | Control, which way is up?	
+tm_074_2	chatter	chatter	tense	mc	tm_074	2	m	any	spin	any	any	any	Cualquiera. Primero parad el giro.	Any of them. Stop the spin first. | Any of them. Stop the spin first. | Doesn't matter. Stop spinning first.	
+tm_075	chatter	chatter	tense	crew	tm_075	1	both	any	spin	any	any	any	La cabeza me da vueltas.	My head is spinning. | My head is spinning. | My head spins.	
+tm_076	chatter	chatter	tense	crew	tm_076	1	both	any	gforce	any	any	any	Me pesan hasta las orejas.	Even my ears feel heavy. | Even my ears feel heavy. | My ears weigh a ton.	
+tm_077	chatter	chatter	tense	mc	tm_077	1	m	any	gforce	any	any	any	Mucha carga. Aguantad, ya baja.	Heavy load. Hold on, it's dropping. | Heavy load. Hold on, it's dropping. | Lots of g's. It gets better soon.	
+tm_078_1	chatter	chatter	tense	crew	tm_078	1	both	any	gforce	any	any	any	Control, me estoy hundiendo en el asiento.	Control, I'm sinking into my seat. | Control, I'm sinking into my seat. | Control, the seat is swallowing me.	
+tm_078_2	chatter	chatter	tense	mc	tm_078	2	m	any	gforce	any	any	any	Normal. Respira por la barriga.	Normal. Breathe from the belly. | Normal. Breathe from the belly. | Normal. Belly breathing.	
+tm_079	chatter	chatter	tense	crew	tm_079	1	both	any	gforce	any	any	any	No puedo levantar el brazo. Ni quiero.	I can't lift my arm. Don't want to either. | I can't lift my arm. Don't want to either. | My arm won't lift. It doesn't want to.	
+tm_080_1	chatter	chatter	tense	crew	tm_080	1	both	any	q	any	any	any	Control, esto tiembla como un tren viejo.	Control, this shakes like an old train. | Control, this shakes like an old train. | Control, it's like an old train in here.	
+tm_080_2	chatter	chatter	tense	mc	tm_080	2	m	any	q	any	any	any	Presión alta. Ya casi pasa.	High pressure. It's nearly over. | High pressure. It's nearly over. | Max pressure. Almost through it.	
+tm_081	chatter	chatter	tense	crew	tm_081	1	both	any	q	any	any	any	Los dientes me castañetean.	My teeth are chattering. | My teeth are chattering. | My teeth are rattling.	
+tm_082	chatter	chatter	tense	mc	tm_082	1	m	any	q	any	any	any	Mucha presión. Suave con el acelerador.	Lots of pressure. Easy on the throttle. | Lots of pressure. Easy on the throttle. | High pressure. Gentle throttle.	
+tm_083	chatter	chatter	tense	crew	tm_083	1	both	any	q	any	any	any	Todo vibra. Hasta mis ideas.	Everything's shaking. Even my thoughts. | Everything's shaking. Even my thoughts. | It all shakes. My thoughts too.	
+tm_084_1	chatter	chatter	tense	crew	tm_084	1	both	any	ground	any	any	any	Control, el suelo tiene mucha prisa por vernos.	Control, the ground is in a real hurry to meet us. | Control, the ground is in a real hurry to meet us. | Control, the ground wants to meet us. Fast.	
+tm_084_2	chatter	chatter	tense	mc	tm_084	2	m	any	ground	any	any	any	Lo vemos. Frenad ya.	We see it. Slow down now. | We see it. Slow down now. | Copy. Slow down.	
+tm_085	chatter	chatter	tense	crew	tm_085	1	both	any	ground	any	any	any	Mucho suelo. Muy cerca.	Lots of ground. Very close. | Lots of ground. Very close. | So much ground. So close.	
+tm_086	chatter	chatter	tense	mc	tm_086	1	m	any	ground	any	any	any	Ojo con la altura. Subid o frenad.	Watch your altitude. Climb or slow down. | Watch your altitude. Climb or slow down. | Mind the altitude. Climb or brake.	
+tm_087_1	chatter	chatter	tense	crew	tm_087	1	both	any	ground	any	any	any	Control, prefiero el suelo un poco más lejos.	Control, I'd like the ground a bit further away. | Control, I'd like the ground a bit further away. | Control, can the ground move back a little?	
+tm_087_2	chatter	chatter	tense	mc	tm_087	2	m	any	ground	any	any	any	Nosotros también. Corrige.	So would we. Correct. | So would we. Correct. | Us too. Correct it.	
+tm_088_1	chatter	chatter	tense	crew	tm_088	1	both	any	heat	any	any	any	Control, aquí dentro hace calor. Mucho calor.	Control, it's hot in here. Very hot. | Control, it's hot in here. Very hot. | Control, very hot in here.	
+tm_088_2	chatter	chatter	tense	mc	tm_088	2	m	any	heat	any	any	any	Lo vemos. El escudo aguanta.	We see it. The shield is holding. | We see it. The shield is holding. | Copy. The shield holds.	
+tm_089	chatter	chatter	tense	crew	tm_089	1	both	any	heat	any	any	any	Huele a tostada. Y no hay tostadas.	It smells like toast. And there's no toast. | It smells like toast. And there's no toast. | Smells like toast. No toast here.	
+tm_090	chatter	chatter	tense	mc	tm_090	1	m	any	heat	any	any	any	La temperatura sube. Vigilad las piezas.	Temperature's rising. Watch the parts. | Temperature's rising. Watch the parts. | It's getting hotter. Watch the parts.	
+tm_091	chatter	chatter	tense	crew	tm_091	1	both	any	heat	any	any	any	El casco está caliente. No me gusta.	The hull is hot. I don't like it. | The hull is hot. I don't like it. | Hot hull. Not a fan.	
+tm_092_1	chatter	chatter	tense	crew	tm_092	1	both	reentry	plasma	any	any	any	Control, fuera todo brilla como un horno.	Control, it's glowing like an oven outside. | Control, it's glowing like an oven outside. | Control, it's an oven out there.	
+tm_092_2	chatter	chatter	tense	mc	tm_092	2	m	reentry	plasma	any	any	any	Es el plasma. Normal. Casi normal.	That's the plasma. Normal. Almost normal. | That's the plasma. Normal. Almost normal. | Plasma. Normal. Mostly.	
+tm_093	chatter	chatter	tense	crew	tm_093	1	both	reentry	plasma	any	any	any	La ventana brilla mucho. Muy naranja.	The window is glowing. Very orange. | The window is glowing. Very orange. | Very orange window.	
+tm_094	chatter	chatter	tense	mc	tm_094	1	m	reentry	plasma	any	any	any	Vais a perder la radio pronto. Os esperamos al otro lado.	You'll lose the radio soon. We'll wait for you on the other side. | You'll lose the radio soon. We'll wait for you on the other side. | Radio goes quiet soon. See you on the other side.	
+tm_095_1	chatter	chatter	tense	crew	tm_095	1	both	any	fuel	any	any	any	Control, el indicador de combustible no para de bajar.	Control, the fuel gauge won't stop dropping. | Control, the fuel gauge won't stop dropping. | Control, the fuel keeps dropping.	
+tm_095_2	chatter	chatter	tense	mc	tm_095	2	m	any	fuel	any	any	any	Lo vemos. Nada de gastos extra.	We see it. No extra spending. | We see it. No extra spending. | Copy. No wasting fuel.	
+tm_096	chatter	chatter	tense	crew	tm_096	1	both	any	fuel	any	any	any	Quedan pocas gotas. Muy pocas.	Only a few drops left. Very few. | Only a few drops left. Very few. | A few drops. That's it.	
+tm_097	chatter	chatter	tense	mc	tm_097	1	m	any	fuel	any	any	any	Combustible justo. Cada gota cuenta.	Fuel is tight. Every drop counts. | Fuel is tight. Every drop counts. | Tight on fuel. Every drop matters.	
+tm_098_1	chatter	chatter	tense	crew	tm_098	1	both	any	fuel	any	any	any	Control, ¿cuánto se puede andar con un depósito vacío?	Control, how far can you go on an empty tank? | Control, how far can you go on an empty tank? | Control, how far does an empty tank get us?	
+tm_098_2	chatter	chatter	tense	mc	tm_098	2	m	any	fuel	any	any	any	Nada. No lo pruebes.	Nowhere. Don't try it. | Nowhere. Don't try it. | Not far. Don't test it.	
+tm_099_1	chatter	chatter	tense	crew	tm_099	1	both	any	impulse	any	any	any	¡Uf! Ese golpe lo he notado.	Oof! I felt that bump. | Oof! I felt that bump. | Oof! That bump!	
+tm_099_2	chatter	chatter	tense	mc	tm_099	2	m	any	impulse	any	any	any	Nosotros también. ¿Todo bien?	So did we. All good? | So did we. All good? | We felt it too. Okay?	
+tm_099_3	chatter	chatter	tense	crew	tm_099	3	both	any	impulse	any	any	any	Creo que sí.	I think so. | I think so. | Probably.	
+tm_100	chatter	chatter	tense	crew	tm_100	1	both	any	impulse	any	any	any	Algo ha dado un tirón.	Something jerked. | Something jerked. | Something jolted.	
+tm_101	chatter	chatter	tense	mc	tm_101	1	m	any	impulse	any	any	any	Mucho movimiento. Sujetaos bien.	Lots of movement. Hold on tight. | Lots of movement. Hold on tight. | Big movements. Hang on.	
+tm_102	chatter	chatter	tense	crew	tm_102	1	both	any	impulse	any	any	any	Me he dado con la cabeza en el panel.	I bumped my head on the panel. | I bumped my head on the panel. | Ow. My head hit the panel.	
+tm_103_1	chatter	chatter	tense	crew	tm_103	1	both	any	engine_out	any	any	any	Control, el motor se ha callado.	Control, the engine went quiet. | Control, the engine went quiet. | Control, engine is silent.	
+tm_103_2	chatter	chatter	tense	mc	tm_103	2	m	any	engine_out	any	any	any	Lo vemos. Seguid la lista de fallos.	We see it. Follow the failure checklist. | We see it. Follow the failure checklist. | Copy. Failure checklist.	
+tm_104	chatter	chatter	tense	crew	tm_104	1	both	any	engine_out	any	any	any	Sin motor. Esto se pone interesante.	No engine. This is getting interesting. | No engine. This is getting interesting. | Engine's gone. Interesting.	
+tm_105	chatter	chatter	tense	mc	tm_105	1	m	any	engine_out	any	any	any	Motor apagado. Calma, tenemos opciones.	Engine out. Calm, we have options. | Engine out. Calm, we have options. | Lost the engine. We still have options.	
+tm_106_1	chatter	chatter	tense	crew	tm_106	1	both	any	engine_out	any	any	any	Control, ¿alguien ha visto el motor? Ya no suena.	Control, has anyone seen the engine? It's not making noise anymore. | Control, has anyone seen the engine? It's not making noise anymore. | Control, the engine stopped humming. Seen it anywhere?	
+tm_106_2	chatter	chatter	tense	mc	tm_106	2	m	any	engine_out	any	any	any	Comprobad el combustible y la etapa.	Check the fuel and the stage. | Check the fuel and the stage. | Look at fuel and staging.	

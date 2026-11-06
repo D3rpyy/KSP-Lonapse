@@ -1344,22 +1344,30 @@ public static class Tests
             Check(gen > 0 && swapped == gen, "runtime voice: every generic {body} row takes a modded body name (" + swapped + " of " + gen + ")", null);
         }
 
-        // runtime-only lines: GameData/Lonapse/Phrases/runtime.tsv
-        string rtPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases/runtime.tsv"));
+        // runtime-only lines: every file in GameData/Lonapse/Phrases/Runtime
+        string rtDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases/Runtime"));
         var rtErr = new List<string>();
-        List<RuntimeTemplate> rtAll = RuntimeLines.Parse(new List<string>(System.IO.File.ReadAllLines(rtPath, System.Text.Encoding.UTF8)), rtErr);
+        var rtFiles = new List<KeyValuePair<string, IList<string>>>();
+        string[] rtPaths = System.IO.Directory.GetFiles(rtDir, "*.tsv");
+        Array.Sort(rtPaths, StringComparer.Ordinal);
+        foreach (string f in rtPaths)
+            rtFiles.Add(new KeyValuePair<string, IList<string>>(System.IO.Path.GetFileName(f), System.IO.File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+        List<RuntimeTemplate> rtAll = RuntimeLines.ParseAll(rtFiles, rtErr);
+        int rtVersions = 0;
+        foreach (RuntimeTemplate t in rtAll) rtVersions += t.Versions.Count;
         var kindCount = new Dictionary<string, int>();
         foreach (RuntimeTemplate t in rtAll) { int c0; kindCount.TryGetValue(t.Kind, out c0); kindCount[t.Kind] = c0 + 1; }
         var kc = new List<string>();
         foreach (var kv in kindCount) kc.Add(kv.Key + " " + kv.Value);
-        Check(rtErr.Count == 0 && rtAll.Count >= 40 && kindCount.Count == RuntimeLines.Kinds.Length,
-              "runtime voice: runtime.tsv parses, every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
+        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length,
+              "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
         var rtBadErr = new List<string>();
         RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
             "rt_b\tnope\t\tB.\tB.", "rt_c\treport\t\tC {fuel}.\tC.", "rt_d\treport\t\tD {nothing}.\tD {nothing}.", "x_e\treport\t\tE.\tE.",
-            "rt_f\treport\torbit fuel>=2\tF {fuel}.\tF {fuel}.", "rt_f\treport\t\tF.\tF." }, rtBadErr);
-        Check(rtBadErr.Count == 6, "runtime voice: bad template rows are reported (condition, kind, slots differ, unknown slot, id, duplicate)",
+            "rt_f\treport\torbit fuel>=2\tF {fuel}.\tF {fuel}.", "rt_f\treport\t\tF.\tF.",
+            "rt_g\treport\t\tG. | G2.\tG.", "rt_h\treport\t\tH {fuel}. | H.\tH {fuel}. | H {ec}." }, rtBadErr);
+        Check(rtBadErr.Count == 8, "runtime voice: bad template rows are reported (condition, kind, slots differ, unknown slot, id, duplicate, version count, version slots)",
               rtBadErr.Count + ": " + string.Join(" ; ", rtBadErr.ToArray()));
 
         var vals = new Dictionary<string, double> { { "alt_km", 85.2 }, { "pe_km", 80.4 }, { "ap_km", 91.0 }, { "speed", 2281 }, { "fuel", 63 }, { "day", 3 },
@@ -1367,16 +1375,16 @@ public static class Tests
         var nms = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
         var orbit = RuntimeLines.Fitting(rtAll, "report", "orbit", vals, nms);
         string rs, re;
-        RuntimeTemplate t0 = rtAll.Find(t => t.Id == "rt_orbit_1");
+        RuntimeTemplate t0 = rtAll.Find(t => t.Id == "rt_orbit");
         bool filled = t0 != null && RuntimeLines.Fill(t0, vals, nms, out rs, out re)
                       && re == "Stable orbit. Periapsis 80 km, apoapsis 91 km."
                       && RuntimeSpeech.Spoken(rs) == LonapseText.ReverseText("Órbita estable. Periapsis ochenta kilómetros, apoapsis noventa y un kilómetros.");
         Check(filled, "runtime voice: an orbit report, numbers in reversed Spanish words, digits in the subtitle",
-              t0 == null ? "no rt_orbit_1" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
+              t0 == null ? "no rt_orbit" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
         var ids = new List<string>();
         foreach (RuntimeTemplate t in orbit) ids.Add(t.Id);
-        Check(!ids.Contains("rt_flight_1") && !ids.Contains("rt_fuel_low") && !ids.Contains("rt_orbit_inc") && !ids.Contains("rt_node_1")
-              && ids.Contains("rt_fuel_1") && ids.Contains("rt_vessel_1") && ids.Contains("rt_orbit_eq") && ids.Contains("rt_ec_ok")
+        Check(!ids.Contains("rt_flight") && !ids.Contains("rt_fuel_low") && !ids.Contains("rt_orbit_inc") && !ids.Contains("rt_node")
+              && ids.Contains("rt_fuel") && ids.Contains("rt_vessel") && ids.Contains("rt_orbit_eq") && ids.Contains("rt_ec_ok")
               && RuntimeLines.Fitting(rtAll, "report", "landed", new Dictionary<string, double>(), new Dictionary<string, string[]>()).Count == 0,
               "runtime voice: templates fit the situation, the checks and the values there are", string.Join(", ", ids.ToArray()));
 
@@ -1387,14 +1395,28 @@ public static class Tests
         foreach (string k in RuntimeLines.NameSlots) fullN[k] = new[] { "Nombre", "Name" };
         var badT = new List<string>();
         foreach (RuntimeTemplate t in rtAll)
+        for (int v = 0; v < t.Versions.Count; v++)
         {
             string a1, a2;
-            if (!RuntimeLines.Fill(t, full, fullN, out a1, out a2)) badT.Add(t.Id + " does not fill");
+            if (!RuntimeLines.Fill(t, v, full, fullN, out a1, out a2)) badT.Add(t.Id + " version " + (v + 1) + " does not fill");
             else if (a2.IndexOf('{') >= 0 || a1.IndexOf('{') >= 0) badT.Add(t.Id + " has a slot left");
             else if (PhraseTable.HasExplosionWord(a1) || PhraseTable.HasExplosionWord(a2)) badT.Add(t.Id + " has an explosion word");
             else if (RuntimeSpeech.Spoken(a1).IndexOfAny(new[] { '{', '}', '⟪', '⟫' }) >= 0) badT.Add(t.Id + " spoken text has marks left");
         }
-        Check(badT.Count == 0, "runtime voice: every template fills and speaks cleanly (" + rtAll.Count + ")", string.Join(" ; ", badT.ToArray()));
+        Check(badT.Count == 0, "runtime voice: every version of every template fills and speaks cleanly (" + rtVersions + ")", string.Join(" ; ", badT.ToArray()));
+        {
+            // versions: only the ones whose slots have a value are picked
+            var vt = RuntimeLines.Parse(new List<string> { "kind\tid\twhen\tnote\tenglish\tspanish",
+                "report\trt_v\t\tany note\tA {fuel}. | B {ec}. | C.\tA {fuel}. | B {ec}. | C." }, null);
+            List<int> fv = vt.Count == 1 ? RuntimeLines.FillableVersions(vt[0], new Dictionary<string, double> { { "ec", 5 } }, null) : null;
+            Check(fv != null && fv.Count == 2 && fv[0] == 1 && fv[1] == 2,
+                  "runtime voice: columns by name, and a template only picks the versions it can fill", fv == null ? "parse failed" : string.Join(",", fv.ConvertAll(vx => vx.ToString()).ToArray()));
+            var dupErr = new List<string>();
+            RuntimeLines.ParseAll(new[] {
+                new KeyValuePair<string, IList<string>>("a.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_1\tchat\t\tS.\tS." }),
+                new KeyValuePair<string, IList<string>>("b.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_2\tchat\t\tS.\tS." }) }, dupErr);
+            Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
+        }
         // runtime chats: rt_chat_<name>_<seq>, two kerbals take turns, self and other per speaker
         var chats = RuntimeLines.Chats(rtAll);
         var nA = new Dictionary<string, string[]>(fullN);
@@ -1461,43 +1483,105 @@ public static class Tests
         Check(hist["missions"] == 2 && hist["flight_no"] == 3 && hist["visits"] == 2 && hist["landings"] == 1 && hist["stars"] == 2,
               "runtime voice: crew history counts recovered flights, visits and landings per flight, without training",
               hist["missions"] + " " + hist["flight_no"] + " " + hist["visits"] + " " + hist["landings"] + " " + hist["stars"]);
-        // slots_es.tsv: every line matches its table row, every pool value is in pools.tsv, and a fill gives the Spanish
+        // spanish_rt (runtime Spanish next to the line) and the spanish column of pools.tsv
         {
-            string dir = System.IO.Path.GetDirectoryName(rtPath);
-            var esErr = new List<string>();
-            SlotsEs es = SlotsEs.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "slots_es.tsv"), System.Text.Encoding.UTF8)), esErr);
-            var english = new Dictionary<string, string>();
-            string[] head = null;
-            foreach (string l in System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "phrases.tsv"), System.Text.Encoding.UTF8))
+            string dir = rtDir.Substring(0, rtDir.Length - "/Runtime".Length);
+            var tErr = new List<string>();
+            PhraseTable built = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "phrases.tsv"), System.Text.Encoding.UTF8)), tErr);
+            var pErr = new List<string>();
+            SlotPools realPools = SlotPools.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "pools.tsv"), System.Text.Encoding.UTF8)), pErr);
+            int slotted = 0, withRt = 0, versionsNoRt = 0, rtLines = 0;
+            var noEs = new List<string>();
+            foreach (PhraseEntry pe in built.Entries)
             {
-                string[] f = l.Split('\t');
-                if (head == null) { head = f; continue; }
-                int ik = Array.IndexOf(head, "clip_key"), ie = Array.IndexOf(head, "english");
-                if (f.Length > ie && ie >= 0) english[f[ik]] = f[ie];
+                if (pe.SpanishRt != null) rtLines++;
+                if (!SubtitleSlots.HasSlots(pe.English)) continue;
+                slotted++;
+                if (pe.SpanishRt != null) withRt++;
+                List<string> vs = SubtitleSlots.Versions(pe.English);
+                for (int k = 0; k < vs.Count; k++)
+                {
+                    if (!SubtitleSlots.HasSlots(vs[k])) continue;
+                    string rtv = pe.SpanishRtVersion(k);
+                    if (string.IsNullOrEmpty(rtv)) { versionsNoRt++; continue; }
+                    // every pool the runtime Spanish uses has Spanish for each of its values
+                    foreach (System.Text.RegularExpressions.Match m in SubtitleSlots.EsSlotRe.Matches(rtv))
+                    {
+                        string pool = m.Groups[2].Value;
+                        IList<string> vals0 = realPools.Values(pool);
+                        if (vals0 == null) continue;
+                        foreach (string raw in vals0)
+                        {
+                            string text, g, es0;
+                            SubtitleSlots.SplitConditions(raw, null, out text);
+                            if (!realPools.Spanish(pool, text, out g, out es0) && !noEs.Contains(pool + "/" + text)) noEs.Add(pool + "/" + text);
+                            else if (m.Groups[1].Success && g == null && !noEs.Contains(pool + "/" + text + " (no gender)")) noEs.Add(pool + "/" + text + " (no gender)");
+                        }
+                    }
+                }
             }
-            foreach (string k in es.LineKeys)
-            {
-                string en;
-                if (!english.TryGetValue(k, out en)) esErr.Add(k + " is not in phrases.tsv");
-                else if (en != es.LineEnglish(k)) esErr.Add(k + ": english differs from phrases.tsv");
-            }
-            Check(esErr.Count == 0 && es.LineCount >= 40 && es.PoolCount >= 100,
-                  "slots_es: " + es.LineCount + " lines and " + es.PoolCount + " pool values parse and match phrases.tsv", string.Join(" ; ", esErr.ToArray()));
+            Check(tErr.Count == 0 && pErr.Count == 0 && rtLines >= 65 && realPools.SpanishCount >= 172 && noEs.Count == 0,
+                  "spanish_rt: " + rtLines + " rows with runtime Spanish, " + realPools.SpanishCount + " pool values with Spanish, every pool value a runtime line uses has its Spanish",
+                  string.Join(" ; ", tErr.ToArray()) + string.Join(" ; ", pErr.ToArray()) + string.Join(" ; ", noEs.ToArray()));
+            Console.WriteLine("INFO  spanish_rt coverage: " + slotted + " slotted rows, " + withRt + " with spanish_rt, " + versionsNoRt + " slotted versions without");
 
-            var esPools = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\tlucky rock" }, null);
-            var se = SlotsEs.Parse(new List<string> { "kind\tkey\tenglish\tspanish",
-                "line\tt_1\tA. | {other}, where is my {thing}?\tA. | {other}, ¿dónde está {el thing}?",
-                "pool\tthing\tlucky rock\tf:piedra de la suerte" }, null);
-            var row = new PhraseEntry { ClipKey = "t_1", Role = "crew", Spanish = "A.", English = "A. | {other}, where is my {thing}?" };
+            var esPools = SlotPools.Parse(new List<string> { "pool\tenglish\tspanish", "thing\tlucky rock\tf:piedra de la suerte" }, null);
+            var rowErr = new List<string>();
+            var tbl = PhraseTable.Parse(new List<string> {
+                "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tspanish\tenglish\tspanish_rt",
+                "t_1\tchatter\tchatter\tcalm\tcrew\tt\t1\tboth\tA.\tA. | {other}, where is my {thing}?\t | {other}, ¿dónde está {el thing}?",
+                "t_2\tchatter\tchatter\tcalm\tcrew\tt\t2\tboth\tB.\tB. | B {thing}.\tB.",
+                "t_3\tchatter\tchatter\tcalm\tcrew\tt\t3\tboth\tC.\tC. | Fuel at {fuel} percent.",
+                "t_4\tchatter\tchatter\tcalm\tcrew\tt\t4\tboth\tD.\tD. | D.\t | D {vessel}.",
+                "u_1\tchatter\tchatter\tcalm\tcrew\tu\t1\tboth\tE.\tE. | Fuel at {fuel} percent.\t | Combustible al {fuel} por ciento." }, rowErr);
+            PhraseEntry row = new List<PhraseEntry>(tbl.Entries).Find(q0 => q0.ClipKey == "t_1");
+            Check(rowErr.Count == 3 && row != null && new List<PhraseEntry>(tbl.Entries).Exists(q0 => q0.ClipKey == "u_1"),
+                  "spanish_rt: a wrong version count, a runtime number without Spanish and a slot its english lacks are refused (a missing last cell is fine)",
+                  rowErr.Count + ": " + string.Join(" ; ", rowErr.ToArray()));
             var outE = SubtitleSlots.Fill(new List<PhraseEntry> { row }, esPools, new Dictionary<string, string>(),
-                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "1" : vv[0], null, null, se);
+                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "1" : vv[0], null, null, true);
             string esText = outE[0].RuntimeSpanish;
             Check(outE[0].English == "Bob, where is my lucky rock?" && esText == "‹Bob›, ¿dónde está la piedra de la suerte?"
                   && SubtitleSlots.Article("del", "mp") == "de los" && SubtitleSlots.Article("el", null) == null,
-                  "slots_es: the filled version gets its Spanish with the same values (name mark, article by gender)", outE[0].English + " / " + esText);
+                  "spanish_rt: the filled version gets its Spanish with the same values (name mark, article by gender)", outE[0].English + " / " + esText);
             var outO = SubtitleSlots.Fill(new List<PhraseEntry> { row }, esPools, new Dictionary<string, string>(),
-                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "0" : vv[0], null, null, se);
-            Check(outO[0].RuntimeSpanish == null, "slots_es: the original version keeps its recorded clip (no runtime Spanish)", outO[0].RuntimeSpanish);
+                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "0" : vv[0], null, null, true);
+            var outOff = SubtitleSlots.Fill(new List<PhraseEntry> { row }, esPools, new Dictionary<string, string>(),
+                i => new Dictionary<string, string> { { "other", "Bob" } }, (pool, vv) => pool.StartsWith("version:") ? "1" : vv[0], null, null, false);
+            Check(outO[0].RuntimeSpanish == null && outOff[0].RuntimeSpanish == null && outOff[0].English == "Bob, where is my lucky rock?",
+                  "spanish_rt: an empty piece and the runtime voice off keep the recorded clip", outO[0].RuntimeSpanish + " / " + outOff[0].RuntimeSpanish);
+
+            // a runtime number: only with its value (the runtime voice on), said in words, shown in digits
+            PhraseEntry fuel = new List<PhraseEntry>(tbl.Entries).Find(q0 => q0.ClipKey == "u_1");
+            var lines1 = new List<PhraseEntry> { fuel };
+            var off = new Dictionary<string, string> { { "day", "2" } };
+            var on = new Dictionary<string, string> { { "day", "2" }, { "fuel", "21.4" } };
+            int picked1 = 0;
+            for (int i = 0; i < 20; i++)
+            {
+                var o = SubtitleSlots.Fill(lines1, esPools, off, null, (pool, vv) => vv[vv.Count - 1], null, null, false);
+                if (o[0].English.IndexOf("Fuel", StringComparison.Ordinal) >= 0) picked1++;
+            }
+            var onF = SubtitleSlots.Fill(lines1, esPools, on, null, (pool, vv) => vv[vv.Count - 1], null, null, true);
+            Check(picked1 == 0 && onF[0].English == "Fuel at 21 percent." && onF[0].RuntimeSpanish == "Combustible al veintiún por ciento."
+                  && SubtitleSlots.CanFill(lines1, esPools, off, null, null),
+                  "spanish_rt: a {fuel} version is never picked without the value, with it the voice says the number in words",
+                  onF[0].English + " / " + onF[0].RuntimeSpanish);
+        }
+        // the slot catalogue in src/Slots.cs and in audio/build_lonapse.py are the same
+        {
+            string py = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../audio/build_lonapse.py")), System.Text.Encoding.UTF8);
+            Func<string, string> list = name =>
+            {
+                var m = System.Text.RegularExpressions.Regex.Match(py, "\n" + name + @" = \[([^\]]*)\]");
+                if (!m.Success) return "(missing " + name + ")";
+                var items = new List<string>();
+                foreach (System.Text.RegularExpressions.Match q in System.Text.RegularExpressions.Regex.Matches(m.Groups[1].Value, "\"([a-z_]+)\"")) items.Add(q.Groups[1].Value);
+                return string.Join(" ", items.ToArray());
+            };
+            bool same = list("NUMBER_SLOTS") == string.Join(" ", Slots.Numbers) && list("NAME_SLOTS") == string.Join(" ", Slots.Names)
+                        && list("RUNTIME_PERSONS") == string.Join(" ", Slots.Persons) && list("FLIGHT_SLOTS") == string.Join(" ", Slots.Flight);
+            Check(same, "slots: src/Slots.cs and audio/build_lonapse.py list the same slots", list("NUMBER_SLOTS") + " | " + list("NAME_SLOTS"));
         }
         {
             float[] pitch = { 1.005f, 0.948f, 1.163f };
@@ -1528,16 +1612,17 @@ public static class Tests
         var plural = new List<string>();
         var pluralRe = new System.Text.RegularExpressions.Regex(@"\b(un|1) (kilómetros|metros|minutos|grados|puntos|fondos|piezas|contratos|kerbals|meters|minutes|degrees|points|funds|parts|contracts)\b");
         foreach (RuntimeTemplate t in rtAll)
+        for (int v = 0; v < t.Versions.Count; v++)
         {
             var one = new Dictionary<string, double>();
             foreach (string k in RuntimeLines.NumberSlots) one[k] = 1;
             string a1, a2;
-            if (RuntimeLines.Fill(t, one, fullN, out a1, out a2) && (pluralRe.IsMatch(a1) || pluralRe.IsMatch(a2))) plural.Add(t.Id + ": " + a1 + " / " + a2);
+            if (RuntimeLines.Fill(t, v, one, fullN, out a1, out a2) && (pluralRe.IsMatch(a1) || pluralRe.IsMatch(a2))) plural.Add(t.Id + ": " + a1 + " / " + a2);
         }
         string o1, o2;
         RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_period"), new Dictionary<string, double> { { "period_min", 1.04 } }, null, out o1, out o2);
         string m1, m2;
-        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_2"), new Dictionary<string, double> { { "alt_km", 15e6 } },
+        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit"), 1, new Dictionary<string, double> { { "alt_km", 15e6 } },
                           new Dictionary<string, string[]> { { "body", new[] { "Kérbol", "Kerbol" } } }, out m1, out m2);
         Check(m1 == "Os vemos a quince millones de kilómetros sobre ⟪Kérbol⟫." && m2 == "We see you 15 million km above Kerbol.",
               "runtime voice: a value in millions: \"quince millones de kilómetros\", \"15 million km\"", m1 + " / " + m2);
@@ -1658,7 +1743,7 @@ public static class Tests
 
         // vessel conditions on pool values, and scenes that cannot be filled
         var vp = SlotPools.Parse(new List<string> { "pool\tenglish", "outside\t[solar] solar panel", "outside\t[legs] landing leg",
-            "exp\t[goo] Mystery Goo" }, null);
+            "experiment\t[goo] Mystery Goo" }, null);
         var vl2 = new List<PhraseEntry> { new PhraseEntry { ClipKey = "w1", English = "The {outside} wobbles. | Something wobbles." } };
         var onlyLegs = new List<string> { "legs" };
         Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, onlyLegs)[0].English == "The landing leg wobbles."
@@ -1670,7 +1755,7 @@ public static class Tests
         Check(neverSolar, "slots: a part the vessel does not have is never named", null);
         Check(SubtitleSlots.Fill(vl2, vp, null, null, (pool, vals) => vals[0], null, new List<string>())[0].English == "Something wobbles.",
               "slots: a version whose pool has no usable value is skipped", null);
-        var ex = new List<PhraseEntry> { new PhraseEntry { ClipKey = "x1", English = "The {exp} glows. | The {exp} hums." } };
+        var ex = new List<PhraseEntry> { new PhraseEntry { ClipKey = "x1", English = "The {experiment} glows. | The {experiment} hums." } };
         Check(!SubtitleSlots.CanFill(ex, vp, null, null, new List<string>()) && SubtitleSlots.CanFill(ex, vp, null, null, new List<string> { "goo" }),
               "slots: CanFill is false when no version can be filled (no Mystery Goo aboard)", null);
         var px = new List<PhraseEntry> { new PhraseEntry { ClipKey = "p1", English = "Hi {other}. | Hi there {other}." } };

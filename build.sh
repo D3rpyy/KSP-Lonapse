@@ -95,15 +95,24 @@ mv -f "$GD/Plugins/Lonapse.dll.tmp" "$GD/Plugins/Lonapse.dll"
 echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll") bytes)"
 
 # ---- the rest of what players get, from the same sources as package.sh ----
-# phrase tables: the text tables in GameData/Lonapse/Phrases (runtime.tsv, pools.tsv, slots_es.tsv, ...),
-# phrases.tsv from the audio build when there is one. Phrases/Extra in the install is the player's own, not touched.
-mkdir -p "$GD/Phrases"
+# phrase tables: the text tables in GameData/Lonapse/Phrases (pools.tsv, ...) and Phrases/Runtime/*.tsv,
+# phrases.tsv from the audio build when there is one. Phrases/Extra in the install is the player's own, not touched,
+# and so is a file of the player's own in Phrases/Runtime (only the files the repo ships are replaced).
+mkdir -p "$GD/Phrases" "$GD/Phrases/Runtime"
 shopt -s nullglob
 for f in "$REPO"/GameData/Lonapse/Phrases/*.tsv; do
   cp -f "$f" "$GD/Phrases/"
   echo "Installed: $GD/Phrases/$(basename "$f")"
 done
+for f in "$REPO"/GameData/Lonapse/Phrases/Runtime/*.tsv; do
+  cp -f "$f" "$GD/Phrases/Runtime/"
+  echo "Installed: $GD/Phrases/Runtime/$(basename "$f")"
+done
 shopt -u nullglob
+# 0.7.0 tables that moved: runtime.tsv is now Phrases/Runtime, slots_es.tsv is the spanish_rt column and pools.tsv
+for old in runtime.tsv slots_es.tsv; do
+  if [[ -f "$GD/Phrases/$old" ]]; then rm -f "$GD/Phrases/$old"; echo "Removed old: $GD/Phrases/$old"; fi
+done
 if [[ -f "$REPO/audio/build/lonapse/phrases.tsv" ]]; then
   cp -f "$REPO/audio/build/lonapse/phrases.tsv" "$GD/Phrases/phrases.tsv"
   echo "Installed: $GD/Phrases/phrases.tsv (from the audio build)"

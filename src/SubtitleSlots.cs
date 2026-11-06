@@ -20,12 +20,16 @@ using System.Text.RegularExpressions;
 
 namespace Lonapse
 {
-    /// <summary>Values per pool from pools.tsv (columns pool and english).</summary>
+    /// <summary>Values per pool from pools.tsv (columns pool and english, optional spanish).</summary>
     public sealed class SlotPools
     {
         private readonly Dictionary<string, List<string>> pools = new Dictionary<string, List<string>>();
+        // pool + tab + value (without [conditions]) to { gender or null, spanish }, for the runtime voice
+        private readonly Dictionary<string, KeyValuePair<string, string>> spanish = new Dictionary<string, KeyValuePair<string, string>>();
+        public static readonly string[] Genders = { "m", "f", "mp", "fp" };
 
         public int Count { get { return pools.Count; } }
+        public int SpanishCount { get { return spanish.Count; } }
         public bool Has(string pool) { return pool != null && pools.ContainsKey(pool); }
 
         public IList<string> Values(string pool)
@@ -34,13 +38,39 @@ namespace Lonapse
             return pool != null && pools.TryGetValue(pool, out v) ? v : null;
         }
 
-        /// <summary>Reads pools.tsv: a header with pool and english, then one value per row. # starts a comment.
-        /// Bad rows are skipped and described in errors. Same rules as load_pools in audio/build_lonapse.py.</summary>
+        /// <summary>The Spanish of a pool value (its english without [conditions]) and its gender (null: none).
+        /// False when the value has no Spanish: a line that uses it then plays its recorded clip.</summary>
+        public bool Spanish(string pool, string english, out string gender, out string es)
+        {
+            gender = null; es = null;
+            KeyValuePair<string, string> kv;
+            if (!spanish.TryGetValue(pool + "\t" + english, out kv)) return false;
+            gender = kv.Key; es = kv.Value;
+            return true;
+        }
+
+        /// <summary>Splits "f:piedra de la suerte" into its gender (m f mp fp, or null) and the Spanish.</summary>
+        public static string SplitGender(string es, out string gender)
+        {
+            gender = null;
+            es = (es ?? "").Trim();
+            int colon = es.IndexOf(':');
+            if (colon > 0 && colon <= 2 && Array.IndexOf(Genders, es.Substring(0, colon)) >= 0)
+            {
+                gender = es.Substring(0, colon);
+                es = es.Substring(colon + 1).Trim();
+            }
+            return es;
+        }
+
+        /// <summary>Reads pools.tsv: a header with pool and english (spanish optional), then one value per row. #
+        /// starts a comment. Bad rows are skipped and described in errors. Same rules as load_pools in
+        /// audio/build_lonapse.py.</summary>
         public static SlotPools Parse(IList<string> lines, List<string> errors)
         {
             SlotPools p = new SlotPools();
             if (lines == null) return p;
-            int iPool = -1, iEn = -1, width = 0;
+            int iPool = -1, iEn = -1, iEs = -1, width = 0;
             for (int i = 0; i < lines.Count; i++)
             {
                 string line = (lines[i] ?? "").TrimEnd('\r');
@@ -50,10 +80,13 @@ namespace Lonapse
                 {
                     iPool = Array.IndexOf(f, "pool");
                     iEn = Array.IndexOf(f, "english");
+                    iEs = Array.IndexOf(f, "spanish");
                     width = f.Length;
                     if (iPool < 0 || iEn < 0) { if (errors != null) errors.Add("pools: header needs pool and english"); return p; }
                     continue;
                 }
+                // a missing last cell is an empty spanish (editors drop a trailing tab)
+                if (f.Length == width - 1 && iEs == width - 1) { var pad = new string[width]; f.CopyTo(pad, 0); pad[width - 1] = ""; f = pad; }
                 if (f.Length != width) { if (errors != null) errors.Add("pools line " + (i + 1) + ": expected " + width + " columns"); continue; }
                 string name = f[iPool].Trim(), val = f[iEn].Trim();
                 if (!SubtitleSlots.IsSlotName(name)) { if (errors != null) errors.Add("pools line " + (i + 1) + ": pool '" + name + "' must match [a-z_]+"); continue; }
@@ -67,113 +100,32 @@ namespace Lonapse
                 List<string> l;
                 if (!p.pools.TryGetValue(name, out l)) p.pools[name] = l = new List<string>();
                 if (!l.Contains(val)) l.Add(val);
+                if (iEs >= 0 && f[iEs].Trim().Length > 0)
+                {
+                    string g, text;
+                    SubtitleSlots.SplitConditions(val, null, out text);
+                    string es = SplitGender(f[iEs], out g);
+                    if (es.Length == 0) { if (errors != null) errors.Add("pools line " + (i + 1) + ": empty spanish after the gender"); continue; }
+                    p.spanish[name + "\t" + text] = new KeyValuePair<string, string>(g, es);
+                }
             }
             return p;
         }
     }
 
-    /// <summary>
-    /// Experimental (runtime voice): slots_es.tsv, the Spanish of the subtitle templates, so the runtime voice says
-    /// what the subtitle shows. Lines: clip key, its english (must equal the table row) and one Spanish version per
-    /// english version. Pools: the Spanish of a pool value, with m: f: mp: fp: for the article.
-    /// </summary>
-    public sealed class SlotsEs
-    {
-        readonly Dictionary<string, KeyValuePair<string, List<string>>> lines = new Dictionary<string, KeyValuePair<string, List<string>>>();
-        readonly Dictionary<string, KeyValuePair<string, string>> pools = new Dictionary<string, KeyValuePair<string, string>>();
-        public static readonly string[] Genders = { "m", "f", "mp", "fp" };
-
-        public int LineCount { get { return lines.Count; } }
-        public int PoolCount { get { return pools.Count; } }
-        public IEnumerable<string> LineKeys { get { return lines.Keys; } }
-
-        /// <summary>The Spanish versions of a line, only when its english is the same as when the file was written.</summary>
-        public bool Line(string clipKey, string english, out List<string> versions)
-        {
-            versions = null;
-            KeyValuePair<string, List<string>> kv;
-            if (clipKey == null || !lines.TryGetValue(clipKey, out kv) || kv.Key != (english ?? "")) return false;
-            versions = kv.Value;
-            return true;
-        }
-
-        public string LineEnglish(string clipKey)
-        {
-            KeyValuePair<string, List<string>> kv;
-            return clipKey != null && lines.TryGetValue(clipKey, out kv) ? kv.Key : null;
-        }
-
-        /// <summary>The Spanish of a pool value (its english without [conditions]) and its gender (null: none).</summary>
-        public bool Pool(string pool, string english, out string gender, out string spanish)
-        {
-            gender = null; spanish = null;
-            KeyValuePair<string, string> kv;
-            if (!pools.TryGetValue(pool + "\t" + english, out kv)) return false;
-            gender = kv.Key; spanish = kv.Value;
-            return true;
-        }
-
-        /// <summary>Reads slots_es.tsv: header kind, key, english, spanish. Bad rows go to errors and are skipped.</summary>
-        public static SlotsEs Parse(IList<string> rows, List<string> errors)
-        {
-            var r = new SlotsEs();
-            if (rows == null) return r;
-            bool header = false;
-            for (int i = 0; i < rows.Count; i++)
-            {
-                string line = (rows[i] ?? "").TrimEnd('\r');
-                if (line.Trim().Length == 0 || line.TrimStart().StartsWith("#")) continue;
-                string[] f = line.Split('\t');
-                if (!header)
-                {
-                    header = true;
-                    if (f.Length != 4 || f[0] != "kind" || f[1] != "key" || f[2] != "english" || f[3] != "spanish")
-                    {
-                        if (errors != null) errors.Add("slots_es: header must be kind, key, english, spanish");
-                        return r;
-                    }
-                    continue;
-                }
-                string where = "slots_es line " + (i + 1);
-                if (f.Length != 4) { if (errors != null) errors.Add(where + ": expected 4 columns, got " + f.Length); continue; }
-                string kind = f[0].Trim(), key = f[1].Trim(), en = f[2].Trim(), es = f[3].Trim();
-                if (kind == "line")
-                {
-                    var vs = new List<string>();
-                    foreach (string v in es.Split(SubtitleSlots.VersionSep)) vs.Add(v.Trim());
-                    if (vs.Count != SubtitleSlots.Versions(en).Count) { if (errors != null) errors.Add(where + " (" + key + "): " + vs.Count + " spanish versions for " + SubtitleSlots.Versions(en).Count + " english"); continue; }
-                    if (vs.Exists(v => v.Length == 0)) { if (errors != null) errors.Add(where + " (" + key + "): an empty spanish version"); continue; }
-                    if (r.lines.ContainsKey(key)) { if (errors != null) errors.Add(where + ": duplicate line " + key); continue; }
-                    r.lines[key] = new KeyValuePair<string, List<string>>(en, vs);
-                }
-                else if (kind == "pool")
-                {
-                    string g = null;
-                    int colon = es.IndexOf(':');
-                    if (colon > 0 && colon <= 2 && Array.IndexOf(Genders, es.Substring(0, colon)) >= 0) { g = es.Substring(0, colon); es = es.Substring(colon + 1).Trim(); }
-                    if (es.Length == 0) { if (errors != null) errors.Add(where + " (" + key + "): empty spanish"); continue; }
-                    string pk = key + "\t" + en;
-                    if (r.pools.ContainsKey(pk)) { if (errors != null) errors.Add(where + ": duplicate pool value " + key + " / " + en); continue; }
-                    r.pools[pk] = new KeyValuePair<string, string>(g, es);
-                }
-                else if (errors != null) errors.Add(where + ": kind must be line or pool");
-            }
-            return r;
-        }
-    }
-
     public static class SubtitleSlots
     {
-        /// <summary>Flight values the director fills in. Same list as FLIGHT_SLOTS in audio/build_lonapse.py.</summary>
-        public static readonly string[] FlightSlots = { "day", "here", "vessel", "alt_km" };
+        /// <summary>Flight values the director fills in on every flight (Slots.Flight). The other number slots only
+        /// with the runtime voice on.</summary>
+        public static readonly string[] FlightSlots = Slots.Flight;
         /// <summary>Intercom only: the other kerbal and the speaker. Same as PERSON_SLOTS in the script.</summary>
         public static readonly string[] PersonSlots = { "other", "self" };
         public const string Other = "other", Self = "self";
 
         // {name} or {name:2}
         static readonly Regex SlotRe = new Regex(@"\{([a-z_]+)(?::([1-9]))?\}", RegexOptions.CultureInvariant);
-        /// <summary>A slot in slots_es.tsv: {thing}, {thing:2}, or with an article {el thing} {un thing} {del thing} {al thing}.</summary>
-        static readonly Regex EsSlotRe = new Regex(@"\{(?:(el|un|del|al) )?([a-z_]+)(?::([1-9]))?\}", RegexOptions.CultureInvariant);
+        /// <summary>A slot in a spanish_rt version: {thing}, {thing:2}, or with an article {el thing} {un thing} {del thing} {al thing}.</summary>
+        public static readonly Regex EsSlotRe = new Regex(@"\{(?:(el|un|del|al) )?([a-z_]+)(?::([1-9]))?\}", RegexOptions.CultureInvariant);
 
         public static bool IsSlotName(string s)
         {
@@ -182,11 +134,8 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>body and the flight and person slots cannot be pool names.</summary>
-        public static bool IsReserved(string name)
-        {
-            return name == "body" || Array.IndexOf(FlightSlots, name) >= 0 || Array.IndexOf(PersonSlots, name) >= 0;
-        }
+        /// <summary>The number, name and person slots of Slots cannot be pool names.</summary>
+        public static bool IsReserved(string name) { return Slots.IsReserved(name); }
 
         public static bool HasSlots(string text) { return !string.IsNullOrEmpty(text) && SlotRe.IsMatch(text); }
 
@@ -319,21 +268,22 @@ namespace Lonapse
                                              Func<string, IList<string>, string> pick, List<string> unresolved,
                                              ICollection<string> conditions)
         {
-            return Fill(lines, pools, values, lineValues, pick, unresolved, conditions, null);
+            return Fill(lines, pools, values, lineValues, pick, unresolved, conditions, false);
         }
 
-        /// <summary>Fill, and with <paramref name="es"/> (slots_es.tsv) also the Spanish of each filled line in
-        /// PhraseEntry.RuntimeSpanish, for the runtime voice. A line whose Spanish cannot be made (no Spanish for the
-        /// line or for a value it uses) keeps RuntimeSpanish null and plays its recorded clip.</summary>
+        /// <summary>Fill, and with <paramref name="spoken"/> also the Spanish of each filled line in
+        /// PhraseEntry.RuntimeSpanish, for the runtime voice, from the spanish_rt column and the pool Spanish. A line
+        /// whose Spanish cannot be made (no spanish_rt for the version, or no Spanish for a value it uses) keeps
+        /// RuntimeSpanish null and plays its recorded clip.</summary>
         public static List<PhraseEntry> Fill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
                                              Func<int, IDictionary<string, string>> lineValues,
                                              Func<string, IList<string>, string> pick, List<string> unresolved,
-                                             ICollection<string> conditions, SlotsEs es)
+                                             ICollection<string> conditions, bool spoken)
         {
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
             var st = new FillState();
-            st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved; st.conditions = conditions; st.es = es;
+            st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved; st.conditions = conditions; st.spoken = spoken;
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
@@ -342,7 +292,7 @@ namespace Lonapse
                 st.where = e.ClipKey + " (line " + i + ")";
                 int vi;
                 string src = PickVersion(e, st, out vi);
-                string en = Expand(src, true, 0, st);
+                string en = Expand(Plurals(src, st, false), true, 0, st);
                 r.Add(CopyWithEnglish(e, en, SpanishFor(e, vi, st)));
             }
             return r;
@@ -378,7 +328,7 @@ namespace Lonapse
             public List<string> unresolved;
             public ICollection<string> conditions;
             public string where;
-            public SlotsEs es;
+            public bool spoken;
             // slot (name:n) to the pool value taken (its english without [ ]), for the Spanish
             public readonly Dictionary<string, string> chosenRaw = new Dictionary<string, string>();
             // slot (name:n) to its filled text, for the whole scene
@@ -444,10 +394,39 @@ namespace Lonapse
                 string text;
                 SplitConditions(vs[k], conds, out text);
                 if (!TextFillable(text, 0, st)) continue;
+                // a number the recording cannot say: only with its runtime Spanish
+                if (HasRuntimeNumber(text) && string.IsNullOrEmpty(e.SpanishRtVersion(k))) continue;
                 if (conds.Count == 0) plain.Add(new KeyValuePair<int, string>(k, text));
                 else if (Holds(conds, st.conditions)) matching.Add(new KeyValuePair<int, string>(k, text));
             }
             return matching.Count > 0 ? matching : plain;
+        }
+
+        /// <summary>The text uses a number slot that only the runtime voice can say ({fuel}, {ec} ...).</summary>
+        public static bool HasRuntimeNumber(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            foreach (Match m in SlotRe.Matches(text)) if (Slots.IsRuntimeNumber(m.Groups[1].Value)) return true;
+            return false;
+        }
+
+        /// <summary>The number values of the scene, for the singular noun after a 1 ("1 minute").</summary>
+        static Dictionary<string, double> Numbers(FillState st)
+        {
+            var d = new Dictionary<string, double>();
+            if (st.values == null) return d;
+            foreach (var kv in st.values)
+            {
+                double v;
+                if (Slots.IsNumber(kv.Key) && double.TryParse(kv.Value, System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture, out v)) d[kv.Key] = v;
+            }
+            return d;
+        }
+
+        static string Plurals(string text, FillState st, bool spanish)
+        {
+            return text.IndexOf('{') < 0 ? text : RuntimeLines.Singular(text, Numbers(st), spanish);
         }
 
         static string PickVersion(PhraseEntry e, FillState st, out int index)
@@ -495,7 +474,7 @@ namespace Lonapse
             if (name == "body") return m.Value;   // {body} rows are expanded at build time, never here
             string v;
             if (st.per != null && st.per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
-            if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
+            if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return ShownValue(name, v);
             string key = name + ":" + n;
             if (st.chosen.TryGetValue(key, out v)) return v;
             List<string> pool = depth < MaxDepth ? Usable(name, depth, st) : new List<string>();
@@ -527,10 +506,11 @@ namespace Lonapse
         /// bodies in ⟪ ⟫). Null when there is none, when a value has no Spanish, or when it is the recorded sentence.</summary>
         static string SpanishFor(PhraseEntry e, int version, FillState st)
         {
-            List<string> vs;
-            if (st.es == null || version < 0 || !st.es.Line(e.ClipKey, e.English, out vs) || version >= vs.Count) return null;
+            if (!st.spoken || version < 0) return null;
+            string src = e.SpanishRtVersion(version);
+            if (string.IsNullOrEmpty(src)) return null;
             bool ok = true;
-            string t = ExpandEs(vs[version], true, 0, st, ref ok);
+            string t = ExpandEs(Plurals(src, st, true), true, 0, st, ref ok);
             if (!ok || string.IsNullOrEmpty(t) || t == e.Spanish) return null;
             return t;
         }
@@ -564,7 +544,7 @@ namespace Lonapse
                 return said ?? "";
             }
             string raw, g, es;
-            if (depth >= MaxDepth || !st.chosenRaw.TryGetValue(name + ":" + n, out raw) || !st.es.Pool(name, raw, out g, out es))
+            if (depth >= MaxDepth || !st.chosenRaw.TryGetValue(name + ":" + n, out raw) || st.pools == null || !st.pools.Spanish(name, raw, out g, out es))
             {
                 ok = false;
                 return "";
@@ -592,20 +572,27 @@ namespace Lonapse
                 case "here":
                     string body = v.StartsWith("the ", StringComparison.OrdinalIgnoreCase) ? v.Substring(4) : v;
                     return RuntimeSpeech.MarkRaw(RuntimeLines.BodySpoken(body));
-                case "day":
-                case "alt_km":
-                    double d;
-                    if (!double.TryParse(v, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out d)) return null;
-                    return RuntimeLines.Words(name, d);
                 default:
-                    return null;
+                    double d;
+                    if (!Slots.IsNumber(name) || !double.TryParse(v, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out d)) return null;
+                    return RuntimeLines.Words(name, d);
             }
+        }
+
+        /// <summary>A flight value as the subtitle shows it: a number as RuntimeLines.Digits ("1,234", "7.5"), the
+        /// rest as it is.</summary>
+        static string ShownValue(string name, string v)
+        {
+            double d;
+            if (Slots.IsNumber(name) && double.TryParse(v, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out d)) return RuntimeLines.Digits(name, d);
+            return v;
         }
 
         /// <summary>The article for {el x} {un x} {del x} {al x} by the gender of the value. Null without a gender.</summary>
         public static string Article(string art, string gender)
         {
-            int g = Array.IndexOf(SlotsEs.Genders, gender ?? "");
+            int g = Array.IndexOf(SlotPools.Genders, gender ?? "");
             if (g < 0) return null;
             switch (art)
             {
@@ -678,7 +665,8 @@ namespace Lonapse
                 ClipKey = e.ClipKey, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
                 Seq = e.Seq, Gender = e.Gender, Phase = e.Phase, Cause = e.Cause, Trait = e.Trait, Persona = e.Persona,
                 Topic = e.Topic, Core = e.Core, Beep = e.Beep, Body = e.Body, Spanish = e.Spanish,
-                LonapseText = e.LonapseText, English = english, Folder = e.Folder, RuntimeSpanish = runtimeSpanish
+                LonapseText = e.LonapseText, English = english, Folder = e.Folder, RuntimeSpanish = runtimeSpanish,
+                SpanishRt = e.SpanishRt
             };
         }
     }

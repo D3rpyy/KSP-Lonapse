@@ -1,0 +1,9 @@
+# Runtime voice: science and contract follow-ups. The format is explained at the top of reports.tsv.
+id	kind	when	spanish	english
+rt_sci_pts	science_pts		Datos de {exp} recibidos desde {body}. Son {sci} puntos de ciencia. | Los científicos dan las gracias por los datos de {exp}. {sci} puntos. | Datos de {exp} recibidos. Ciencia: {sci} puntos.	Got the {exp} data from {body}. That's {sci} science points. | The scientists say thanks for the {exp} data. {sci} points. | Got the {exp} data. Science: {sci} points.
+rt_sci_big	science_pts	sci>=10	¡{sci} puntos! El laboratorio está de fiesta.	{sci} points! The lab is partying.
+rt_sci	science		Datos de {exp} recibidos desde {body}. | Han llegado los datos de {exp}. Gracias.	Got the {exp} data from {body}. | The {exp} data came in. Thanks.
+rt_con_funds	contract_funds		Contrato cumplido. {funds} fondos para el programa. | Buenas noticias de contabilidad: {funds} fondos más. | Contrato pagado. Entran {funds} fondos.	Contract complete. {funds} funds for the program. | Good news from accounting: {funds} more funds. | Contract paid. {funds} funds coming in.
+rt_con_big	contract_funds	funds>=100000	{funds} fondos. Contabilidad no se lo cree.	{funds} funds. Accounting can't believe it.
+rt_con_done	contract_done		Contrato cumplido. Buen trabajo, equipo. | Otro contrato cumplido. Contabilidad sonríe.	Contract complete. Good work, team. | Another contract done. Accounting is smiling.
+rt_con_fail	contract_failed		Hemos perdido un contrato. Contabilidad no está contenta. | Contrato perdido. Lo intentaremos otra vez.	We lost a contract. Accounting is not happy. | Contract lost. We'll try again.

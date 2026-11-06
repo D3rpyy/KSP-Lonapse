@@ -5,7 +5,7 @@ in a scene, {pool:2} another value, pool values with slots inside, a capital at 
 
   python3 audio/slots.py               3 fills of every template scene
   python3 audio/slots.py tp_lost -n 8  8 fills of one scene
-  python3 audio/slots.py --spanish     with the spanish under each line
+  python3 audio/slots.py --spanish     with the spanish (and the spanish_rt) under each line
   python3 audio/slots.py --phase landed --body kerbin   the versions for that situation ([landed], [kerbin])
   python3 audio/slots.py --has solar,legs              the vessel parts there are (default: a typical lander)
 """
@@ -19,6 +19,8 @@ import build_lonapse as b
 SLOT = re.compile(r"\{([a-z_]+)(?::([1-9]))?\}")
 FAKE_FLIGHT = {"day": ["1", "3", "12", "47"], "here": ["Kerbin", "Mun", "Minmus", "Duna", "Jool"],
                "vessel": ["Kerbal X", "Lander II", "Station Alpha"], "alt_km": ["85", "120", "2.4", "640"]}
+# the numbers only the runtime voice says ({fuel}, {ec} ...): a few made-up values, so their versions show too
+FAKE_FLIGHT.update({n: ["1", "7.5", "23", "480"] for n in b.RUNTIME_NUMBERS})
 FAKE_CREW = ["Jebediah", "Bill", "Bob", "Valentina"]
 
 
@@ -138,6 +140,8 @@ def main():
                 print("  %-10s %s" % (who + ":", text))
                 if args.spanish:
                     print("  %-10s (%s)" % ("", r["spanish"]))
+                    if r.get("spanish_rt"):
+                        print("  %-10s (runtime: %s)" % ("", r["spanish_rt"]))
             print()
 
 

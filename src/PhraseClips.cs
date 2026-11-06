@@ -19,14 +19,12 @@ namespace Lonapse
         /// when the file is missing, then a slot shows "...".</summary>
         public static SlotPools pools = new SlotPools();
         public const string PoolsRel = "GameData/Lonapse/Phrases/pools.tsv";
-        /// <summary>Experimental (runtime voice): the Spanish of the subtitle templates (slots_es.tsv).</summary>
-        public static SlotsEs slotsEs = new SlotsEs();
-        public const string SlotsEsRel = "GameData/Lonapse/Phrases/slots_es.tsv";
         /// <summary>Experimental (runtime voice): extra rows, in the source format of audio/lonapse/phrases. They have
         /// no clips, so they only play when Piper can speak them (runtimeCanSpeak).</summary>
         public const string ExtraRel = "GameData/Lonapse/Phrases/Extra";
         public static int extraFiles;
-        /// <summary>Experimental (runtime voice): the runtime-only templates from runtime.tsv, empty without the file.</summary>
+        /// <summary>Runtime voice: the runtime-only templates from every Phrases/Runtime/*.tsv, empty without the folder.</summary>
+        public const string RuntimeRel = "GameData/Lonapse/Phrases/Runtime";
         public static List<RuntimeTemplate> runtimeTemplates = new List<RuntimeTemplate>();
         /// <summary>Set by the director: true when a row without a clip can be spoken at runtime.</summary>
         public static Func<PhraseEntry, bool> runtimeCanSpeak;
@@ -82,7 +80,6 @@ namespace Lonapse
             for (int i = 0; i < errors.Count && i < 10; i++) Log.Warn("Lonapse table: " + errors[i]);
             if (errors.Count > 10) Log.Warn("Lonapse table: " + (errors.Count - 10) + " more error(s)");
             LoadPools();
-            LoadSlotsEs();
             LoadRuntimeTemplates();
 
             GameDatabase db = GameDatabase.Instance;
@@ -121,29 +118,20 @@ namespace Lonapse
             runtimeTemplates = new List<RuntimeTemplate>();
             try
             {
-                string rp = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeLines.FileRel);
-                if (!File.Exists(rp)) return;
+                string dir = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeRel);
+                if (!Directory.Exists(dir)) return;
+                string[] paths = Directory.GetFiles(dir, "*.tsv");
+                Array.Sort(paths, StringComparer.Ordinal);
+                var files = new List<KeyValuePair<string, IList<string>>>();
+                foreach (string f in paths)
+                    files.Add(new KeyValuePair<string, IList<string>>(Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
                 var rerr = new List<string>();
-                runtimeTemplates = RuntimeLines.Parse(new List<string>(File.ReadAllLines(rp, System.Text.Encoding.UTF8)), rerr);
-                for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse " + rerr[i]);
-                Log.Info("Lonapse: " + runtimeTemplates.Count + " runtime voice templates");
+                runtimeTemplates = RuntimeLines.ParseAll(files, rerr);
+                for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse runtime: " + rerr[i]);
+                if (rerr.Count > 10) Log.Warn("Lonapse runtime: " + (rerr.Count - 10) + " more error(s)");
+                Log.Info("Lonapse: " + runtimeTemplates.Count + " runtime voice templates from " + files.Count + " file(s) in Phrases/Runtime");
             }
-            catch (Exception e) { Log.Warn("Lonapse runtime.tsv: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
-        }
-
-        static void LoadSlotsEs()
-        {
-            slotsEs = new SlotsEs();
-            try
-            {
-                string pp = Path.Combine(KSPUtil.ApplicationRootPath, SlotsEsRel);
-                if (!File.Exists(pp)) return;
-                var err = new List<string>();
-                slotsEs = SlotsEs.Parse(new List<string>(File.ReadAllLines(pp, System.Text.Encoding.UTF8)), err);
-                for (int i = 0; i < err.Count && i < 10; i++) Log.Warn("Lonapse slots_es: " + err[i]);
-                Log.Info("Lonapse: " + slotsEs.LineCount + " spoken subtitle templates, " + slotsEs.PoolCount + " spoken pool values");
-            }
-            catch (Exception e) { Log.Warn("Lonapse slots_es: read failed: " + e.Message); slotsEs = new SlotsEs(); }
+            catch (Exception e) { Log.Warn("Lonapse Phrases/Runtime: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
         }
 
         static void LoadPools()
@@ -156,7 +144,7 @@ namespace Lonapse
                 var perr = new List<string>();
                 pools = SlotPools.Parse(new List<string>(File.ReadAllLines(pp, System.Text.Encoding.UTF8)), perr);
                 for (int i = 0; i < perr.Count && i < 10; i++) Log.Warn("Lonapse pools: " + perr[i]);
-                Log.Info("Lonapse: " + pools.Count + " subtitle slot pools");
+                Log.Info("Lonapse: " + pools.Count + " subtitle slot pools, " + pools.SpanishCount + " values with Spanish");
             }
             catch (Exception e) { Log.Warn("Lonapse pools: read failed: " + e.Message); pools = new SlotPools(); }
         }

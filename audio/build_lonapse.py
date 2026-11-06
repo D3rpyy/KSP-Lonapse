@@ -145,14 +145,17 @@ OGG_QUALITY = "3"            # libvorbis -q:a 3, mono (neural voices have more a
 
 # Columns are found by name. The source files must have every SOURCE_COLUMNS column (any order) and may have the
 # SOURCE_OPTIONAL columns (plan v4: trait, persona, topic), which default to their value here when absent. The built
-# table is written in BUILT_COLUMNS order, english last. The C# loader (PhraseTable.Parse) also finds columns by name.
+# table is written in BUILT_COLUMNS order, english and spanish_rt last. The C# loader (PhraseTable.Parse) also finds columns by name.
 ENGLISH_COLUMN = "english"   # subtitle text
 SOURCE_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq", "gender", "phase", "cause",
                   "spanish", ENGLISH_COLUMN]
-SOURCE_OPTIONAL = {"trait": "any", "persona": "any", "topic": "any", "core": "any", "beep": ""}
+# spanish_rt (runtime voice): one Spanish version per english version, split by |, said by Piper in game. An empty
+# version is said by the recorded clip. Not part of render_key: it never changes a rendered clip.
+SPANISH_RT_COLUMN = "spanish_rt"
+SOURCE_OPTIONAL = {"trait": "any", "persona": "any", "topic": "any", "core": "any", "beep": "", SPANISH_RT_COLUMN: ""}
 BUILT_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq", "gender", "phase", "cause",
                  "trait", "persona", "topic", "core", "beep", "spanish", "lonapse_text", "folder", "body",
-                 ENGLISH_COLUMN]
+                 ENGLISH_COLUMN, SPANISH_RT_COLUMN]
 BODY_COLUMNS = ["key", "spanish", "english"]
 PHASES = ["any", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
           "serious", "goofy"]
@@ -172,9 +175,24 @@ PLACEHOLDER_RE = re.compile(r"\{([^{}]*)\}")
 # Experimental (procedural talk): subtitle slots in the english only, filled in game (SubtitleSlots in C#).
 # {pool} or {pool:2} from pools.tsv, a flight value, or (intercom only) a kerbal's first name.
 SLOT_RE = re.compile(r"^([a-z_]+)(?::([1-9]))?$")
+# The slot catalogue. Same lists as Slots.Numbers, Slots.Names and Slots.Persons in src/Slots.cs (the tests
+# compare them). Every one of them is reserved: it cannot be a pool name.
+NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "funds",
+                "inc_deg", "period_min", "t_ap_min", "t_pe_min", "ec", "mono", "parts", "crew", "node_dv", "node_min",
+                "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
+                "at_home", "flight_no", "missions", "stars", "visits", "landings"]
+NAME_SLOTS = ["here", "vessel", "body", "exp", "target"]
+RUNTIME_PERSONS = ["other", "self", "kerbal"]
+# On every flight, also without the runtime voice (Slots.Flight)
 FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km"]
+# Numbers only the runtime voice can say: a version that uses one needs its spanish_rt (Slots.IsRuntimeNumber)
+RUNTIME_NUMBERS = [n for n in NUMBER_SLOTS if n not in FLIGHT_SLOTS]
+# In a subtitle template, intercom only (SubtitleSlots.PersonSlots)
 PERSON_SLOTS = ["other", "self"]
+RESERVED_SLOTS = set(NUMBER_SLOTS) | set(NAME_SLOTS) | set(RUNTIME_PERSONS)
 POOL_COLUMNS = ["pool", "english"]
+POOL_OPTIONAL = {"spanish": ""}   # runtime voice: the Spanish of the value, m: f: mp: fp: before it for the article
+POOL_GENDERS = ["m", "f", "mp", "fp"]
 
 # Panic crew delivery (user request): broken pieces with a gasp or a ragged pause in between, Piper with more
 # variation (noise), light drive, and now and then a voice crack. All random choices are seeded per clip.
@@ -339,6 +357,8 @@ def read_tsv(path, want_columns, label, optional=None):
                 return rows, errors
             header = fields
             continue
+        if len(fields) == len(header) - 1 and header[-1] in optional:
+            fields.append("")   # editors drop the tab before an empty last cell
         if len(fields) != len(header):
             errors.append("%s: expected %d columns, got %d" % (loc, len(header), len(fields)))
             continue
@@ -646,24 +666,28 @@ def pool_reach(pools):
         walk(k, [k])
     for k, names in direct.items():
         for n in names:
-            if n not in pools and n not in FLIGHT_SLOTS and n not in PERSON_SLOTS:
+            if n not in pools and n not in FLIGHT_SLOTS and n not in PERSON_SLOTS and n not in RUNTIME_NUMBERS:
                 errors.append("pools: pool '%s' uses slot {%s}, which has no pool" % (k, n))
     return reach, sorted(set(errors))
 
 
+POOL_SPANISH = {}   # (pool, value without [conditions]) -> spanish cell as written, filled by load_pools
+
+
 def load_pools(path=POOLS_FILE):
     """Subtitle slot values (experimental, procedural talk). Returns ({pool: [values]} in file order, errors).
-    No file gives no pools. Same rules as SlotPools.Parse in C#."""
+    No file gives no pools. Same rules as SlotPools.Parse in C#. The spanish column goes to POOL_SPANISH."""
+    POOL_SPANISH.clear()
     if not path.exists():
         return {}, []
-    rows, errors = read_tsv(path, POOL_COLUMNS, path.name)
+    rows, errors = read_tsv(path, POOL_COLUMNS, path.name, POOL_OPTIONAL)
     pools = {}
     for r in rows:
         bad = []
         name, val = r["pool"], r["english"]
         if not re.match(r"^[a-z_]+$", name):
             bad.append("pool must match [a-z_]+")
-        elif name == "body" or name in FLIGHT_SLOTS or name in PERSON_SLOTS:
+        elif name in RESERVED_SLOTS:
             bad.append("'%s' is a reserved slot name" % name)
         why = value_problem(val)
         if why:
@@ -676,6 +700,12 @@ def load_pools(path=POOLS_FILE):
             errors.append("%s (%s): duplicate value '%s'" % (r["loc"], name, val))
         else:
             vals.append(val)
+        es = r.get("spanish", "")
+        if es:
+            g, _, rest = es.partition(":")
+            if rest and g in POOL_GENDERS and not rest.strip():
+                errors.append("%s (%s): empty spanish after the gender" % (r["loc"], name))
+            POOL_SPANISH[(name, split_conditions(val)[1])] = es
     return pools, errors
 
 
@@ -695,7 +725,7 @@ def check_slots(rows, pools):
                 if not m or m.group(1) == "body":
                     continue
                 name, n = m.group(1), int(m.group(2) or 1)
-                if name in FLIGHT_SLOTS:
+                if name in FLIGHT_SLOTS or name in RUNTIME_NUMBERS:
                     if m.group(2):
                         errors.append("%s (%s): {%s} is a flight value, it has no :n" % (r["loc"], r["clip_key"], p))
                 elif name in PERSON_SLOTS:
@@ -729,10 +759,10 @@ def write_pools(pools):
         if POOLS_OUT.exists():
             POOLS_OUT.unlink()
         return
-    lines = ["\t".join(POOL_COLUMNS)]
+    lines = ["\t".join(POOL_COLUMNS + list(POOL_OPTIONAL))]
     for name, vals in pools.items():
         for v in vals:
-            lines.append(name + "\t" + v)
+            lines.append(name + "\t" + v + "\t" + POOL_SPANISH.get((name, split_conditions(v)[1]), ""))
     POOLS_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -779,13 +809,57 @@ def load_all():
     good, verr = validate(rows)
     errors += verr
     pools, perr = load_pools()
-    errors += perr + check_slots(good, pools)
+    errors += perr + check_slots(good, pools) + check_spanish_rt(good)
     warnings = []
     errors += check_minimums(good, warnings)
     for w in warnings:
         log("WARN table: " + w)
     expanded = expand_bodies(good, bodies)
     return good, expanded, errors, files, bodies
+
+
+ES_SLOT_RE = re.compile(r"\{(?:(?:el|un|del|al) )?([a-z_]+)(?::[1-9])?\}")
+
+
+def check_spanish_rt(rows):
+    """The spanish_rt column, same rules as PhraseTable.CheckSpanishRt in C#: one piece per english version (an
+    empty piece: the recorded clip says it), each piece uses only slots of its english version, no [conditions],
+    and a version with a runtime number ({fuel} ...) needs its piece."""
+    errors = []
+    for r in rows:
+        rt = r.get(SPANISH_RT_COLUMN, "")
+        en = [v.strip() for v in r["english"].split("|")]
+        where = "%s (%s)" % (r["loc"], r["clip_key"])
+        if not rt:
+            for v in en:
+                if any(n in RUNTIME_NUMBERS for n in slot_names(v)):
+                    errors.append("%s: a version with a runtime number needs spanish_rt: '%s'" % (where, v))
+                    break
+            continue
+        if r["role"] == "probe":
+            errors.append("%s: spanish_rt on a subtitle-only row" % where)
+            continue
+        es = [v.strip() for v in rt.split("|")]
+        if len(es) != len(en):
+            errors.append("%s: spanish_rt has %d versions for %d english, split both by | in the same order"
+                          % (where, len(es), len(en)))
+            continue
+        for k, (e, s) in enumerate(zip(en, es), start=1):
+            text = split_conditions(e)[1] or ""
+            have = set(slot_names(text))
+            if not s:
+                if have & set(RUNTIME_NUMBERS):
+                    errors.append("%s: version %d has a runtime number and needs its spanish_rt" % (where, k))
+                continue
+            if s.startswith("["):
+                errors.append("%s: spanish_rt version %d: leave out the [conditions]" % (where, k))
+            for n in ES_SLOT_RE.findall(s):
+                if n not in have:
+                    errors.append("%s: spanish_rt version %d uses {%s}, its english does not" % (where, k, n))
+            rest = ES_SLOT_RE.sub("", s)
+            if "{" in rest or "}" in rest:
+                errors.append("%s: spanish_rt version %d has a bad slot" % (where, k))
+    return errors
 
 
 def check_minimums(rows, warnings=None):

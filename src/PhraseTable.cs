@@ -40,9 +40,18 @@ namespace Lonapse
         public string English = "";
         // Sounds/ folder of the clip, e.g. "crew/calm" (from the built table, or PhraseTable.FolderFor)
         public string Folder;
-        // Experimental (runtime voice): the Spanish of the filled subtitle from slots_es.tsv, marked for
-        // RuntimeSpeech. Set by SubtitleSlots.Fill, null when the recorded clip says the line.
+        // Runtime voice: the spanish_rt column, one Spanish version per english version (split by |, same order).
+        // An empty version: the recorded clip says it. Null when the row has none.
+        public List<string> SpanishRt;
+        // Runtime voice: the Spanish of the filled subtitle (from SpanishRt), marked for RuntimeSpeech. Set by
+        // SubtitleSlots.Fill, null when the recorded clip says the line.
         public string RuntimeSpanish;
+
+        /// <summary>The spanish_rt of english version k, null or empty when the recorded clip says it.</summary>
+        public string SpanishRtVersion(int k)
+        {
+            return SpanishRt != null && k >= 0 && k < SpanishRt.Count ? SpanishRt[k] : null;
+        }
 
         public bool HasBody { get { return !string.IsNullOrEmpty(Body); } }
 
@@ -174,6 +183,45 @@ namespace Lonapse
         // game. {body} at most once per text, and for a voiced row in spanish and english or in neither (a
         // subtitle-only row has no spanish). Whether a pool exists, and that {other} and {self} are only in
         // intercom scenes, is checked by the build script. Adds a description per problem to bad.
+        /// <summary>
+        /// The spanish_rt column: one piece per english version (split by |), an empty piece for a version the
+        /// recorded clip says. A piece uses only slots of its english version ({el thing} counts as {thing}), and a
+        /// version with a number the recording cannot say ({fuel} ...) needs one. Same rules as check_spanish_rt in
+        /// audio/build_lonapse.py.
+        /// </summary>
+        static void CheckSpanishRt(PhraseEntry e, string rt, List<string> bad)
+        {
+            List<string> en = SubtitleSlots.Versions(e.English);
+            if (string.IsNullOrEmpty(rt))
+            {
+                foreach (string v in en)
+                    if (SubtitleSlots.HasRuntimeNumber(v)) { bad.Add("a version with a runtime number needs spanish_rt: '" + v + "'"); return; }
+                return;
+            }
+            if (e.SubtitleOnly) { bad.Add("spanish_rt on a subtitle-only row"); return; }
+            List<string> es = SubtitleSlots.Versions(rt);
+            if (es.Count != en.Count) { bad.Add("spanish_rt has " + es.Count + " versions for " + en.Count + " english, split both by | in the same order"); return; }
+            bool any = false;
+            for (int k = 0; k < es.Count; k++)
+            {
+                string text;
+                SubtitleSlots.SplitConditions(en[k], null, out text);
+                if (es[k].Length == 0)
+                {
+                    if (SubtitleSlots.HasRuntimeNumber(text)) { bad.Add("version " + (k + 1) + " has a runtime number and needs its spanish_rt"); return; }
+                    continue;
+                }
+                any = true;
+                if (es[k].IndexOf('[') == 0) { bad.Add("spanish_rt version " + (k + 1) + ": leave out the [conditions]"); return; }
+                var have = SubtitleSlots.Names(text);
+                foreach (System.Text.RegularExpressions.Match m in SubtitleSlots.EsSlotRe.Matches(es[k]))
+                    if (!have.Contains(m.Groups[2].Value)) { bad.Add("spanish_rt version " + (k + 1) + " uses {" + m.Groups[2].Value + "}, its english does not"); return; }
+                string rest = SubtitleSlots.EsSlotRe.Replace(es[k], "");
+                if (rest.IndexOf('{') >= 0 || rest.IndexOf('}') >= 0) { bad.Add("spanish_rt version " + (k + 1) + " has a bad slot"); return; }
+            }
+            if (any) e.SpanishRt = es;
+        }
+
         static void CheckPlaceholders(PhraseEntry e, List<string> bad)
         {
             List<string> es = Placeholders(e.Spanish), en = Placeholders(e.English);
@@ -294,10 +342,11 @@ namespace Lonapse
         public const string TopicColumn = "topic";
         public const string CoreColumn = "core";
         public const string BeepColumn = "beep";
+        public const string SpanishRtColumn = "spanish_rt";
         // Optional columns. A column outside Columns and Optional is ignored.
         public static readonly string[] Optional = {
             PhaseColumn, CauseColumn, LonapseColumn, FolderColumn, BodyColumn, EnglishColumn,
-            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn };
+            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn, SpanishRtColumn };
 
         // Topics allowed for an event: ScienceTopics for science, SoiTopics for soi_enter, v6 StagingTopics,
         // MilestoneTopics and RoverTopics, only "any" otherwise.
@@ -407,6 +456,14 @@ namespace Lonapse
                     continue;
                 }
 
+                // a missing last cell is an empty spanish_rt (editors drop a trailing tab)
+                if (f.Length == width - 1 && col.ContainsKey(SpanishRtColumn) && col[SpanishRtColumn] == width - 1)
+                {
+                    var pad = new string[width];
+                    f.CopyTo(pad, 0);
+                    pad[width - 1] = "";
+                    f = pad;
+                }
                 if (f.Length != width)
                 {
                     errors.Add("line " + lineNo + ": expected " + width + " columns, got " + f.Length);
@@ -433,6 +490,7 @@ namespace Lonapse
                 if (col.ContainsKey(TopicColumn) && f[col[TopicColumn]].Length > 0) e.Topic = f[col[TopicColumn]];
                 if (col.ContainsKey(CoreColumn) && f[col[CoreColumn]].Length > 0) e.Core = f[col[CoreColumn]];
                 if (col.ContainsKey(BeepColumn)) e.Beep = f[col[BeepColumn]];
+                string rt = col.ContainsKey(SpanishRtColumn) ? f[col[SpanishRtColumn]] : "";
 
                 List<string> bad = new List<string>();
                 if (!IsKey(e.ClipKey)) bad.Add("clip_key '" + e.ClipKey + "' must match [a-z0-9_]+");
@@ -482,6 +540,7 @@ namespace Lonapse
                 if (e.Role == RoleProbe && !ProbeSubtitleOk(e.English))
                     bad.Add("probe subtitle must look like [beeps excitedly] (beeps and 1 to 3 lowercase words), got '" + e.English + "'");
                 CheckPlaceholders(e, bad);
+                if (bad.Count == 0) CheckSpanishRt(e, rt, bad);
                 e.Seq = seq;
 
                 if (col.ContainsKey(LonapseColumn))

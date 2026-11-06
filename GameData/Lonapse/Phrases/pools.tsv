@@ -1,173 +1,173 @@
-pool	english
-thing	lucky rock
-thing	rubber duck
-thing	space pen
-thing	sample bag
-thing	flag
-thing	flight log
-thing	camera
-thing	toothbrush
-thing	favorite spoon
-thing	spare strut
-thing	[goo] jar of Mystery Goo
-thing	snack bar
-thing	rover key
-thing	sandwich
-thing	pillow
-thing	lucky wrench
-thing	comic book
-spot	seat
-spot	control panel
-spot	snack locker
-spot	air vent
-spot	toilet
-spot	headrest
-spot	cup holder
-spot	sleeping bag
-spot	storage net
-spot	first aid kit
-spot	window
-spot	life support panel
-part	hatch handle
-part	radio knob
-part	window seal
-part	seat belt
-part	toilet lid
-part	cabin light
-part	air vent cover
-part	throttle lever
-part	cup holder
-part	snack locker door
-part	headrest
-outside_part	[solar] solar panel
-outside_part	[antenna] antenna
-outside_part	[legs] landing leg
-outside_part	[ladder] ladder
-outside_part	[docking] docking port
-outside_part	[heatshield] heat shield
-outside_part	[chute] parachute
-outside_part	[engine] engine
-outside_part	[strut] strut
-beeper	fuel gauge
-beeper	life support panel
-beeper	toilet
-beeper	snack locker
-beeper	radio
-beeper	control panel
-beeper	[probe] probe core
-beeper	[goo] Mystery Goo
-beeper	[sciencejr] Science Jr.
-food	snack paste
-food	tube cheese
-food	freeze-dried noodles
-food	space beans
-food	Jeb's famous chili
-food	powdered eggs
-food	mystery stew
-food	algae bars
-food	emergency rations
-food	reheated soup
-food	dehydrated fish
-food	cold pizza
-creature	the Kraken
-creature	a giant space whale
-creature	a Mun made of cheese
-creature	a strut that could talk
-creature	a rover with feelings
-creature	a booster that wanted a hug
-creature	Mission Control, but they were all ducks
-creature	Gene, but he was a goat
-creature	a probe core that would not stop beeping
-not_me	Not me.
-not_me	Don't look at me.
-not_me	I didn't touch it.
-not_me	Wasn't me this time.
-not_me	Why do you always ask me?
-not_me	I was asleep.
-not_me	[probe] Ask the probe.
-silly_name	Rocky McRocketface
-silly_name	Big Tube 2
-silly_name	Untitled Craft 3
-silly_name	Jeb's Revenge
-silly_name	The Flying Pickle
-silly_name	Definitely Safe
-silly_name	Boom Mk1
-silly_name	Dave
-chore	clean the toilet
-chore	clean the windows
-chore	count the snacks
-chore	talk to Control
-chore	[goo] feed the Mystery Goo
-chore	wipe the helmets
-chore	sort the rocks
-chore	fix the cup holder
-chore	read the manual out loud
-noise	clank
-noise	squeak
-noise	hiss
-noise	knock
-noise	long groan
-noise	beep
-noise	rattle
-noise	pop
-rumor	Gene sleeps under his desk.
-rumor	the intern launched a pizza last week.
-rumor	Wernher strapped a booster to his chair.
-rumor	Control lost the manual. Again.
-rumor	the new rocket is just three old rockets.
-rumor	Gene cried at the last launch.
-rumor	the snack budget is bigger than the fuel budget.
-song	the countdown song
-song	the snack song
-song	that jingle from the ads
-song	Kerbin, Sweet Kerbin
-song	the theme from the safety video
-experiment	[goo] Mystery Goo
-experiment	[thermometer] thermometer
-experiment	[barometer] barometer
-experiment	[seismic] seismic sensor
-experiment	[gravity] gravity sensor
-experiment	[sciencejr] Science Jr.
-experiment	[magnetometer] magnetometer
-mc_excuse	Budget cuts.
-mc_excuse	Gene says no.
-mc_excuse	The intern spent it on boosters.
-mc_excuse	Maybe next year.
-mc_excuse	Fill out form 27B first.
-mc_excuse	We spent it on snacks.
-status	the snacks are holding up.
-status	nobody has cried today.
-status	the toilet works again.
-status	we only lost one glove.
-status	[goo] the Mystery Goo is looking at us.
-status	morale is high. Mostly.
-home_thing	real gravity
-home_thing	rain
-home_thing	the KSC cafeteria
-home_thing	my own bed
-home_thing	grass
-home_thing	showers
-home_thing	Mom's mystery stew
-home_thing	pizza that isn't frozen
-jeb_idea	add more boosters
-jeb_idea	do a flip
-jeb_idea	eat the Mystery Goo
-jeb_idea	go faster
-jeb_idea	lick the window
-jeb_idea	push the big red button
-cure	drinking upside down
-cure	thinking about taxes
-cure	staring at the fuel gauge
-cure	talking to the probe
-cure	holding your nose and humming
-loud_thing	a Mainsail
-loud_thing	a broken vacuum
-loud_thing	an angry goat
-loud_thing	a rusty hatch
-loud_thing	a rocket on the pad
-loud_thing	a Kraken with a cold
-game	I spy
-game	rock paper scissors
-game	twenty questions
-game	who can float the longest
-game	guess the snack
+pool	english	spanish
+thing	lucky rock	f:piedra de la suerte
+thing	rubber duck	m:pato de goma
+thing	space pen	m:bolígrafo espacial
+thing	sample bag	f:bolsa de muestras
+thing	flag	f:bandera
+thing	flight log	m:diario de vuelo
+thing	camera	f:cámara
+thing	toothbrush	m:cepillo de dientes
+thing	favorite spoon	f:cuchara favorita
+thing	spare strut	m:puntal de repuesto
+thing	[goo] jar of Mystery Goo	m:bote de Moco Misterioso
+thing	snack bar	f:barrita
+thing	rover key	f:llave del róver
+thing	sandwich	m:bocadillo
+thing	pillow	f:almohada
+thing	lucky wrench	f:llave inglesa de la suerte
+thing	comic book	m:cómic
+spot	seat	m:asiento
+spot	control panel	m:panel de control
+spot	snack locker	m:armario de aperitivos
+spot	air vent	f:rejilla de ventilación
+spot	toilet	m:váter
+spot	headrest	m:reposacabezas
+spot	cup holder	m:posavasos
+spot	sleeping bag	m:saco de dormir
+spot	storage net	f:red de almacenaje
+spot	first aid kit	m:botiquín
+spot	window	f:ventana
+spot	life support panel	m:panel de soporte vital
+part	hatch handle	f:manija de la escotilla
+part	radio knob	m:botón de la radio
+part	window seal	f:junta de la ventana
+part	seat belt	m:cinturón
+part	toilet lid	f:tapa del váter
+part	cabin light	f:luz de la cabina
+part	air vent cover	f:tapa de la rejilla
+part	throttle lever	f:palanca de gases
+part	cup holder	m:posavasos
+part	snack locker door	f:puerta del armario de aperitivos
+part	headrest	m:reposacabezas
+outside_part	[solar] solar panel	m:panel solar
+outside_part	[antenna] antenna	f:antena
+outside_part	[legs] landing leg	f:pata de aterrizaje
+outside_part	[ladder] ladder	f:escalera
+outside_part	[docking] docking port	m:puerto de atraque
+outside_part	[heatshield] heat shield	m:escudo térmico
+outside_part	[chute] parachute	m:paracaídas
+outside_part	[engine] engine	m:motor
+outside_part	[strut] strut	m:puntal
+beeper	fuel gauge	m:indicador de combustible
+beeper	life support panel	m:panel de soporte vital
+beeper	toilet	m:váter
+beeper	snack locker	m:armario de aperitivos
+beeper	radio	f:radio
+beeper	control panel	m:panel de control
+beeper	[probe] probe core	m:núcleo de la sonda
+beeper	[goo] Mystery Goo	m:Moco Misterioso
+beeper	[sciencejr] Science Jr.	m:laboratorio Science Jr
+food	snack paste	f:pasta de aperitivo
+food	tube cheese	m:queso en tubo
+food	freeze-dried noodles	mp:fideos liofilizados
+food	space beans	fp:alubias espaciales
+food	Jeb's famous chili	m:famoso chile de Jeb
+food	powdered eggs	mp:huevos en polvo
+food	mystery stew	m:guiso misterioso
+food	algae bars	fp:barritas de algas
+food	emergency rations	fp:raciones de emergencia
+food	reheated soup	f:sopa recalentada
+food	dehydrated fish	m:pescado deshidratado
+food	cold pizza	f:pizza fría
+creature	the Kraken	el Kraken
+creature	a giant space whale	una ballena espacial gigante
+creature	a Mun made of cheese	una nuM de queso
+creature	a strut that could talk	un puntal que hablaba
+creature	a rover with feelings	un róver con sentimientos
+creature	a booster that wanted a hug	un propulsor que quería un abrazo
+creature	Mission Control, but they were all ducks	Control de Misión, pero eran todos patos
+creature	Gene, but he was a goat	Gene, pero era una cabra
+creature	a probe core that would not stop beeping	un núcleo de sonda que no paraba de pitar
+not_me	Not me.	Yo no.
+not_me	Don't look at me.	No me mires a mí.
+not_me	I didn't touch it.	Yo no lo he tocado.
+not_me	Wasn't me this time.	Esta vez no he sido yo.
+not_me	Why do you always ask me?	¿Por qué siempre me preguntas a mí?
+not_me	I was asleep.	Yo estaba dormido.
+not_me	[probe] Ask the probe.	Pregúntale a la sonda.
+silly_name	Rocky McRocketface	‹Rocky McRocketface›
+silly_name	Big Tube 2	Tubo Grande 2
+silly_name	Untitled Craft 3	Nave Sin Título 3
+silly_name	Jeb's Revenge	La Venganza de Jeb
+silly_name	The Flying Pickle	El Pepinillo Volador
+silly_name	Definitely Safe	Segurísimo
+silly_name	Boom Mk1	Pum Mk1
+silly_name	Dave	‹Dave›
+chore	clean the toilet	limpiar el váter
+chore	clean the windows	limpiar las ventanas
+chore	count the snacks	contar los aperitivos
+chore	talk to Control	hablar con Control
+chore	[goo] feed the Mystery Goo	dar de comer al Moco Misterioso
+chore	wipe the helmets	limpiar los cascos
+chore	sort the rocks	ordenar las piedras
+chore	fix the cup holder	arreglar el posavasos
+chore	read the manual out loud	leer el manual en voz alta
+noise	clank	golpe
+noise	squeak	chirrido
+noise	hiss	silbido
+noise	knock	toque
+noise	long groan	crujido largo
+noise	beep	pitido
+noise	rattle	traqueteo
+noise	pop	chasquido
+rumor	Gene sleeps under his desk.	Gene duerme debajo de su mesa.
+rumor	the intern launched a pizza last week.	el becario lanzó una pizza la semana pasada.
+rumor	Wernher strapped a booster to his chair.	Wernher se ató un propulsor a la silla.
+rumor	Control lost the manual. Again.	Control ha perdido el manual. Otra vez.
+rumor	the new rocket is just three old rockets.	el cohete nuevo son tres cohetes viejos.
+rumor	Gene cried at the last launch.	Gene lloró en el último lanzamiento.
+rumor	the snack budget is bigger than the fuel budget.	hay más dinero para aperitivos que para combustible.
+song	the countdown song	la canción de la cuenta atrás
+song	the snack song	la canción de los aperitivos
+song	that jingle from the ads	esa musiquilla de los anuncios
+song	Kerbin, Sweet Kerbin	nibréK, dulce nibréK
+song	the theme from the safety video	la música del vídeo de seguridad
+experiment	[goo] Mystery Goo	m:Moco Misterioso
+experiment	[thermometer] thermometer	m:termómetro
+experiment	[barometer] barometer	m:barómetro
+experiment	[seismic] seismic sensor	m:sensor sísmico
+experiment	[gravity] gravity sensor	m:sensor de gravedad
+experiment	[sciencejr] Science Jr.	m:laboratorio Science Jr.
+experiment	[magnetometer] magnetometer	m:magnetómetro
+mc_excuse	Budget cuts.	Recortes de presupuesto.
+mc_excuse	Gene says no.	‹Gene› dice que no.
+mc_excuse	The intern spent it on boosters.	El becario se lo gastó en propulsores.
+mc_excuse	Maybe next year.	Quizá el año que viene.
+mc_excuse	Fill out form 27B first.	Primero rellenad el formulario veintisiete be.
+mc_excuse	We spent it on snacks.	Nos lo gastamos en aperitivos.
+status	the snacks are holding up.	los aperitivos aguantan.
+status	nobody has cried today.	hoy nadie ha llorado.
+status	the toilet works again.	el váter vuelve a funcionar.
+status	we only lost one glove.	solo hemos perdido un guante.
+status	[goo] the Mystery Goo is looking at us.	el Moco Misterioso nos está mirando.
+status	morale is high. Mostly.	la moral está alta. Casi siempre.
+home_thing	real gravity	la gravedad de verdad
+home_thing	rain	la lluvia
+home_thing	the KSC cafeteria	la cafetería del centro espacial
+home_thing	my own bed	mi propia cama
+home_thing	grass	la hierba
+home_thing	showers	las duchas
+home_thing	Mom's mystery stew	el guiso misterioso de mamá
+home_thing	pizza that isn't frozen	la pizza que no está congelada
+jeb_idea	add more boosters	poner más propulsores
+jeb_idea	do a flip	dar una voltereta
+jeb_idea	eat the Mystery Goo	comerse el Moco Misterioso
+jeb_idea	go faster	ir más rápido
+jeb_idea	lick the window	lamer la ventana
+jeb_idea	push the big red button	pulsar el gran botón rojo
+cure	drinking upside down	beber boca abajo
+cure	thinking about taxes	pensar en los impuestos
+cure	staring at the fuel gauge	mirar fijamente el indicador de combustible
+cure	talking to the probe	hablar con la sonda
+cure	holding your nose and humming	taparte la nariz y tararear
+loud_thing	a Mainsail	un motor Mainsail
+loud_thing	a broken vacuum	una aspiradora rota
+loud_thing	an angry goat	una cabra enfadada
+loud_thing	a rusty hatch	una escotilla oxidada
+loud_thing	a rocket on the pad	un cohete en la plataforma
+loud_thing	a Kraken with a cold	un Kraken resfriado
+game	I spy	veo veo
+game	rock paper scissors	piedra, papel o tijera
+game	twenty questions	las veinte preguntas
+game	who can float the longest	quién flota más tiempo
+game	guess the snack	adivinar el aperitivo

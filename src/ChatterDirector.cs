@@ -171,7 +171,7 @@ namespace Lonapse
             var unresolved = new System.Collections.Generic.List<string>();
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
                                             (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions(),
-                                            PhraseClips.slotsEs);
+                                            RuntimeOn);
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
             for (int i = 0; i < filled.Count; i++)
                 if (!ReferenceEquals(filled[i], lines[i])) Log.Info("Subtitle " + filled[i].ClipKey + ": " + filled[i].English);
@@ -256,7 +256,20 @@ namespace Lonapse
         private float slotCacheClock = -1f;
         private string slotCacheDebugPhase, slotCacheBody;
 
+        /// <summary>The flight values for the subtitle slots, and with the runtime voice on also every number of
+        /// RuntimeNumbers ({fuel}, {ec} ...), so a recorded line can have a version that says them.</summary>
         private System.Collections.Generic.Dictionary<string, string> SlotFlightValues()
+        {
+            var d = BaseFlightValues();
+            var nums = RuntimeNumbers();
+            if (nums != null)
+                foreach (var kv in nums)
+                    if (!d.ContainsKey(kv.Key)) d[kv.Key] = kv.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture);
+            return d;
+        }
+
+        /// <summary>day, here, vessel and alt_km: there on every flight.</summary>
+        private System.Collections.Generic.Dictionary<string, string> BaseFlightValues()
         {
             string here = null, vessel = null;
             double alt = double.NaN;
