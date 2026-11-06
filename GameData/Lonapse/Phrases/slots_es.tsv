@@ -1,0 +1,251 @@
+# Runtime voice: the Spanish of the subtitle templates, so the voice says the same as the subtitle.
+# UTF-8, tab separated, # starts a comment line. No build step: restart KSP after a change.
+#
+# kind line:  key is the clip key of a template row. english is that row's english (a check, the tests compare it).
+#             spanish holds one version per english version, split by |, in the same order. Leave out the [conditions].
+#             A version may use the slots of its english version, or fewer.
+# kind pool:  key is the pool, english the value as in pools.tsv (without [conditions]), spanish its Spanish.
+#             Start with m: f: mp: or fp: (masculine, feminine, plural) when a line uses the value with an article.
+#
+# Spanish slots: {thing} the value as it is, {el thing} with el/la/los/las, {un thing} un/una/unos/unas,
+# {del thing} del/de la/de los/de las, {al thing} al/a la/a los/a las. {thing:2} as in the english.
+# {other} {self} {here} {vessel} {day} work as in the english. The voice reverses every word (loñapsE), so a body
+# name is written backwards like in bodies.tsv ("nibréK" is heard as Kérbin). Names in ‹ › are said as names.
+kind	key	english	spanish
+line	tp_lost_1	Who took my {thing}? | Has anyone seen my {thing}? | My {thing} is gone. Again. | Okay. Who moved my {thing}? | {other}, did you take my {thing}?	¿Quién se ha llevado mi {thing}? | ¿Alguien ha visto mi {thing}? | Mi {thing} ha desaparecido. Otra vez. | A ver. ¿Quién ha movido mi {thing}? | {other}, ¿has cogido tú mi {thing}?
+line	tp_lost_2	{not_me} Look behind the {spot}. | {not_me} Try the {spot}. | Check behind the {spot}, {other}. | Last time it was under the {spot}.	{not_me} Mira detrás {del spot}. | {not_me} Prueba en {el spot}. | Mira detrás {del spot}, {other}. | La última vez estaba debajo {del spot}.
+line	tp_lost_3	Oh. Found it. Next to my {thing:2}. | Found it. It was with my {thing:2}. | Oh. There it is. | Got it. Sorry, {other}.	Ah. Ya está. Al lado de mi {thing:2}. | Encontrado. Estaba con mi {thing:2}. | Ah. Ahí está. | Ya lo tengo. Perdona, {other}.
+line	tp_smell_1	What is that smell? Is that {food}? | Does anyone else smell {food}? | Something smells like {food} in here. | {other}, did you heat up the {food} again?	¿Qué es ese olor? ¿Es {food}? | ¿Alguien más huele a {food}? | Aquí dentro huele a {food}. | {other}, ¿has vuelto a calentar {el food}?
+line	tp_smell_2	Better not ask, {other}. | You don't want to know. | Let's just say it was {food:2}. | Don't ask. Breathe through your mouth.	Mejor no preguntes, {other}. | No quieres saberlo. | Digamos que era {food:2}. | No preguntes. Respira por la boca.
+line	tp_name_1	Who named this thing {vessel}? | {vessel}. Who picked that name? | Why is this ship called {vessel}? | I still can't believe we fly the {vessel}.	¿Quién le puso {vessel} a este trasto? | {vessel}. ¿Quién eligió ese nombre? | ¿Por qué esta nave se llama {vessel}? | Todavía no me creo que volemos en la {vessel}.
+line	tp_name_2	That was your idea, {other}. | You picked it, {other}. | You voted for it. Twice. | It was that or {silly_name}.	Fue idea tuya, {other}. | Lo elegiste tú, {other}. | Votaste a favor. Dos veces. | Era eso o {silly_name}.
+line	tp_name_3	Well, it was a great idea. | Fine. It's a good name. | Okay. Good name. | Fair enough.	Pues era una idea buenísima. | Vale. Es un buen nombre. | Bueno. Buen nombre. | Me parece justo.
+line	tp_dream_1	Last night I dreamt about {creature}. | I had that dream again. With {creature}. | I dreamt about {creature}. It knew my name. | Don't laugh, but I dreamt about {creature}.	Anoche soñé con {creature}. | He vuelto a tener ese sueño. Con {creature}. | Soñé con {creature}. Sabía mi nombre. | No te rías, pero soñé con {creature}.
+line	tp_dream_2	Again? That's the third time, {other}. | Again? You need more sleep, {other}. | Third time this week. | Was I in it? | Again? Stop eating {food} before bed.	¿Otra vez? Ya van tres veces, {other}. | ¿Otra vez? Tienes que dormir más, {other}. | Tercera vez esta semana. | ¿Salía yo? | ¿Otra vez? Deja de comer {food} antes de dormir.
+line	tp_days_1	How long have we been out here? | What day is it? | {other}, how many days has it been? | I've lost count of the days.	¿Cuánto tiempo llevamos aquí fuera? | ¿Qué día es hoy? | {other}, ¿cuántos días han pasado? | He perdido la cuenta de los días.
+line	tp_days_2	Day {day}. Too many. | Day {day}, I think. | No idea. Day {day}? | Day {day}. I counted on the wall.	Día {day}. Demasiados. | Día {day}, creo. | Ni idea. ¿Día {day}? | Día {day}. Los he contado en la pared.
+line	tp_days_3	I thought it was fewer. | Feels like more. | That can't be right. | Huh. Only {day}?	Creía que eran menos. | Parecen más. | Eso no puede ser. | Vaya. ¿Solo {day}?
+line	tp_loose_1	The {part} came loose again. | {other}, the {part} is loose again. | Is the {part} supposed to wobble like that? | Something rattles. I think it's the {part}.	Se ha vuelto a soltar {el part}. | {other}, otra vez se ha soltado {el part}. | ¿Es normal que {el part} se mueva así? | Algo vibra. Creo que es {el part}.
+line	tp_loose_2	Tape it, like the {part:2}. | Tape. Same as always. | Just use tape, {other}. | Tape it. Don't tell Control.	Ponle cinta, como {al part:2}. | Cinta. Como siempre. | Usa cinta y ya está, {other}. | Ponle cinta. No se lo digas a Control.
+line	tp_chore_1	Whose turn is it to {chore}? | Who's supposed to {chore} today? | Someone has to {chore}. Not me. | {other}, your turn to {chore}.	¿A quién le toca {chore}? | ¿Quién tiene que {chore} hoy? | Alguien tiene que {chore}. Yo no. | {other}, te toca {chore}.
+line	tp_chore_2	Yours. Definitely. | Yours, {other}. I keep a list. | Not mine. I did it yesterday. | Yours. I checked the chart.	A ti. Seguro. | A ti, {other}. Llevo una lista. | A mí no. Lo hice ayer. | A ti. Lo he mirado en la tabla.
+line	tp_chore_3	That's not fair. | I did it last time! | Fine. But you {chore:2} tomorrow. | I want to see that chart.	Eso no es justo. | ¡Lo hice la última vez! | Vale. Pero mañana te toca {chore:2}. | Quiero ver esa tabla.
+line	tp_noise_1	Did you hear that {noise}? | What was that {noise}? | There it is again. That {noise}. | {other}. Did you hear that {noise}?	¿Has oído ese {noise}? | ¿Qué ha sido ese {noise}? | Otra vez. Ese {noise}. | {other}. ¿Has oído ese {noise}?
+line	tp_noise_2	Probably normal. | That's normal. I think. | It's the {outside_part}. Probably. | Ships make noises. It's fine.	Será normal. | Es normal. Creo. | Es {el outside_part}. Seguramente. | Las naves hacen ruidos. No pasa nada.
+line	tp_noise_3	You said that last time. | You always say that. | That's what worries me. | You said that about the {part:2}.	Eso dijiste la última vez. | Siempre dices lo mismo. | Eso es lo que me preocupa. | Eso mismo dijiste {del part:2}.
+line	tp_rumor_1	Did you hear about Control? {rumor} | Guess what I heard. {rumor} | Don't tell anyone, but {rumor} | {other}, big news. {rumor}	¿Te has enterado de lo de Control? {rumor} | Adivina lo que he oído. {rumor} | No se lo digas a nadie, pero {rumor} | {other}, tengo noticias. {rumor}
+line	tp_rumor_2	I don't believe it. | No way. | That explains a lot. | Who told you that?	No me lo creo. | Imposible. | Eso explica muchas cosas. | ¿Quién te ha dicho eso?
+line	tp_song_1	Can you stop humming {song}? | {other}, you're humming {song} again. | If I hear {song} one more time... | Please. Not {song} again.	¿Puedes dejar de tararear {song}? | {other}, otra vez estás tarareando {song}. | Si vuelvo a oír {song} una vez más... | Por favor. Otra vez {song} no.
+line	tp_song_2	I wasn't humming. | That wasn't me. | It helps me think. | I wasn't. Now I am.	No estaba tarareando. | No era yo. | Me ayuda a pensar. | No lo hacía. Ahora sí.
+line	tp_window_1	Look out the window. That's {here}. | Come look at {here}, {other}. | {other}, look. {here} again. | Quick, the window. {here}!	Mira por la ventana. Eso es {here}. | Ven a ver {here}, {other}. | {other}, mira. Otra vez {here}. | Rápido, la ventana. ¡{here}!
+line	tp_window_2	I've seen it a thousand times. | Seen it. Day {day} of seeing it. | Nice. Can I go back to sleep? | Still pretty, I guess.	Ya lo he visto mil veces. | Visto. Día {day} viéndolo. | Muy bonito. ¿Puedo volver a dormir? | Sigue siendo bonito, supongo.
+line	tp_bet_1	Bet you my {thing} I'm right. | Want to bet? Loser has to {chore}. | I bet you my {thing}. | Bet? Loser has to {chore}.	Te apuesto mi {thing} a que tengo razón. | ¿Apostamos? El que pierda tiene que {chore}. | Te apuesto mi {thing}. | ¿Apuesta? El que pierda tiene que {chore}.
+line	tp_bet_2	Deal. But this time you pay up. | Deal. You still owe me a {thing:2}. | Fine. Last time you cheated. | Deal, {other}. No cheating.	Vale. Pero esta vez pagas. | Hecho. Todavía me debes {un thing:2}. | Vale. La última vez hiciste trampa. | Hecho, {other}. Sin trampas.
+line	tp_home_1	I miss home. | I miss {home_thing}. | I miss Kerbin. Even the KSC cafeteria. | {other}, do you miss {home_thing}?	Echo de menos mi casa. | Echo de menos {home_thing}. | Echo de menos nibréK. Hasta la cafetería. | {other}, ¿echas de menos {home_thing}?
+line	tp_home_2	Me too. A little. | Me too. Don't tell Control. | A bit. I miss {home_thing:2}. | Sometimes. Mostly {home_thing:2}. | [kerbin] We're still at Kerbin, {other}. | [orbit kerbin] Kerbin is right there. Look out the window. | [prelaunch] We haven't even launched, {other}.	Yo también. Un poco. | Yo también. No se lo digas a Control. | Un poco. Echo de menos {home_thing:2}. | A veces. Sobre todo {home_thing:2}. | Seguimos en nibréK, {other}. | nibréK está justo ahí. Mira por la ventana. | Ni siquiera hemos despegado, {other}.
+line	tp_jeb_1	What would Jeb do right now? | What would Jeb do in this situation? | {other}, what would Jeb do? | Okay. What would Jeb do?	¿Qué haría Jeb ahora mismo? | ¿Qué haría Jeb en esta situación? | {other}, ¿qué haría Jeb? | A ver. ¿Qué haría Jeb?
+line	tp_jeb_2	Something dangerous. | Probably {jeb_idea}. | {jeb_idea}. Obviously. | Something dangerous. He'd {jeb_idea}.	Algo peligroso. | Seguramente {jeb_idea}. | {jeb_idea}. Evidentemente. | Algo peligroso. Querría {jeb_idea}.
+line	tp_jeb_3	So let's not. | Let's not do that. | Tempting, though. | Good. We do the opposite.	Pues no lo hagamos. | Mejor no hacer eso. | Aunque es tentador. | Bien. Hacemos lo contrario.
+line	tp_hiccup_1	I can't stop hiccuping. | I have the hiccups again. | Hic. Sorry. Hic. | {other}, help. Hiccups.	No puedo parar de tener hipo. | Tengo hipo otra vez. | Hip. Perdón. Hip. | {other}, ayuda. Hipo.
+line	tp_hiccup_2	Hold your breath. | Hold your breath. Not too long. | Try {cure}. | Hold your breath. Or try {cure}.	Aguanta la respiración. | Aguanta la respiración. No demasiado. | Prueba a {cure}. | Aguanta la respiración. O prueba a {cure}.
+line	tp_snore_1	You snored a lot last night. | You snore like {loud_thing}. | {other}, you snored like {loud_thing}. | Last night you snored like {loud_thing}.	Anoche roncaste muchísimo. | Roncas como {loud_thing}. | {other}, roncabas como {loud_thing}. | Anoche roncaste como {loud_thing}.
+line	tp_snore_2	I don't snore. | I don't snore. That was the {part}. | Prove it. | That was you, {other}.	Yo no ronco. | Yo no ronco. Era {el part}. | Demuéstralo. | Eras tú, {other}.
+line	tp_beep_1	Why is that beeping? | Why is the {beeper} beeping? | What's that alarm? | {other}. Something is beeping. A lot.	¿Por qué pita eso? | ¿Por qué pita {el beeper}? | ¿Qué alarma es esa? | {other}. Algo está pitando. Mucho.
+line	tp_beep_2	Ignore it. It always beeps. | That's just the timer for the {food}. | Ignore it, {other}. It beeps for fun. | It always does that. Probably.	Ignóralo. Siempre pita. | Es el temporizador {del food}. | Ignóralo, {other}. Pita porque sí. | Siempre hace eso. Creo.
+line	tp_game_1	Want to play a game? | Let's play {game}. | Bored. {game}? | {other}, {game}? Please?	¿Jugamos a algo? | Juguemos a {game}. | Me aburro. ¿{game}? | {other}, ¿{game}? ¿Por favor?
+line	tp_game_2	Okay, but I go first. | Fine. I go first. | Only if I win this time. | Okay. I go first, {other}.	Vale, pero empiezo yo. | Bueno. Empiezo yo. | Solo si esta vez gano yo. | Vale. Empiezo yo, {other}.
+line	tp_favorite_1	What's your favorite part of the ship? | Favorite part of the {vessel}? Go. | {other}, best part of this ship? | Quick. Favorite part of the ship?	¿Cuál es tu parte favorita de la nave? | ¿Parte favorita de la {vessel}? Venga. | {other}, ¿lo mejor de esta nave? | Rápido. ¿Parte favorita de la nave?
+line	tp_favorite_2	The {part}. Easy. | The {spot}. Don't ask why. | That one. The {outside_part}. | The {spot}. Obviously.	{el part}. Fácil. | {el spot}. No preguntes por qué. | Eso. {el outside_part}. | {el spot}. Evidentemente.
+line	tp_favorite_3	So weird. | Weird answer. | Fair enough. | You're strange, {other}.	Qué raro. | Respuesta rara. | Me parece justo. | Eres un poco raro, {other}.
+line	tp_listen_1	Do you think Control listens to us? | {other}, is Control listening right now? | Do you think Control hears all of this? | Does Control record the intercom?	¿Tú crees que Control nos escucha? | {other}, ¿Control nos está escuchando ahora? | ¿Crees que Control oye todo esto? | ¿Control graba el intercomunicador?
+line	tp_listen_2	I hope not. | I hope not. I said things. | Hopefully not. | I hope not. They'd know about the {thing}.	Espero que no. | Espero que no. He dicho cosas. | Ojalá que no. | Espero que no. Sabrían lo {del thing}.
+line	ct_bad_08_1	Good bump. I didn't even spill my coffee. | Good bump. I didn't even spill my coffee. | Nice bump. My {food} didn't even move.	Buen golpe. Ni se me ha caído el café. | Buen golpe. Ni se me ha caído el café. | Buen golpe. Y sin tirar {el food}.
+line	ct_tour_01_2	Whenever you like. There's mash in a tube. | Whenever you like. There's mash in a tube. | Any time. There's {food}.	Cuando quieras. Hay puré en tubo. | Cuando quieras. Hay puré en tubo. | Cuando quieras. Hay {food}.
+line	ev_stc_01_2	Quiet. A bit boring. | Quiet. A bit boring. | Quiet. Somebody is playing {game} again.	Tranquila. Algo aburrida. | Tranquila. Algo aburrida. | Tranquila. Alguien está jugando otra vez a {game}.
+line	em_059_2	Copy. No coffee. | Copy. No coffee. | Copy. No warm {food}.	Recibido. Nada de café. | Recibido. Nada de café. | Recibido. Nada de calentar {el food}.
+line	em_106_2	More cookies. Always more cookies. | More cookies. Always more cookies. | More {food}. Always more.	Más galletas. Siempre más galletas. | Más galletas. Siempre más galletas. | Más {food}. Siempre más.
+line	in_pow_ok_b_2	Good. You can turn the coffee maker back on. | Good. You can turn the coffee maker back on. | Good. You can reheat the {food} again.	Bien. Ya podéis encender la cafetera. | Bien. Ya podéis encender la cafetera. | Bien. Ya podéis volver a calentar {el food}.
+line	pc_013_1	What do you think of the food? | What do you think of the food? | How do you like the {food}?	¿Tú qué opinas de la comida? | ¿Tú qué opinas de la comida? | ¿Tú qué opinas {del food}?
+line	pc_051_1	I'm going to teach you to play cards. | I'm going to teach you to play cards. | Let me teach you {game}.	Te voy a enseñar a jugar a las cartas. | Te voy a enseñar a jugar a las cartas. | Te voy a enseñar a jugar a {game}.
+line	pm_061_1	Sorry, I was eating. Say again? | Sorry, I was eating. Say again? | Sorry, I was eating {food}. Again?	Perdón, estaba comiendo. ¿Repites? | Perdón, estaba comiendo. ¿Repites? | Perdón, estaba comiendo {el food}. ¿Otra vez?
+line	tp_food_1	Control, we are out of {food}. | Control, someone ate all the {food}. | Control, we ate the last of the {food}. | Control, food report: zero {food} left.	Control, ya no queda nada {del food}. | Control, alguien se ha comido lo que quedaba {del food}. | Control, nos hemos comido lo último {del food}. | Control, informe de comida: no queda nada {del food}.
+line	tp_food_2	You still have plenty of {food:2}. | Eat the {food:2}. | There's a full crate of {food:2}. | Try the {food:2}. It builds character.	Os queda mucho {del food:2}. | Comed {el food:2}. | Hay una caja llena {del food:2}. | Probad {el food:2}. Forja el carácter.
+line	tp_experiment_1	Control, the {experiment} is doing something weird. | Control, the {experiment} is making a noise. | Control, is the {experiment} supposed to glow? | Control, the {experiment} moved. By itself.	Control, {el experiment} hace algo raro. | Control, {el experiment} hace un ruido. | Control, ¿{el experiment} tiene que brillar? | Control, {el experiment} se ha movido. Solo.
+line	tp_budget_1	Control, can you send us some {food}? | Control, we need a new {outside_part}. | Control, any chance of a better {thing}? | Control, can we get more struts?	Control, ¿podéis mandarnos {food}? | Control, necesitamos {un outside_part} de repuesto. | Control, ¿hay alguna posibilidad de {un thing} mejor? | Control, ¿nos mandáis más puntales?
+line	tp_budget_2	That's not in the budget. | Negative. {mc_excuse} | Not in the budget. {mc_excuse} | {mc_excuse} Sorry.	Eso no entra en el presupuesto. | Negativo. {mc_excuse} | No entra en el presupuesto. {mc_excuse} | {mc_excuse} Lo siento.
+line	tp_report_1	Control, daily report. Day {day}, all fine. | Control, day {day}. Nothing fell off. | Control, day {day} report: {status} | Control, report for day {day}: {status}	Control, informe del día. Día {day}, todo bien. | Control, día {day}. No se ha caído nada. | Control, informe del día {day}: {status} | Control, informe para el día {day}: {status}
+line	tp_shake_1	Control, things are shaking a bit. | Control, the {outside_part} is shaking. Is that bad? | Control, everything wobbles. Even the {part}. | Control, it's shaking. A little. A lot.	Control, esto tiembla un poco. | Control, {el outside_part} tiembla. ¿Es malo? | Control, todo se tambalea. Hasta {el part}. | Control, esto tiembla. Un poco. Mucho.
+line	tp_home_when_2	Soon. Roughly. | Soon. Probably. | {mc_excuse} But soon. | Soon. Stop asking. | [kerbin] You're still at Kerbin. Patience. | [kerbin] You only just left. Relax. | [landed] You have to take off first.	Pronto. Más o menos. | Pronto. Seguramente. | {mc_excuse} Pero pronto. | Pronto. Dejad de preguntar. | Seguís en nibréK. Paciencia. | Acabáis de salir. Tranquilos. | Primero tenéis que despegar.
+line	tm_025	The flight director put down his coffee. This is serious. | The flight director put down his coffee. This is serious. | The flight director stopped eating {food}. That's serious.	El jefe de vuelo ha dejado el café. Esto va en serio. | El jefe de vuelo ha dejado el café. Esto va en serio. | El jefe de vuelo ha dejado de comer {el food}. Eso es serio.
+pool	thing	lucky rock	f:piedra de la suerte
+pool	thing	rubber duck	m:pato de goma
+pool	thing	space pen	m:bolígrafo espacial
+pool	thing	sample bag	f:bolsa de muestras
+pool	thing	flag	f:bandera
+pool	thing	flight log	m:diario de vuelo
+pool	thing	camera	f:cámara
+pool	thing	toothbrush	m:cepillo de dientes
+pool	thing	favorite spoon	f:cuchara favorita
+pool	thing	spare strut	m:puntal de repuesto
+pool	thing	jar of Mystery Goo	m:bote de Moco Misterioso
+pool	thing	snack bar	f:barrita
+pool	thing	rover key	f:llave del róver
+pool	thing	sandwich	m:bocadillo
+pool	thing	pillow	f:almohada
+pool	thing	lucky wrench	f:llave inglesa de la suerte
+pool	thing	comic book	m:cómic
+pool	spot	seat	m:asiento
+pool	spot	control panel	m:panel de control
+pool	spot	snack locker	m:armario de aperitivos
+pool	spot	air vent	f:rejilla de ventilación
+pool	spot	toilet	m:váter
+pool	spot	headrest	m:reposacabezas
+pool	spot	cup holder	m:posavasos
+pool	spot	sleeping bag	m:saco de dormir
+pool	spot	storage net	f:red de almacenaje
+pool	spot	first aid kit	m:botiquín
+pool	spot	window	f:ventana
+pool	spot	life support panel	m:panel de soporte vital
+pool	part	hatch handle	f:manija de la escotilla
+pool	part	radio knob	m:botón de la radio
+pool	part	window seal	f:junta de la ventana
+pool	part	seat belt	m:cinturón
+pool	part	toilet lid	f:tapa del váter
+pool	part	cabin light	f:luz de la cabina
+pool	part	air vent cover	f:tapa de la rejilla
+pool	part	throttle lever	f:palanca de gases
+pool	part	cup holder	m:posavasos
+pool	part	snack locker door	f:puerta del armario de aperitivos
+pool	part	headrest	m:reposacabezas
+pool	outside_part	solar panel	m:panel solar
+pool	outside_part	antenna	f:antena
+pool	outside_part	landing leg	f:pata de aterrizaje
+pool	outside_part	ladder	f:escalera
+pool	outside_part	docking port	m:puerto de atraque
+pool	outside_part	heat shield	m:escudo térmico
+pool	outside_part	parachute	m:paracaídas
+pool	outside_part	engine	m:motor
+pool	outside_part	strut	m:puntal
+pool	food	snack paste	f:pasta de aperitivo
+pool	food	tube cheese	m:queso en tubo
+pool	food	freeze-dried noodles	mp:fideos liofilizados
+pool	food	space beans	fp:alubias espaciales
+pool	food	Jeb's famous chili	m:famoso chile de Jeb
+pool	food	powdered eggs	mp:huevos en polvo
+pool	food	mystery stew	m:guiso misterioso
+pool	food	algae bars	fp:barritas de algas
+pool	food	emergency rations	fp:raciones de emergencia
+pool	food	reheated soup	f:sopa recalentada
+pool	food	dehydrated fish	m:pescado deshidratado
+pool	food	cold pizza	f:pizza fría
+pool	beeper	fuel gauge	m:indicador de combustible
+pool	beeper	life support panel	m:panel de soporte vital
+pool	beeper	toilet	m:váter
+pool	beeper	snack locker	m:armario de aperitivos
+pool	beeper	radio	f:radio
+pool	beeper	control panel	m:panel de control
+pool	beeper	probe core	m:núcleo de la sonda
+pool	beeper	Mystery Goo	m:Moco Misterioso
+pool	beeper	Science Jr.	m:laboratorio Science Jr
+pool	chore	clean the toilet	limpiar el váter
+pool	chore	clean the windows	limpiar las ventanas
+pool	chore	count the snacks	contar los aperitivos
+pool	chore	talk to Control	hablar con Control
+pool	chore	feed the Mystery Goo	dar de comer al Moco Misterioso
+pool	chore	wipe the helmets	limpiar los cascos
+pool	chore	sort the rocks	ordenar las piedras
+pool	chore	fix the cup holder	arreglar el posavasos
+pool	chore	read the manual out loud	leer el manual en voz alta
+pool	creature	the Kraken	el Kraken
+pool	creature	a giant space whale	una ballena espacial gigante
+pool	creature	a Mun made of cheese	una nuM de queso
+pool	creature	a strut that could talk	un puntal que hablaba
+pool	creature	a rover with feelings	un róver con sentimientos
+pool	creature	a booster that wanted a hug	un propulsor que quería un abrazo
+pool	creature	Mission Control, but they were all ducks	Control de Misión, pero eran todos patos
+pool	creature	Gene, but he was a goat	Gene, pero era una cabra
+pool	creature	a probe core that would not stop beeping	un núcleo de sonda que no paraba de pitar
+pool	cure	drinking upside down	beber boca abajo
+pool	cure	thinking about taxes	pensar en los impuestos
+pool	cure	staring at the fuel gauge	mirar fijamente el indicador de combustible
+pool	cure	talking to the probe	hablar con la sonda
+pool	cure	holding your nose and humming	taparte la nariz y tararear
+pool	game	I spy	veo veo
+pool	game	rock paper scissors	piedra, papel o tijera
+pool	game	twenty questions	las veinte preguntas
+pool	game	who can float the longest	quién flota más tiempo
+pool	game	guess the snack	adivinar el aperitivo
+pool	home_thing	real gravity	la gravedad de verdad
+pool	home_thing	rain	la lluvia
+pool	home_thing	the KSC cafeteria	la cafetería del centro espacial
+pool	home_thing	my own bed	mi propia cama
+pool	home_thing	grass	la hierba
+pool	home_thing	showers	las duchas
+pool	home_thing	Mom's mystery stew	el guiso misterioso de mamá
+pool	home_thing	pizza that isn't frozen	la pizza que no está congelada
+pool	jeb_idea	add more boosters	poner más propulsores
+pool	jeb_idea	do a flip	dar una voltereta
+pool	jeb_idea	eat the Mystery Goo	comerse el Moco Misterioso
+pool	jeb_idea	go faster	ir más rápido
+pool	jeb_idea	lick the window	lamer la ventana
+pool	jeb_idea	push the big red button	pulsar el gran botón rojo
+pool	loud_thing	a Mainsail	un motor Mainsail
+pool	loud_thing	a broken vacuum	una aspiradora rota
+pool	loud_thing	an angry goat	una cabra enfadada
+pool	loud_thing	a rusty hatch	una escotilla oxidada
+pool	loud_thing	a rocket on the pad	un cohete en la plataforma
+pool	loud_thing	a Kraken with a cold	un Kraken resfriado
+pool	noise	clank	golpe
+pool	noise	squeak	chirrido
+pool	noise	hiss	silbido
+pool	noise	knock	toque
+pool	noise	long groan	crujido largo
+pool	noise	beep	pitido
+pool	noise	rattle	traqueteo
+pool	noise	pop	chasquido
+pool	not_me	Not me.	Yo no.
+pool	not_me	Don't look at me.	No me mires a mí.
+pool	not_me	I didn't touch it.	Yo no lo he tocado.
+pool	not_me	Wasn't me this time.	Esta vez no he sido yo.
+pool	not_me	Why do you always ask me?	¿Por qué siempre me preguntas a mí?
+pool	not_me	I was asleep.	Yo estaba dormido.
+pool	not_me	Ask the probe.	Pregúntale a la sonda.
+pool	rumor	Gene sleeps under his desk.	Gene duerme debajo de su mesa.
+pool	rumor	the intern launched a pizza last week.	el becario lanzó una pizza la semana pasada.
+pool	rumor	Wernher strapped a booster to his chair.	Wernher se ató un propulsor a la silla.
+pool	rumor	Control lost the manual. Again.	Control ha perdido el manual. Otra vez.
+pool	rumor	the new rocket is just three old rockets.	el cohete nuevo son tres cohetes viejos.
+pool	rumor	Gene cried at the last launch.	Gene lloró en el último lanzamiento.
+pool	rumor	the snack budget is bigger than the fuel budget.	hay más dinero para aperitivos que para combustible.
+pool	silly_name	Rocky McRocketface	‹Rocky McRocketface›
+pool	silly_name	Big Tube 2	Tubo Grande 2
+pool	silly_name	Untitled Craft 3	Nave Sin Título 3
+pool	silly_name	Jeb's Revenge	La Venganza de Jeb
+pool	silly_name	The Flying Pickle	El Pepinillo Volador
+pool	silly_name	Definitely Safe	Segurísimo
+pool	silly_name	Boom Mk1	Pum Mk1
+pool	silly_name	Dave	‹Dave›
+pool	song	the countdown song	la canción de la cuenta atrás
+pool	song	the snack song	la canción de los aperitivos
+pool	song	that jingle from the ads	esa musiquilla de los anuncios
+pool	song	Kerbin, Sweet Kerbin	nibréK, dulce nibréK
+pool	song	the theme from the safety video	la música del vídeo de seguridad
+pool	experiment	Mystery Goo	m:Moco Misterioso
+pool	experiment	thermometer	m:termómetro
+pool	experiment	barometer	m:barómetro
+pool	experiment	seismic sensor	m:sensor sísmico
+pool	experiment	gravity sensor	m:sensor de gravedad
+pool	experiment	Science Jr.	m:laboratorio Science Jr.
+pool	experiment	magnetometer	m:magnetómetro
+pool	mc_excuse	Budget cuts.	Recortes de presupuesto.
+pool	mc_excuse	Gene says no.	‹Gene› dice que no.
+pool	mc_excuse	The intern spent it on boosters.	El becario se lo gastó en propulsores.
+pool	mc_excuse	Maybe next year.	Quizá el año que viene.
+pool	mc_excuse	Fill out form 27B first.	Primero rellenad el formulario veintisiete be.
+pool	mc_excuse	We spent it on snacks.	Nos lo gastamos en aperitivos.
+pool	status	the snacks are holding up.	los aperitivos aguantan.
+pool	status	nobody has cried today.	hoy nadie ha llorado.
+pool	status	the toilet works again.	el váter vuelve a funcionar.
+pool	status	we only lost one glove.	solo hemos perdido un guante.
+pool	status	the Mystery Goo is looking at us.	el Moco Misterioso nos está mirando.
+pool	status	morale is high. Mostly.	la moral está alta. Casi siempre.

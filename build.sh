@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Build Lonapse and install it into the KSP instance.
+# Build Lonapse and install it into the KSP instance: the DLL and every other file players get (the same files and
+# sources package.sh puts in the zip). The runtime voice goes to PluginData/Runtime from audio/build/runtime/Runtime
+# (./fetch_runtime.sh). The rest of PluginData (settings.cfg, played.txt) is never touched.
 # Usage: ./build.sh [--compile-only] [--no-sounds]
 # The KSP install comes from $KSP_DIR, or from the first line of .ksp_dir in the repo root (a local file, not in git).
 #   KSP_DIR=/path/to/ksp ./build.sh
@@ -92,15 +94,60 @@ cp -f "$OUT" "$GD/Plugins/Lonapse.dll.tmp"
 mv -f "$GD/Plugins/Lonapse.dll.tmp" "$GD/Plugins/Lonapse.dll"
 echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll") bytes)"
 
+# ---- the rest of what players get, from the same sources as package.sh ----
+# phrase tables: the text tables in GameData/Lonapse/Phrases (runtime.tsv, pools.tsv, slots_es.tsv, ...),
+# phrases.tsv from the audio build when there is one. Phrases/Extra in the install is the player's own, not touched.
+mkdir -p "$GD/Phrases"
+shopt -s nullglob
+for f in "$REPO"/GameData/Lonapse/Phrases/*.tsv; do
+  cp -f "$f" "$GD/Phrases/"
+  echo "Installed: $GD/Phrases/$(basename "$f")"
+done
+shopt -u nullglob
+if [[ -f "$REPO/audio/build/lonapse/phrases.tsv" ]]; then
+  cp -f "$REPO/audio/build/lonapse/phrases.tsv" "$GD/Phrases/phrases.tsv"
+  echo "Installed: $GD/Phrases/phrases.tsv (from the audio build)"
+fi
+
+# docs and the version file, as in the zip
+cp -f "$REPO/LICENSE" "$GD/LICENSE.txt"
+cp -f "$REPO/LICENSE-CC-BY-4.0" "$GD/LICENSE-CC-BY-4.0.txt"
+cp -f "$REPO/docs/LICENSING.md" "$GD/LICENSING.md"
+cp -f "$REPO/README.md" "$REPO/CHANGELOG.md" "$GD/"
+cp -f "$REPO/audio/CREDITS.md" "$GD/CREDITS.md"
+cp -f "$REPO/GameData/Lonapse/Lonapse.version" "$GD/Lonapse.version"
+echo "Installed: LICENSE.txt, LICENSE-CC-BY-4.0.txt, LICENSING.md, README.md, CHANGELOG.md, CREDITS.md, Lonapse.version"
+
+# runtime voice: Piper and the voices, as in the zip. --delete only inside PluginData/Runtime.
+RT_SRC="$REPO/audio/build/runtime/Runtime"
+if [[ -f "$RT_SRC/windows/piper.exe" ]]; then
+  case "$GD/PluginData/Runtime" in */GameData/Lonapse/PluginData/Runtime) ;; *) echo "ERROR: runtime path sanity check failed" >&2; exit 1 ;; esac
+  mkdir -p "$GD/PluginData/Runtime"
+  rsync -a --delete "$RT_SRC/" "$GD/PluginData/Runtime/"
+  echo "Installed runtime voice from: $RT_SRC"
+else
+  echo "Runtime voice not installed: no $RT_SRC, run ./fetch_runtime.sh first"
+fi
+
 if [[ -f "$GD/PluginData/settings.cfg" ]]; then
   echo "Kept existing user settings: $GD/PluginData/settings.cfg"
 else
   echo "No settings.cfg yet, the plugin writes defaults on first start."
 fi
 
-# Sounds/ is owned by the audio pipeline (python3 audio/build_clips.py --install). build.sh never writes there.
-if [[ $NO_SOUNDS -eq 0 && -d "$REPO/audio/build/Sounds" ]]; then
-  echo "Note: audio/build/Sounds exists. Install it with: python3 audio/build_clips.py --install"
+# sounds: audio/build/Sounds when it is complete (as package.sh), else the committed GameData/Lonapse/Sounds.
+# Only audio files: a .cfg under GameData would be parsed by KSP. --delete removes clips that are no longer built.
+if [[ $NO_SOUNDS -eq 0 ]]; then
+  SND="$REPO/audio/build/Sounds"
+  for d in beeps static crew control; do [[ -d "$SND/$d" ]] || SND="$REPO/GameData/Lonapse/Sounds"; done
+  if [[ -d "$SND" ]]; then
+    mkdir -p "$GD/Sounds"
+    case "$GD/Sounds" in */GameData/Lonapse/Sounds) ;; *) echo "ERROR: sounds path sanity check failed" >&2; exit 1 ;; esac
+    rsync -a --delete --prune-empty-dirs --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' "$SND/" "$GD/Sounds/"
+    echo "Installed sounds from: $SND"
+  fi
+else
+  echo "Sounds skipped (--no-sounds)"
 fi
 
 n=0

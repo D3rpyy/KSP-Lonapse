@@ -23,12 +23,22 @@ First tell the scripts where your KSP install is. You can set `KSP_DIR`, or writ
 ./build.sh --compile-only                   # compile only, into build/
 KSP_DIR=/path/to/KSP ./build.sh             # use another install just this once
 python3 -I audio/build_clips.py --install   # build the sounds and copy them into your game
+./fetch_runtime.sh                          # runtime voice: download Piper, check it, stage it with the voices
 ./package.sh                                # refresh GameData/Lonapse in the repo and make the release zip in dist/
 ```
 
+`fetch_runtime.sh` puts the runtime voice together in `audio/build/runtime/Runtime` (not in git): Piper 1.2.0 for
+Windows and Linux from the pinned release, the three voices and the licence texts from `runtime/licenses`. Every
+download and every voice is checked against a pinned sha256. The voices come from `audio/build/runtime_voices`. When
+they are missing, pass `--python <python with onnx and onnxruntime>` and the script makes them with
+`audio/quantize_runtime_voices.py`. It also zips the Piper, piper-phonemize and espeak-ng source as
+`audio/build/runtime_source/Lonapse-<version>-runtime-source.zip`. Attach that file to the GitHub release, the GPL of
+espeak-ng asks for it. Run it after the version bump, so the file name has the right version.
+
 `build.sh` compiles with `mcs` against the game's own DLLs in `KSP_Data/Managed/` and copies the result to
-`GameData/Lonapse/Plugins/Lonapse.dll`. It only writes inside `GameData/Lonapse/`. It leaves `Sounds/` alone and it
-never overwrites your `PluginData/settings.cfg`. It also refuses to install while KSP is running, because replacing a
+`GameData/Lonapse/Plugins/Lonapse.dll`. It also installs every other file players get: the phrase tables, the docs,
+the sounds and the runtime voice in `PluginData/Runtime` (when `fetch_runtime.sh` has run). It only writes inside
+`GameData/Lonapse/`, and it never overwrites your `PluginData/settings.cfg` or `played.txt`. It also refuses to install while KSP is running, because replacing a
 loaded DLL breaks the running game.
 
 If an old `GameData/Quindar/` install is found, `build.sh` copies its settings over and removes it. The plugin itself
@@ -41,6 +51,7 @@ GameData/Lonapse/
   Plugins/Lonapse.dll
   Sounds/...                (from the audio pipeline)
   Phrases/phrases.tsv       (all scenes and subtitles, from the audio pipeline)
+  PluginData/Runtime/       (runtime voice: windows/, linux/, voices/, LICENSES/)
   PluginData/settings.cfg   (written by the plugin on first start)
 ```
 

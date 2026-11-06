@@ -7,6 +7,24 @@ ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and plain Python. They conta
 
 No audio from the Chatterer mod or any other mod was used.
 
+## Runtime voice
+
+Lonapse ships a speech engine in `GameData/Lonapse/PluginData/Runtime` that speaks lines while you play. It is not
+part of Lonapse. Each part keeps its own licence. The texts are in `PluginData/Runtime/LICENSES` (in the repo:
+`runtime/licenses`).
+
+| Part | Author | License |
+|---|---|---|
+| [Piper](https://github.com/rhasspy/piper) 1.2.0 (release 2023.11.14-2) | Michael Hansen | MIT |
+| [piper-phonemize](https://github.com/rhasspy/piper-phonemize) | Michael Hansen | MIT |
+| [espeak-ng](https://github.com/espeak-ng/espeak-ng) 1.52 (rhasspy fork) | the espeak-ng contributors | GPL-3.0-or-later |
+| [ONNX Runtime](https://github.com/microsoft/onnxruntime) 1.14.1 | Microsoft | MIT |
+| The three voices below | see the table below | CC0, Apache-2.0, Unlicense |
+
+The program files are unchanged from the Piper release. The voices are changed: their weights are quantized to int8
+and the decoder is kept at float32 (`audio/quantize_runtime_voices.py`). The source code of Piper, piper-phonemize
+and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+
 ## Lonapse voices: Piper
 
 The loñapsE voice clips (`audio/build_lonapse.py`, phrase table in `audio/lonapse/`) are spoken by Piper
@@ -22,7 +40,9 @@ https://huggingface.co/rhasspy/piper-voices. The license of each voice is the on
 
 The model cards state the license of the training dataset. They do not state a separate license for the
 model weights. All three are permissive, and the Apache-2.0 voice needs this attribution, which this file provides.
-The voice models themselves are not shipped, only the audio rendered with them.
+The recorded clips are rendered with these models. Changed copies of the same three models ship in
+`GameData/Lonapse/PluginData/Runtime/voices` for the runtime voice. The change: the weights are quantized to int8
+with ONNX Runtime `quantize_dynamic` (QUInt8), and the decoder is kept at float32. See the README, Runtime voice files.
 
 Piper phonemizes through espeak-ng, so espeak-ng (GPL-3.0-or-later) is also part of the pipeline. Whether
 audio produced by a GPL program falls under the GPL is a legal question this project has not settled. The

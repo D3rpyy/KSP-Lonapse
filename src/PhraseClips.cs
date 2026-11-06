@@ -19,6 +19,17 @@ namespace Lonapse
         /// when the file is missing, then a slot shows "...".</summary>
         public static SlotPools pools = new SlotPools();
         public const string PoolsRel = "GameData/Lonapse/Phrases/pools.tsv";
+        /// <summary>Experimental (runtime voice): the Spanish of the subtitle templates (slots_es.tsv).</summary>
+        public static SlotsEs slotsEs = new SlotsEs();
+        public const string SlotsEsRel = "GameData/Lonapse/Phrases/slots_es.tsv";
+        /// <summary>Experimental (runtime voice): extra rows, in the source format of audio/lonapse/phrases. They have
+        /// no clips, so they only play when Piper can speak them (runtimeCanSpeak).</summary>
+        public const string ExtraRel = "GameData/Lonapse/Phrases/Extra";
+        public static int extraFiles;
+        /// <summary>Experimental (runtime voice): the runtime-only templates from runtime.tsv, empty without the file.</summary>
+        public static List<RuntimeTemplate> runtimeTemplates = new List<RuntimeTemplate>();
+        /// <summary>Set by the director: true when a row without a clip can be spoken at runtime.</summary>
+        public static Func<PhraseEntry, bool> runtimeCanSpeak;
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
@@ -50,7 +61,16 @@ namespace Lonapse
             List<string> errors = new List<string>();
             try
             {
-                table = PhraseTable.Parse(new List<string>(File.ReadAllLines(path, System.Text.Encoding.UTF8)), errors);
+                var rows = new List<string>(File.ReadAllLines(path, System.Text.Encoding.UTF8));
+                extraFiles = 0;
+                string extra = Path.Combine(KSPUtil.ApplicationRootPath, ExtraRel);
+                if (Directory.Exists(extra))
+                {
+                    string[] files = Directory.GetFiles(extra, "*.tsv");
+                    Array.Sort(files, StringComparer.Ordinal);
+                    foreach (string f in files) { rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8)); extraFiles++; }
+                }
+                table = PhraseTable.Parse(rows, errors);
             }
             catch (Exception e)
             {
@@ -62,6 +82,8 @@ namespace Lonapse
             for (int i = 0; i < errors.Count && i < 10; i++) Log.Warn("Lonapse table: " + errors[i]);
             if (errors.Count > 10) Log.Warn("Lonapse table: " + (errors.Count - 10) + " more error(s)");
             LoadPools();
+            LoadSlotsEs();
+            LoadRuntimeTemplates();
 
             GameDatabase db = GameDatabase.Instance;
             int missing = 0;
@@ -89,8 +111,39 @@ namespace Lonapse
                 if (sc.IsProbe) probeSceneCount++;
             }
             status = clipCount + " clips, " + sceneCount + " scenes (" + probeSceneCount + " probe), "
-                     + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "");
+                     + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "")
+                     + (extraFiles > 0 ? ", " + extraFiles + " extra table(s) for the runtime voice" : "");
             Log.Info("Lonapse: " + status);
+        }
+
+        static void LoadRuntimeTemplates()
+        {
+            runtimeTemplates = new List<RuntimeTemplate>();
+            try
+            {
+                string rp = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeLines.FileRel);
+                if (!File.Exists(rp)) return;
+                var rerr = new List<string>();
+                runtimeTemplates = RuntimeLines.Parse(new List<string>(File.ReadAllLines(rp, System.Text.Encoding.UTF8)), rerr);
+                for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse " + rerr[i]);
+                Log.Info("Lonapse: " + runtimeTemplates.Count + " runtime voice templates");
+            }
+            catch (Exception e) { Log.Warn("Lonapse runtime.tsv: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
+        }
+
+        static void LoadSlotsEs()
+        {
+            slotsEs = new SlotsEs();
+            try
+            {
+                string pp = Path.Combine(KSPUtil.ApplicationRootPath, SlotsEsRel);
+                if (!File.Exists(pp)) return;
+                var err = new List<string>();
+                slotsEs = SlotsEs.Parse(new List<string>(File.ReadAllLines(pp, System.Text.Encoding.UTF8)), err);
+                for (int i = 0; i < err.Count && i < 10; i++) Log.Warn("Lonapse slots_es: " + err[i]);
+                Log.Info("Lonapse: " + slotsEs.LineCount + " spoken subtitle templates, " + slotsEs.PoolCount + " spoken pool values");
+            }
+            catch (Exception e) { Log.Warn("Lonapse slots_es: read failed: " + e.Message); slotsEs = new SlotsEs(); }
         }
 
         static void LoadPools()
@@ -106,6 +159,25 @@ namespace Lonapse
                 Log.Info("Lonapse: " + pools.Count + " subtitle slot pools");
             }
             catch (Exception e) { Log.Warn("Lonapse pools: read failed: " + e.Message); pools = new SlotPools(); }
+        }
+
+        private static readonly Queue<string> runtimeUrls = new Queue<string>();
+        private const int RuntimeKeep = 16;
+
+        /// <summary>Experimental (runtime voice): a clip made at runtime for a row that has no file, so Clip(e) finds
+        /// it like any other. Only the last RuntimeKeep stay, older ones are destroyed.</summary>
+        public static void SetRuntimeClip(PhraseEntry e, AudioClip clip)
+        {
+            if (e == null || clip == null) return;
+            string url = e.ClipUrl(PhraseTable.FixedGender(e.Role) ?? "m");
+            clips[url] = clip;
+            runtimeUrls.Enqueue(url);
+            while (runtimeUrls.Count > RuntimeKeep)
+            {
+                string old = runtimeUrls.Dequeue();
+                AudioClip c;
+                if (clips.TryGetValue(old, out c)) { clips.Remove(old); if (c != null) UnityEngine.Object.Destroy(c); }
+            }
         }
 
         /// <summary>Clip for a row. A crew row falls back to the other gender, so a line is never lost.
@@ -128,7 +200,8 @@ namespace Lonapse
         {
             if (sc == null || sc.Lines.Count == 0) return false;
             for (int i = 0; i < sc.Lines.Count; i++)
-                if (!sc.Lines[i].SubtitleOnly && Clip(sc.Lines[i], false) == null) return false;
+                if (!sc.Lines[i].SubtitleOnly && Clip(sc.Lines[i], false) == null
+                    && (runtimeCanSpeak == null || !runtimeCanSpeak(sc.Lines[i]))) return false;
             return true;
         }
 

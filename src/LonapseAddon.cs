@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.6.0";
+        public const string Version = "0.7.0";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -30,6 +30,7 @@ namespace Lonapse
         public VoiceChannel[] allChannels = new VoiceChannel[0];
 
         public ChatterDirector director;
+        public RuntimeVoice runtimeVoice;  // experimental: lines spoken at runtime by Piper (Debug tab test)
         public BeepDirector beeps;
         public BlackoutMachine blackout;
         private SettingsWindow window;
@@ -293,6 +294,8 @@ namespace Lonapse
             started = false;
             gateOpen = false;
             RestoreListener();
+            try { if (runtimeVoice != null) runtimeVoice.Dispose(); runtimeVoice = null; }
+            catch (Exception e) { Log.Exception("OnDestroy.runtimeVoice", e); }
             try
             {
                 for (int i = 0; i < allChannels.Length; i++) if (allChannels[i] != null) allChannels[i].Destroy();
@@ -649,6 +652,7 @@ namespace Lonapse
                 float dt = Math.Min(rawDt, 0.1f);
                 railsWarp = ReadRailsWarp(); // every frame, for the gate and the overlay
                 HandleHotkey();
+                if (runtimeVoice != null) runtimeVoice.Tick();
                 if (window != null && (!window.Visible || uiHidden)) window.ReleaseLock();
 
                 Vessel v = FlightGlobals.ActiveVessel;

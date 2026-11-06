@@ -20,6 +20,10 @@ namespace Lonapse
         public bool outDueToG;
 
         public float basePitch;
+        /// <summary>Set by CrewRoster.Rebuild: keeps this voice apart from the others aboard (DcMath.SpreadPitches).</summary>
+        public float pitchSpread = 1f;
+        /// <summary>The pitch to play with: basePitch spread from the rest of the crew.</summary>
+        public float Pitch { get { return basePitch * pitchSpread; } }
         public float tremRate;
         public float timbre;
         public Random rng;
@@ -444,6 +448,7 @@ namespace Lonapse
                 voices.Add(kv);
                 members.Add(pcm);
             }
+            SpreadVoices();
             if (!voices.Contains(lastSpeaker)) lastSpeaker = null;
             // same count and no new name: the same set (names are unique)
             if (voices.Count != old.Count) changed = true;
@@ -453,10 +458,28 @@ namespace Lonapse
                 else
                 {
                     Log.Info("Roster for " + Names.Of(v) + ": " + voices.Count + " kerbal(s)");
-                    for (int i = 0; i < voices.Count; i++) Log.Info("  voice " + voices[i].Describe());
+                    for (int i = 0; i < voices.Count; i++)
+                        Log.Info("  voice " + voices[i].Describe() + ", aboard pitch " + voices[i].Pitch.ToString("0.000"));
                 }
             }
             return changed;
+        }
+
+        /// <summary>Minimum pitch gap between two kerbals of the same gender aboard (about 1.5 semitones).</summary>
+        public const float CrewPitchGap = 0.09f;
+
+        /// <summary>Per gender (one voice model each): the pitches of the crew aboard pushed apart. Played the same on
+        /// recorded and runtime lines, so a kerbal sounds the same in both.</summary>
+        private void SpreadVoices()
+        {
+            foreach (bool f in new[] { false, true })
+            {
+                var group = voices.FindAll(k => k.isFemale == f);
+                var pitch = new float[group.Count];
+                for (int i = 0; i < group.Count; i++) pitch[i] = group[i].basePitch;
+                float[] mul = DcMath.SpreadPitches(pitch, CrewPitchGap, 0.82f, 1.28f);
+                for (int i = 0; i < group.Count; i++) group[i].pitchSpread = mul[i];
+            }
         }
 
         public void UpdateStress(float stress)

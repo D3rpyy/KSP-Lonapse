@@ -69,19 +69,32 @@ namespace Lonapse
         }
 
         /// <summary>
+        /// User report (0.7.0): a persona or trait tier is a small list (2 to 8 scenes in orbit), so its own shuffle
+        /// bag repeats it every few picks. A tier may only take a scene the whole list would also give now: one never
+        /// heard, or in the quarter heard longest ago (SceneMemory.Freshest of the whole list).
+        /// </summary>
+        private Predicate<PhraseScene> Rested(IList<PhraseScene> all)
+        {
+            var ids = new HashSet<string>();
+            foreach (PhraseScene x in Mem.Freshest(all)) ids.Add(x.Id);
+            return x => ids.Contains(x.Id);
+        }
+
+        /// <summary>
         /// Scene choice for a known speaker, shared by radio and intercom. Tiers: persona scene (personaPreference),
         /// trait scene (traitPreference), plain any-persona any-trait scene, then any scene that fits. Never a misfit.
         /// </summary>
         private PhraseScene PreferFor(KerbalVoice sp, string band, Func<Predicate<PhraseScene>, PhraseScene> pick,
-                                      Predicate<PhraseScene> filter)
+                                      Func<Predicate<PhraseScene>, List<PhraseScene>> list, Predicate<PhraseScene> filter)
         {
             Predicate<PhraseScene> fit = x => FitsSpeaker(x, sp) && (filter == null || filter(x));
             if (sp == null) return pick(fit);
             PhraseScene sc;
             Predicate<PhraseScene> pt = PersonaTier(sp, band);
-            if (pt != null && (sc = pick(x => pt(x) && fit(x))) != null) return sc;
-            if (sp.persona.trait != Persona.Any && rng.NextDouble() < Tu.traitPreference
-                && (sc = pick(x => !IsAnyKey(x.Trait) && fit(x))) != null) return sc;
+            bool tt = sp.persona.trait != Persona.Any && rng.NextDouble() < Tu.traitPreference;
+            Predicate<PhraseScene> rested = (pt != null || tt) ? Rested(list(fit)) : null;
+            if (pt != null && (sc = pick(x => pt(x) && fit(x) && rested(x))) != null) return sc;
+            if (tt && (sc = pick(x => !IsAnyKey(x.Trait) && fit(x) && rested(x))) != null) return sc;
             if ((sc = pick(x => IsAnyKey(x.Persona) && IsAnyKey(x.Trait) && fit(x))) != null) return sc;
             return pick(fit);
         }
@@ -89,13 +102,13 @@ namespace Lonapse
         /// <summary>Radio scene of the event for this crew speaker (PickScene plus the persona and trait tiers).</summary>
         private PhraseScene PickSceneFor(string ev, string band, KerbalVoice sp, Predicate<PhraseScene> filter)
         {
-            return PreferFor(sp, band, f => PickScene(ev, band, f), filter);
+            return PreferFor(sp, band, f => PickScene(ev, band, f), f => CoreList(ev, band, SceneCause(), false, f), filter);
         }
 
         /// <summary>Intercom scene for speaker A (PickIntercomScene plus the persona and trait tiers).</summary>
         private PhraseScene PickIntercomSceneFor(string band, KerbalVoice a, Predicate<PhraseScene> filter)
         {
-            return PreferFor(a, band, f => PickIntercomScene(band, f), filter);
+            return PreferFor(a, band, f => PickIntercomScene(band, f), f => CoreList("chatter", band, DominantCause ?? NoCause, true, f), filter);
         }
 
         /// <summary>
@@ -393,7 +406,9 @@ namespace Lonapse
         /// <summary>A one-line MC crew_lost scene (tense first, then any band). Phase is not checked: the flight is over.</summary>
         private PhraseScene PickFinalScene()
         {
-            Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1;
+            // a real clip: the final call plays it directly, not through the runtime voice
+            Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1
+                                              && PhraseClips.Clip(x.Lines[0], false) != null;
             PhraseScene sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, "tense", one), rng, lastSceneId);
             if (sc == null) sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, null, one), rng, lastSceneId);
             if (sc != null) lastSceneId = sc.Id;
@@ -542,12 +557,13 @@ namespace Lonapse
                 foreach (string b in bands)
                 {
                     PhraseScene sc;
+                    Predicate<PhraseScene> rested = (personaRoll || traitRoll) ? Rested(EventCoreList(r.ev, b, t, f)) : null;
                     if (personaRoll)
                     {
                         Predicate<PhraseScene> pt = badassTense ? (Predicate<PhraseScene>)(x => x.Persona == "badass") : (x => !IsAnyKey(x.Persona));
-                        if ((sc = PickEventCore(r.ev, b, t, x => pt(x) && f(x))) != null) return sc;
+                        if ((sc = PickEventCore(r.ev, b, t, x => pt(x) && f(x) && rested(x))) != null) return sc;
                     }
-                    if (traitRoll && (sc = PickEventCore(r.ev, b, t, x => !IsAnyKey(x.Trait) && f(x))) != null) return sc;
+                    if (traitRoll && (sc = PickEventCore(r.ev, b, t, x => !IsAnyKey(x.Trait) && f(x) && rested(x))) != null) return sc;
                     if ((sc = PickEventCore(r.ev, b, t, x => IsAnyKey(x.Persona) && IsAnyKey(x.Trait) && f(x))) != null) return sc;
                     if ((sc = PickEventCore(r.ev, b, t, f)) != null) return sc;
                 }
@@ -556,13 +572,17 @@ namespace Lonapse
 
         private PhraseScene PickEventCore(string ev, string band, string topic, Predicate<PhraseScene> filter)
         {
-            string phase = CurrentPhase;
-            var list = PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
-                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
-                      && (sc.IsIntercom || BlackoutOk(sc)) && filter(sc) && SlotsOk(sc));
-            PhraseScene p = Mem.Take(list, rng, lastSceneId);
+            PhraseScene p = Mem.Take(EventCoreList(ev, band, topic, filter), rng, lastSceneId);
             if (p != null) lastSceneId = p.Id;
             return p;
+        }
+
+        private List<PhraseScene> EventCoreList(string ev, string band, string topic, Predicate<PhraseScene> filter)
+        {
+            string phase = CurrentPhase;
+            return PhraseClips.table.ScenesFor(ev, band, null, null, null, null, topic, true,
+                sc => PhraseClips.Playable(sc) && !sc.IsProbe && RadioPhaseOk(sc, phase) && CrewCanVoice(sc) && SolarOk(sc)
+                      && (sc.IsIntercom || BlackoutOk(sc)) && sc.PlaysAt(Body) && filter(sc) && SlotsOk(sc));
         }
 
         /// <summary>One-line MC reply of the event (band, then tense, then any). Null when the event has none.</summary>

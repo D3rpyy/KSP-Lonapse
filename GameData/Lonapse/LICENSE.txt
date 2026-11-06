@@ -1,20 +1,3 @@
-Lonapse is dual licensed.
-
-1. The code (everything under src/, tests/, the build scripts build.sh and
-   package.sh, and the Python scripts under audio/) is licensed under the MIT
-   License below.
-
-2. The sound clips (GameData/Lonapse/Sounds/) and the phrase text
-   (audio/lonapse/, GameData/Lonapse/Phrases/) are licensed under the
-   Creative Commons Attribution 4.0 International License (CC BY 4.0).
-   See https://creativecommons.org/licenses/by/4.0/
-
-   Credit: "Lonapse by D3rpyy".
-
-Third-party credits for the TTS voices are in audio/CREDITS.md.
-
--------------------------------------------------------------------------------
-
 MIT License
 
 Copyright (c) 2026 Wouter Visser

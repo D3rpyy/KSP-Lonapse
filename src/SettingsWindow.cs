@@ -338,6 +338,7 @@ namespace Lonapse
         private static readonly string[] CountDirections = { "Up (1 to 10)", "Down (10 to 1)" };
         private string testEvent = "", testPhase = "", testCause = "", testBody = "", testTopic = "";
         private string testStatus = "";
+        private string runtimeTestStatus;
 
         /// <summary>Button that cycles <paramref name="value"/> through <paramref name="list"/>. Empty shows as "any".</summary>
         private static string Cycle(string caption, string value, string[] list)
@@ -475,6 +476,18 @@ namespace Lonapse
             s.planChatter = Toggle(s.planChatter, "Maneuver node talk");
             s.lightDelay = Toggle(s.lightDelay, "Light delay");
             Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
+
+            Header("Runtime voice");
+            s.runtimeVoice = Toggle(s.runtimeVoice, "Speak names and new lines at runtime");
+            {
+                string why = s.runtimeVoice ? RuntimeVoice.Missing("mc") : null;
+                Hint(why != null ? "Not available: " + why
+                     : "Names of kerbals, the vessel and modded planets are spoken in the lines. When a line is not ready in time, the normal one plays.");
+            }
+            s.runtimeReports = Toggle(s.runtimeReports, "Mission Control reports with numbers");
+            Hint("Now and then: orbit, altitude, speed, fuel or the mission day, read out with the real values.");
+            s.runtimeScience = Toggle(s.runtimeScience, "Science points and contract funds");
+            Hint("After a science reaction or a finished contract, Mission Control says the numbers.");
 
             Header("Mission Control reacts to");
             s.eventSoi = Toggle(s.eventSoi, "A new sphere of influence");
@@ -970,6 +983,13 @@ namespace Lonapse
                 }
             }
             GUILayout.Label(string.IsNullOrEmpty(testStatus) ? " " : testStatus);   // always drawn: keeps the control count stable
+            GUILayout.Label("Runtime lines: " + (d != null ? d.RuntimeStats : "-"));
+            if (GUILayout.Button("Test MC report"))
+            {
+                try { runtimeTestStatus = d != null ? d.DebugRuntimeReport() : "no director"; }
+                catch (Exception e) { runtimeTestStatus = "error: " + e.Message; Log.Exception("DebugRuntimeReport", e); }
+            }
+            GUILayout.Label(string.IsNullOrEmpty(runtimeTestStatus) ? " " : runtimeTestStatus);   // always drawn: keeps the control count stable
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));
             if (d != null)

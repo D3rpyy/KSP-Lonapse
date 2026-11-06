@@ -4,9 +4,10 @@
 </picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
-[![Version 0.6.0](https://img.shields.io/badge/version-0.6.0-green)](CHANGELOG.md)
+[![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
-[![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
+[![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE-CC-BY-4.0)
+[![Runtime voice: own licenses](https://img.shields.io/badge/runtime%20voice-own%20licenses-lightgrey)](runtime/licenses/README.md)
 [![CKAN](https://img.shields.io/badge/CKAN-Indexed-green.svg)](https://github.com/KSP-CKAN/CKAN)
 [![SpaceDock](https://img.shields.io/badge/SpaceDock-Available-blue.svg)](https://spacedock.info/mod/4786/Lonapse#stats)
 
@@ -41,12 +42,19 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all). If you want a real countdown from 10, pick Down in the General tab.
 - **Stations and bases.** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
-- **English subtitles** with a colour per speaker. The number of subtitle lines, their size, width and position are fully customizable.
-- **Lots of lines.** 1729 interactions with almost 3500 lines, 738 of them new in 0.6.0. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
+- **Runtime voice: they say your names.** A small speech engine (Piper) ships with the mod and speaks new lines while you play, in the same voices as the recorded ones. It is on by default and runs on Windows and Linux (see Runtime voice files below).
+  - **Names.** Mission Control ends a line with the name of the kerbal who just spoke or with your vessel's name, and kerbals on the intercom call each other by name. A planet from a mod is called by its real name.
+  - **Real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, on a docking approach the distance to the target. After science it says the points, after a contract the funds.
+  - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
+  - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
+  - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
+  - **Your own lines.** Add a row to `Phrases/runtime.tsv` or a file in `Phrases/Extra/` and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
+- **English subtitles** with a colour per speaker. Most lines have several wordings, so a line you heard before can read differently. The number of subtitle lines, their size, width and position are fully customizable.
+- **Lots of lines.** 1896 recorded interactions with 6478 extra subtitle wordings, plus 53 runtime lines and 22 runtime chats. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
-1. Download `Lonapse-0.6.0.zip` from the releases page. The `GameData` folder in this repo has the same files.
+1. Download `Lonapse-0.7.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
@@ -146,7 +154,6 @@ the missing module to its log. Nothing else happens.
 - I play on Linux. Windows and macOS should be fine since it is a plain plugin, but I have not tested them.
 - Don't run it together with Chatterer. Both would talk at the same time.
 - RemoteTech is supported for the radio signal simulation, but I have not tested it in game yet.
-- Modded probe cores get the generic probe voice with "Probe" as the subtitle name, unless they have a Lonapse voice (see Probe voices). You can also pick one for them in the window.
 
 ## Known limits
 
@@ -159,14 +166,75 @@ the missing module to its log. Nothing else happens.
 The repo has the plugin source, the phrase tables and the audio scripts. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 for the build and [audio/README.md](audio/README.md) for the sound pipeline.
 
+## Runtime voice files
+
+To speak lines with live values (names, numbers, bodies), Lonapse ships a copy of the Piper text to speech program
+in `GameData/Lonapse/PluginData/Runtime`. Lonapse starts it as a separate program and sends it text. It runs on your
+own computer. Lonapse does not download anything.
+
+| Part | Files | Version and source | License |
+|---|---|---|---|
+| Piper | `piper.exe`, `piper_phonemize.dll` | 1.2.0, release [2023.11.14-2](https://github.com/rhasspy/piper/releases/tag/2023.11.14-2) of [rhasspy/piper](https://github.com/rhasspy/piper) and [piper-phonemize](https://github.com/rhasspy/piper-phonemize) | MIT |
+| espeak-ng | `espeak-ng.dll`, `espeak-ng-data/` | 1.52, the build in that Piper release, source at [espeak-ng](https://github.com/espeak-ng/espeak-ng) | GPL-3.0-or-later |
+| ONNX Runtime | `onnxruntime.dll`, `onnxruntime_providers_shared.dll` | the build in that Piper release, [microsoft/onnxruntime](https://github.com/microsoft/onnxruntime) | MIT |
+| Voices | `voices/*.onnx`, `voices/*.onnx.json` | the three voices in [audio/CREDITS.md](audio/CREDITS.md), from [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices), changed by me: weights quantized to int8, decoder kept float32 (see below) | CC0, Apache-2.0, Unlicense |
+
+The program files for Windows and Linux are unchanged from the official Piper release. On Linux the libraries are
+stored under the name Piper loads, so there are no symlinks in the zip. You can check the files yourself, or look the
+hashes up on [VirusTotal](https://www.virustotal.com):
+
+| File | sha256 |
+|---|---|
+| `windows/piper.exe` | `96f3da3811151580073e40bb4dd20eb0fb8115f5f5f76e2fb54282b3edfa5c1f` |
+| `windows/piper_phonemize.dll` | `4b5f344b2f31204a8a94a0bf485f93e4971671e81188a0d67f326e113bfb0b2e` |
+| `windows/espeak-ng.dll` | `9588480f8197df62fd8461a8431f8eaec6e8e7749c5ffcbe7fee656fe40a2189` |
+| `windows/onnxruntime.dll` | `a630f67f4a82b6689e4178bf81d362d945522dd907b2a92cb43cebf72c83a06f` |
+| `windows/onnxruntime_providers_shared.dll` | `71705b9bd76baced583eb37fe5ec2101946b4de50f1e9bdb156109f7e8082980` |
+| `linux/piper` | `12672a94ca6716e5a8f335cfa68bf43bd9a33284960e3f9d16b85090bf7aab6b` |
+| `linux/libespeak-ng.so.1` | `a18ed1133dd1594f9d076ecdf8eec51c87d9138d879de0f1516417a2679d5ecf` |
+| `linux/libpiper_phonemize.so.1` | `602f2c559fc279f8d90b873f78ffbf56c1a5304a64351279d4a8c0cb5eb21fbd` |
+| `linux/libonnxruntime.so.1.14.1` | `9a6828636dd7bed5887e6ce898cac1010cbbd593e6931b63423d189d42165434` |
+| `voices/es_ES-davefx-medium.onnx` | `558ede4ebfd7bcb1c9cec4026a8575fff386d98de3afd372e78b722c08d8e034` |
+| `voices/es_MX-claude-high.onnx` | `d6c55bd42f7b00a54d1ab18ac849c7940283764359890155988011386cff65fe` |
+| `voices/es_MX-ald-medium.onnx` | `07cfd143e350cc5e6400f2da0b98409b8a16ca4524e3b26c11900d709c573468` |
+
+There is no runtime voice on macOS. The macOS build of this Piper release is missing its libraries and cannot start.
+On a Mac, Lonapse plays the recorded lines only. I play KSP for Windows under Proton, so the Linux build is not tested
+in the game.
+
+The licence texts and the source links are in `PluginData/Runtime/LICENSES`. The source code of Piper,
+piper-phonemize and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+`./fetch_runtime.sh` in the repo downloads the Piper release, checks every file against these hashes and puts the
+runtime folder together.
+
+The voices are smaller than the originals (about 22 MB instead of 63 MB each). I quantized them with ONNX Runtime
+`quantize_dynamic` (8 bit weights). The decoder, the last part of the model that makes the waveform, is left at
+float32, because quantizing it too gave audible static in the pauses. Because of this change the voice hashes differ
+from the ones on Hugging Face. `audio/quantize_runtime_voices.py` makes them, and gives the same hashes with
+onnx 1.23.2 and onnxruntime 1.31.1.
+
+`piper.exe` is not code signed, and a game that starts another program can look suspicious to a virus scanner. I
+have not tested this with any antivirus program. If yours blocks it, compare the hashes above first. Lonapse keeps
+working without the runtime voice, it then uses the recorded clips only.
+
 ## Credits and license
 
 Inspired by [Chatterer](https://github.com/Athlonic/Chatterer). Lonapse contains none of its code or sounds.
 
-The voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine, with three
-Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are synthesized.
+The recorded voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine,
+with three Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are
+synthesized.
+
+The runtime voice uses [Piper 1.2.0](https://github.com/rhasspy/piper) by Michael Hansen, with
+[piper-phonemize](https://github.com/rhasspy/piper-phonemize), [espeak-ng](https://github.com/espeak-ng/espeak-ng)
+and [ONNX Runtime](https://github.com/microsoft/onnxruntime), and changed copies of the same three voices from
+[rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices). See Runtime voice files above.
 
 I wrote the mod with help from Claude (an AI assistant) for code and documentation. The design, the testing in game
 and the decisions are my own.
 
-The code is MIT licensed. The sounds and the phrase text are CC BY 4.0. See [LICENSE](LICENSE).
+The code is MIT licensed ([LICENSE](LICENSE)). The sounds and the phrase text are CC BY 4.0
+([LICENSE-CC-BY-4.0](LICENSE-CC-BY-4.0)). Which part has which license is in [docs/LICENSING.md](docs/LICENSING.md).
+The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
+piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng), and CC0, Apache-2.0 and the Unlicense (the voices).
+The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.

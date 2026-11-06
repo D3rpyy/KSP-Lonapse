@@ -4,6 +4,7 @@
 # Needs the KSP DLLs to compile (KSP_DIR or .ksp_dir, see build.sh) and a finished audio build:
 #   python3 -I audio/build_clips.py   (beeps, static)
 #   python3 -I audio/build_lonapse.py (voices, phrase table)
+#   ./fetch_runtime.sh                (runtime voice: Piper and the voices, into audio/build/runtime/Runtime)
 # Commit the changed GameData/ afterwards.
 set -euo pipefail
 
@@ -27,12 +28,18 @@ for d in beeps static crew control; do
   [[ -d "$SOUNDS/$d" ]] || { echo "ERROR: $SOUNDS/$d is missing, build the audio first" >&2; exit 1; }
 done
 [[ -f "$TABLE" ]] || { echo "ERROR: $TABLE is missing, run audio/build_lonapse.py first" >&2; exit 1; }
+RUNTIME="$REPO/audio/build/runtime/Runtime"
+for f in windows/piper.exe linux/piper voices/es_ES-davefx-medium.onnx voices/es_MX-claude-high.onnx \
+         voices/es_MX-ald-medium.onnx LICENSES/README.md; do
+  [[ -f "$RUNTIME/$f" ]] || { echo "ERROR: $RUNTIME/$f is missing, run ./fetch_runtime.sh first" >&2; exit 1; }
+done
 
 echo "Running the offline tests"
 bash tests/run.sh >/dev/null || { echo "ERROR: tests failed, run tests/run.sh to see why" >&2; exit 1; }
 "$REPO/build.sh" --compile-only
 
-# Refresh GameData/Lonapse. PluginData (user settings) is never touched or packed.
+# Refresh GameData/Lonapse. PluginData in the repo (user settings) is never touched or packed. The runtime voice is
+# added to the zip from audio/build/runtime/Runtime, as GameData/Lonapse/PluginData/Runtime.
 mkdir -p "$GD/Plugins" "$GD/Sounds" "$GD/Phrases"
 cp build/Lonapse.dll "$GD/Plugins/Lonapse.dll"
 # Only audio files. A .cfg under GameData would be parsed by KSP.
@@ -40,6 +47,8 @@ rsync -a --delete --prune-empty-dirs --include='*/' --include='*.wav' --include=
   "$SOUNDS/" "$GD/Sounds/"
 cp "$TABLE" "$GD/Phrases/phrases.tsv"
 cp LICENSE "$GD/LICENSE.txt"
+cp LICENSE-CC-BY-4.0 "$GD/LICENSE-CC-BY-4.0.txt"
+cp docs/LICENSING.md "$GD/LICENSING.md"
 cp README.md CHANGELOG.md "$GD/"
 cp audio/CREDITS.md "$GD/CREDITS.md"
 
@@ -47,7 +56,16 @@ mkdir -p dist
 ZIP="$REPO/dist/Lonapse-$VERSION.zip"
 rm -f "$ZIP"
 zip -qr -X "$ZIP" GameData/Lonapse -x 'GameData/Lonapse/PluginData/*'
+STAGE="$(mktemp -d "$REPO/dist/runtime_stage.XXXXXX")"
+trap 'rm -rf "$STAGE"' EXIT
+mkdir -p "$STAGE/GameData/Lonapse/PluginData"
+cp -r "$RUNTIME" "$STAGE/GameData/Lonapse/PluginData/Runtime"
+(cd "$STAGE" && zip -qr -X "$ZIP" GameData)
 
 n=$(unzip -l "$ZIP" | grep -cE '\.(wav|ogg)$')
 echo "Updated: $GD"
-echo "Packed: $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files)"
+r=$(unzip -l "$ZIP" | grep -c 'PluginData/Runtime/')
+echo "Packed: $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files, $r runtime voice entries)"
+SRCZIP="$REPO/audio/build/runtime_source/Lonapse-$VERSION-runtime-source.zip"
+if [[ -f "$SRCZIP" ]]; then echo "Attach to the GitHub release too: $SRCZIP"
+else echo "WARNING: no $SRCZIP, run ./fetch_runtime.sh again after the version bump. It goes with the release (GPL source)." >&2; fi

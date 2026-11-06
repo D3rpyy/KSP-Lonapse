@@ -1,0 +1,137 @@
+# Runtime voice: lines that only exist in game, because they hold real values. Piper speaks them, no audio is built.
+# UTF-8, tab separated, # starts a comment line. Add a row and restart KSP, that is all.
+#
+# id       a-z 0-9 _, starts with rt_, unique
+# kind     report (now and then), dock (after a docking approach call), land (once per descent, low and falling),
+#          science, science_pts (after a science reaction), contract_funds, contract_done, contract_failed
+#          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
+#          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when.
+# when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
+#          or node_min>=2. Several situations: one must match. Every check must hold.
+#          In a chat also the job of a kerbal: a=pilot (kerbal A, who starts) and/or b=scientist (kerbal B).
+#          Jobs: pilot engineer scientist tourist. The chat only plays when the two kerbals have those jobs, in
+#          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.
+# spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).
+#          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.
+# english  the subtitle. A number slot shows digits, a name slot the name.
+#
+# Number slots: alt_km pe_km ap_km speed fuel day sci funds inc_deg period_min t_ap_min t_pe_min ec mono parts
+#   crew node_dv node_min funds_total sci_total rep contracts dist_m close_ms height_m vspeed_ms
+#   at_home flight_no missions stars visits landings (crew history, see below)
+#   (km, min, deg, ms and sci get one decimal below 10, the rest whole numbers)
+# Name slots: vessel body exp target, and in a chat self (the speaker) and other (the one spoken to)
+# Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
+#   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions
+#   (flights that ended with a recovery), visits and landings (earlier flights that reached or landed on this body),
+#   stars (experience level). at_home is 1 at Kerbin, else 0. A template that uses them only plays with crew aboard.
+# Avoid a plural noun after a value that can be 1: use a check like node_min>=2.
+id	kind	when	spanish	english
+rt_orbit_1	report	orbit	Órbita estable. Periapsis {pe_km} kilómetros, apoapsis {ap_km} kilómetros.	Stable orbit. Periapsis {pe_km} km, apoapsis {ap_km} km.
+rt_orbit_2	report	orbit	Os vemos a {alt_km} kilómetros sobre {body}.	We see you {alt_km} km above {body}.
+rt_orbit_3	report	orbit	Seguimos vuestra órbita. Vais a {speed} metros por segundo. Nada mal.	Tracking your orbit. You're doing {speed} m/s. Not bad.
+rt_orbit_inc	report	orbit inc_deg>=2	Inclinación de {inc_deg} grados. Los de navegación están contentos.	Inclination {inc_deg} degrees. Navigation is happy.
+rt_orbit_eq	report	orbit inc_deg<1	Órbita casi ecuatorial. Menos de un grado de inclinación.	Almost equatorial orbit. Less than one degree of inclination.
+rt_orbit_period	report	orbit period_min>=2	Una vuelta completa os lleva {period_min} minutos.	One full orbit takes you {period_min} minutes.
+rt_orbit_tap	report	orbit t_ap_min>=2	Apoapsis en {t_ap_min} minutos.	Apoapsis in {t_ap_min} minutes.
+rt_orbit_tpe	report	orbit t_pe_min>=2	Periapsis en {t_pe_min} minutos. Os avisamos.	Periapsis in {t_pe_min} minutes. We'll let you know.
+rt_flight_1	report	flight suborbital	Altitud {alt_km} kilómetros, velocidad {speed} metros por segundo. Todo bien.	Altitude {alt_km} km, speed {speed} m/s. All good.
+rt_sub_1	report	suborbital	Apoapsis a {ap_km} kilómetros. Todavía no es una órbita.	Apoapsis at {ap_km} km. Not an orbit yet.
+rt_sub_2	report	suborbital t_ap_min>=2	Llegáis a la apoapsis en {t_ap_min} minutos.	You reach apoapsis in {t_ap_min} minutes.
+rt_landed_1	report	landed	Os tenemos en la superficie de {body}. Buen sitio.	We have you on the surface of {body}. Nice spot.
+rt_escape_1	report	escape	Vais camino de salir de {body}. Velocidad {speed} metros por segundo.	You're on your way out of {body}. Speed {speed} m/s.
+rt_fuel_1	report	fuel>=25	Según nuestras pantallas os queda el {fuel} por ciento de combustible.	Our screens say you have {fuel} percent fuel left.
+rt_fuel_low	report	fuel<25 fuel>0	Ojo con el combustible. Solo queda el {fuel} por ciento.	Watch the fuel. Only {fuel} percent left.
+rt_ec_low	report	ec<30	Batería al {ec} por ciento. Apagad algo, por favor.	Battery at {ec} percent. Turn something off, please.
+rt_ec_ok	report	ec>=90	Batería al {ec} por ciento. Energía de sobra.	Battery at {ec} percent. Plenty of power.
+rt_mono	report	mono>0 mono<30	Queda el {mono} por ciento de monopropelente. Con calma con los propulsores.	{mono} percent monoprop left. Easy on the RCS.
+rt_parts	report	parts>=30	La nave tiene {parts} piezas. Esperamos que sigan todas ahí.	The ship has {parts} parts. We hope they're all still there.
+rt_crew	report	crew>=2	Contamos {crew} kerbals a bordo. Que nadie se esconda.	We count {crew} kerbals aboard. No hiding.
+rt_day_1	report	day>=2	Día {day} de la misión. Aquí abajo todo en orden.	Mission day {day}. All fine down here.
+rt_day_first	report	day<2	Primer día de la misión. Ya sois famosos.	First day of the mission. You're famous already.
+rt_vessel_1	report		{vessel}, aquí Control. Os seguimos en pantalla.	{vessel}, Control here. We have you on screen.
+rt_node_1	report	node_min>=2 node_dv>=1	Próxima maniobra en {node_min} minutos. Son {node_dv} metros por segundo.	Next burn in {node_min} minutes. That's {node_dv} m/s.
+rt_node_2	report	node_dv>=2	La maniobra pide {node_dv} metros por segundo. Que no se os pase.	The burn needs {node_dv} m/s. Don't miss it.
+rt_funds	report	funds_total>=20000	Contabilidad informa: tenemos {funds_total} fondos.	Accounting reports: we have {funds_total} funds.
+rt_funds_low	report	funds_total>=2 funds_total<20000	Quedan {funds_total} fondos. Volved con algo de valor.	{funds_total} funds left. Bring back something valuable.
+rt_sci_total	report	sci_total>=2	El laboratorio tiene {sci_total} puntos de ciencia. Quieren más.	The lab has {sci_total} science points. They want more.
+rt_rep	report	rep>=2	Nuestra reputación está en {rep}. El público os quiere.	Our reputation is at {rep}. The public loves you.
+rt_rep_low	report	rep<0	Reputación en {rep}. El público tiene dudas.	Reputation at {rep}. The public has doubts.
+rt_contracts	report	contracts>=2	Hay {contracts} contratos abiertos. Nadie dijo que fuera fácil.	There are {contracts} open contracts. Nobody said it would be easy.
+rt_dock_1	dock	dist_m>=100 close_ms>0	Objetivo a {dist_m} metros. Os acercáis a {close_ms} metros por segundo.	Target at {dist_m} meters. Closing at {close_ms} m/s.
+rt_dock_2	dock	dist_m>=2 dist_m<100	Solo {dist_m} metros hasta {target}. Despacio.	Only {dist_m} meters to {target}. Slowly.
+rt_dock_fast	dock	close_ms>=5	Vais a {close_ms} metros por segundo hacia {target}. Frenad un poco.	You're closing on {target} at {close_ms} m/s. Slow down a bit.
+rt_land_1	land	vspeed_ms>=2	Altura {height_m} metros, bajando a {vspeed_ms} metros por segundo.	Height {height_m} meters, coming down at {vspeed_ms} m/s.
+rt_land_fast	land	vspeed_ms>=30	Bajáis a {vspeed_ms} metros por segundo. Eso es mucho. Frenad.	Coming down at {vspeed_ms} m/s. That's a lot. Brake.
+rt_land_body	land	height_m>=2	Faltan {height_m} metros para {body}. Suerte.	{height_m} meters to {body}. Good luck.
+rt_sci_1	science_pts		Datos de {exp} recibidos desde {body}. Son {sci} puntos de ciencia.	Got the {exp} data from {body}. That's {sci} science points.
+rt_sci_2	science_pts		Los científicos dan las gracias por los datos de {exp}. {sci} puntos.	The scientists say thanks for the {exp} data. {sci} points.
+rt_sci_4	science_pts	sci>=10	¡{sci} puntos! El laboratorio está de fiesta.	{sci} points! The lab is partying.
+rt_sci_3	science		Datos de {exp} recibidos desde {body}.	Got the {exp} data from {body}.
+rt_con_1	contract_funds		Contrato cumplido. {funds} fondos para el programa.	Contract complete. {funds} funds for the program.
+rt_con_2	contract_funds		Buenas noticias de contabilidad: {funds} fondos más.	Good news from accounting: {funds} more funds.
+rt_con_4	contract_funds	funds>=100000	{funds} fondos. Contabilidad no se lo cree.	{funds} funds. Accounting can't believe it.
+rt_con_3	contract_done		Contrato cumplido. Buen trabajo, equipo.	Contract complete. Good work, team.
+rt_con_fail	contract_failed		Hemos perdido un contrato. Contabilidad no está contenta.	We lost a contract. Accounting is not happy.
+rt_chat_fuel_1	chat	fuel>=25	{other}, nos queda el {fuel} por ciento de combustible.	{other}, we have {fuel} percent fuel left.
+rt_chat_fuel_2	chat		¿Y eso es mucho o poco?	Is that a lot or a little?
+rt_chat_fuel_3	chat		Depende de a quién preguntes.	Depends on who you ask.
+rt_chat_fuellow_1	chat	fuel>0 fuel<25	Solo queda el {fuel} por ciento de combustible.	Only {fuel} percent fuel left.
+rt_chat_fuellow_2	chat		Pues no lo gastes todo de golpe, {other}.	Then don't spend it all at once, {other}.
+rt_chat_day_1	chat	day>=2	{other}, ¿sabes qué día es hoy?	{other}, do you know what day it is?
+rt_chat_day_2	chat		Día {day}. Lo voy apuntando en la pared.	Day {day}. I'm marking it on the wall.
+rt_chat_day_3	chat		Eso es la pintura de la nave, {other}.	That's the ship's paint, {other}.
+rt_chat_alt_1	chat	orbit	Estamos a {alt_km} kilómetros de altura.	We're {alt_km} km up.
+rt_chat_alt_2	chat		No mires abajo, {other}.	Don't look down, {other}.
+rt_chat_alt_3	chat		Ya he mirado. Ha sido un error.	I already did. Big mistake.
+rt_chat_speed_1	chat	orbit	¿Sabías que vamos a {speed} metros por segundo?	Did you know we're doing {speed} m/s?
+rt_chat_speed_2	chat		Por eso no abro la ventana.	That's why I don't open the window.
+rt_chat_body_1	chat	orbit	{other}, mira por la ventana. Eso es {body}.	{other}, look out the window. That's {body}.
+rt_chat_body_2	chat		Pensaba que sería más grande.	I thought it would be bigger.
+rt_chat_landed_1	chat	landed	Bueno, {other}. Ya estamos en {body}.	Well, {other}. We're on {body}.
+rt_chat_landed_2	chat		¿Quién sale primero?	Who goes out first?
+rt_chat_landed_3	chat		Tú. Siempre tú.	You. Always you.
+rt_chat_vessel_1	chat		¿Quién le puso {vessel} a esta nave?	Who named this ship {vessel}?
+rt_chat_vessel_2	chat		Fuiste tú, {other}.	You did, {other}.
+rt_chat_vessel_3	chat		Ah. Pues es un nombre precioso.	Oh. Well, it's a lovely name.
+rt_chat_parts_1	chat	parts>=30	Esta nave tiene {parts} piezas.	This ship has {parts} parts.
+rt_chat_parts_2	chat		¿Y cuántas sobran?	And how many are extra?
+rt_chat_parts_3	chat		Eso lo sabremos pronto.	We'll find out soon.
+rt_chat_ec_1	chat	ec<30	{other}, la batería está al {ec} por ciento.	{other}, the battery is at {ec} percent.
+rt_chat_ec_2	chat		Vale. Apago la música.	Okay. I'll turn off the music.
+rt_chat_node_1	chat	node_min>=2	La próxima maniobra es dentro de {node_min} minutos.	The next burn is in {node_min} minutes.
+rt_chat_node_2	chat		Me da tiempo a comer un bocadillo.	I have time for a sandwich.
+rt_chat_node_3	chat		No te da tiempo, {other}.	You don't, {other}.
+rt_chat_period_1	chat	orbit period_min>=2	Una vuelta entera dura {period_min} minutos.	One full orbit takes {period_min} minutes.
+rt_chat_period_2	chat		Entonces hoy ya he visto amanecer tres veces.	Then I've seen three sunrises today already.
+rt_chat_sci_1	chat	sci_total>=2	En casa tienen {sci_total} puntos de ciencia.	Back home they have {sci_total} science points.
+rt_chat_sci_2	chat		¿Y cuántos son nuestros, {other}?	And how many are ours, {other}?
+rt_chat_sci_3	chat		Todos. Evidentemente.	All of them. Obviously.
+rt_chat_crew_1	chat	crew>=3	Somos {crew} aquí dentro. Hace calor.	There are {crew} of us in here. It's hot.
+rt_chat_crew_2	chat		Eres tú, {other}. Siempre eres tú.	It's you, {other}. It's always you.
+rt_chat_funds_1	chat	funds_total>=2	¿Sabes cuánto dinero le queda a la agencia? {funds_total} fondos.	Know how much money the agency has left? {funds_total} funds.
+rt_chat_funds_2	chat		Entonces no rompas nada, {other}.	Then don't break anything, {other}.
+rt_chat_pilotnode_1	chat	node_min>=2 a=pilot	{other}, la maniobra es dentro de {node_min} minutos. Agárrate.	{other}, the burn is in {node_min} minutes. Hold on.
+rt_chat_pilotnode_2	chat		¿Puedo conducir yo?	Can I drive?
+rt_chat_pilotnode_3	chat		No.	No.
+rt_chat_engfuel_1	chat	fuel>0 fuel<25 a=engineer	Según mis cálculos, queda el {fuel} por ciento de combustible.	By my numbers we have {fuel} percent fuel left.
+rt_chat_engfuel_2	chat		¿Y según los míos?	And by mine?
+rt_chat_engfuel_3	chat		Tú no haces cálculos, {other}.	You don't do numbers, {other}.
+rt_chat_scipts_1	chat	sci_total>=2 a=scientist	{other}, en casa ya tienen {sci_total} puntos de ciencia.	{other}, back home they have {sci_total} science points.
+rt_chat_scipts_2	chat		¿Eso es bueno?	Is that good?
+rt_chat_scipts_3	chat		Es ciencia. Siempre es bueno.	It's science. It's always good.
+rt_chat_tourist_1	chat	orbit alt_km>=2 a=tourist b=pilot	¿De verdad estamos a {alt_km} kilómetros de casa?	Are we really {alt_km} km from home?
+rt_chat_tourist_2	chat		Sí. Y no, no paramos para hacer fotos.	Yes. And no, we're not stopping for photos.
+rt_crew_first	report	flight_no=1	{kerbal}, es tu primer vuelo. Respira y disfruta.	{kerbal}, it's your first flight. Breathe and enjoy it.
+rt_crew_flightno	report	flight_no>=2 flight_no<10	{kerbal}, este es tu vuelo número {flight_no}. Ya eres de la casa.	{kerbal}, this is flight number {flight_no} for you. You're family now.
+rt_crew_veteran	report	missions>=10	{kerbal}, con {missions} vuelos a la espalda, esto es rutina para ti.	{kerbal}, with {missions} flights behind you, this is routine.
+rt_crew_newbody	report	at_home=0 visits=0	{kerbal}, es tu primera vez en {body}. Saluda de nuestra parte.	{kerbal}, it's your first time at {body}. Say hi for us.
+rt_crew_visits	report	at_home=0 visits>=2	{kerbal}, ya has estado en {body} en {visits} viajes. Tú nos guías.	{kerbal}, you've been to {body} on {visits} trips. You lead the way.
+rt_crew_landedbefore	report	landed at_home=0 landings>=1	{kerbal}, tú ya conoces {body}. Ya aterrizaste aquí antes.	{kerbal}, you know {body}. You landed here before.
+rt_crew_stars	report	stars>=3	{kerbal}, con nivel {stars} ya no hace falta que te digamos nada.	{kerbal}, at level {stars} we don't need to tell you anything.
+rt_chat_firstflight_1	chat	flight_no=1	{other}, es mi primer vuelo. ¿Se nota?	{other}, this is my first flight. Can you tell?
+rt_chat_firstflight_2	chat		Solo porque te agarras a todo.	Only because you're holding on to everything.
+rt_chat_newbody_1	chat	at_home=0 visits=0	Nunca había estado en {body}.	I've never been to {body} before.
+rt_chat_newbody_2	chat		Pues ya lo puedes contar, {other}.	Well, now you can tell everyone, {other}.
+rt_chat_oldhand_1	chat	missions>=5	{other}, este es mi vuelo número {flight_no}.	{other}, this is flight number {flight_no} for me.
+rt_chat_oldhand_2	chat		¿Y todavía te mareas?	And you still get sick?
+rt_chat_oldhand_3	chat		Cada vez.	Every time.
