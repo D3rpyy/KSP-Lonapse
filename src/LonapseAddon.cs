@@ -92,6 +92,7 @@ namespace Lonapse
 
         // probe mode: an uncrewed vessel with a probe core (minimumCrew 0) opens the gate in probe mode
         public bool probeMode;
+        public bool touristCabin;         // probe mode with only tourists aboard: the probe flies, the tourists talk among themselves and to it
         public string probeCoreKey;       // ProbeCores key of the root-most probe core, null outside probe mode
         public ProbeSleepState probeSleepState = ProbeSleepState.Awake;
         private readonly ProbeSleep probeSleep = new ProbeSleep();
@@ -1162,6 +1163,7 @@ namespace Lonapse
             warpChatter = false;
             evaMode = false;
             probeMode = false;
+            touristCabin = false;
             if (!settings.enabled) return RDisabled;
             if (settings.muted) return RMuted;
             if (!HighLogic.LoadedSceneIsFlight) return RScene;
@@ -1178,10 +1180,30 @@ namespace Lonapse
                 if (!settings.probeMode || probeCoreKey == null) return RNoCrew;
                 probeMode = true;
             }
+            else if (!eva && settings.probeMode && probeCoreKey != null && OnlyTourists(v))
+            {
+                // tourists cannot fly: the probe core is the crew, Mission Control talks to it
+                probeMode = true;
+                touristCabin = true;
+            }
             if (railsWarp && !settings.warpChatter) return RWarp;
             warpChatter = railsWarp;
             evaMode = eva;
             return GateOpenReason;
+        }
+
+        /// <summary>Every kerbal aboard is a tourist (and there is at least one).</summary>
+        private static bool OnlyTourists(Vessel v)
+        {
+            try
+            {
+                List<ProtoCrewMember> crew = v.GetVesselCrew();
+                if (crew == null || crew.Count == 0) return false;
+                foreach (ProtoCrewMember c in crew)
+                    if (c == null || Persona.TraitKey(c.trait) != Persona.Tourist) return false;
+                return true;
+            }
+            catch (Exception) { return false; }
         }
 
         private static bool ReadRailsWarp()

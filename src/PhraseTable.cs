@@ -310,6 +310,9 @@ namespace Lonapse
         public static readonly string[] StagingTopics = { "any", "separation", "ignition" };
         public static readonly string[] MilestoneTopics = { "any", "day1", "day10", "day100", "day365", "orbit", "landing" };
         public static readonly string[] RoverTopics = { "any", "fast", "air", "tilt", "idle" };
+        // probe_crew topic staging: a tourist calls the stage, the probe reacts (only tourists aboard, at a staging)
+        public const string StagingJokeTopic = "staging";
+        public static readonly string[] ProbeCrewTopics = { "any", StagingJokeTopic };
         // A scene about solar panels (chatter, power_low, power_ok) only plays on a ship that has one.
         // Chatter also has part topics: prechute (a chute is still packed and none is open), chuteopen (a chute
         // is open) and heatshield (the ship has a heat shield).
@@ -373,6 +376,7 @@ namespace Lonapse
             if (ev == "staging") return StagingTopics;
             if (ev == "probe_milestone") return MilestoneTopics;
             if (ev == "probe_rover") return RoverTopics;
+            if (ev == ProbeCrewEvent) return ProbeCrewTopics;
             if (ev == "chatter") return ChatterTopics;
             if (ev == "power_low" || ev == "power_ok") return SolarTopics;
             return new string[] { Any };

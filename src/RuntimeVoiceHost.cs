@@ -9,9 +9,9 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
     public sealed class RuntimeVoiceHost : MonoBehaviour
     {
-        /// <summary>Every voice a flight can need: Mission Control calm, tense and panic, and the calm and tense voice
-        /// of both genders. Crew panic lines are recorded clips, callouts load when one is needed.</summary>
-        public static readonly string[] SessionKinds = { "mc", "mc.tense", "mc.mc_panic", "m", "m.tense", "f", "f.tense" };
+        /// <summary>Every voice a flight often needs: Mission Control calm, tense, panic and callout, and the calm and
+        /// tense voice of both genders. Crew panic lines are recorded clips, crew callouts load when one is needed.</summary>
+        public static readonly string[] SessionKinds = { "mc", "mc.tense", "mc.mc_panic", "mc.callout", "m", "m.tense", "f", "f.tense" };
 
         private void Awake()
         {

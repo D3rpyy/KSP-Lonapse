@@ -150,15 +150,14 @@ namespace Lonapse
             return sceneTrait != Tourist && !IsPairTrait(sceneTrait);
         }
 
-        /// <summary>A radio scene (or a single line, a callout) fits this speaker. Never a pair trait. A tourist gets
-        /// no job event unless the scene is written for tourists, and in the calm band only tourist scenes (calm
-        /// crew talk is work talk). Under stress a tourist may say any line: fear needs no training.</summary>
-        public static bool RadioFits(string sceneTrait, string ev, string band, bool tourist)
+        /// <summary>A radio scene (or a single line, a callout) fits this speaker. Never a pair trait. A tourist only
+        /// says the scenes written for tourists, in every band: the crew's stress lines sound trained ("Small
+        /// rotation. Correcting."). A scream is the one exception, fear needs no training.</summary>
+        public static bool RadioFits(string sceneTrait, string ev, string band, bool tourist, bool scream = false)
         {
             if (IsPairTrait(sceneTrait)) return false;
             if (!tourist || sceneTrait == Tourist) return true;
-            if (JobFor(ev) != null) return false;
-            return band == "tense" || band == "panic";
+            return scream && JobFor(ev) == null;
         }
 
         /// <summary>A runtime chat side fits: a tourist only takes a side that asks for a tourist (a=tourist).</summary>

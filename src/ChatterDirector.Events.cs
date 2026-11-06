@@ -44,7 +44,7 @@ namespace Lonapse
         /// a non-tourist never takes a pair scene. An intercom scene is checked for the pair (Persona.PairFits).</summary>
         private static bool TouristOk(PhraseScene sc, KerbalVoice k)
         {
-            return sc.IsIntercom || Persona.RadioFits(sc.Trait, sc.Event, sc.Band, k.persona.IsTourist);
+            return sc.IsIntercom || Persona.RadioFits(sc.Trait, sc.Event, sc.Band, k.persona.IsTourist, PacingRules.IsScream(sc.Id));
         }
 
         /// <summary>Somebody conscious aboard can voice the scene's trait and persona. Scenes nobody fits are skipped.</summary>

@@ -4217,9 +4217,25 @@ public static class Tests
                         int min = band == "calm" ? 14 : 5;
                         if (n < min) need.Add(tr + " " + band + " " + n + "/" + min);
                     }
-                int radio = 0;
-                foreach (string sc in order) if (Col(byScene[sc][0], "trait") == "tourist" && hasMc(byScene[sc])) radio++;
+                int radio = 0, tense = 0, panic = 0, withProbe = 0, stageJoke = 0;
+                foreach (string sc in order)
+                {
+                    List<SrcRow> l = byScene[sc];
+                    if (Col(l[0], "trait") != "tourist") continue;
+                    bool probeRow = false;
+                    foreach (SrcRow r in l) if (r["role"] == "probe") probeRow = true;
+                    if (l[0]["event"] == "probe_crew" && probeRow) { if (Col(l[0], "topic") == "staging") stageJoke++; else withProbe++; continue; }
+                    if (l[0]["event"] != "chatter" || (l.Count >= 2 && !hasMc(l))) continue; // radio only, not intercom
+                    if (l[0]["band"] == "calm" && hasMc(l)) radio++;
+                    if (l[0]["band"] == "tense") tense++;
+                    if (l[0]["band"] == "panic") panic++;
+                }
                 if (radio < 12) need.Add("tourist radio " + radio + "/12");
+                // under stress a tourist only says tourist lines on the radio, so there must be plenty
+                if (tense < 20) need.Add("tourist tense radio " + tense + "/20");
+                if (panic < 12) need.Add("tourist panic radio " + panic + "/12");
+                if (withProbe < 12) need.Add("tourist with the probe " + withProbe + "/12");
+                if (stageJoke < 6) need.Add("tourist calls the stage " + stageJoke + "/6");
                 Check(need.Count == 0, "v4 tables: tourists have their own dialogues for every pair (tourist to crew, crew to tourist, two tourists) and radio scenes",
                       string.Join(", ", need.ToArray()));
             }
@@ -4431,13 +4447,17 @@ public static class Tests
                       "tourist: an intercom chat with a tourist only takes the dialogues written for that pair, one without never a tourist scene", "");
                 Check(!Persona.RadioFits("any", "staging", "none", true) && Persona.RadioFits("tourist", "staging", "none", true)
                       && Persona.RadioFits("any", "staging", "none", false) && !Persona.RadioFits("any", "chatter", "calm", true)
-                      && Persona.RadioFits("tourist", "chatter", "calm", true) && Persona.RadioFits("any", "chatter", "panic", true)
+                      && Persona.RadioFits("tourist", "chatter", "calm", true) && !Persona.RadioFits("any", "chatter", "panic", true)
+                      && !Persona.RadioFits("any", "chatter", "tense", true) && Persona.RadioFits("any", "chatter", "panic", true, true)
+                      && Persona.RadioFits("tourist", "chatter", "tense", true)
                       && !Persona.RadioFits("any", "power_low", "tense", true) && !Persona.RadioFits("to_tourist", "chatter", "calm", false)
                       && !Persona.RadioFits("tourist_pair", "chatter", "calm", true),
-                      "tourist: no job callouts and no calm crew talk for a tourist, fear lines yes, pair scenes never on the radio", "");
+                      "tourist: on the radio a tourist only says tourist scenes (calm and stressed) and screams, pair scenes never on the radio", "");
                 Check(Persona.ChatSideFits(null, "pilot brave") && !Persona.ChatSideFits(null, "tourist") && !Persona.ChatSideFits("pilot", "tourist")
                       && Persona.ChatSideFits("tourist", "tourist dim") && RuntimeLines.JobOk("tourist", "tourist dim"),
                       "tourist: a runtime chat side only takes a tourist when it asks for one", "");
+                Check(Array.IndexOf(PhraseTable.TopicsFor("probe_crew"), "staging") > 0 && Array.IndexOf(PhraseTable.TopicsFor("chatter"), "staging") < 0,
+                      "tourist: probe_crew has the staging topic (a tourist calls the stage, the probe reacts)", "");
                 Check(PhraseTable.PartTopicOk("prechute", false, false, true, false) && !PhraseTable.PartTopicOk("prechute", false, false, true, true)
                       && !PhraseTable.PartTopicOk("prechute", false, false, false, false) && PhraseTable.PartTopicOk("chuteopen", false, false, false, true)
                       && !PhraseTable.PartTopicOk("chuteopen", false, false, true, false) && !PhraseTable.PartTopicOk("heatshield", true, false, true, true)

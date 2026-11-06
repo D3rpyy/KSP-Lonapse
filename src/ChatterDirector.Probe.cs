@@ -313,6 +313,8 @@ namespace Lonapse
             if (!host.settings.radioEnabled) return "radio disabled";
             if (!host.settings.probeCallouts) return "probe callouts off";
             if (string.IsNullOrEmpty(ev)) return "no probe callout for " + what;
+            // only tourists aboard: now and then one of them calls the stage first (it is the cabin, no link needed)
+            if (ev == "staging" && FireTouristStage()) return null;
             if (!ProbeLink) return "no link";
             if (ProbeAsleep) return "probe asleep";
             if (ProbeBeepPending()) return "probe busy";
@@ -537,8 +539,8 @@ namespace Lonapse
         {
             get
             {
-                return host.settings.probeCrewChats && !host.probeMode && host.probeCoreKey != null && !ProbeAsleep
-                       && PhraseClips.Loaded;
+                return host.settings.probeCrewChats && (!host.probeMode || host.touristCabin) && host.probeCoreKey != null
+                       && !ProbeAsleep && PhraseClips.Loaded;
             }
         }
 
@@ -564,18 +566,44 @@ namespace Lonapse
             if (a == null) return false;
             string band = KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)];
             Func<string, Func<Predicate<PhraseScene>, PhraseScene>> pick = b =>
-                f => PickProbe(PhraseTable.ProbeCrewEvent, x => x.Band == b && f(x));
+                f => PickProbe(PhraseTable.ProbeCrewEvent, x => x.Band == b && x.Topic != PhraseTable.StagingJokeTopic && f(x));
             Func<string, Func<Predicate<PhraseScene>, List<PhraseScene>>> all = b =>
                 f => PhraseClips.Loaded ? PhraseClips.table.ProbeScenesFor(PhraseTable.ProbeCrewEvent, Core, CurrentPhase, false,
-                         x => x.Band == b && PhraseClips.Playable(x) && f(x) && SlotsOk(x)) : new List<PhraseScene>();
+                         x => x.Band == b && x.Topic != PhraseTable.StagingJokeTopic && PhraseClips.Playable(x) && f(x) && SlotsOk(x))
+                         : new List<PhraseScene>();
             PhraseScene sc = PreferFor(a, band, pick(band), all(band), null);
             if (sc == null && band != "calm") sc = PreferFor(a, "calm", pick("calm"), all("calm"), null);
             if (sc == null) return false;
+            return QueueProbeCrew(a, sc, false);
+        }
+
+        /// <summary>Share of stagings with only tourists aboard where a tourist calls the stage first and the probe
+        /// reacts (probe_crew scenes with topic staging), in place of the probe's own callout.</summary>
+        const double TouristStageChance = 0.4;
+
+        /// <summary>Probe mode with tourists: a tourist calls the stage, the probe reacts. False when it cannot play
+        /// now (no scene, a chat on the way, the intercom off): the probe then beeps its own callout.</summary>
+        private bool FireTouristStage()
+        {
+            if (!host.touristCabin || !host.settings.intercomEnabled || HasChatItems() || rng.NextDouble() >= TouristStageChance)
+                return false;
+            KerbalVoice a = host.roster.PickWithTrait(Persona.Tourist, rng, null);
+            if (a == null) return false;
+            PhraseScene sc = PickProbe(PhraseTable.ProbeCrewEvent, x => x.Topic == PhraseTable.StagingJokeTopic && FitsSpeaker(x, a));
+            if (sc == null || !QueueProbeCrew(a, sc, true)) return false;
+            Log.Info("Probe callout (staging): " + a.displayName + " calls it first, scene " + sc.Id);
+            return true;
+        }
+
+        /// <summary>Queues a probe_crew scene for kerbal a: probe rows as cabin beeps, crew rows on the intercom.
+        /// forced: it plays at any stress (a staging joke happens in the launch).</summary>
+        private bool QueueProbeCrew(KerbalVoice a, PhraseScene sc, bool forced)
+        {
             List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0 || count + 2 * lines.Count + 1 > Capacity) return false;
             chatA = a;
             chatB = a;
-            chatForced = false;
+            chatForced = forced;
             chatStarted = false;
             lastChatClock = clock;
             chatLimit = IntercomAbortLimit;
@@ -628,7 +656,7 @@ namespace Lonapse
             Settings cfg = host.settings;
             PhraseEntry e = u.entry;
             // the same abort rules as an intercom line, and the probe must still be there and awake
-            if ((!chatForced && host.stress.stress > chatLimit) || !CanChat(chatA) || host.probeMode
+            if ((!chatForced && host.stress.stress > chatLimit) || !CanChat(chatA) || (host.probeMode && !host.touristCabin)
                 || host.probeCoreKey == null || ProbeAsleep)
             {
                 abortChat = true;

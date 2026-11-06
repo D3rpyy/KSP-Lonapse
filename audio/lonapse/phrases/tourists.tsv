@@ -205,6 +205,56 @@ tu_radt_03_1	chatter	chatter	tense	crew	tu_radt_03	1	both	any	spin	tourist	any	a
 tu_radt_03_2	chatter	chatter	tense	mc	tu_radt_03	2	m	any	spin	tourist	any	any	Lo sabemos. Estamos en ello.	We know. We're on it.	
 tu_radt_04_1	chatter	chatter	tense	crew	tu_radt_04	1	both	any	any	tourist	any	any	Control, quiero volver a casa. Ya.	Control, I want to go home. Now.	
 tu_radt_04_2	chatter	chatter	tense	mc	tu_radt_04	2	m	any	any	tourist	any	any	Vamos a ello. Respira hondo.	We're on it. Breathe deep.	
+tu_radt_05_1	chatter	chatter	tense	crew	tu_radt_05	1	both	any	any	tourist	any	any	Control, una luz parpadea. ¿Es la luz divertida?	Control, a light is blinking. Is it the fun one?	
+tu_radt_05_2	chatter	chatter	tense	mc	tu_radt_05	2	m	any	any	tourist	any	any	Hoy no hay luces divertidas. Agárrate.	No fun lights today. Hold on.	
+tu_radt_06_1	chatter	chatter	tense	crew	tu_radt_06	1	both	any	any	tourist	any	any	Control, ¿pulso algo? Lo que sea.	Control, should I press something? Anything?	
+tu_radt_06_2	chatter	chatter	tense	mc	tu_radt_06	2	m	any	any	tourist	any	any	No. Por favor, no.	No. Please don't.	
+tu_radt_07_1	chatter	chatter	tense	crew	tu_radt_07	1	both	any	spin	tourist	any	any	Control, las estrellas no paran de moverse. ¿Las he roto yo?	Control, the stars keep moving. Did I break them?	
+tu_radt_07_2	chatter	chatter	tense	mc	tu_radt_07	2	m	any	spin	tourist	any	any	No. Agárrate fuerte.	No. Hold on tight.	
+tu_radt_08	chatter	chatter	tense	crew	tu_radt_08	1	both	any	spin	tourist	any	any	Estamos girando. Yo no he sido. Lo prometo.	We're turning. It wasn't me. I promise.	
+tu_radt_09	chatter	chatter	tense	crew	tu_radt_09	1	both	any	gforce	tourist	any	any	Control, tengo las mejillas en las orejas.	Control, my cheeks are in my ears.	
+tu_radt_10_1	chatter	chatter	tense	crew	tu_radt_10	1	both	any	gforce	tourist	any	any	Control, peso una tonelada. ¿Eso entra en el precio?	Control, I weigh a ton. Is that included in the price?	
+tu_radt_10_2	chatter	chatter	tense	mc	tu_radt_10	2	m	any	gforce	tourist	any	any	Es temporal. Respira.	It's temporary. Breathe.	
+tu_radt_11_1	chatter	chatter	tense	crew	tu_radt_11	1	both	any	q	tourist	any	any	Control, la nave hace un ruido triste.	Control, the ship is making a sad noise.	
+tu_radt_11_2	chatter	chatter	tense	mc	tu_radt_11	2	m	any	q	tourist	any	any	Es el aire. Aguanta.	That's the air. Hold on.	
+tu_radt_12	chatter	chatter	tense	crew	tu_radt_12	1	both	any	q	tourist	any	any	Todo tiembla. Hasta mis dientes.	Everything rattles. Even my teeth.	
+tu_radt_13_1	chatter	chatter	tense	crew	tu_radt_13	1	both	any	ground	tourist	any	any	Control, el suelo se hace grande. ¿Es a propósito?	Control, the ground is getting bigger. Is that on purpose?	
+tu_radt_13_2	chatter	chatter	tense	mc	tu_radt_13	2	m	any	ground	tourist	any	any	Estamos en ello.	We're on it.	
+tu_radt_14	chatter	chatter	tense	crew	tu_radt_14	1	both	any	ground	tourist	any	any	Control, ¿el suelo tiene que venir tan deprisa?	Control, is the ground supposed to come this fast?	
+tu_radt_15	chatter	chatter	tense	crew	tu_radt_15	1	both	any	heat	tourist	any	any	Hace mucho calor. ¿Alguien está cocinando?	It's very hot. Is someone cooking?	
+tu_radt_16_1	chatter	chatter	tense	crew	tu_radt_16	1	both	any	plasma	tourist	any	any	Control, hay luces de colores fuera. ¿Lo hemos pagado aparte?	Control, there are colored lights outside. Did we pay extra?	
+tu_radt_16_2	chatter	chatter	tense	mc	tu_radt_16	2	m	any	plasma	tourist	any	any	Va incluido. No te levantes.	It's included. Stay seated.	
+tu_radt_17_1	chatter	chatter	tense	crew	tu_radt_17	1	both	any	fuel	tourist	any	any	Control, alguien ha dicho combustible. ¿Es malo?	Control, someone said fuel. Is that bad?	
+tu_radt_17_2	chatter	chatter	tense	mc	tu_radt_17	2	m	any	fuel	tourist	any	any	Lo estamos mirando.	We're looking at it.	
+tu_radt_18	chatter	chatter	tense	crew	tu_radt_18	1	both	any	impulse	tourist	any	any	¡Ay! ¡Algo nos ha dado! ¡O le hemos dado a algo!	Ow! Something hit us! Or we hit something!	
+tu_radt_19_1	chatter	chatter	tense	crew	tu_radt_19	1	both	any	engine_out	tourist	any	any	Control, la parte ruidosa se ha callado. ¿Tenía que callarse?	Control, the loud part went quiet. Was it supposed to?	
+tu_radt_19_2	chatter	chatter	tense	mc	tu_radt_19	2	m	any	engine_out	tourist	any	any	No mucho. Estamos en ello.	Not really. We're on it.	
+tu_radt_20_1	chatter	chatter	tense	crew	tu_radt_20	1	both	any	any	tourist	any	any	Control, quiero hablar con el encargado.	Control, I'd like to speak to the manager.	
+tu_radt_20_2	chatter	chatter	tense	mc	tu_radt_20	2	m	any	any	tourist	any	any	Al habla. Agárrate.	Speaking. Hold on.	
+tu_radt_21	chatter	chatter	tense	crew	tu_radt_21	1	both	any	any	tourist	any	any	He vuelto a leer el folleto. Esto no sale.	I read the brochure again. This isn't in it.	
+tu_radt_22	chatter	chatter	tense	crew	tu_radt_22	1	both	any	any	tourist	any	any	No toco nada. Ni la nariz.	I'm not touching anything. Not even my nose.	
+tu_radt_23_1	chatter	chatter	tense	crew	tu_radt_23	1	both	any	any	tourist	any	any	Control, ¿esto lo hacéis para asustarnos?	Control, are you doing this to scare us?	
+tu_radt_23_2	chatter	chatter	tense	mc	tu_radt_23	2	m	any	any	tourist	any	any	No. Pero te agradecemos la paciencia.	No. But thanks for your patience.	
+tu_radt_24_1	chatter	chatter	tense	crew	tu_radt_24	1	both	any	any	tourist	any	any	Control, ¿quién de aquí sabe lo que pasa?	Control, who in here knows what's going on?	
+tu_radt_24_2	chatter	chatter	tense	mc	tu_radt_24	2	m	any	any	tourist	any	any	Nosotros. Más o menos.	We do. Roughly.	
+tu_radp_01	chatter	chatter	panic	crew	tu_radp_01	1	both	any	spin	tourist	any	any	¡Damos vueltas! ¡Que alguien lo pare!	We're spinning! Somebody stop it!	
+tu_radp_02	chatter	chatter	panic	crew	tu_radp_02	1	both	any	spin	tourist	any	any	¡Todo gira! ¡Mi estómago también!	Everything's spinning! My stomach too!	
+tu_radp_03	chatter	chatter	panic	crew	tu_radp_03	1	both	any	gforce	tourist	any	any	¡No puedo moverme! ¡El asiento me come!	I can't move! The seat is eating me!	
+tu_radp_04	chatter	chatter	panic	crew	tu_radp_04	1	both	any	gforce	tourist	any	any	¡Todo pesa! ¡Hasta lo que pienso!	Everything is heavy! Even my thoughts!	
+tu_radp_05	chatter	chatter	panic	crew	tu_radp_05	1	both	any	q	tourist	any	any	¡Todo tiembla! ¡Esto no salía en el folleto!	Everything's shaking! This wasn't in the brochure!	
+tu_radp_06	chatter	chatter	panic	crew	tu_radp_06	1	both	any	q	tourist	any	any	¡Se va a romper! ¡Lo noto en los dientes!	It's going to break! I can feel it in my teeth!	
+tu_radp_07	chatter	chatter	panic	crew	tu_radp_07	1	both	any	ground	tourist	any	any	¡El suelo! ¡Viene el suelo! ¡Que alguien conduzca!	The ground! The ground is coming! Somebody drive!	
+tu_radp_08	chatter	chatter	panic	crew	tu_radp_08	1	both	any	ground	tourist	any	any	¡Pago el doble si no chocamos!	I'll pay double if we don't crash!	
+tu_radp_09	chatter	chatter	panic	crew	tu_radp_09	1	both	any	heat	tourist	any	any	¡Quema! ¿¡Dónde está la salida de emergencia!?	It's burning hot! Where's the emergency exit?!	
+tu_radp_10	chatter	chatter	panic	crew	tu_radp_10	1	both	any	plasma	tourist	any	any	¡Fuera brilla todo! ¡Mamá!	Everything's glowing outside! Mom!	
+tu_radp_11	chatter	chatter	panic	crew	tu_radp_11	1	both	any	impulse	tourist	any	any	¡Nos hemos dado contra algo! ¡Yo no he tocado nada!	We hit something! I didn't touch anything!	
+tu_radp_12	chatter	chatter	panic	crew	tu_radp_12	1	both	any	fuel	tourist	any	any	¿¡Cómo que no hay combustible!? ¡Quiero mi dinero!	What do you mean, no fuel?! I want my money back!	
+tu_radp_13	chatter	chatter	panic	crew	tu_radp_13	1	both	any	engine_out	tourist	any	any	¡El motor se ha callado! ¿¡Quién conduce esto!?	The engine went quiet! Who's driving this thing?!	
+tu_radp_14	chatter	chatter	panic	crew	tu_radp_14	1	both	any	engine_out	tourist	any	any	¡Ya no empuja nada! ¡Control! ¡Yo solo compré el billete!	Nothing's pushing anymore! Control! I only bought a ticket!	
+tu_radp_15_1	chatter	chatter	panic	crew	tu_radp_15	1	both	any	q	tourist	any	any	¡Control! ¡Todo se mueve! ¿¡Esto es normal!?	Control! Everything is moving! Is this normal?!	
+tu_radp_15_2	chatter	chatter	panic	mc	tu_radp_15	2	m	any	q	tourist	any	any	¡Agárrate! ¡Quédate en tu asiento!	Hold on! Stay in your seat!	
+tu_radp_16_1	chatter	chatter	panic	crew	tu_radp_16	1	both	any	gforce	tourist	any	any	¡Control, me aplasta! ¡Me voy a desmayar!	Control, it's crushing me! I'm going to faint!	
+tu_radp_16_2	chatter	chatter	panic	mc	tu_radp_16	2	m	any	gforce	tourist	any	any	Respira. Cabeza contra el asiento.	Breathe. Head against the seat.	
 tu_stg_01	staging	callout	none	crew	tu_stg_01	1	both	any	any	tourist	any	any	¿Se ha caído algo?	Did something fall off?	
 tu_stg_02	staging	callout	none	crew	tu_stg_02	1	both	any	any	tourist	any	any	¡Uy! ¿Eso tenía que soltarse?	Oops! Was that supposed to come off?	
 tu_stg_03	staging	callout	none	crew	tu_stg_03	1	both	any	any	tourist	any	any	Ha sonado un golpe. ¿Es bueno?	Something went clunk. Is that good?	

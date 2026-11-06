@@ -220,6 +220,8 @@ TOPICS_BY_EVENT = {
     "staging": ["any", "separation", "ignition"],
     "probe_milestone": ["any", "day1", "day10", "day100", "day365", "orbit", "landing"],
     "probe_rover": ["any", "fast", "air", "tilt", "idle"],
+    # probe_crew staging: a tourist calls the stage, the probe reacts. Same as PhraseTable.ProbeCrewTopics in C#.
+    "probe_crew": ["any", "staging"],
     # Scenes about solar panels only play on a ship that has one. Chatter also has prechute (a chute still
     # packed, none open), chuteopen and heatshield. Same as PhraseTable.ChatterTopics in C#.
     "chatter": ["any", "solar", "prechute", "chuteopen", "heatshield"],
