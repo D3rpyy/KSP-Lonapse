@@ -2126,9 +2126,9 @@ public static class Tests
         PhraseScene sc = null;
         foreach (PhraseScene x in t1.Scenes) if (x.Id == "ss") sc = x;
         Check(sc != null && sc.HasSlots, "slots: the scene knows it has slots", null);
-        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, true, "Kerbin", "Lander II", 1234);
-        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, false, null, "", 25600)["alt_km"] == "26"
-              && !SubtitleSlots.FlightValues(0, false, null, "", 0).ContainsKey("vessel"),
+        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, ProbeRules.KerbinDay, "Kerbin", "Lander II", 1234);
+        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 25600)["alt_km"] == "26"
+              && !SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 0).ContainsKey("vessel"),
               "slots: flight values (mission day from 1, km, empty names left out)", flight["day"] + " " + flight["alt_km"]);
         var pp = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\thelmet", "thing\tsock" }, null);
         var un = new List<string>();
@@ -4560,29 +4560,33 @@ public static class Tests
                 Check(!ProbeRules.SayAgainDue(float.NaN, true, 0.35f, 0.1, 0.35f, 200f, 120f), "v6: no say again on a NaN signal", null);
                 Check(ProbeRules.RepeatMood("proud") == "offended" && ProbeRules.RepeatMood("bored") == "offended"
                       && ProbeRules.RepeatMood("scared") == "scared" && ProbeRules.RepeatMood(null) == "happy", "v6: RepeatMood", null);
-                Check(ProbeRules.MissionDay(0, true) == 1 && ProbeRules.MissionDay(6 * 3600.0 - 1, true) == 1
-                      && ProbeRules.MissionDay(6 * 3600.0, true) == 2 && ProbeRules.MissionDay(24 * 3600.0, false) == 2
-                      && ProbeRules.MissionDay(double.NaN, true) == 1, "v6: MissionDay with Kerbin and Earth days", null);
+                Check(ProbeRules.MissionDay(0, ProbeRules.KerbinDay) == 1 && ProbeRules.MissionDay(6 * 3600.0 - 1, ProbeRules.KerbinDay) == 1
+                      && ProbeRules.MissionDay(6 * 3600.0, ProbeRules.KerbinDay) == 2 && ProbeRules.MissionDay(24 * 3600.0, ProbeRules.EarthDay) == 2
+                      && ProbeRules.MissionDay(double.NaN, ProbeRules.KerbinDay) == 1, "v6: MissionDay with Kerbin and Earth days", null);
+                // JNSQ with Kronometer: 12 h days, so 13 Kerbin days of MET is day 7
+                Check(ProbeRules.MissionDay(13 * 6 * 3600.0, 12 * 3600.0) == 7 && ProbeRules.MissionDay(13 * 6 * 3600.0, double.NaN) == 14
+                      && ProbeRules.MissionDay(100, 0) == 1, "MissionDay with a modded day length and a broken one", null);
+                Check(SubtitleSlots.FlightValues(25 * 3600.0, 12 * 3600.0, null, null, double.NaN)["day"] == "3", "the {day} slot uses the game day length", null);
                 Check(ProbeRules.BeepSubtitle("scared") == "[beeps nervously]" && PhraseTable.ProbeSubtitleOk(ProbeRules.DataSubtitle),
                       "v6: mood subtitle and data subtitle have the short form", null);
 
                 double day = 6 * 3600.0;
                 ProbeMilestones ms = new ProbeMilestones();
-                Check(ms.Update("a", 2.5 * day, true, false, false, "Kerbin") == null, "v6: first sight of a vessel replays nothing", null);
-                Check(ms.Update("a", 3 * day, true, false, false, "Kerbin") == null, "v6: day 1 passed before first sight stays quiet", null);
-                Check(ms.Update("a", 10 * day, true, false, false, "Kerbin") == "day10", "v6: day 10 milestone", null);
-                Check(ms.Update("a", 10.5 * day, true, false, false, "Kerbin") == null, "v6: a milestone plays once", null);
-                Check(ms.Update("a", 10.6 * day, true, true, false, "Kerbin") == "orbit" && ms.Update("a", 10.7 * day, true, true, false, "Kerbin") == null,
+                Check(ms.Update("a", 2.5 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: first sight of a vessel replays nothing", null);
+                Check(ms.Update("a", 3 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: day 1 passed before first sight stays quiet", null);
+                Check(ms.Update("a", 10 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == "day10", "v6: day 10 milestone", null);
+                Check(ms.Update("a", 10.5 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: a milestone plays once", null);
+                Check(ms.Update("a", 10.6 * day, ProbeRules.KerbinDay, true, false, "Kerbin") == "orbit" && ms.Update("a", 10.7 * day, ProbeRules.KerbinDay, true, false, "Kerbin") == null,
                       "v6: first orbit of a body once", null);
-                Check(ms.Update("a", 10.8 * day, true, true, false, "Mun") == "orbit", "v6: first orbit of another body", null);
-                Check(ms.Update("a", 400 * day, true, true, false, "Mun") == "day365", "v6: several days at once give only the highest", null);
-                Check(ms.Update("a", 401 * day, true, true, false, "Mun") == null, "v6: the skipped day 100 is marked done", null);
+                Check(ms.Update("a", 10.8 * day, ProbeRules.KerbinDay, true, false, "Mun") == "orbit", "v6: first orbit of another body", null);
+                Check(ms.Update("a", 400 * day, ProbeRules.KerbinDay, true, false, "Mun") == "day365", "v6: several days at once give only the highest", null);
+                Check(ms.Update("a", 401 * day, ProbeRules.KerbinDay, true, false, "Mun") == null, "v6: the skipped day 100 is marked done", null);
                 Check(ms.TakeLanding("a", "Mun") && !ms.TakeLanding("a", "Mun") && ms.TakeLanding("a", "Minmus"), "v6: first landing per body once", null);
                 ProbeMilestones ms2 = new ProbeMilestones();
-                ms2.Update("b", 0.5 * day, true, false, true, "Kerbin");
-                Check(!ms2.TakeLanding("b", "Kerbin") && ms2.Update("b", 1.2 * day, true, false, true, "Kerbin") == "day1",
+                ms2.Update("b", 0.5 * day, ProbeRules.KerbinDay, false, true, "Kerbin");
+                Check(!ms2.TakeLanding("b", "Kerbin") && ms2.Update("b", 1.2 * day, ProbeRules.KerbinDay, false, true, "Kerbin") == "day1",
                       "v6: landed at first sight is no first landing, day 1 still plays", null);
-                Check(ms2.Update(null, day, true, false, false, "Kerbin") == null && !ms2.TakeLanding("", "Kerbin"), "v6: no vessel id, no milestone", null);
+                Check(ms2.Update(null, day, ProbeRules.KerbinDay, false, false, "Kerbin") == null && !ms2.TakeLanding("", "Kerbin"), "v6: no vessel id, no milestone", null);
 
                 Tuning tu = new Tuning();
                 RoverMoments rm = new RoverMoments();

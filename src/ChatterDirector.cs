@@ -278,7 +278,6 @@ namespace Lonapse
         {
             string here = null, vessel = null;
             double alt = double.NaN;
-            bool kerbinDays = true;
             try
             {
                 Vessel v = FlightGlobals.ActiveVessel;
@@ -291,12 +290,11 @@ namespace Lonapse
                     alt = v.altitude;
                     if (v.mainBody != null) here = v.mainBody.bodyName;
                 }
-                kerbinDays = GameSettings.KERBIN_TIME;
             }
             catch (Exception) { }
             if (!string.IsNullOrEmpty(bodyOverride)) here = char.ToUpperInvariant(bodyOverride[0]) + bodyOverride.Substring(1);
             if (here == "Mun") here = "the Mun";   // as KSP writes it, a capital at a sentence start
-            return SubtitleSlots.FlightValues(host.missionTime, kerbinDays, here, vessel, alt);
+            return SubtitleSlots.FlightValues(host.missionTime, LonapseAddon.DayLength(), here, vessel, alt);
         }
 
         private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)

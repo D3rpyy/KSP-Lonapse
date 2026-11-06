@@ -102,7 +102,7 @@ namespace Lonapse
         private readonly DataBeeps dataBeeps = new DataBeeps();
         private float probeMomentPoll;
         public double missionTime;        // s, active vessel mission time
-        public bool kerbinTime = true;    // GameSettings.KERBIN_TIME (6 h days)
+        public double dayLength = ProbeRules.KerbinDay;    // seconds per day on the game clock
         private readonly List<ModuleCommand> probeCmds = new List<ModuleCommand>();
         private readonly List<string> probeNames = new List<string>();
         // probe voices: every core part root first, the voices that exist, and the result of the pick
@@ -928,7 +928,7 @@ namespace Lonapse
             probePollLeft -= dt;
             if (probePollLeft > 0f) return;
             probePollLeft = 0.25f;
-            try { kerbinTime = GameSettings.KERBIN_TIME; } catch (Exception) { }
+            dayLength = DayLength();
             try { missionTime = v != null ? v.missionTime : 0.0; } catch (Exception) { missionTime = 0.0; }
             if (probeCoreKey == null || !settings.probeSleep)
             {
@@ -1139,7 +1139,7 @@ namespace Lonapse
                 if (settings.probeMilestones)
                 {
                     bool orbiting = v.situation == Vessel.Situations.ORBITING;
-                    string m = milestones.Update(v.id.ToString(), missionTime, kerbinTime, orbiting, v.LandedOrSplashed, sample.body);
+                    string m = milestones.Update(v.id.ToString(), missionTime, dayLength, orbiting, v.LandedOrSplashed, sample.body);
                     if (m != null)
                     {
                         Log.Info("Probe milestone: " + m + " (" + sample.body + ")");
@@ -1193,6 +1193,20 @@ namespace Lonapse
         }
 
         /// <summary>Every kerbal aboard is a tourist (and there is at least one).</summary>
+        /// <summary>Seconds per day on the game clock. Mods like Kronometer replace the date formatter, so JNSQ and
+        /// rescale packs count their own day. Without a formatter the game setting picks 6 h or 24 h.</summary>
+        public static double DayLength()
+        {
+            try
+            {
+                var f = KSPUtil.dateTimeFormatter;
+                if (f != null && f.Day > 0) return ProbeRules.SaneDay(f.Day);
+            }
+            catch (Exception) { }
+            try { return GameSettings.KERBIN_TIME ? ProbeRules.KerbinDay : ProbeRules.EarthDay; }
+            catch (Exception) { return ProbeRules.KerbinDay; }
+        }
+
         private static bool OnlyTourists(Vessel v)
         {
             try

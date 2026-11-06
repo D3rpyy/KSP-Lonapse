@@ -225,12 +225,21 @@ namespace Lonapse
             return string.IsNullOrEmpty(mood) ? HappyMood : mood;
         }
 
-        /// <summary>1-based mission day. A day is 6 h with kerbinTime, else 24 h. Negative or NaN time gives day 1.</summary>
-        public static int MissionDay(double missionTime, bool kerbinTime)
+        /// <summary>A stock Kerbin day and an Earth day, in seconds.</summary>
+        public const double KerbinDay = 6.0 * 3600.0, EarthDay = 24.0 * 3600.0;
+
+        /// <summary>The day length to count with. A missing or broken value gives the Kerbin day.</summary>
+        public static double SaneDay(double dayLength)
+        {
+            return double.IsNaN(dayLength) || double.IsInfinity(dayLength) || dayLength < 60.0 ? KerbinDay : dayLength;
+        }
+
+        /// <summary>1-based mission day for a day of dayLength seconds (the game clock, so mods like Kronometer
+        /// count). Negative or NaN time gives day 1.</summary>
+        public static int MissionDay(double missionTime, double dayLength)
         {
             if (double.IsNaN(missionTime) || missionTime <= 0) return 1;
-            double day = kerbinTime ? 6.0 * 3600.0 : 24.0 * 3600.0;
-            double d = Math.Floor(missionTime / day);
+            double d = Math.Floor(missionTime / SaneDay(dayLength));
             if (d > int.MaxValue - 1) return int.MaxValue;
             return (int)d + 1;
         }
