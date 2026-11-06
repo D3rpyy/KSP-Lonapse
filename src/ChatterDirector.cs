@@ -281,7 +281,10 @@ namespace Lonapse
                 Vessel v = FlightGlobals.ActiveVessel;
                 if (v != null)
                 {
-                    vessel = Names.Of(v);   // stock craft are named #autoLOC_...
+                    // on EVA {vessel} is the ship nearby, not the kerbal (user report: "Stay close to" the own name)
+                    double sd;
+                    Vessel named = v.isEVA ? ShipNear(v, out sd) : v;
+                    vessel = named != null ? Names.Of(named) : null;   // stock craft are named #autoLOC_...
                     alt = v.altitude;
                     if (v.mainBody != null) here = v.mainBody.bodyName;
                 }
@@ -1431,8 +1434,11 @@ namespace Lonapse
                 // EVA (req 15): the kerbal talks with Mission Control only, quiet unless something is wrong
                 if (s < tu.quietBand)
                 {
-                    if (rng.NextDouble() < 0.4) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
-                    else if (!EnqueueRadioScene(PickScene("eva_check", null, null), null, U(0f, 0.3f)) && !PhraseClips.Loaded)
+                    // a real EVA has constant comms: mostly talk, a runtime EVA line now and then for variety
+                    double r = rng.NextDouble();
+                    if (r < 0.2) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
+                    else if (r < 0.55 && QueueEvaLine()) { }
+                    else if (!EnqueueRadioScene(PickScene("eva_check", null, EvaSceneOk), null, U(0f, 0.3f)) && !PhraseClips.Loaded)
                         EnqueueMcFor("eva_check", U(0f, 0.3f));
                     return true;
                 }
@@ -1949,7 +1955,8 @@ namespace Lonapse
             clock += dt;
             Tuning tu = Tu;
             float s = host.stress.stress;
-            float rate = host.settings.rateMultiplier * (host.stationMode ? tu.stationRateFactor : 1f);
+            float rate = host.settings.rateMultiplier * (host.stationMode ? tu.stationRateFactor : 1f)
+                         * (host.evaMode ? tu.evaRateFactor : 1f);
             currentInterval = DcMath.MeanInterval(s, tu.tQuiet, tu.tManic, rate);
             if (host.probeMode) currentInterval *= tu.probeRateFactor; // plan v5: fewer pet talk lines
 

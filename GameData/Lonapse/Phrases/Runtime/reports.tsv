@@ -12,6 +12,7 @@
 #          self is the kerbal who answers (replies.tsv). Without to= it can also follow a sunrise line, or a
 #          recorded calm chatter scene that ends with a Mission Control statement.
 #          sunrise: Mission Control at a sunrise in orbit, now and then (sunrise_biome.tsv)
+#          eva: Mission Control to a kerbal on EVA, also the report on EVA. flag: after a flag is planted (eva_flag.tsv)
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25
@@ -35,8 +36,9 @@
 #   in_warp (1 in time warp, for checks only) node_h (hours to the burn) soi_h (hours until the orbit leaves this body)
 #   sci_left sci_first con_sci con_rep (science and contract lines, see science_contracts.tsv)
 #   sunrises (sunrises in orbit this flight)
+#   jet ship_m eva_mins (on EVA: jetpack percent, meters to the ship, minutes outside, see eva_flag.tsv)
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
-# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), kerbal in a report, and in a chat self (the speaker) and other (the one
+# Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.
 # Crew history: in a report {kerbal} is the kerbal Mission Control talks to, and these numbers are that kerbal's.
 #   In a chat they are the numbers of kerbal A (who starts). flight_no (this flight, 1 is the first), missions

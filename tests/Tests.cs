@@ -1475,6 +1475,21 @@ public static class Tests
                   "runtime voice: crew replies answer their own MC lines, the general ones any report",
                   string.Join(",", rFuel.ToArray()) + " / dock " + rDock.Count + " / " + string.Join(",", rOrbit.ToArray()) + " / " + string.Join(",", rSci.ToArray())
                   + " / " + string.Join(" ; ", toErr.ToArray()));
+            {
+                var en = new Dictionary<string, double> { { "jet", 80 }, { "ship_m", 120 }, { "eva_mins", 6 }, { "at_home", 0 }, { "day", 3 } };
+                var enm = new Dictionary<string, string[]> { { "kerbal", new[] { "Yeb", "Jeb" } }, { "here", new[] { "Mun", "Mun" } },
+                                                            { "biome", new[] { "Midlands", "Midlands" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
+                var evaFit = RuntimeLines.Fitting(rtAll, "eva", "landed", en, enm).ConvertAll(t => t.Id);
+                RuntimeTemplate flagNamed = rtAll.Find(t => t.Id == "rt_flag_named");
+                var fn = new Dictionary<string, string[]>(enm) { { "flag", new[] { "Bob", "Bob" } }, { "self", new[] { "Yeb", "Jeb" } } };
+                var flagRe = flagNamed != null ? RuntimeLines.Replies(rtAll, flagNamed, "landed", en, fn).ConvertAll(t => t.Id) : new List<string>();
+                var noFlag = RuntimeLines.Fitting(rtAll, "flag", "landed", en, enm).ConvertAll(t => t.Id);
+                Check(evaFit.Contains("rt_eva_far") && evaFit.Contains("rt_eva_jet") && evaFit.Contains("rt_eva_away") && evaFit.Contains("rt_eva_time")
+                      && !evaFit.Contains("rt_eva_near") && !evaFit.Contains("rt_eva_jet_low") && !evaFit.Contains("rt_eva_orbit")
+                      && flagRe.Contains("rt_re_flag_named") && flagRe.Contains("rt_re_flag") && !noFlag.Contains("rt_flag_named") && noFlag.Contains("rt_flag_ship"),
+                      "runtime voice: EVA lines fit the jetpack, the ship distance and the time outside. Flag lines get the planter's answer",
+                      string.Join(",", evaFit.ToArray()) + " / " + string.Join(",", flagRe.ToArray()));
+            }
             Check(Persona.JobFor("staging") == "pilot" && Persona.JobFor("touchdown") == "pilot" && Persona.JobFor("power_low") == "engineer"
                   && Persona.JobFor("science") == "scientist" && Persona.JobFor("chatter") == null && Persona.JobFor(null) == null
                   && Persona.JobForLine("rt_fuel_low") == "pilot" && Persona.JobForLine("rt_ec_ok") == "engineer"

@@ -40,6 +40,8 @@ namespace Lonapse
         public float dockGuardDist = 3f, dockQuietTime = 2.0f, dockClosingRate = 0.05f, dockGuardMax = 5f;
 
         // --- Phase 2: station and base mode ---
+        // EVA: more radio, like a real EVA with constant comms (rate factor on the talk interval)
+        public float evaRateFactor = 1.6f;
         public float stationRateFactor = 0.5f, stationMcFactor = 1.0f, stationCalmBias = 0.6f, stationPingFactor = 2.0f;
         // periodic MC-initiated "station, Houston" exchange on stations and bases
         public float stationMcMin = 150f, stationMcMax = 300f;
@@ -249,6 +251,7 @@ namespace Lonapse
             intercomStressMin = DcMath.Clamp(intercomStressMin, 5f, 3600f);
             intercomStressPeak = DcMath.Clamp(intercomStressPeak, 0.05f, 1f);
             if (stationRateFactor < 0.05f) stationRateFactor = 0.05f;
+            evaRateFactor = DcMath.Clamp(evaRateFactor, 0.25f, 4f);
             if (stationPingFactor < 0.1f) stationPingFactor = 0.1f;
             if (intercomStationBoost < 0.1f) intercomStationBoost = 0.1f;
             if (intercomQuietBoost < 0.1f) intercomQuietBoost = 0.1f;

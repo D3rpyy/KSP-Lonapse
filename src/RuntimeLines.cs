@@ -59,7 +59,7 @@ namespace Lonapse
     public static class RuntimeLines
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
@@ -355,7 +355,8 @@ namespace Lonapse
         public static bool Answers(RuntimeTemplate reply, string lineId, string lineKind)
         {
             if (reply == null || reply.Kind != "reply" || string.IsNullOrEmpty(lineId)) return false;
-            if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp" || lineKind == "sunrise" || lineKind == RecordedKind;
+            if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp" || lineKind == "sunrise" || lineKind == "eva"
+                                         || lineKind == RecordedKind;
             foreach (string p in reply.To)
             {
                 if (p.EndsWith("*", StringComparison.Ordinal) ? lineId.StartsWith(p.Substring(0, p.Length - 1), StringComparison.Ordinal)

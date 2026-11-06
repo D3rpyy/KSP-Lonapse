@@ -116,9 +116,17 @@ namespace Lonapse
         }
 
         /// <summary>Spoken and English vessel name, null when it is too long to say.</summary>
-        string[] VesselNames()
+        string[] VesselNames() { return NamesOfVessel(ActiveVessel); }
+
+        /// <summary>{vessel} on EVA: the ship nearby, not the kerbal (user report: "Stay close to" the kerbal's own name).</summary>
+        string[] ShipNames()
         {
-            Vessel v = ActiveVessel;
+            double d;
+            return NamesOfVessel(ShipNear(ActiveVessel, out d));
+        }
+
+        static string[] NamesOfVessel(Vessel v)
+        {
             string full = v != null ? Names.Of(v) : null;   // stock craft are named #autoLOC_...
             string say = full != null && !full.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(full) : null;
             if (say == null) return null;
@@ -243,8 +251,8 @@ namespace Lonapse
                                 : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
                                 && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
                                 : crew == 1 ? host.roster.voices[0] : null;
-                // a group on EVA: the vessel name is the name of the one in control, so not that
-                bool evaGroup = crew > 1 && ActiveVessel != null && ActiveVessel.isEVA;
+                // on EVA the vessel name is the name of the kerbal in control: never that
+                bool evaGroup = ActiveVessel != null && ActiveVessel.isEVA;
                 if (crew == 0 || (!evaGroup && rng.NextDouble() < RuntimeVesselShare)) name = VesselNames();
                 if (name == null && k != null)
                 {
@@ -379,10 +387,26 @@ namespace Lonapse
             // not on the pad: "fuel left" means something was used (user report: a fuel line before any engine fired)
             bool pad = false;
             try { pad = v.situation == Vessel.Situations.PRELAUNCH; } catch (Exception) { }
-            if (!pad) Put(nums, "fuel", StageFuelPercent(v, log));
-            Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
-            Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
-            try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
+            bool eva = v.isEVA;
+            if (!eva)
+            {
+                if (!pad) Put(nums, "fuel", StageFuelPercent(v, log));
+                Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
+                Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
+                try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
+            }
+            else
+            {
+                // a kerbal on EVA: the jetpack, the ship nearby and the time outside. Not the vessel values: the
+                // kerbal is a vessel of one part (user report: "one kerbal aboard" answered by a kerbal outside)
+                double jet = ResourcePercent(v, "EVA Propellant");
+                if (double.IsNaN(jet)) jet = ResourcePercent(v, "MonoPropellant");
+                Put(nums, "jet", jet);
+                double sd;
+                if (ShipNear(v, out sd) != null) nums["ship_m"] = Math.Round(sd);
+                double es = EvaSeconds();
+                if (!double.IsInfinity(es)) nums["eva_mins"] = Math.Floor(es / 60.0);
+            }
             try
             {
                 if (v.patchedConicSolver != null && v.patchedConicSolver.maneuverNodes.Count > 0)
@@ -413,7 +437,7 @@ namespace Lonapse
                 System.Globalization.CultureInfo.InvariantCulture, out dd)) nums["day"] = dd;
             string[] b = BodyNames(v.mainBody != null ? v.mainBody.bodyName : null);
             if (b != null) { names["body"] = b; names["here"] = b; }
-            string[] vn = VesselNames();
+            string[] vn = v.isEVA ? ShipNames() : VesselNames();
             if (vn != null) names["vessel"] = vn;
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
             // the biome under the vessel, said as a name (Kerbin's "Water" reads badly in a sentence, left out)
@@ -566,19 +590,27 @@ namespace Lonapse
         }
 
         /// <summary>Picks a template of a kind that fits now, not one of the last few, and queues it. False when none fits.</summary>
-        bool QueueKind(string kind, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names, float delay, bool report)
+        bool QueueKind(string kind, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names, float delay, bool report,
+                       double replyChance = ReplyChance)
         {
             List<RuntimeTemplate> fit = RuntimeLines.Fitting(PhraseClips.runtimeTemplates, kind, sit, nums, names);
             List<RuntimeTemplate> fresh = fit.FindAll(t => !recentRuntime.Contains(t.Id));
             if (fresh.Count > 0) fit = fresh;
-            else if (kind == "report" || kind == "warp") return false;   // a report can wait, an answer to an event may repeat
+            else if (kind == "report" || kind == "warp" || kind == "eva") return false;   // a report can wait, an answer to an event may repeat
             if (fit.Count == 0) return false;
-            QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, delay, report);
+            QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, delay, report, replyChance);
             return true;
         }
 
         /// <summary>A report that fits the vessel now, not one of the last few. False when none fits.</summary>
         bool QueueReport()
+        {
+            Vessel v = ActiveVessel;
+            return QueueReport(v != null && v.isEVA ? "eva" : "report");
+        }
+
+        /// <summary>A report of a kind: report, or eva on EVA (the ship reports do not fit a kerbal outside).</summary>
+        bool QueueReport(string kind, double replyChance = ReplyChance)
         {
             Vessel v = ActiveVessel;
             if (v == null) return false;
@@ -596,9 +628,117 @@ namespace Lonapse
                 string[] kn = FirstNames(k);
                 if (kn != null) { names["kerbal"] = kn; CrewValues(k, v, nums); reportKerbal = k; }
             }
-            try { return QueueKind("report", sit, nums, names, 0.3f, true); }
+            try { return QueueKind(kind, sit, nums, names, 0.3f, true, replyChance); }
             finally { reportKerbal = null; }
         }
+
+        // ---------------- EVA ----------------
+
+        readonly Dictionary<string, double> evaStartUT = new Dictionary<string, double>();
+        const double EvaStartWindow = 90.0, NearShipRange = 100.0, ShipRange = 500.0;
+        /// <summary>Scenes about going out (only in the first EvaStartWindow s) and about the hatch or the ship (only
+        /// within NearShipRange of it). User report: "Leaving the hatch" far from the ship.</summary>
+        static readonly string[] EvaStartScenes = { "eva_check_03", "ev_eva_08" };
+        static readonly string[] NearShipScenes = { "ev_eva_03", "ev_eva_04" };
+
+        /// <summary>A kerbal went out now (onCrewOnEva).</summary>
+        public void NoteEvaStart(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            try { evaStartUT[name] = Planetarium.GetUniversalTime(); } catch (Exception) { }
+        }
+
+        /// <summary>Seconds the active EVA kerbal has been outside. Infinity when not on EVA or not seen going out
+        /// (a loaded save): then it counts as a long time.</summary>
+        double EvaSeconds()
+        {
+            Vessel v = ActiveVessel;
+            if (v == null || !v.isEVA) return double.PositiveInfinity;
+            try
+            {
+                foreach (ProtoCrewMember pcm in v.GetVesselCrew())
+                {
+                    double t;
+                    if (pcm != null && evaStartUT.TryGetValue(pcm.name, out t)) return Math.Max(0, Planetarium.GetUniversalTime() - t);
+                }
+            }
+            catch (Exception) { }
+            return double.PositiveInfinity;
+        }
+
+        /// <summary>The ship of an EVA kerbal: the nearest loaded vessel within ShipRange that is not a kerbal, a flag,
+        /// debris or an asteroid. Null when there is none.</summary>
+        static Vessel ShipNear(Vessel v, out double dist)
+        {
+            dist = double.PositiveInfinity;
+            Vessel best = null;
+            if (v == null) return null;
+            try
+            {
+                List<Vessel> loaded = FlightGlobals.VesselsLoaded;
+                for (int i = 0; i < loaded.Count; i++)
+                {
+                    Vessel o = loaded[i];
+                    if (o == null || ReferenceEquals(o, v) || o.isEVA) continue;
+                    if (o.vesselType == VesselType.Flag || o.vesselType == VesselType.Debris || o.vesselType == VesselType.SpaceObject
+                        || o.vesselType == VesselType.DeployedScienceController || o.vesselType == VesselType.DeployedSciencePart) continue;
+                    double d = Vector3d.Distance(o.GetWorldPos3D(), v.GetWorldPos3D());
+                    if (d < dist && d <= ShipRange) { dist = d; best = o; }
+                }
+            }
+            catch (Exception) { best = null; dist = double.PositiveInfinity; }
+            return best;
+        }
+
+        /// <summary>The scene fits the EVA now: the going-out lines only at the start, the hatch lines near the ship.</summary>
+        bool EvaSceneOk(PhraseScene sc)
+        {
+            if (sc == null) return false;
+            if (Array.IndexOf(EvaStartScenes, sc.Id) >= 0 && EvaSeconds() > EvaStartWindow) return false;
+            if (Array.IndexOf(NearShipScenes, sc.Id) >= 0)
+            {
+                double d;
+                if (ShipNear(ActiveVessel, out d) == null || d > NearShipRange) return false;
+            }
+            return true;
+        }
+
+        /// <summary>A runtime EVA line (kind eva) instead of a table scene, for variety. False when none fits.</summary>
+        bool QueueEvaLine()
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports || reportPending || radioSilent || mcBlackout
+                || !host.signal.connected || !host.settings.radioEnabled) return false;
+            return QueueReport("eva");
+        }
+
+        /// <summary>A flag stands (afterFlagPlanted): Mission Control says something about it, and the kerbal who
+        /// planted it nearly always answers. {flag} is the flag's name when the voice can say it.</summary>
+        public void RuntimeFlag(string placedBy, string flagName)
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports || radioSilent || mcBlackout || !host.signal.connected
+                || !host.settings.radioEnabled) return;
+            Vessel v = ActiveVessel;
+            if (v == null) return;
+            string sit = SituationOf(v) ?? "landed";
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            CollectValues(v, sit, nums, names);
+            string say = !string.IsNullOrEmpty(flagName) && !flagName.StartsWith("#", StringComparison.Ordinal)
+                         ? RuntimeLines.VesselSpeakable(flagName) : null;
+            if (say != null) names["flag"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(flagName) };
+            KerbalVoice k = placedBy != null ? host.roster.voices.Find(x => x != null && x.name == placedBy) : null;
+            if (k == null) k = host.roster.Own;
+            string[] kn = k != null ? FirstNames(k) : null;
+            if (kn != null) { names["kerbal"] = kn; reportKerbal = k; }
+            try
+            {
+                bool ok = QueueKind("flag", sit, nums, names, 0.6f, false, FlagReplyChance);
+                Log.Info("Runtime voice: flag line " + (ok ? "queued" : "none fits"));
+            }
+            finally { reportKerbal = null; }
+        }
+
+        const double FlagReplyChance = 0.9;
 
         /// <summary>Share of radio turns in time warp that are a warp line (kind warp), when one fits.</summary>
         const double WarpLineChance = 0.75;
@@ -873,7 +1013,7 @@ namespace Lonapse
         /// when the radio is busy or cut by then. report: the report timer waits for it.
         /// </summary>
         void QueueRuntimeOnly(RuntimeTemplate t, Dictionary<string, double> nums, Dictionary<string, string[]> names,
-                              float delay, bool report)
+                              float delay, bool report, double replyChance = ReplyChance)
         {
             string spanish, english;
             List<int> vs = RuntimeLines.FillableVersions(t, nums, names);
@@ -892,7 +1032,7 @@ namespace Lonapse
             bool warpOnly = t.AboutWarp && host.warpChatter;
             if (warpOnly) MarkWarpOnly(e.ClipKey);
             // a crew reply, rendered at the same time: it plays right after the MC line, or not at all
-            Reply rp = PlanReply(t, nums, names);
+            Reply rp = PlanReply(t, nums, names, replyChance);
             if (rp != null && warpOnly) MarkWarpOnly(rp.entry.ClipKey);
             bool mcDone = false, mcQueued = false;
             Action reply = () =>

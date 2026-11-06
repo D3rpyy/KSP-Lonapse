@@ -410,6 +410,8 @@ namespace Lonapse
             GameEvents.onPartUndock.Add(OnPartUndock);
             GameEvents.onVesselGoOffRails.Add(OnVesselGoOffRails);
             GameEvents.onCrewOnEva.Add(OnCrewMoved);
+            GameEvents.onCrewOnEva.Add(OnCrewOnEva);
+            GameEvents.afterFlagPlanted.Add(OnFlagPlanted);
             GameEvents.onCrewBoardVessel.Add(OnCrewMoved);
             GameEvents.onPartCouple.Add(OnPartCouple);
             GameEvents.onDockingComplete.Add(OnDockingComplete);
@@ -434,6 +436,8 @@ namespace Lonapse
             GameEvents.onPartUndock.Remove(OnPartUndock);
             GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
             GameEvents.onCrewOnEva.Remove(OnCrewMoved);
+            GameEvents.onCrewOnEva.Remove(OnCrewOnEva);
+            GameEvents.afterFlagPlanted.Remove(OnFlagPlanted);
             GameEvents.onCrewBoardVessel.Remove(OnCrewMoved);
             GameEvents.onPartCouple.Remove(OnPartCouple);
             GameEvents.onDockingComplete.Remove(OnDockingComplete);
@@ -470,6 +474,31 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnPartUndock", e); }
         }
         private void OnCrewMoved(GameEvents.FromToAction<Part, Part> a) { roster.dirty = true; }
+
+        /// <summary>A kerbal goes out: the director keeps the time, for the lines that fit only the start of an EVA.</summary>
+        private void OnCrewOnEva(GameEvents.FromToAction<Part, Part> a)
+        {
+            try
+            {
+                Vessel ev = a.to != null ? a.to.vessel : null;
+                if (ev == null || director == null) return;
+                foreach (ProtoCrewMember pcm in ev.GetVesselCrew()) director.NoteEvaStart(pcm.name);
+            }
+            catch (Exception e) { Log.Exception("OnCrewOnEva", e); }
+        }
+
+        /// <summary>A flag stands: Mission Control and the kerbal who planted it have something to say.</summary>
+        private void OnFlagPlanted(FlagSite f)
+        {
+            try
+            {
+                if (!started || f == null || director == null) return;
+                string flag = f.vessel != null ? f.vessel.vesselName : null;
+                Log.Info("Flag planted by " + (f.placedBy ?? "?") + ": " + (flag ?? "?"));
+                director.RuntimeFlag(f.placedBy, flag);
+            }
+            catch (Exception e) { Log.Exception("OnFlagPlanted", e); }
+        }
         private bool InvolvesActive(GameEvents.FromToAction<Part, Part> a)
         {
             Vessel av = FlightGlobals.ActiveVessel;
@@ -682,7 +711,7 @@ namespace Lonapse
                     signal.Reset();
                     closing.Clear();
                     hardDockPending = false;
-                    subtitles.Clear();
+                    // subtitles stay: a line that is still playing keeps its subtitle after a switch (user report)
                     alarmCh.FadeOutOnce(0.5f);
                     alarmHoldLeft = 0f;
                     try { launchPhase = v != null && v.situation == Vessel.Situations.PRELAUNCH; } catch (Exception) { launchPhase = false; }
