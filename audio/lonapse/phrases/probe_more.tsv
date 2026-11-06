@@ -92,12 +92,12 @@ pm_043_2	touchdown	chatter	none	mc	pm_043	2	m	any	any	any	any	any	any		Aterrizaj
 pm_044_1	touchdown	chatter	none	mc	pm_044	1	m	any	any	any	any	any	any		¡Contacto! Aquí aplaude toda la sala.	Contact! The whole room is clapping. | Contact! The whole room is clapping. | Contact! Everyone here is clapping.	
 pm_044_2	touchdown	chatter	none	probe	pm_044	2	both	any	any	any	any	any	any	happy		[beeps a bow]	
 pm_045_1	touchdown	chatter	none	probe	pm_045	1	both	any	any	any	any	any	any	curious		[beeps at the dust]	
-pm_045_2	touchdown	chatter	none	mc	pm_045	2	m	any	any	any	any	any	any		Es polvo. Bienvenida a tu nuevo hogar.	That's dust. Welcome to your new home. | That's dust. Welcome to your new home. | Dust. Welcome to {here}, your new home.	
+pm_045_2	touchdown	chatter	none	mc	pm_045	2	m	any	any	any	any	any	any		Es polvo. Bienvenida a tu nuevo hogar.	That's dust. Welcome to your new home. | That's dust. Welcome to your new home. | Dust. Welcome to {here}, your new home.	 |  | Polvo. Bienvenida a {here}, tu nuevo hogar.
 pm_046_1	touchdown	chatter	none	probe	pm_046	1	both	any	any	any	any	any	rovemate	happy		[beeps very impatiently]	
 pm_046_2	touchdown	chatter	none	mc	pm_046	2	m	any	any	any	any	any	rovemate		Sí, ya puedes ir a explorar. Despacio.	Yes, you can go explore now. Slowly. | Yes, you can go explore now. Slowly. | Go explore. Slowly.	
 pm_047_1	touchdown	chatter	none	probe	pm_047	1	both	any	any	any	any	any	okto	proud		[beeps exact coordinates]	
 pm_047_2	touchdown	chatter	none	mc	pm_047	2	m	any	any	any	any	any	okto		Aterrizaje de libro, Okto. Te lo apuntamos.	Textbook landing, Okto. We'll note it down. | Textbook landing, Okto. We'll note it down. | Perfect landing, Okto. Logged.	
-pm_048_1	touchdown	chatter	none	mc	pm_048	1	m	any	any	any	any	any	snob		Ha llegado su excelencia. ¿Le gusta el sitio?	Your excellency has arrived. Do you like the place? | Your excellency has arrived. Do you like the place? | Welcome to {here}, your excellency. Acceptable?	
+pm_048_1	touchdown	chatter	none	mc	pm_048	1	m	any	any	any	any	any	snob		Ha llegado su excelencia. ¿Le gusta el sitio?	Your excellency has arrived. Do you like the place? | Your excellency has arrived. Do you like the place? | Welcome to {here}, your excellency. Acceptable?	 |  | Bienvenida a {here}, su excelencia. ¿Es aceptable?
 pm_048_2	touchdown	chatter	none	probe	pm_048	2	both	any	any	any	any	any	snob	bored		[beeps unimpressed]	
 pm_049_1	docked	chatter	none	probe	pm_049	1	both	any	any	any	any	any	any	happy		[beeps at the neighbor]	
 pm_049_2	docked	chatter	none	mc	pm_049	2	m	any	any	any	any	any	any		Acoplamiento completo. Ya tienes compañía.	Docking complete. You've got company. | Docking complete. You've got company. | Docked. Company for you.	
@@ -123,7 +123,7 @@ pm_059_1	burn_soon	warning	tense	probe	pm_059	1	both	any	any	any	any	any	rovemat
 pm_059_2	burn_soon	warning	tense	mc	pm_059	2	m	any	any	any	any	any	rovemate		Todavía no, Rovemate. Espera la marca.	Not yet, Rovemate. Wait for the mark. | Not yet, Rovemate. Wait for the mark. | Wait, Rovemate. Not yet.	
 pm_060_1	burn_soon	warning	tense	mc	pm_060	1	m	any	any	any	any	any	stayputnik		Stayputnik, encendido pronto. ¿Estás despierto?	Stayputnik, burn soon. Are you awake? | Stayputnik, burn soon. Are you awake? | Burn soon, Stayputnik. Awake?	
 pm_060_2	burn_soon	warning	tense	probe	pm_060	2	both	any	any	any	any	any	stayputnik	sleepy		[beeps a startled yes]	
-pm_061_1	probe_say_again	chatter	calm	mc	pm_061	1	m	any	any	any	any	any	any		Perdón, estaba comiendo. ¿Repites?	Sorry, I was eating. Say again? | Sorry, I was eating. Say again? | Sorry, I was eating {food}. Again?	Perdón, estaba comiendo. ¿Repites? | Perdón, estaba comiendo. ¿Repites? | Perdón, estaba comiendo {el food}. ¿Otra vez?
+pm_061_1	probe_say_again	chatter	calm	mc	pm_061	1	m	any	any	any	any	any	any		Perdón, estaba comiendo. ¿Repites?	Sorry, I was eating. Say again? | Sorry, I was eating. Say again? | Sorry, I was eating {food}. Again?	 |  | Perdón, estaba comiendo {el food}. ¿Otra vez?
 pm_061_2	probe_say_again	chatter	calm	probe	pm_061	2	both	any	any	any	any	any	any	offended		[beeps again annoyed]	
 pm_062_1	probe_say_again	chatter	calm	mc	pm_062	1	m	any	any	any	any	any	any		Se ha cortado. Una vez más, por favor.	It cut out. Once more, please. | It cut out. Once more, please. | You broke up. One more time.	
 pm_062_2	probe_say_again	chatter	calm	probe	pm_062	2	both	any	any	any	any	any	any	bored		[beeps it again slowly]	
