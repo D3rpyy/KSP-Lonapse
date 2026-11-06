@@ -1523,6 +1523,40 @@ public static class Tests
             Check(tErr.Count == 0 && pErr.Count == 0 && rtLines >= 65 && realPools.SpanishCount >= 172 && noEs.Count == 0,
                   "spanish_rt: " + rtLines + " rows with runtime Spanish, " + realPools.SpanishCount + " pool values with Spanish, every pool value a runtime line uses has its Spanish",
                   string.Join(" ; ", tErr.ToArray()) + string.Join(" ; ", pErr.ToArray()) + string.Join(" ; ", noEs.ToArray()));
+            // every runtime Spanish version fills, with every value there is, and speaks without marks or slots left
+            {
+                var allVals = new Dictionary<string, string> { { "day", "3" }, { "here", "the Mun" }, { "vessel", "Kerbal X" }, { "alt_km", "85" } };
+                foreach (string k in Slots.Numbers) if (!allVals.ContainsKey(k)) allVals[k] = "42";
+                var badRt = new List<string>();
+                int spoken = 0;
+                foreach (PhraseEntry pe in built.Entries)
+                {
+                    if (pe.SpanishRt == null) continue;
+                    for (int k = 0; k < pe.SpanishRt.Count; k++)
+                    {
+                        if (string.IsNullOrEmpty(pe.SpanishRt[k])) continue;
+                        int wantV = k;
+                        // the conditions of this version, and every vessel part (pool values like [goo] need them)
+                        var vc = new List<string>();
+                        string vtext;
+                        SubtitleSlots.SplitConditions(SubtitleSlots.Versions(pe.English)[k], vc, out vtext);
+                        var phases = new List<string> { "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout", "kerbin", "away" };
+                        foreach (string c0 in SubtitleSlots.Conditions) if (!phases.Contains(c0) && !vc.Contains(c0)) vc.Add(c0);
+                        var o = SubtitleSlots.Fill(new List<PhraseEntry> { pe }, realPools, allVals,
+                            i => new Dictionary<string, string> { { "other", "Bob" }, { "self", "Bill" } },
+                            (pool, vv) => pool.StartsWith(SceneMemory.VersionPool, StringComparison.Ordinal)
+                                          ? (vv.Contains(wantV.ToString()) ? wantV.ToString() : vv[0]) : vv[0], null,
+                            vc, true);
+                        string said = o[0].RuntimeSpanish;
+                        if (said == null) { badRt.Add(pe.ClipKey + " v" + (k + 1) + " gives no runtime Spanish"); continue; }
+                        string spk = RuntimeSpeech.Spoken(said);
+                        if (spk.IndexOfAny(new[] { '{', '}', '‹', '›', '⟪', '⟫' }) >= 0 || o[0].English.IndexOf('{') >= 0) badRt.Add(pe.ClipKey + " v" + (k + 1) + ": " + spk);
+                        spoken++;
+                    }
+                }
+                Check(badRt.Count == 0 && spoken > 300, "spanish_rt: every runtime Spanish version (" + spoken + ") fills and speaks cleanly",
+                      string.Join(" ; ", badRt.GetRange(0, Math.Min(8, badRt.Count)).ToArray()) + (badRt.Count > 8 ? " ... " + badRt.Count : ""));
+            }
             Console.WriteLine("INFO  spanish_rt coverage: " + slotted + " slotted rows, " + withRt + " with spanish_rt, " + versionsNoRt + " slotted versions without");
 
             var esPools = SlotPools.Parse(new List<string> { "pool\tenglish\tspanish", "thing\tlucky rock\tf:piedra de la suerte" }, null);

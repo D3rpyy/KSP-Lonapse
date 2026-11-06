@@ -120,7 +120,7 @@ namespace Lonapse
             string kind = RuntimeDelivery.KindFor(mc ? "mc" : KindFor(speaker), e.Band, e.Severity, e.Event);
             if (kind == null || RuntimeVoice.Missing(kind) != null) return null;
             bool required = PhraseClips.Clip(e, !mc && speaker.isFemale) == null;
-            // a subtitle template with its Spanish from slots_es.tsv: the voice says what the subtitle shows
+            // a subtitle template with its runtime Spanish (spanish_rt): the voice says what the subtitle shows
             string spanish = e.RuntimeSpanish ?? e.Spanish, english = e.English ?? "";
             bool changed = e.RuntimeSpanish != null;
             if (spanish.IndexOf("{body}", StringComparison.Ordinal) >= 0 || english.IndexOf("{body}", StringComparison.Ordinal) >= 0)
@@ -141,8 +141,10 @@ namespace Lonapse
                     spanish = s2; english = e2; changed = true;
                 }
             }
-            // a subtitle slot ({vessel}, {other}) already shows a name the recorded Spanish does not say: say it too
-            string[] shown = SubtitleName(english, spanish, partner);
+            // a subtitle slot ({vessel}, {other}) already shows a name the recorded Spanish does not say: say it too.
+            // Not with the runtime Spanish of the row (spanish_rt): that already says what the subtitle shows.
+            string[] shown = e.RuntimeSpanish == null ? SubtitleName(english, spanish, partner) : null;
+            if (e.RuntimeSpanish != null) name = null;   // its slots already hold the names it needs
             if (shown != null)
             {
                 string s4 = RuntimeSpeech.AddName(spanish, RuntimeSpeech.MarkRaw(shown[0]));
