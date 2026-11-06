@@ -820,7 +820,8 @@ namespace Lonapse
             if (max < 1) max = 1;
             if (max > Settings.SubtitleMaxEntriesCap) max = Settings.SubtitleMaxEntriesCap;
             s.subtitleMaxEntries = max;
-            Hint("Background: how dark the box behind the text is. Lines: how many subtitles show at once.");
+            s.subtitleHold = Mathf.Round(Row("Stay on screen", s.subtitleHold, 0f, SubtitleLayout.MaxHold, s.subtitleHold, "0.0' s'") * 10f) / 10f;
+            Hint("Background: how dark the box behind the text is. Lines: how many subtitles show at once. Stay on screen: how long a subtitle stays after its line is spoken.");
 
             GUILayout.Space(6f);
             if (GUILayout.Button("Preview") && host.subtitles != null)

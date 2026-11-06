@@ -2029,6 +2029,29 @@ public static class Tests
             Check(ProbeVoicePick.Resolve(stockOnly, new Dictionary<string, string> { { "someModCore".ToLowerInvariant(), "missing" } }, reg, out at, out why) == cfgOkto
                   && at == 1 && why == ProbeVoicePick.Why.StockPart,
                   "probe voice: unknown voice names are skipped, then the first stock part decides", null);
+            // Patches/Lonapse_StockCores.cfg: a stock core with its own voice from the patch (priority -1)
+            var patched = new List<ProbeCorePart> { new ProbeCorePart("probeCoreOcto.v2", "okto", -1), new ProbeCorePart("modProbe", "modcore", 0) };
+            ProbeVoiceSpec pm = ProbeVoicePick.Resolve(patched, null, reg, out at, out why);
+            ProbeVoiceSpec ps = ProbeVoicePick.Resolve(new List<ProbeCorePart> { new ProbeCorePart("probeCoreOcto.v2", "okto", -1) }, null, reg, out at, out why);
+            Check(pm == cfgVoice && ps == cfgOkto && why == ProbeVoicePick.Why.StockPart,
+                  "probe voice: a patched stock core still says stock, and a modded core with priority 0 still wins over it", pm != null ? pm.Name : "null");
+            {
+                // every part in the patch is a known stock core and gets its own stock voice
+                string cfgPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Patches/Lonapse_StockCores.cfg"));
+                string cfg = System.IO.File.ReadAllText(cfgPath);
+                var badPatch = new List<string>();
+                int patchedParts = 0;
+                foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(cfg,
+                         @"@PART\[([^\]]+)\][^\n]*\n\{\s*MODULE \{ name = ModuleLonapse  voice = ([a-z0-9]+)  priority = (-?[0-9]+) \}"))
+                    foreach (string pn in m.Groups[1].Value.Split('|'))
+                    {
+                        patchedParts++;
+                        if (!ProbeCores.IsKnown(pn) || ProbeCores.KeyFor(pn) != m.Groups[2].Value) badPatch.Add(pn + " = " + m.Groups[2].Value);
+                        if (m.Groups[3].Value != "-1") badPatch.Add(pn + " priority " + m.Groups[3].Value);
+                    }
+                Check(badPatch.Count == 0 && patchedParts == 17, "probe voice: the MM patch gives all " + patchedParts + " stock cores their own voice at priority -1",
+                      string.Join(" ; ", badPatch.ToArray()));
+            }
             ProbeVoiceSpec g = ProbeVoicePick.Resolve(new List<ProbeCorePart> { new ProbeCorePart("x", null, 0) }, null, reg, out at, out why);
             Check(g != null && g.Name == ProbeCores.Generic && at == 0 && why == ProbeVoicePick.Why.Generic
                   && ProbeVoicePick.Resolve(new List<ProbeCorePart>(), null, reg, out at, out why) == null && at == -1,
@@ -3225,6 +3248,15 @@ public static class Tests
                 for (float now = 9f; now < 11f; now += 0.01f) { float a = SubtitleLayout.Alpha(now, 10f, 10.3f); if (a < 0f || a > 1f) alphaRange = false; }
                 Check(alphaRange, "subtitle: Alpha in 0..1 for a very short entry", null);
                 Check(SubtitleLayout.Duration(2f) == 2.6f && SubtitleLayout.Duration(0.1f) == 1.2f && SubtitleLayout.Duration(float.NaN) == 1.2f, "subtitle: Duration line + 0.6 s, min 1.2 s", null);
+                Check(SubtitleLayout.Duration(2f, 3f) == 5f && SubtitleLayout.Duration(2f, 0f) == 2f && SubtitleLayout.Duration(0.1f, 0f) == 1.2f
+                      && SubtitleLayout.Duration(2f, 99f) == 2f + SubtitleLayout.MaxHold && SubtitleLayout.Duration(2f, float.NaN) == 2.6f,
+                      "subtitle: the hold setting adds its seconds after the line, 0 to 8 s, at least 1.2 s on screen", null);
+                var sh = new Settings { subtitleHold = 20f };
+                sh.Clamp();
+                var sh2 = new Settings { subtitleHold = float.NaN };
+                sh2.Clamp();
+                Check(sh.subtitleHold == SubtitleLayout.MaxHold && sh2.subtitleHold == SubtitleLayout.DefaultHold && new Settings().subtitleHold == 0.6f,
+                      "subtitle: the hold setting is clamped, the default keeps the old 0.6 s", sh.subtitleHold + " " + sh2.subtitleHold);
                 Check(SubtitleLayout.FontSize(1f) == 15 && SubtitleLayout.FontSize(5f) == 24 && SubtitleLayout.FontSize(0.1f) == (int)Math.Round(15f * 0.7f) && SubtitleLayout.LabelFontSize(0.7f) >= 9,
                       "subtitle: font 15 px x size, size clamped 0.7..1.6", null);
             }

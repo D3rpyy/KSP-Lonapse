@@ -7,7 +7,10 @@
 - **Mission Control reads numbers in ordinary lines too.** With the runtime voice on, 32 event lines have a version with a real value: the battery when power runs low or comes back, the delta-v and time of a new maneuver node, the fuel left after a cutoff, the speed at staging, the parts and crew after docking, the science in the lab. Without the runtime voice these versions never show.
 - **More variety in the runtime reports.** Runtime lines can have several wordings, split by `|`. Lines with the same meaning are one row now, and 18 lines got new wordings.
 
+- **Subtitle time on screen.** A new "Stay on screen" slider in the subtitle settings sets how long a subtitle stays after its line is spoken, from 0 to 8 s. The default is 0.6 s, as before. The countdown numbers keep the short time.
+
 ### For modders
+- **The stock probe cores get `ModuleLonapse`** through a Module Manager patch, `Patches/Lonapse_StockCores.cfg`, with their own voice and priority -1. A patch of your own can run `:AFTER[Lonapse]` to change them. Module Manager stays optional: without it the patch does nothing and the stock cores sound the same as before.
 - `Phrases/runtime.tsv` is now the folder `Phrases/Runtime/` (reports, crew, docking and landing, science and contracts, chats). Every `.tsv` in it is read, so your own lines can go in a file of your own. The columns are found by name. The format is at the top of `reports.tsv`.
 - `Phrases/slots_es.tsv` is gone. The runtime Spanish of a line is the `spanish_rt` column of its row, and the Spanish of a pool value is the `spanish` column of `pools.tsv`. An English edit can no longer silently switch it off.
 - The install removes the old `runtime.tsv` and `slots_es.tsv`.

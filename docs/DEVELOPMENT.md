@@ -58,6 +58,7 @@ GameData/Lonapse/
   Phrases/phrases.tsv       (all scenes and subtitles, from the audio pipeline, with the spanish_rt column)
   Phrases/pools.tsv         (subtitle slot values and their Spanish)
   Phrases/Runtime/*.tsv     (runtime voice lines with real values, no audio)
+  Patches/*.cfg             (Module Manager patches: ModuleLonapse on the stock cores, optional MM)
   PluginData/Runtime/       (runtime voice: windows/, linux/, voices/, LICENSES/)
   PluginData/settings.cfg   (written by the plugin on first start)
 ```

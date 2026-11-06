@@ -145,6 +145,11 @@ part from another mod, or only when Lonapse is installed, use a Module Manager p
 still show their own name in the subtitles. It may be a localization tag like `#LOC_myMod_stp`. Without it, the
 part shows the name of its voice.
 
+The stock cores get the module too, from `Patches/Lonapse_StockCores.cfg` (priority -1, so a modded core with
+priority 0 or more still wins). Module Manager is not required: without it that patch does nothing and the stock
+cores keep the same voices from Lonapse's own list. With MM, a patch of yours can run `:AFTER[Lonapse]` to change a
+stock core's voice.
+
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.
 

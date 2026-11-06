@@ -49,6 +49,12 @@ namespace Lonapse
         /// <summary>Show a line. <paramref name="who"/> is the speaker's display name, or "MC" for Mission Control.</summary>
         public void Show(string who, string line, float seconds)
         {
+            Show(who, line, seconds, settings != null ? settings.subtitleHold : SubtitleLayout.DefaultHold);
+        }
+
+        /// <summary>Show with its own hold time after the line (the countdown keeps the default, one number a second).</summary>
+        public void Show(string who, string line, float seconds, float hold)
+        {
             if (string.IsNullOrEmpty(line)) return;
             // newest at the end: rotate the oldest entry object to the end and reuse it
             Entry e = entries[0];
@@ -62,7 +68,7 @@ namespace Lonapse
             e.measuredW = -1f;
             e.measuredFont = -1;
             e.start = Time.unscaledTime;
-            e.end = e.start + SubtitleLayout.Duration(seconds);
+            e.end = e.start + SubtitleLayout.Duration(seconds, hold);
             e.active = true;
         }
 

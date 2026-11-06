@@ -157,7 +157,14 @@ namespace Lonapse
                 if (m == null) continue;
                 if (best < 0 || cores[i].priority > cores[best].priority) { best = i; bestV = m; }
             }
-            if (bestV != null) { coreIndex = best; why = Why.Module; return bestV; }
+            if (bestV != null)
+            {
+                // the stock cores get their own voice through Patches/Lonapse_StockCores.cfg: still "stock"
+                coreIndex = best;
+                why = ProbeCores.IsKnown(cores[best].partName) && ProbeCores.KeyFor(cores[best].partName) == cores[best].moduleVoice
+                      ? Why.StockPart : Why.Module;
+                return bestV;
+            }
             for (int i = 0; i < cores.Count; i++)
                 if (ProbeCores.IsKnown(cores[i].partName) && (v = reg.Get(ProbeCores.KeyFor(cores[i].partName))) != null)
                 {

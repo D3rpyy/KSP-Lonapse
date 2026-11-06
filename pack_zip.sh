@@ -29,7 +29,7 @@ LIST="$(unzip -Z1 "$ZIP")"
 n=$(grep -cE '\.(wav|ogg)$' <<<"$LIST" || true)
 r=$(grep -c 'PluginData/Runtime/' <<<"$LIST" || true)
 for f in Plugins/Lonapse.dll PluginData/Runtime/windows/piper.exe PluginData/Runtime/linux/piper \
-         Phrases/phrases.tsv Phrases/pools.tsv Phrases/Runtime/reports.tsv; do
+         Phrases/phrases.tsv Phrases/pools.tsv Phrases/Runtime/reports.tsv Patches/Lonapse_StockCores.cfg; do
   grep -qx "GameData/Lonapse/$f" <<<"$LIST" || { echo "ERROR: $f is missing from the zip" >&2; exit 1; }
 done
 # the 0.7.0 tables that moved (Phrases/Runtime, the spanish_rt column) must not ship again

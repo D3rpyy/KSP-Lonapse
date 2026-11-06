@@ -108,6 +108,12 @@ for f in "$REPO"/GameData/Lonapse/Phrases/Runtime/*.tsv; do
   cp -f "$f" "$GD/Phrases/Runtime/"
   echo "Installed: $GD/Phrases/Runtime/$(basename "$f")"
 done
+# Module Manager patches (stock cores get ModuleLonapse). Optional for players: without MM they do nothing.
+mkdir -p "$GD/Patches"
+for f in "$REPO"/GameData/Lonapse/Patches/*.cfg; do
+  cp -f "$f" "$GD/Patches/"
+  echo "Installed: $GD/Patches/$(basename "$f")"
+done
 shopt -u nullglob
 # 0.7.0 tables that moved: runtime.tsv is now Phrases/Runtime, slots_es.tsv is the spanish_rt column and pools.tsv
 for old in runtime.tsv slots_es.tsv; do

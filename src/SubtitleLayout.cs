@@ -368,8 +368,19 @@ namespace Lonapse
         /// <summary>How long an entry stays: the line plus 0.6 s, at least 1.2 s.</summary>
         public static float Duration(float seconds)
         {
+            return Duration(seconds, DefaultHold);
+        }
+
+        /// <summary>Settings.subtitleHold: how long a subtitle stays after its line, default and most (user request).</summary>
+        public const float DefaultHold = 0.6f, MaxHold = 8f;
+
+        /// <summary>On screen for the line plus <paramref name="hold"/> s (0 .. MaxHold), at least 1.2 s.</summary>
+        public static float Duration(float seconds, float hold)
+        {
             if (float.IsNaN(seconds) || float.IsInfinity(seconds)) seconds = 0f;
-            return Math.Max(1.2f, seconds + 0.6f);
+            if (float.IsNaN(hold) || float.IsInfinity(hold)) hold = DefaultHold;
+            hold = Math.Max(0f, Math.Min(MaxHold, hold));
+            return Math.Max(1.2f, seconds + hold);
         }
 
         /// <summary>Opacity factor: fades in over FadeIn after start and out over FadeOut before end.</summary>
