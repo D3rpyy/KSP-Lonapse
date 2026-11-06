@@ -236,5 +236,5 @@ and the decisions are my own.
 The code is MIT licensed ([LICENSE](LICENSE)). The sounds and the phrase text are CC BY 4.0
 ([LICENSE-CC-BY-4.0](LICENSE-CC-BY-4.0)). Which part has which license is in [docs/LICENSING.md](docs/LICENSING.md).
 The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
-piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng), and CC0, Apache-2.0 and the Unlicense (the voices).
+piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng, [LICENSE-GPL-3.0](LICENSE-GPL-3.0)), and CC0, Apache-2.0 and the Unlicense (the voices).
 The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.
