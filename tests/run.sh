@@ -10,6 +10,6 @@ mcs -sdk:4.x -define:DC_OFFLINE_TEST -warn:4 -out:"$OUT/DcTests.exe" \
     "$REPO/src/Pacing.cs" "$REPO/src/MixMath.cs" "$REPO/src/SignalMath.cs" "$REPO/src/RadioProfile.cs" \
     "$REPO/src/DescentSequence.cs" "$REPO/src/ThrottleWatch.cs" "$REPO/src/Audit.cs" \
     "$REPO/src/PhraseTable.cs" "$REPO/src/Slots.cs" "$REPO/src/SubtitleSlots.cs" "$REPO/src/Countdown.cs" "$REPO/src/FlightPhase.cs" "$REPO/src/MouthMath.cs" "$REPO/src/Persona.cs" \
-    "$REPO/src/EventWatchers.cs" "$REPO/src/SubtitleLayout.cs" "$REPO/src/FaceMath.cs" "$REPO/src/ProbeCore.cs" "$REPO/src/ProbeSynth.cs" "$REPO/src/ProbeVoices.cs" "$REPO/src/SceneMemory.cs" "$REPO/src/RuntimeSpeech.cs" "$REPO/src/RuntimeLines.cs" "$REPO/src/ProbeRules.cs" "$REPO/src/ProbeMoments.cs" \
+    "$REPO/src/EventWatchers.cs" "$REPO/src/SubtitleLayout.cs" "$REPO/src/FaceMath.cs" "$REPO/src/ProbeCore.cs" "$REPO/src/ProbeSynth.cs" "$REPO/src/ProbeVoices.cs" "$REPO/src/SceneMemory.cs" "$REPO/src/RuntimeSpeech.cs" "$REPO/src/RuntimeLines.cs" "$REPO/src/ModEvents.cs" "$REPO/src/ProbeRules.cs" "$REPO/src/ProbeMoments.cs" \
     "$REPO/tests/Tests.cs"
 mono "$OUT/DcTests.exe"

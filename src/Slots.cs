@@ -34,8 +34,21 @@ namespace Lonapse
         /// <summary>A number the recording cannot say: only filled with the runtime voice on.</summary>
         public static bool IsRuntimeNumber(string name) { return IsNumber(name) && !IsFlight(name); }
 
+        /// <summary>A slot of another mod: x_ and a-z 0-9 _ (x_cups). Filled from the values the mod sends with its
+        /// event, a number or a name. Never a pool.</summary>
+        public static bool IsModSlot(string name)
+        {
+            if (name == null || name.Length < 3 || !name.StartsWith("x_", StringComparison.Ordinal)) return false;
+            for (int i = 2; i < name.Length; i++)
+            {
+                char c = name[i];
+                if (!(c >= 'a' && c <= 'z') && !(c >= '0' && c <= '9') && c != '_') return false;
+            }
+            return true;
+        }
+
         /// <summary>Not a pool: every number, name and person slot.</summary>
-        public static bool IsReserved(string name) { return IsNumber(name) || IsName(name) || IsPerson(name); }
+        public static bool IsReserved(string name) { return IsNumber(name) || IsName(name) || IsPerson(name) || IsModSlot(name); }
 
         /// <summary>Keys said with one decimal below 10: km, min, h, deg, m/s and science points (sci, sci_left, con_sci).</summary>
         public static bool HasDecimals(string key)

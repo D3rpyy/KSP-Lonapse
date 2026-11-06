@@ -338,6 +338,8 @@ namespace Lonapse
         private static readonly string[] CountDirections = { "Up (1 to 10)", "Down (10 to 1)" };
         private string testEvent = "", testPhase = "", testCause = "", testBody = "", testTopic = "";
         private string testStatus = "";
+        private string modTestEvent, modTestStatus;
+        private string[] modEventIds;
         private string runtimeTestStatus;
 
         /// <summary>Button that cycles <paramref name="value"/> through <paramref name="list"/>. Empty shows as "any".</summary>
@@ -983,6 +985,27 @@ namespace Lonapse
             tu.faceWeight = Mathf.Round(Slider("Face expression weight", tu.faceWeight, 0f, 1f, "0.00") * 20f) / 20f;
             bool flip = Toggle(tu.faceExpressionSign < 0f, "Flip expression sign (grin vs fear)");
             tu.faceExpressionSign = flip ? -1f : 1f;
+
+            // --- events of other mods (LonapseApi) ---
+            Header("Mod events");
+            if (modEventIds == null || Event.current.type == EventType.Layout)
+                modEventIds = ModEvents.Ids(PhraseClips.runtimeTemplates).ToArray();
+            var per = new System.Text.StringBuilder();
+            foreach (var kv in PhraseClips.modTemplateCounts) per.Append(per.Length > 0 ? ", " : "").Append(kv.Key).Append(" (").Append(kv.Value).Append(')');
+            GUILayout.Label(per.Length > 0 ? "Lines from: " + per : "No mod lines loaded (GameData/<Mod>/Lonapse/*.tsv).");
+            if (modEventIds.Length > 0)
+            {
+                if (modTestEvent == null || Array.IndexOf(modEventIds, modTestEvent) < 0) modTestEvent = modEventIds[0];
+                modTestEvent = Cycle("Event", modTestEvent, modEventIds);
+            }
+            else GUILayout.Label(" ");
+            if (GUILayout.Button("Test mod event") && d != null && modEventIds.Length > 0)
+            {
+                try { modTestStatus = d.TestModEvent(modTestEvent); }
+                catch (Exception e) { modTestStatus = "error: " + e.Message; Log.Exception("TestModEvent", e); }
+            }
+            GUILayout.Label(string.IsNullOrEmpty(modTestStatus) ? " " : modTestStatus);
+            GUILayout.Label(d != null && d.modLog.Count > 0 ? string.Join("\n", d.modLog.ToArray()) : "No mod events yet.");
 
             // --- phrase test ---
             Header("Phrase test");

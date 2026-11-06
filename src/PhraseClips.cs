@@ -125,13 +125,71 @@ namespace Lonapse
                 var files = new List<KeyValuePair<string, IList<string>>>();
                 foreach (string f in paths)
                     files.Add(new KeyValuePair<string, IList<string>>(Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+                int own = files.Count;
+                // other mods: GameData/<Mod>/Lonapse/*.tsv, after the Lonapse files (a duplicate id is the mod's row)
+                var modFiles = ModLineFiles();
+                files.AddRange(modFiles);
                 var rerr = new List<string>();
                 runtimeTemplates = RuntimeLines.ParseAll(files, rerr);
                 for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse runtime: " + rerr[i]);
                 if (rerr.Count > 10) Log.Warn("Lonapse runtime: " + (rerr.Count - 10) + " more error(s)");
-                Log.Info("Lonapse: " + runtimeTemplates.Count + " runtime voice templates from " + files.Count + " file(s) in Phrases/Runtime");
+                // per mod: the templates of its files
+                modTemplateCounts.Clear();
+                foreach (RuntimeTemplate t in runtimeTemplates)
+                {
+                    string mod = ModOf(t.Where);
+                    if (mod == null) continue;
+                    int n;
+                    modTemplateCounts.TryGetValue(mod, out n);
+                    modTemplateCounts[mod] = n + 1;
+                }
+                int modCount = 0;
+                var per = new List<string>();
+                foreach (var kv in modTemplateCounts) { modCount += kv.Value; per.Add(kv.Key + " (" + kv.Value + ")"); }
+                Log.Info("Lonapse: " + (runtimeTemplates.Count - modCount) + " runtime voice templates from " + own + " file(s) in Phrases/Runtime");
+                if (modFiles.Count > 0)
+                    Log.Info("Lonapse: " + modCount + " mod templates from " + modFiles.Count + " file(s): " + string.Join(", ", per.ToArray()));
             }
             catch (Exception e) { Log.Warn("Lonapse Phrases/Runtime: read failed: " + e.Message); runtimeTemplates = new List<RuntimeTemplate>(); }
+        }
+
+        /// <summary>Templates per mod folder (other mods' Lonapse/*.tsv), for the log and the Debug tab.</summary>
+        public static readonly SortedDictionary<string, int> modTemplateCounts = new SortedDictionary<string, int>(StringComparer.Ordinal);
+
+        /// <summary>The mod folder of a template from another mod ("ExampleMod/Lonapse/lines.tsv:3" gives
+        /// "ExampleMod"), null for a Lonapse file.</summary>
+        public static string ModOf(string where)
+        {
+            if (string.IsNullOrEmpty(where)) return null;
+            int i = where.IndexOf("/Lonapse/", StringComparison.Ordinal);
+            return i > 0 ? where.Substring(0, i) : null;
+        }
+
+        /// <summary>The .tsv files in GameData/&lt;Mod&gt;/Lonapse/ of every other mod, sorted by mod and name. A mod
+        /// folder that cannot be read is skipped.</summary>
+        static List<KeyValuePair<string, IList<string>>> ModLineFiles()
+        {
+            var r = new List<KeyValuePair<string, IList<string>>>();
+            string gd = Path.Combine(KSPUtil.ApplicationRootPath, "GameData");
+            if (!Directory.Exists(gd)) return r;
+            string[] mods = Directory.GetDirectories(gd);
+            Array.Sort(mods, StringComparer.Ordinal);
+            foreach (string m in mods)
+            {
+                string mod = Path.GetFileName(m);
+                if (mod == "Lonapse") continue;
+                try
+                {
+                    string dir = Path.Combine(m, "Lonapse");
+                    if (!Directory.Exists(dir)) continue;
+                    string[] paths = Directory.GetFiles(dir, "*.tsv");
+                    Array.Sort(paths, StringComparer.Ordinal);
+                    foreach (string f in paths)
+                        r.Add(new KeyValuePair<string, IList<string>>(mod + "/Lonapse/" + Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+                }
+                catch (Exception e) { Log.Warn("Lonapse: lines of " + mod + " not read: " + e.Message); }
+            }
+            return r;
         }
 
         static void LoadPools()

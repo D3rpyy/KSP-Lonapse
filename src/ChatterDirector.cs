@@ -11,7 +11,9 @@ namespace Lonapse
         // plan v5 probe mode: probe beep on beep[1] (radio)
         ProbeBeep,
         // 0.6.0: a probe core on a crewed vessel beeps in the cabin (beep[1], intercom sound), part of a chat
-        CabinBeep }
+        CabinBeep,
+        // a line shown as a subtitle only, no voice (a mod event with the runtime voice off). speaker null: Mission Control
+        SubtitleLine }
 
     public class Utterance
     {
@@ -627,6 +629,7 @@ namespace Lonapse
 
         private bool PrevDone()
         {
+            if (clock < subtitleHoldUntil) return false;   // a subtitle-only line holds the air for its reading time
             if (lastChannel == null) return true;
             if (!lastChannel.Busy) return true;
             return clock - lastStartClock > lastDuration + 0.5f;
@@ -654,7 +657,7 @@ namespace Lonapse
         {
             return k == UttKind.CrewLine || k == UttKind.ControlLine || k == UttKind.ControlFx
                    || k == UttKind.BedStart || k == UttKind.StaticBurst || k == UttKind.RadioOpen || k == UttKind.RadioClose
-                   || k == UttKind.RogerBeep || k == UttKind.ProbeBeep;
+                   || k == UttKind.RogerBeep || k == UttKind.ProbeBeep || k == UttKind.SubtitleLine;
         }
 
         /// <summary>A crew reply to a Mission Control runtime line (rt_re_...), logged when it plays or is skipped.</summary>
@@ -667,6 +670,15 @@ namespace Lonapse
         private float WarpPitch
         {
             get { return host.warpChatter ? DcMath.WarpFactor(host.warpRate, Tu.warpPitchGain, Tu.warpPitchMax) : 1f; }
+        }
+
+        /// <summary>Until this clock a subtitle-only line holds the air (PrevDone).</summary>
+        private float subtitleHoldUntil = -1f;
+
+        /// <summary>Reading time of a subtitle-only line: 0.065 s per character, at least 2 s.</summary>
+        internal static float SubtitleReadSeconds(string text)
+        {
+            return Math.Max(2f, 0.065f * (text ?? "").Length);
         }
 
         private bool CanChat(KerbalVoice k)
@@ -976,6 +988,18 @@ namespace Lonapse
                     c.Play(clip, clickVol, 1f, false, 0f);
                     ch = c;
                     return StartResult.Started;
+                }
+                case UttKind.SubtitleLine:
+                {
+                    // the line is only read: shown for its reading time, the air is held as long
+                    if (u.entry == null) return StartResult.Skip;
+                    if (u.speaker != null && (!host.roster.InGroup(u.speaker) || u.speaker.outDueToG)) return StartResult.Skip;
+                    if (u.speaker == null && McUnreachable) return StartResult.Skip;
+                    float secs = SubtitleReadSeconds(u.entry.English);
+                    ShowSubtitle(u.entry, u.speaker != null ? u.speaker.displayName : "MC", secs);
+                    subtitleHoldUntil = clock + secs;
+                    lastEndClock = -1f;
+                    return StartResult.Instant;
                 }
                 case UttKind.RadioOpen:
                 case UttKind.RadioClose:
@@ -2007,6 +2031,7 @@ namespace Lonapse
             UpdatePendingCallout();
             UpdateEvents();
             RuntimeTick();
+            ModTick();
             ProcessQueue();
 
             bool blackoutPhase = InBlackoutPhase;

@@ -212,8 +212,12 @@ namespace Lonapse
 
         // ---------------------------------------------------------------- lifecycle
 
+        /// <summary>The running flight addon, for LonapseApi. Null outside flight.</summary>
+        internal static LonapseAddon Instance;
+
         private void Awake()
         {
+            Instance = this;
             try
             {
                 settings = Settings.Load();
@@ -297,6 +301,7 @@ namespace Lonapse
 
         private void OnDestroy()
         {
+            if (ReferenceEquals(Instance, this)) Instance = null;
             started = false;
             gateOpen = false;
             RestoreListener();

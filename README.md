@@ -153,6 +153,13 @@ stock core's voice.
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.
 
+## Lines for your own mod
+
+Another mod can give its own events a voice: a repair that is done, supplies that run low, an experiment that is
+finished. That mod ships its lines in `GameData/<ItsMod>/Lonapse/*.tsv` and tells Lonapse when the event happens.
+Lonapse picks who talks and fits it into the radio. Neither mod needs the other. How it works is in
+[docs/API.md](docs/API.md), with a wrapper to copy and an example file in [docs/api](docs/api).
+
 ## Compatibility
 
 - Built and tested on KSP 1.12.5. Other 1.12 versions should work but I have not tried them.

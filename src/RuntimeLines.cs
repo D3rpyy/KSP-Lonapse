@@ -36,6 +36,11 @@ namespace Lonapse
         /// kerbal alone). A science line with on= only plays for that experiment. Empty: no event.</summary>
         public readonly List<string> On = new List<string>();
 
+        /// <summary>Meta row of a mod event: the cooldown in seconds (-1: the default), the priority (low normal
+        /// high, null: normal) and who talks (crew mc any, null: any).</summary>
+        public double Cooldown = -1;
+        public string Priority, Who;
+
         /// <summary>An event chat: a chat with on=.</summary>
         public bool IsEvent { get { return Kind == "chat" && On.Count > 0; } }
 
@@ -87,7 +92,10 @@ namespace Lonapse
     public static class RuntimeLines
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
-                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag" };
+                                                  "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag",
+                                                  "event", "meta" };
+        /// <summary>Kinds only other mods use (Lonapse itself ships no rows of them).</summary>
+        public static readonly string[] ModKinds = { "event", "meta" };
         public static readonly string[] Situations = { "orbit", "flight", "suborbital", "landed", "escape", "other" };
         /// <summary>The number slots (Slots.Numbers) and the name slots: names and persons of Slots.</summary>
         public static readonly string[] NumberSlots = Slots.Numbers;
@@ -142,7 +150,11 @@ namespace Lonapse
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
         static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
         static readonly Regex ToRe = new Regex(@"^to=(rt_[a-z0-9_]*\*?)$");
-        static readonly Regex OnRe = new Regex(@"^on=([a-z_]+)$");
+        static readonly Regex OnRe = new Regex(@"^on=([a-z0-9_]+(?:\.[a-z0-9_]+)?)$");
+        static readonly Regex MetaRe = new Regex(@"^(cooldown|priority|who)=([a-z0-9.]+)$");
+
+        /// <summary>An event of another mod: a namespaced id, mod.event (examplemod.repair_done).</summary>
+        public static bool IsModEvent(string ev) { return ev != null && ev.IndexOf('.') > 0; }
 
         /// <summary>The events of on=: flag (a flag planted), deploy (a Breaking Ground part deployed), science
         /// (any experiment) and the science topics of EventWatchers (evareport, surfacesample, roc ...).</summary>
@@ -156,7 +168,7 @@ namespace Lonapse
         {
             if (t == null || ev == null) return false;
             foreach (string o in t.On)
-                if (o == ev || (o == "science" && ev != "flag" && ev != "deploy")) return true;
+                if (o == ev || (o == "science" && ev != "flag" && ev != "deploy" && !IsModEvent(ev))) return true;
             return false;
         }
 
@@ -261,9 +273,24 @@ namespace Lonapse
                     Match on = OnRe.Match(tok);
                     if (on.Success)
                     {
-                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts") bad.Add("'" + tok + "' only works in a chat or a science line");
-                        else if (Array.IndexOf(Events, on.Groups[1].Value) < 0) bad.Add("unknown event '" + on.Groups[1].Value + "' (" + string.Join(" ", Events) + ")");
-                        else t.On.Add(on.Groups[1].Value);
+                        string ev = on.Groups[1].Value;
+                        bool mod = IsModEvent(ev);
+                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "event" && t.Kind != "meta")
+                            bad.Add("'" + tok + "' only works in a chat, a science line, an event or a meta row");
+                        else if ((t.Kind == "event" || t.Kind == "meta") && !mod) bad.Add("an event or meta row needs a mod event mod.event, not '" + ev + "'");
+                        else if (!mod && Array.IndexOf(Events, ev) < 0) bad.Add("unknown event '" + ev + "' (" + string.Join(" ", Events) + ", or a mod event mod.event)");
+                        else t.On.Add(ev);
+                        continue;
+                    }
+                    Match mt = MetaRe.Match(tok);
+                    if (mt.Success && t.Kind == "meta")
+                    {
+                        string mk = mt.Groups[1].Value, mv = mt.Groups[2].Value;
+                        double cd;
+                        if (mk == "cooldown" && double.TryParse(mv, NumberStyles.Float, CultureInfo.InvariantCulture, out cd) && cd >= 0) t.Cooldown = cd;
+                        else if (mk == "priority" && (mv == "low" || mv == "normal" || mv == "high")) t.Priority = mv;
+                        else if (mk == "who" && (mv == "crew" || mv == "mc" || mv == "any")) t.Who = mv;
+                        else bad.Add("bad meta value '" + tok + "' (cooldown=<seconds>, priority=low|normal|high, who=crew|mc|any)");
                         continue;
                     }
                     Match to = ToRe.Match(tok);
@@ -285,7 +312,7 @@ namespace Lonapse
                         continue;
                     }
                     Match m = Check.Match(tok);
-                    if (m.Success && Array.IndexOf(NumberSlots, m.Groups[1].Value) >= 0)
+                    if (m.Success && (Array.IndexOf(NumberSlots, m.Groups[1].Value) >= 0 || Slots.IsModSlot(m.Groups[1].Value)))
                     {
                         t.Checks.Add(new KeyValuePair<string, KeyValuePair<string, double>>(m.Groups[1].Value,
                             new KeyValuePair<string, double>(m.Groups[2].Value, double.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture))));
@@ -293,6 +320,16 @@ namespace Lonapse
                     }
                     bad.Add("bad condition '" + tok + "'");
                 }
+                if (t.Kind == "meta")
+                {
+                    // settings of a mod event, no lines
+                    if (t.On.Count != 1) bad.Add("a meta row needs exactly one on=mod.event");
+                    t.Versions.Clear();
+                    if (bad.Count > 0) { if (errors != null) errors.Add(where + " (" + t.Id + "): " + string.Join("; ", bad.ToArray())); continue; }
+                    r.Add(t);
+                    continue;
+                }
+                if (t.Kind == "event" && t.On.Count == 0) bad.Add("an event line needs on=mod.event");
                 int nEs = f[col["spanish"]].Split(SubtitleSlots.VersionSep).Length, nEn = f[col["english"]].Split(SubtitleSlots.VersionSep).Length;
                 if (nEs != nEn) bad.Add(nEs + " spanish versions for " + nEn + " english, split both by | in the same order");
                 for (int v = 0; v < t.Versions.Count && bad.Count == 0; v++)
@@ -301,7 +338,8 @@ namespace Lonapse
                     if (es.Length == 0 || en.Length == 0) { bad.Add("spanish and english must not be empty" + vn); continue; }
                     foreach (string text in new[] { es, en })
                         foreach (Match m in Slot.Matches(text))
-                            if (Array.IndexOf(NumberSlots, m.Groups[1].Value) < 0 && Array.IndexOf(NameSlots, m.Groups[1].Value) < 0)
+                            if (Array.IndexOf(NumberSlots, m.Groups[1].Value) < 0 && Array.IndexOf(NameSlots, m.Groups[1].Value) < 0
+                                && !Slots.IsModSlot(m.Groups[1].Value))
                                 bad.Add("unknown slot {" + m.Groups[1].Value + "}" + vn);
                     if (SlotSet(es) != SlotSet(en)) bad.Add("spanish and english must use the same slots" + vn);
                 }
@@ -745,7 +783,7 @@ namespace Lonapse
 
         // ---------------- filling ----------------
 
-        static readonly Regex Slot = new Regex(@"\{([a-z_]+)\}");
+        static readonly Regex Slot = new Regex(@"\{([a-z][a-z0-9_]*)\}");
 
         /// <summary>
         /// Fills a template. nums: numeric values by slot name. names: name slots by slot name, each { spoken, english }
@@ -808,7 +846,7 @@ namespace Lonapse
             { "parts", "part" }, { "contracts", "contract" }, { "kerbals", "kerbal" },
             { "flights", "flight" }, { "trips", "trip" }, { "landings", "landing" },
         };
-        static readonly Regex SlotNoun = new Regex(@"\{([a-z_]+)\} (\p{L}+)");
+        static readonly Regex SlotNoun = new Regex(@"\{([a-z][a-z0-9_]*)\} (\p{L}+)");
 
         /// <summary>A value that is 1 (after rounding) takes the singular noun right after its slot: "un kilómetro",
         /// "1 minute". In Spanish a value in millions gets "de" before its noun. Applied to the template before it is filled.</summary>

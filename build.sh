@@ -54,6 +54,17 @@ mcs -target:library -nostdlib -noconfig \
     -optimize+ -warn:4 -out:"$OUT" "${SRC[@]}"
 echo "Compiled: $OUT ($(stat -c %s "$OUT") bytes)"
 
+# the API wrapper for other mods must compile on its own, without Lonapse.dll (it proves there is no dependency).
+# The result is thrown away, it is never installed.
+WRAP="$REPO/docs/api/LonapseWrapper.cs"
+if [[ -f "$WRAP" ]]; then
+  mkdir -p "$REPO/build/api-check"
+  mcs -target:library -nostdlib -noconfig \
+      -r:"$MG/mscorlib.dll" -r:"$MG/System.dll" -r:"$MG/System.Core.dll" "${refs[@]}" \
+      -warn:4 -out:"$REPO/build/api-check/LonapseWrapper.dll" "$WRAP"
+  echo "API wrapper compiles without Lonapse.dll: docs/api/LonapseWrapper.cs"
+fi
+
 if [[ $COMPILE_ONLY -eq 1 ]]; then
   echo "Compile only, nothing installed."
   exit 0

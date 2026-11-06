@@ -1359,7 +1359,7 @@ public static class Tests
         foreach (RuntimeTemplate t in rtAll) { int c0; kindCount.TryGetValue(t.Kind, out c0); kindCount[t.Kind] = c0 + 1; }
         var kc = new List<string>();
         foreach (var kv in kindCount) kc.Add(kv.Key + " " + kv.Value);
-        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length,
+        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length - RuntimeLines.ModKinds.Length,
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
         var rtBadErr = new List<string>();
@@ -1551,6 +1551,96 @@ public static class Tests
                 Check(one.Count == 1 && one[0].Id == "rt_chat_ok_1" && oneErr.Count == 3,
                       "runtime voice: an event chat may have one line, a normal chat not, on= only on chats and science, known events only",
                       string.Join(" ; ", oneErr.ToArray()));
+            }
+            {
+                // the API for other mods: a mod's own file next to the Lonapse files, with an example mod
+                string exPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../docs/api/example_mod.tsv"));
+                var modFiles = new List<KeyValuePair<string, IList<string>>>(rtFiles);
+                modFiles.Add(new KeyValuePair<string, IList<string>>("ExampleMod/Lonapse/example_mod.tsv",
+                    System.IO.File.ReadAllLines(exPath, System.Text.Encoding.UTF8)));
+                var modErr = new List<string>();
+                List<RuntimeTemplate> withMod = RuntimeLines.ParseAll(modFiles, modErr);
+                var mine = withMod.FindAll(t => t.Where.StartsWith("ExampleMod/", StringComparison.Ordinal));
+                ModEventInfo repair = ModEvents.Info(withMod, "examplemod.repair_done");
+                ModEventInfo supplies = ModEvents.Info(withMod, "examplemod.supplies_low");
+                ModEventInfo exp = ModEvents.Info(withMod, "examplemod.experiment_done");
+                List<string> modIds = ModEvents.Ids(withMod);
+                Check(modErr.Count == 0 && mine.Count >= 10 && withMod.Count == rtAll.Count + mine.Count
+                      && repair.HasChat && repair.HasMc && repair.Cooldown == 180 && repair.Priority == 1 && repair.Who == "any"
+                      && supplies.Priority == 2 && supplies.Cooldown == 600 && exp.Who == "mc" && exp.Priority == 0 && exp.HasLines
+                      && !ModEvents.Info(withMod, "examplemod.nothing").HasLines && modIds.Count == 3 && modIds[0] == "examplemod.experiment_done",
+                      "mod API: the example mod file parses next to the Lonapse files, with its meta settings",
+                      mine.Count + " mod templates; " + string.Join(" ; ", modErr.ToArray()));
+
+                // mod events never mix with the stock events, the stock lines never answer them
+                RuntimeTemplate anySci = withMod.Find(t => t.Id == "rt_chat_snolink_1");
+                RuntimeTemplate modChat = withMod.Find(t => t.Id == "rt_chat_examplemod_repair_1");
+                Check(anySci != null && modChat != null && !RuntimeLines.OnFits(anySci, "examplemod.repair_done")
+                      && RuntimeLines.OnFits(modChat, "examplemod.repair_done") && !RuntimeLines.OnFits(modChat, "examplemod.supplies_low")
+                      && !RuntimeLines.OnFits(modChat, "flag") && !withMod.Exists(t => t.Kind == "reply" && t.To.Count == 0
+                          && RuntimeLines.Answers(t, "rt_examplemod_repair", "event")),
+                      "mod API: a mod event only fits its own lines, and only its own replies answer it", "");
+
+                // x_ slots: numbers in Spanish words and digits, names as "spanish|english", checks on x_ values
+                var xn = new Dictionary<string, double> { { "x_days", 4 } };
+                var xs = new Dictionary<string, string[]> { { "other", new[] { "Bil", "Bill" } } };
+                RuntimeTemplate sup = withMod.Find(t => t.Id == "rt_examplemod_supplies");
+                RuntimeTemplate one = withMod.Find(t => t.Id == "rt_examplemod_supplies_one");
+                string es0, en0;
+                bool supFill = sup != null && RuntimeLines.Fill(sup, 0, xn, xs, out es0, out en0)
+                               && en0 == "You have supplies for 4 days. Plan the trip home."
+                               && RuntimeSpeech.Spoken(es0).Contains(LonapseText.ReverseText("cuatro"));
+                string[] nm = ModEvents.SplitName("el grifo|the tap");
+                var expNames = new Dictionary<string, string[]> { { "x_experiment", ModEvents.SplitName("plant growth") }, { "kerbal", new[] { "Yeb", "Jeb" } } };
+                RuntimeTemplate et = withMod.Find(t => t.Id == "rt_examplemod_experiment");
+                Check(supFill && RuntimeLines.Fitting(withMod, "event", "orbit", xn, xs).Contains(sup)
+                      && !RuntimeLines.Fitting(withMod, "event", "orbit", xn, xs).Contains(one)
+                      && RuntimeLines.Fitting(withMod, "event", "orbit", new Dictionary<string, double> { { "x_days", 1 } }, xs).Contains(one)
+                      && nm[0] == "el grifo" && nm[1] == "the tap" && ModEvents.SplitName("") == null && ModEvents.SplitName("|x") == null
+                      && et != null && RuntimeLines.FillableVersions(et, null, expNames).Count == 2,
+                      "mod API: x_ slots fill from the mod's numbers and names, and checks work on them", "");
+
+                // bad mod rows: each one only skips itself
+                var badErr = new List<string>();
+                var badFiles = new List<KeyValuePair<string, IList<string>>>(rtFiles);
+                badFiles.Add(new KeyValuePair<string, IList<string>>("SomeMod/Lonapse/a.tsv", new List<string> {
+                        "id\tkind\twhen\tspanish\tenglish",
+                        "rt_somemod_ok\tevent\ton=somemod.thing\tVale {x_n}.\tOkay {x_n}.",
+                        "rt_somemod_noon\tevent\t\tA.\tA.",
+                        "rt_somemod_stock\tevent\ton=flag\tB.\tB.",
+                        "rt_somemod_unknown\tchat\ton=nothing\tC.\tC.",
+                        "rt_somemod_onelang\tevent\ton=somemod.thing\tD {x_n}.\tD.",
+                        "rt_somemod_meta\tmeta\ton=somemod.thing cooldown=abc\t\t",
+                        "rt_orbit\tevent\ton=somemod.thing\tE.\tE.",
+                        "rt_somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF." }));
+                List<RuntimeTemplate> badRows = RuntimeLines.ParseAll(badFiles, badErr)
+                    .FindAll(t => t.Where.StartsWith("SomeMod/", StringComparison.Ordinal));
+                Check(badRows.Count == 2 && badRows[0].Id == "rt_somemod_ok" && badRows[1].Id == "rt_somemod_check" && badErr.Count == 6,
+                      "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id)",
+                      badErr.Count + ": " + string.Join(" ; ", badErr.ToArray()));
+                Check(ModEvents.ValidId("examplemod.repair_done") && ModEvents.ValidId("m2.e_1") && !ModEvents.ValidId("flag")
+                      && !ModEvents.ValidId("a.b.c") && !ModEvents.ValidId(".x") && !ModEvents.ValidId("x.") && !ModEvents.ValidId("Mod.Event")
+                      && !ModEvents.ValidId(null) && Slots.IsModSlot("x_days") && !Slots.IsModSlot("x_") && !Slots.IsModSlot("days")
+                      && !Slots.IsModSlot("x_Days") && Slots.IsReserved("x_days"),
+                      "mod API: event ids are mod.event, mod slots start with x_", "");
+
+                // the pending list: cooldown per event, the global gap, high priority, max age, capacity
+                var q = new ModEventQueue();
+                bool okQ = q.Offer("m.a", 1, 120, 0, null) == null && q.Offer("m.a", 1, 120, 1, null) == "already waiting";
+                var first = q.Take(2, 0);
+                okQ &= first != null && first.Id == "m.a" && q.Offer("m.a", 1, 120, 50, null) == "cooldown";
+                okQ &= q.Offer("m.b", 1, 120, 10, null) == null && q.Take(20, 0) == null;      // global gap of 30 s
+                okQ &= q.Offer("m.c", 2, 120, 21, null) == null;
+                var high = q.Take(22, 0);
+                okQ &= high != null && high.Id == "m.c";                                        // high skips the gap
+                okQ &= q.Take(60, 2) == null;                                                   // only high allowed now
+                var qb = q.Take(60, 0);
+                okQ &= qb != null && qb.Id == "m.b";
+                okQ &= q.Offer("m.a", 1, 120, 130, null) == null;                               // its cooldown is over
+                okQ &= q.Count == 1 && q.Take(300, 0) == null && q.Count == 0;                  // older than 90 s: gone
+                for (int i = 0; i < 8; i++) q.Offer("m.e" + i, 0, 0, 400, null);
+                okQ &= q.Count == ModEvents.MaxPending && q.Offer("m.z", 2, 0, 400, null) == "queue full";
+                Check(okQ, "mod API: pending mod events keep their cooldowns, the gap between events, priorities, max age and the cap", "");
             }
             Check(DcMath.WarpFactor(1f, 0.4f, 2.5f) == 1f && Math.Abs(DcMath.WarpFactor(100f, 0.4f, 2.5f) - 1.8f) < 1e-4f
                   && DcMath.WarpFactor(100000f, 0.4f, 2.5f) == 2.5f && DcMath.WarpFactor(1000f, 0f, 2.5f) == 1f

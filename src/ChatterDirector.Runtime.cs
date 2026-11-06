@@ -605,6 +605,8 @@ namespace Lonapse
                 var own = fit.FindAll(t => t.On.Contains(topic ?? ""));
                 if (own.Count > 0 && rng.NextDouble() < 0.7) fit = own;
             }
+            // a mod event line: only the lines of that event
+            if (kind == "event") { string topic = runtimeTopic; fit.RemoveAll(t => !RuntimeLines.OnFits(t, topic)); }
             List<RuntimeTemplate> fresh = fit.FindAll(t => !recentRuntime.Contains(t.Id));
             if (fresh.Count > 0) fit = fresh;
             else if (kind == "report" || kind == "warp" || kind == "eva") return false;   // a report can wait, an answer to an event may repeat
@@ -950,11 +952,12 @@ namespace Lonapse
         /// <summary>An event chat (a chat with on=) about ev: a is the kerbal who did it, b a partner nearby or null
         /// (then a one-line chat, the kerbal alone). extra: more names (flag, device). after runs once the chat is
         /// queued or dropped, also when its clips fail. False when none fits: after does not run then.</summary>
-        bool EventChat(string ev, KerbalVoice a, KerbalVoice b, Dictionary<string, string[]> extra, Action after)
+        bool EventChat(string ev, KerbalVoice a, KerbalVoice b, Dictionary<string, string[]> extra, Action after,
+                       Dictionary<string, double> extraNums = null, bool textOnly = false)
         {
-            if (!RuntimeOn || runtimeChatPending || a == null || !CanChat(a)) return false;
+            if ((!textOnly && !RuntimeOn) || runtimeChatPending || a == null || !CanChat(a)) return false;
             if (b != null && (ReferenceEquals(a, b) || !CanChat(b))) b = null;
-            return StartRuntimeChat(a, b, ev, extra, after);
+            return StartRuntimeChat(a, b, ev, extra, after, extraNums, textOnly);
         }
 
         /// <summary>A partner for kerbal a: another kerbal of the group who can talk (the radio partners too). Null
@@ -967,11 +970,12 @@ namespace Lonapse
             return all.Count > 0 ? all[rng.Next(all.Count)] : null;
         }
 
-        bool StartRuntimeChat(KerbalVoice a, KerbalVoice b, string ev, Dictionary<string, string[]> extra, Action after)
+        bool StartRuntimeChat(KerbalVoice a, KerbalVoice b, string ev, Dictionary<string, string[]> extra, Action after,
+                              Dictionary<string, double> extraNums = null, bool textOnly = false)
         {
             bool solo = b == null;
             if (solo) b = a;
-            if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
+            if (!textOnly && (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null)) return false;
             Vessel v = ActiveVessel;
             if (v == null) return false;
             ChatWay way = solo ? (a.onEva ? ChatWay.Eva : ChatWay.Apart) : WayOf(a, b);
@@ -981,6 +985,7 @@ namespace Lonapse
             var common = new Dictionary<string, string[]>();
             CollectValues(v, sit, nums, common);
             if (extra != null) foreach (var kv in extra) common[kv.Key] = kv.Value;
+            if (extraNums != null) foreach (var kv in extraNums) nums[kv.Key] = kv.Value;
             string[] na = FirstNames(a), nb = FirstNames(b);
             if (na == null || nb == null) return false;
             var namesA = new Dictionary<string, string[]>(common) { { "self", na }, { "other", nb } };
@@ -1058,6 +1063,14 @@ namespace Lonapse
                 if (chat[0].AboutWarp && host.warpChatter) MarkWarpOnly(e.ClipKey);
                 entries.Add(e);
                 spanish.Add(sp);
+            }
+            if (textOnly)
+            {
+                // no runtime voice: the subtitles with the radio keying, nothing is spoken
+                bool queued = QueueSubtitleChat(a, b, entries, radio);
+                Log.Info("Runtime voice off: chat " + chat[0].Id + (queued ? " shown as subtitles" : " dropped, the queue is full"));
+                if (after != null) after();
+                return queued;
             }
             runtimeChatPending = true;
             int left = entries.Count;
@@ -1302,6 +1315,16 @@ namespace Lonapse
             if (warpOnly) MarkWarpOnly(e.ClipKey);
             // a crew reply, rendered at the same time: it plays right after the MC line, or not at all
             Reply rp = PlanReply(t, nums, names, replyChance);
+            if (runtimeTextOnly)
+            {
+                // no runtime voice (a mod event): the subtitles only, with the radio keying
+                if (report) reportPending = false;
+                if (count + 8 > Capacity) return;
+                QueueSubtitle(null, e, delay);
+                if (rp != null && CanChat(rp.speaker)) QueueSubtitle(rp.speaker, rp.entry, ResponseDelay(host.stress.stress));
+                Log.Info("Runtime voice off: " + t.Id + " shown as a subtitle" + (rp != null ? ", with a reply" : ""));
+                return;
+            }
             if (rp != null && warpOnly) MarkWarpOnly(rp.entry.ClipKey);
             bool mcDone = false, mcQueued = false;
             Action reply = () =>
