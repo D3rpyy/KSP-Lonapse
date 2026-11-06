@@ -624,6 +624,18 @@ namespace Lonapse
             return sb.Length > 0 ? sb.ToString() : null;
         }
 
+        /// <summary>A biome name a voice can say, as VesselSpeakable. Null for a localization tag a planet pack left
+        /// untranslated (#LOC_...) and for a name with letters outside the Latin alphabet (KSP in Chinese, Japanese
+        /// or Russian): the Spanish voice cannot say those.</summary>
+        public static string BiomeSpeakable(string biomeName)
+        {
+            string n = CleanName(biomeName);
+            if (string.IsNullOrEmpty(n) || n.StartsWith("#", StringComparison.Ordinal)) return null;
+            foreach (char c in n)
+                if (char.IsLetter(c) && c > '\u024F') return null;   // Basic Latin up to Latin Extended-B
+            return VesselSpeakable(n);
+        }
+
         /// <summary>KSP display names can end in a gender tag (^N, ^f). Trimmed, the tag removed.</summary>
         public static string CleanName(string name)
         {

@@ -1417,6 +1417,11 @@ public static class Tests
                 new KeyValuePair<string, IList<string>>("b.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_2\tchat\t\tS.\tS." }) }, dupErr);
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
+        Check(RuntimeLines.BiomeSpeakable("Highlands") == "Highlands" && RuntimeLines.BiomeSpeakable("Northern Basin") == "Northern Basin"
+              && RuntimeLines.BiomeSpeakable("Côte Sauvage") == "Côte Sauvage" && RuntimeLines.BiomeSpeakable("#LOC_Pack_Biome3") == null
+              && RuntimeLines.BiomeSpeakable("高地") == null && RuntimeLines.BiomeSpeakable("Высокогорье") == null
+              && RuntimeLines.BiomeSpeakable("Northern Polar Highland Craters") == null && RuntimeLines.BiomeSpeakable("") == null,
+              "runtime voice: biome names from mods are said, untranslated tags and other scripts are left out", null);
         {
             // shadow: behind the body inside its cylinder is dark, in front or beside it is lit
             bool shadowOk = DcMath.InShadow(-700, 0, 0, 1e9, 0, 0, 600) && !DcMath.InShadow(700, 0, 0, 1e9, 0, 0, 600)

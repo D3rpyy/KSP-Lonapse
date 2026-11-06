@@ -383,7 +383,7 @@ namespace Lonapse
                 if (mb != null && mb.BiomeMap != null && sit != "escape")
                 {
                     string bn = ScienceUtil.GetExperimentBiomeLocalized(mb, v.latitude, v.longitude);
-                    string say = !string.IsNullOrEmpty(bn) && bn != "Water" ? RuntimeLines.VesselSpeakable(bn) : null;
+                    string say = bn != "Water" ? RuntimeLines.BiomeSpeakable(bn) : null;
                     if (say != null) names["biome"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(bn) };
                 }
             }
