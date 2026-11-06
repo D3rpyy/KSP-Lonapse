@@ -1490,6 +1490,21 @@ public static class Tests
                       "runtime voice: EVA lines fit the jetpack, the ship distance and the time outside. Flag lines get the planter's answer",
                       string.Join(",", evaFit.ToArray()) + " / " + string.Join(",", flagRe.ToArray()));
             }
+            {
+                var evaChats = RuntimeLines.Chats(rtAll).FindAll(c => c[0].AboutEva);
+                var na = new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } }, { "other", new[] { "Bil", "Bill" } },
+                                                           { "vessel", new[] { "Kerbal X", "Kerbal X" } }, { "biome", new[] { "Midlands", "Midlands" } } };
+                var nb = new Dictionary<string, string[]>(na);
+                nb["self"] = new[] { "Bil", "Bill" };
+                nb["other"] = new[] { "Yeb", "Jeb" };
+                var onEva = new Dictionary<string, double> { { "on_eva", 1 }, { "pair_m", 50 }, { "jet", 20 }, { "ship_m", 80 }, { "eva_mins", 12 } };
+                var inside = new Dictionary<string, double> { { "fuel", 50 }, { "crew", 2 } };
+                List<RuntimeTemplate> pair = evaChats.Find(c => c[0].Id == "rt_chat_evapair_1");
+                bool evaFits = pair != null && RuntimeLines.ChatFits(pair, "landed", onEva, na, nb, "pilot", "scientist");
+                bool insideFits = evaChats.Exists(c => RuntimeLines.ChatFits(c, "landed", inside, na, nb, "pilot brave", "scientist nervous"));
+                Check(evaChats.Count >= 12 && evaFits && !insideFits,
+                      "runtime voice: EVA suit radio chats fit on EVA with their values, never inside", evaChats.Count + " EVA chats");
+            }
             Check(Persona.JobFor("staging") == "pilot" && Persona.JobFor("touchdown") == "pilot" && Persona.JobFor("power_low") == "engineer"
                   && Persona.JobFor("science") == "scientist" && Persona.JobFor("chatter") == null && Persona.JobFor(null) == null
                   && Persona.JobForLine("rt_fuel_low") == "pilot" && Persona.JobForLine("rt_ec_ok") == "engineer"

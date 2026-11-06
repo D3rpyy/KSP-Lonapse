@@ -1436,8 +1436,9 @@ namespace Lonapse
                 {
                     // a real EVA has constant comms: mostly talk, a runtime EVA line now and then for variety
                     double r = rng.NextDouble();
-                    if (r < 0.2) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
-                    else if (r < 0.55 && QueueEvaLine()) { }
+                    if (r < 0.15) { if (host.settings.beepsEnabled) Enqueue(UttKind.PingPattern, null, 0f, 0f, null); }
+                    else if (r < 0.45 && TryEvaChat()) { }   // two kerbals of an EVA group on the suit radio
+                    else if (r < 0.7 && QueueEvaLine()) { }
                     else if (!EnqueueRadioScene(PickScene("eva_check", null, EvaSceneOk), null, U(0f, 0.3f)) && !PhraseClips.Loaded)
                         EnqueueMcFor("eva_check", U(0f, 0.3f));
                     return true;

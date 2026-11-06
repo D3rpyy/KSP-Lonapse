@@ -37,6 +37,8 @@
 #   sci_left sci_first con_sci con_rep (science and contract lines, see science_contracts.tsv)
 #   sunrises (sunrises in orbit this flight)
 #   jet ship_m eva_mins (on EVA: jetpack percent, meters to the ship, minutes outside, see eva_flag.tsv)
+#   on_eva (1 on EVA, for checks only: a chat with on_eva=1 plays on the suit radio) pair_m (meters between two
+#   kerbals in an EVA chat, see eva_chats.tsv)
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)
 # Name slots: vessel body here exp target, next (the body after soi_h), biome (under the vessel), flag (a flag line), kerbal in a report, and in a chat self (the speaker) and other (the one
 #   spoken to). The same list is in src/Slots.cs.

@@ -32,6 +32,16 @@ namespace Lonapse
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
 
+        /// <summary>A chat for kerbals on EVA (a check on on_eva): it plays over the suit radio.</summary>
+        public bool AboutEva
+        {
+            get
+            {
+                foreach (var c in Checks) if (c.Key == "on_eva") return true;
+                return false;
+            }
+        }
+
         /// <summary>A line about time warp: kind warp, or a check on in_warp (a warp chat).</summary>
         public bool AboutWarp
         {

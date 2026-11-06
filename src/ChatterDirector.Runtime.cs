@@ -406,6 +406,7 @@ namespace Lonapse
                 if (ShipNear(v, out sd) != null) nums["ship_m"] = Math.Round(sd);
                 double es = EvaSeconds();
                 if (!double.IsInfinity(es)) nums["eva_mins"] = Math.Floor(es / 60.0);
+                nums["on_eva"] = 1;
             }
             try
             {
@@ -818,9 +819,9 @@ namespace Lonapse
         /// Sometimes an intercom chat from Phrases/Runtime instead of the table: every line rendered in the voice of its
         /// kerbal, queued as one chat once all lines are ready. True when one was started (the caller queues nothing).
         /// </summary>
-        bool TryRuntimeChat(KerbalVoice a, KerbalVoice b)
+        bool TryRuntimeChat(KerbalVoice a, KerbalVoice b, bool eva = false)
         {
-            double chance = host.warpChatter ? WarpChatChance : RuntimeChatChance;
+            double chance = eva ? 1.0 : host.warpChatter ? WarpChatChance : RuntimeChatChance;
             if (!RuntimeOn || runtimeChatPending || a == null || b == null || (!debugForce && rng.NextDouble() >= chance)) return false;
             if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
             Vessel v = ActiveVessel;
@@ -840,6 +841,12 @@ namespace Lonapse
             var numsB = new Dictionary<string, double>(nums);
             CrewValues(a, v, numsA);
             CrewValues(b, v, numsB);
+            if (eva)
+            {
+                // on EVA the jetpack and the ship distance are the speaker's own, pair_m the meters between the two
+                EvaValues(a, b, numsA);
+                EvaValues(b, a, numsB);
+            }
             var fit = new List<KeyValuePair<List<RuntimeTemplate>, bool>>();
             foreach (List<RuntimeTemplate> c in RuntimeLines.Chats(PhraseClips.runtimeTemplates))
             {
@@ -847,8 +854,10 @@ namespace Lonapse
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
                 else if (RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
             }
+            // on EVA only the suit radio chats, inside never those
+            fit.RemoveAll(c => c.Key[0].AboutEva != eva);
             // in time warp a chat about the warp when one fits
-            if (host.warpChatter)
+            if (host.warpChatter && !eva)
             {
                 var warpFit = fit.FindAll(c => c.Key[0].AboutWarp);
                 if (warpFit.Count > 0) fit = warpFit;
@@ -899,11 +908,12 @@ namespace Lonapse
                     clips[idx] = r.clip;
                     if (--left > 0) return;
                     runtimeChatPending = false;
-                    bool ok = !failed && CanChat(a) && CanChat(b) && host.settings.intercomEnabled && !Somber;
+                    bool ok = !failed && CanChat(a) && CanChat(b) && !Somber
+                              && (eva ? host.settings.radioEnabled && !radioSilent && host.evaMode : host.settings.intercomEnabled);
                     if (ok)
                     {
                         for (int k = 0; k < entries.Count; k++) PhraseClips.SetRuntimeClip(entries[k], clips[k]);
-                        ok = QueueChatTurns(a, b, entries, entries.Count, null, false);
+                        ok = eva ? QueueRadioChat(a, b, entries) : QueueChatTurns(a, b, entries, entries.Count, null, false);
                     }
                     if (!ok)
                     {
@@ -918,6 +928,63 @@ namespace Lonapse
                 });
             }
             return true;
+        }
+
+        /// <summary>An EVA chat over the suit radio: each line keyed like a crew radio line (click, line, beep,
+        /// squelch), the two kerbals in turn. False when the queue has no room.</summary>
+        bool QueueRadioChat(KerbalVoice a, KerbalVoice b, List<PhraseEntry> entries)
+        {
+            if (count + 4 * entries.Count > Capacity) return false;
+            for (int i = 0; i < entries.Count; i++)
+                EnqueueCrew(entries[i].Folder, i == 0 ? U(0.2f, 0.6f) : ResponseDelay(host.stress.stress), 0f, i % 2 == 0 ? a : b, entries[i]);
+            return true;
+        }
+
+        /// <summary>The loaded EVA vessel of a kerbal (the active one or a nearby one), null when not on EVA.</summary>
+        static Vessel EvaVesselOf(KerbalVoice k)
+        {
+            if (k == null) return null;
+            try
+            {
+                List<Vessel> loaded = FlightGlobals.VesselsLoaded;
+                for (int i = 0; i < loaded.Count; i++)
+                {
+                    Vessel o = loaded[i];
+                    if (o == null || !o.isEVA) continue;
+                    foreach (ProtoCrewMember pcm in o.GetVesselCrew()) if (pcm != null && pcm.name == k.name) return o;
+                }
+            }
+            catch (Exception) { }
+            return null;
+        }
+
+        /// <summary>EVA values of kerbal k for a suit radio chat: its own jetpack and ship distance, and pair_m to
+        /// the other kerbal.</summary>
+        void EvaValues(KerbalVoice k, KerbalVoice other, Dictionary<string, double> nums)
+        {
+            Vessel kv = EvaVesselOf(k), ov = EvaVesselOf(other);
+            if (kv == null) return;
+            double jet = ResourcePercent(kv, "EVA Propellant");
+            if (double.IsNaN(jet)) jet = ResourcePercent(kv, "MonoPropellant");
+            nums.Remove("jet");
+            Put(nums, "jet", jet);
+            double sd;
+            nums.Remove("ship_m");
+            if (ShipNear(kv, out sd) != null) nums["ship_m"] = Math.Round(sd);
+            try { if (ov != null) nums["pair_m"] = Math.Round(Vector3d.Distance(kv.GetWorldPos3D(), ov.GetWorldPos3D())); }
+            catch (Exception) { }
+        }
+
+        /// <summary>Two kerbals of an EVA group talk over the suit radio (a runtime EVA chat). False when there are
+        /// not two who can talk, or no chat fits.</summary>
+        bool TryEvaChat()
+        {
+            if (!host.evaMode || host.roster.SpeakableCount() < 2) return false;
+            KerbalVoice a = PickRested();
+            if (!CanChat(a)) return false;
+            var others = host.roster.voices.FindAll(k => !ReferenceEquals(k, a) && CanChat(k));
+            if (others.Count == 0) return false;
+            return TryRuntimeChat(a, others[rng.Next(others.Count)], true);
         }
 
         bool landSaid;
