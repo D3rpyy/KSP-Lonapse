@@ -1,30 +1,39 @@
 # Changelog
 
-## 0.7.0 (not released yet)
+## 0.7.0 (2026-11-06)
 
-**Kerbals now say your names.** Mission Control and the crew speak the names of your kerbals, your vessel and the planet you are at, and Mission Control reads out real numbers. The voice still speaks loñapsE. Only the names are said as they are.
+**Kerbals now say your names, and Mission Control reads your real numbers.** Until now every line was a recording made before release, so the voice could never say the name of your kerbal, your vessel or the place you are at. This version ships a small speech engine (Piper) with the same three voices, and it speaks new lines while you play. That adds 53 Mission Control lines and 22 crew chats (56 lines) with real values, on top of 6478 new subtitle versions, 29 scenes with subtitle slots and 138 new probe scenes. The voice still speaks loñapsE. Only names are said as they are.
 
 ### New
-- Runtime voice. Lonapse now ships a small speech engine (Piper) and three voices, and speaks some lines while you play. Turn it on with "Speak names and new lines at runtime" in the Crew tab. It is off by default.
-  - Mission Control sometimes ends a line with the name of the kerbal who just spoke, or with the name of your vessel. On a probe it uses the vessel name.
-  - In crew chats on the intercom, a kerbal sometimes says the other one's name.
-  - On a planet from a mod, lines about "the planet" say its real name.
-  - Mission Control reports now and then with the real values: your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, and on a docking approach the distance to the target. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
-  - These lines are templates in `GameData/Lonapse/Phrases/runtime.tsv`. Add a row and restart KSP to give Mission Control something new to say. The file explains the columns.
-  - After some science reactions Mission Control says the experiment, the body and the science points. A finished contract gets its funds, a failed one a short line. Turn this off with "Science points and contract funds".
-  - A line that is not ready in time plays as before, without the name. Nothing waits more than a second for it.
-  - You can add your own lines without rendering any audio. Put rows in `GameData/Lonapse/Phrases/Extra/*.tsv`, in the format of the tables in the repo. They are only heard with the runtime voice on.
-- Subtitles with versions. Most lines now have several English subtitles for the same audio: 6478 new versions on 3186 of the 3849 lines. You see a new wording first, the original comes later.
-- Subtitle slots. 29 template scenes fill in things from your flight: the mission day, the planet, the vessel, the altitude, parts of your vessel and the names of the crew in a chat. A subtitle only names parts your vessel has, and some versions only show in the right place, like on the ground or at Kerbin.
-- QBE, Mk2 Drone Core, MPO and MTM have their own probe voices and 138 scenes of their own lines.
+- **Runtime voice.** It is on by default. Turn it off with "Speak names and new lines at runtime" in the Crew tab, then only the recorded lines play. Piper runs as a separate program next to KSP. A line that is not ready within a second plays as before, without the name, so nothing ever waits for it.
+  - **Names.** Mission Control sometimes ends a line with the name of the kerbal who just spoke, or with the name of your vessel. On a probe it uses the vessel name. In crew chats on the intercom, a kerbal sometimes says the other one's name. On a planet from a mod, lines about "the planet" say its real name.
+  - **Reports with real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel of the burning stage, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, and on a docking approach the distance to the target. Big numbers are said short, in thousands, millions and billions. The numbers are spoken in loñapsE, the subtitle shows them in digits. Turn this off with "Mission Control reports with numbers".
+  - **Science and contracts.** After some science reactions Mission Control says the experiment, the body and the science points. A finished contract gets its funds, a failed one a short line. Turn this off with "Science points and contract funds".
+  - **Crew history.** Mission Control knows your crew's career. It can tell a kerbal that this is their first flight or their tenth, their first time at Duna, that they landed here before, or what level they are. Two kerbals in a chat can talk about it too.
+  - **Crew chats with values.** 22 intercom chats use real values and the names of the two kerbals. Some only play with the right jobs, like a pilot and an engineer talking about the fuel.
+  - **The voice says what the subtitle shows.** For 65 lines with subtitle versions and slots, every version has its own Spanish. The voice speaks the version you see, with the word that was filled in: the thing that is lost, the food, the part, the vessel or the name of the other kerbal. Before, these lines always played the same recording, whatever the subtitle said. The Spanish is in `GameData/Lonapse/Phrases/slots_es.tsv` (65 lines and 172 values). The other subtitle versions still play their recorded clip.
+  - **Same sound as the recordings.** Runtime lines use the same voice, pitch and delivery as the recorded lines around them. A kerbal keeps their own voice, and a tense or panicked line is as fast and high as the recorded ones.
+- **Write your own lines, no audio needed.** The runtime lines are templates in `GameData/Lonapse/Phrases/runtime.tsv`. Add a row and restart KSP to give Mission Control something new to say. The file explains the columns, the values you can use and the checks (like `fuel<25` or `orbit`). A chat can ask for jobs: `a=pilot` for the kerbal who starts, `b=scientist` for the one who answers. You can also put rows in `GameData/Lonapse/Phrases/Extra/*.tsv` in the format of the tables in the repo. These lines are only heard with the runtime voice on.
+- **Subtitles with versions.** Most lines now have several English subtitles for the same audio: 6478 new versions on 3186 of the 3849 lines. You see a new wording first, the original comes later. So a line you heard before can still read differently.
+- **Subtitle slots.** 29 template scenes fill in things from your flight: the mission day, the planet, the vessel, the altitude, parts of your vessel and the names of the crew in a chat. A subtitle only names parts your vessel has, and some versions only show in the right place, like on the ground or at Kerbin.
+- **More probe voices.** QBE, Mk2 Drone Core, MPO and MTM have their own probe voices and 138 scenes of their own lines.
 - `ModuleLonapse` takes a `displayName`, so a probe from a mod shows its own name in the subtitles.
-- "Light delay" in the Crew tab. Turn it off and Mission Control answers right away, also far from Kerbin.
+- **"Light delay"** in the Crew tab. Turn it off and Mission Control answers right away, also far from Kerbin.
 
-### Changed
-- The scene variants test from the development builds is gone. Its lines are now subtitle versions.
+### Fixed
+- The same lines came back too often for kerbals with a personality or a job. Their own scenes are a small list, and now they wait like every other scene before they come back.
+- Mission Control said the name of one kerbal and another one answered. It now talks to the kerbal who answers.
+- A subtitle showed the vessel name, but nobody said it. With the runtime voice on, the name is now spoken too.
+- Some lines made no sense at Kerbin, like "Remember: you can't take Kerbin home." They no longer play there.
+- Without a link the crew kept calling Control and got no answer. Now they only talk to each other until the link is back, like in a radio blackout.
+- Two kerbals of the same gender aboard could sound almost the same. Their voices are now kept at least 1.5 semitones apart.
+- Vessel names from KSP's localization (like `#autoLOC_...`) are shown and spoken as the real name.
 
 ### Notes
-- The runtime voice makes the download bigger. Piper and its voices run as a separate program next to KSP, in `GameData/Lonapse/PluginData/Runtime`. Piper is GPL-3, see the licence files in that folder.
+- The download is about 80 MB bigger: Piper for Windows and Linux and the three voices, in `GameData/Lonapse/PluginData/Runtime`. The voices are smaller copies of the build voices (int8 weights, decoder kept at full precision), and they sound the same.
+- There is no runtime voice on macOS yet. The macOS build of Piper is missing its libraries. On a Mac only the recorded lines play. The Linux build is not tested in the game.
+- Piper, espeak-ng, ONNX Runtime and the voices come with their own licences, see the licence files in that folder and "Runtime voice files" in the readme. The readme also lists the sha256 of every file, if your virus scanner asks.
+- The scene variants test from the development builds is gone. Its lines are now subtitle versions.
 
 ## 0.6.0 (2026-11-05)
 
