@@ -181,6 +181,9 @@ names. Players who do not like the lines of one mod can turn them off in the Mod
 The repo has the plugin source, the phrase tables and the audio scripts. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 for the build and [audio/README.md](audio/README.md) for the sound pipeline.
 
+`GameData/Lonapse/Phrases/phrases.tsv` is built by `audio/build_lonapse.py` and is too large for GitHub to show as a
+table. The lines it is built from are in [audio/lonapse/phrases/](audio/lonapse/phrases/), one table per topic.
+
 ## Runtime voice files
 
 To speak lines with live values (names, numbers, bodies), Lonapse ships a copy of the Piper text to speech program
