@@ -424,6 +424,8 @@ namespace Lonapse
             s.beepsEnabled = Toggle(s.beepsEnabled, "Telemetry beeps");
             s.warpChatter = Toggle(s.warpChatter, "Chatter during time warp");
             Hint("Calm talk goes on in time warp. Events wait until the warp ends. With the runtime voice Mission Control also talks about the warp.");
+            s.evaGroup = Toggle(s.evaGroup, "Nearby EVA kerbals join the radio");
+            Hint("On EVA, other kerbals on EVA within 150 m talk with Mission Control too.");
             s.rateMultiplier = Mathf.Round(Row("Radio amount", s.rateMultiplier, 0.25f, 4f, s.rateMultiplier, "0.0#'x'") * 20f) / 20f;
             Hint("How often the crew and Mission Control talk. 2x is twice as often.");
             Tuning tu = s.tuning;

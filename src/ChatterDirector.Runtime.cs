@@ -243,13 +243,15 @@ namespace Lonapse
                                 : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
                                 && host.roster.voices.Contains(lastCrewVoice) ? lastCrewVoice
                                 : crew == 1 ? host.roster.voices[0] : null;
-                if (crew == 0 || rng.NextDouble() < RuntimeVesselShare) name = VesselNames();
+                // a group on EVA: the vessel name is the name of the one in control, so not that
+                bool evaGroup = crew > 1 && ActiveVessel != null && ActiveVessel.isEVA;
+                if (crew == 0 || (!evaGroup && rng.NextDouble() < RuntimeVesselShare)) name = VesselNames();
                 if (name == null && k != null)
                 {
                     string first = RuntimeLines.CleanName(SubtitleSlots.FirstName(k.displayName));
                     if (!string.IsNullOrEmpty(first)) name = new[] { RuntimeSpeech.Respell(first), first };
                 }
-                if (name == null && crew > 1) name = rng.NextDouble() < 0.5 ? VesselNames() : TeamNames();
+                if (name == null && crew > 1) name = !evaGroup && rng.NextDouble() < 0.5 ? VesselNames() : TeamNames();
             }
             RuntimeLine r = PlanLine(e, null, name);
             if (name != null && r != null) NameSaid();

@@ -15,6 +15,8 @@ namespace Lonapse
         public string name;           // raw name: the voice hash uses this, so voices stay stable
         public string displayName;    // localized for logs and the overlay (#autoLOC_... names of stock kerbals)
         public bool isPilot;
+        /// <summary>A kerbal on EVA near the active EVA kerbal (evaGroup), not the one in control.</summary>
+        public bool nearbyEva;
         public float courage, stupidity;
         public bool isBadass;
         public bool outDueToG;
@@ -411,7 +413,21 @@ namespace Lonapse
         }
 
         /// <summary>Rebuild from the vessel crew. Returns true when the set of crew names changed.</summary>
-        public bool Rebuild(Vessel v)
+        public bool Rebuild(Vessel v) { return Rebuild(v, null); }
+
+        /// <summary>The kerbal in control: the first voice that is not a nearby EVA kerbal. Null without crew.</summary>
+        public KerbalVoice Own
+        {
+            get
+            {
+                for (int i = 0; i < voices.Count; i++) if (!voices[i].nearbyEva) return voices[i];
+                return null;
+            }
+        }
+
+        /// <summary>Rebuild from the vessel crew plus the kerbals of <paramref name="nearby"/> (other EVA kerbals close
+        /// to an active EVA kerbal, may be null). Returns true when the set of crew names changed.</summary>
+        public bool Rebuild(Vessel v, IList<Vessel> nearby)
         {
             dirty = false;
             List<KerbalVoice> old = new List<KerbalVoice>(voices);
@@ -422,6 +438,16 @@ namespace Lonapse
             try { crew = v.GetVesselCrew(); }
             catch (Exception e) { Log.Exception("CrewRoster.Rebuild", e); }
             if (crew == null) return old.Count > 0;
+            int own = crew.Count;
+            if (nearby != null)
+            {
+                crew = new List<ProtoCrewMember>(crew);
+                foreach (Vessel n in nearby)
+                {
+                    try { if (n != null) crew.AddRange(n.GetVesselCrew()); }
+                    catch (Exception) { }
+                }
+            }
 
             bool changed = false;
             for (int i = 0; i < crew.Count; i++)
@@ -445,6 +471,7 @@ namespace Lonapse
                 try { p = new Persona(pcm.courage, pcm.stupidity, pcm.isBadass, pcm.veteran, pcm.trait); }
                 catch (Exception e) { Log.Exception("CrewRoster.Persona", e); p = new Persona(kv.courage, kv.stupidity, kv.isBadass, false, null); }
                 kv.ApplyPersona(p, personalityEffects);
+                kv.nearbyEva = i >= own;
                 voices.Add(kv);
                 members.Add(pcm);
             }
@@ -459,7 +486,7 @@ namespace Lonapse
                 {
                     Log.Info("Roster for " + Names.Of(v) + ": " + voices.Count + " kerbal(s)");
                     for (int i = 0; i < voices.Count; i++)
-                        Log.Info("  voice " + voices[i].Describe() + ", aboard pitch " + voices[i].Pitch.ToString("0.000"));
+                        Log.Info("  voice " + voices[i].Describe() + (voices[i].nearbyEva ? ", nearby on EVA" : ", aboard") + " pitch " + voices[i].Pitch.ToString("0.000"));
                 }
             }
             return changed;

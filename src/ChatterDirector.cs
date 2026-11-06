@@ -1605,7 +1605,8 @@ namespace Lonapse
             if (!host.evaMode || !host.CanStartAudio || radioSilent || !host.settings.radioEnabled) return false;
             if (HasRadioItems() || Holding || airEventPrio > 0 || count + 10 > Capacity) return false;
             PhraseScene sc = PickScene("eva_fall", null, null);
-            if (!EnqueueRadioScene(sc, null, U(0.4f, 0.9f))) return false;
+            // the kerbal who fell talks, not one of the others nearby on EVA
+            if (!EnqueueRadioScene(sc, host.roster.Own, U(0.4f, 0.9f))) return false;
             Log.Info("EVA fall: " + sc.Id);
             return true;
         }
