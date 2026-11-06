@@ -124,8 +124,10 @@ if ! voices_ok; then
     fetch "$n.onnx" "$u/$n.onnx" "$s" "$REPO/audio/voices"
     j="$REPO/audio/voices/$n.onnx.json"
     [[ -f "$j" ]] || fetch "$n.onnx.json" "$u/$n.onnx.json" "" "$REPO/audio/voices"
-    sed -i 's/"phoneme_type": "PhonemeType.ESPEAK"/"phoneme_type": "espeak"/' "$j"
-    [[ -z "$(tail -c1 "$j")" ]] || echo >> "$j"
+    if grep -q '"phoneme_type": "PhonemeType.ESPEAK"' "$j"; then
+      sed -i 's/"phoneme_type": "PhonemeType.ESPEAK"/"phoneme_type": "espeak"/' "$j"
+      [[ -z "$(tail -c1 "$j")" ]] || echo >> "$j"
+    fi
     [[ "$(sha "$j")" == "${JSON_SHA[$n]}" ]] || { echo "ERROR: $j has sha256 $(sha "$j"), expected ${JSON_SHA[$n]}" >&2; exit 1; }
   done
   "$PY" -I "$REPO/audio/quantize_runtime_voices.py" --out "$VOICES"
