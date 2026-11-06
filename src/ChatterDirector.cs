@@ -220,6 +220,7 @@ namespace Lonapse
                             else if (m is ModuleAblator) tag = "heatshield";
                             else if (m is ModuleParachute) tag = "chute";
                             else if (m is ModuleEngines) tag = "engine";
+                            else if (m is ModuleRCS) tag = "rcs";
                             else if (m is CompoundParts.CModuleStrut) tag = "strut";
                             else if (m is ModuleCommand) { if (((ModuleCommand)m).minimumCrew == 0) tag = "probe"; }
                             else if (m is ModuleScienceExperiment) tag = SubtitleSlots.ExperimentCondition(((ModuleScienceExperiment)m).experimentID);

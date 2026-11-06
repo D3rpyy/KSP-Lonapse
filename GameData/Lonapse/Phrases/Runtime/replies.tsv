@@ -12,7 +12,7 @@ rt_re_landed	reply	to=rt_landed	Gracias. El sitio lo elegimos con los ojos cerra
 rt_re_escape	reply	to=rt_escape	Adiós, {body}. Te escribiremos. | No miréis atrás. Bueno, un poco.	Bye, {body}. We'll write. | Don't look back. Well, maybe a little.
 rt_re_fuel	reply	to=rt_fuel	Si se acaba, empujamos. | Perfecto. Así no hay que parar a repostar. | Perfecto. Hay para un par de errores más.	If it runs out, we'll push. | Great. No need to stop for gas. | Great. Enough for a couple more mistakes.
 rt_re_fuel_low	reply	to=rt_fuel_low	¿Y si soplamos todos hacia atrás? | Entendido. Remos preparados. | Recibido. Ahora toca planear.	What if we all blow backwards? | Copy. Oars ready. | Copy. Gliding time.
-rt_re_ec_low	reply	to=rt_ec_low	Apagando la radio. Ah, espera. | Vale, desenchufo la cafetera. | Entendido. Seguiremos a oscuras.	Turning off the radio. Oh, wait. | Fine, I'm unplugging the coffee maker. | Understood. We'll carry on in the dark.
+rt_re_ec_low	reply	to=rt_ec_low*	Apagando la radio. Ah, espera. | Vale, desenchufo la cafetera. | Entendido. Seguiremos a oscuras.	Turning off the radio. Oh, wait. | Fine, I'm unplugging the coffee maker. | Understood. We'll carry on in the dark.
 rt_re_ec_ok	reply	to=rt_ec_ok	Bien. La cafetera sigue encendida.	Good. The coffee maker stays on.
 rt_re_mono	reply	to=rt_mono	Con calma, sí. Díselo al piloto. | Recibido. Solo toques pequeños.	Easy, yes. Tell the pilot. | Copy. Only little taps.
 rt_re_parts	reply	to=rt_parts	Las contamos esta mañana. Faltaba una, pero era un tornillo. | Casi todas. Una está flotando por aquí dentro.	We counted them this morning. One was missing, but it was a bolt. | Almost all of them. One is floating around in here.
@@ -48,3 +48,17 @@ rt_re_crew_legend	reply	to=rt_crew_legend to=rt_crew_home_veteran	La taza es mí
 rt_re_crew_firstland	reply	to=rt_crew_firstland	Un paso pequeño. Y otro. Y otro.	One small step. And another. And another.
 rt_re_sunrise	reply	to=rt_sunrise*	Otra vez no. Acababa de dormirme. | Buenos días, Control. ¿Hay café? | Mis ojos. Mis pobres ojos.	Not again. I just fell asleep. | Good morning, Control. Is there coffee? | My eyes. My poor eyes.
 rt_re_biome	reply	to=rt_biome*	Ya lo vemos. Muy bonito. Muy marrón. | ¿{biome}? ¿Quién pone estos nombres?	We see it. Very pretty. Very brown. | {biome}? Who comes up with these names?
+rt_re_crew_flightno	reply	to=rt_crew_flightno	Gracias, Control. Ya me sé la cuenta atrás de memoria. | ¿Familia? Entonces quiero un descuento en el combustible. | Y cada vez el asiento es igual de duro.	Thanks, Control. I know the countdown by heart now. | Family? Then I want a discount on the fuel. | And every time the seat is just as hard.
+rt_re_crew_manylandings	reply	to=rt_crew_manylandings	Ya tengo mi sitio favorito para aparcar. | Si sigo así, me cobran alquiler.	I have a favorite parking spot by now. | If I keep this up, they'll charge me rent.
+rt_re_crew_secondvisit	reply	to=rt_crew_secondvisit	Sí. Esta vez sin perderme. Espero. | Me dejé las gafas de sol la otra vez.	Yes. This time without getting lost. I hope. | I left my sunglasses here last time.
+rt_re_crew_rookie	reply	to=rt_crew_rookie	Estoy en ello. Las estrellas no se ganan solas. | Lo sé. Voy a tocar más botones.	Working on it. Stars don't earn themselves. | I know. I'll press more buttons.
+rt_re_crew_stars_mid	reply	to=rt_crew_stars_mid	Poco a poco. Pronto me dejaréis conducir. | Gracias. Ya casi no me tiemblan las manos.	Step by step. Soon you'll let me drive. | Thanks. My hands hardly shake anymore.
+rt_re_flight_high	reply	to=rt_flight_high	Desde aquí las nubes parecen pequeñas. | Recibido. Seguimos subiendo con calma.	From up here the clouds look small. | Copy. Still climbing, nice and calm.
+rt_re_escape_home	reply	to=rt_escape_home	Llamaremos. Dejad la luz encendida. | Adiós, casa. Guardadnos la cena.	We'll call. Leave the light on. | Bye, home. Save us some dinner.
+rt_re_landed_home	reply	to=rt_landed_home	Tranquilo, sí. Hasta los pájaros nos miran. | Aire de verdad. Qué lujo.	Quiet, yes. Even the birds are looking at us. | Real air. What a luxury.
+rt_re_mono_ok	reply	to=rt_mono_ok	No lo digas dos veces. | Genial. Voy a hacer piruetas.	Don't say it twice. | Great. Time for some spins.
+rt_re_ec_mid	reply	to=rt_ec_mid*	Recibido. Apagamos la luz del baño. | Ni bien ni mal. Como la comida de aquí.	Copy. We'll turn off the bathroom light. | Not good, not bad. Like the food up here.
+rt_re_parts_small	reply	to=rt_parts_small	Pequeño pero valiente. | Menos piezas, menos tornillos sueltos.	Small but brave. | Fewer parts, fewer loose bolts.
+rt_re_con_left	reply	to=rt_con_left to=rt_con_one	Bien. Uno menos en la lista. | Recibido. ¿Pagan por horas?	Good. One less on the list. | Copy. Do they pay by the hour?
+rt_re_con_last	reply	to=rt_con_last	¿Vacaciones, entonces? | Buscad algo con vistas al mar.	Vacation, then? | Find something with a sea view.
+rt_re_mono_plain	reply	to=rt_mono_plain	Recibido. Lo vigilamos.	Copy. We'll watch it.

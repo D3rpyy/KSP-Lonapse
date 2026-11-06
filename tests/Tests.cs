@@ -1372,6 +1372,21 @@ public static class Tests
         Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length - RuntimeLines.ModKinds.Length,
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
+        {
+            // a report that talks to one kerbal by name gets a reply of its own (to=), not only the generic ones
+            var noReply = new List<string>();
+            foreach (RuntimeTemplate t in rtAll)
+            {
+                if (t.Kind != "report" || !t.NamesKerbal) continue;
+                bool has = false;
+                foreach (RuntimeTemplate r in rtAll)
+                    if (r.Kind == "reply")
+                        foreach (string to in r.To)
+                            if (to == t.Id || (to.EndsWith("*") && t.Id.StartsWith(to.Substring(0, to.Length - 1)))) has = true;
+                if (!has) noReply.Add(t.Id);
+            }
+            Check(noReply.Count == 0, "runtime voice: every report that names a kerbal has its own reply", string.Join(" ", noReply.ToArray()));
+        }
         var rtBadErr = new List<string>();
         RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
             "rt_b\tnope\t\tB.\tB.", "rt_c\treport\t\tC {fuel}.\tC.", "rt_d\treport\t\tD {nothing}.\tD {nothing}.", "x_e\treport\t\tE.\tE.",

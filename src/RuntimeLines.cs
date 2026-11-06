@@ -31,6 +31,16 @@ namespace Lonapse
         public readonly List<string> To = new List<string>();
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
+        /// <summary>A version talks to one kerbal by name ({kerbal}): that kerbal answers more often.</summary>
+        public bool NamesKerbal
+        {
+            get
+            {
+                foreach (string[] v in Versions)
+                    if (v != null && v.Length > 0 && v[0] != null && v[0].Contains("{kerbal")) return true;
+                return false;
+            }
+        }
         /// <summary>Event chats and science lines: the events it is about (on=flag on=surfacesample in the when
         /// column). A chat with on= only plays on that event, never as a normal chat, and may be one line long (a
         /// kerbal alone). A science line with on= only plays for that experiment. Empty: no event.</summary>

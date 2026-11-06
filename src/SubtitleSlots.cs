@@ -181,7 +181,7 @@ namespace Lonapse
                                                        "descent", "landed", "blackout", "kerbin", "away",
                                                        // parts on the vessel (ChatterDirector.VesselConditions)
                                                        "solar", "antenna", "legs", "ladder", "docking", "heatshield",
-                                                       "chute", "engine", "strut", "probe",
+                                                       "chute", "engine", "strut", "probe", "rcs",
                                                        // science experiments on the vessel
                                                        "goo", "sciencejr", "thermometer", "barometer", "seismic",
                                                        "gravity", "magnetometer" };

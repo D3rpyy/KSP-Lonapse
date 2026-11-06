@@ -394,6 +394,17 @@ namespace Lonapse
                 Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
                 Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
                 try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
+                // parts a line can name: has_solar, has_rcs and has_legs are 1 or 0 (only for the active vessel,
+                // the part list is cached there)
+                bool active = false;
+                try { active = v == FlightGlobals.ActiveVessel; } catch (Exception) { }
+                if (active)
+                {
+                    var parts = VesselConditions();
+                    nums["has_solar"] = parts.Contains("solar") ? 1 : 0;
+                    nums["has_rcs"] = parts.Contains("rcs") ? 1 : 0;
+                    nums["has_legs"] = parts.Contains("legs") ? 1 : 0;
+                }
             }
             else
             {
@@ -1397,6 +1408,8 @@ namespace Lonapse
 
         /// <summary>Share of Mission Control runtime lines the crew answers, when a reply fits.</summary>
         const double ReplyChance = 0.45;
+        /// <summary>Share when the report talks to one kerbal by name: silence after that sounds rude.</summary>
+        const double AddressedReplyChance = 0.85;
         /// <summary>The kerbal a report talks to ({kerbal}), set while QueueReport queues it: that kerbal answers.</summary>
         KerbalVoice reportKerbal;
         readonly Queue<string> recentReplies = new Queue<string>();
@@ -1416,9 +1429,10 @@ namespace Lonapse
         /// </summary>
         Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names, double chance = ReplyChance)
         {
+            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
+            if (k != null && line.NamesKerbal && chance == ReplyChance) chance = AddressedReplyChance;
             if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
                 || Somber || (!debugForce && rng.NextDouble() >= chance)) return null;
-            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
             if (k == null)
             {
                 // the pilot answers a fuel or node line, the engineer the power, the scientist the science

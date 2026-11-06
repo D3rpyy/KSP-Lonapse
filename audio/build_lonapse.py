@@ -182,7 +182,7 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
                 "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
-                "link", "apart", "a_eva", "b_eva"]
+                "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs"]
 NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
@@ -572,7 +572,7 @@ def validate(rows):
 CONDITIONS = ["prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
               "kerbin", "away",
               # parts and experiments on the vessel
-              "solar", "antenna", "legs", "ladder", "docking", "heatshield", "chute", "engine", "strut", "probe",
+              "solar", "antenna", "legs", "ladder", "docking", "heatshield", "chute", "engine", "strut", "probe", "rcs",
               "goo", "sciencejr", "thermometer", "barometer", "seismic", "gravity", "magnetometer"]
 COND_RE = re.compile(r"^\[([^\]]*)\]\s*(.*)$")
 
