@@ -9,6 +9,8 @@ id	kind	when	spanish	english
 #   {x_name}           your own values, sent with the event. A number becomes Spanish words in the voice and digits				
 #                      in the subtitle, a name is said as it is. Every version uses the same slots in both languages.				
 # Ids start with rt_ and must be unique over all files: start them with rt_<yourmod>_ (chats rt_chat_<yourmod>_...).				
+# Every comment line ends with four tabs and the header is the first line, so GitHub shows this file as a table.				
+# Lonapse itself skips comment lines however many tabs they hold (docs/API.md, The line file).				
 # meta rows: the settings of each event (all optional).				
 rt_examplemod_repair_meta	meta	on=examplemod.repair_done cooldown=180 priority=normal who=any		
 rt_examplemod_supplies_meta	meta	on=examplemod.supplies_low cooldown=600 priority=high		
