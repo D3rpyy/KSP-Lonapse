@@ -22,7 +22,9 @@ https://huggingface.co/rhasspy/piper-voices. The license of each voice is the on
 
 The model cards state the license of the training dataset. They do not state a separate license for the
 model weights. All three are permissive, and the Apache-2.0 voice needs this attribution, which this file provides.
-The voice models themselves are not shipped, only the audio rendered with them.
+The recorded clips are rendered with these models. Changed copies of the same three models ship in
+`GameData/Lonapse/PluginData/Runtime/voices` for the runtime voice. The change: the weights are quantized to int8
+with ONNX Runtime `quantize_dynamic` (QUInt8), and the decoder is kept at float32. See the README, Runtime voice files.
 
 Piper phonemizes through espeak-ng, so espeak-ng (GPL-3.0-or-later) is also part of the pipeline. Whether
 audio produced by a GPL program falls under the GPL is a legal question this project has not settled. The
