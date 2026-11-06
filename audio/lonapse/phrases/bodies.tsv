@@ -1,21 +1,21 @@
 # Scenes that name the current body with {body} (see audio/lonapse/bodies.tsv). New keys: bo_
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
-clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-chat_calm_s4_1	chatter	chatter	calm	mc	chat_calm_s4	1	m	orbit	any	¿Qué tal la vista desde ahí arriba?	How's the view from up there? | How's the view from up there? | How's the view, {vessel}?
-chat_calm_s4_2	chatter	chatter	calm	crew	chat_calm_s4	2	both	orbit	any	Increíble. Qué vista sobre {body}.	Incredible. What a view of {body}.
-bo_greetings_1	chatter	chatter	calm	mc	bo_greetings	1	m	goofy	any	Saludos para {body} de parte de todos.	Say hi to {body} from all of us.
-bo_greetings_2	chatter	chatter	calm	crew	bo_greetings	2	both	goofy	any	Hecho. No ha contestado.	Done. No answer. | Done. No answer. | Done. It didn't answer.
-bo_postcards_1	chatter	chatter	calm	mc	bo_postcards	1	m	coast	any	¿Cómo se ve {body} desde ahí?	How does {body} look from there?
-bo_postcards_2	chatter	chatter	calm	crew	bo_postcards	2	both	coast	any	Menos grande que en las postales.	Smaller than on the postcards. | Smaller than on the postcards. | Smaller than the postcards.
-bo_first_song_1	chatter	chatter	calm	crew	bo_first_song	1	both	goofy	any	Control, vamos a cantar una canción.	Control, we're going to sing a song. | Control, we're going to sing a song. | Control, song time.
-bo_first_song_2	chatter	chatter	calm	mc	bo_first_song	2	m	goofy	any	Bajito, que no os oiga {body}.	Quietly, don't let {body} hear you.
-bo_first_song_3	chatter	chatter	calm	crew	bo_first_song	3	both	goofy	any	Demasiado tarde. Ya nos ha oído.	Too late. It already heard us. | Too late. It already heard us. | Too late. It heard.
-bo_today_1	chatter	chatter	calm	mc	bo_today	1	m	goofy	any	¿Qué tal está {body} hoy?	How's {body} today?
-bo_today_2	chatter	chatter	calm	crew	bo_today	2	both	goofy	any	Igual que ayer. Sigue en su sitio.	Same as yesterday. Still where we left it. | Same as yesterday. Still where we left it. | Same as yesterday. Hasn't moved.
-bo_museum_1	chatter	chatter	calm	mc	bo_museum	1	m	goofy	any	Haced muchas fotos. El museo quiere ver {body}.	Take lots of photos. The museum wants to see {body}.
-bo_museum_2	chatter	chatter	calm	crew	bo_museum	2	both	goofy	any	Ya tenemos doscientas. Todas con mi dedo delante.	We have two hundred already. All with my finger in front. | We have two hundred already. All with my finger in front. | Two hundred already. My finger is on all of them.
-bo_kids_1	chatter	chatter	calm	mc	bo_kids	1	m	goofy	any	Hay niños en casa mirando hacia {body} ahora mismo.	Kids at home are looking toward {body} right now.
-bo_kids_2	chatter	chatter	calm	crew	bo_kids	2	both	goofy	any	¡Hola, niños! Comed verdura.	Hello, kids! Eat your vegetables. | Hello, kids! Eat your vegetables. | Hi, kids! Eat your veggies.
-bo_souvenir_1	chatter	chatter	calm	mc	bo_souvenir	1	m	goofy	any	Recordad: no se puede llevar {body} a casa.	Remember: you can't take {body} home.
-bo_souvenir_2	chatter	chatter	calm	crew	bo_souvenir	2	both	goofy	any	¿Ni un trocito?	Not even a little piece? | Not even a little piece? | Not one tiny piece?
-bo_souvenir_3	chatter	chatter	calm	mc	bo_souvenir	3	m	goofy	any	Ni un trocito.	Not even a little piece. | Not even a little piece. | Not one.
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
+chat_calm_s4_1	chatter	chatter	calm	mc	chat_calm_s4	1	m	orbit	any	¿Qué tal la vista desde ahí arriba?	How's the view from up there? | How's the view from up there? | How's the view, {vessel}?	 |  | ¿Qué tal la vista, {vessel}?
+chat_calm_s4_2	chatter	chatter	calm	crew	chat_calm_s4	2	both	orbit	any	Increíble. Qué vista sobre {body}.	Incredible. What a view of {body}.	
+bo_greetings_1	chatter	chatter	calm	mc	bo_greetings	1	m	goofy	any	Saludos para {body} de parte de todos.	Say hi to {body} from all of us.	
+bo_greetings_2	chatter	chatter	calm	crew	bo_greetings	2	both	goofy	any	Hecho. No ha contestado.	Done. No answer. | Done. No answer. | Done. It didn't answer.	
+bo_postcards_1	chatter	chatter	calm	mc	bo_postcards	1	m	coast	any	¿Cómo se ve {body} desde ahí?	How does {body} look from there?	
+bo_postcards_2	chatter	chatter	calm	crew	bo_postcards	2	both	coast	any	Menos grande que en las postales.	Smaller than on the postcards. | Smaller than on the postcards. | Smaller than the postcards.	
+bo_first_song_1	chatter	chatter	calm	crew	bo_first_song	1	both	goofy	any	Control, vamos a cantar una canción.	Control, we're going to sing a song. | Control, we're going to sing a song. | Control, song time.	
+bo_first_song_2	chatter	chatter	calm	mc	bo_first_song	2	m	goofy	any	Bajito, que no os oiga {body}.	Quietly, don't let {body} hear you.	
+bo_first_song_3	chatter	chatter	calm	crew	bo_first_song	3	both	goofy	any	Demasiado tarde. Ya nos ha oído.	Too late. It already heard us. | Too late. It already heard us. | Too late. It heard.	
+bo_today_1	chatter	chatter	calm	mc	bo_today	1	m	goofy	any	¿Qué tal está {body} hoy?	How's {body} today?	
+bo_today_2	chatter	chatter	calm	crew	bo_today	2	both	goofy	any	Igual que ayer. Sigue en su sitio.	Same as yesterday. Still where we left it. | Same as yesterday. Still where we left it. | Same as yesterday. Hasn't moved.	
+bo_museum_1	chatter	chatter	calm	mc	bo_museum	1	m	goofy	any	Haced muchas fotos. El museo quiere ver {body}.	Take lots of photos. The museum wants to see {body}.	
+bo_museum_2	chatter	chatter	calm	crew	bo_museum	2	both	goofy	any	Ya tenemos doscientas. Todas con mi dedo delante.	We have two hundred already. All with my finger in front. | We have two hundred already. All with my finger in front. | Two hundred already. My finger is on all of them.	
+bo_kids_1	chatter	chatter	calm	mc	bo_kids	1	m	goofy	any	Hay niños en casa mirando hacia {body} ahora mismo.	Kids at home are looking toward {body} right now.	
+bo_kids_2	chatter	chatter	calm	crew	bo_kids	2	both	goofy	any	¡Hola, niños! Comed verdura.	Hello, kids! Eat your vegetables. | Hello, kids! Eat your vegetables. | Hi, kids! Eat your veggies.	
+bo_souvenir_1	chatter	chatter	calm	mc	bo_souvenir	1	m	goofy	any	Recordad: no se puede llevar {body} a casa.	Remember: you can't take {body} home.	
+bo_souvenir_2	chatter	chatter	calm	crew	bo_souvenir	2	both	goofy	any	¿Ni un trocito?	Not even a little piece? | Not even a little piece? | Not one tiny piece?	
+bo_souvenir_3	chatter	chatter	calm	mc	bo_souvenir	3	m	goofy	any	Ni un trocito.	Not even a little piece. | Not even a little piece. | Not one.	
