@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Lonapse
@@ -13,29 +14,59 @@ namespace Lonapse
         private static readonly Dictionary<string, int> suppressedBySite = new Dictionary<string, int>();
         private static readonly HashSet<string> onceKeys = new HashSet<string>();
 
-        public static void Info(string msg) { UnityEngine.Debug.Log(Prefix + msg); }
-        public static void Warn(string msg) { UnityEngine.Debug.LogWarning(Prefix + msg); }
-        public static void Error(string msg) { UnityEngine.Debug.LogError(Prefix + msg); }
+        // A log line from another thread (the Piper threads) waits here for the main thread. Debug.Log itself may be
+        // called from any thread, but KSP hands every line to its debug console, which builds UI objects. Doing
+        // that off the main thread crashed the game (access violation in Mesh.Internal_Create).
+        private static int mainThread;
+        private static readonly Queue<Action> fromOtherThreads = new Queue<Action>();
+        private const int MaxWaiting = 500;
+
+        /// <summary>Marks the calling thread as the main thread. Called from the addon's Awake.</summary>
+        public static void SetMainThread() { mainThread = Thread.CurrentThread.ManagedThreadId; }
+
+        /// <summary>True when this call must wait for the main thread. Before SetMainThread every thread counts as main.</summary>
+        private static bool Defer(Action a)
+        {
+            if (mainThread == 0 || Thread.CurrentThread.ManagedThreadId == mainThread) return false;
+            lock (fromOtherThreads) if (fromOtherThreads.Count < MaxWaiting) fromOtherThreads.Enqueue(a);
+            return true;
+        }
+
+        /// <summary>Writes the lines other threads logged. Main thread only, once per frame.</summary>
+        public static void Flush()
+        {
+            while (true)
+            {
+                Action a;
+                lock (fromOtherThreads) { if (fromOtherThreads.Count == 0) return; a = fromOtherThreads.Dequeue(); }
+                try { a(); } catch { }
+            }
+        }
+
+        public static void Info(string msg) { if (!Defer(() => Info(msg))) UnityEngine.Debug.Log(Prefix + msg); }
+        public static void Warn(string msg) { if (!Defer(() => Warn(msg))) UnityEngine.Debug.LogWarning(Prefix + msg); }
+        public static void Error(string msg) { if (!Defer(() => Error(msg))) UnityEngine.Debug.LogError(Prefix + msg); }
 
         public static void Debug(string msg)
         {
-            if (verbose) UnityEngine.Debug.Log(Prefix + "[debug] " + msg);
+            if (verbose && !Defer(() => Debug(msg))) UnityEngine.Debug.Log(Prefix + "[debug] " + msg);
         }
 
         /// <summary>Logs an info line only the first time the key is seen in this game session.</summary>
         public static void InfoOnce(string key, string msg)
         {
-            if (onceKeys.Add(key)) Info(msg);
+            if (!Defer(() => InfoOnce(key, msg)) && onceKeys.Add(key)) Info(msg);
         }
 
         public static void WarnOnce(string key, string msg)
         {
-            if (onceKeys.Add(key)) Warn(msg);
+            if (!Defer(() => WarnOnce(key, msg)) && onceKeys.Add(key)) Warn(msg);
         }
 
         /// <summary>Exception from a Unity callback. At most one log line per 10 s per site.</summary>
         public static void Exception(string site, Exception e)
         {
+            if (Defer(() => Exception(site, e))) return;
             float now = Time.realtimeSinceStartup;
             float last;
             if (lastBySite.TryGetValue(site, out last) && now - last < 10f)
