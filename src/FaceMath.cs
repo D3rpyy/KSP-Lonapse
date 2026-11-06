@@ -36,6 +36,27 @@ namespace Lonapse
             return badass ? MoodBadass : MoodCalm;
         }
 
+        /// <summary>Below this the stock face counts as fearful (KSP's own panic, high g).</summary>
+        public const float FearFace = -0.15f;
+
+        /// <summary>
+        /// The mood a talking or listening face moves to. The line mood, but a line never makes the face happier than
+        /// it is: a fearful stock face (stockMood below FearFace) keeps its fear on a calm line, a fearful line may
+        /// deepen it. The kerbal's own stress (0..1, the same that picks the voice band) caps how happy the face can
+        /// look: no cap up to 0.3, a straight face at 0.8, mild fear at 1. A badass gets 0.4 more room.
+        /// </summary>
+        public static float HeldMood(float lineMood, float stockMood, float stress, bool badass)
+        {
+            if (float.IsNaN(lineMood)) lineMood = 0f;
+            if (float.IsNaN(stockMood)) stockMood = 0f;
+            if (float.IsNaN(stress)) stress = 0f;
+            float m = lineMood;
+            if (stockMood < FearFace && m > stockMood) m = stockMood;
+            float cap = 1f - 2f * Math.Max(0f, Clamp01(stress) - 0.3f) + (badass ? 0.4f : 0f);
+            if (m > cap) m = cap;
+            return Clamp(m, -1f, 1f);
+        }
+
         /// <summary>Same as PhraseTable.IsGoofyPhase, repeated here so this file stays free of the table.</summary>
         public static bool IsGoofyPhase(string p)
         {

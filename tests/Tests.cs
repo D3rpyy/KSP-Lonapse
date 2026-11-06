@@ -4073,6 +4073,11 @@ public static class Tests
                 Check(MouthMath.EnvelopeOpen(0.1f) == 0f && MouthMath.EnvelopeOpen(0.8f) == 1f && MouthMath.EnvelopeOpen(1f) == 1f
                       && Math.Abs(MouthMath.EnvelopeOpen(0.46f) - 0.5f) < 1e-4,
                       "mouth track: closed in pauses, wide on the loud syllables", "");
+                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, false) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, false) == -1f
+                      && FaceMath.HeldMood(0.8f, 0f, 0.1f, false) == 0.8f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.8f, false)) < 1e-5
+                      && FaceMath.HeldMood(0.8f, 0f, 1f, false) < -0.3f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.8f, true) - 0.4f) < 1e-5
+                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, false) == -0.5f,
+                      "face: a calm line keeps a scared face scared, stress caps the grin, a fearful line still shows", "");
                 float fa = 0f, sl = 0f, peak = 0f, steady = 0f;
                 for (int i = 0; i < 30; i++) peak = Math.Max(peak, FaceMath.Accent(ref fa, ref sl, 1f, 0.01f));
                 for (int i = 0; i < 400; i++) steady = FaceMath.Accent(ref fa, ref sl, 1f, 0.01f);

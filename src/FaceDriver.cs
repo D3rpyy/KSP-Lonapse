@@ -60,6 +60,8 @@ namespace Lonapse
             public bool speaking;
             public bool listening;
             public float moodTarget;           // kept while the weight eases out
+            public float stress;               // the kerbal's own stress (KerbalVoice.sk), caps the happy side
+            public bool badass;
             public float moodW;
             public float lastExpr;
             public bool exprWritten;           // SetFloat ran this frame
@@ -284,6 +286,9 @@ namespace Lonapse
             foreach (Face f in faces.Values)
             {
                 bool engaged = f.speaking || f.listening;
+                KerbalVoice kv = host.roster != null ? host.roster.voices.Find(x => x != null && x.name == f.name) : null;
+                f.stress = kv != null ? kv.sk : 0f;
+                f.badass = kv != null && kv.BadassEffective;
                 f.moodW = FaceMath.Ramp(f.moodW, engaged || test, dt, MoodRise, MoodFall);
                 if (test) f.moodTarget = testMood; // the fade after the test starts from the last test value
             }
@@ -302,7 +307,9 @@ namespace Lonapse
             foreach (Face f in faces.Values)
             {
                 if (!f.hasExpr || f.anim == null || f.kes == null) continue;
-                float mood = exprTest ? exprTestMood : f.moodTarget;
+                // the face keeps its fear and follows the stress: a calm line never turns a scared face into a grin
+                float stockMood = exprSign < 0f ? -f.kes.expression : f.kes.expression;
+                float mood = exprTest ? exprTestMood : FaceMath.HeldMood(f.moodTarget, stockMood, f.stress, f.badass);
                 float w = exprTest ? 1f : FaceMath.Smooth01(f.moodW) * exprWeight;
                 if (w <= 0f) continue;
                 f.lastExpr = FaceMath.Blend(f.kes.expression, mood, w, exprSign);
