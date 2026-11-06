@@ -182,7 +182,7 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
                 "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
-                "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs"]
+                "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist"]
 NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
@@ -208,7 +208,8 @@ PANIC_GASP_CHANCE = 0.0      # chance of a gasp between two pieces (otherwise a 
                              # keep the same random choices as the approved test render.
 # Speaker trait, speaker persona and topic. Same values as PhraseTable.Traits, Personas, ScienceTopics and
 # SoiTopics in C#. topic is any on every event except science, soi_enter and staging, probe_milestone, probe_rover.
-TRAITS = ["any", "pilot", "engineer", "scientist", "tourist"]
+# tourist_pair (two tourists) and to_tourist (crew to a tourist) are for intercom scenes only. Same as Persona in C#.
+TRAITS = ["any", "pilot", "engineer", "scientist", "tourist", "to_tourist", "tourist_pair"]
 PERSONAS = ["any", "badass", "brave", "nervous", "dim", "veteran"]
 TOPICS_BY_EVENT = {
     "science": ["any", "crewreport", "evareport", "mysterygoo", "surfacesample", "mobilematerialslab",
@@ -559,6 +560,9 @@ def validate(rows):
         intercom = len(lines) >= 2 and all(r["role"] == "crew" for r in lines)
         if intercom and (head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES):
             errors.append("%s: scene '%s' is an intercom scene in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
+        if head["trait"] in ("to_tourist", "tourist_pair") and not intercom:
+            errors.append("%s: scene '%s' has trait %s, that is only for intercom scenes (crew only, 2 or more lines)"
+                          % (head["loc"], sc, head["trait"]))
         if head["event"] == PROBE_CREW_EVENT:
             roles = {r["role"] for r in lines}
             if "probe" not in roles or "crew" not in roles:

@@ -260,6 +260,8 @@ namespace Lonapse
             return false;
         }
 
+        /// <summary>Callout speaker: the pilot, else anyone but a tourist, a tourist only when nobody else is awake
+        /// (then only the tourist callouts fit, see Persona.RadioFits).</summary>
         public static KerbalVoice PickCallout(List<KerbalVoice> list, Random rng)
         {
             for (int i = 0; i < list.Count; i++)
@@ -267,7 +269,8 @@ namespace Lonapse
                 KerbalVoice k = list[i];
                 if (k != null && k.isPilot && !k.outDueToG) return k;
             }
-            return Pick(list, null, rng, null);
+            KerbalVoice pro = PickWithTrait(list, null, null, rng, k => !k.persona.IsTourist);
+            return pro ?? Pick(list, null, rng, null);
         }
 
         public static int SpeakableCount(List<KerbalVoice> list)

@@ -62,3 +62,10 @@ rt_re_parts_small	reply	to=rt_parts_small	Pequeño pero valiente. | Menos piezas
 rt_re_con_left	reply	to=rt_con_left to=rt_con_one	Bien. Uno menos en la lista. | Recibido. ¿Pagan por horas?	Good. One less on the list. | Copy. Do they pay by the hour?
 rt_re_con_last	reply	to=rt_con_last	¿Vacaciones, entonces? | Buscad algo con vistas al mar.	Vacation, then? | Find something with a sea view.
 rt_re_mono_plain	reply	to=rt_mono_plain	Recibido. Lo vigilamos.	Copy. We'll watch it.
+rt_re_tourist_first	reply	to=rt_crew_tourist_first is_tourist=1	No toco nada. Lo prometo. Casi. | ¡Qué nervios! ¿Esto es normal?	I won't touch anything. Promise. Almost. | So nervous! Is this normal?
+rt_re_tourist_again	reply	to=rt_crew_tourist_again is_tourist=1	Esta vez traigo mi propia comida. | Quiero el mismo asiento que la otra vez.	This time I brought my own food. | I want the same seat as last time.
+rt_re_tourist_view	reply	to=rt_crew_tourist_view is_tourist=1	Preciosas. Cada céntimo. | Ya tengo mil fotos. Todas iguales.	Beautiful. Worth every penny. | I have a thousand photos. All the same.
+rt_re_tourist_body	reply	to=rt_crew_tourist_body is_tourist=1	¿Me firmáis un certificado? | Lo voy a contar en todas las fiestas.	Will you sign me a certificate? | I'll tell everyone at every party.
+rt_re_tourist_landed	reply	to=rt_crew_tourist_landed is_tourist=1	Me quedo dentro. Pero lo miro todo. | ¿Puedo sacar la mano por la ventana? Es broma.	I'm staying inside. But I'm looking at everything. | Can I stick my hand out the window? Kidding.
+rt_re_tourist_home	reply	to=rt_crew_tourist_home is_tourist=1	Cinco estrellas. Bueno, cuatro. | ¿Ya? Quiero repetir.	Five stars. Well, four. | Already? I want to go again.
+rt_re_tourist_any	reply	is_tourist=1	¿Eso es bueno? Suena bien. | Lo apunto. No sé dónde, pero lo apunto. | Gracias, Control. No he entendido nada. | ¡Hola, Control! Soy yo, desde el asiento de atrás.	Is that good? Sounds good. | I'll write that down. Not sure where, but I will. | Thanks, Control. I didn't understand a thing. | Hi, Control! It's me, from the back seat.

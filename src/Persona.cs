@@ -111,11 +111,62 @@ namespace Lonapse
             return false;
         }
 
-        /// <summary>True when this kerbal has the trait of a table row. Empty or any always matches.</summary>
+        /// <summary>True when this kerbal has the trait of a table row (for an intercom scene: speaker A). Empty or
+        /// any always matches. tourist_pair wants a tourist, to_tourist anyone who is not one.</summary>
         public bool TraitMatches(string rowTrait)
         {
             if (IsAny(rowTrait)) return true;
-            return trait != Any && string.Equals(rowTrait.Trim(), trait, StringComparison.OrdinalIgnoreCase);
+            string t = rowTrait.Trim();
+            if (string.Equals(t, TouristPair, StringComparison.OrdinalIgnoreCase)) return IsTourist;
+            if (string.Equals(t, ToTourist, StringComparison.OrdinalIgnoreCase)) return !IsTourist;
+            return trait != Any && string.Equals(t, trait, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public bool IsTourist { get { return trait == Tourist; } }
+
+        // ---- tourists ----
+        // A tourist has never flown a ship. So a tourist never makes a crew callout or reads a job report, never
+        // says a calm crew line meant for the professionals and only talks in dialogues written for tourists.
+        // Scene traits for that: tourist (a tourist talks, in an intercom chat to a crew member who is not one),
+        // to_tourist (a crew member talks to a tourist) and tourist_pair (two tourists). The last two are only
+        // for intercom scenes.
+        public const string Tourist = "tourist";
+        public const string ToTourist = "to_tourist";
+        public const string TouristPair = "tourist_pair";
+
+        /// <summary>The scene trait only fits an intercom pair (to_tourist, tourist_pair).</summary>
+        public static bool IsPairTrait(string sceneTrait)
+        {
+            return sceneTrait == ToTourist || sceneTrait == TouristPair;
+        }
+
+        /// <summary>An intercom scene fits the pair: with a tourist in it only the scenes written for that pair,
+        /// without one never a tourist scene.</summary>
+        public static bool PairFits(string sceneTrait, bool aTourist, bool bTourist)
+        {
+            if (aTourist && bTourist) return sceneTrait == TouristPair;
+            if (aTourist) return sceneTrait == Tourist;
+            if (bTourist) return sceneTrait == ToTourist;
+            return sceneTrait != Tourist && !IsPairTrait(sceneTrait);
+        }
+
+        /// <summary>A radio scene (or a single line, a callout) fits this speaker. Never a pair trait. A tourist gets
+        /// no job event unless the scene is written for tourists, and in the calm band only tourist scenes (calm
+        /// crew talk is work talk). Under stress a tourist may say any line: fear needs no training.</summary>
+        public static bool RadioFits(string sceneTrait, string ev, string band, bool tourist)
+        {
+            if (IsPairTrait(sceneTrait)) return false;
+            if (!tourist || sceneTrait == Tourist) return true;
+            if (JobFor(ev) != null) return false;
+            return band == "tense" || band == "panic";
+        }
+
+        /// <summary>A runtime chat side fits: a tourist only takes a side that asks for a tourist (a=tourist).</summary>
+        public static bool ChatSideFits(string want, string have)
+        {
+            bool isTourist = have != null && Array.IndexOf(have.Split(' '), Tourist) >= 0;
+            if (!isTourist) return true;
+            return want != null && Array.IndexOf(want.Split(' '), Tourist) >= 0;
         }
 
         /// <summary>True when at least one flag is set.</summary>

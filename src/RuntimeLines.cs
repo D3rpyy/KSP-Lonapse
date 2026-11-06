@@ -525,6 +525,7 @@ namespace Lonapse
         {
             if (chat == null || chat.Count == 0) return false;
             if (!JobOk(chat[0].TraitA, jobA) || !JobOk(chat[0].TraitB, jobB)) return false;
+            if (!Persona.ChatSideFits(chat[0].TraitA, jobA) || !Persona.ChatSideFits(chat[0].TraitB, jobB)) return false;
             if (!Holds(chat[0], situation, nums) || FillableVersions(chat[0], nums, namesA).Count == 0) return false;
             for (int i = 1; i < chat.Count; i++)
                 if (FillableVersions(chat[i], nums, i % 2 == 0 ? namesA : namesB).Count == 0) return false;
@@ -605,6 +606,14 @@ namespace Lonapse
             if (line == null) { r.Clear(); return r; }
             r.RemoveAll(t => !Answers(t, line.Id, line.Kind));
             return r;
+        }
+
+        /// <summary>The template asks for a tourist (is_tourist=1 in the when column).</summary>
+        public static bool ForTourist(RuntimeTemplate t)
+        {
+            foreach (var c in t.Checks)
+                if (c.Key == "is_tourist" && c.Value.Key == "=" && c.Value.Value == 1) return true;
+            return false;
         }
 
         /// <summary>The situation and the checks of the when column hold.</summary>

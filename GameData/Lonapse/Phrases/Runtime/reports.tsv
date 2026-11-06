@@ -27,6 +27,7 @@ id	kind	when	spanish	english
 #          either order: if only B has the job of a, B starts. A kerbal with a job from a mod fits no job check.				
 #          Personas work the same way: badass brave nervous dim veteran (a=dim b=veteran). Several for one kerbal				
 #          (a=pilot a=brave): all must hold.				
+#          A tourist only takes a side that asks for one (a=tourist, b=tourist), so a chat without it never has a tourist.				
 #          on=: the event of an event chat, or the experiment of a science line: flag deploy science (any				
 #          experiment) evareport surfacesample roc crewreport mysterygoo and the other stock experiment ids.				
 #          Or an event of another mod: on=yourmod.event (docs/API.md). Then also kind event (a Mission Control				
@@ -54,6 +55,7 @@ id	kind	when	spanish	english
 #   kerbals in an EVA chat, see eva_chats.tsv)				
 #   link (1 with a link to Mission Control, 0 without one or in a blackout, for checks only)				
 #   has_solar has_rcs has_legs (1 when the ship has solar panels, RCS thrusters or landing legs, else 0, for checks only)				
+#   is_tourist (1 when the kerbal is a tourist, else 0, for checks only. A tourist only answers with is_tourist=1 replies)				
 #   apart a_eva b_eva (radio chats between two vessels: apart is 1, a_eva is 1 when kerbal A is on EVA, b_eva the				
 #   same for kerbal B, for checks only, see radio_chats.tsv)				
 #   (km, min, h, deg, ms, sci, sci_left and con_sci get one decimal below 10, the rest whole numbers)				

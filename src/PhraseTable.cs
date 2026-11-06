@@ -299,7 +299,7 @@ namespace Lonapse
         public const string HomeBody = "kerbin";
         // Same values as TRAITS, PERSONAS and TOPICS_BY_EVENT in audio/build_lonapse.py
         public const string Any = "any";
-        public static readonly string[] Traits = { "any", "pilot", "engineer", "scientist", "tourist" };
+        public static readonly string[] Traits = { "any", "pilot", "engineer", "scientist", "tourist", "to_tourist", "tourist_pair" };
         public static readonly string[] Personas = { "any", "badass", "brave", "nervous", "dim", "veteran" };
         public static readonly string[] ScienceTopics = {
             "any", "crewreport", "evareport", "mysterygoo", "surfacesample", "mobilematerialslab",

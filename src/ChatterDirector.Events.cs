@@ -37,7 +37,14 @@ namespace Lonapse
         {
             if (sc == null) return false;
             if (k == null) return true;
-            return k.persona.TraitMatches(sc.Trait) && PersonaOk(sc, k) && !BadassNoScream(sc, k);
+            return k.persona.TraitMatches(sc.Trait) && PersonaOk(sc, k) && !BadassNoScream(sc, k) && TouristOk(sc, k);
+        }
+
+        /// <summary>The tourist rules (Persona.RadioFits): a radio scene or callout only when it suits a tourist, and
+        /// a non-tourist never takes a pair scene. An intercom scene is checked for the pair (Persona.PairFits).</summary>
+        private static bool TouristOk(PhraseScene sc, KerbalVoice k)
+        {
+            return sc.IsIntercom || Persona.RadioFits(sc.Trait, sc.Event, sc.Band, k.persona.IsTourist);
         }
 
         /// <summary>Somebody conscious aboard can voice the scene's trait and persona. Scenes nobody fits are skipped.</summary>
@@ -45,6 +52,7 @@ namespace Lonapse
         {
             if (IsAnyKey(sc.Trait) && IsAnyKey(sc.Persona)) return true;
             if (!IsAnyKey(sc.Persona) && !Effects) return false;
+            if (Persona.IsPairTrait(sc.Trait)) return sc.IsIntercom && host.roster.AnyWithTrait(Persona.Tourist, null);
             return host.roster.AnyWithTrait(sc.Trait, k => PersonaOk(sc, k));
         }
 
@@ -53,7 +61,7 @@ namespace Lonapse
         /// staging and not one of two scientists at random.</summary>
         private KerbalVoice PickFitting(PhraseScene sc)
         {
-            Predicate<KerbalVoice> ok = k => PersonaOk(sc, k) && !BadassNoScream(sc, k);
+            Predicate<KerbalVoice> ok = k => PersonaOk(sc, k) && !BadassNoScream(sc, k) && TouristOk(sc, k);
             string job = IsAnyKey(sc.Trait) ? Persona.JobFor(sc.Event) : null;
             if (job != null && rng.NextDouble() < Persona.JobShare && host.roster.AnyWithTrait(job, ok))
                 return host.roster.PickWithTrait(job, rng, ok);

@@ -866,7 +866,13 @@ namespace Lonapse
                     }
                     // a kerbal of another vessel is never replaced by one of the cabin
                     if (sp != null && sp.outDueToG && host.roster.radio.Contains(sp)) return StartResult.Skip;
-                    if (sp == null || sp.outDueToG) sp = host.roster.PickSpeaker(rng);
+                    if (sp == null || sp.outDueToG)
+                    {
+                        KerbalVoice was = sp;
+                        sp = host.roster.PickSpeaker(rng);
+                        // a line written for a crew member does not move to a tourist
+                        if (sp != null && sp.persona.IsTourist && (was == null || !was.persona.IsTourist)) return StartResult.Skip;
+                    }
                     if (sp == null) return StartResult.Skip;
                     AudioClip rtClip;
                     PhraseEntry rtEntry;
@@ -1950,13 +1956,18 @@ namespace Lonapse
             // experimental runtime voice: sometimes a chat with real values, spoken in game (it queues itself when ready)
             if (forced == null && !blackoutFirst && TryRuntimeChat(a, b)) return true;
             PhraseScene sc = forced;
+            // with a tourist in the pair only the dialogues written for that pair (Persona.PairFits)
+            bool aT = a.persona.IsTourist, bT = b.persona.IsTourist;
+            Predicate<PhraseScene> pair = x => x.IsIntercom && Persona.PairFits(x.Trait, aT, bT);
             if (sc == null && PhraseClips.Loaded)
             {
                 // speaker A starts the chat: persona and trait scenes for A are preferred, never a misfit
-                if (blackoutFirst) sc = PickIntercomSceneFor(null, a, x => x.IsIntercom && x.Phase == FlightPhase.Blackout);
-                if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, x => x.IsIntercom);
-                if (sc == null) sc = PickIntercomSceneFor("calm", a, x => x.IsIntercom);
+                if (blackoutFirst) sc = PickIntercomSceneFor(null, a, x => pair(x) && x.Phase == FlightPhase.Blackout);
+                if (sc == null) sc = PickIntercomSceneFor(KerbalVoice.BandNames[(int)(a.band == Band.Panic ? Band.Tense : a.band)], a, pair);
+                if (sc == null) sc = PickIntercomSceneFor("calm", a, pair);
             }
+            // folder turns could say anything: not with a tourist
+            if (sc == null && forced == null && (aT || bT)) return false;
             // {other} and {self}: line i is spoken by a when i is even (see the turn loop below)
             string nameA = SubtitleSlots.FirstName(a.displayName), nameB = SubtitleSlots.FirstName(b.displayName);
             var lines = sc != null ? PlayLines(sc, i => new System.Collections.Generic.Dictionary<string, string> {

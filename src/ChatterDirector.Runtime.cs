@@ -528,6 +528,7 @@ namespace Lonapse
         void CrewValues(KerbalVoice k, Vessel v, Dictionary<string, double> nums)
         {
             if (k == null || v == null) return;
+            nums["is_tourist"] = k.persona.IsTourist ? 1 : 0;
             try
             {
                 ProtoCrewMember pcm = HighLogic.CurrentGame != null && HighLogic.CurrentGame.CrewRoster != null
@@ -1442,6 +1443,8 @@ namespace Lonapse
         Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names, double chance = ReplyChance)
         {
             KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
+            // a tourist does not answer a job report (fuel, orbit, power, science): somebody who works here does
+            if (k != null && k.persona.IsTourist && Persona.JobForLine(line.Id) != null) k = null;
             if (k != null && line.NamesKerbal && chance == ReplyChance) chance = AddressedReplyChance;
             if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
                 || Somber || (!debugForce && rng.NextDouble() >= chance)) return null;
@@ -1464,6 +1467,8 @@ namespace Lonapse
             var nn = new Dictionary<string, double>(nums ?? new Dictionary<string, double>());
             if (!ReferenceEquals(k, reportKerbal)) CrewValues(k, v, nn);
             List<RuntimeTemplate> fit = RuntimeLines.Replies(PhraseClips.runtimeTemplates, line, sit, nn, rn);
+            // a tourist only gives the answers written for tourists (is_tourist=1), the rest is crew talk
+            if (k.persona.IsTourist) fit.RemoveAll(x => !RuntimeLines.ForTourist(x));
             List<RuntimeTemplate> fresh = fit.FindAll(x => !recentReplies.Contains(x.Id));
             if (fresh.Count == 0) return null;
             RuntimeTemplate t = fresh[rng.Next(fresh.Count)];

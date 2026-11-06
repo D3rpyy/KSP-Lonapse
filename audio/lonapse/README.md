@@ -38,6 +38,7 @@ The source files are:
 | `phrases/probe_more.tsv` | 0.6.0: more probe mode lines for throttle, chutes, data, splashdown, touchdown, docking, burns and say again. | `pm_` |
 | `phrases/templates.tsv` | Experimental: templates with subtitle slots. | `tp_` |
 | `phrases/probe_cores.tsv` | Own lines for the `qbe`, `mk2drone`, `mpo` and `mtm` cores, after their in-game part descriptions. | `pk_` |
+| `phrases/tourists.tsv` | Tourists. Intercom dialogues with the crew and between two tourists, radio with Mission Control, and callouts for a ship with only tourists aboard. | `tu_` |
 
 Some older rows have keys without these prefixes.
 
@@ -90,7 +91,7 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | `gender` | `m`, `f`, `both` |
 | `phase` | `any`, `prelaunch`, `launch`, `ascent`, `orbit`, `coast`, `reentry`, `descent`, `landed`, `blackout`, `serious`, `goofy` |
 | `cause` | `any`, `spin`, `gforce`, `q`, `ground`, `heat`, `plasma`, `fuel`, `impulse`, `engine_out` |
-| `trait` | optional. `any`, `pilot`, `engineer`, `scientist`, `tourist`. The crew speaker must have this trait. |
+| `trait` | optional. `any`, `pilot`, `engineer`, `scientist`, `tourist`, `to_tourist`, `tourist_pair`. The crew speaker must have this trait. In an intercom scene that is speaker A, and a tourist in the chat needs a scene for that pair: `tourist` (a tourist talks to a crew member), `to_tourist` (a crew member talks to a tourist) or `tourist_pair` (two tourists). The last two are only for intercom scenes. A tourist never makes a job callout (staging, chutes, docking, power, science) unless the scene has trait `tourist`, and on the radio only says calm lines with trait `tourist`. |
 | `persona` | optional. `any`, `badass`, `brave`, `nervous`, `dim`, `veteran`. The crew speaker must have this persona. |
 | `core` | optional. `any`, `stayputnik`, `okto`, `hecs`, `rovemate`, `snob`, `qbe`, `mk2drone`, `mpo`, `mtm`, `generic` (the keys of `ProbeCores.Keys`). Holds for the whole scene. |
 | `beep` | optional. The beep mood of a `probe` row: `happy`, `offended`, `curious`, `scared`, `sleepy`, `proud`, `bored`. Required on probe rows, empty on every other row. |

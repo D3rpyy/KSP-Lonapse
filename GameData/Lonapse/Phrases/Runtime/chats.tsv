@@ -110,3 +110,30 @@ rt_chat_badass_3	chat		El plan de vuelo es para cobardes.	Flight plans are for c
 rt_chat_dimdim_1	chat	a=dim b=dim	{other}, ¿la Mun está hecha de queso?	{other}, is the Mun made of cheese?
 rt_chat_dimdim_2	chat		Claro. ¿Por qué crees que es amarilla?	Of course. Why do you think it's yellow?
 rt_chat_dimdim_3	chat		Pensaba que era por la luz. Ahora tengo hambre.	I thought it was the light. Now I'm hungry.
+rt_chat_tour_speed_1	chat	orbit a=tourist	{other}, ¿de verdad vamos a {speed} metros por segundo?	{other}, are we really doing {speed} meters per second?
+rt_chat_tour_speed_2	chat		Sí. Y no, no se puede frenar para mirar.	Yes. And no, we can't slow down to look.
+rt_chat_tour_speed_3	chat		Pues yo no noto nada.	Well, I don't feel a thing.
+rt_chat_tour_alt_1	chat	orbit alt_km>=2 a=tourist	{other}, ¿{alt_km} kilómetros es mucho?	{other}, is {alt_km} km a lot?
+rt_chat_tour_alt_2	chat		Para ti, muchísimo.	For you, a whole lot.
+rt_chat_tour_day_1	chat	day>=2 a=tourist	{other}, ¿cuántos días llevamos? Mi billete era de fin de semana.	{other}, how many days has it been? My ticket was for a weekend.
+rt_chat_tour_day_2	chat		Día {day}. Los fines de semana aquí son largos.	Day {day}. Weekends up here are long.
+rt_chat_tour_landed_1	chat	landed at_home=0 a=tourist	{other}, ¿esto es {body}? ¿De verdad?	{other}, is this {body}? Really?
+rt_chat_tour_landed_2	chat		De verdad. Y no, no puedes salir.	Really. And no, you can't go outside.
+rt_chat_tour_landed_3	chat		Solo quería preguntarlo otra vez.	I just wanted to ask again.
+rt_chat_totour_body_1	chat	orbit b=tourist	{other}, mira por la ventana. Eso es {body}.	{other}, look out the window. That's {body}.
+rt_chat_totour_body_2	chat		¡Hala! ¿Puedo tocarlo?	Wow! Can I touch it?
+rt_chat_totour_body_3	chat		Desde aquí no. Ni desde ningún sitio.	Not from here. Not from anywhere.
+rt_chat_totour_fuel_1	chat	fuel>=25 b=tourist	Tranquilidad, {other}. Queda el {fuel} por ciento de combustible.	Relax, {other}. We have {fuel} percent fuel left.
+rt_chat_totour_fuel_2	chat		¿Y eso es bueno o malo?	Is that good or bad?
+rt_chat_totour_fuel_3	chat		Es bueno. Deja de preguntar.	It's good. Stop asking.
+rt_chat_totour_alt_1	chat	orbit alt_km>=2 b=tourist	{other}, ahora mismo estás a {alt_km} kilómetros de tu casa.	{other}, right now you're {alt_km} km from your house.
+rt_chat_totour_alt_2	chat		Mi madre no se lo va a creer.	My mother won't believe it.
+rt_chat_tourtour_alt_1	chat	orbit alt_km>=2 a=tourist b=tourist	{other}, dicen que estamos a {alt_km} kilómetros.	{other}, they say we're {alt_km} km up.
+rt_chat_tourtour_alt_2	chat		¿Y eso cuánto es en pisos?	And how many floors is that?
+rt_chat_tourtour_alt_3	chat		Muchos. Más que mi edificio.	A lot. More than my building.
+rt_chat_tourtour_body_1	chat	orbit a=tourist b=tourist	{other}, ¿eso redondo de ahí es {body}?	{other}, is that round thing {body}?
+rt_chat_tourtour_body_2	chat		Eso creo. O una ventana sucia.	I think so. Or a dirty window.
+rt_chat_tourtour_day_1	chat	day>=2 a=tourist b=tourist	{other}, día {day}. ¿Tú también echas de menos tu cama?	{other}, day {day}. Do you miss your bed too?
+rt_chat_tourtour_day_2	chat		Echo de menos el suelo.	I miss the floor.
+rt_chat_tourtour_landed_1	chat	landed at_home=0 a=tourist b=tourist	{other}, estamos en {body}. Sonríe para la foto.	{other}, we're on {body}. Smile for the photo.
+rt_chat_tourtour_landed_2	chat		Espera, que tengo el pelo aplastado del casco.	Wait, my hair is flat from the helmet.

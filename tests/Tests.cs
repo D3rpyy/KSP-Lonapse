@@ -1386,6 +1386,29 @@ public static class Tests
                 if (!has) noReply.Add(t.Id);
             }
             Check(noReply.Count == 0, "runtime voice: every report that names a kerbal has its own reply", string.Join(" ", noReply.ToArray()));
+            // tourists: the career lines are for crew who work here, tourists get their own lines, answers and chats
+            var careerOpen = new List<string>();
+            int tourReports = 0, tourReplies = 0, tourA = 0, tourB = 0, tourPair = 0;
+            foreach (RuntimeTemplate t in rtAll)
+            {
+                if (t.Kind == "report" && t.Where.StartsWith("crew.tsv") && !t.Id.StartsWith("rt_crew_tourist"))
+                {
+                    bool gated = false;
+                    foreach (var c in t.Checks) if (c.Key == "is_tourist" && c.Value.Value == 0) gated = true;
+                    if (!gated) careerOpen.Add(t.Id);
+                }
+                if (t.Kind == "report" && RuntimeLines.ForTourist(t)) tourReports++;
+                if (t.Kind == "reply" && RuntimeLines.ForTourist(t)) tourReplies++;
+                if (t.Kind == "chat")
+                {
+                    bool sa = Persona.ChatSideFits(t.TraitA, "tourist") && t.TraitA != null, sb = Persona.ChatSideFits(t.TraitB, "tourist") && t.TraitB != null;
+                    if (sa && sb) tourPair++; else if (sa) tourA++; else if (sb) tourB++;
+                }
+            }
+            Check(careerOpen.Count == 0 && tourReports >= 5 && tourReplies >= 6 && tourA >= 4 && tourB >= 3 && tourPair >= 4,
+                  "runtime voice: career lines skip tourists, tourists have own reports (" + tourReports + "), answers (" + tourReplies
+                  + ") and chats (" + tourA + " tourist to crew, " + tourB + " crew to tourist, " + tourPair + " two tourists)",
+                  string.Join(" ", careerOpen.ToArray()));
         }
         var rtBadErr = new List<string>();
         RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
@@ -3254,7 +3277,9 @@ public static class Tests
                                                  EventWatchers.PowerOk, EventWatchers.SignalLost, EventWatchers.SignalBack, EventWatchers.CrewLost })
                 if (Array.IndexOf(PhraseTable.Events, ev) < 0) evMissing.Add(ev);
             Check(evMissing.Count == 0, "v4 table: every watcher event is a table event", Short(evMissing, 4));
-            Check(Array.IndexOf(PhraseTable.Traits, "any") == 0 && Persona.TraitKeys.Length == PhraseTable.Traits.Length - 1
+            // the table traits: any, the KSP jobs and the two intercom pair traits for tourists
+            Check(Array.IndexOf(PhraseTable.Traits, "any") == 0 && Persona.TraitKeys.Length == PhraseTable.Traits.Length - 3
+                  && Array.IndexOf(PhraseTable.Traits, Persona.ToTourist) > 0 && Array.IndexOf(PhraseTable.Traits, Persona.TouristPair) > 0
                   && Array.TrueForAll(Persona.TraitKeys, x => Array.IndexOf(PhraseTable.Traits, x) > 0)
                   && Array.TrueForAll(Persona.PersonaKeys, x => Array.IndexOf(PhraseTable.Personas, x) > 0)
                   && Persona.PersonaKeys.Length == PhraseTable.Personas.Length - 1,
@@ -4177,6 +4202,27 @@ public static class Tests
                 Check(shortG.Count == 0, "v4 tables: every persona and every trait has >= 4 scenes",
                       shortG.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortG.ToArray()));
             }
+            // tourists: enough intercom dialogues for each pair, calm and tense, and radio scenes with Mission Control
+            {
+                var need = new List<string>();
+                foreach (string tr in new[] { "tourist", "to_tourist", "tourist_pair" })
+                    foreach (string band in new[] { "calm", "tense" })
+                    {
+                        int n = 0;
+                        foreach (string sc in order)
+                        {
+                            List<SrcRow> l = byScene[sc];
+                            if (Col(l[0], "trait") == tr && l[0]["band"] == band && l.Count >= 2 && !hasMc(l)) n++;
+                        }
+                        int min = band == "calm" ? 14 : 5;
+                        if (n < min) need.Add(tr + " " + band + " " + n + "/" + min);
+                    }
+                int radio = 0;
+                foreach (string sc in order) if (Col(byScene[sc][0], "trait") == "tourist" && hasMc(byScene[sc])) radio++;
+                if (radio < 12) need.Add("tourist radio " + radio + "/12");
+                Check(need.Count == 0, "v4 tables: tourists have their own dialogues for every pair (tourist to crew, crew to tourist, two tourists) and radio scenes",
+                      string.Join(", ", need.ToArray()));
+            }
             // persona scenes are crew lines: a persona scene must have a crew line (the persona is the crew speaker's)
             {
                 List<string> noCrew = new List<string>();
@@ -4372,6 +4418,26 @@ public static class Tests
                 Check(DcMath.CrewDistortion(1f, 0f, true) == 0f && Math.Abs(DcMath.CrewDistortion(1f, 1f, true) - 0.1f) < 1e-5
                       && Math.Abs(DcMath.CrewDistortion(1f, 0f, false) - 0.3f) < 1e-5 && DcMath.CrewDistortion(0.4f, 0f, false) == 0f,
                       "voice: a recorded panic clip gets no stress distortion on top, a calm line none, a stressed one at most 0.3", "");
+                var tour = new Persona(0.5f, 0.5f, false, false, "Tourist");
+                var pilot = new Persona(0.5f, 0.5f, false, false, "Pilot");
+                Check(tour.IsTourist && !pilot.IsTourist && tour.TraitMatches("tourist_pair") && !pilot.TraitMatches("tourist_pair")
+                      && pilot.TraitMatches("to_tourist") && !tour.TraitMatches("to_tourist") && !pilot.TraitMatches("tourist"),
+                      "tourist: pair traits check speaker A (tourist_pair a tourist, to_tourist anyone else)", "");
+                Check(Persona.PairFits("tourist_pair", true, true) && !Persona.PairFits("tourist", true, true) && !Persona.PairFits("any", true, true)
+                      && Persona.PairFits("tourist", true, false) && !Persona.PairFits("any", true, false)
+                      && Persona.PairFits("to_tourist", false, true) && !Persona.PairFits("any", false, true) && !Persona.PairFits("pilot", false, true)
+                      && Persona.PairFits("any", false, false) && Persona.PairFits("pilot", false, false)
+                      && !Persona.PairFits("tourist", false, false) && !Persona.PairFits("to_tourist", false, false) && !Persona.PairFits("tourist_pair", false, false),
+                      "tourist: an intercom chat with a tourist only takes the dialogues written for that pair, one without never a tourist scene", "");
+                Check(!Persona.RadioFits("any", "staging", "none", true) && Persona.RadioFits("tourist", "staging", "none", true)
+                      && Persona.RadioFits("any", "staging", "none", false) && !Persona.RadioFits("any", "chatter", "calm", true)
+                      && Persona.RadioFits("tourist", "chatter", "calm", true) && Persona.RadioFits("any", "chatter", "panic", true)
+                      && !Persona.RadioFits("any", "power_low", "tense", true) && !Persona.RadioFits("to_tourist", "chatter", "calm", false)
+                      && !Persona.RadioFits("tourist_pair", "chatter", "calm", true),
+                      "tourist: no job callouts and no calm crew talk for a tourist, fear lines yes, pair scenes never on the radio", "");
+                Check(Persona.ChatSideFits(null, "pilot brave") && !Persona.ChatSideFits(null, "tourist") && !Persona.ChatSideFits("pilot", "tourist")
+                      && Persona.ChatSideFits("tourist", "tourist dim") && RuntimeLines.JobOk("tourist", "tourist dim"),
+                      "tourist: a runtime chat side only takes a tourist when it asks for one", "");
                 Check(PhraseTable.PartTopicOk("prechute", false, false, true, false) && !PhraseTable.PartTopicOk("prechute", false, false, true, true)
                       && !PhraseTable.PartTopicOk("prechute", false, false, false, false) && PhraseTable.PartTopicOk("chuteopen", false, false, false, true)
                       && !PhraseTable.PartTopicOk("chuteopen", false, false, true, false) && !PhraseTable.PartTopicOk("heatshield", true, false, true, true)
