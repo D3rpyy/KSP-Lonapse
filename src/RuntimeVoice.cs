@@ -244,6 +244,9 @@ namespace Lonapse
                 if (Platform == "macos") psi.EnvironmentVariables["DYLD_LIBRARY_PATH"] = dir;
                 var sw = Stopwatch.StartNew();
                 w.proc = Process.Start(psi);
+                // below the game: loading a model and the first line take all cores for a moment, KSP keeps its frames
+                try { w.proc.PriorityClass = ProcessPriorityClass.BelowNormal; }
+                catch (Exception e) { Log.Info("Runtime voice: Piper priority not lowered (" + e.Message + ")"); }
                 w.stdin = w.proc.StandardInput.BaseStream;
                 Worker ww = w;
                 w.reader = new Thread(() => ReadLoop(ww)) { IsBackground = true, Name = "Lonapse Piper " + kind };
