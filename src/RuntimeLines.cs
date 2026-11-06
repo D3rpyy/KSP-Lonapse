@@ -32,6 +32,17 @@ namespace Lonapse
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
 
+        /// <summary>A line about time warp: kind warp, or a check on in_warp (a warp chat).</summary>
+        public bool AboutWarp
+        {
+            get
+            {
+                if (Kind == "warp") return true;
+                foreach (var c in Checks) if (c.Key == "in_warp") return true;
+                return false;
+            }
+        }
+
         /// <summary>The first version (the tests and the log use it).</summary>
         public string Spanish { get { return Versions.Count > 0 ? Versions[0][0] : ""; } }
         public string English { get { return Versions.Count > 0 ? Versions[0][1] : ""; } }

@@ -670,6 +670,8 @@ namespace Lonapse
                     dockGeo.dirty = true;
                     chutes.dirty = true;
                     lastPolledStage = SafeStage(v);
+                    pollDropFrom = int.MinValue;
+                    scanParts = scanIgnited = -1;
                     stress.ResetAll();
                     stress.StartWarmup();
                     roster.dirty = true;
@@ -1415,10 +1417,39 @@ namespace Lonapse
         private readonly Dictionary<int, int> stageParts = new Dictionary<int, int>();
         private float stageScanLeft;
 
+        // what the 1 s scan saw: the part count and the burning engines. A stage that really fired drops parts or
+        // lights an engine. Editing the stage order in flight also moves currentStage, but fires nothing.
+        private int scanParts = -1, scanIgnited = -1;
+        // a currentStage drop without onStageActivate, waiting for proof that something fired
+        private int pollDropFrom = int.MinValue, pollDropTo;
+        private float pollDropTime;
+        private const float PollProofWindow = 1.5f;
+
+        private static int IgnitedEngines(Vessel v)
+        {
+            int n = 0;
+            for (int i = 0; i < v.parts.Count; i++)
+            {
+                Part p = v.parts[i];
+                if (p == null) continue;
+                for (int m = 0; m < p.Modules.Count; m++)
+                {
+                    var e = p.Modules[m] as ModuleEngines;
+                    if (e != null && e.EngineIgnited) n++;
+                }
+            }
+            return n;
+        }
+
         private void ScanStages(Vessel v)
         {
             stageParts.Clear();
             if (v == null || v.parts == null) return;
+            if (pollDropFrom == int.MinValue)
+            {
+                scanParts = v.parts.Count;
+                scanIgnited = IgnitedEngines(v);
+            }
             for (int i = 0; i < v.parts.Count; i++)
             {
                 Part p = v.parts[i];
@@ -1472,11 +1503,35 @@ namespace Lonapse
             }
             int cur = SafeStage(v);
             if (cur == int.MinValue) return;
-            if (lastPolledStage != int.MinValue && cur < lastPolledStage && Time.unscaledTime - lastStageEventTime > 1.0f)
+            if (lastPolledStage != int.MinValue && cur < lastPolledStage && Time.unscaledTime - lastStageEventTime > 1.0f
+                && pollDropFrom == int.MinValue)
             {
-                Log.Info("Staging detected by currentStage poll (" + lastPolledStage + " -> " + cur + "), no onStageActivate seen");
-                stress.AddImpulse(settings.tuning.impulseStage);
-                beeps.OnStage(cur, "poll");
+                pollDropFrom = lastPolledStage;
+                pollDropTo = cur;
+                pollDropTime = Time.unscaledTime;
+            }
+            if (pollDropFrom != int.MinValue)
+            {
+                if (lastStageEventTime >= pollDropTime - 1f)
+                    pollDropFrom = int.MinValue;   // onStageActivate came after all, it did the callout
+                else
+                {
+                    bool fired = false;
+                    try { fired = scanParts >= 0 && (v.parts.Count < scanParts || IgnitedEngines(v) > scanIgnited); }
+                    catch (Exception) { fired = false; }
+                    if (fired)
+                    {
+                        Log.Info("Staging detected by currentStage poll (" + pollDropFrom + " -> " + pollDropTo + "), no onStageActivate seen");
+                        stress.AddImpulse(settings.tuning.impulseStage);
+                        beeps.OnStage(pollDropTo, "poll");
+                        pollDropFrom = int.MinValue;
+                    }
+                    else if (Time.unscaledTime - pollDropTime > PollProofWindow)
+                    {
+                        Log.Info("Stage order changed (" + pollDropFrom + " -> " + pollDropTo + "), nothing fired: no staging callout");
+                        pollDropFrom = int.MinValue;
+                    }
+                }
             }
             lastPolledStage = cur;
         }

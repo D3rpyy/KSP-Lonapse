@@ -599,7 +599,26 @@ namespace Lonapse
         }
 
         /// <summary>Share of radio turns in time warp that are a warp line (kind warp), when one fits.</summary>
-        const double WarpLineChance = 0.5;
+        const double WarpLineChance = 0.75;
+        /// <summary>Share of intercom chats in time warp that are a runtime chat, so a warp chat can come up.</summary>
+        const double WarpChatChance = 0.85;
+
+        /// <summary>Clip keys of lines about the warp (warp lines, warp chats and their replies) queued in a real
+        /// warp. When the warp has ended by their turn they are dropped, so nobody talks about the warp after it.</summary>
+        readonly HashSet<string> warpOnlyKeys = new HashSet<string>();
+
+        void MarkWarpOnly(string clipKey)
+        {
+            if (clipKey == null) return;
+            if (warpOnlyKeys.Count > 200) warpOnlyKeys.Clear();
+            warpOnlyKeys.Add(clipKey);
+        }
+
+        /// <summary>The line is about a warp that has ended: skip it.</summary>
+        bool WarpOver(PhraseEntry e)
+        {
+            return e != null && !host.warpChatter && e.ClipKey != null && warpOnlyKeys.Contains(e.ClipKey);
+        }
 
         /// <summary>Time warp chatter: a warp line from Mission Control (time to the node or the next body).
         /// False when the runtime voice is off, the radio is cut or none fits: the usual exchange plays then.</summary>
@@ -659,7 +678,8 @@ namespace Lonapse
         /// </summary>
         bool TryRuntimeChat(KerbalVoice a, KerbalVoice b)
         {
-            if (!RuntimeOn || runtimeChatPending || a == null || b == null || (!debugForce && rng.NextDouble() >= RuntimeChatChance)) return false;
+            double chance = host.warpChatter ? WarpChatChance : RuntimeChatChance;
+            if (!RuntimeOn || runtimeChatPending || a == null || b == null || (!debugForce && rng.NextDouble() >= chance)) return false;
             if (RuntimeVoice.Missing(KindFor(a)) != null || RuntimeVoice.Missing(KindFor(b)) != null) return false;
             Vessel v = ActiveVessel;
             if (v == null) return false;
@@ -684,6 +704,12 @@ namespace Lonapse
                 if (recentRuntime.Contains(c[0].Id)) continue;
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
                 else if (RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
+            }
+            // in time warp a chat about the warp when one fits
+            if (host.warpChatter)
+            {
+                var warpFit = fit.FindAll(c => c.Key[0].AboutWarp);
+                if (warpFit.Count > 0) fit = warpFit;
             }
             if (fit.Count == 0) return false;
             var pick = fit[rng.Next(fit.Count)];
@@ -714,6 +740,7 @@ namespace Lonapse
                     Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
                 };
                 e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
+                if (chat[0].AboutWarp && host.warpChatter) MarkWarpOnly(e.ClipKey);
                 entries.Add(e);
                 spanish.Add(sp);
             }
@@ -860,8 +887,11 @@ namespace Lonapse
             };
             e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
             if (report) reportPending = true;
+            bool warpOnly = t.AboutWarp && host.warpChatter;
+            if (warpOnly) MarkWarpOnly(e.ClipKey);
             // a crew reply, rendered at the same time: it plays right after the MC line, or not at all
             Reply rp = PlanReply(t, nums, names);
+            if (rp != null && warpOnly) MarkWarpOnly(rp.entry.ClipKey);
             bool mcDone = false, mcQueued = false;
             Action reply = () =>
             {

@@ -522,6 +522,7 @@ namespace Lonapse
             for (int i = kept; i < count; i++)
             {
                 Utterance u = queue[(head + i) % Capacity];
+                if (IsReplyLine(u.entry)) Log.Info("Runtime voice: " + u.entry.ClipKey + " dropped with the radio queue");
                 u.speaker = null;
                 u.entry = null;
             }
@@ -651,6 +652,12 @@ namespace Lonapse
             return k == UttKind.CrewLine || k == UttKind.ControlLine || k == UttKind.ControlFx
                    || k == UttKind.BedStart || k == UttKind.StaticBurst || k == UttKind.RadioOpen || k == UttKind.RadioClose
                    || k == UttKind.RogerBeep || k == UttKind.ProbeBeep;
+        }
+
+        /// <summary>A crew reply to a Mission Control runtime line (rt_re_...), logged when it plays or is skipped.</summary>
+        private static bool IsReplyLine(PhraseEntry e)
+        {
+            return e != null && e.ClipKey != null && e.ClipKey.StartsWith("rt_re_", StringComparison.Ordinal);
         }
 
         private bool CanChat(KerbalVoice k)
@@ -810,12 +817,20 @@ namespace Lonapse
             if (IsRadioItem(u.who) && !cfg.radioEnabled) return StartResult.Skip;
             if (u.who == UttKind.PingPattern && !cfg.beepsEnabled) return StartResult.Skip;
             if (IsIntercomItem(u.who) && !cfg.intercomEnabled) { abortChat = true; return StartResult.Skip; }
+            if (WarpOver(u.entry))
+            {
+                // a line about the warp, and the warp is over
+                Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped, the time warp ended");
+                if (IsIntercomItem(u.who)) abortChat = true;
+                return StartResult.Skip;
+            }
 
             switch (u.who)
             {
                 case UttKind.CrewLine:
                 {
-                    if (!host.roster.AnyoneCanSpeak()) return StartResult.Skip;
+                    bool reply = IsReplyLine(u.entry);
+                    if (!host.roster.AnyoneCanSpeak()) { if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped, nobody can speak"); return StartResult.Skip; }
                     if (CrewPlaying() >= CrewCap()) return StartResult.Wait;
                     VoiceChannel c = FreeCrewChannel();
                     if (c == null) return StartResult.Wait;
@@ -826,7 +841,7 @@ namespace Lonapse
                     PhraseEntry rtEntry;
                     int turn = RuntimeTurn(u, sp, out rtClip, out rtEntry);
                     if (turn == TurnWait) return StartResult.Wait;
-                    if (turn == TurnSkip) return StartResult.Skip;
+                    if (turn == TurnSkip) { if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped at its turn"); return StartResult.Skip; }
                     NoteCrewSpeaker(sp);
                     PhraseEntry shown = rtEntry ?? u.entry;
                     AudioClip clip;
@@ -846,7 +861,8 @@ namespace Lonapse
                         what = folder;
                         panic = folder == "crew/panic";
                     }
-                    if (clip == null) return StartResult.Skip;
+                    if (clip == null) { if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped, its clip is gone"); return StartResult.Skip; }
+                    if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " plays (" + sp.displayName + ")");
                     float sk = sp.sk, gs = host.stress.gStrain;
                     float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax);
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
