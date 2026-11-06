@@ -36,7 +36,7 @@ id	kind	when	spanish	english
 #          mod's Breaking Ground part (kind device, id=<part name>, words of {device}) and its contract type				
 #          (kind contract, id=<class name>, words of {contract}, for contract lines with on=yourmod.topic).				
 # spanish  normal Spanish. A number slot becomes Spanish words, reversed like every other word (loñapsE).				
-#          A name slot is spoken as the name. Write the number before a masculine noun: "un" for 1 is made.				
+#          A name slot is spoken as the name. Write the number before a masculine noun: 'un' for 1 is made.				
 # english  the subtitle. A number slot shows digits, a name slot the name.				
 #				
 # Versions: spanish and english may hold several versions split by |, in the same order. One is picked per play,				

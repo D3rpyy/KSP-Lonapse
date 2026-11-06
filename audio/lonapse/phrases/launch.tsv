@@ -23,8 +23,8 @@ throttle_cut_s1_1	throttle_cut	callout	none	crew	throttle_cut_s1	1	both	any	any	
 throttle_cut_s1_2	throttle_cut	callout	none	mc	throttle_cut_s1	2	m	any	any	Confirmado, apagado del motor.	Confirmed, engine shutdown. | Confirmed, engine shutdown. | Confirmed. Engines shut down. | Confirmed. Engines off at {speed} m/s.	 |  |  | Confirmado. Motores apagados a {speed} metros por segundo.
 # Launch countdown. It counts up in Spanish because Lonapse reverses: onU, soD ... zeiD, then liftoff.												
 # The build gives Piper the countdown text with only the first letter as a capital (build_lonapse.py spoken_text).												
-# Two numbers are spelled for the voice: Sinko is spoken "Oknis" (Cinco gave "Ocnic", over 1 s with the end stop),												
-# Neuve is spoken "Evuen" (Nueve gave "Eveun", dragged). The period keeps every number short and level.												
+# Two numbers are spelled for the voice: Sinko is spoken 'Oknis' (Cinco gave 'Ocnic', over 1 s with the end stop),												
+# Neuve is spoken 'Evuen' (Nueve gave 'Eveun', dragged). The period keeps every number short and level.												
 countdown_01	countdown	callout	none	mc	countdown_s1	1	m	any	any	Uno.	One	
 countdown_02	countdown	callout	none	mc	countdown_s1	2	m	any	any	Dos.	Two	
 countdown_03	countdown	callout	none	mc	countdown_s1	3	m	any	any	Tres.	Three	

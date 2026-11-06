@@ -70,17 +70,6 @@ It is a tab separated text file, UTF-8, with the columns `id kind when spanish e
 the Lonapse runtime lines. It is explained at the top of `GameData/Lonapse/Phrases/Runtime/reports.tsv`. Lonapse reads
 every `.tsv` in your `Lonapse` folder at the first flight scene. KSP itself ignores `.tsv` files.
 
-A line that starts with `#` is a comment and an empty line is skipped. Lonapse does not care where they are or how
-many tabs they hold. GitHub does. It only shows a `.tsv` as a table when the first line is the header and every line
-has as many columns as the header. So if your file is on GitHub:
-
-- Put the header on the first line, the comments below it.
-- End every comment line and empty line with tabs up to the column count. With five columns that is four tabs.
-- Give a `meta` row its two empty text cells as well (two tabs at the end).
-
-`docs/api/example_mod.tsv` is written that way. Some editors remove trailing tabs on save. Then the file still works in
-Lonapse, but GitHub shows it as plain text again with "It looks like row N should actually have 1 column".
-
 ```
 id	kind	when	spanish	english
 rt_chat_yourmod_repair_1	chat	on=yourmod.repair_done	{other}, ya está arreglado: {x_part}.	{other}, it's fixed: {x_part}.
