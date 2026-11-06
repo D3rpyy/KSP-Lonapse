@@ -378,6 +378,9 @@ public static class Tests
         Near(DcMath.CrewPitch(1.0f, 1f, 0f, 2f, 1.2f), Math.Pow(2, 2.0 / 12), 1e-4, "pitch: stress 1 adds 2 semitones (x1.122)");
         Near(DcMath.CrewPitch(1.12f, 1f, 0f, 2f, 1.2f), 1.2, 1e-6, "pitch: total capped at 1.2");
         Near(DcMath.CrewPitch(1.0f, 0f, 1f, 2f, 1.2f), 0.88, 1e-6, "pitch: full G strain lowers 12%");
+        Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, true), 1.0, 1e-6, "pitch: recorded panic clip gets no stress raise");
+        Near(DcMath.CrewPitch(1.05f, 1f, 1f, 0.5f, 1.12f, true), 1.05 * 0.88, 1e-6, "pitch: recorded panic keeps base pitch and G drop");
+        Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, false), DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f), 1e-6, "pitch: other clips unchanged");
         Near(DcMath.TruncFraction(0.8f, 0.85f, 0.8f), 1.0, 1e-6, "truncation: none below sk 0.85");
         Near(DcMath.TruncFraction(1.0f, 0.85f, 0.8f), 0.8, 1e-6, "truncation: at most 20% cut at sk 1");
         {

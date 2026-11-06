@@ -894,7 +894,9 @@ namespace Lonapse
                     if (clip == null) { if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " skipped, its clip is gone"); return StartResult.Skip; }
                     if (reply) Log.Info("Runtime voice: " + u.entry.ClipKey + " plays (" + sp.displayName + ")");
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax) * WarpPitch;
+                    // a recorded panic clip gets no stress pitch on top (a runtime voice render has no panic delivery)
+                    bool recordedPanic = panic && rtClip == null;
+                    float pitch = DcMath.CrewPitch(sp.Pitch, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(false, tu);
                     c.Play(clip, vol, pitch, false, 0f);
@@ -937,11 +939,13 @@ namespace Lonapse
                     if (turn == TurnWait) return StartResult.Wait;
                     if (turn == TurnSkip) return StartResult.Skip;
                     PhraseEntry shown = rtEntry ?? u.entry;
+                    string icFolder = u.entry == null ? (u.folder ?? CrewFolder(sp, s)) : null;
                     AudioClip clip = rtClip ?? (u.entry != null ? PhraseClips.Clip(u.entry, sp.isFemale)
-                                                     : ClipLibrary.NextFor(u.folder ?? CrewFolder(sp, s), sp.isFemale, sp.rng));
+                                                     : ClipLibrary.NextFor(icFolder, sp.isFemale, sp.rng));
                     if (clip == null) return StartResult.Skip;
                     float sk = sp.sk, gs = host.stress.gStrain;
-                    float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax) * WarpPitch;
+                    bool recordedPanic = rtClip == null && (u.entry != null ? u.entry.Band == "panic" : icFolder == "crew/panic");
+                    float pitch = DcMath.CrewPitch(sp.Pitch * u.pitchMul, sk, gs, tu.crewStressSemitones, tu.crewPitchMax, recordedPanic) * WarpPitch;
                     float vol = DcMath.Lerp(0.55f, 1.0f, sk);
                     c.SetPreset(true, tu, cfg.intercomRadioFx);
                     c.Play(clip, vol, pitch, false, 0f);

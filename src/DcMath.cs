@@ -138,6 +138,16 @@ namespace Lonapse
         }
 
         /// <summary>
+        /// Crew pitch for a clip. A recorded panic clip (crew/panic) already has its panic in the recording: no
+        /// stress raise on top, only the kerbal's own pitch and the G strain drop (user test: panic sounded too high).
+        /// </summary>
+        public static float CrewPitch(float basePitch, float sk, float gStrain, float stressSemitones, float maxPitch,
+                                      bool recordedPanic)
+        {
+            return CrewPitch(basePitch, recordedPanic ? 0f : sk, gStrain, stressSemitones, maxPitch);
+        }
+
+        /// <summary>
         /// Radio static slider (0..1) to a level (0..1). Loudness is heard on a log scale, so a straight line was only
         /// audible near 100 % (user test 0.6.0). The square root makes 25 % half the full level.
         /// </summary>
