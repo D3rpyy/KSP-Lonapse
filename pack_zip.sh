@@ -24,7 +24,11 @@ mkdir -p "$STAGE/GameData/Lonapse/PluginData"
 cp -r "$RUNTIME" "$STAGE/GameData/Lonapse/PluginData/Runtime"
 (cd "$STAGE" && zip -qr -X "$ZIP" GameData)
 
-n=$(unzip -l "$ZIP" | grep -cE '\.(wav|ogg)$')
-r=$(unzip -l "$ZIP" | grep -c 'PluginData/Runtime/')
-unzip -l "$ZIP" | grep -q 'GameData/Lonapse/PluginData/Runtime/windows/piper.exe' || { echo "ERROR: piper.exe is missing from the zip" >&2; exit 1; }
+# read the listing once (grep -q on a pipe closes it early, and with pipefail that looks like a failure)
+LIST="$(unzip -Z1 "$ZIP")"
+n=$(grep -cE '\.(wav|ogg)$' <<<"$LIST" || true)
+r=$(grep -c 'PluginData/Runtime/' <<<"$LIST" || true)
+for f in Plugins/Lonapse.dll PluginData/Runtime/windows/piper.exe PluginData/Runtime/linux/piper; do
+  grep -qx "GameData/Lonapse/$f" <<<"$LIST" || { echo "ERROR: $f is missing from the zip" >&2; exit 1; }
+done
 echo "Packed: $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files, $r runtime voice entries)"
