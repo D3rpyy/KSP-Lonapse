@@ -7,6 +7,7 @@
 [![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE)
+[![Runtime voice: own licenses](https://img.shields.io/badge/runtime%20voice-own%20licenses-lightgrey)](runtime/licenses/README.md)
 [![CKAN](https://img.shields.io/badge/CKAN-Indexed-green.svg)](https://github.com/KSP-CKAN/CKAN)
 [![SpaceDock](https://img.shields.io/badge/SpaceDock-Available-blue.svg)](https://spacedock.info/mod/4786/Lonapse#stats)
 
@@ -215,10 +216,19 @@ working without the runtime voice, it then uses the recorded clips only.
 
 Inspired by [Chatterer](https://github.com/Athlonic/Chatterer). Lonapse contains none of its code or sounds.
 
-The voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine, with three
-Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are synthesized.
+The recorded voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine,
+with three Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are
+synthesized.
+
+The runtime voice uses [Piper 1.2.0](https://github.com/rhasspy/piper) by Michael Hansen, with
+[piper-phonemize](https://github.com/rhasspy/piper-phonemize), [espeak-ng](https://github.com/espeak-ng/espeak-ng)
+and [ONNX Runtime](https://github.com/microsoft/onnxruntime), and changed copies of the same three voices from
+[rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices). See Runtime voice files above.
 
 I wrote the mod with help from Claude (an AI assistant) for code and documentation. The design, the testing in game
 and the decisions are my own.
 
 The code is MIT licensed. The sounds and the phrase text are CC BY 4.0. See [LICENSE](LICENSE).
+The runtime voice in `PluginData/Runtime` is not part of Lonapse and keeps its own licences: MIT (Piper,
+piper-phonemize, ONNX Runtime), GPL-3.0-or-later (espeak-ng), and CC0, Apache-2.0 and the Unlicense (the voices).
+The texts are in [runtime/licenses](runtime/licenses/README.md), and the source code is attached to each release.

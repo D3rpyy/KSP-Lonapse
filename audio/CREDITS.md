@@ -7,6 +7,24 @@ ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and plain Python. They conta
 
 No audio from the Chatterer mod or any other mod was used.
 
+## Runtime voice
+
+Lonapse ships a speech engine in `GameData/Lonapse/PluginData/Runtime` that speaks lines while you play. It is not
+part of Lonapse. Each part keeps its own licence. The texts are in `PluginData/Runtime/LICENSES` (in the repo:
+`runtime/licenses`).
+
+| Part | Author | License |
+|---|---|---|
+| [Piper](https://github.com/rhasspy/piper) 1.2.0 (release 2023.11.14-2) | Michael Hansen | MIT |
+| [piper-phonemize](https://github.com/rhasspy/piper-phonemize) | Michael Hansen | MIT |
+| [espeak-ng](https://github.com/espeak-ng/espeak-ng) 1.52 (rhasspy fork) | the espeak-ng contributors | GPL-3.0-or-later |
+| [ONNX Runtime](https://github.com/microsoft/onnxruntime) 1.14.1 | Microsoft | MIT |
+| The three voices below | see the table below | CC0, Apache-2.0, Unlicense |
+
+The program files are unchanged from the Piper release. The voices are changed: their weights are quantized to int8
+and the decoder is kept at float32 (`audio/quantize_runtime_voices.py`). The source code of Piper, piper-phonemize
+and espeak-ng is attached to each GitHub release as `Lonapse-<version>-runtime-source.zip`.
+
 ## Lonapse voices: Piper
 
 The loñapsE voice clips (`audio/build_lonapse.py`, phrase table in `audio/lonapse/`) are spoken by Piper
