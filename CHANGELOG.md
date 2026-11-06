@@ -9,7 +9,6 @@
 - **Biome names.** Reports and crew chats can say the biome under the vessel: "You're passing over the Highlands." "Welcome to the Midlands. Population: us." Biomes of planet packs work too. A name the voice cannot say is left out: an untranslated tag (`#LOC_...`), a name in another alphabet, or one that is too long.
 - **Personality in runtime chats.** A runtime chat can ask for a persona, like a dim kerbal and a brave one. 6 new chats use it: the dim kerbal and the red button, a nervous kerbal and a strange noise, a veteran who still shakes, and more.
 - **Subtitle time on screen.** A new "Stay on screen" slider in the subtitle settings sets how long a subtitle stays after its line is spoken, from 0 to 10 s. The default is 0.6 s, as before. The countdown numbers keep the short time.
-- **Debug tab.** New buttons test a runtime chat, a report with a crew reply, a warp line and a sunrise line right away.
 
 ### Changed
 - **The voice says what the subtitle shows, for every line with a name or a value.** All 289 subtitle lines that fill in a word now have their own Spanish. Before, 228 of them played the general recording while the subtitle showed the other kerbal's name, your vessel, the body or the mission day.
