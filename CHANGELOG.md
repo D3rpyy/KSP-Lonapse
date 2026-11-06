@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.1
+## 0.8.0
 
 ### New
 - **Chatter during time warp.** Time warp on rails is no longer dead silent. The calm radio and intercom talk goes on at its normal pace. Events wait until the warp ends, as before. With the runtime voice on, Mission Control also talks about the warp: the hours to the next burn and the hours to the next body. 10 new Mission Control lines and 4 crew chats only play in warp (`Phrases/Runtime/warp.tsv`). Turn it off with "Chatter during time warp" in the General tab.
