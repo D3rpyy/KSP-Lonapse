@@ -1511,7 +1511,7 @@ namespace Lonapse
             bool lit;
             try
             {
-                CelestialBody sun = Planetarium.fetch != null ? Planetarium.fetch.Sun : null, b = v.mainBody;
+                CelestialBody b = v.mainBody, sun = StarOf(b);
                 if (sun == null || b == null || ReferenceEquals(sun, b)) { sunKnown = false; return; }
                 Vector3d p = v.GetWorldPos3D() - b.position, s = sun.position - b.position;
                 lit = !DcMath.InShadow(p.x, p.y, p.z, s.x, s.y, s.z, b.Radius);
@@ -1524,6 +1524,20 @@ namespace Lonapse
             sunrises++;
             if (!debugForce && (host.warpChatter || clock - lastSunriseLine < SunriseGap || rng.NextDouble() >= SunriseChance)) return;
             QueueSunrise(v);
+        }
+
+        /// <summary>The star the body goes around: the first star up the orbit chain. Kopernicus packs with more than
+        /// one star light a planet from its own star, not from the main sun. Without a star flag the main sun.</summary>
+        static CelestialBody StarOf(CelestialBody b)
+        {
+            for (int i = 0; b != null && i < 16; i++)
+            {
+                if (b.isStar) return b;
+                CelestialBody up = b.referenceBody;
+                if (up == null || ReferenceEquals(up, b)) break;
+                b = up;
+            }
+            return Planetarium.fetch != null ? Planetarium.fetch.Sun : null;
         }
 
         bool QueueSunrise(Vessel v)
