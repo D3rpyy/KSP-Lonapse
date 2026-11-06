@@ -2,21 +2,21 @@
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	spanish_rt
 dock_approach_a_1	dock_approach	chatter	calm	crew	dock_approach_a	1	both	any	any	Nos acercamos despacio al puerto.	Approaching the port slowly. | Approaching the port slowly. | Slow approach to the port.	
-dock_approach_a_2	dock_approach	chatter	calm	mc	dock_approach_a	2	m	any	any	Recibido. Velocidad correcta.	Copy. Speed is good. | Copy. Speed is good. | Copy. Good speed, {vessel}.	
+dock_approach_a_2	dock_approach	chatter	calm	mc	dock_approach_a	2	m	any	any	Recibido. Velocidad correcta.	Copy. Speed is good. | Copy. Speed is good. | Copy. Good speed, {vessel}.	 |  | Recibido. Buena velocidad, {vessel}.
 dock_approach_b_1	dock_approach	chatter	calm	crew	dock_approach_b	1	both	any	any	Vamos bien, sin prisa.	Looking good, no rush. | Looking good, no rush. | All good. Taking our time.	
 dock_approach_b_2	dock_approach	chatter	calm	mc	dock_approach_b	2	m	any	any	Entendido. Seguid así.	Understood. Keep it up. | Understood. Keep it up. | Copy. Keep going like that.	
 dock_close_a_1	dock_close	chatter	tense	crew	dock_close_a	1	both	any	any	Estamos muy cerca del puerto.	We're very close to the port. | We're very close to the port. | Port is very close now.	
 dock_close_a_2	dock_close	chatter	tense	mc	dock_close_a	2	m	any	any	Mantened el rumbo.	Hold your heading. | Hold your heading. | Keep that heading.	
 dock_hard_a_1	dock_hard	warning	tense	crew	dock_hard_a	1	both	any	any	Golpe fuerte al acoplar.	Hard hit on docking. | Hard hit on docking. | We docked hard.	
 dock_hard_a_2	dock_hard	warning	tense	mc	dock_hard_a	2	m	any	any	Recibido. Comprobad el puerto.	Copy. Check the port. | Copy. Check the port. | Copy. Look at the port.	
-docked_01	docked	chatter	none	mc	docked_01	1	m	any	any	Acoplamiento confirmado.	Docking confirmed. | Docking confirmed. | We confirm docking, {vessel}.	
+docked_01	docked	chatter	none	mc	docked_01	1	m	any	any	Acoplamiento confirmado.	Docking confirmed. | Docking confirmed. | We confirm docking, {vessel}.	 |  | Confirmamos el acoplamiento, {vessel}.
 docked_02	docked	chatter	none	crew	docked_02	1	both	any	any	Estamos unidos.	We're joined. | We're joined. | Connected.	
 relief_01	relief	chatter	none	crew	relief_01	1	both	any	any	Menos mal.	Thank goodness. | Thank goodness. | Oh, thank goodness.	
 relief_02	relief	chatter	none	crew	relief_02	1	both	any	any	Ya está, respiro.	That's it, I can breathe. | That's it, I can breathe. | Okay. Breathing again.	
 relief_03	relief	chatter	none	crew	relief_03	1	m	any	any	Estoy listo, sigo.	I'm ready, carrying on. | I'm ready, carrying on. | Ready. Continuing.	
 relief_04	relief	chatter	none	crew	relief_04	1	f	any	any	Estoy lista, sigo.	I'm ready, carrying on. | I'm ready, carrying on. | All set. Moving on.	
 plan_node_01	plan_node	chatter	calm	mc	plan_node_01	1	m	any	any	Nuevo nodo en el plan de vuelo.	New node in the flight plan. | New node in the flight plan. | The flight plan has a new node.	
-plan_node_02	plan_node	chatter	calm	mc	plan_node_02	1	m	any	any	Hay una maniobra planeada.	There's a maneuver planned. | There's a maneuver planned. | A maneuver is planned, {vessel}.	
+plan_node_02	plan_node	chatter	calm	mc	plan_node_02	1	m	any	any	Hay una maniobra planeada.	There's a maneuver planned. | There's a maneuver planned. | A maneuver is planned, {vessel}.	 |  | Hay una maniobra planeada, {vessel}.
 burn_soon_01	burn_soon	warning	tense	mc	burn_soon_01	1	m	any	any	Maniobra en menos de un minuto.	Maneuver in less than a minute. | Maneuver in less than a minute. | Under a minute to the maneuver.	
 burn_soon_02	burn_soon	warning	tense	mc	burn_soon_02	1	m	any	any	Preparaos para la maniobra.	Get ready for the maneuver. | Get ready for the maneuver. | Prepare for the maneuver.	
 station_check_01	station_check	chatter	calm	mc	station_check_01	1	m	any	any	¿Todo en orden en la estación?	Everything in order on the station? | Everything in order on the station? | All good on the station?	
@@ -24,13 +24,13 @@ station_check_01_2	station_check	chatter	calm	crew	station_check_01	2	both	any	a
 station_check_02	station_check	chatter	calm	mc	station_check_02	1	m	any	any	Revisión de estación. Confirmad.	Station check. Please confirm. | Station check. Please confirm. | Station, please confirm status.	
 station_check_02_2	station_check	chatter	calm	crew	station_check_02	2	both	any	any	Confirmado, estación estable.	Confirmed, station stable. | Confirmed, station stable. | Confirmed. Stable.	
 eva_check_01	eva_check	chatter	calm	mc	eva_check_01	1	m	any	any	¿Cómo va la salida?	How's the EVA going? | How's the EVA going? | How's the walk going?	
-eva_check_01_2	eva_check	chatter	calm	crew	eva_check_01	2	both	any	any	Va bien, Control. Disfrutando la vista.	Going well, Control. Enjoying the view. | Going well, Control. Enjoying the view. | Very well. Great view of {here}.	
+eva_check_01_2	eva_check	chatter	calm	crew	eva_check_01	2	both	any	any	Va bien, Control. Disfrutando la vista.	Going well, Control. Enjoying the view. | Going well, Control. Enjoying the view. | Very well. Great view of {here}.	 |  | Muy bien. Qué vista de {here}.
 eva_check_02	eva_check	chatter	calm	mc	eva_check_02	1	m	any	any	Confirma el estado del traje.	Confirm suit status. | Confirm suit status. | Suit status, please.	
 eva_check_02_2	eva_check	chatter	calm	crew	eva_check_02	2	both	any	any	Traje en verde. Todo bien.	Suit is green. All good. | Suit is green. All good. | Green suit. All fine.	
 relief_05	relief	chatter	none	crew	relief_05	1	both	any	any	Uf, eso estuvo cerca.	Phew, that was close. | Phew, that was close. | Phew. Close one.	
 relief_06	relief	chatter	none	crew	relief_06	1	both	any	any	Ya pasó lo peor.	The worst is over. | The worst is over. | The worst part is behind us.	
 relief_s1_1	relief	chatter	none	crew	relief_s1	1	both	any	any	Ya estamos bien.	We're fine now. | We're fine now. | All good now.	
-relief_s1_2	relief	chatter	none	mc	relief_s1	2	m	any	any	Nos alegra oírlo.	Glad to hear it. | Glad to hear it. | Good to hear, {vessel}.	
+relief_s1_2	relief	chatter	none	mc	relief_s1	2	m	any	any	Nos alegra oírlo.	Glad to hear it. | Glad to hear it. | Good to hear, {vessel}.	 |  | Nos alegra oírlo, {vessel}.
 docked_s1_1	docked	chatter	none	crew	docked_s1	1	both	any	any	Captura completa.	Capture complete. | Capture complete. | Captured.	
 docked_s1_2	docked	chatter	none	mc	docked_s1	2	m	any	any	Acoplamiento firme, bien hecho.	Hard dock, well done. | Hard dock, well done. | Hard dock. Nice work.	
 dock_approach_c_1	dock_approach	chatter	calm	crew	dock_approach_c	1	both	any	any	Cien metros, velocidad baja.	A hundred meters, low speed. | A hundred meters, low speed. | Hundred meters. Slow.	
@@ -44,7 +44,7 @@ plan_node_s1_2	plan_node	chatter	calm	crew	plan_node_s1	2	both	any	any	Recibido,
 plan_node_03	plan_node	chatter	calm	crew	plan_node_03	1	both	any	any	Preparando la maniobra.	Preparing the maneuver. | Preparing the maneuver. | Getting the maneuver ready.	
 burn_soon_s1_1	burn_soon	warning	tense	mc	burn_soon_s1	1	m	any	any	Encendido en un minuto.	Burn in one minute. | Burn in one minute. | One minute to the burn.	
 burn_soon_s1_2	burn_soon	warning	tense	crew	burn_soon_s1	2	both	any	any	Listos para encender.	Ready to burn. | Ready to burn. | Ready.	
-burn_soon_03	burn_soon	warning	tense	crew	burn_soon_03	1	both	any	any	Orientando la nave para la maniobra.	Orienting the ship for the maneuver. | Orienting the ship for the maneuver. | Pointing {vessel} for the maneuver.	
+burn_soon_03	burn_soon	warning	tense	crew	burn_soon_03	1	both	any	any	Orientando la nave para la maniobra.	Orienting the ship for the maneuver. | Orienting the ship for the maneuver. | Pointing {vessel} for the maneuver.	 |  | Orientando la {vessel} para la maniobra.
 station_check_s1_1	station_check	chatter	calm	mc	station_check_s1	1	m	any	any	Estación, ¿cómo estáis?	Station, how are you doing? | Station, how are you doing? | Station, how's it going?	
 station_check_s1_2	station_check	chatter	calm	crew	station_check_s1	2	both	any	any	Todo en orden, control.	All in order, control. | All in order, control. | All fine, Control.	
 eva_check_s1_1	eva_check	chatter	calm	mc	eva_check_s1	1	m	any	any	¿Qué tal el traje?	How's the suit? | How's the suit? | Suit okay?	
@@ -66,7 +66,7 @@ ev_dcl_01_1	dock_close	chatter	tense	crew	ev_dcl_01	1	both	any	any	Cinco metros.
 ev_dcl_01_2	dock_close	chatter	tense	mc	ev_dcl_01	2	m	any	any	Despacio. Muy bien.	Slowly. Very good. | Slowly. Very good. | Gently. Good.	
 ev_dcl_02_1	dock_close	chatter	tense	crew	ev_dcl_02	1	both	any	any	Nos acercamos un poco rápido.	Closing a bit fast. | Closing a bit fast. | A little fast.	
 ev_dcl_02_2	dock_close	chatter	tense	mc	ev_dcl_02	2	m	any	any	Frenad un poco antes del contacto.	Brake a little before contact. | Brake a little before contact. | Slow down before contact.	
-ev_dcl_03_1	dock_close	chatter	tense	mc	ev_dcl_03	1	m	any	any	Velocidad de cierre alta. Frenad.	High closing speed. Slow down. | High closing speed. Slow down. | Too fast, {vessel}. Slow down.	
+ev_dcl_03_1	dock_close	chatter	tense	mc	ev_dcl_03	1	m	any	any	Velocidad de cierre alta. Frenad.	High closing speed. Slow down. | High closing speed. Slow down. | Too fast, {vessel}. Slow down.	 |  | Demasiado rápido, {vessel}. Frenad.
 ev_dcl_03_2	dock_close	chatter	tense	crew	ev_dcl_03	2	both	any	any	Frenando.	Braking. | Braking. | Slowing.	
 ev_dcl_04	dock_close	chatter	tense	mc	ev_dcl_04	1	m	any	any	Cuidado con la velocidad de cierre.	Careful with the closing speed. | Careful with the closing speed. | Watch the closing speed.	
 ev_dcl_05	dock_close	chatter	tense	crew	ev_dcl_05	1	both	any	any	Casi tocamos. Agarraos.	Almost touching. Hold on. | Almost touching. Hold on. | Nearly in contact. Hang on.	
@@ -82,7 +82,7 @@ ev_dhd_05	dock_hard	warning	tense	mc	ev_dhd_05	1	m	any	any	Acoplamiento brusco. 
 # More docked.
 ev_dkd_01_1	docked	chatter	none	crew	ev_dkd_01	1	both	any	any	Acoplados. Puerto firme.	Docked. Port is secure. | Docked. Port is secure. | Docked and secure.	
 ev_dkd_01_2	docked	chatter	none	mc	ev_dkd_01	2	m	any	any	Confirmado. Buen trabajo.	Confirmed. Good work. | Confirmed. Good work. | Confirmed. Nice job.	
-ev_dkd_02_1	docked	chatter	none	mc	ev_dkd_02	1	m	any	any	Vemos el acoplamiento. Enhorabuena.	We see the docking. Congratulations. | We see the docking. Congratulations. | Docking confirmed. Congrats, {vessel}.	
+ev_dkd_02_1	docked	chatter	none	mc	ev_dkd_02	1	m	any	any	Vemos el acoplamiento. Enhorabuena.	We see the docking. Congratulations. | We see the docking. Congratulations. | Docking confirmed. Congrats, {vessel}.	 |  | Acoplamiento confirmado. Enhorabuena, {vessel}.
 ev_dkd_02_2	docked	chatter	none	crew	ev_dkd_02	2	both	any	any	Gracias. Ha sido suave.	Thanks. That was smooth. | Thanks. That was smooth. | Thanks. Smooth one.	
 ev_dkd_03_1	docked	chatter	none	crew	ev_dkd_03	1	both	any	any	Estamos unidos. Igualando presión.	We're joined. Equalizing pressure. | We're joined. Equalizing pressure. | Connected. Equalizing pressure.	
 ev_dkd_03_2	docked	chatter	none	mc	ev_dkd_03	2	m	any	any	Recibido. Tomaos un momento.	Copy. Take a moment. | Copy. Take a moment. | Copy. Take your time.	
@@ -91,7 +91,7 @@ ev_dkd_05	docked	chatter	none	mc	ev_dkd_05	1	m	any	any	Dos naves, ahora una. Bie
 ev_dkd_06	docked	chatter	none	crew	ev_dkd_06	1	both	any	any	Enganchados. ¡Qué bonito!	Latched. How lovely! | Latched. How lovely! | Latched! Lovely.	
 ev_dkd_07	docked	chatter	none	crew	ev_dkd_07	1	both	any	any	Contacto y captura.	Contact and capture. | Contact and capture. | Contact. Capture.	
 # More relief after the blackout. Single MC lines open a crew-only relief line.
-ev_rel_01	relief	chatter	none	mc	ev_rel_01	1	m	any	any	Os oímos de nuevo. Bienvenidos.	We hear you again. Welcome back. | We hear you again. Welcome back. | Signal's back. Welcome back, {vessel}.	
+ev_rel_01	relief	chatter	none	mc	ev_rel_01	1	m	any	any	Os oímos de nuevo. Bienvenidos.	We hear you again. Welcome back. | We hear you again. Welcome back. | Signal's back. Welcome back, {vessel}.	 |  | Ha vuelto la señal. Bienvenidos, {vessel}.
 ev_rel_02	relief	chatter	none	mc	ev_rel_02	1	m	any	any	Señal recuperada. ¿Cómo estáis?	Signal back. How are you? | Signal back. How are you? | We have you again. How are you?	
 ev_rel_02_2	relief	chatter	none	crew	ev_rel_02	2	both	any	any	¡Bien! Un poco tostados.	Fine! A little toasted. | Fine! A little toasted. | Good! Slightly toasted.	
 ev_rel_03	relief	chatter	none	mc	ev_rel_03	1	m	any	any	Qué alegría oíros.	So good to hear you. | So good to hear you. | Great to hear your voice.	
@@ -104,7 +104,7 @@ ev_rel_09_1	relief	chatter	none	mc	ev_rel_09	1	m	any	any	¿Seguís ahí?	Are you
 ev_rel_09_2	relief	chatter	none	crew	ev_rel_09	2	both	any	any	Seguimos aquí, y enteros.	Still here, and in one piece. | Still here, and in one piece. | Here. One piece.	
 ev_rel_10	relief	chatter	none	crew	ev_rel_10	1	both	any	any	Qué susto. Ya pasó.	What a scare. It's over. | What a scare. It's over. | That was scary. It's done.	
 # More maneuver nodes (calm).
-ev_pln_01	plan_node	chatter	calm	mc	ev_pln_01	1	m	any	any	Tenemos una maniobra nueva para vosotros.	We have a new maneuver for you. | We have a new maneuver for you. | New maneuver for you, {vessel}.	
+ev_pln_01	plan_node	chatter	calm	mc	ev_pln_01	1	m	any	any	Tenemos una maniobra nueva para vosotros.	We have a new maneuver for you. | We have a new maneuver for you. | New maneuver for you, {vessel}.	 |  | Maniobra nueva para vosotros, {vessel}.
 ev_pln_02	plan_node	chatter	calm	mc	ev_pln_02	1	m	any	any	Revisad el nodo en el mapa.	Check the node on the map. | Check the node on the map. | Look at the node on the map.	
 ev_pln_03	plan_node	chatter	calm	mc	ev_pln_03	1	m	any	any	Plan de vuelo actualizado.	Flight plan updated. | Flight plan updated. | New flight plan.	
 ev_pln_04_1	plan_node	chatter	calm	crew	ev_pln_04	1	both	any	any	Control, hemos puesto un nodo.	Control, we've set a node. | Control, we've set a node. | Control, node placed.	
@@ -116,7 +116,7 @@ ev_pln_06_2	plan_node	chatter	calm	mc	ev_pln_06	2	m	any	any	Comprobado. Los núm
 ev_pln_07	plan_node	chatter	calm	crew	ev_pln_07	1	both	any	any	Otro nodo. Me encantan los nodos.	Another node. I love nodes. | Another node. I love nodes. | More nodes. My favourite.	
 ev_pln_08	plan_node	chatter	calm	crew	ev_pln_08	1	both	any	any	Apuntando la maniobra en mi libreta.	Writing the maneuver in my notebook. | Writing the maneuver in my notebook. | The maneuver goes in my notebook.	
 # More burn warnings (warning, tense).
-ev_brn_01	burn_soon	warning	tense	mc	ev_brn_01	1	m	any	any	Maniobra en breve. Orientad la nave.	Maneuver soon. Point the ship. | Maneuver soon. Point the ship. | Maneuver soon. Point {vessel}.	
+ev_brn_01	burn_soon	warning	tense	mc	ev_brn_01	1	m	any	any	Maniobra en breve. Orientad la nave.	Maneuver soon. Point the ship. | Maneuver soon. Point the ship. | Maneuver soon. Point {vessel}.	 |  | Maniobra en breve. Orientad la {vessel}.
 ev_brn_02	burn_soon	warning	tense	mc	ev_brn_02	1	m	any	any	Atentos, maniobra inminente.	Heads up, maneuver coming up. | Heads up, maneuver coming up. | Attention, maneuver soon.	
 ev_brn_03	burn_soon	warning	tense	mc	ev_brn_03	1	m	any	any	Faltan pocos segundos para la maniobra.	A few seconds to the maneuver. | A few seconds to the maneuver. | Seconds to the maneuver.	
 ev_brn_04_1	burn_soon	warning	tense	mc	ev_brn_04	1	m	any	any	Maniobra pronto. ¿Estáis orientados?	Maneuver soon. Are you pointed? | Maneuver soon. Are you pointed? | Maneuver coming. Pointed?	
@@ -129,7 +129,7 @@ ev_brn_07	burn_soon	warning	tense	crew	ev_brn_07	1	both	any	any	Apuntando al mar
 ev_brn_08	burn_soon	warning	tense	crew	ev_brn_08	1	both	any	any	Casi es la hora.	It's almost time. | It's almost time. | Nearly time.	
 # More station and base check-ins (calm).
 ev_stc_01_1	station_check	chatter	calm	mc	ev_stc_01	1	m	any	any	Estación, ¿qué tal la vida a bordo?	Station, how's life on board? | Station, how's life on board? | Station, how's life up there?	
-ev_stc_01_2	station_check	chatter	calm	crew	ev_stc_01	2	both	any	any	Tranquila. Algo aburrida.	Quiet. A bit boring. | Quiet. A bit boring. | Quiet. Somebody is playing {game} again.	Tranquila. Algo aburrida. | Tranquila. Algo aburrida. | Tranquila. Alguien está jugando otra vez a {game}.
+ev_stc_01_2	station_check	chatter	calm	crew	ev_stc_01	2	both	any	any	Tranquila. Algo aburrida.	Quiet. A bit boring. | Quiet. A bit boring. | Quiet. Somebody is playing {game} again.	 |  | Tranquila. Alguien está jugando otra vez a {game}.
 ev_stc_02_1	station_check	chatter	calm	mc	ev_stc_02	1	m	any	any	Revisión rutinaria. ¿Algún problema?	Routine check. Any problems? | Routine check. Any problems? | Routine check. Problems?	
 ev_stc_02_2	station_check	chatter	calm	crew	ev_stc_02	2	both	any	any	Ninguno, control. Todo estable.	None, control. All stable. | None, control. All stable. | No problems. All stable.	
 ev_stc_03_1	station_check	chatter	calm	mc	ev_stc_03	1	m	any	any	Estación, ¿cómo van los sistemas?	Station, how are the systems? | Station, how are the systems? | Station, systems check?	
@@ -146,10 +146,10 @@ ev_eva_01	eva_check	chatter	calm	mc	ev_eva_01	1	m	any	any	¿Cómo va ahí fuera?
 ev_eva_01_2	eva_check	chatter	calm	crew	ev_eva_01	2	both	any	any	Todo bien. Aquí fuera es enorme.	All good. It's huge out here. | All good. It's huge out here. | Good. So much space out here.	
 ev_eva_02	eva_check	chatter	calm	mc	ev_eva_02	1	m	any	any	Revisa el combustible del propulsor.	Check your jetpack fuel. | Check your jetpack fuel. | Watch the jetpack fuel.	
 ev_eva_03	eva_check	chatter	calm	mc	ev_eva_03	1	m	any	any	Recuerda dónde está la escotilla.	Remember where the hatch is. | Remember where the hatch is. | Don't forget where the hatch is.	
-ev_eva_04	eva_check	chatter	calm	mc	ev_eva_04	1	m	any	any	No te alejes demasiado de la nave.	Don't go too far from the ship. | Don't go too far from the ship. | Stay close to {vessel}.	
+ev_eva_04	eva_check	chatter	calm	mc	ev_eva_04	1	m	any	any	No te alejes demasiado de la nave.	Don't go too far from the ship. | Don't go too far from the ship. | Stay close to {vessel}.	 |  | No te alejes de la {vessel}.
 ev_eva_05	eva_check	chatter	calm	mc	ev_eva_05	1	m	any	any	Te seguimos de cerca. Todo bien.	We're watching you closely. All good. | We're watching you closely. All good. | We're watching. Looks good.	
 ev_eva_06_1	eva_check	chatter	calm	mc	ev_eva_06	1	m	any	any	¿Todo bien por ahí fuera?	All good out there? | All good out there? | Everything okay outside?	
-ev_eva_06_2	eva_check	chatter	calm	crew	ev_eva_06	2	both	any	any	Todo bien. ¡Qué vista!	All good. What a view! | All good. What a view! | Fine. What a view of {here}!	
+ev_eva_06_2	eva_check	chatter	calm	crew	ev_eva_06	2	both	any	any	Todo bien. ¡Qué vista!	All good. What a view! | All good. What a view! | Fine. What a view of {here}!	 |  | Todo bien. ¡Qué vista de {here}!
 ev_eva_07_1	eva_check	chatter	calm	mc	ev_eva_07	1	m	any	any	¿Te queda propulsor?	Got propellant left? | Got propellant left? | Jetpack propellant okay?	
 ev_eva_07_2	eva_check	chatter	calm	crew	ev_eva_07	2	both	any	any	De sobra, control.	Plenty, control. | Plenty, control. | Lots left.	
 ev_eva_08_1	eva_check	chatter	calm	crew	ev_eva_08	1	both	any	any	Control, estoy fuera.	Control, I'm outside. | Control, I'm outside. | Control, I'm out.	
@@ -160,7 +160,7 @@ ev_eva_10	eva_check	chatter	calm	crew	ev_eva_10	1	both	any	any	Me encanta estar 
 # EVA fall (user test): the EVA kerbal trips or falls and ragdolls on the ground. Replaces the touchdown lines on EVA.
 ev_evafall_01_1	eva_fall	chatter	calm	crew	ev_evafall_01	1	both	any	any	¡Uy! ¡Estoy bien!	Whoa! I'm okay! | Whoa! I'm okay! | Whoa! Fine! I'm fine!	
 ev_evafall_01_2	eva_fall	chatter	calm	mc	ev_evafall_01	2	m	any	any	Te hemos visto. Con cuidado.	We saw that. Careful. | We saw that. Careful. | Saw that. Be careful.	
-ev_evafall_02_1	eva_fall	chatter	calm	crew	ev_evafall_02	1	both	any	any	¡Ay! El suelo está duro.	Ow! The ground is hard. | Ow! The ground is hard. | Ow! Hard ground on {here}.	
+ev_evafall_02_1	eva_fall	chatter	calm	crew	ev_evafall_02	1	both	any	any	¡Ay! El suelo está duro.	Ow! The ground is hard. | Ow! The ground is hard. | Ow! Hard ground on {here}.	 |  | ¡Ay! El suelo de {here} está duro.
 ev_evafall_02_2	eva_fall	chatter	calm	mc	ev_evafall_02	2	m	any	any	Levántate despacio.	Get up slowly. | Get up slowly. | Slowly back up.	
 ev_evafall_03_1	eva_fall	chatter	calm	mc	ev_evafall_03	1	m	any	any	¿Estás bien? Eso ha sonado fuerte.	Are you okay? That sounded hard. | Are you okay? That sounded hard. | Okay? That sounded painful.	
 ev_evafall_03_2	eva_fall	chatter	calm	crew	ev_evafall_03	2	both	any	any	Sí. Solo mi orgullo.	Yes. Just my pride. | Yes. Just my pride. | Only my pride is hurt.	
