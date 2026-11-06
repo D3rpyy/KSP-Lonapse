@@ -20,6 +20,8 @@
 
 - **One zip per release.** A version release on GitHub now only has `Lonapse-<version>.zip`, so CKAN picks the right file. The source of the runtime voice (Piper, piper-phonemize, espeak-ng) is linked at its exact commits in `PluginData/Runtime/LICENSES` instead of attached as a second zip.
 
+- **Fuel numbers.** Before any engine has fired, the fuel value counted every tank of the vessel, so a line could say "92 percent fuel left" on a fresh rocket. Now it uses the tanks of the next stage with a liquid engine. On the launch pad no line says the fuel at all, and a vessel without a liquid engine gets no fuel line.
+
 ### For modders
 - **The stock probe cores get `ModuleLonapse`** through a Module Manager patch, `Patches/Lonapse_StockCores.cfg`, with their own voice and priority -1. A patch of your own can run `:AFTER[Lonapse]` to change them. Module Manager stays optional: without it the patch does nothing and the stock cores sound the same as before.
 - `Phrases/runtime.tsv` is now the folder `Phrases/Runtime/` (reports, crew, docking and landing, science and contracts, chats). Every `.tsv` in it is read, so your own lines can go in a file of your own. The columns are found by name. The format is at the top of `reports.tsv`.
