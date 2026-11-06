@@ -1475,6 +1475,11 @@ public static class Tests
                   "runtime voice: crew replies answer their own MC lines, the general ones any report",
                   string.Join(",", rFuel.ToArray()) + " / dock " + rDock.Count + " / " + string.Join(",", rOrbit.ToArray()) + " / " + string.Join(",", rSci.ToArray())
                   + " / " + string.Join(" ; ", toErr.ToArray()));
+            Check(Persona.JobFor("staging") == "pilot" && Persona.JobFor("touchdown") == "pilot" && Persona.JobFor("power_low") == "engineer"
+                  && Persona.JobFor("science") == "scientist" && Persona.JobFor("chatter") == null && Persona.JobFor(null) == null
+                  && Persona.JobForLine("rt_fuel_low") == "pilot" && Persona.JobForLine("rt_ec_ok") == "engineer"
+                  && Persona.JobForLine("rt_sci_pts") == "scientist" && Persona.JobForLine("rt_funds") == null && Persona.JobForLine("rt_crew") == null,
+                  "jobs: the pilot flies, the engineer watches power and parts, the scientist the science", "");
             Check(!rtAll.Exists(t => t.Kind == "reply" && t.Versions.Exists(vv0 => vv0[1].Contains("{self"))),
                   "runtime voice: no crew reply says its own name", "");
         }

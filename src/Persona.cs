@@ -19,6 +19,42 @@ namespace Lonapse
 
         public const string Any = "any";
         public static readonly string[] TraitKeys = { "pilot", "engineer", "scientist", "tourist" };
+
+        /// <summary>The share of a job event's crew lines (trait any) that goes to a kerbal with that job when one is
+        /// aboard. The rest stays a random pick, so the others still speak up now and then.</summary>
+        public const double JobShare = 0.8;
+
+        /// <summary>The job that would speak up at an event: the pilot flies (burns, staging, docking, landing), the
+        /// engineer watches power and parts, the scientist the science. Null for an event anyone talks about.</summary>
+        public static string JobFor(string ev)
+        {
+            switch (ev)
+            {
+                case "burn_soon": case "plan_node": case "staging": case "throttle_cut": case "throttle_full":
+                case "dock_approach": case "dock_close": case "dock_hard": case "docked":
+                case "touchdown": case "splashdown": case "chute_full": case "chute_semi": case "soi_enter":
+                    return "pilot";
+                case "power_low": case "power_ok": case "part_lost":
+                    return "engineer";
+                case "science":
+                    return "scientist";
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>The job that answers a runtime MC line, by its id: fuel, nodes, docking and the orbit go to the
+        /// pilot, power and parts to the engineer, science to the scientist. Null for the rest.</summary>
+        public static string JobForLine(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            string[] pilot = { "rt_fuel", "rt_node", "rt_mono", "rt_dock", "rt_land", "rt_flight", "rt_sub", "rt_orbit", "rt_escape" };
+            string[] engineer = { "rt_ec", "rt_parts" };
+            foreach (string p in pilot) if (id.StartsWith(p, StringComparison.Ordinal)) return "pilot";
+            foreach (string p in engineer) if (id.StartsWith(p, StringComparison.Ordinal)) return "engineer";
+            if (id.StartsWith("rt_sci", StringComparison.Ordinal)) return "scientist";
+            return null;
+        }
         public static readonly string[] PersonaKeys = { "badass", "brave", "nervous", "dim", "veteran" };
 
         public readonly float courage, stupidity;

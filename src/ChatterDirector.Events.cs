@@ -48,10 +48,16 @@ namespace Lonapse
             return host.roster.AnyWithTrait(sc.Trait, k => PersonaOk(sc, k));
         }
 
-        /// <summary>A crew speaker for the scene with its trait and persona, null when nobody fits.</summary>
+        /// <summary>A crew speaker for the scene with its trait and persona, null when nobody fits. A scene for anyone
+        /// at a job event (staging, a burn, low power) mostly goes to the kerbal with that job, so the pilot calls the
+        /// staging and not one of two scientists at random.</summary>
         private KerbalVoice PickFitting(PhraseScene sc)
         {
-            return host.roster.PickWithTrait(sc.Trait, rng, k => PersonaOk(sc, k) && !BadassNoScream(sc, k));
+            Predicate<KerbalVoice> ok = k => PersonaOk(sc, k) && !BadassNoScream(sc, k);
+            string job = IsAnyKey(sc.Trait) ? Persona.JobFor(sc.Event) : null;
+            if (job != null && rng.NextDouble() < Persona.JobShare && host.roster.AnyWithTrait(job, ok))
+                return host.roster.PickWithTrait(job, rng, ok);
+            return host.roster.PickWithTrait(sc.Trait, rng, ok);
         }
 
         /// <summary>

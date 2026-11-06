@@ -933,7 +933,15 @@ namespace Lonapse
         {
             if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
                 || Somber || (!debugForce && rng.NextDouble() >= chance)) return null;
-            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : PickRested();
+            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
+            if (k == null)
+            {
+                // the pilot answers a fuel or node line, the engineer the power, the scientist the science
+                string job = Persona.JobForLine(line.Id);
+                if (job != null && rng.NextDouble() < Persona.JobShare && host.roster.AnyWithTrait(job, CanChat))
+                    k = host.roster.PickWithTrait(job, rng, CanChat);
+            }
+            if (k == null) k = PickRested();
             if (!CanChat(k) || RuntimeVoice.Missing(KindFor(k)) != null) return null;
             string[] kn = FirstNames(k);
             if (kn == null) return null;
