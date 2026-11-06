@@ -329,15 +329,20 @@ namespace Lonapse
             PhraseClips.runtimeCanSpeak = RuntimeCanSpeak;
             if (!RuntimeOn) return;
             WarmOnce("mc");
-            // the stressed Mission Control voices load early, in a calm moment, not in the middle of a tense scene
-            // where the model load costs frames. mc.tense right away, mc.mc_panic once the stress starts to build.
+            // every voice a crewed flight can need loads at the start, while KSP still settles the scene, not in the
+            // middle of a tense scene where the model load costs frames: Mission Control calm, tense and panic, and
+            // the calm and tense voice of each gender aboard (crew panic lines are recorded clips)
             if (host.roster.voices.Count > 0)
             {
                 WarmOnce("mc.tense");
-                if (host.stress.stress >= McPanicWarmStress) WarmOnce("mc.mc_panic");
+                WarmOnce("mc.mc_panic");
             }
             for (int i = 0; i < host.roster.voices.Count; i++)
-                if (host.roster.voices[i] != null) WarmOnce(KindFor(host.roster.voices[i]));
+                if (host.roster.voices[i] != null)
+                {
+                    WarmOnce(KindFor(host.roster.voices[i]));
+                    WarmOnce(KindFor(host.roster.voices[i]) + ".tense");
+                }
             if (!host.settings.runtimeReports) return;
             RuntimeLandCheck();
             SunriseTick();
@@ -352,9 +357,6 @@ namespace Lonapse
             nextReport = clock + U(ReportMin, ReportMax);
             QueueReport();
         }
-
-        /// <summary>Stress at which the panic voice of Mission Control is loaded, well before the panic band.</summary>
-        const float McPanicWarmStress = 0.3f;
 
         void WarmOnce(string kind)
         {

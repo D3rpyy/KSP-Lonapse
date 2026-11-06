@@ -51,8 +51,9 @@ namespace Lonapse
 
         /// <summary>Piper processes besides calm Mission Control running at once (one per kind and delivery band, see
         /// RuntimeDelivery.KindFor). Each holds its own copy of the model in memory, so the least recently used one
-        /// stops when another is needed.</summary>
-        public const int MaxCrewWorkers = 4;
+        /// stops when another is needed. 6 fits what loads at the flight start with a mixed crew: mc.tense,
+        /// mc.mc_panic, m, m.tense, f, f.tense.</summary>
+        public const int MaxCrewWorkers = 6;
         long useCounter;
 
         readonly Dictionary<string, Worker> workers = new Dictionary<string, Worker>();
