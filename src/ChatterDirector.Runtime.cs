@@ -31,7 +31,7 @@ namespace Lonapse
         const double RuntimeVesselShare = 0.25;
         /// <summary>After a name was said (an added name, or a line with {other}, {vessel} ...), the time in s in
         /// which lines prefer to say none. People do not name each other in every sentence.</summary>
-        const float NameGap = 45f;
+        const float NameGap = 30f;
         float lastNameClock = -999f;
         bool NamesRecent { get { return clock - lastNameClock < NameGap; } }
         void NameSaid() { lastNameClock = clock; }
