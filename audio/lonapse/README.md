@@ -270,6 +270,8 @@ Lines with real values that have no recording at all go into `GameData/Lonapse/P
 
 With the runtime voice installed and the setting "Speak names and new lines at runtime" on, rows can also go into `GameData/Lonapse/Phrases/Extra/*.tsv` in the KSP install. Same columns as the files here, no build step. Piper speaks them in game, in loñapsE like every other line. `{body}` in such a row gets the current body name, also on a modded planet.
 
+Lonapse ships one such table itself: `GameData/Lonapse/Phrases/Extra/probe_runtime.tsv`, 10 probe scenes per core with Mission Control (keys `px_`). `build.sh` installs it and the zip carries it. An update replaces only the files the repo ships, so a file of your own in that folder stays. The rows follow every rule of this README. The offline tests parse the file after the shipped `phrases.tsv`, like the game does.
+
 These rows have no clip. Without the runtime voice they never play. A line that is not ready 4 s after its turn is skipped. Nobody listened to these lines before they play, so a word can come out wrong.
 
 ## Folders

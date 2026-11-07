@@ -107,9 +107,10 @@ echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll"
 
 # ---- the rest of what players get, from the same sources as package.sh ----
 # phrase tables: the text tables in GameData/Lonapse/Phrases (pools.tsv, ...) and Phrases/Runtime/*.tsv,
-# phrases.tsv from the audio build when there is one. Phrases/Extra in the install is the player's own, not touched,
-# and so is a file of the player's own in Phrases/Runtime (only the files the repo ships are replaced).
-mkdir -p "$GD/Phrases" "$GD/Phrases/Runtime"
+# phrases.tsv from the audio build when there is one, and the Phrases/Extra tables the repo ships (runtime-only
+# scenes). A file of the player's own in Phrases/Extra or Phrases/Runtime is not touched (only the files the repo
+# ships are replaced).
+mkdir -p "$GD/Phrases" "$GD/Phrases/Runtime" "$GD/Phrases/Extra"
 shopt -s nullglob
 for f in "$REPO"/GameData/Lonapse/Phrases/*.tsv; do
   cp -f "$f" "$GD/Phrases/"
@@ -118,6 +119,10 @@ done
 for f in "$REPO"/GameData/Lonapse/Phrases/Runtime/*.tsv; do
   cp -f "$f" "$GD/Phrases/Runtime/"
   echo "Installed: $GD/Phrases/Runtime/$(basename "$f")"
+done
+for f in "$REPO"/GameData/Lonapse/Phrases/Extra/*.tsv; do
+  cp -f "$f" "$GD/Phrases/Extra/"
+  echo "Installed: $GD/Phrases/Extra/$(basename "$f")"
 done
 # lines Lonapse ships for other mods, read only when that mod is installed
 for d in "$REPO"/GameData/Lonapse/Compat/*/; do

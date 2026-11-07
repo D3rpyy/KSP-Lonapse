@@ -10,6 +10,7 @@
 - **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. A probe beeps for each of them, and for the approach and the close approach too. Before, a probe was silent until the dock itself.
 - **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
 - **The ship checks that you mean to dock.** A docking call comes more often when the target has a free port of the same size, one of your ports is armed and the two ports face each other. Creeping up on debris or an asteroid now rarely gets a docking call.
+- **More probe talk.** Every probe core has 10 new scenes with Mission Control: chats, hails and sleepy moments, in the character of that core. 100 scenes in all, 268 lines. They have no recording. Piper speaks Mission Control in game, so they only play with the runtime voice on.
 
 ### Changed
 
@@ -23,6 +24,7 @@
 ### For modders
 
 - The runtime tables have three new kinds, `undock`, `dock_close` and `dock_callout`, and three new events for `on=`, `undock`, `dockclose` and `dockcallout`. The lines are in `Phrases/Runtime/undock.tsv` and `dock_close.tsv`.
+- Lonapse now ships a table in `Phrases/Extra`: `probe_runtime.tsv`, with the new probe scenes. An update replaces only that file. Your own files in `Phrases/Extra` stay.
 - New settings `sfxVolume` and `dockingSfx`, and new tuning values `dockIntentBase`, `dockIntentAngle` and `dockChatHold`.
 
 ## 0.8.1

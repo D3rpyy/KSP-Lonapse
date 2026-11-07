@@ -1422,6 +1422,35 @@ public static class Tests
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
         {
+            // the shipped Phrases/Extra tables after the shipped phrases.tsv, as PhraseClips.Build reads them: no bad
+            // row, no key or scene twice, and every probe core has its runtime-only scenes
+            string gdPhrases = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases"));
+            string shipped = System.IO.Path.Combine(gdPhrases, "phrases.tsv");
+            string[] extraPaths = System.IO.Directory.Exists(System.IO.Path.Combine(gdPhrases, "Extra"))
+                ? System.IO.Directory.GetFiles(System.IO.Path.Combine(gdPhrases, "Extra"), "*.tsv") : new string[0];
+            if (System.IO.File.Exists(shipped) && extraPaths.Length > 0)
+            {
+                Array.Sort(extraPaths, StringComparer.Ordinal);
+                var exRows = new List<string>(System.IO.File.ReadAllLines(shipped, System.Text.Encoding.UTF8));
+                foreach (string f in extraPaths) exRows.AddRange(System.IO.File.ReadAllLines(f, System.Text.Encoding.UTF8));
+                var exErr = new List<string>();
+                PhraseTable ex = PhraseTable.Parse(exRows, exErr);
+                var perCore = new Dictionary<string, int>();
+                foreach (PhraseScene sc in ex.Scenes)
+                {
+                    if (!sc.IsProbe || !sc.Lines[0].ClipKey.StartsWith("px_")) continue;
+                    int c0; perCore.TryGetValue(sc.Core, out c0); perCore[sc.Core] = c0 + 1;
+                }
+                bool allCores = System.Linq.Enumerable.All(ProbeCores.Keys, k => perCore.ContainsKey(k) && perCore[k] >= 10);
+                var pc = new List<string>();
+                foreach (var kv in perCore) pc.Add(kv.Key + " " + kv.Value);
+                Check(exErr.Count == 0 && allCores,
+                      "runtime voice: shipped Phrases/Extra parses after phrases.tsv, runtime probe scenes per core (" + string.Join(", ", pc.ToArray()) + ")",
+                      string.Join(" ; ", exErr.Count > 5 ? exErr.GetRange(0, 5).ToArray() : exErr.ToArray()));
+            }
+            else Console.WriteLine("SKIP  runtime voice: no shipped phrases.tsv or Phrases/Extra");
+        }
+        {
             // a report that talks to one kerbal by name gets a reply of its own (to=), not only the generic ones
             var noReply = new List<string>();
             foreach (RuntimeTemplate t in rtAll)
