@@ -439,8 +439,10 @@ namespace Lonapse
             GameEvents.onVesselGoOffRails.Add(OnVesselGoOffRails);
             GameEvents.onCrewOnEva.Add(OnCrewMoved);
             GameEvents.onCrewOnEva.Add(OnCrewOnEva);
+            GameEvents.onCrewOnEva.Add(OnHatchExit);
             GameEvents.afterFlagPlanted.Add(OnFlagPlanted);
             GameEvents.onCrewBoardVessel.Add(OnCrewMoved);
+            GameEvents.onCrewBoardVessel.Add(OnHatchBoard);
             GameEvents.onPartCouple.Add(OnPartCouple);
             GameEvents.onDockingComplete.Add(OnDockingComplete);
             GameEvents.onCrewTransferred.Add(OnCrewTransferred);
@@ -465,8 +467,10 @@ namespace Lonapse
             GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
             GameEvents.onCrewOnEva.Remove(OnCrewMoved);
             GameEvents.onCrewOnEva.Remove(OnCrewOnEva);
+            GameEvents.onCrewOnEva.Remove(OnHatchExit);
             GameEvents.afterFlagPlanted.Remove(OnFlagPlanted);
             GameEvents.onCrewBoardVessel.Remove(OnCrewMoved);
+            GameEvents.onCrewBoardVessel.Remove(OnHatchBoard);
             GameEvents.onPartCouple.Remove(OnPartCouple);
             GameEvents.onDockingComplete.Remove(OnDockingComplete);
             GameEvents.onCrewTransferred.Remove(OnCrewTransferred);
@@ -505,10 +509,29 @@ namespace Lonapse
         }
         private void OnCrewMoved(GameEvents.FromToAction<Part, Part> a) { roster.dirty = true; }
 
-        /// <summary>One sound effect of the ship on the sfx channel. Same gate as every other sound, and the setting.</summary>
-        private void PlaySfx(string folder)
+        /// <summary>A kerbal goes out: the hatch opens.</summary>
+        private void OnHatchExit(GameEvents.FromToAction<Part, Part> a)
         {
-            if (!CanStartAudio || !settings.dockingSfx) return;
+            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_open", settings.hatchSfx); }
+            catch (Exception e) { Log.Exception("OnHatchExit", e); }
+        }
+
+        /// <summary>A kerbal comes back in: the hatch closes.</summary>
+        private void OnHatchBoard(GameEvents.FromToAction<Part, Part> a)
+        {
+            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_close", settings.hatchSfx); }
+            catch (Exception e) { Log.Exception("OnHatchBoard", e); }
+        }
+
+        /// <summary>One sound effect of the ship on the sfx channel. Same gate as every other sound, and the setting.</summary>
+        private void PlaySfx(string folder) { PlaySfx(folder, settings.dockingSfx); }
+
+        /// <summary>The ping of a new sphere of influence. Called by the event hub.</summary>
+        public void PlaySoiSfx() { PlaySfx("sfx/soi_change", settings.soiSfx); }
+
+        private void PlaySfx(string folder, bool enabled)
+        {
+            if (!CanStartAudio || !enabled) return;
             AudioClip c = ClipLibrary.Next(folder, rng);
             if (c == null) return;
             sfxCh.Play(c, 1f, 1f, false, 0f);
@@ -527,12 +550,45 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnCrewOnEva", e); }
         }
 
+        private Vessel flagEvaVessel;
+        private KerbalEVA flagEva;
+        private bool flagPlanting;     // the EVA kerbal is turning to plant or planting, last frame
+        private bool flagSfxPlayed;    // the flag sound played at the press, so afterFlagPlanted stays quiet
+
+        /// <summary>
+        /// The flag sound starts when the kerbal starts to plant (the Plant Flag button). KSP fires afterFlagPlanted
+        /// only after the planting animation and the naming dialog, which is too late for the sound. The press puts
+        /// the kerbal's state machine in st_flagAcquireHeading, then st_flagPlant: the first frame in either plays it.
+        /// </summary>
+        private void TickFlagPress(Vessel v)
+        {
+            try
+            {
+                if (v == null || !v.isEVA) { flagEvaVessel = null; flagEva = null; flagPlanting = false; return; }
+                if (!ReferenceEquals(v, flagEvaVessel)) { flagEvaVessel = v; flagEva = v.FindPartModuleImplementing<KerbalEVA>(); }
+                KerbalEVA eva = flagEva;
+                KFSMState st = eva != null && eva.fsm != null ? eva.fsm.CurrentState : null;
+                bool now = st != null && (ReferenceEquals(st, eva.st_flagAcquireHeading) || ReferenceEquals(st, eva.st_flagPlant));
+                if (now && !flagPlanting)
+                {
+                    PlaySfx("sfx/flag_plant", settings.flagSfx);
+                    flagSfxPlayed = true;
+                }
+                flagPlanting = now;
+            }
+            catch (Exception e) { flagEva = null; Log.Exception("TickFlagPress", e); }
+        }
+
         /// <summary>A flag stands: Mission Control and the kerbal who planted it have something to say.</summary>
         private void OnFlagPlanted(FlagSite f)
         {
             try
             {
-                if (!started || f == null || director == null) return;
+                if (!started || f == null) return;
+                // the sound already played at the press. Only when that was missed does it come now.
+                if (!flagSfxPlayed) PlaySfx("sfx/flag_plant", settings.flagSfx);
+                flagSfxPlayed = false;
+                if (director == null) return;
                 string flag = f.vessel != null ? f.vessel.vesselName : null;
                 Log.Info("Flag planted by " + (f.placedBy ?? "?") + ": " + (flag ?? "?"));
                 director.RuntimeFlag(f.placedBy, flag);
@@ -806,6 +862,7 @@ namespace Lonapse
                 gameGain = ComputeGameGain();
                 UpdateStationMode(v);
                 UpdateDocking(v, dt);
+                TickFlagPress(v);
 
                 string reason = EvaluateGate(v);
                 bool open = ReferenceEquals(reason, GateOpenReason);
@@ -906,7 +963,9 @@ namespace Lonapse
         private void UpdateChannels(float dt)
         {
             float globalMul = gateGain * settings.masterVolume * gameGain * (evaMode ? settings.evaRadioVolume : 1f);
-            if (!gateOpen && silenced) globalMul = 0f;
+            // a sound effect is the ship or the kerbal itself, not the suit radio: the EVA radio volume leaves it alone
+            float sfxMul = gateGain * settings.masterVolume * gameGain;
+            if (!gateOpen && silenced) { globalMul = 0f; sfxMul = 0f; }
             // crew_lost final call with the gate closed: only the control channel, at full gate gain
             bool finalCall = !gateOpen && director != null && director.FinalCallActive;
             for (int i = 0; i < allChannels.Length; i++)
@@ -914,6 +973,7 @@ namespace Lonapse
                 VoiceChannel c = allChannels[i];
                 c.SetDsp(settings.useDsp);
                 float mul = finalCall && ReferenceEquals(c, control) ? settings.masterVolume * gameGain : globalMul;
+                if (ReferenceEquals(c, sfxCh)) mul = sfxMul;
                 c.Update(dt, CategoryVolume(c), mul);
             }
         }
@@ -1421,7 +1481,7 @@ namespace Lonapse
             Tuning tu = settings.tuning;
             float run = evaMode && sample.valid ? sample.evaRun : 0f;
             evaExertion = DcMath.Exertion(evaExertion, run, dt, tu.evaExertRise, tu.evaExertFall);
-            bool want = gateOpen && settings.radioEnabled && p != null && p.BedClip != null && ClipLibrary.CountOf(p.BedClip) > 0;
+            bool want = gateOpen && settings.radioEnabled && settings.evaBreathing && p != null && p.BedClip != null && ClipLibrary.CountOf(p.BedClip) > 0;
             float rate = 1f + (tu.evaBreathRate - 1f) * evaExertion;
             float gain = p != null ? p.BedGain * (1f + (tu.evaBreathGain - 1f) * evaExertion) : 0f;
             if (want && !breathCh.Busy)

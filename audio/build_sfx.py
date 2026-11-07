@@ -15,6 +15,8 @@ Only the Python standard library and the ffmpeg binary are used (helpers come fr
 
 import argparse
 import math
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -39,20 +41,64 @@ EFFECTS = {
     # name: source file in audio/sfx_sources/
     "airlock_dock":   "airlock_dock.wav",
     "airlock_undock": "airlock_undock.wav",
+    "hatch_open":     "hatch_open.wav",
+    "hatch_close":    "hatch_close.wav",
+    "flag_plant":     "flag_plant.wav",
 }
+
+# Effects that only get louder: one plain gain to a loudness target (LUFS), no body lift, so the recording keeps its
+# own shape. The limiter catches the peaks above the ceiling. -16 LUFS is about the airlock.
+GAIN_ONLY = {"flag_plant": -16.0}
+
+
+# Effects that are synthesized because there is no recording: name -> list of (freq Hz, start s, length s, amp).
+# The soi_change ping is two soft sine notes a fifth apart, like a telemetry handover blip.
+SYNTH = {
+    "soi_change": [(880.0, 0.00, 0.22, 0.50), (1318.5, 0.16, 0.45, 0.45)],
+}
+
+
+def build_synth(name, out_dir):
+    notes = SYNTH[name]
+    total = max(s + d for _, s, d, _ in notes) + 0.05
+    x = [0.0] * int(round(total * SR))
+    for f, start, dur, amp in notes:
+        t = bc.tone(f, dur, attack=0.008, decay=dur / 3.0)
+        i0 = int(round(start * SR))
+        for k, v in enumerate(t):
+            x[i0 + k] += v * amp
+    peak = max(abs(v) for v in x)
+    x = [v * (10 ** (-5.0 / 20.0) / peak) for v in x]      # peak at -5 dBFS, a ping should sit just under the airlock hits
+    x = bc.limit(x)
+    path = out_dir / name / ("sfx_%s_000.wav" % name)
+    bc.write_wav(path, x)
+    bc.log("synth   %-34s %.2f s  peak %.1f dBFS" % (path.name, len(x) / SR, bc.db(max(abs(v) for v in x))))
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+def source_lufs(src):
+    """The integrated loudness of a file in LUFS (ffmpeg ebur128)."""
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-nostdin", "-i", str(src), "-af", "ebur128", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    m = re.findall(r"I:\s+(-?[0-9.]+) LUFS", r.stderr)
+    if not m:
+        bc.die("no loudness for %s" % src)
+    return float(m[-1])
+
+
 def build(name, out_dir):
     src = SOURCES / EFFECTS[name]
     if not src.is_file():
         bc.die("missing source %s" % src)
     path = out_dir / name / ("sfx_%s_000.wav" % name)
     path.parent.mkdir(parents=True, exist_ok=True)
+    af = BODY_LIFT + "," + LIMIT
+    if name in GAIN_ONLY:
+        af = "volume=%.2fdB,%s" % (GAIN_ONLY[name] - source_lufs(src), LIMIT)
     bc.run(["ffmpeg", "-hide_banner", "-nostdin", "-loglevel", "error", "-y", "-i", str(src),
-            "-af", BODY_LIFT + "," + LIMIT, "-ar", str(SR), "-c:a", "pcm_s16le", str(path)])
+            "-af", af, "-ar", str(SR), "-c:a", "pcm_s16le", str(path)])
     for label, f in (("source", src), ("output", path)):
         x = bc.ffmpeg_raw(["-i", str(f)])      # mono downmix, only for the numbers
         w = SR // 10
@@ -71,13 +117,18 @@ def main():
     if a.list:
         for n, f in EFFECTS.items():
             bc.log("%s  from %s" % (n, f))
+        for n in list(SYNTH):
+            bc.log("%s  synthesized" % n)
         return
-    names = a.effects or list(EFFECTS)
+    names = a.effects or (list(EFFECTS) + list(SYNTH))
     for n in names:
-        if n not in EFFECTS:
+        if n not in EFFECTS and n not in SYNTH:
             bc.die("unknown effect '%s', try --list" % n)
     for n in names:
-        build(n, a.out)
+        if n in SYNTH:
+            build_synth(n, a.out)
+        else:
+            build(n, a.out)
 
 
 if __name__ == "__main__":

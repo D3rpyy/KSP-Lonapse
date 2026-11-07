@@ -165,7 +165,9 @@ namespace Lonapse
         {
             try
             {
-                if (!Enabled || !host.settings.eventSoi || !IsActive(d.host) || d.to == null) return;
+                if (!Enabled || !IsActive(d.host) || d.to == null) return;
+                host.PlaySoiSfx();   // the ping has its own setting and does not depend on the spoken event
+                if (!host.settings.eventSoi) return;
                 // no welcome while the crew panics or the ship is in plasma
                 if (lastPanic || lastPlasma) { Log.Debug("SOI change to " + d.to.bodyName + " skipped (panic or plasma)"); return; }
                 Tuning tu = host.settings.tuning;

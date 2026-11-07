@@ -515,6 +515,10 @@ namespace Lonapse
             s.rogerBeep = Toggle(s.rogerBeep, "Roger beep");
             s.masterAlarm = Toggle(s.masterAlarm, "Master alarm at very high stress");
             s.dockingSfx = Toggle(s.dockingSfx, "Airlock sounds on dock and undock");
+            s.soiSfx = Toggle(s.soiSfx, "Ping when entering a new sphere of influence");
+            s.hatchSfx = Toggle(s.hatchSfx, "Hatch sounds on EVA exit and boarding");
+            s.flagSfx = Toggle(s.flagSfx, "Sound when a flag is planted");
+            s.evaBreathing = Toggle(s.evaBreathing, "Helmet breathing on EVA");
         }
 
         private void DrawCrew(Settings s)

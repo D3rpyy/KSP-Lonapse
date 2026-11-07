@@ -25,7 +25,7 @@ grep -q "^## $VERSION" CHANGELOG.md || { echo "ERROR: CHANGELOG.md has no entry 
 
 SOUNDS="$REPO/audio/build/Sounds"
 TABLE="$REPO/audio/build/lonapse/phrases.tsv"
-for d in beeps sfx sfx/airlock_dock sfx/airlock_undock crew control; do
+for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant crew control; do
   [[ -d "$SOUNDS/$d" ]] || { echo "ERROR: $SOUNDS/$d is missing, build the audio first" >&2; exit 1; }
 done
 [[ -f "$TABLE" ]] || { echo "ERROR: $TABLE is missing, run audio/build_lonapse.py first" >&2; exit 1; }

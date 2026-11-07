@@ -385,7 +385,7 @@ namespace Lonapse
         public float crewVolume = 1.0f;
         public float controlVolume = 0.8f;
         public float beepVolume = 0.6f;
-        public float sfxVolume = 0.8f;          // sound effects of the ship itself (docking), not a radio sound
+        public float sfxVolume = 1.0f;          // sound effects of the ship itself (docking), not a radio sound
         public float staticVolume = 0.5f;
         public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old, harsher level)
         public float intercomVolume = 0.8f;
@@ -442,6 +442,10 @@ namespace Lonapse
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
         public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
         public bool dockingSfx = true;              // airlock sounds on dock and undock
+        public bool evaBreathing = true;            // helmet breathing under the radio on EVA
+        public bool flagSfx = true;                 // a thud and a flutter when a kerbal plants a flag
+        public bool hatchSfx = true;                // hatch sounds when a kerbal goes out on EVA and comes back in
+        public bool soiSfx = true;                  // a soft ping when the ship enters a new sphere of influence
         // --- Mouths ---
         public bool mouthAnimation = true;          // kerbals move their jaw while they talk
         public bool mouthDebug = false;             // log and show mouth driver details
@@ -805,6 +809,10 @@ namespace Lonapse
                 n.TryGetValue("signalDropouts", ref s.signalDropouts);
                 n.TryGetValue("masterAlarm", ref s.masterAlarm);
                 n.TryGetValue("dockingSfx", ref s.dockingSfx);
+                n.TryGetValue("soiSfx", ref s.soiSfx);
+                n.TryGetValue("hatchSfx", ref s.hatchSfx);
+                n.TryGetValue("flagSfx", ref s.flagSfx);
+                n.TryGetValue("evaBreathing", ref s.evaBreathing);
                 n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
                 n.TryGetValue("mouthDebug", ref s.mouthDebug);
                 n.TryGetValue("personalityEffects", ref s.personalityEffects);
@@ -957,6 +965,10 @@ namespace Lonapse
                 n.AddValue("signalDropouts", signalDropouts);
                 n.AddValue("masterAlarm", masterAlarm);
                 n.AddValue("dockingSfx", dockingSfx);
+                n.AddValue("soiSfx", soiSfx);
+                n.AddValue("hatchSfx", hatchSfx);
+                n.AddValue("flagSfx", flagSfx);
+                n.AddValue("evaBreathing", evaBreathing);
                 n.AddValue("mouthAnimation", mouthAnimation);
                 n.AddValue("mouthDebug", mouthDebug);
                 n.AddValue("personalityEffects", personalityEffects);

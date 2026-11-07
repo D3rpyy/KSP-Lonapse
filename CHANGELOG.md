@@ -10,12 +10,9 @@
 - **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. A probe beeps for each of them, and for the approach and the close approach too. Before, a probe was silent until the dock itself.
 - **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
 - **The ship checks that you mean to dock.** A docking call comes more often when the target has a free port of the same size, one of your ports is armed and the two ports face each other. Creeping up on debris or an asteroid now rarely gets a docking call.
+- Added new settings under Sounds to toggle sound effects.
+- **Flag sound.** Planting a flag has its own sound. It starts when you press Plant Flag, not after you name the flag. The sound effects start at 100% volume. On EVA they no longer follow the EVA radio volume, because they are not a radio sound.
 - **More probe talk.** Every probe core has 10 new scenes with Mission Control: chats, hails and sleepy moments, in the character of that core. 100 scenes in all, 268 lines. They have no recording. Piper speaks Mission Control in game, so they only play with the runtime voice on.
-
-### Changed
-
-- **Radio static and EVA breathing moved.** The clips in `Sounds/static` are now in `Sounds/sfx`, the same audio under new names. When you copy a new version over an old one, delete the old `Sounds/static` folder.
-- **KSP.log says why.** It names the docking target, tells you when an approach call can not come because the target was already close, and logs the three port signs and the chance for every call.
 
 ### Fixed
 
@@ -25,7 +22,7 @@
 
 - The runtime tables have three new kinds, `undock`, `dock_close` and `dock_callout`, and three new events for `on=`, `undock`, `dockclose` and `dockcallout`. The lines are in `Phrases/Runtime/undock.tsv` and `dock_close.tsv`.
 - Lonapse now ships a table in `Phrases/Extra`: `probe_runtime.tsv`, with the new probe scenes. An update replaces only that file. Your own files in `Phrases/Extra` stay.
-- New settings `sfxVolume` and `dockingSfx`, and new tuning values `dockIntentBase`, `dockIntentAngle` and `dockChatHold`.
+- New settings `sfxVolume`, `dockingSfx`, `soiSfx`, `hatchSfx`, `flagSfx` and `evaBreathing`, and new tuning values `dockIntentBase`, `dockIntentAngle` and `dockChatHold`.
 
 ## 0.8.1
 

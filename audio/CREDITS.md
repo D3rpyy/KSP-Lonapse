@@ -6,8 +6,11 @@ Beeps (`Sounds/beeps/`) and the radio static and breathing in `Sounds/sfx/` (`bu
 `breath_loop`) are synthesized by `build_clips.py` with ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and
 plain Python. They contain no recorded material.
 
-The docking effects (`Sounds/sfx/airlock_dock`, `airlock_undock`) are made by `build_sfx.py` from the
+The docking effects (`Sounds/sfx/airlock_dock`, `airlock_undock`, `hatch_open`, `hatch_close`) and the flag plant (`flag_plant`) are made by `build_sfx.py` from the
 recordings in `audio/sfx_sources/`. The source and licence of those recordings are not written down here yet.
+
+The sphere of influence ping (`Sounds/sfx/soi_change`) is synthesized by `build_sfx.py` from sine notes. It contains no
+recorded material.
 
 No audio from the Chatterer mod or any other mod was used.
 

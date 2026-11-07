@@ -41,11 +41,11 @@ namespace Lonapse
             "sfx/burst", "sfx/loop", "sfx/squelch",
             "beeps/click_desk", "beeps/headset_open", "beeps/headset_close", "sfx/breath_loop", "beeps/master_alarm",
             "beeps/roger",
-            "sfx/airlock_dock", "sfx/airlock_undock",
+            "sfx/airlock_dock", "sfx/airlock_undock", "sfx/soi_change", "sfx/hatch_open", "sfx/hatch_close", "sfx/flag_plant",
         };
 
         // one entry per folder in BaseFolders, in the same order
-        private static readonly int[] BaseMinimums = { 24, 24, 24, 8, 8, 24, 12, 3, 2, 2, 1, 1, 1, 1, 6, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
+        private static readonly int[] BaseMinimums = { 24, 24, 24, 8, 8, 24, 12, 3, 2, 2, 1, 1, 1, 1, 6, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         // Built clips per probe beep folder (build_clips.py)
         public const int ProbeBeepMinimum = 3;
