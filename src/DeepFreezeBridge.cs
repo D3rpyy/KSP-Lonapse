@@ -59,7 +59,8 @@ namespace Lonapse
         {
             foreach (AssemblyLoader.LoadedAssembly la in AssemblyLoader.loadedAssemblies)
             {
-                if (la == null || la.assembly == null || la.name != "DeepFreeze") continue;
+                // la.name is the KSPAssembly name ("DeepFreeze Continued..."), the file name is DeepFreeze
+                if (la == null || la.assembly == null || la.assembly.GetName().Name != "DeepFreeze") continue;
                 Type t = la.assembly.GetType("DF.DFGameEvents", false);
                 if (t != null) return t;
             }
