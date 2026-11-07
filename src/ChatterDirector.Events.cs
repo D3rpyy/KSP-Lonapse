@@ -263,6 +263,8 @@ namespace Lonapse
             r.maxAge = EventWatchers.MaxAgeFor(r.ev, r.maxAge, Tu.eventMaxAge); // science 600 s, soi 120 s at most
             RemovePending(OppositeOf(r.ev), "superseded by " + r.ev);
             RemovePending(r.ev, null); // a newer request of the same event replaces the waiting one
+            // a DeepFreeze group is busy: the event waits a few seconds, its line comes right after the freezer line
+            if (host.ModHoldsAir && r.ev != EventWatchers.CrewLost) return AddPending(r, "a DeepFreeze line goes first");
             string why;
             EvGo go = TryEvent(r, out why);
             if (go == EvGo.Played) return true;
