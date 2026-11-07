@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.8.0";
+        public const string Version = "0.8.1";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
