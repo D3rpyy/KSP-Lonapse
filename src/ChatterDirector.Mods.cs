@@ -132,7 +132,10 @@ namespace Lonapse
         {
             ModEventInfo info = ModEvents.Info(PhraseClips.runtimeTemplates, id);
             KerbalVoice k = d.kerbal != null ? host.roster.Find(d.kerbal) : null;
-            if (k == null || !CanChat(k)) k = PickRested();
+            // the kerbal who did it says line 1: gone or out since, nobody else says it for them (Mission Control may)
+            bool named = d.kerbal != null;
+            if (k != null && !CanChat(k)) k = null;
+            if (k == null && !named) k = PickRested();
             bool reach = !McUnreachable && host.signal.connected && host.settings.radioEnabled;
             bool text = !RuntimeOn;
             bool chatOk = info.HasChat && info.Who != "mc" && k != null;

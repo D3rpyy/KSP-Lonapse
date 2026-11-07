@@ -2076,10 +2076,11 @@ namespace Lonapse
             if (RadioAudible || Holding) lastRadioClock = clock;
             if (IntercomAudible) lastChatClock = clock;
             UpdatePendingCallout();
-            UpdateEvents();
-            // a DeepFreeze group is busy: no new chatter, report or chat starts until its line played
+            // a DeepFreeze group is busy: no new event call, chatter, report or chat starts until its line played.
+            // Events wait in their list (with their max age), the group takes seconds.
             bool modHold = host.ModHoldsAir;
             if (modHold) holdoff = Math.Max(holdoff, 0.5f);
+            else UpdateEvents();
             if (!modHold) RuntimeTick();
             ModTick();
             ProcessQueue();

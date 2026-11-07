@@ -406,6 +406,9 @@ namespace Lonapse
             return n <= 1 ? id : n == 2 ? id + "_two" : id + "_group";
         }
 
+        /// <summary>Drops a name that is no longer in this state (thawed again before the line).</summary>
+        public void Remove(string name) { names.Remove(name); }
+
         public void Clear() { names.Clear(); }
     }
 }

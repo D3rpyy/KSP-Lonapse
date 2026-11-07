@@ -172,8 +172,21 @@ namespace Lonapse
         /// <summary>A start without an end (a vessel switch, a DeepFreeze error) stops counting after this.</summary>
         private const double StuckAfter = 30.0;
 
-        private void OnFreezing(Part p, string name) { if (name != null) freezing[name] = clock; }
-        private void OnThawing(Part p, string name) { if (name != null) thawing[name] = clock; }
+        private void OnFreezing(Part p, string name) { if (name != null) { freezing[name] = clock; Changed(name, true); } }
+        private void OnThawing(Part p, string name) { if (name != null) { thawing[name] = clock; Changed(name, false); } }
+
+        /// <summary>A kerbal goes the other way (frozen again before the thaw line, or thawed before the freeze
+        /// line): the old moment is dropped, from the open group and from the queue, so no stale line plays.</summary>
+        private void Changed(string name, bool freezingNow)
+        {
+            NameBatch b = freezingNow ? thawedBatch : frozenBatch;
+            b.Remove(name);
+            if (freezingNow) comatoseBatch.Remove(name);
+            if (host == null || host.director == null) return;
+            string id = freezingNow ? Thawed : Frozen;
+            foreach (string ev in new[] { id, id + "_two", id + "_group" })
+                if (host.director.CancelModEvent(ev)) Log.Info("DeepFreeze " + ev + " dropped: " + Names.Localize(name) + (freezingNow ? " freezes again" : " thaws"));
+        }
         private void OnFreezeAbort(Part p, string name) { if (name != null) freezing.Remove(name); }
         private void OnThawAbort(Part p, string name) { if (name != null) thawing.Remove(name); }
 
@@ -181,6 +194,7 @@ namespace Lonapse
         {
             if (k == null) return;
             freezing.Remove(k.name);
+            Changed(k.name, true);
             frozenBatch.Add(clock, k.name);
             frozenPart = p;
         }
@@ -189,6 +203,7 @@ namespace Lonapse
         {
             if (k == null) return;
             thawing.Remove(k.name);
+            Changed(k.name, false);
             thawedBatch.Add(clock, k.name);
             thawedPart = p;
         }

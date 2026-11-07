@@ -34,7 +34,7 @@ LonapseWrapper.Trigger("yourmod.repair_done", vessel, kerbal,
 - `eventId` is `yourmod.event`: a-z, 0-9 and `_`, with one dot. Start it with your mod's name, so two mods
   never use the same id.
 - `vessel` is what vessel it happened on. Pass null for the active vessel.
-- `kerbal` is the kerbal who did it, a `ProtoCrewMember`. Pass null and Lonapse picks one.
+- `kerbal` is the kerbal who did it, a `ProtoCrewMember`. Pass null and Lonapse picks one. When that kerbal is gone or out cold by the time the line plays, nobody else says their chat. Only the Mission Control line can still play.
 - `numbers` and `names` are your own values, for the `{x_...}` slots in your lines. Both may be null.
   - A number becomes Spanish words in the voice and digits in the subtitle.
   - A name is `"english"` or `"spanish|english"`. The voice says the Spanish, the subtitle shows the English.
