@@ -372,7 +372,7 @@ namespace Lonapse
     /// </summary>
     public class NameBatch
     {
-        public const double Quiet = 12.0, MaxAge = 60.0;
+        public const double Quiet = 9.0, MaxAge = 60.0;
         public readonly List<string> names = new List<string>();
         private double first, last;
 

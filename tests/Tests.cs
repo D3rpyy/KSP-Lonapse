@@ -3493,10 +3493,10 @@ public static class Tests
             // DeepFreeze groups: one line for kerbals frozen one after another
             NameBatch nb = new NameBatch();
             nb.Add(0, "Jebediah Kerman"); nb.Add(8, "Bill Kerman"); nb.Add(9, "Bill Kerman");
-            Check(nb.Take(15) == null && nb.Count == 2, "DeepFreeze group: still open while a freeze came less than 12 s ago", null);
-            List<string> grp = nb.Take(20.5);
+            Check(nb.Take(16.5) == null && nb.Count == 2, "DeepFreeze group: still open while a freeze came less than 9 s ago", null);
+            List<string> grp = nb.Take(17.5);
             Check(grp != null && grp.Count == 2 && grp[0] == "Jebediah Kerman" && nb.Count == 0 && nb.Take(100) == null,
-                  "DeepFreeze group: due 12 s after the last freeze, each name once, then empty", grp == null ? "null" : string.Join(", ", grp.ToArray()));
+                  "DeepFreeze group: due 9 s after the last freeze, each name once, then empty", grp == null ? "null" : string.Join(", ", grp.ToArray()));
             for (int i = 0; i < 10; i++) nb.Add(200 + i * 10, "K" + i);
             Check(nb.Take(260) != null, "DeepFreeze group: a long row of freezes plays after 60 s at the latest", null);
             Check(NameBatch.IdFor("deepfreeze.frozen", 1) == "deepfreeze.frozen" && NameBatch.IdFor("deepfreeze.frozen", 2) == "deepfreeze.frozen_two"

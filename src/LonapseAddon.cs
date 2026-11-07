@@ -93,6 +93,7 @@ namespace Lonapse
 
         // probe mode: an uncrewed vessel with a probe core (minimumCrew 0) opens the gate in probe mode
         public bool probeMode;
+        public bool frozenShip;           // nobody awake aboard, DeepFreeze has them frozen: only Mission Control talks (mod events, crew_lost)
         public bool touristCabin;         // probe mode with only tourists aboard: the probe flies, the tourists talk among themselves and to it
         public string probeCoreKey;       // ProbeCores key of the root-most probe core, null outside probe mode
         public ProbeSleepState probeSleepState = ProbeSleepState.Awake;
@@ -835,7 +836,8 @@ namespace Lonapse
                 countdown.Update(dt, v);
                 PollPlan(v, dt);
 
-                if (gateOpen)
+                if (gateOpen && frozenShip) director.UpdateFrozenShip(dt);
+                else if (gateOpen)
                 {
                     blackout.Update(dt);
                     director.Update(dt);
@@ -1169,6 +1171,7 @@ namespace Lonapse
             evaMode = false;
             probeMode = false;
             touristCabin = false;
+            frozenShip = false;
             if (!settings.enabled) return RDisabled;
             if (settings.muted) return RMuted;
             if (!HighLogic.LoadedSceneIsFlight) return RScene;
@@ -1182,8 +1185,9 @@ namespace Lonapse
             {
                 // No crew but a probe core opens the gate in probe mode. Without one it stays RNoCrew, so
                 // FinalCallAllowed (crew_lost with the gate closed) keeps working for crewed flights.
-                if (!settings.probeMode || probeCoreKey == null) return RNoCrew;
-                probeMode = true;
+                if (settings.probeMode && probeCoreKey != null) probeMode = true;
+                else if (deepFreeze != null && deepFreeze.FrozenAboard > 0) frozenShip = true;   // Mission Control can still call the freezer
+                else return RNoCrew;
             }
             else if (!eva && settings.probeMode && probeCoreKey != null && OnlyTourists(v))
             {
@@ -1197,7 +1201,6 @@ namespace Lonapse
             return GateOpenReason;
         }
 
-        /// <summary>Every kerbal aboard is a tourist (and there is at least one).</summary>
         /// <summary>Seconds per day on the game clock. Mods like Kronometer replace the date formatter, so JNSQ and
         /// rescale packs count their own day. Without a formatter the game setting picks 6 h or 24 h.</summary>
         public static double DayLength()
@@ -1237,6 +1240,7 @@ namespace Lonapse
             return d;
         }
 
+        /// <summary>Every kerbal aboard is a tourist (and there is at least one).</summary>
         private static bool OnlyTourists(Vessel v)
         {
             try

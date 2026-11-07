@@ -20,6 +20,9 @@ namespace Lonapse
 
         public bool Active { get { return onFrozen != null || onThaw != null; } }
 
+        /// <summary>Kerbals DeepFreeze has frozen in the active vessel (the last read, once a second).</summary>
+        public int FrozenAboard { get { return frozenAboard.Count; } }
+
         public void Init(LonapseAddon owner)
         {
             host = owner;

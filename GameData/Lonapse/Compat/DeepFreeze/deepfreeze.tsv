@@ -3,7 +3,7 @@ id	kind	when	spanish	english
 # deepfreeze.frozen: a kerbal is frozen. Somebody else aboard says line 1. deepfreeze.thawed: the thawed kerbal says				
 # line 1. deepfreeze.comatose: the freezer lost power and the kerbal came out comatose, somebody else talks.				
 # x_frozen is the first name of the frozen, thawed or comatose kerbal. No gendered words about them in the Spanish.				
-# Lonapse groups kerbals frozen or thawed one after another (12 s without a new one). One kerbal: the event itself.				
+# Lonapse groups kerbals frozen or thawed one after another (9 s without a new one). One kerbal: the event itself.				
 # Two: the event with _two, x_frozen and x_frozen2. Three or more: the event with _group, x_count (x_frozen is one).				
 # A thaw of two or a group: a thawed kerbal says line 1 and is x_frozen. No cooldown, the groups keep it short.				
 rt_deepfreeze_frozen_meta	meta	on=deepfreeze.frozen cooldown=0 priority=normal		

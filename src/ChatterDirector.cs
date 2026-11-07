@@ -2036,6 +2036,17 @@ namespace Lonapse
 
         // ---------------- per frame ----------------
 
+        /// <summary>A ship where DeepFreeze has everyone frozen: no chatter, only the mod events (Mission Control about
+        /// the freezer) and a crew_lost call (a kerbal died frozen).</summary>
+        public void UpdateFrozenShip(float dt)
+        {
+            clock += dt;
+            if (RadioAudible || Holding) lastRadioClock = clock;
+            UpdateClosedGate(true);
+            ModTick();
+            ProcessQueue();
+        }
+
         public void Update(float dt)
         {
             clock += dt;
