@@ -54,7 +54,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 
 ## Install
 
-1. Download `Lonapse-0.8.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
+1. Download `Lonapse-0.8.1.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
@@ -180,6 +180,9 @@ names. Players who do not like the lines of one mod can turn them off in the Mod
 
 The repo has the plugin source, the phrase tables and the audio scripts. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 for the build and [audio/README.md](audio/README.md) for the sound pipeline.
+
+`GameData/Lonapse/Phrases/phrases.tsv` is built by `audio/build_lonapse.py` and is too large for GitHub to show as a
+table. The lines it is built from are in [audio/lonapse/phrases/](audio/lonapse/phrases/), one table per topic.
 
 ## Runtime voice files
 
