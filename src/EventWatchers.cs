@@ -365,4 +365,42 @@ namespace Lonapse
             return true;
         }
     }
+
+    /// <summary>
+    /// Gathers names of one kind of moment (DeepFreeze freezes one kerbal at a time) into one group: the group is
+    /// due when Quiet seconds passed without a new name, or MaxAge after the first. One line then names the group.
+    /// </summary>
+    public class NameBatch
+    {
+        public const double Quiet = 12.0, MaxAge = 60.0;
+        public readonly List<string> names = new List<string>();
+        private double first, last;
+
+        public int Count { get { return names.Count; } }
+
+        public void Add(double now, string name)
+        {
+            if (string.IsNullOrEmpty(name) || names.Contains(name)) return;
+            if (names.Count == 0) first = now;
+            last = now;
+            names.Add(name);
+        }
+
+        /// <summary>The group when it is due (and empties the batch), else null.</summary>
+        public List<string> Take(double now)
+        {
+            if (names.Count == 0 || (now - last < Quiet && now - first < MaxAge)) return null;
+            var r = new List<string>(names);
+            names.Clear();
+            return r;
+        }
+
+        /// <summary>The event id for a group of n: id for one, id_two for two, id_group for three or more.</summary>
+        public static string IdFor(string id, int n)
+        {
+            return n <= 1 ? id : n == 2 ? id + "_two" : id + "_group";
+        }
+
+        public void Clear() { names.Clear(); }
+    }
 }

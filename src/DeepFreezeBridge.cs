@@ -1,5 +1,6 @@
 // DeepFreeze (DeepFreeze Updated): its freeze, thaw and comatose events become Lonapse mod events, so the lines in
-// Compat/DeepFreeze/deepfreeze.tsv play on them. Once a second it reads DeepFreeze's public list of frozen kerbals
+// Compat/DeepFreeze/deepfreeze.tsv play on them. Kerbals frozen or thawed one after another become one group, so
+// two get both names in one line and three or more a line for the group. Once a second it reads DeepFreeze's public list of frozen kerbals
 // (DeepFreeze.Instance.FrozenKerbals, the API other mods use too): who is frozen aboard and who is comatose.
 // DeepFreeze is found through reflection, there is no dependency. Without DeepFreeze nothing is subscribed.
 #if !DC_OFFLINE_TEST
@@ -58,7 +59,7 @@ namespace Lonapse
             }
             catch (Exception e) { Log.Exception("DeepFreezeBridge.Dispose", e); }
             onFrozen = onThaw = onComatose = onAwake = null;
-            thawed.Clear();
+            frozenBatch.Clear(); thawedBatch.Clear(); comatoseBatch.Clear();
             frozenAboard.Clear();
             CrewRoster.comatose.Clear();
             onDied = null;
@@ -140,43 +141,32 @@ namespace Lonapse
 
         private void OnAwake(Part p, ProtoCrewMember k) { if (k != null) CrewRoster.comatose.Remove(k.name); }
 
-        private sealed class Waiting { public string name; public Part part; public float left; }
+        // ---- the moments, grouped: DeepFreeze freezes and thaws one kerbal at a time ----
+        private double clock;
+        private readonly NameBatch frozenBatch = new NameBatch(), thawedBatch = new NameBatch(), comatoseBatch = new NameBatch();
+        private Part frozenPart, thawedPart, comatosePart;
 
-        /// <summary>Seconds a thawed kerbal may take to show up in the crew list.</summary>
-        private const float ThawWait = 3f;
-        private readonly List<Waiting> thawed = new List<Waiting>();
+        private void OnFrozen(Part p, ProtoCrewMember k) { if (k != null) { frozenBatch.Add(clock, k.name); frozenPart = p; } }
+        private void OnThaw(Part p, ProtoCrewMember k) { if (k != null) { thawedBatch.Add(clock, k.name); thawedPart = p; } }
 
-        private void OnFrozen(Part p, ProtoCrewMember k) { Offer(Frozen, p, k, false); }
         private void OnComatose(Part p, ProtoCrewMember k)
         {
-            if (k != null) CrewRoster.comatose.Add(k.name);
-            Offer(Comatose, p, k, false);
+            if (k == null) return;
+            CrewRoster.comatose.Add(k.name);
+            comatoseBatch.Add(clock, k.name);
+            comatosePart = p;
         }
 
-        // the thawed kerbal says line 1, once the crew list has them again (the next rebuild)
-        private void OnThaw(Part p, ProtoCrewMember k)
-        {
-            if (k != null) thawed.Add(new Waiting { name = k.name, part = p, left = ThawWait });
-        }
-
-        /// <summary>Every frame: offers a waiting thaw when the kerbal is back aboard, or drops it after ThawWait. Once
-        /// a second the list of frozen kerbals.</summary>
+        /// <summary>Every frame: plays a group that is due. Once a second the list of frozen kerbals.</summary>
         public void Tick(float dt)
         {
+            clock += dt;
             listLeft -= dt;
             if (listLeft <= 0f) { listLeft = 1f; ReadList(); }
-            for (int i = thawed.Count - 1; i >= 0; i--)
-            {
-                Waiting w = thawed[i];
-                w.left -= dt;
-                bool back = host != null && host.roster != null && host.roster.Find(w.name) != null;
-                if (!back && w.left > 0f) continue;
-                thawed.RemoveAt(i);
-                ProtoCrewMember k = null;
-                try { k = HighLogic.CurrentGame.CrewRoster[w.name]; } catch (Exception) { }
-                if (back && k != null) Offer(Thawed, w.part, k, true);
-                else Log.Info("DeepFreeze " + Thawed + ": " + Names.Localize(w.name) + " not in the crew list, no line");
-            }
+            List<string> g;
+            if ((g = frozenBatch.Take(clock)) != null) Offer(Frozen, frozenPart, g, false);
+            if ((g = thawedBatch.Take(clock)) != null) Offer(Thawed, thawedPart, g, true);
+            if ((g = comatoseBatch.Take(clock)) != null) Offer(Comatose, comatosePart, g, false);
         }
 
         private void OnDied(ProtoCrewMember k)
@@ -185,18 +175,48 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("DeepFreezeBridge.OnDied", e); }
         }
 
-        /// <summary>The event goes to the director with the kerbal's first name as x_frozen. speaks: the kerbal says
-        /// line 1 (a thaw). Else somebody else aboard does (the frozen one is in the freezer, the comatose one out).</summary>
-        private void Offer(string id, Part p, ProtoCrewMember k, bool speaks)
+        /// <summary>One line for the group: id for one kerbal (x_frozen), id_two for two (x_frozen and x_frozen2),
+        /// id_group for three or more (x_count, x_frozen is one of them). thawedSpeaks: a thawed kerbal says line 1.
+        /// Else somebody else aboard does (the frozen are in the freezer, the comatose out).</summary>
+        private void Offer(string id, Part p, List<string> group, bool thawedSpeaks)
         {
             try
             {
-                if (host == null || host.director == null || k == null) return;
-                string first = RuntimeLines.CleanName(SubtitleSlots.FirstName(Names.Localize(k.name)));
-                if (string.IsNullOrEmpty(first)) return;
-                var names = new Dictionary<string, string> { { "x_frozen", first } };
-                string why = host.director.OfferModEvent(id, p != null ? p.vessel : null, speaks ? k : null, null, names);
-                Log.Info("DeepFreeze " + id + ": " + first + (why == null ? "" : " (not played: " + why + ")"));
+                if (host == null || host.director == null || group.Count == 0) return;
+                var firsts = new List<string>();
+                foreach (string n in group)
+                {
+                    string f = RuntimeLines.CleanName(SubtitleSlots.FirstName(Names.Localize(n)));
+                    if (!string.IsNullOrEmpty(f)) firsts.Add(f);
+                }
+                if (firsts.Count == 0) return;
+                string ev = NameBatch.IdFor(id, group.Count);
+                var names = new Dictionary<string, string> { { "x_frozen", firsts[0] } };
+                if (firsts.Count > 1) names["x_frozen2"] = firsts[1];
+                var nums = new Dictionary<string, double> { { "x_count", group.Count } };
+                ProtoCrewMember speaker = null;
+                if (thawedSpeaks)
+                {
+                    // the first thawed kerbal the crew list has, named first so {x_frozen2} is somebody else
+                    for (int i = 0; i < group.Count && speaker == null; i++)
+                    {
+                        if (host.roster.Find(group[i]) == null) continue;
+                        try { speaker = HighLogic.CurrentGame.CrewRoster[group[i]]; } catch (Exception) { }
+                        if (speaker != null && i > 0 && i < firsts.Count)
+                        {
+                            string t = firsts[0]; firsts[0] = firsts[i]; firsts[i] = t;
+                            names["x_frozen"] = firsts[0];
+                            if (firsts.Count > 1) names["x_frozen2"] = firsts[1];
+                        }
+                    }
+                    if (speaker == null)
+                    {
+                        Log.Info("DeepFreeze " + ev + ": " + string.Join(", ", firsts.ToArray()) + " not in the crew list, no line");
+                        return;
+                    }
+                }
+                string why = host.director.OfferModEvent(ev, p != null ? p.vessel : null, speaker, nums, names);
+                Log.Info("DeepFreeze " + ev + ": " + string.Join(", ", firsts.ToArray()) + (why == null ? "" : " (not played: " + why + ")"));
             }
             catch (Exception e) { Log.Exception("DeepFreezeBridge.Offer", e); }
         }

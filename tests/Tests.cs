@@ -1629,17 +1629,21 @@ public static class Tests
                     var dfErr = new List<string>();
                     List<RuntimeTemplate> dfAll = RuntimeLines.ParseAll(dfFiles, dfErr);
                     var dfBad = new List<string>(dfErr);
-                    foreach (string id in new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" })
-                    {
-                        ModEventInfo inf = ModEvents.Info(dfAll, id);
-                        if (!inf.HasLines || !inf.HasChat || !inf.HasMc) dfBad.Add(id + " misses chat or Mission Control lines");
-                        if (inf.Cooldown != 60) dfBad.Add(id + " cooldown " + inf.Cooldown);
-                    }
+                    foreach (string ev in new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" })
+                        for (int n = 1; n <= 4; n++)
+                        {
+                            string id = NameBatch.IdFor(ev, n);
+                            ModEventInfo inf = ModEvents.Info(dfAll, id);
+                            if (!inf.HasLines || !inf.HasChat || !inf.HasMc) dfBad.Add(id + " misses chat or Mission Control lines");
+                            if (inf.Cooldown != 0) dfBad.Add(id + " cooldown " + inf.Cooldown);
+                        }
                     var dfN = new Dictionary<string, string[]>();
                     foreach (string k in RuntimeLines.NameSlots) dfN[k] = new[] { "Nombre", "Name" };
                     dfN["x_frozen"] = new[] { "Jeb", "Jeb" };
+                    dfN["x_frozen2"] = new[] { "Bill", "Bill" };
                     var dfV = new Dictionary<string, double>();
                     foreach (string k in RuntimeLines.NumberSlots) dfV[k] = 50;
+                    dfV["x_count"] = 4;
                     int dfCount = 0;
                     foreach (RuntimeTemplate t in dfAll)
                     {
@@ -1653,8 +1657,8 @@ public static class Tests
                                 dfBad.Add(t.Id + " version " + (v + 1) + " does not fill");
                         }
                     }
-                    Check(dfBad.Count == 0 && dfCount >= 20 && !rtAll.Exists(t => t.Id.StartsWith("rt_deepfreeze") || t.Id.StartsWith("rt_chat_deepfreeze")),
-                          "DeepFreeze: the Compat lines parse as the mod DeepFreeze, frozen, thawed and comatose have chats, Mission Control lines and replies ("
+                    Check(dfBad.Count == 0 && dfCount >= 50 && !rtAll.Exists(t => t.Id.StartsWith("rt_deepfreeze") || t.Id.StartsWith("rt_chat_deepfreeze")),
+                          "DeepFreeze: the Compat lines parse as the mod DeepFreeze, frozen, thawed and comatose for one, two and a group have chats, Mission Control lines and replies, no cooldown ("
                           + dfCount + ")", string.Join(" ; ", dfBad.ToArray()));
                 }
 
@@ -3485,6 +3489,18 @@ public static class Tests
                   "events: crew_lost names only the kerbals still lost", string.Join(", ", cl.lastNames.ToArray()));
             Check(cl.OnLost(30, "Bill Kerman") && !cl.Tick(34, 3, 600, n => false, out r) && cl.pending.Count == 0,
                   "events: a dropped kerbal can be reported again, nobody still lost gives no call", null);
+
+            // DeepFreeze groups: one line for kerbals frozen one after another
+            NameBatch nb = new NameBatch();
+            nb.Add(0, "Jebediah Kerman"); nb.Add(8, "Bill Kerman"); nb.Add(9, "Bill Kerman");
+            Check(nb.Take(15) == null && nb.Count == 2, "DeepFreeze group: still open while a freeze came less than 12 s ago", null);
+            List<string> grp = nb.Take(20.5);
+            Check(grp != null && grp.Count == 2 && grp[0] == "Jebediah Kerman" && nb.Count == 0 && nb.Take(100) == null,
+                  "DeepFreeze group: due 12 s after the last freeze, each name once, then empty", grp == null ? "null" : string.Join(", ", grp.ToArray()));
+            for (int i = 0; i < 10; i++) nb.Add(200 + i * 10, "K" + i);
+            Check(nb.Take(260) != null, "DeepFreeze group: a long row of freezes plays after 60 s at the latest", null);
+            Check(NameBatch.IdFor("deepfreeze.frozen", 1) == "deepfreeze.frozen" && NameBatch.IdFor("deepfreeze.frozen", 2) == "deepfreeze.frozen_two"
+                  && NameBatch.IdFor("deepfreeze.frozen", 7) == "deepfreeze.frozen_group", "DeepFreeze group: one, two and group event ids", null);
 
             // priorities
             Check(EventPriority.CrewLost > EventPriority.PartLost && EventPriority.PartLost > EventPriority.Power && EventPriority.Power > EventPriority.Signal
