@@ -395,7 +395,7 @@ namespace Lonapse
         // BAND_DELIVERY, MC_LIVELY_* and PANIC_NOISE_* in build_lonapse.py: a runtime line must sound like the
         // recorded lines of the same band. Tempo factor and extra semitones per delivery band.
         static readonly Dictionary<string, double[]> Bands = new Dictionary<string, double[]> {
-            { "calm", new[] { 1.00, 0.0 } }, { "tense", new[] { 1.10, 0.7 } }, { "panic", new[] { 1.10, 1.0 } },
+            { "calm", new[] { 1.00, 0.0 } }, { "tense", new[] { 1.10, 0.0 } }, { "panic", new[] { 1.10, 0.0 } },
             { "mc_panic", new[] { 0.95, 0.3 } }, { "callout", new[] { 1.08, 0.5 } },
         };
         public const double McLivelyTempo = 1.04, McLivelyNoise = 0.80, McLivelyNoiseW = 0.90;

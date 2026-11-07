@@ -74,7 +74,7 @@ namespace Lonapse
         // --- Scheduler ---
         public float tQuiet = 110f, tManic = 1.0f, quietBand = 0.15f, burstBand = 0.6f;
         // crew delivery under stress: extra pitch at stress 1 in semitones, total pitch cap, clip truncation, overlap
-        public float crewStressSemitones = 0.5f, crewPitchMax = 1.12f, truncStart = 0.85f, truncMinFrac = 0.8f, overlapMax = 0.35f;
+        public float crewStressSemitones = 0f, crewPitchMax = 1.12f, truncStart = 0.85f, truncMinFrac = 0.8f, overlapMax = 0.35f;
         public float mcTenseLo = 0.20f, mcTenseHi = 0.45f;
 
         // --- Voice channels ---
@@ -206,7 +206,7 @@ namespace Lonapse
         public static readonly string[] SignedFields = { "faceExpressionSign" };
 
         /// <summary>Schema version of the saved TUNING node. Bump when defaults of existing fields change.</summary>
-        public const int CurrentVersion = 12;
+        public const int CurrentVersion = 13;
 
         /// <summary>
         /// Fields whose defaults changed in version 3. A file written by an older version gets these reset to
@@ -595,6 +595,12 @@ namespace Lonapse
                 // The runtime voice is on by default. It was off in the development builds, so an old file
                 // with it off gets it on. Players can turn it off again.
                 if (!runtimeVoice) { runtimeVoice = true; reset.Add("runtimeVoice off -> on"); }
+            }
+            if (fromVersion < 13)
+            {
+                // No stress pitch on the crew any more, 0.5 semitones still sounded like chipmunks. Only the old
+                // default moves.
+                ResetIfOld(reset, "crewStressSemitones", 0.5f, 0.5f);
             }
             tuningVersion = Tuning.CurrentVersion;
             return reset;

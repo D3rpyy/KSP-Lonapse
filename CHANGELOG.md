@@ -17,12 +17,14 @@
 ### Fixed
 
 - **Kerbals no longer sometimes sound deep and slow, like the plain voice.** Each kerbal plays at their own pitch, pushed apart from the rest of the crew and lowered a little under G. For a low-voiced kerbal this could undo the whole Kerbal shift. It happened most on stations with many kerbals, in intercom chats and under high G. The pitch now has a floor, so every kerbal keeps the Kerbal sound. On a big station the voices sit a bit closer together because of this. G strain lowers the voice by at most 6% instead of 12%.
+- **Tense and panicking kerbals no longer sound like chipmunks.** Under stress the crew voice went up in pitch, in the recordings and again in game. That is gone. A tense or panicking kerbal now has their normal voice and only talks a bit faster. The stress is in the lines and the delivery: the short pieces, gasps and cracks of a panic line. Mission Control is unchanged.
 
 ### For modders
 
 - The runtime tables have three new kinds, `undock`, `dock_close` and `dock_callout`, and three new events for `on=`, `undock`, `dockclose` and `dockcallout`. The lines are in `Phrases/Runtime/undock.tsv` and `dock_close.tsv`.
 - Lonapse now ships a table in `Phrases/Extra`: `probe_runtime.tsv`, with the new probe scenes. An update replaces only that file. Your own files in `Phrases/Extra` stay.
 - New settings `sfxVolume`, `dockingSfx`, `soiSfx`, `hatchSfx`, `flagSfx` and `evaBreathing`, and new tuning values `dockIntentBase`, `dockIntentAngle` and `dockChatHold`.
+- The tuning value `crewStressSemitones` defaults to 0 (was 0.5). An old settings file with 0.5 moves to 0, your own value stays.
 
 ## 0.8.1
 

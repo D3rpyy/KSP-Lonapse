@@ -106,10 +106,11 @@ MC_LIVELY_NOISE_W = 0.90
 BAND_DELIVERY = {
     "calm":    dict(tempo=1.00, pitch_st=0.0),
     "none":    dict(tempo=1.00, pitch_st=0.0),
-    "tense":   dict(tempo=1.10, pitch_st=0.7),
-    # crew panic: shouted, only a bit faster (pieces and gasps below). Was +3 semitones, which on top of the Kerbal
-    # shift and the runtime stress pitch sounded like chipmunks. The panic now comes from the delivery.
-    "panic":   dict(tempo=1.10, pitch_st=1.0),
+    # crew tense and panic: only a bit faster, no extra pitch. Panic was +3 and later +1 semitones, tense +0.7.
+    # On top of the Kerbal shift that still sounded like chipmunks. The stress comes from the lines and the
+    # delivery (pieces, gasps, cracks below).
+    "tense":   dict(tempo=1.10, pitch_st=0.0),
+    "panic":   dict(tempo=1.10, pitch_st=0.0),
     # Mission Control during a panic: a bit slower and calm, the contrast. The small lift keeps it from sounding
     # deeper than the calm delivery (the old 0.92 tempo plus the runtime pitch drop sounded too deep).
     "mc_panic": dict(tempo=0.95, pitch_st=0.3),

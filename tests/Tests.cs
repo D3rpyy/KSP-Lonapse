@@ -2178,8 +2178,8 @@ public static class Tests
             bool same = RuntimeDelivery.KindFor("m", "calm", "chatter", "chatter") == "m" && RuntimeDelivery.KindFor("f", "none", "chatter", "x") == "f"
                 && Math.Abs(mcCalm.Tempo - 1.04) < 1e-9 && mcCalm.NoiseScale == 0.80 && mcCalm.PitchSt == 3.0
                 && Math.Abs(mcPanic.Tempo - 0.95) < 1e-9 && Math.Abs(mcPanic.PitchSt - 3.3) < 1e-9 && mcPanic.NoiseScale == 0.667
-                && Math.Abs(mT.Tempo - 1.10) < 1e-9 && Math.Abs(mT.PitchSt - 5.7) < 1e-9
-                && fP.NoiseScale == 0.90 && Math.Abs(fP.PitchSt - 5.0) < 1e-9
+                && Math.Abs(mT.Tempo - 1.10) < 1e-9 && Math.Abs(mT.PitchSt - 5.0) < 1e-9
+                && fP.NoiseScale == 0.90 && Math.Abs(fP.PitchSt - 4.0) < 1e-9
                 && Math.Abs(mC.Tempo - 1.08) < 1e-9 && Math.Abs(mC.PitchSt - 5.5) < 1e-9
                 && RuntimeDelivery.KindFor("mc", "calm", "chatter", "countdown") == null && RuntimeDelivery.BaseKind("m.tense") == "m";
             Check(same, "voices: runtime lines use the build's delivery per band (tempo, pitch, noise), the countdown is never runtime", "");
@@ -2776,7 +2776,7 @@ public static class Tests
         Near(DcMath.StaticCurve(float.NaN), 0.0, 1e-6, "radio static: NaN is silent");
         Check(new Settings().radioStatic == 0.5f, "radio static: on by default (50 %)", null);
         Settings old = new Settings(); old.tuningVersion = Tuning.CurrentVersion;
-        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 12, "settings v5: no migration needed at the current version (12 since the 0.7.0 defaults)", null);
+        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 13, "settings v5: no migration needed at the current version (13 since the crew stress pitch went)", null);
     }
 
     static void ReviewFixTests()
@@ -3899,8 +3899,12 @@ public static class Tests
                 Settings k8 = new Settings(); k8.subtitlePos = "custom"; k8.subtitleY = 0.6f; k8.MigrateValues(8);
                 Settings p9 = new Settings(); p9.tuning.crewStressSemitones = 2f; p9.tuning.crewPitchMax = 1.2f; p9.MigrateValues(9);
                 Settings q9 = new Settings(); q9.tuning.crewStressSemitones = 3f; q9.tuning.crewPitchMax = 1.3f; q9.MigrateValues(9);
-                Check(p9.tuning.crewStressSemitones == 0.5f && p9.tuning.crewPitchMax == 1.12f && q9.tuning.crewStressSemitones == 3f && q9.tuning.crewPitchMax == 1.3f,
-                      "settings v10: old stress pitch defaults move to 0.5 st and 1.12, own values stay", null);
+                Check(p9.tuning.crewStressSemitones == 0f && p9.tuning.crewPitchMax == 1.12f && q9.tuning.crewStressSemitones == 3f && q9.tuning.crewPitchMax == 1.3f,
+                      "settings v10: old stress pitch defaults move to the new defaults, own values stay", null);
+                Settings p12 = new Settings(); p12.tuning.crewStressSemitones = 0.5f; p12.MigrateValues(12);
+                Settings q12 = new Settings(); q12.tuning.crewStressSemitones = 1f; q12.MigrateValues(12);
+                Check(p12.tuning.crewStressSemitones == 0f && q12.tuning.crewStressSemitones == 1f,
+                      "settings v13: the old 0.5 st stress pitch goes to 0, an own value stays", null);
                 Check(m8.subtitlePos == "above_navball" && k8.subtitlePos == "custom", "settings v9: custom at the old default becomes above_navball, a moved custom stays", m8.subtitlePos + " " + k8.subtitlePos);
             }
             s.subtitleX = float.NaN; s.subtitleY = 7f; s.subtitleSize = 9f; s.subtitleOpacity = -1f; s.subtitleMaxEntries = 99; s.Clamp();
