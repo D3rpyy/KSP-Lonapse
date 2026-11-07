@@ -381,6 +381,8 @@ public static class Tests
         Near(1.02f * DcMath.PairPitchNudge(1.00f, 1.02f, 0.05f), 1.05, 1e-4, "intercom pitch: second voice pushed up to a 0.05 gap");
         Near(0.99f * DcMath.PairPitchNudge(1.00f, 0.99f, 0.05f), 0.95, 1e-4, "intercom pitch: second voice pushed down to a 0.05 gap");
         Near(1.00f * DcMath.PairPitchNudge(1.00f, 1.00f, 0.05f), 1.05, 1e-4, "intercom pitch: identical pitches get the full gap");
+        Near(0.93f * DcMath.PairPitchNudge(0.94f, 0.93f, 0.05f, DcMath.CrewPitchMin, 1.12f), 0.99, 1e-4, "intercom pitch: near the crew floor the second voice goes up, not down");
+        Near(1.11f * DcMath.PairPitchNudge(1.10f, 1.11f, 0.05f, DcMath.CrewPitchMin, 1.12f), 1.05, 1e-4, "intercom pitch: near the top the second voice goes down");
         {
             KerbalVoice jeb = KerbalVoice.Create("Jebediah Kerman", 0.5f, 0.5f, true), bob = KerbalVoice.Create("Bob Kerman", 0.5f, 0.5f, false);
             KerbalVoice val = KerbalVoice.Create("Valentina Kerman", 0.5f, 0.5f, true);
@@ -420,9 +422,12 @@ public static class Tests
         Near(DcMath.CrewPitch(1.0f, 0f, 0f, 2f, 1.2f), 1.0, 1e-6, "pitch: calm kerbal at base pitch");
         Near(DcMath.CrewPitch(1.0f, 1f, 0f, 2f, 1.2f), Math.Pow(2, 2.0 / 12), 1e-4, "pitch: stress 1 adds 2 semitones (x1.122)");
         Near(DcMath.CrewPitch(1.12f, 1f, 0f, 2f, 1.2f), 1.2, 1e-6, "pitch: total capped at 1.2");
-        Near(DcMath.CrewPitch(1.0f, 0f, 1f, 2f, 1.2f), 0.88, 1e-6, "pitch: full G strain lowers 12%");
+        Near(DcMath.CrewPitch(1.0f, 0f, 1f, 2f, 1.2f), 0.94, 1e-6, "pitch: full G strain lowers 6%");
+        Near(DcMath.CrewPitch(0.82f, 0f, 1f, 0.5f, 1.12f), DcMath.CrewPitchMin, 1e-6, "pitch: a low kerbal under full G stays at the crew floor");
+        Check(5.0 + 12.0 * Math.Log(DcMath.CrewPitch(0.5f, 0f, 1f, 0.5f, 1.12f), 2.0) > 3.0,
+              "pitch: the playback pitch never undoes the male Kerbal shift (+5 st) to under +3 st", null);
         Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, true), 1.0, 1e-6, "pitch: recorded panic clip gets no stress raise");
-        Near(DcMath.CrewPitch(1.05f, 1f, 1f, 0.5f, 1.12f, true), 1.05 * 0.88, 1e-6, "pitch: recorded panic keeps base pitch and G drop");
+        Near(DcMath.CrewPitch(1.05f, 1f, 1f, 0.5f, 1.12f, true), 1.05 * 0.94, 1e-6, "pitch: recorded panic keeps base pitch and G drop");
         Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, false), DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f), 1e-6, "pitch: other clips unchanged");
         Check(DcMath.TruncFraction(1f, 0.85f, 0.8f, true) == 1f && Math.Abs(DcMath.TruncFraction(1f, 0.85f, 0.8f, false) - 0.8f) < 1e-6,
               "truncation: a recorded panic clip is never cut, other lines still are", null);
@@ -2129,6 +2134,14 @@ public static class Tests
             Check(gaps && mean && order && far[0] == 1f && far[1] == 1f && one[0] == 1f,
                   "voices: a crew's pitches are pushed apart to the gap, the average and the order stay, far apart stays as it is",
                   pa.ToString("0.000") + " " + pb.ToString("0.000") + " " + pc.ToString("0.000"));
+            // a station: eight male kerbals at low base pitches must all stay in the crew range
+            float[] st = { 0.864f, 0.87f, 0.88f, 0.88f, 0.90f, 0.95f, 1.0f, 1.07f };
+            float[] sm = DcMath.SpreadPitches(st, 0.09f, DcMath.CrewPitchMin, DcMath.CrewSpreadMax);
+            float sLo = float.MaxValue, sHi = 0f;
+            for (int i = 0; i < st.Length; i++) { sLo = Math.Min(sLo, st[i] * sm[i]); sHi = Math.Max(sHi, st[i] * sm[i]); }
+            Check(sLo >= DcMath.CrewPitchMin - 1e-4f && sHi <= DcMath.CrewSpreadMax + 1e-4f,
+                  "voices: a big crew is spread inside the crew range (the gap shrinks), nobody under the floor",
+                  sLo.ToString("0.000") + " .. " + sHi.ToString("0.000"));
             RuntimeDelivery mcCalm = RuntimeDelivery.For("mc"), mcPanic = RuntimeDelivery.For(RuntimeDelivery.KindFor("mc", "panic", "chatter", "chatter"));
             RuntimeDelivery mT = RuntimeDelivery.For(RuntimeDelivery.KindFor("m", "tense", "chatter", "chatter"));
             RuntimeDelivery fP = RuntimeDelivery.For(RuntimeDelivery.KindFor("f", "panic", "chatter", "chatter"));

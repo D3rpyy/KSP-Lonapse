@@ -551,7 +551,7 @@ namespace Lonapse
                 group.AddRange(radio.FindAll(k => k.isFemale == f));
                 var pitch = new float[group.Count];
                 for (int i = 0; i < group.Count; i++) pitch[i] = group[i].basePitch;
-                float[] mul = DcMath.SpreadPitches(pitch, CrewPitchGap, 0.82f, 1.28f);
+                float[] mul = DcMath.SpreadPitches(pitch, CrewPitchGap, DcMath.CrewPitchMin, DcMath.CrewSpreadMax);
                 for (int i = 0; i < group.Count; i++) group[i].pitchSpread = mul[i];
             }
         }

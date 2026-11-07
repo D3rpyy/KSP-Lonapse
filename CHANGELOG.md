@@ -16,6 +16,10 @@
 - **Radio static and EVA breathing moved.** The clips in `Sounds/static` are now in `Sounds/sfx`, the same audio under new names. When you copy a new version over an old one, delete the old `Sounds/static` folder.
 - **KSP.log says why.** It names the docking target, tells you when an approach call can not come because the target was already close, and logs the three port signs and the chance for every call.
 
+### Fixed
+
+- **Kerbals no longer sometimes sound deep and slow, like the plain voice.** Each kerbal plays at their own pitch, pushed apart from the rest of the crew and lowered a little under G. For a low-voiced kerbal this could undo the whole Kerbal shift. It happened most on stations with many kerbals, in intercom chats and under high G. The pitch now has a floor, so every kerbal keeps the Kerbal sound. On a big station the voices sit a bit closer together because of this. G strain lowers the voice by at most 6% instead of 12%.
+
 ### For modders
 
 - The runtime tables have three new kinds, `undock`, `dock_close` and `dock_callout`, and three new events for `on=`, `undock`, `dockclose` and `dockcallout`. The lines are in `Phrases/Runtime/undock.tsv` and `dock_close.tsv`.

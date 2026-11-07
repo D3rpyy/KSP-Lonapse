@@ -127,14 +127,24 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Crew pitch: base pitch, raised by up to <paramref name="stressSemitones"/> at sk = 1, lowered up to 12% by
-        /// G strain, clamped to [0.75, maxPitch].
+        /// Lowest playback pitch of a crew voice (about -1.4 semitones). The clips are already shifted up into the
+        /// Kerbal register (+5 st male, +4 st female) and a pitch under 1 slows them down again. The old floor of 0.75
+        /// undid the whole male shift, so a low kerbal sounded like the plain, slow Piper voice.
+        /// </summary>
+        public const float CrewPitchMin = 0.92f;
+
+        /// <summary>Highest pitch the crew spread uses: the default crewPitchMax, above it the voices clamp together.</summary>
+        public const float CrewSpreadMax = 1.12f;
+
+        /// <summary>
+        /// Crew pitch: base pitch, raised by up to <paramref name="stressSemitones"/> at sk = 1, lowered up to 6% by
+        /// G strain, clamped to [CrewPitchMin, maxPitch].
         /// </summary>
         public static float CrewPitch(float basePitch, float sk, float gStrain, float stressSemitones, float maxPitch)
         {
             float raise = (float)Math.Pow(2.0, Clamp01(sk) * stressSemitones / 12.0);
-            float p = basePitch * raise * (1f - 0.12f * Clamp01(gStrain));
-            return Clamp(p, 0.75f, Math.Max(0.76f, maxPitch));
+            float p = basePitch * raise * (1f - 0.06f * Clamp01(gStrain));
+            return Clamp(p, CrewPitchMin, Math.Max(CrewPitchMin + 0.01f, maxPitch));
         }
 
         /// <summary>
@@ -226,7 +236,9 @@ namespace Lonapse
         /// <summary>
         /// Two kerbals aboard sounded the same (pitch 1.005 and 0.948). Multipliers for the
         /// pitches of one crew (one voice model) so every two are at least minGap apart: sorted, pushed up from the
-        /// lowest, then all shifted back so the average stays, kept in lo..hi. One pitch or none: all 1.
+        /// lowest, then all shifted back so the average stays, kept in lo..hi. A big crew (a station) that does not
+        /// fit at minGap gets a smaller gap: the range wins, because a pitch under lo undoes the Kerbal shift.
+        /// One pitch or none: all 1.
         /// </summary>
         public static float[] SpreadPitches(float[] pitch, float minGap, float lo, float hi)
         {
@@ -234,6 +246,7 @@ namespace Lonapse
             var mul = new float[n];
             for (int i = 0; i < n; i++) mul[i] = 1f;
             if (n < 2) return mul;
+            if (hi > lo) minGap = Math.Min(minGap, (hi - lo) / (n - 1));
             var order = new int[n];
             for (int i = 0; i < n; i++) order[i] = i;
             Array.Sort(order, (a, b) => pitch[a] != pitch[b] ? pitch[a].CompareTo(pitch[b]) : a.CompareTo(b));
@@ -246,8 +259,15 @@ namespace Lonapse
                 before += pitch[order[k]];
                 after += p[k];
             }
+            // base pitches that alone span more than lo..hi: squeeze them in, the order stays
+            float span = p[n - 1] - p[0];
+            if (hi > lo && span > hi - lo)
+            {
+                after = 0f;
+                for (int k = 0; k < n; k++) { p[k] = p[0] + (p[k] - p[0]) * (hi - lo) / span; after += p[k]; }
+            }
             float shift = (before - after) / n;
-            // the whole set must fit in lo..hi: shift into the range, the gap wins over the range when it cannot fit
+            // the whole set must fit in lo..hi (the gap and the squeeze above make sure it can): shift into the range
             float low = p[0] + shift, high = p[n - 1] + shift;
             if (low < lo) shift += lo - low;
             else if (high > hi) shift -= Math.Min(high - hi, low - lo);
@@ -261,11 +281,23 @@ namespace Lonapse
 
         public static float PairPitchNudge(float pitchA, float pitchB, float minGap)
         {
+            return PairPitchNudge(pitchA, pitchB, minGap, 0f, float.MaxValue);
+        }
+
+        /// <summary>
+        /// PairPitchNudge with the crew range: the second voice goes the other way when its side would leave lo..hi.
+        /// Pushed down under CrewPitchMin it was clamped back to the first voice, and it undid the Kerbal shift.
+        /// </summary>
+        public static float PairPitchNudge(float pitchA, float pitchB, float minGap, float lo, float hi)
+        {
             if (pitchB <= 0.01f) return 1f;
             float diff = pitchB - pitchA;
             if (Math.Abs(diff) >= minGap) return 1f;
-            float targetB = diff >= 0f ? pitchA + minGap : pitchA - minGap;
-            return targetB / pitchB;
+            float up = pitchA + minGap, down = pitchA - minGap;
+            bool goUp = diff >= 0f;
+            if (goUp && up > hi && down >= lo) goUp = false;
+            else if (!goUp && down < lo && up <= hi) goUp = true;
+            return (goUp ? up : down) / pitchB;
         }
 
         /// <summary>Warp-end ping only when the previous one is at least cooldown seconds ago.</summary>
