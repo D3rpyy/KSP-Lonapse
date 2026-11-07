@@ -83,7 +83,7 @@ namespace Lonapse
             }
         }
 
-        RuntimeVoice Voice { get { if (host.runtimeVoice == null) host.runtimeVoice = new RuntimeVoice(); return host.runtimeVoice; } }
+        RuntimeVoice Voice { get { if (host.runtimeVoice == null) host.runtimeVoice = RuntimeVoice.Shared; return host.runtimeVoice; } }
 
         /// <summary>The Piper voice of a kerbal: m or f, like the recorded clips. The kerbal's own pitch, timbre and
         /// tremolo come from the playback, the same for recorded and runtime lines.</summary>
@@ -118,7 +118,7 @@ namespace Lonapse
         /// <summary>Spoken and English vessel name, null when it is too long to say.</summary>
         string[] VesselNames() { return NamesOfVessel(ActiveVessel); }
 
-        /// <summary>{vessel} on EVA: the ship nearby, not the kerbal (user report: "Stay close to" the kerbal's own name).</summary>
+        /// <summary>{vessel} on EVA: the ship nearby, not the kerbal ("Stay close to" the kerbal's own name).</summary>
         string[] ShipNames()
         {
             double d;
@@ -245,7 +245,7 @@ namespace Lonapse
             if (!NamesRecent && rng.NextDouble() < RuntimeNameChance)
             {
                 int crew = host.roster.voices.Count;
-                // user report: MC named one kerbal and another answered. The scene's own crew speaker wins
+                // MC named one kerbal and another answered. The scene's own crew speaker wins
                 // (the lines are queued before anyone speaks, so lastCrewVoice is the one before)
                 KerbalVoice k = to != null && host.roster.voices.Contains(to) ? to
                                 : lastCrewVoice != null && clock - lastCrewVoiceClock < RuntimeAnswerWindow
@@ -329,8 +329,20 @@ namespace Lonapse
             PhraseClips.runtimeCanSpeak = RuntimeCanSpeak;
             if (!RuntimeOn) return;
             WarmOnce("mc");
+            // RuntimeVoiceHost loads these when the save opens, so here Warm finds them running and does nothing. Only
+            // after a quickload straight into a flight, or with runtime voice switched on in flight, they load here:
+            // Mission Control calm, tense and panic, and the calm and tense voice of each gender aboard
+            if (host.roster.voices.Count > 0)
+            {
+                WarmOnce("mc.tense");
+                WarmOnce("mc.mc_panic");
+            }
             for (int i = 0; i < host.roster.voices.Count; i++)
-                if (host.roster.voices[i] != null) WarmOnce(KindFor(host.roster.voices[i]));
+                if (host.roster.voices[i] != null)
+                {
+                    WarmOnce(KindFor(host.roster.voices[i]));
+                    WarmOnce(KindFor(host.roster.voices[i]) + ".tense");
+                }
             if (!host.settings.runtimeReports) return;
             RuntimeLandCheck();
             SunriseTick();
@@ -384,7 +396,7 @@ namespace Lonapse
                 if (sit == "orbit") { nums["period_min"] = o.period / 60.0; nums["t_pe_min"] = o.timeToPe / 60.0; }
                 if (o.ApA > 0 && o.timeToAp > 0) nums["t_ap_min"] = o.timeToAp / 60.0;
             }
-            // not on the pad: "fuel left" means something was used (user report: a fuel line before any engine fired)
+            // not on the pad: "fuel left" means something was used (a fuel line before any engine fired)
             bool pad = false;
             try { pad = v.situation == Vessel.Situations.PRELAUNCH; } catch (Exception) { }
             bool eva = v.isEVA;
@@ -394,11 +406,22 @@ namespace Lonapse
                 Put(nums, "ec", ResourcePercent(v, "ElectricCharge"));
                 Put(nums, "mono", ResourcePercent(v, "MonoPropellant"));
                 try { nums["parts"] = v.parts.Count; nums["crew"] = v.GetCrewCount(); } catch (Exception) { }
+                // parts a line can name: has_solar, has_rcs and has_legs are 1 or 0 (only for the active vessel,
+                // the part list is cached there)
+                bool active = false;
+                try { active = v == FlightGlobals.ActiveVessel; } catch (Exception) { }
+                if (active)
+                {
+                    var parts = VesselConditions();
+                    nums["has_solar"] = parts.Contains("solar") ? 1 : 0;
+                    nums["has_rcs"] = parts.Contains("rcs") ? 1 : 0;
+                    nums["has_legs"] = parts.Contains("legs") ? 1 : 0;
+                }
             }
             else
             {
                 // a kerbal on EVA: the jetpack, the ship nearby and the time outside. Not the vessel values: the
-                // kerbal is a vessel of one part (user report: "one kerbal aboard" answered by a kerbal outside)
+                // kerbal is a vessel of one part ("one kerbal aboard" answered by a kerbal outside)
                 double jet = ResourcePercent(v, "EVA Propellant");
                 if (double.IsNaN(jet)) jet = ResourcePercent(v, "MonoPropellant");
                 Put(nums, "jet", jet);
@@ -505,6 +528,7 @@ namespace Lonapse
         void CrewValues(KerbalVoice k, Vessel v, Dictionary<string, double> nums)
         {
             if (k == null || v == null) return;
+            nums["is_tourist"] = k.persona.IsTourist ? 1 : 0;
             try
             {
                 ProtoCrewMember pcm = HighLogic.CurrentGame != null && HighLogic.CurrentGame.CrewRoster != null
@@ -521,9 +545,9 @@ namespace Lonapse
 
         /// <summary>
         /// Liquid fuel left in percent for the stage that burns: the tanks that feed a running engine (its crossfeed
-        /// set), like the stage view of the KSP resource panel (user report: 73 % was said with 530 of 1125 in the
+        /// set), like the stage view of the KSP resource panel (73 % was said with 530 of 1125 in the
         /// stage, the full upper stage tanks were counted too). No running engine: the tanks of the next stage with a
-        /// liquid engine, the one that fires next. No liquid engine at all: NaN, so no fuel line plays (user report:
+        /// liquid engine, the one that fires next. No liquid engine at all: NaN, so no fuel line plays (
         /// "92 % fuel left" before any engine had fired, the old fallback counted every tank of the vessel).
         /// </summary>
         static double StageFuelPercent(Vessel v, bool log)
@@ -660,7 +684,7 @@ namespace Lonapse
         readonly Dictionary<string, double> evaStartUT = new Dictionary<string, double>();
         const double EvaStartWindow = 90.0, NearShipRange = 100.0, ShipRange = 500.0;
         /// <summary>Scenes about going out (only in the first EvaStartWindow s) and about the hatch or the ship (only
-        /// within NearShipRange of it). User report: "Leaving the hatch" far from the ship.</summary>
+        /// within NearShipRange of it), so no "Leaving the hatch" far from the ship.</summary>
         static readonly string[] EvaStartScenes = { "eva_check_03", "ev_eva_08" };
         static readonly string[] NearShipScenes = { "ev_eva_03", "ev_eva_04" };
 
@@ -1397,6 +1421,8 @@ namespace Lonapse
 
         /// <summary>Share of Mission Control runtime lines the crew answers, when a reply fits.</summary>
         const double ReplyChance = 0.45;
+        /// <summary>Share when the report talks to one kerbal by name: silence after that sounds rude.</summary>
+        const double AddressedReplyChance = 0.85;
         /// <summary>The kerbal a report talks to ({kerbal}), set while QueueReport queues it: that kerbal answers.</summary>
         KerbalVoice reportKerbal;
         readonly Queue<string> recentReplies = new Queue<string>();
@@ -1416,9 +1442,12 @@ namespace Lonapse
         /// </summary>
         Reply PlanReply(RuntimeTemplate line, Dictionary<string, double> nums, Dictionary<string, string[]> names, double chance = ReplyChance)
         {
+            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
+            // a tourist does not answer a job report (fuel, orbit, power, science): somebody who works here does
+            if (k != null && k.persona.IsTourist && Persona.JobForLine(line.Id) != null) k = null;
+            if (k != null && line.NamesKerbal && chance == ReplyChance) chance = AddressedReplyChance;
             if (!RuntimeOn || host.probeMode || host.roster.voices.Count == 0 || host.stress.stress > ReportMaxStress
                 || Somber || (!debugForce && rng.NextDouble() >= chance)) return null;
-            KerbalVoice k = reportKerbal != null && CanChat(reportKerbal) ? reportKerbal : null;
             if (k == null)
             {
                 // the pilot answers a fuel or node line, the engineer the power, the scientist the science
@@ -1438,6 +1467,8 @@ namespace Lonapse
             var nn = new Dictionary<string, double>(nums ?? new Dictionary<string, double>());
             if (!ReferenceEquals(k, reportKerbal)) CrewValues(k, v, nn);
             List<RuntimeTemplate> fit = RuntimeLines.Replies(PhraseClips.runtimeTemplates, line, sit, nn, rn);
+            // a tourist only gives the answers written for tourists (is_tourist=1), the rest is crew talk
+            if (k.persona.IsTourist) fit.RemoveAll(x => !RuntimeLines.ForTourist(x));
             List<RuntimeTemplate> fresh = fit.FindAll(x => !recentReplies.Contains(x.Id));
             if (fresh.Count == 0) return null;
             RuntimeTemplate t = fresh[rng.Next(fresh.Count)];
@@ -1480,7 +1511,7 @@ namespace Lonapse
             bool lit;
             try
             {
-                CelestialBody sun = Planetarium.fetch != null ? Planetarium.fetch.Sun : null, b = v.mainBody;
+                CelestialBody b = v.mainBody, sun = StarOf(b);
                 if (sun == null || b == null || ReferenceEquals(sun, b)) { sunKnown = false; return; }
                 Vector3d p = v.GetWorldPos3D() - b.position, s = sun.position - b.position;
                 lit = !DcMath.InShadow(p.x, p.y, p.z, s.x, s.y, s.z, b.Radius);
@@ -1493,6 +1524,20 @@ namespace Lonapse
             sunrises++;
             if (!debugForce && (host.warpChatter || clock - lastSunriseLine < SunriseGap || rng.NextDouble() >= SunriseChance)) return;
             QueueSunrise(v);
+        }
+
+        /// <summary>The star the body goes around: the first star up the orbit chain. Kopernicus packs with more than
+        /// one star light a planet from its own star, not from the main sun. Without a star flag the main sun.</summary>
+        static CelestialBody StarOf(CelestialBody b)
+        {
+            for (int i = 0; b != null && i < 16; i++)
+            {
+                if (b.isStar) return b;
+                CelestialBody up = b.referenceBody;
+                if (up == null || ReferenceEquals(up, b)) break;
+                b = up;
+            }
+            return Planetarium.fetch != null ? Planetarium.fetch.Sun : null;
         }
 
         bool QueueSunrise(Vessel v)

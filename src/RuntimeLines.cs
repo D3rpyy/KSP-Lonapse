@@ -31,6 +31,16 @@ namespace Lonapse
         public readonly List<string> To = new List<string>();
         /// <summary>Where the row is: "reports.tsv:12".</summary>
         public string Where = "";
+        /// <summary>A version talks to one kerbal by name ({kerbal}): that kerbal answers more often.</summary>
+        public bool NamesKerbal
+        {
+            get
+            {
+                foreach (string[] v in Versions)
+                    if (v != null && v.Length > 0 && v[0] != null && v[0].Contains("{kerbal")) return true;
+                return false;
+            }
+        }
         /// <summary>Event chats and science lines: the events it is about (on=flag on=surfacesample in the when
         /// column). A chat with on= only plays on that event, never as a normal chat, and may be one line long (a
         /// kerbal alone). A science line with on= only plays for that experiment. Empty: no event.</summary>
@@ -124,7 +134,7 @@ namespace Lonapse
         static readonly string[] VisitTypes = { "Flyby", "Orbit", "Suborbit", "Land", "Flight", "Escape" };
 
         /// <summary>
-        /// Crew history (user request): from a kerbal's career log, entries { flight, type, target } of the flights
+        /// Crew history: from a kerbal's career log, entries { flight, type, target } of the flights
         /// before this one. missions: flights that ended with a recovery. flight_no: missions + 1, this flight.
         /// visits and landings: earlier flights that reached or landed on <paramref name="body"/>. stars: the
         /// experience level. Training entries do not count.
@@ -515,6 +525,7 @@ namespace Lonapse
         {
             if (chat == null || chat.Count == 0) return false;
             if (!JobOk(chat[0].TraitA, jobA) || !JobOk(chat[0].TraitB, jobB)) return false;
+            if (!Persona.ChatSideFits(chat[0].TraitA, jobA) || !Persona.ChatSideFits(chat[0].TraitB, jobB)) return false;
             if (!Holds(chat[0], situation, nums) || FillableVersions(chat[0], nums, namesA).Count == 0) return false;
             for (int i = 1; i < chat.Count; i++)
                 if (FillableVersions(chat[i], nums, i % 2 == 0 ? namesA : namesB).Count == 0) return false;
@@ -595,6 +606,14 @@ namespace Lonapse
             if (line == null) { r.Clear(); return r; }
             r.RemoveAll(t => !Answers(t, line.Id, line.Kind));
             return r;
+        }
+
+        /// <summary>The template asks for a tourist (is_tourist=1 in the when column).</summary>
+        public static bool ForTourist(RuntimeTemplate t)
+        {
+            foreach (var c in t.Checks)
+                if (c.Key == "is_tourist" && c.Value.Key == "=" && c.Value.Value == 1) return true;
+            return false;
         }
 
         /// <summary>The situation and the checks of the when column hold.</summary>
@@ -773,7 +792,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// The value that is spoken and shown, rounded so it stays short (user report: "15 000 000 km" was a long string
+        /// The value that is spoken and shown, rounded so it stays short ("15 000 000 km" was a long string
         /// of words). From a billion: one decimal below 10 billion. From a million: whole millions, one decimal below
         /// 10 million (2.5 million). From 10 000: whole thousands. Below that: one decimal below 10 for keys with decimals (km, min, deg, ms, science points),
         /// else whole numbers. Spoken words and subtitle digits use this same value.

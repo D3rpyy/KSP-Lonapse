@@ -45,6 +45,7 @@ namespace Lonapse
         public float duration;       // real seconds the item is expected to take (length / pitch, or truncated)
 
         public float baseDistortion;
+        public bool recordedPanic;        // the clip is from crew/panic: no stress distortion on top (SetCrewFilters)
         public float extraDistortion;
         public float tremDepth;
         public float tremRate = 5.5f;
@@ -70,7 +71,7 @@ namespace Lonapse
             src.bypassEffects = false;
             src.bypassListenerEffects = true;
             src.bypassReverbZones = true;
-            // the game listener is ducked under voice (req 3): our sources apply the listener base volume themselves
+            // the game listener is ducked under voice: our sources apply the listener base volume themselves
             src.ignoreListenerVolume = true;
             src.ignoreListenerPause = false;
             src.priority = priority;
@@ -120,7 +121,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Radio profile band-pass (req 16) for the control channel.</summary>
+        /// <summary>Radio profile band-pass for the control channel.</summary>
         public void SetBand(float hpHz, float lpHz)
         {
             if (hp != null) hp.cutoffFrequency = hpHz;
@@ -187,6 +188,7 @@ namespace Lonapse
             // a reused channel must not inherit the previous speaker's live filters or tremolo
             speaker = null;
             tremDepth = 0f;
+            recordedPanic = false;
             if (trem != null) trem.depth = 0f;
             src.volume = 0f; // real volume is applied in Update before the next audio frame
             src.Play();
@@ -247,6 +249,7 @@ namespace Lonapse
             clipName = "";
             phraseKey = null;
             tremDepth = 0f;
+            recordedPanic = false;
             extraDistortion = 0f;
             if (trem != null) trem.depth = 0f;
         }
@@ -323,7 +326,7 @@ namespace Lonapse
             float cutoff = DcMath.Lerp(tu.crewLpCalm, tu.crewLpStress, sk) * timbre * DcMath.Lerp(1f, 0.25f, gStrain);
             if (cutoff < tu.crewLpMin) cutoff = tu.crewLpMin;
             lp.cutoffFrequency = cutoff;
-            baseDistortion = 0.5f * DcMath.Smooth(sk, 0.5, 1.0) + 0.1f * gStrain;
+            baseDistortion = DcMath.CrewDistortion(sk, gStrain, recordedPanic);
             tremDepth = 0.40f * gStrain + 0.10f * DcMath.Smooth(sk, 0.8, 1.0);
         }
 

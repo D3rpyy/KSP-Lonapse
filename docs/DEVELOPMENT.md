@@ -224,7 +224,7 @@ measured ones. If something feels off, this is where you can change it. The tuni
 - **Touchdown.** The descent blips stop when you land, then the crew and Mission Control talk about the landing.
 - **The radio clicks.** A desk click on stations and bases, a short headset squelch in ships and on EVA.
 - **Static follows your signal.** With CommNet on and no link, Mission Control can't hear you and stays silent.
-- **Panic sounds like panic.** The crew shouts in broken pieces with gasps in between. Mission Control answers slowly
+- **Panic sounds like panic.** The crew shouts in broken pieces with ragged pauses in between. Mission Control answers slowly
   and calmly. Now and then someone screams, at most once a minute per kerbal (`screamCooldown`).
 - **The master alarm is for real trouble.** A soft alarm plays far in the background only when the stress of the
   vessel reaches 0.9 (`alarmStress`). A nervous kerbal panicking at low stress doesn't set it off.
@@ -274,10 +274,14 @@ What stress changes:
 
 - **How often they talk**: from about once every 110 s at stress 0 to once a second at stress 1 (10.5 s at 0.5),
   with some randomness on top.
-- **How the crew sounds**: calm, tense or panic lines. Under stress the crew gets louder and rougher, and the pitch
-  goes up by at most half a semitone (`crewStressSemitones`, total pitch capped by `crewPitchMax`). Above personal
-  stress 0.85 lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
-- **Mission Control**: gets calmer and slower the more stressed the crew is.
+- **How the crew sounds**: calm, tense or panic lines. Under stress the crew gets a little louder (about 2 dB from
+  calm to full stress) and rougher, and the pitch goes up by at most half a semitone (`crewStressSemitones`, total
+  pitch capped by `crewPitchMax`). Panic clips get neither: the panic is already in the recording. Above personal
+  stress 0.85 other lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
+- **Faces**: they follow the kerbal's own thresholds, the same that switch the voice. Below `tenseAt` the face is
+  free, from there it gets more and more scared, clearly scared at `panicAt` and full fear at stress 1, also between
+  lines. A brave or badass kerbal has later thresholds, so it keeps a calm face longer.
+- **Mission Control**: gets calmer and slower the more stressed the crew is, at a steady volume.
 - **Every kerbal is different**: the name sets a fixed pitch, wobble and timbre, so Jeb always sounds like Jeb.
   Courage and stupidity change how strongly a kerbal reacts and when they move to tense or panic. Badass kerbals stay
   steadier. Kerbals that black out from G stay silent.

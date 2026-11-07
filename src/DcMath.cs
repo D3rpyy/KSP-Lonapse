@@ -138,15 +138,25 @@ namespace Lonapse
         }
 
         /// <summary>
+        /// Crew pitch for a clip. A recorded panic clip (crew/panic) already has its panic in the recording: no
+        /// stress raise on top, only the kerbal's own pitch and the G strain drop (panic sounded too high).
+        /// </summary>
+        public static float CrewPitch(float basePitch, float sk, float gStrain, float stressSemitones, float maxPitch,
+                                      bool recordedPanic)
+        {
+            return CrewPitch(basePitch, recordedPanic ? 0f : sk, gStrain, stressSemitones, maxPitch);
+        }
+
+        /// <summary>
         /// Radio static slider (0..1) to a level (0..1). Loudness is heard on a log scale, so a straight line was only
-        /// audible near 100 % (user test 0.6.0). The square root makes 25 % half the full level.
+        /// audible near 100 %. The square root makes 25 % half the full level.
         /// </summary>
         public static float StaticCurve(float amount)
         {
             return (float)Math.Sqrt(Clamp01(amount));
         }
 
-        /// <summary>EVA running (user test): 0 at or below the walk speed, 1 at the run speed. Unknown speeds
+        /// <summary>EVA running: 0 at or below the walk speed, 1 at the run speed. Unknown speeds
         /// (0 or less, or run not above walk) fall back to 1.0 and 2.5 m/s.</summary>
         public static float EvaRunLevel(float speed, float walkSpeed, float runSpeed)
         {
@@ -179,12 +189,42 @@ namespace Lonapse
             return Lerp(1f, minFrac, Ramp(sk, truncStart, 1.0));
         }
 
+        /// <summary>Same, but a recorded panic clip is never cut: it is already broken into pieces, so a cut only
+        /// loses the last word.</summary>
+        public static float TruncFraction(float sk, float truncStart, float minFrac, bool recordedPanic)
+        {
+            return recordedPanic ? 1f : TruncFraction(sk, truncStart, minFrac);
+        }
+
+        /// <summary>Crew line volume by the kerbal's stress: 0.70 calm to 0.90 at full stress (about 2 dB). Was
+        /// 0.55 to 1.0 (5 dB), which made panic lines much louder than the rest.</summary>
+        public static float CrewVolume(float sk) { return Lerp(0.70f, 0.90f, Clamp01(sk)); }
+
+        /// <summary>Extra gain on a recorded panic clip: 2 dB down. It is much denser than a calm clip at the same
+        /// loudness (peak to RMS 11 dB against 15 dB), so it hit the soft clipper behind the voice boost and sounded harsh.</summary>
+        public const float PanicClipGain = 0.8f;
+
+        /// <summary>Radio distortion on a crew line: up to 0.3 with stress (was 0.5) and 0.1 with G strain. A recorded
+        /// panic clip already has its drive in the recording, so it only gets the G part.</summary>
+        public static float CrewDistortion(float sk, float gStrain, bool recordedPanic)
+        {
+            float g = 0.1f * Clamp01(gStrain);
+            return recordedPanic ? g : 0.3f * Smooth(sk, 0.5, 1.0) + g;
+        }
+
+        /// <summary>Crew callout volume: the same 2 dB range, a little higher (was 0.65 to 1.0).</summary>
+        public static float CalloutVolume(float sk) { return Lerp(0.75f, 0.95f, Clamp01(sk)); }
+
+        /// <summary>Mission Control volume: steady. Was 0.80 calm down to 0.60 under stress, which left MC far below
+        /// a panicking crew.</summary>
+        public const float McVolume = 0.75f;
+
         /// <summary>
         /// Intercom pair: pitch multiplier for the second voice so the two base pitches differ by at least minGap.
         /// Returns 1 when they already differ enough.
         /// </summary>
         /// <summary>
-        /// User report (0.7.0): two kerbals aboard sounded the same (pitch 1.005 and 0.948). Multipliers for the
+        /// Two kerbals aboard sounded the same (pitch 1.005 and 0.948). Multipliers for the
         /// pitches of one crew (one voice model) so every two are at least minGap apart: sorted, pushed up from the
         /// lowest, then all shifted back so the average stays, kept in lo..hi. One pitch or none: all 1.
         /// </summary>

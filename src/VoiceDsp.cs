@@ -1,4 +1,4 @@
-// Voice clarity DSP on the audio thread (plan v2, req 3): presence EQ (+3 dB peaking around 2.5 kHz) and a
+// Voice clarity DSP on the audio thread: presence EQ (+3 dB peaking around 2.5 kHz) and a
 // feed-forward peak compressor (threshold -18 dB, ratio 3, makeup). Coefficients come from MixMath.
 // Runs as the last filter on crew and control sources. No allocation in OnAudioFilterRead.
 using System;

@@ -1,6 +1,6 @@
 // Probe beep synth: a port of make_probe_beep and normalize from audio/build_clips.py, so probe voices can be
 // made in game from a few values (base pitch, wave, rhythm, glide and more) instead of prebuilt WAV files.
-// 0.6.0: speed, vibrato, buzz and spread on top of the Python values, and mood patterns of a voice's own.
+// Speed, vibrato, buzz and spread on top of the Python values, and mood patterns of a voice's own.
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 // tests/probe_reference.tsv (from audio/probe_reference.py) checks that both give the same samples.
 using System;

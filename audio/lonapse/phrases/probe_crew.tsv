@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	english	spanish_rt
-# Lonapse 0.6.0: probe and crew in the cabin (event probe_crew). The probe beeps, a crew member answers.																	
+# Probe and crew in the cabin (event probe_crew). The probe beeps, a crew member answers.																	
 pc_001_1	probe_crew	chatter	calm	probe	pc_001	1	both	goofy	any	any	any	any	any	proud		[beeps with a report]	
 pc_001_2	probe_crew	chatter	calm	crew	pc_001	2	both	goofy	any	any	any	any	any		Mm. Buenos datos.	Hmm. Good data. | Hmm. Good data. | Hm. Nice data.	
 pc_002_1	probe_crew	chatter	calm	probe	pc_002	1	both	goofy	any	any	any	any	any	curious		[beeps a question]	
@@ -237,3 +237,53 @@ pc_098_2	probe_crew	chatter	calm	probe	pc_098	2	both	goofy	any	tourist	any	any	a
 pc_098_3	probe_crew	chatter	calm	crew	pc_098	3	both	goofy	any	tourist	any	any	any		Qué interesante. No he entendido nada.	How interesting. I understood nothing. | How interesting. I understood nothing. | Very interesting. No idea what you said.	
 pc_099_1	probe_crew	chatter	calm	probe	pc_099	1	both	goofy	any	tourist	any	any	any	happy		[beeps for the photo]	
 pc_099_2	probe_crew	chatter	calm	crew	pc_099	2	both	goofy	any	tourist	any	any	any		¡Patata!	Say cheese! | Say cheese! | Smile!	
+# Tourists aboard with a probe core: they talk to the probe, and at a staging one calls it first (topic staging).																	
+tu_pc_01_1	probe_crew	chatter	calm	crew	tu_pc_01	1	both	goofy	any	tourist	any	any	any		¿Tú conduces esto?	Are you driving this?	
+tu_pc_01_2	probe_crew	chatter	calm	probe	tu_pc_01	2	both	goofy	any	tourist	any	any	any	proud		[beeps proudly]	
+tu_pc_01_3	probe_crew	chatter	calm	crew	tu_pc_01	3	both	goofy	any	tourist	any	any	any		Pues lo haces muy bien.	Well, you're doing great.	
+tu_pc_02_1	probe_crew	chatter	calm	probe	tu_pc_02	1	both	goofy	any	tourist	any	any	any	curious		[beeps at the camera]	
+tu_pc_02_2	probe_crew	chatter	calm	crew	tu_pc_02	2	both	goofy	any	tourist	any	any	any		¿Quieres salir en la foto?	Do you want to be in the photo?	
+tu_pc_02_3	probe_crew	chatter	calm	probe	tu_pc_02	3	both	goofy	any	tourist	any	any	any	happy		[beeps yes]	
+tu_pc_03_1	probe_crew	chatter	calm	crew	tu_pc_03	1	both	goofy	any	tourist	any	any	any		¿Cuánto falta?	How much longer?	
+tu_pc_03_2	probe_crew	chatter	calm	probe	tu_pc_03	2	both	goofy	any	tourist	any	any	any	bored		[beeps a long number]	
+tu_pc_03_3	probe_crew	chatter	calm	crew	tu_pc_03	3	both	goofy	any	tourist	any	any	any		Vale. Mucho.	Okay. A lot.	
+tu_pc_04_1	probe_crew	chatter	calm	crew	tu_pc_04	1	both	goofy	any	tourist	any	any	any		¿Puedo tocar tus botones?	Can I touch your buttons?	
+tu_pc_04_2	probe_crew	chatter	calm	probe	tu_pc_04	2	both	goofy	any	tourist	any	any	any	offended		[beeps a firm no]	
+tu_pc_05_1	probe_crew	chatter	calm	crew	tu_pc_05	1	both	goofy	any	tourist	any	any	any		Oye, ¿tú comes?	Hey, do you eat?	
+tu_pc_05_2	probe_crew	chatter	calm	probe	tu_pc_05	2	both	goofy	any	tourist	any	any	any	curious		[beeps in confusion]	
+tu_pc_05_3	probe_crew	chatter	calm	crew	tu_pc_05	3	both	goofy	any	tourist	any	any	any		Yo tampoco he comido. Somos iguales.	I haven't eaten either. We're the same.	
+tu_pc_06_1	probe_crew	chatter	calm	probe	tu_pc_06	1	both	goofy	any	tourist	any	any	any	scared		[beeps nervously]	
+tu_pc_06_2	probe_crew	chatter	calm	crew	tu_pc_06	2	both	goofy	any	tourist	any	any	any		Calma. Yo tampoco sé lo que hago.	Easy. I don't know what I'm doing either.	
+tu_pc_07_1	probe_crew	chatter	calm	crew	tu_pc_07	1	both	goofy	any	tourist	any	any	any		Voy a contar a todos que me llevó un robot.	I'm telling everyone a robot flew me here.	
+tu_pc_07_2	probe_crew	chatter	calm	probe	tu_pc_07	2	both	goofy	any	tourist	any	any	any	proud		[beeps very flattered]	
+tu_pc_08_1	probe_crew	chatter	calm	crew	tu_pc_08	1	both	goofy	any	tourist	any	any	any		¿Tienes nombre?	Do you have a name?	
+tu_pc_08_2	probe_crew	chatter	calm	probe	tu_pc_08	2	both	goofy	any	tourist	any	any	any	proud		[beeps its serial number]	
+tu_pc_08_3	probe_crew	chatter	calm	crew	tu_pc_08	3	both	goofy	any	tourist	any	any	any		Te llamaré Pepito.	I'll call you Pepito.	
+tu_pc_08_4	probe_crew	chatter	calm	probe	tu_pc_08	4	both	goofy	any	tourist	any	any	any	offended		[beeps an objection]	
+tu_pc_09_1	probe_crew	chatter	calm	probe	tu_pc_09	1	both	goofy	any	tourist	any	any	any	sleepy		[beeps a yawn]	
+tu_pc_09_2	probe_crew	chatter	calm	crew	tu_pc_09	2	both	goofy	any	tourist	any	any	any		No te duermas, por favor. Tú eres quien sabe.	Don't fall asleep, please. You're the one who knows how.	
+tu_pc_10_1	probe_crew	chatter	calm	crew	tu_pc_10	1	both	goofy	any	tourist	any	any	any		Ponme cinco estrellas en tu reseña.	Give me five stars in your review.	
+tu_pc_10_2	probe_crew	chatter	calm	probe	tu_pc_10	2	both	goofy	any	tourist	any	any	any	bored		[beeps three]	
+tu_pc_11_1	probe_crew	chatter	calm	crew	tu_pc_11	1	both	goofy	any	tourist	any	any	any		¿Sabes ir a casa sin mapa?	Do you know the way home without a map?	
+tu_pc_11_2	probe_crew	chatter	calm	probe	tu_pc_11	2	both	goofy	any	tourist	any	any	any	proud		[beeps a whole route]	
+tu_pc_11_3	probe_crew	chatter	calm	crew	tu_pc_11	3	both	goofy	any	tourist	any	any	any		Me fío de ti. No tengo otra opción.	I trust you. I have no other choice.	
+tu_pc_12_1	probe_crew	chatter	calm	probe	tu_pc_12	1	both	goofy	any	tourist	any	any	any	happy		[beeps a little song]	
+tu_pc_12_2	probe_crew	chatter	calm	crew	tu_pc_12	2	both	goofy	any	tourist	any	any	any		¡Otra! ¡Otra!	Again! Again!	
+tu_pstg_01_1	probe_crew	chatter	calm	crew	tu_pstg_01	1	both	any	any	tourist	any	staging	any		¡Etapa! ¡La he dicho yo primero!	Stage! I called it first!	
+tu_pstg_01_2	probe_crew	chatter	calm	probe	tu_pstg_01	2	both	any	any	tourist	any	staging	any	offended		[beeps very offended]	
+tu_pstg_02_1	probe_crew	chatter	calm	crew	tu_pstg_02	1	both	any	any	tourist	any	staging	any		¿Eso era una etapa? ¡Etapa!	Was that a stage? Stage!	
+tu_pstg_02_2	probe_crew	chatter	calm	probe	tu_pstg_02	2	both	any	any	tourist	any	staging	any	bored		[beeps a tired yes]	
+tu_pstg_03_1	probe_crew	chatter	calm	crew	tu_pstg_03	1	both	any	any	tourist	any	staging	any		¡Separación! Siempre quise decirlo.	Separation! I always wanted to say that.	
+tu_pstg_03_2	probe_crew	chatter	calm	probe	tu_pstg_03	2	both	any	any	tourist	any	staging	any	proud		[beeps it correctly]	
+tu_pstg_04_1	probe_crew	chatter	calm	crew	tu_pstg_04	1	both	any	any	tourist	any	staging	any		¡Ignición! ¿Se dice así?	Ignition! Is that how you say it?	
+tu_pstg_04_2	probe_crew	chatter	calm	probe	tu_pstg_04	2	both	any	any	tourist	any	staging	any	curious		[beeps a slow correction]	
+tu_pstg_04_3	probe_crew	chatter	calm	crew	tu_pstg_04	3	both	any	any	tourist	any	staging	any		Vale. Lo que tú digas.	Okay. Whatever you say.	
+tu_pstg_05_1	probe_crew	chatter	calm	crew	tu_pstg_05	1	both	any	any	tourist	any	staging	any		¡He pulsado yo eso! Creo.	I pressed that! I think.	
+tu_pstg_05_2	probe_crew	chatter	calm	probe	tu_pstg_05	2	both	any	any	tourist	any	staging	any	offended		[beeps very firmly]	
+tu_pstg_05_3	probe_crew	chatter	calm	crew	tu_pstg_05	3	both	any	any	tourist	any	staging	any		Vale, vale. Has sido tú.	Okay, okay. It was you.	
+tu_pstg_06_1	probe_crew	chatter	calm	crew	tu_pstg_06	1	both	any	any	tourist	any	staging	any		¡Algo se ha soltado! ¡Etapa, supongo!	Something came off! Stage, I guess!	
+tu_pstg_06_2	probe_crew	chatter	calm	probe	tu_pstg_06	2	both	any	any	tourist	any	staging	any	bored		[beeps very patiently]	
+tu_pstg_07_1	probe_crew	chatter	calm	crew	tu_pstg_07	1	both	any	any	tourist	any	staging	any		¡Etapa! ¿Lo he hecho bien?	Stage! Did I do it right?	
+tu_pstg_07_2	probe_crew	chatter	calm	probe	tu_pstg_07	2	both	any	any	tourist	any	staging	any	happy		[beeps a patient yes]	
+tu_pstg_08_1	probe_crew	chatter	calm	crew	tu_pstg_08	1	both	any	any	tourist	any	staging	any		¡Todos a sus puestos! ¡Etapa!	Everyone to your stations! Stage!	
+tu_pstg_08_2	probe_crew	chatter	calm	probe	tu_pstg_08	2	both	any	any	tourist	any	staging	any	offended		[beeps an eye roll]	

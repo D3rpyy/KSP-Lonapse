@@ -1,7 +1,7 @@
 // Lonapse phrase clips: loads GameData/Lonapse/Phrases/phrases.tsv and resolves each row to its AudioClips
-// (plan v2 4.7, plan v3). Scenes without a playable clip are dropped, so the director only sees what can be heard.
+//. Scenes without a playable clip are dropped, so the director only sees what can be heard.
 // sceneCount counts a {body} scene once. clipCount counts every clip, body variants included.
-// Plan v5: probe rows are subtitle only. They need no clip, and the director shows their text
+// Probe rows are subtitle only. They need no clip, and the director shows their text
 // with Subtitle and plays the probe beep itself.
 using System;
 using System.Collections.Generic;
@@ -25,6 +25,9 @@ namespace Lonapse
         public static int extraFiles;
         /// <summary>Runtime voice: the runtime-only templates from every Phrases/Runtime/*.tsv, empty without the folder.</summary>
         public const string RuntimeRel = "GameData/Lonapse/Phrases/Runtime";
+        /// <summary>Lines Lonapse ships for other mods: Compat/&lt;Assembly&gt;/*.tsv, read only when that assembly is
+        /// loaded. They count as lines of that mod (the Mods tab, its switch).</summary>
+        public const string CompatRel = "GameData/Lonapse/Compat";
         public static List<RuntimeTemplate> runtimeTemplates = new List<RuntimeTemplate>();
         /// <summary>Every parsed runtime template, the muted mods included. runtimeTemplates is this without the
         /// templates of the muted mods (ApplyModMutes).</summary>
@@ -36,7 +39,7 @@ namespace Lonapse
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
-        // Plan v5: rows without a clip (probe) and playable probe scenes (IsProbeScene)
+        // Rows without a clip (probe) and playable probe scenes (IsProbeScene)
         public static int subtitleOnlyCount, probeSceneCount;
         public static string status = "not loaded";
 
@@ -192,7 +195,8 @@ namespace Lonapse
                     files.Add(new KeyValuePair<string, IList<string>>(Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
                 int own = files.Count;
                 // other mods: GameData/<Mod>/Lonapse/*.tsv, after the Lonapse files (a duplicate id is the mod's row)
-                var modFiles = ModLineFiles();
+                var modFiles = CompatLineFiles();
+                modFiles.AddRange(ModLineFiles());   // after the compat lines, so a mod's own row wins a duplicate id
                 files.AddRange(modFiles);
                 var rerr = new List<string>();
                 allRuntimeTemplates = RuntimeLines.ParseAll(files, rerr);
@@ -236,6 +240,44 @@ namespace Lonapse
             if (string.IsNullOrEmpty(where)) return null;
             int i = where.IndexOf("/Lonapse/", StringComparison.Ordinal);
             return i > 0 ? where.Substring(0, i) : null;
+        }
+
+        /// <summary>The mods of the Compat folders that are installed, for the Mods tab.</summary>
+        public static readonly HashSet<string> compatMods = new HashSet<string>(StringComparer.Ordinal);
+
+        /// <summary>The .tsv files of Compat/&lt;Assembly&gt;/ whose assembly is loaded, named like the files of that
+        /// mod (&lt;Assembly&gt;/Lonapse/file.tsv).</summary>
+        static List<KeyValuePair<string, IList<string>>> CompatLineFiles()
+        {
+            var r = new List<KeyValuePair<string, IList<string>>>();
+            compatMods.Clear();
+            string dir = Path.Combine(KSPUtil.ApplicationRootPath, CompatRel);
+            if (!Directory.Exists(dir)) return r;
+            string[] mods = Directory.GetDirectories(dir);
+            Array.Sort(mods, StringComparer.Ordinal);
+            foreach (string m in mods)
+            {
+                string mod = Path.GetFileName(m);
+                try
+                {
+                    if (!AssemblyLoaded(mod)) continue;
+                    string[] paths = Directory.GetFiles(m, "*.tsv");
+                    Array.Sort(paths, StringComparer.Ordinal);
+                    foreach (string f in paths)
+                        r.Add(new KeyValuePair<string, IList<string>>(mod + "/Lonapse/" + Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+                    if (paths.Length > 0) { compatMods.Add(mod); Log.Info("Lonapse: " + mod + " is installed, its lines from Lonapse load"); }
+                }
+                catch (Exception e) { Log.Warn("Lonapse: lines for " + mod + " not read: " + e.Message); }
+            }
+            return r;
+        }
+
+        /// <summary>A loaded plugin with this assembly (file) name. KSP's own name for it is the KSPAssembly title.</summary>
+        public static bool AssemblyLoaded(string name)
+        {
+            foreach (AssemblyLoader.LoadedAssembly la in AssemblyLoader.loadedAssemblies)
+                if (la != null && la.assembly != null && la.assembly.GetName().Name == name) return true;
+            return false;
         }
 
         /// <summary>The .tsv files in GameData/&lt;Mod&gt;/Lonapse/ of every other mod, sorted by mod and name. A mod
@@ -324,19 +366,19 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>Plan v5: true for a probe row. It has no clip, only its subtitle.</summary>
+        /// <summary>True for a probe row. It has no clip, only its subtitle.</summary>
         public static bool SubtitleOnly(PhraseEntry e)
         {
             return e != null && e.SubtitleOnly;
         }
 
-        /// <summary>Plan v5: the speaker role of a row (crew mc probe), null for null.</summary>
+        /// <summary>The speaker role of a row (crew mc probe), null for null.</summary>
         public static string SpeakerRole(PhraseEntry e)
         {
             return e == null ? null : e.Role;
         }
 
-        /// <summary>Plan v5: beep mood of a probe row (happy offended ...), empty for other rows.</summary>
+        /// <summary>Beep mood of a probe row (happy offended ...), empty for other rows.</summary>
         public static string BeepMood(PhraseEntry e)
         {
             return e == null ? "" : e.Beep;

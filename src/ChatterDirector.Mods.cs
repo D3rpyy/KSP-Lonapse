@@ -97,6 +97,9 @@ namespace Lonapse
         }
 
         /// <summary>LonapseApi.Cancel: drops a waiting mod event that has not played yet. True when one was waiting.</summary>
+        /// <summary>A mod event whose id starts with prefix waits to play.</summary>
+        public bool ModWaiting(string prefix) { return modQueue.Waiting(prefix); }
+
         public bool CancelModEvent(string id)
         {
             if (id == null || !modQueue.Cancel(id)) return false;
@@ -129,7 +132,10 @@ namespace Lonapse
         {
             ModEventInfo info = ModEvents.Info(PhraseClips.runtimeTemplates, id);
             KerbalVoice k = d.kerbal != null ? host.roster.Find(d.kerbal) : null;
-            if (k == null || !CanChat(k)) k = PickRested();
+            // the kerbal who did it says line 1: gone or out since, nobody else says it for them (Mission Control may)
+            bool named = d.kerbal != null;
+            if (k != null && !CanChat(k)) k = null;
+            if (k == null && !named) k = PickRested();
             bool reach = !McUnreachable && host.signal.connected && host.settings.radioEnabled;
             bool text = !RuntimeOn;
             bool chatOk = info.HasChat && info.Who != "mc" && k != null;

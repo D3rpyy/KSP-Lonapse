@@ -1,4 +1,4 @@
-// v4 events (plan v4, features 4 to 8 and 10): KSP side. Subscribes to GameEvents for the active vessel,
+// Game events, the KSP side. Subscribes to GameEvents for the active vessel,
 // feeds the pure watchers in EventWatchers.cs and hands every EventRequest to `play` (wired by the addon to
 // ChatterDirector.PlayEvent). Init and Dispose add and remove exactly the same handlers.
 #if !DC_OFFLINE_TEST
@@ -106,7 +106,7 @@ namespace Lonapse
                     Log.Info("Event part_lost: " + partLoss.lastCount + " parts");
                     if (cfg.eventPartLoss) Send(r);
                 }
-                if (crewLoss.Tick(now, tu.crewLostDelay, tu.eventMaxAge, out r))
+                if (crewLoss.Tick(now, tu.crewLostDelay, tu.eventMaxAge, StillLost, out r))
                 {
                     Log.Info("Event crew_lost: " + string.Join(", ", crewLoss.lastNames.ToArray()));
                     if (cfg.eventCrewLoss) Send(r);
@@ -166,7 +166,7 @@ namespace Lonapse
             try
             {
                 if (!Enabled || !host.settings.eventSoi || !IsActive(d.host) || d.to == null) return;
-                // feature 4: no welcome while the crew panics or the ship is in plasma
+                // no welcome while the crew panics or the ship is in plasma
                 if (lastPanic || lastPlasma) { Log.Debug("SOI change to " + d.to.bodyName + " skipped (panic or plasma)"); return; }
                 Tuning tu = host.settings.tuning;
                 CelestialBody home = FlightGlobals.GetHomeBody();
@@ -270,9 +270,34 @@ namespace Lonapse
             {
                 if (pcm == null || from == to) return;   // set_rosterStatus fires even when the value stays the same
                 if (to != ProtoCrewMember.RosterStatus.Dead && to != ProtoCrewMember.RosterStatus.Missing) return;
+                // DeepFreeze makes a frozen kerbal Unowned before it sets Dead: stored, not lost
+                if (pcm.type == ProtoCrewMember.KerbalType.Unowned) { Log.Info("Crew frozen or stored, not lost: " + Names.Localize(pcm.name)); return; }
                 if (crewLoss.OnLost(now, pcm.name)) Log.Info("Crew lost: " + Names.Localize(pcm.name) + " (" + to + ")");
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnKerbalStatusChange", e); }
+        }
+
+        /// <summary>At crew_lost time: the kerbal is still dead or missing, not frozen or thawed in the meantime.
+        /// A kerbal the roster does not know counts as lost.</summary>
+        private static bool StillLost(string name)
+        {
+            try
+            {
+                ProtoCrewMember pcm = HighLogic.CurrentGame != null ? HighLogic.CurrentGame.CrewRoster[name] : null;
+                if (pcm == null) return true;
+                if (pcm.type == ProtoCrewMember.KerbalType.Unowned) return false;
+                return pcm.rosterStatus == ProtoCrewMember.RosterStatus.Dead || pcm.rosterStatus == ProtoCrewMember.RosterStatus.Missing;
+            }
+            catch (Exception) { return true; }
+        }
+
+        /// <summary>DeepFreeze: a frozen kerbal died with the freezer. The roster status stays Dead, so no status change
+        /// comes for it. aboard: DeepFreeze listed them in the active vessel, also when the ship was loaded with them
+        /// frozen (then the crew list never had them).</summary>
+        public void OnFrozenKerbalDied(string name, bool aboard)
+        {
+            if (aboard) crewLoss.Know(name);
+            if (crewLoss.OnLost(now, name)) Log.Info("Crew lost: " + Names.Localize(name) + " (died frozen)");
         }
 
         // fallback for a death that does not go through the roster status (sender is the kerbal name)

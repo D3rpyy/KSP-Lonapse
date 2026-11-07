@@ -157,7 +157,7 @@ ev_eva_08_2	eva_check	chatter	calm	mc	ev_eva_08	2	m	any	any	Recibido. Muévete c
 ev_eva_09	eva_check	chatter	calm	crew	ev_eva_09	1	both	any	any	El traje funciona perfecto.	The suit works perfectly. | The suit works perfectly. | Suit works great.	
 ev_eva_10	eva_check	chatter	calm	crew	ev_eva_10	1	both	any	any	Me encanta estar aquí fuera.	I love being out here. | I love being out here. | Outside is the best.	
 												
-# EVA fall (user test): the EVA kerbal trips or falls and ragdolls on the ground. Replaces the touchdown lines on EVA.												
+# EVA fall: the EVA kerbal trips or falls and ragdolls on the ground. Replaces the touchdown lines on EVA.												
 ev_evafall_01_1	eva_fall	chatter	calm	crew	ev_evafall_01	1	both	any	any	¡Uy! ¡Estoy bien!	Whoa! I'm okay! | Whoa! I'm okay! | Whoa! Fine! I'm fine!	
 ev_evafall_01_2	eva_fall	chatter	calm	mc	ev_evafall_01	2	m	any	any	Te hemos visto. Con cuidado.	We saw that. Careful. | We saw that. Careful. | Saw that. Be careful.	
 ev_evafall_02_1	eva_fall	chatter	calm	crew	ev_evafall_02	1	both	any	any	¡Ay! El suelo está duro.	Ow! The ground is hard. | Ow! The ground is hard. | Ow! Hard ground on {here}.	 |  | ¡Ay! El suelo de {here} está duro.

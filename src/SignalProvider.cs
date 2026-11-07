@@ -1,6 +1,6 @@
-// Signal provider chain (plan v2, req 17 and 4.4): override, CommNet, RemoteTech (reflection), distance to KSC.
+// Signal provider chain: override, CommNet, RemoteTech (reflection), distance to KSC.
 // Polled at signalPollSec. A provider switch only sticks after signalHoldTime seconds. Every switch is logged.
-// Plan v6: an EVA kerbal has no antenna of its own, so its suit radio relays through the best nearby loaded ship.
+// An EVA kerbal has no antenna of its own, so its suit radio relays through the best nearby loaded ship.
 // The ship's signal, scaled by the suit range, counts (SignalMath.RelaySignal). No ship link means no EVA link.
 using System;
 using System.Reflection;
@@ -19,8 +19,8 @@ namespace Lonapse
         public bool occluded;
         public double distanceKm;
         public double homeKm;                          // km from the surface of the home body (light delay)
-        public string relayName;                       // v6 EVA: the ship the suit radio relays through, null for none
-        public double relayKm;                         // v6 EVA: km to that ship
+        public string relayName;                       // EVA: the ship the suit radio relays through, null for none
+        public double relayKm;                         // EVA: km to that ship
 
         /// <summary>One read of every provider for one vessel.</summary>
         private struct Link
@@ -124,7 +124,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Plan v6: the EVA kerbal's link through the best loaded ship within suit range. Per provider the better of
+        /// The EVA kerbal's link through the best loaded ship within suit range. Per provider the better of
         /// the kerbal's own link and the ship's link times the suit range wins. The ship must have a control point
         /// (a command pod or probe core), like a real relay would need one. Without a ship nothing changes.
         /// </summary>

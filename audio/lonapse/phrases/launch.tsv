@@ -43,7 +43,7 @@ staging_ign_03	staging	callout	none	crew	staging_ign_03	1	both	any	any	Motores e
 staging_ign_s2_1	staging	callout	none	crew	staging_ign_s2	1	both	any	any	Motor encendido.	Engine lit. | Engine lit. | The engine is lit.	
 staging_ign_s2_2	staging	callout	none	mc	staging_ign_s2	2	m	any	any	Recibido, buen encendido.	Copy, good ignition. | Copy, good ignition. | Copy. Clean ignition.	
 staging_any_02	staging	callout	none	crew	staging_any_02	1	both	any	any	Siguiente etapa.	Next stage. | Next stage. | On to the next stage.	
-# W1 (plan v3): serious launch and return radio, procedural. Calm mostly, tense lines name their cause.												
+# Serious launch and return radio, procedural. Calm mostly, tense lines name their cause.												
 la_pre_s1_1	chatter	chatter	calm	mc	la_pre_s1	1	m	prelaunch	any	Tripulación, comprobación final. ¿Estado?	Crew, final check. Status? | Crew, final check. Status? | Final check, crew. Status?	
 la_pre_s1_2	chatter	chatter	calm	crew	la_pre_s1	2	both	prelaunch	any	Todos listos en cabina.	All set in the cockpit. | All set in the cockpit. | Cockpit is ready.	
 la_pre_s1_3	chatter	chatter	calm	mc	la_pre_s1	3	m	prelaunch	any	Recibido. Buen trabajo.	Copy. Good work. | Copy. Good work. | Copy. Nice.	

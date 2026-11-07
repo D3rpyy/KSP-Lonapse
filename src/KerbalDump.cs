@@ -1,4 +1,4 @@
-// Debug dump for the talking-kerbal study (req 24): writes the transform tree, the components, the animator
+// Debug dump for the talking-kerbal study: writes the transform tree, the components, the animator
 // parameters and the expression system settings of every kerbal model the plugin can reach, so the mouth animation
 // can be built on real bone names. Output: GameData/Lonapse/PluginData/kerbal_dump.txt, summary in KSP.log.
 // The dump itself only reads. The jaw probe afterwards (JawProbe) rotates each lower jaw by a marker angle for one

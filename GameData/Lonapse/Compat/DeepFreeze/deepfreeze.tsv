@@ -1,0 +1,84 @@
+id	kind	when	spanish	english
+# Runtime voice: lines for DeepFreeze, shipped by Lonapse. They load only when DeepFreeze is installed, as the mod DeepFreeze in the Mods tab. Lonapse sends the events itself.				
+# deepfreeze.frozen: a kerbal is frozen. Somebody else aboard says line 1. deepfreeze.thawed: the thawed kerbal says				
+# line 1. deepfreeze.comatose: the freezer lost power and the kerbal came out comatose, somebody else talks.				
+# x_frozen is the first name of the frozen, thawed or comatose kerbal. No gendered words about them in the Spanish.				
+# Lonapse groups kerbals frozen or thawed one after another (3 s after the last ends, none running). One kerbal: the event itself.				
+# Two: the event with _two, x_frozen and x_frozen2. Three or more: the event with _group, x_count (x_frozen is one).				
+# A thaw of two or a group: a thawed kerbal says line 1 and is x_frozen. No cooldown, the groups keep it short.				
+rt_deepfreeze_frozen_meta	meta	on=deepfreeze.frozen cooldown=0 priority=high		
+rt_deepfreeze_frozen_two_meta	meta	on=deepfreeze.frozen_two cooldown=0 priority=high		
+rt_deepfreeze_frozen_group_meta	meta	on=deepfreeze.frozen_group cooldown=0 priority=high		
+rt_deepfreeze_thawed_meta	meta	on=deepfreeze.thawed cooldown=0 priority=high		
+rt_deepfreeze_thawed_two_meta	meta	on=deepfreeze.thawed_two cooldown=0 priority=high		
+rt_deepfreeze_thawed_group_meta	meta	on=deepfreeze.thawed_group cooldown=0 priority=high		
+rt_deepfreeze_comatose_meta	meta	on=deepfreeze.comatose cooldown=0 priority=high		
+rt_deepfreeze_comatose_two_meta	meta	on=deepfreeze.comatose_two cooldown=0 priority=high		
+rt_deepfreeze_comatose_group_meta	meta	on=deepfreeze.comatose_group cooldown=0 priority=high		
+# Frozen: the crew about the kerbal in the freezer.				
+rt_chat_deepfreeze_frozen_1	chat	on=deepfreeze.frozen	{other}, {x_frozen} ya está en el hielo. | {other}, {x_frozen} está congelando. Bueno, ya está.	{other}, {x_frozen} is on ice now. | {other}, {x_frozen} is freezing. Well, done freezing.
+rt_chat_deepfreeze_frozen_2	chat		Qué paz. Por fin nadie ronca. | Qué suerte. Meses sin fregar platos.	So peaceful. Finally nobody snores. | Lucky. Months without doing the dishes.
+rt_chat_deepfreeze_frozen_3	chat		No te comas sus galletas. | Ya me he comido sus galletas.	Don't eat their cookies. | I already ate their cookies.
+rt_chat_deepfreeze_frozen2_1	chat	on=deepfreeze.frozen	{other}, ¿crees que {x_frozen} sueña ahí dentro? | {other}, mira por la ventanita. {x_frozen} parece un helado.	{other}, do you think {x_frozen} dreams in there? | {other}, look through the little window. {x_frozen} looks like an ice cream.
+rt_chat_deepfreeze_frozen2_2	chat		Seguro que sueña con queso. | No le hagas fotos. O sí. Hazle fotos.	Bet they dream about cheese. | Don't take pictures. Or do. Take pictures.
+rt_chat_deepfreeze_frozen2_3	chat		Queso congelado. Qué triste. | Para el álbum de la misión.	Frozen cheese. How sad. | For the mission album.
+rt_chat_deepfreeze_frozensolo_1	chat	on=deepfreeze.frozen	{x_frozen} está en el congelador. Ahora hay mucho silencio aquí. | Que duermas bien, {x_frozen}. Dejo la luz encendida.	{x_frozen} is in the freezer. It's very quiet in here now. | Sleep well, {x_frozen}. I'll leave the light on.
+rt_deepfreeze_frozen	event	on=deepfreeze.frozen	Vemos a {x_frozen} en el congelador. Constantes vitales frías. Muy frías. | {x_frozen} está en el hielo. Dulces sueños. Os despertamos al llegar.	We see {x_frozen} in the freezer. Vital signs are cold. Very cold. | {x_frozen} is on ice. Sweet dreams. We'll wake you when you get there.
+rt_re_deepfreeze_frozen	reply	to=rt_deepfreeze_frozen	Recibido. Le hablaré de vez en cuando. | Entendido. Yo vigilo el congelador.	Copy. I'll talk to them now and then. | Roger. I'll keep an eye on the freezer.
+# Thawed: the kerbal who just came out says line 1.				
+rt_chat_deepfreeze_thawed_1	chat	on=deepfreeze.thawed	Brr. {other}, ¿cuánto tiempo he estado fuera? | {other}, ¿por qué hace tanto calor aquí?	Brr. {other}, how long was I out? | {other}, why is it so warm in here?
+rt_chat_deepfreeze_thawed_2	chat		Bastante. Te has perdido la comida. Muchas comidas. | No hace calor, {x_frozen}. Tú sigues con frío.	Long enough. You missed lunch. Lots of lunches. | It's not warm, {x_frozen}. You're still cold.
+rt_chat_deepfreeze_thawed_3	chat		¿Y mis galletas? | Me siento como un pescado del congelador.	And my cookies? | I feel like a fish stick from the freezer.
+rt_chat_deepfreeze_thawed2_1	chat	on=deepfreeze.thawed	{other}, no siento los dedos de los pies. | {other}, ¿ya hemos llegado?	{other}, I can't feel my toes. | {other}, are we there yet?
+rt_chat_deepfreeze_thawed2_2	chat		Cuéntalos. Deberían ser diez. | Casi. Hola de nuevo, {x_frozen}.	Count them. There should be ten. | Almost. Welcome back, {x_frozen}.
+rt_chat_deepfreeze_thawed2_3	chat		Uno, dos... luego sigo. | ¿Casi? ¿Entonces para qué me despertáis?	One, two... I'll finish later. | Almost? Then why did you wake me up?
+rt_chat_deepfreeze_thawedsolo_1	chat	on=deepfreeze.thawed	Brr. ¿Hola? ¿Nadie? Vale, solo yo. | Fuera del hielo. Los dedos de los pies todavía no.	Brr. Hello? Anyone? Okay, just me. | Out of the ice. My toes are not, yet.
+rt_deepfreeze_thawed	event	on=deepfreeze.thawed	Hola de nuevo, {x_frozen}. ¿Cómo van esos dedos? | {x_frozen} ya está fuera del hielo. Despacio, que marea.	Welcome back, {x_frozen}. How are those fingers? | {x_frozen} is out of the ice. Take it slow, it makes you dizzy.
+rt_re_deepfreeze_thawed	reply	to=rt_deepfreeze_thawed	Están todos. Creo. | ¿Mareo? Yo siempre estoy así.	They're all there. I think. | Dizzy? I'm always like this.
+# Comatose: the freezer lost power and the kerbal is out cold. Somebody else talks.				
+rt_chat_deepfreeze_comatose_1	chat	on=deepfreeze.comatose	{other}, el congelador se ha quedado sin energía. {x_frozen} no despierta. | {other}, {x_frozen} ha salido del hielo, pero no del todo.	{other}, the freezer ran out of power. {x_frozen} won't wake up. | {other}, {x_frozen} came out of the ice, but not all the way.
+rt_chat_deepfreeze_comatose_2	chat		¿Se pondrá bien? | Como un lunes por la mañana, entonces.	Will they be okay? | Like a Monday morning, then.
+rt_chat_deepfreeze_comatose_3	chat		Despertará. De mal humor, pero despertará. | Déjale descansar. Y arreglemos la energía.	They'll wake up. Grumpy, but they'll wake up. | Let them rest. And let's fix the power.
+rt_chat_deepfreeze_comatosesolo_1	chat	on=deepfreeze.comatose	Sin energía en el congelador. {x_frozen}, aguanta. | {x_frozen} no responde. Necesito baterías. Ya.	No power in the freezer. {x_frozen}, hang in there. | {x_frozen} isn't responding. I need batteries. Now.
+rt_deepfreeze_comatose	event	on=deepfreeze.comatose	Vemos un fallo de energía en el congelador. {x_frozen} está en coma. Recuperad la energía. | {x_frozen} ha salido del hielo demasiado rápido. Necesita descanso, y vosotros energía.	We see a power failure in the freezer. {x_frozen} is comatose. Get the power back. | {x_frozen} came out of the ice too fast. They need rest, and you need power.
+rt_re_deepfreeze_comatose	reply	to=rt_deepfreeze_comatose	Recibido. Buscando las baterías. | Entendido. Que nadie toque el congelador.	Copy. Looking for the batteries. | Roger. Nobody touch the freezer.
+# Frozen, two kerbals: somebody else aboard.				
+rt_chat_deepfreeze_frozentwo_1	chat	on=deepfreeze.frozen_two	{other}, {x_frozen} y {x_frozen2} ya están en el hielo. | {other}, mira. {x_frozen} y {x_frozen2}, congelando juntos.	{other}, {x_frozen} and {x_frozen2} are on ice now. | {other}, look. {x_frozen} and {x_frozen2}, freezing together.
+rt_chat_deepfreeze_frozentwo_2	chat		Más sitio para nosotros. | Qué bonito. Como dos helados en una nevera.	More room for us. | How sweet. Like two ice creams in one fridge.
+rt_chat_deepfreeze_frozentwo_3	chat		Y más galletas. | Que no se peleen por la manta.	And more cookies. | Let's hope they don't fight over the blanket.
+rt_chat_deepfreeze_frozentwosolo_1	chat	on=deepfreeze.frozen_two	{x_frozen} y {x_frozen2} están en el congelador. Me quedo de guardia. | Dos en el hielo: {x_frozen} y {x_frozen2}. Dulces sueños.	{x_frozen} and {x_frozen2} are in the freezer. I'm on watch. | Two on ice: {x_frozen} and {x_frozen2}. Sweet dreams.
+rt_deepfreeze_frozen_two	event	on=deepfreeze.frozen_two	Vemos a {x_frozen} y {x_frozen2} en el congelador. Constantes frías y estables. | {x_frozen} y {x_frozen2} en el hielo. Os despertamos al llegar.	We see {x_frozen} and {x_frozen2} in the freezer. Vitals cold and steady. | {x_frozen} and {x_frozen2} on ice. We'll wake them when you get there.
+rt_re_deepfreeze_frozen_two	reply	to=rt_deepfreeze_frozen_two	Recibido. Ahora se oye el silencio. | Entendido. Les dejo una nota en el cristal.	Copy. Now you can hear the silence. | Roger. I'll leave them a note on the glass.
+# Frozen, a group of three or more: somebody else aboard.				
+rt_chat_deepfreeze_frozengroup_1	chat	on=deepfreeze.frozen_group	{other}, ya van {x_count} en el congelador. | {other}, {x_count} kerbals en el hielo. Esto parece un supermercado.	{other}, that's {x_count} in the freezer now. | {other}, {x_count} kerbals on ice. This looks like a supermarket.
+rt_chat_deepfreeze_frozengroup_2	chat		Y aquí toca hacer el trabajo de todo el mundo. | Pasillo de congelados, a la izquierda.	And we get to do everyone's work. | Frozen aisle, on the left.
+rt_chat_deepfreeze_frozengroup_3	chat		Por lo menos no discuten. | No les pongas etiqueta de oferta.	At least nobody argues. | Don't put a sale sticker on them.
+rt_chat_deepfreeze_frozengroupsolo_1	chat	on=deepfreeze.frozen_group	{x_count} en el hielo. Ahora hay mucho silencio aquí. | Todo el mundo congelado menos yo. {x_count} sueños a la vez.	{x_count} on ice. It's very quiet in here now. | Everyone frozen but me. {x_count} dreams at once.
+rt_deepfreeze_frozen_group	event	on=deepfreeze.frozen_group	Contamos {x_count} kerbals en el congelador. Las constantes están frías y estables. | {x_count} en el hielo. Buenas noches a todo el mundo.	We count {x_count} kerbals in the freezer. Vitals are cold and steady. | {x_count} on ice. Good night, everyone.
+rt_re_deepfreeze_frozen_group	reply	to=rt_deepfreeze_frozen_group	Recibido. Apago la música. | Entendido. Les leo un cuento si hace falta.	Copy. I'm turning off the music. | Roger. I'll read them a story if needed.
+# Thawed, two kerbals: one of them says line 1 and is x_frozen.				
+rt_chat_deepfreeze_thawedtwo_1	chat	on=deepfreeze.thawed_two	Brr. {x_frozen2}, ¿tú también has despertado? | {x_frozen2}, ¿notas los dedos? Yo no.	Brr. {x_frozen2}, are you awake too? | {x_frozen2}, can you feel your fingers? I can't.
+rt_chat_deepfreeze_thawedtwo_2	chat		Hola de nuevo, pareja. Os hemos guardado la comida. | Hola de nuevo, pareja. Hay chocolate caliente.	Welcome back, you two. We saved you lunch. | Welcome back, you two. There's hot chocolate.
+rt_chat_deepfreeze_thawedtwo_3	chat		¿Cuánto tiempo ha pasado? | Dos tazas, por favor. Grandes.	How long has it been? | Two cups, please. Big ones.
+rt_chat_deepfreeze_thawedtwosolo_1	chat	on=deepfreeze.thawed_two	Brr. Fuera del hielo, y {x_frozen2} también. Hola, {x_frozen2}. | {x_frozen2}, despierta. Bueno, ya has despertado. Más o menos.	Brr. Out of the ice, and {x_frozen2} too. Hi, {x_frozen2}. | {x_frozen2}, wake up. Well, you're awake. More or less.
+rt_deepfreeze_thawed_two	event	on=deepfreeze.thawed_two	Hola de nuevo, {x_frozen} y {x_frozen2}. Despacio, que marea. | {x_frozen} y {x_frozen2} fuera del hielo. Contad los dedos, por favor.	Welcome back, {x_frozen} and {x_frozen2}. Take it slow, it makes you dizzy. | {x_frozen} and {x_frozen2} out of the ice. Count your fingers, please.
+rt_re_deepfreeze_thawed_two	reply	to=rt_deepfreeze_thawed_two	Veinte dedos. En total. | Recibido. ¿Alguien ha visto mis calcetines?	Twenty fingers. In total. | Copy. Has anyone seen my socks?
+# Thawed, a group of three or more: one of them says line 1.				
+rt_chat_deepfreeze_thawedgroup_1	chat	on=deepfreeze.thawed_group	Brr. ¿Todo el mundo despierto? Somos {x_count} narices heladas. | {other}, ¿qué día es? Y no digas que lunes.	Brr. Everyone awake? That's {x_count} frozen noses. | {other}, what day is it? And don't say Monday.
+rt_chat_deepfreeze_thawedgroup_2	chat		Hola de nuevo a todo el mundo. La cocina está abierta. | Es martes. Bueno, no lo sé. Hace mucho.	Welcome back, everyone. The kitchen is open. | It's Tuesday. Well, I don't know. It's been a while.
+rt_chat_deepfreeze_thawedgroup_3	chat		Que nadie se pelee por la ducha. | Entonces quiero el desayuno de todos esos días.	Nobody fight over the shower. | Then I want breakfast for all those days.
+rt_chat_deepfreeze_thawedgroupsolo_1	chat	on=deepfreeze.thawed_group	Brr. {x_count} kerbals fuera del hielo a la vez. Qué ruido de repente. | Todo el mundo despierto. Abrid la ventana. Bueno, no.	Brr. {x_count} kerbals out of the ice at once. So noisy all of a sudden. | Everyone's awake. Open the window. Well, no.
+rt_deepfreeze_thawed_group	event	on=deepfreeze.thawed_group	Contamos {x_count} kerbals fuera del hielo. Hola de nuevo a todo el mundo. | {x_count} despertares a la vez. Id despacio y bebed agua.	We count {x_count} kerbals out of the ice. Welcome back, everyone. | {x_count} wake-ups at once. Go slow and drink water.
+rt_re_deepfreeze_thawed_group	reply	to=rt_deepfreeze_thawed_group	Recibido. La cola del baño ya es larga. | Entendido. Nadie encuentra sus calcetines.	Copy. The line for the bathroom is long already. | Roger. Nobody can find their socks.
+# Comatose, two kerbals: somebody else talks.				
+rt_chat_deepfreeze_comatosetwo_1	chat	on=deepfreeze.comatose_two	{other}, el congelador se ha quedado sin energía. {x_frozen} y {x_frozen2} no despiertan. | {other}, {x_frozen} y {x_frozen2} han salido del hielo, pero no del todo.	{other}, the freezer ran out of power. {x_frozen} and {x_frozen2} won't wake up. | {other}, {x_frozen} and {x_frozen2} came out of the ice, but not all the way.
+rt_chat_deepfreeze_comatosetwo_2	chat		Necesitamos energía. Ya. | Dejémosles descansar. Y busquemos baterías.	We need power. Now. | Let them rest. And let's find batteries.
+rt_chat_deepfreeze_comatosesolo2_1	chat	on=deepfreeze.comatose_two	Sin energía. {x_frozen} y {x_frozen2} no responden. Aguantad. | {x_frozen} y {x_frozen2} en coma. Necesito baterías.	No power. {x_frozen} and {x_frozen2} aren't responding. Hang in there. | {x_frozen} and {x_frozen2} are comatose. I need batteries.
+rt_deepfreeze_comatose_two	event	on=deepfreeze.comatose_two	Fallo de energía en el congelador. {x_frozen} y {x_frozen2} están en coma. Recuperad la energía. | {x_frozen} y {x_frozen2} han salido del hielo demasiado rápido. Necesitan descanso.	Power failure in the freezer. {x_frozen} and {x_frozen2} are comatose. Get the power back. | {x_frozen} and {x_frozen2} came out of the ice too fast. They need rest.
+rt_re_deepfreeze_comatose_two	reply	to=rt_deepfreeze_comatose_two	Recibido. Buscando las baterías. | Entendido. Les vigilo.	Copy. Looking for the batteries. | Roger. I'm watching them.
+# Comatose, a group of three or more: somebody else talks.				
+rt_chat_deepfreeze_comatosegroup_1	chat	on=deepfreeze.comatose_group	{other}, el congelador ha fallado. {x_count} kerbals en coma. | {other}, sin energía en el congelador. Son {x_count} y nadie despierta.	{other}, the freezer failed. {x_count} kerbals comatose. | {other}, no power in the freezer. That's {x_count} and none of them wake up.
+rt_chat_deepfreeze_comatosegroup_2	chat		Energía primero. Luego mantas. | Vale. Tú baterías, yo mantas.	Power first. Then blankets. | Okay. You get batteries, I get blankets.
+rt_chat_deepfreeze_comatosegroupsolo_1	chat	on=deepfreeze.comatose_group	{x_count} kerbals en coma y yo sin energía. Esto no está bien. | El congelador ha fallado. {x_count} sin despertar. Aguantad.	{x_count} kerbals comatose and I have no power. This is bad. | The freezer failed. {x_count} won't wake up. Hang in there.
+rt_deepfreeze_comatose_group	event	on=deepfreeze.comatose_group	Fallo de energía en el congelador. {x_count} kerbals en coma. Recuperad la energía ya. | {x_count} kerbals han salido del hielo demasiado rápido. Necesitan descanso y vosotros energía.	Power failure in the freezer. {x_count} kerbals comatose. Get the power back now. | {x_count} kerbals came out of the ice too fast. They need rest, and you need power.
+rt_re_deepfreeze_comatose_group	reply	to=rt_deepfreeze_comatose_group	Recibido. Todas las manos a las baterías. | Entendido. Nadie toca el congelador.	Copy. All hands on the batteries. | Roger. Nobody touches the freezer.

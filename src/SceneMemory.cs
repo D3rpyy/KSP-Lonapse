@@ -1,4 +1,4 @@
-// Line memory (0.6.0, user report: players hear the same lines too often). A shuffle bag that works with the
+// Line memory (players hear the same lines too often). A shuffle bag that works with the
 // changing lists the director picks from: lines that were never heard come first, then only the quarter of the
 // list that was heard longest ago. With a fixed list every line plays once before any line repeats, and a line
 // never comes back within about three quarters of the list. Kept between game sessions (PluginData/played.txt).

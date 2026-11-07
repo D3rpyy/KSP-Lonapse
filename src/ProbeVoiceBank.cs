@@ -1,4 +1,4 @@
-// Probe voices (0.6.0): AudioClips made in game with ProbeSynth, and the ModuleLonapse part module.
+// Probe voices: AudioClips made in game with ProbeSynth, and the ModuleLonapse part module.
 using System;
 using System.Collections.Generic;
 using UnityEngine;

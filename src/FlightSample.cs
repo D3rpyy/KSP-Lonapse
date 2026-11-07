@@ -30,11 +30,14 @@ namespace Lonapse
         public bool inPlasmaStock;
         // 1 Hz group
         public double fuelFrac;     // ships: liquid/solid/mono rule (FuelMath). EVA: jetpack propellant fraction
-        public bool engineOut;      // an engine flamed out while it still had propellant (launch cap, req 10)
-        public double ecFrac;       // v4 power events: connected ElectricCharge amount / max, 1 when max is 0
+        public bool engineOut;      // an engine flamed out while it still had propellant (launch cap)
+        public double ecFrac;       // power events: connected ElectricCharge amount / max, 1 when max is 0
         public bool hasSolar;       // the vessel has a solar panel (ModuleDeployableSolarPanel, fixed panels too), 1 Hz
+        public bool hasShield;      // the vessel has a heat shield (ModuleAblator), 1 Hz
+        public bool chuteStowed;    // a parachute is still packed or armed (STOWED or ACTIVE), 1 Hz
+        public bool chuteOpen;      // a parachute is open or half open (SEMIDEPLOYED or DEPLOYED), 1 Hz
         public double ecMax;        // connected ElectricCharge capacity (power events need ecMax >= powerMinMax)
-        // EVA (req 12). Defaults are the neutral values for a ship.
+        // EVA. Defaults are the neutral values for a ship.
         public bool eva;            // Kerbal on EVA
         public double evaPropFrac;  // jetpack "EVA Propellant" fraction (KerbalEVA.Fuel / FuelCapacity), valid when eva
         public double evaEcFrac;    // ElectricCharge fraction, valid when eva (stock kerbals carry none, so 1)
@@ -42,17 +45,17 @@ namespace Lonapse
         public bool evaThrusting;   // KerbalEVA.JetpackIsThrusting, per tick
         public bool evaRagdoll;     // KerbalEVA.isRagdoll, per tick
         public float evaRun;        // 0..1 how hard the EVA kerbal runs on the ground (walk speed 0, run speed 1), per tick
-        // rover (req 13), per tick. Set for a rover with or without crew (plan v6).
+        // rover, per tick. Set for a rover with or without crew.
         public bool rover;
         public float roverRough;    // std dev of vertical acceleration over 1 s, m/s2
         public float roverAirTime;  // s since the wheels last touched the ground
         public float roverTilt;     // deg away from the attitude the rover had when it last stood still
-        // flight phase inputs (plan v3, req 3 and 5), per tick
+        // flight phase inputs, per tick
         public string body;         // FlightPhase.BodyKey(mainBody.bodyName): stock key or "generic"
         public double alt;          // m above sea level
         public double atmDepth;     // m, 0 when the body has no atmosphere
         public string phase;        // current FlightPhase, set by the director (not by the sampler)
-        // probe mode (plan v5). Filled by the gate code, not by the sampler. Defaults mean "no probe".
+        // probe mode. Filled by the gate code, not by the sampler. Defaults mean "no probe".
         public string probeCoreKey; // ProbeCores key of the root-most probe core, null when the vessel is not in probe mode
         public bool probeAsleep;    // a probe core reports NotEnoughResources or is hibernating
 
@@ -90,7 +93,7 @@ namespace Lonapse
         public static readonly string[] Names = { "LiquidFuel", "Oxidizer", "SolidFuel", "MonoPropellant", "XenonGas" };
         private static readonly int[][] Groups = { new[] { LF, OX }, new[] { SOLID }, new[] { MONO }, new[] { XENON } };
 
-        /// <summary>EVA jetpack fuel (req 12): MonoPropellant amount / max, 1 when there is no max. Clamped 0..1.</summary>
+        /// <summary>EVA jetpack fuel: MonoPropellant amount / max, 1 when there is no max. Clamped 0..1.</summary>
         public static double EvaFraction(double amount, double max)
         {
             if (!(max > 0)) return 1.0;
@@ -147,13 +150,13 @@ namespace Lonapse
         private int shockNre;
         private bool engineOut;
         // engines in flameout with propellant left: real time the flameout was first seen. An engine counts as "out"
-        // (engine_out cause, real failure) only for EngineOutHold s, so one failure does not repeat forever (user test).
+        // (engine_out cause, real failure) only for EngineOutHold s, so one failure does not repeat forever.
         private readonly Dictionary<ModuleEngines, float> flameoutSince = new Dictionary<ModuleEngines, float>();
         private readonly List<ModuleEngines> flameoutDrop = new List<ModuleEngines>();
         public const float EngineOutHold = 20f;
         private double evaPropFrac = 1.0, evaEcFrac = 1.0, crewDist = double.PositiveInfinity;
         private double ecFrac = 1.0, ecMax;
-        private bool hasSolar;
+        private bool hasSolar, hasShield, chuteStowed, chuteOpen;
 
         // rover roughness and air time, reset with the vessel
         private RollingStat roverAccel = new RollingStat(1f);
@@ -180,7 +183,7 @@ namespace Lonapse
             flameoutSince.Clear();
             evaPropFrac = 1.0; evaEcFrac = 1.0; crewDist = double.PositiveInfinity;
             ecFrac = 1.0; ecMax = 0;
-            hasSolar = false;
+            hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false;
             roverAccel = new RollingStat(1f);
             hasLastVs = false;
             airTime = 0f;
@@ -290,6 +293,9 @@ namespace Lonapse
             s.engineOut = engineOut;
             s.ecFrac = ecFrac;
             s.hasSolar = hasSolar;
+            s.hasShield = hasShield;
+            s.chuteStowed = chuteStowed;
+            s.chuteOpen = chuteOpen;
             s.ecMax = ecMax;
             s.eva = false;
             try { s.eva = v.isEVA; } catch (Exception e) { Log.Exception("FlightSampler.eva", e); }
@@ -316,7 +322,7 @@ namespace Lonapse
             s.valid = true;
         }
 
-        /// <summary>Rover (req 13): roughness from the spread of vertical acceleration, air time, tilt. Per tick.</summary>
+        /// <summary>Rover: roughness from the spread of vertical acceleration, air time, tilt. Per tick.</summary>
         private void SampleRover(Vessel v, float dt, ref FlightSample s)
         {
             s.rover = false;
@@ -329,7 +335,7 @@ namespace Lonapse
                     lastVs = s.vs;
                     hasLastVs = true;
                 }
-                // plan v6: probe rovers too (rover moments and the stress of a probe rover)
+                // Probe rovers too (rover moments and the stress of a probe rover)
                 if (v.vesselType != VesselType.Rover) return;
                 s.rover = true;
                 s.roverRough = roverAccel.StdDev;
@@ -473,14 +479,24 @@ namespace Lonapse
         /// <summary>Connected ElectricCharge of the vessel (1 Hz). Fraction 1 when there is no capacity.</summary>
         private void SampleCharge(Vessel v)
         {
-            hasSolar = false;
+            hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false;
             try
             {
                 List<Part> parts = v.parts;
-                for (int i = 0; parts != null && i < parts.Count && !hasSolar; i++)
-                    if (parts[i] != null && parts[i].FindModuleImplementing<ModuleDeployableSolarPanel>() != null) hasSolar = true;
+                for (int i = 0; parts != null && i < parts.Count; i++)
+                {
+                    Part p = parts[i];
+                    if (p == null) continue;
+                    if (!hasSolar && p.FindModuleImplementing<ModuleDeployableSolarPanel>() != null) hasSolar = true;
+                    if (!hasShield && p.FindModuleImplementing<ModuleAblator>() != null) hasShield = true;
+                    ModuleParachute chute = p.FindModuleImplementing<ModuleParachute>();
+                    if (chute == null) continue;
+                    var st = chute.deploymentState;
+                    if (st == ModuleParachute.deploymentStates.STOWED || st == ModuleParachute.deploymentStates.ACTIVE) chuteStowed = true;
+                    else if (st == ModuleParachute.deploymentStates.SEMIDEPLOYED || st == ModuleParachute.deploymentStates.DEPLOYED) chuteOpen = true;
+                }
             }
-            catch (Exception e) { hasSolar = false; Log.Exception("FlightSampler.solar", e); }
+            catch (Exception e) { hasSolar = false; hasShield = false; chuteStowed = false; chuteOpen = false; Log.Exception("FlightSampler.parts", e); }
             ecFrac = 1.0;
             ecMax = 0;
             if (ecResId < 0) return;
@@ -496,7 +512,7 @@ namespace Lonapse
         }
 
         /// <summary>Marks the propellants burned by ignited engines. Returns false when no ignited engine is found.
-        /// Also sets engineOut when an engine flamed out while it still had propellant (launch cap, req 10).
+        /// Also sets engineOut when an engine flamed out while it still had propellant (launch cap).
         /// A burnt-out SRB or a dry stage also reports flameout, but that is normal staging, not a failure.</summary>
         private bool ScanEngines(Vessel v)
         {
@@ -544,7 +560,7 @@ namespace Lonapse
         // True when every propellant of the engine still has some resource available.
         // An engine that ran dry has at least one propellant at zero. Propellant.totalResourceAvailable is only
         // refreshed while the engine draws, so after a flameout it keeps the last value from before the tank ran dry
-        // (user test: "engine out" lines repeated after running out of fuel). The amount is read fresh here.
+        // ("engine out" lines repeated after running out of fuel). The amount is read fresh here.
         private static bool HasPropellantLeft(Part p, ModuleEngines e)
         {
             if (e.propellants == null || e.propellants.Count == 0) return false;

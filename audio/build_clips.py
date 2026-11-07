@@ -49,7 +49,7 @@ FOLDERS = {
     "static/burst":     dict(min=6,  count=8,  lo=0.2,  hi=1.5,  rms=-24.0, kind="static"),
     "static/loop":      dict(min=2,  count=3,  lo=4.0,  hi=8.0,  rms=-24.0, kind="loop"),
     "static/squelch":   dict(min=2,  count=3,  lo=0.12, hi=0.30, rms=-24.0, kind="static"),
-    # v2 radio profiles (plan 4.6). Added at the end so the existing folders keep their RNG streams.
+    # Radio profiles. Added at the end so the existing folders keep their RNG streams.
     # click_desk: station profile open click, 5 dB hotter than the other beeps because a 15 to 26 ms
     # click measures quiet at -22. headset_*: ship/EVA push-to-talk static (radio-band noise, no tone).
     # breath_loop: EVA helmet breathing bed, -30 dBFS on purpose so it stays under the voices.
@@ -57,13 +57,13 @@ FOLDERS = {
     "beeps/headset_open": dict(min=2, count=2, lo=0.150, hi=0.300, rms=-22.0, kind="beep"),
     "beeps/headset_close": dict(min=2, count=2, lo=0.150, hi=0.300, rms=-22.0, kind="beep"),
     "static/breath_loop": dict(min=1, count=2, lo=6.0, hi=8.0, rms=-30.0, kind="loop"),
-    # v2 ideas round: roger beep at the end of a crew transmission. (The touchdown ambience was removed after a user test.)
+    # Roger beep at the end of a crew transmission.
     "beeps/roger":        dict(min=1, count=2, lo=0.08, hi=0.20, rms=-22.0, kind="beep"),
     # master_alarm: soft two-tone caution loop for panic moments. The plugin plays it far in the background.
     "beeps/master_alarm": dict(min=1, count=1, lo=2.0, hi=2.0, rms=-26.0, kind="loop"),
 }
 
-# Plan v5 probe mode: beeps per probe core and mood, timbre from audio/probe/cores.tsv. Same keys as ProbeCores.Keys and ProbeCores.Moods in src/ProbeCore.cs, folders as ProbeCores.Folders().
+# Probe mode: beeps per probe core and mood, timbre from audio/probe/cores.tsv. Same keys as ProbeCores.Keys and ProbeCores.Moods in src/ProbeCore.cs, folders as ProbeCores.Folders().
 PROBE_CORES_TSV = ROOT / "probe" / "cores.tsv"
 PROBE_CORE_KEYS = ["stayputnik", "okto", "hecs", "rovemate", "snob", "qbe", "mk2drone", "mpo", "mtm", "generic"]
 PROBE_MOODS = ["happy", "offended", "curious", "scared", "sleepy", "proud", "bored"]
@@ -72,14 +72,14 @@ PROBE_RHYTHMS = ["even", "swing", "stutter", "lazy"]
 for _core in PROBE_CORE_KEYS:
     for _mood in PROBE_MOODS:
         FOLDERS["beeps/probe_%s_%s" % (_core, _mood)] = dict(min=3, count=3, lo=0.08, hi=1.8, rms=-22.0, kind="beep")
-# Plan v6: the data stream beep while an antenna sends science (ProbeCores.DataFolder). Fast even chirps.
+# The data stream beep while an antenna sends science (ProbeCores.DataFolder). Fast even chirps.
 FOLDERS["beeps/probe_data"] = dict(min=3, count=4, lo=0.3, hi=1.4, rms=-22.0, kind="beep")
 
 
 PEAK_LIMIT_DB = -1.3       # limiter ceiling, contract requires <= -1 dBFS
 RMS_TOL = 1.0              # +- dB
 MAX_SILENCE = 0.050        # leading / trailing silence
-SIZE_LIMIT = 200 * 1024 * 1024  # 40 MB, 80 MB in v4 (about 2500 clips), 110 MB in 0.6.0 (about 4600 clips plus the effects), 120 MB for the qbe, mk2drone, mpo and mtm beeps, 200 MB for more templates and subtitle versions
+SIZE_LIMIT = 200 * 1024 * 1024  # room for about 5500 voice clips, the effects and the probe beeps of every core and subtitle versions
 SILENCE_DB = -50.0
 NAME_RE = re.compile(r"^[a-z0-9_]+_[0-9]{3}\.wav$")
 
@@ -313,7 +313,7 @@ def make_beeps(folder, i, seed):
                 x += silence(0.035)
         return x
     if name == "click_desk":
-        # hard desk-mic click: band-passed noise with a fast exponential decay (v2, plan 4.6)
+        # hard desk-mic click: band-passed noise with a fast exponential decay
         dur = rng.uniform(0.015, 0.026)
         center = [1800.0, 2400.0, 3000.0][i % 3] * rng.uniform(0.92, 1.08)
         tau = rng.uniform(0.0025, 0.0045)
@@ -323,7 +323,7 @@ def make_beeps(folder, i, seed):
             x[k] *= math.exp(-(k / SR) / tau)
         return fade_edges(x, int(0.005 * SR), int(0.006 * SR))
     if name in ("headset_open", "headset_close"):
-        # push-to-talk static (v2 rev 3): radio-band noise only, no tone and no clicks.
+        # push-to-talk static: radio-band noise only, no tone and no clicks.
         return radio_squelch(rng, 4000 + i + 37 * len(folder) + seed * 101, name == "headset_open")
     if name == "splashdown":
         # descending warbled sweep from ffmpeg aevalsrc (instantaneous phase integral)
@@ -351,7 +351,7 @@ def make_beeps(folder, i, seed):
 
 
 # ---------------------------------------------------------------------------
-# Plan v5: probe beeps (10 cores x 7 moods). Pure Python synthesis.
+# Probe beeps (10 cores x 7 moods). Pure Python synthesis.
 # ---------------------------------------------------------------------------
 _PROBE_CORES = None
 
@@ -515,7 +515,7 @@ def apply_rhythm(notes, rhythm):
 
 
 def make_probe_data(i, seed):
-    """beeps/probe_data: a data stream, 10 to 16 short even chirps on 4 pitches, no glide (plan v6)."""
+    """beeps/probe_data: a data stream, 10 to 16 short even chirps on 4 pitches, no glide."""
     rng = random.Random("%d:probe_data:%d" % (seed, i))
     core = dict(load_probe_cores()["generic"])
     core["glide"] = 0.0
@@ -678,7 +678,7 @@ def make_static(folder, i, seed):
             y[k] = (w * hi + (1.0 - w) * lo) * trem
         return y
     if name == "breath_loop":
-        # EVA helmet breathing (v2 rev 3): exactly 8 s, two breaths per loop.
+        # EVA helmet breathing: exactly 8 s, two breaths per loop.
         # Each breath: inhale (brighter, narrower band near 1.9 kHz, 1.0 to 1.3 s, a smooth bell),
         # a short hold, then exhale (darker and wider near 0.95 kHz, 1.4 to 1.8 s, quick onset and a
         # long tail). Under it a faint suit-fan hiss so the helmet never goes fully silent.
@@ -972,7 +972,7 @@ def main():
                 d.unlink()
                 log("clean: removed %s" % d)
 
-    load_probe_cores()   # plan v5: fail early on a bad audio/probe/cores.tsv
+    load_probe_cores()   # fail early on a bad audio/probe/cores.tsv
     # Replace only the folders this script builds. Sounds/crew and Sounds/control (Lonapse) stay.
     for folder in FOLDERS:
         d = out_root(folder) / folder

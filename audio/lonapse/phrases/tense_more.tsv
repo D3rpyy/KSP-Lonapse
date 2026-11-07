@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
-# Lonapse 0.6.0 lines (tm_). Written as drafts, converted to this table.															
+# More tense lines (tm_).															
 tm_001	chatter	chatter	tense	mc	tm_001	1	m	any	any	any	any	any	Os estamos vigilando de cerca.	We're watching you closely. | We're watching you closely. | All eyes on you, {vessel}.	 |  | Todos los ojos en vosotros, {vessel}.
 tm_002	chatter	chatter	tense	mc	tm_002	1	m	any	any	any	any	any	Calma. Lo tenemos en pantalla.	Easy. We have it on screen. | Easy. We have it on screen. | Calm. It's on our screens.	
 tm_003	chatter	chatter	tense	mc	tm_003	1	m	any	any	any	any	any	Despacio. Paso a paso.	Slowly. One step at a time. | Slowly. One step at a time. | Step by step. No hurry.	

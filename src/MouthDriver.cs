@@ -1,4 +1,4 @@
-// Talking kerbals (req 9): opens the lower jaw of the kerbal whose voice line is playing, on the IVA model that the
+// Talking kerbals: opens the lower jaw of the kerbal whose voice line is playing, on the IVA model that the
 // portrait camera renders (ProtoCrewMember.KerbalRef) and on EVA kerbals. The open amount follows the RMS level of
 // the playing channel. Without a usable level (muted, volume 0, no output data) a procedural flap is used instead.
 //

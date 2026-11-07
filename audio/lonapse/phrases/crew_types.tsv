@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
-# Crew types (plan v4 feature 1 and 3): persona and trait scenes. New keys: ct_															
+# Crew types: persona and trait scenes. New keys: ct_															
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.															
 # persona and trait apply to the crew speaker. In crew-only scenes that is speaker A (odd seq).															
 ct_bad_01_1	chatter	chatter	tense	crew	ct_bad_01	1	both	any	spin	any	badass	any	Giramos un poco. Nada que no se arregle.	We're spinning a bit. Nothing we can't fix. | We're spinning a bit. Nothing we can't fix. | A little spin. Easy fix.	

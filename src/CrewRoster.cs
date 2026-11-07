@@ -43,7 +43,7 @@ namespace Lonapse
         public Band band = Band.Calm;
         public bool isFemale;
 
-        /// <summary>Persona flags and trait key (plan v4). Persona.None until ApplyPersona runs.</summary>
+        /// <summary>Persona flags and trait key. Persona.None until ApplyPersona runs.</summary>
         public Persona persona = Persona.None;
         /// <summary>True when the veteran stress tweak is in exponent and panicAt (personalityEffects on).</summary>
         public bool personaEffects;
@@ -70,11 +70,11 @@ namespace Lonapse
             return effects ? persona.IntercomWeight : 1f;
         }
 
-        /// <summary>Key for per-speaker cooldowns in Pacing (plan 4.3: "sk:&lt;name&gt;").</summary>
+        /// <summary>Key for per-speaker cooldowns in Pacing ("sk:&lt;name&gt;").</summary>
         public string CooldownKey { get { return "sk:" + (name ?? "?"); } }
 
         /// <summary>
-        /// Same as Create, plus gender (req 8). The gender pitch factor is applied after the hash, so the
+        /// Same as Create, plus gender. The gender pitch factor is applied after the hash, so the
         /// hash-based profile of a kerbal stays the same. The defaults match Tuning.genderPitchFemale/Male.
         /// </summary>
         public static KerbalVoice Create(string name, float courage, float stupidity, bool isBadass, bool female,
@@ -132,7 +132,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Band with a ceiling. maxBand Panic gives the plain NextBand. Tense as ceiling gives Tense at most (req 10).
+        /// Band with a ceiling. maxBand Panic gives the plain NextBand. Tense as ceiling gives Tense at most.
         /// </summary>
         public static Band NextBand(Band current, float sk, float tenseAt, float panicAt, Band maxBand)
         {
@@ -141,7 +141,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Launch cap (req 10): the highest band allowed now. Tense while the cap is on, the height is below capAlt,
+        /// Launch cap: the highest band allowed now. Tense while the cap is on, the height is below capAlt,
         /// and there is no real failure. Otherwise Panic (no cap).
         /// </summary>
         public static Band LaunchMaxBand(bool capOn, double heightM, double capAlt, bool realFailure)
@@ -180,12 +180,18 @@ namespace Lonapse
             UpdateStress(vesselStress, maxBand, 0f);
         }
 
-        /// <summary>panicOffset raises the panic threshold (escalation, req 11). 0 means no offset.</summary>
+        /// <summary>panicOffset raises the panic threshold (escalation). 0 means no offset.</summary>
         public void UpdateStress(float vesselStress, Band maxBand, float panicOffset)
         {
             sk = PersonalStress(vesselStress, exponent);
-            band = NextBand(band, sk, tenseAt, Math.Min(1.05f, panicAt + Math.Max(0f, panicOffset)), maxBand);
+            panicNow = Math.Min(1.05f, panicAt + Math.Max(0f, panicOffset));
+            band = NextBand(band, sk, tenseAt, panicNow, maxBand);
         }
+
+        /// <summary>The panic threshold in effect (panicAt plus the escalation offset), set by UpdateStress. The face
+        /// scale uses it, so the face turns scared where the voice does.</summary>
+        public float PanicNow { get { return panicNow > 0f ? panicNow : panicAt; } }
+        private float panicNow;
 
         public string BandName { get { return BandNames[(int)band]; } }
 
@@ -254,6 +260,8 @@ namespace Lonapse
             return false;
         }
 
+        /// <summary>Callout speaker: the pilot, else anyone but a tourist, a tourist only when nobody else is awake
+        /// (then only the tourist callouts fit, see Persona.RadioFits).</summary>
         public static KerbalVoice PickCallout(List<KerbalVoice> list, Random rng)
         {
             for (int i = 0; i < list.Count; i++)
@@ -261,7 +269,8 @@ namespace Lonapse
                 KerbalVoice k = list[i];
                 if (k != null && k.isPilot && !k.outDueToG) return k;
             }
-            return Pick(list, null, rng, null);
+            KerbalVoice pro = PickWithTrait(list, null, null, rng, k => !k.persona.IsTourist);
+            return pro ?? Pick(list, null, rng, null);
         }
 
         public static int SpeakableCount(List<KerbalVoice> list)
@@ -402,12 +411,12 @@ namespace Lonapse
         public KerbalVoice lastSpeaker;
         /// <summary>Band ceiling for UpdateStress (launch cap). Set it from LaunchMaxBand each tick. Panic means no cap.</summary>
         public Band maxBand = Band.Panic;
-        /// <summary>Escalation offset on every panic threshold (req 11), set by the director. 0 means none.</summary>
+        /// <summary>Escalation offset on every panic threshold, set by the director. 0 means none.</summary>
         public float panicOffset;
-        /// <summary>Gender pitch factors (req 8), set from Tuning by the addon. Defaults match Tuning.</summary>
+        /// <summary>Gender pitch factors, set from Tuning by the addon. Defaults match Tuning.</summary>
         public float genderPitchFemale = 1.06f, genderPitchMale = 0.96f;
         /// <summary>
-        /// Settings.personalityEffects (plan v4). Set it from the settings by the addon, like the gender pitch.
+        /// Settings.personalityEffects. Set it from the settings by the addon, like the gender pitch.
         /// Change it at runtime with SetPersonalityEffects so the voices update at once.
         /// </summary>
         public bool personalityEffects = true;
@@ -552,15 +561,25 @@ namespace Lonapse
             for (int i = 0; i < voices.Count; i++)
             {
                 voices[i].UpdateStress(stress, maxBand, panicOffset);
-                try { voices[i].outDueToG = members[i] != null && members[i].outDueToG; }
+                try { voices[i].outDueToG = IsOut(members[i]); }
                 catch (Exception) { voices[i].outDueToG = false; }
             }
             for (int i = 0; i < radio.Count; i++)
             {
                 radio[i].UpdateStress(stress, maxBand, panicOffset);
-                try { radio[i].outDueToG = radioMembers[i] != null && radioMembers[i].outDueToG; }
+                try { radio[i].outDueToG = IsOut(radioMembers[i]); }
                 catch (Exception) { radio[i].outDueToG = false; }
             }
+        }
+
+        /// <summary>Names DeepFreeze lists as comatose (DeepFreezeBridge keeps it). Empty without DeepFreeze.</summary>
+        public static readonly HashSet<string> comatose = new HashSet<string>(StringComparer.Ordinal);
+
+        /// <summary>Out cold: G-LOC, or comatose after a DeepFreeze emergency thaw.</summary>
+        private static bool IsOut(ProtoCrewMember pcm)
+        {
+            if (pcm == null) return false;
+            return pcm.outDueToG || comatose.Contains(pcm.name);
         }
 
         public int SpeakableCount() { return KerbalVoice.SpeakableCount(voices); }

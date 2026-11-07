@@ -121,7 +121,7 @@ namespace Lonapse
                 else
                 {
                     float r = (dist - prevDist) / dt;
-                    // |d(dist)/dt| can never exceed the relative speed; clamping removes jitter spikes
+                    // |d(dist)/dt| can never exceed the relative speed, so clamping removes jitter spikes
                     float lim = Math.Abs(speed) + 0.05f;
                     r = DcMath.Clamp(DcMath.Finite(r), -lim, lim);
                     rangeRate += (r - rangeRate) * DcMath.ExpAlpha(dt, RangeRateTau);
@@ -207,7 +207,7 @@ namespace Lonapse
                 if (calloutDone[i] || th > tu.dockCloseDist + 0.01f) continue;
                 if (dist <= th && (distBefore > th || distBefore < 0f || closePhaseJustStarted) && closing)
                 {
-                    // only one callout per frame; mark every threshold already passed as done
+                    // only one callout per frame. Every threshold already passed is marked done.
                     for (int j = 0; j <= i; j++) calloutDone[j] = true;
                     calloutDue = th;
                 }

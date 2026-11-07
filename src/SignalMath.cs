@@ -47,7 +47,7 @@ namespace Lonapse
             return SignalSource.None;
         }
 
-        // Plan v6 EVA relay: the suit radio reaches Mission Control through a nearby ship. The ship's signal is scaled by
+        // EVA relay: the suit radio reaches Mission Control through a nearby ship. The ship's signal is scaled by
         // the suit link (full up to fullKm, gone at zeroKm). The kerbal's own link wins when it is better. NaN gives 0.
         public static double RelaySignal(double own, double ship, double km, double fullKm, double zeroKm)
         {
@@ -57,7 +57,7 @@ namespace Lonapse
             return Math.Min(1.0, Math.Max(own, relay));
         }
 
-        // Plan v6 EVA relay: connected when the kerbal has its own link, or the ship has one and is within suit range.
+        // EVA relay: connected when the kerbal has its own link, or the ship has one and is within suit range.
         public static bool RelayConnected(bool own, bool ship, double km, double fullKm, double zeroKm)
         {
             return own || (ship && FromDistance(km, fullKm, zeroKm) > 0.0);

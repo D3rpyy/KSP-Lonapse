@@ -1,4 +1,4 @@
-// Plan v6: pure watchers for probe mode. Milestones (mission days, first orbit and first landing per body), rover
+// Pure watchers for probe mode. Milestones (mission days, first orbit and first landing per body), rover
 // moments (fast, air time, tilt, idle) and the data beeps while an antenna sends. No Unity or KSP references, so they
 // compile under DC_OFFLINE_TEST and the tests cover them. LonapseAddon feeds them, the director plays what they return.
 using System;
@@ -20,21 +20,21 @@ namespace Lonapse
         private readonly Dictionary<string, HashSet<string>> done = new Dictionary<string, HashSet<string>>();
 
         /// <summary>Full days (not the 1-based mission day): 0 right after launch.</summary>
-        public static int FullDays(double missionTime, bool kerbinTime)
+        public static int FullDays(double missionTime, double dayLength)
         {
-            return ProbeRules.MissionDay(missionTime, kerbinTime) - 1;
+            return ProbeRules.MissionDay(missionTime, dayLength) - 1;
         }
 
         private static string BodyKey(string kind, string body) { return kind + ":" + (body ?? ""); }
 
-        private HashSet<string> For(string vesselId, double missionTime, bool kerbinTime, bool orbiting, bool landed, string body,
+        private HashSet<string> For(string vesselId, double missionTime, double dayLength, bool orbiting, bool landed, string body,
                                     out bool fresh)
         {
             HashSet<string> set;
             fresh = !done.TryGetValue(vesselId, out set);
             if (!fresh) return set;
             set = new HashSet<string>();
-            int full = FullDays(missionTime, kerbinTime);
+            int full = FullDays(missionTime, dayLength);
             for (int i = 0; i < Days.Length; i++) if (full >= Days[i]) set.Add(DayTopics[i]);
             if (orbiting) set.Add(BodyKey(Orbit, body));
             if (landed) set.Add(BodyKey(Landing, body));
@@ -46,13 +46,13 @@ namespace Lonapse
         /// The milestone topic reached now (day1 to day365 or orbit), or null. One per call. Several days passed at
         /// once (time warp) give only the highest, the lower ones are marked done. Landings come from TakeLanding.
         /// </summary>
-        public string Update(string vesselId, double missionTime, bool kerbinTime, bool orbiting, bool landed, string body)
+        public string Update(string vesselId, double missionTime, double dayLength, bool orbiting, bool landed, string body)
         {
             if (string.IsNullOrEmpty(vesselId)) return null;
             bool fresh;
-            HashSet<string> set = For(vesselId, missionTime, kerbinTime, orbiting, landed, body, out fresh);
+            HashSet<string> set = For(vesselId, missionTime, dayLength, orbiting, landed, body, out fresh);
             if (fresh) return null;
-            int full = FullDays(missionTime, kerbinTime);
+            int full = FullDays(missionTime, dayLength);
             string hit = null;
             for (int i = 0; i < Days.Length; i++)
                 if (full >= Days[i] && set.Add(DayTopics[i])) hit = DayTopics[i];

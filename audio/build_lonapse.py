@@ -10,7 +10,7 @@ Kerbal register, and writes OGG Vorbis clips into the merged Sounds/ tree, in th
     audio/build/Sounds/crew/<calm|tense|panic|relief|callout>/<clip_key>_<m|f>.ogg
     audio/build/Sounds/control/<calm|tense>/<clip_key>_m.ogg
 
-Plan v5 subtitle-only rows (role probe) have an empty spanish and get no clip. They are only in phrases.tsv,
+Subtitle-only rows (role probe) have an empty spanish and get no clip. They are only in phrases.tsv,
 the plugin shows their english and plays a probe beep for them.
 
 This script owns Sounds/crew and Sounds/control. Sounds/beeps and Sounds/static belong to build_clips.py.
@@ -64,7 +64,7 @@ CACHE = BUILD / "cache"
 RENDER_VERSION = 1
 SOUNDS = ROOT / "build" / "Sounds"          # the merged tree that ships
 OWNED = ("crew", "control")                 # top folders of SOUNDS this script owns
-LEGACY_FLAT = BUILD / "Sounds"              # old flat output (v2 T2), removed on build
+LEGACY_FLAT = BUILD / "Sounds"              # old flat output, removed on build
 VOICES_DIR = ROOT / "voices"
 DEFAULT_PIPER_PY = ROOT / ".venv" / "bin" / "python"
 
@@ -91,13 +91,13 @@ VOICES = {
 DELIVERY = {
     "m":  dict(voice="es_ES-davefx-medium", pitch_st=5.0),   # male crew
     "f":  dict(voice="es_MX-claude-high", pitch_st=4.0),     # female crew
-    "mc": dict(voice="es_MX-ald-medium", pitch_st=3.0),      # Mission Control (0.6.0: was 2.0, sounded flat)
+    "mc": dict(voice="es_MX-ald-medium", pitch_st=3.0),      # Mission Control (was 2.0, sounded flat)
 }
 # Delivery kinds that speak with a fixed voice like Mission Control (calm in a panic, see mc_panic)
 MC_LIKE_KINDS = ("mc",)
-# Mission Control outside a panic and the countdown (0.6.0, user report: MC sounds flat). Extra tempo and Piper
+# Mission Control outside a panic and the countdown, so it does not sound flat. Extra tempo and Piper
 # variation (noise scale and noise width, None keeps the Piper default 0.667 and 0.8). The plugin adds the
-# controllers on shift (DcMath.McPitch). Picked by ear (0.6.0) from four test renders: +3 st, tempo 1.04 and
+# controllers on shift (DcMath.McPitch). Picked by ear from four test renders: +3 st, tempo 1.04 and
 # noise 0.80 / 0.90 ("mild"). Stronger settings went toward the crew sound.
 MC_LIVELY_TEMPO = 1.04
 MC_LIVELY_NOISE_SCALE = 0.80
@@ -108,10 +108,10 @@ BAND_DELIVERY = {
     "none":    dict(tempo=1.00, pitch_st=0.0),
     "tense":   dict(tempo=1.10, pitch_st=0.7),
     # crew panic: shouted, only a bit faster (pieces and gasps below). Was +3 semitones, which on top of the Kerbal
-    # shift and the runtime stress pitch sounded like chipmunks (user test). The panic now comes from the delivery.
+    # shift and the runtime stress pitch sounded like chipmunks. The panic now comes from the delivery.
     "panic":   dict(tempo=1.10, pitch_st=1.0),
     # Mission Control during a panic: a bit slower and calm, the contrast. The small lift keeps it from sounding
-    # deeper than the calm delivery (v3 req 7: the old 0.92 tempo plus the runtime pitch drop sounded too deep).
+    # deeper than the calm delivery (the old 0.92 tempo plus the runtime pitch drop sounded too deep).
     "mc_panic": dict(tempo=0.95, pitch_st=0.3),
     "callout": dict(tempo=1.08, pitch_st=0.5),
     # Launch countdown (event countdown): the plain Mission Control register (no callout lift), a calm tempo just
@@ -144,7 +144,7 @@ MAX_SILENCE_S = 0.050
 OGG_QUALITY = "3"            # libvorbis -q:a 3, mono (neural voices have more air and detail than espeak)
 
 # Columns are found by name. The source files must have every SOURCE_COLUMNS column (any order) and may have the
-# SOURCE_OPTIONAL columns (plan v4: trait, persona, topic), which default to their value here when absent. The built
+# SOURCE_OPTIONAL columns (trait, persona, topic), which default to their value here when absent. The built
 # table is written in BUILT_COLUMNS order, english and spanish_rt last. The C# loader (PhraseTable.Parse) also finds columns by name.
 ENGLISH_COLUMN = "english"   # subtitle text
 SOURCE_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq", "gender", "phase", "cause",
@@ -182,7 +182,7 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
                 "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
-                "link", "apart", "a_eva", "b_eva"]
+                "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist"]
 NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
@@ -196,33 +196,39 @@ POOL_COLUMNS = ["pool", "english"]
 POOL_OPTIONAL = {"spanish": ""}   # runtime voice: the Spanish of the value, m: f: mp: fp: before it for the article
 POOL_GENDERS = ["m", "f", "mp", "fp"]
 
-# Panic crew delivery (user request): broken pieces with a gasp or a ragged pause in between, Piper with more
+# Panic crew delivery: broken pieces with a ragged pause in between (gasps off), Piper with more
 # variation (noise), light drive, and now and then a voice crack. All random choices are seeded per clip.
 PANIC_NOISE_SCALE = 0.90
 PANIC_NOISE_W = 1.10
 PANIC_DRIVE = 2.2            # tanh drive for the shouted sound
 PANIC_CRACK_CHANCE = 0.35    # chance per piece that the end of the piece cracks upward
 PANIC_CRACK_ST = 3.0
-PANIC_GASP_CHANCE = 0.7      # chance of a gasp between two pieces (otherwise a short ragged pause)
-# Plan v4: speaker trait, speaker persona and topic. Same values as PhraseTable.Traits, Personas, ScienceTopics and
-# SoiTopics in C#. topic is any on every event except science, soi_enter and (v6) staging, probe_milestone, probe_rover.
-TRAITS = ["any", "pilot", "engineer", "scientist", "tourist"]
+PANIC_GASP_CHANCE = 0.0      # chance of a gasp between two pieces (otherwise a short ragged pause). Was 0.7, the
+                             # synthetic gasp sounded like a swoosh. The draw stays, so the pieces
+                             # keep the same random choices as the approved test render.
+# Speaker trait, speaker persona and topic. Same values as PhraseTable.Traits, Personas, ScienceTopics and
+# SoiTopics in C#. topic is any on every event except science, soi_enter and staging, probe_milestone, probe_rover.
+# tourist_pair (two tourists) and to_tourist (crew to a tourist) are for intercom scenes only. Same as Persona in C#.
+TRAITS = ["any", "pilot", "engineer", "scientist", "tourist", "to_tourist", "tourist_pair"]
 PERSONAS = ["any", "badass", "brave", "nervous", "dim", "veteran"]
 TOPICS_BY_EVENT = {
     "science": ["any", "crewreport", "evareport", "mysterygoo", "surfacesample", "mobilematerialslab",
                 "temperaturescan", "barometerscan", "seismicscan", "gravityscan", "atmosphereanalysis",
                 "asteroidsample", "cometsample", "infraredtelescope", "magnetometer", "roc"],
     "soi_enter": ["any", "home"],
-    # plan v6: probe staging, milestones and rover moments. Same as StagingTopics, MilestoneTopics, RoverTopics in C#.
+    # Probe staging, milestones and rover moments. Same as StagingTopics, MilestoneTopics, RoverTopics in C#.
     "staging": ["any", "separation", "ignition"],
     "probe_milestone": ["any", "day1", "day10", "day100", "day365", "orbit", "landing"],
     "probe_rover": ["any", "fast", "air", "tilt", "idle"],
-    # user test: scenes about solar panels only play on a ship that has one. Same as PhraseTable.SolarTopic in C#.
-    "chatter": ["any", "solar"],
+    # probe_crew staging: a tourist calls the stage, the probe reacts. Same as PhraseTable.ProbeCrewTopics in C#.
+    "probe_crew": ["any", "staging"],
+    # Scenes about solar panels only play on a ship that has one. Chatter also has prechute (a chute still
+    # packed, none open), chuteopen and heatshield. Same as PhraseTable.ChatterTopics in C#.
+    "chatter": ["any", "solar", "prechute", "chuteopen", "heatshield"],
     "power_low": ["any", "solar"],
     "power_ok": ["any", "solar"],
 }
-# Explosion words are only allowed in part_lost rows (plan v4). Matched at the start of a word, case-insensitive.
+# Explosion words are only allowed in part_lost rows. Matched at the start of a word, case-insensitive.
 # "explor..." (explore) is no explosion. "blew" only counts as "blew up|apart|out|off" ("the intern blew away" is
 # wind). "blast off" and "blastoff" are launch talk. Must match PhraseTable.HasExplosionWord in C#.
 EXPLOSION_EVENT = "part_lost"
@@ -233,44 +239,42 @@ FOLDER_COLUMN = "folder"
 EVENTS = ["chatter", "staging", "chute_semi", "chute_full", "throttle_full", "throttle_cut",
           "dock_approach", "dock_close", "dock_hard", "docked", "touchdown", "splashdown", "relief",
           "plan_node", "burn_soon", "station_check", "eva_check", "eva_fall", "countdown",
-          # plan v4
+          # game events
           "soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
-          # plan v5 (probe mode)
+          # probe mode
           "probe_chat", "probe_sleepy",
-          # plan v6 (probe mode): the probe calls Mission Control first
+          # probe mode: the probe calls Mission Control first
           "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data",
-          # 0.6.0: probe and crew on one vessel, in the cabin
+          # Probe and crew on one vessel, in the cabin
           "probe_crew"]
-# New v4 and v5 events: allowed, but not yet held to MIN_PER_EVENT (the writers add them in phase 2). A shortfall is
-# a warning.
+# Newer events: allowed, but not yet held to MIN_PER_EVENT. A shortfall is a warning.
 NEW_EVENTS = ["soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
               "probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone",
               "probe_rover", "probe_data", "probe_crew"]
 # Optional events: no minimum at all, not even a warning.
 OPTIONAL_EVENTS = []
-# Plan v5. Same as PhraseTable.ProbeEvents and PhraseTable.ProbeVariantEvents in C#. Probe events only play in probe
+# Same as PhraseTable.ProbeEvents and PhraseTable.ProbeVariantEvents in C#. Probe events only play in probe
 # mode and have no crew rows. The variant events are existing events whose probe scenes carry a core or a probe-mode
 # role (is_probe_scene).
 PROBE_EVENTS = ["probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone",
                 "probe_rover", "probe_data"]
-# 0.6.0: a crewed vessel with a probe core. Probe and crew rows, no mc rows, never in a serious phase. Same as
+# A crewed vessel with a probe core. Probe and crew rows, no mc rows, never in a serious phase. Same as
 # PhraseTable.ProbeCrewEvent in C#.
 PROBE_CREW_EVENT = "probe_crew"
 PROBE_VARIANT_EVENTS = ["science", "power_low", "power_ok", "soi_enter", "part_lost", "signal_lost", "signal_back",
                         "touchdown", "splashdown", "docked", "burn_soon", "staging", "chute_semi", "chute_full",
                         "throttle_full", "throttle_cut", "plan_node"]
-# Plan v5 core and beep columns. Same as PhraseTable.Cores (any plus ProbeCores.Keys) and ProbeCores.Moods in C#.
+# Core and beep columns. Same as PhraseTable.Cores (any plus ProbeCores.Keys) and ProbeCores.Moods in C#.
 CORES = ["any", "stayputnik", "okto", "hecs", "rovemate", "snob", "qbe", "mk2drone", "mpo", "mtm", "generic"]
 MOODS = ["happy", "offended", "curious", "scared", "sleepy", "proud", "bored"]
 SEVERITIES = ["chatter", "callout", "warning"]
 BANDS = ["calm", "tense", "panic", "none"]
 ROLES = ["crew", "mc", "probe"]
-# Plan v5: rows without a clip (empty spanish, english required) and the roles that only exist in probe mode.
-# Plan v6 removed the room roles (flight, intern, coffee) and the diary: in probe mode only Mission Control and the
-# probe talk.
+# Rows without a clip (empty spanish, english required) and the roles that only exist in probe mode. In probe mode
+# only Mission Control and the probe talk.
 SUBTITLE_ONLY_ROLES = ["probe"]
 PROBE_ROLES = ["probe"]
-# Plan v6: a probe subtitle is short and the same form everywhere: "[beeps excitedly]". Same as
+# A probe subtitle is short and the same form everywhere: "[beeps excitedly]". Same as
 # PhraseTable.ProbeSubtitleOk in C#.
 PROBE_SUBTITLE_RE = re.compile(r"^\[beeps( [a-z]+){1,3}\]$")
 GENDERS = ["m", "f", "both"]
@@ -466,7 +470,7 @@ def validate(rows):
         if row["role"] == "mc" and row["gender"] == "f":
             bad.append("role mc uses the male voice only (gender m or both)")
         sub_only = row["role"] in SUBTITLE_ONLY_ROLES
-        # plan v5: core, beep and the probe-mode roles and events (same rules as PhraseTable.Parse)
+        # Core, beep and the probe-mode roles and events (same rules as PhraseTable.Parse)
         if row["core"] not in CORES:
             bad.append("unknown core '%s' (allowed: %s)" % (row["core"], " ".join(CORES)))
         if row["role"] == "probe":
@@ -549,7 +553,7 @@ def validate(rows):
         if sorted(seqs) != list(range(1, len(seqs) + 1)):
             errors.append("%s: scene '%s' seq numbers %s, must run 1..%d" % (scene_head[sc]["loc"], sc,
                                                                             sorted(seqs), len(seqs)))
-    # intercom (crew only, 2 or more lines) is always funny: never in a serious phase (plan v3)
+    # intercom (crew only, 2 or more lines) is always funny: never in a serious phase
     by_scene = {}
     for r in good:
         by_scene.setdefault(r["scene"], []).append(r)
@@ -558,6 +562,9 @@ def validate(rows):
         intercom = len(lines) >= 2 and all(r["role"] == "crew" for r in lines)
         if intercom and (head["phase"] == "serious" or head["phase"] in SERIOUS_PHASES):
             errors.append("%s: scene '%s' is an intercom scene in the serious phase '%s'" % (head["loc"], sc, head["phase"]))
+        if head["trait"] in ("to_tourist", "tourist_pair") and not intercom:
+            errors.append("%s: scene '%s' has trait %s, that is only for intercom scenes (crew only, 2 or more lines)"
+                          % (head["loc"], sc, head["trait"]))
         if head["event"] == PROBE_CREW_EVENT:
             roles = {r["role"] for r in lines}
             if "probe" not in roles or "crew" not in roles:
@@ -571,7 +578,7 @@ def validate(rows):
 CONDITIONS = ["prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
               "kerbin", "away",
               # parts and experiments on the vessel
-              "solar", "antenna", "legs", "ladder", "docking", "heatshield", "chute", "engine", "strut", "probe",
+              "solar", "antenna", "legs", "ladder", "docking", "heatshield", "chute", "engine", "strut", "probe", "rcs",
               "goo", "sciencejr", "thermometer", "barometer", "seismic", "gravity", "magnetometer"]
 COND_RE = re.compile(r"^\[([^\]]*)\]\s*(.*)$")
 
@@ -920,7 +927,7 @@ def summary(src_rows, rows, files):
 
 
 def is_probe_scene(lines):
-    """Plan v5, same as PhraseTable.IsProbeScene: the core is not any, a line has a probe-mode role, or the event is
+    """Same as PhraseTable.IsProbeScene: the core is not any, a line has a probe-mode role, or the event is
     a probe-only event. lines are the rows of one scene."""
     if not lines:
         return False

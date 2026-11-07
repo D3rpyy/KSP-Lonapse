@@ -1,4 +1,4 @@
-// Maneuver-node chatter (plan v2, req 18). Polls the node list every 0.5 s. A changed plan gives a
+// Maneuver-node chatter. Polls the node list every 0.5 s. A changed plan gives a
 // pre-planning exchange (rate limited by planRateSec). A node closer than burnWarnSec gives one burn warning.
 using System;
 using System.Collections.Generic;

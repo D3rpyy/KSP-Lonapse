@@ -1,4 +1,4 @@
-// Radio profiles for station, ship and EVA transmissions (plan v2, table 4.6). Pure C#, tested offline.
+// Radio profiles for station, ship and EVA transmissions (table 4.6). Pure C#, tested offline.
 // The numbers are starting values, not measurements. They are tuned in the game.
 using System;
 

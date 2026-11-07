@@ -181,7 +181,7 @@ namespace Lonapse
                                                        "descent", "landed", "blackout", "kerbin", "away",
                                                        // parts on the vessel (ChatterDirector.VesselConditions)
                                                        "solar", "antenna", "legs", "ladder", "docking", "heatshield",
-                                                       "chute", "engine", "strut", "probe",
+                                                       "chute", "engine", "strut", "probe", "rcs",
                                                        // science experiments on the vessel
                                                        "goo", "sciencejr", "thermometer", "barometer", "seismic",
                                                        "gravity", "magnetometer" };
@@ -402,8 +402,8 @@ namespace Lonapse
             return true;
         }
 
-        // The versions of a line that may be picked now: those whose conditions hold, else the plain ones; and of
-        // those only the ones that can be filled. Each entry is the index in Versions and the text without [ ].
+        // The versions of a line that may be picked now: those whose conditions hold, else the plain ones. Of those,
+        // only the ones that can be filled. Each entry is the index in Versions and the text without [ ].
         static List<KeyValuePair<int, string>> FillableVersions(PhraseEntry e, FillState st)
         {
             List<string> vs = Versions(e.English);
@@ -667,16 +667,14 @@ namespace Lonapse
             return string.IsNullOrEmpty(v) ? v : char.ToUpperInvariant(v[0]) + v.Substring(1);
         }
 
-        /// <summary>The flight values for Fill. day: the mission day, starting at 1 (Kerbin days of 6 h, or Earth days
-        /// of 24 h with that game setting). alt_km: whole km, one decimal below 10 km. Empty names are left out, so
+        /// <summary>The flight values for Fill. day: the mission day, starting at 1, with days of dayLength seconds
+        /// as the game clock counts them. alt_km: whole km, one decimal below 10 km. Empty names are left out, so
         /// the slot gives "..." instead of an empty word.</summary>
-        public static Dictionary<string, string> FlightValues(double missionTime, bool kerbinDays, string here,
+        public static Dictionary<string, string> FlightValues(double missionTime, double dayLength, string here,
                                                               string vessel, double altM)
         {
             var d = new Dictionary<string, string>();
-            double dayLen = kerbinDays ? 6 * 3600.0 : 24 * 3600.0;
-            double met = double.IsNaN(missionTime) || missionTime < 0 ? 0 : missionTime;
-            d["day"] = ((long)Math.Floor(met / dayLen) + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            d["day"] = ProbeRules.MissionDay(missionTime, dayLength).ToString(System.Globalization.CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(here)) d["here"] = here;
             if (!string.IsNullOrEmpty(vessel)) d["vessel"] = vessel;
             if (!double.IsNaN(altM) && !double.IsInfinity(altM))

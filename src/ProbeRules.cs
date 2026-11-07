@@ -20,7 +20,7 @@ namespace Lonapse
 
     public static class ProbeRules
     {
-        // Plan v6: flight events the probe reacts to (probe variants in probe_events.tsv)
+        // Flight events the probe reacts to (probe variants in probe_events.tsv)
         public const string Touchdown = "touchdown", Splashdown = "splashdown", Docked = "docked", BurnSoon = "burn_soon";
         public const string HailEvent = "probe_hail";
         public const string StressEvent = "probe_stress", SayAgainEvent = "probe_say_again", MilestoneEvent = "probe_milestone",
@@ -117,7 +117,7 @@ namespace Lonapse
                 case EventWatchers.SoiEnter: return "curious";
                 case EventWatchers.PartLost: return ScaredMood;
                 case EventWatchers.SignalBack: return HappyMood;
-                // plan v6: flight events
+                // Flight events
                 case Touchdown: return HappyMood;
                 case Splashdown: return "curious";
                 case Docked: return HappyMood;
@@ -167,7 +167,7 @@ namespace Lonapse
             return true;
         }
 
-        /// <summary>Plan v6: a hail scene (probe_hail) opens with the probe, so it needs a probe row first.</summary>
+        /// <summary>A hail scene (probe_hail) opens with the probe, so it needs a probe row first.</summary>
         public static bool StartsWithProbe(IList<PhraseEntry> lines)
         {
             return lines != null && lines.Count > 0 && lines[0] != null && lines[0].Role == PhraseTable.RoleProbe;
@@ -202,14 +202,14 @@ namespace Lonapse
             return list[list.Count - 1];
         }
 
-        /// <summary>Plan v6 callouts: Mission Control answers a probe callout beep with this chance, and never within
+        /// <summary>Callouts: Mission Control answers a probe callout beep with this chance, and never within
         /// gap s of its last answer (staging comes in bursts). roll is 0..1.</summary>
         public static bool CalloutMcAllowed(double roll, float chance, float sinceLastMc, float gap)
         {
             return sinceLastMc >= gap && roll < chance;
         }
 
-        /// <summary>Plan v6 "say again?": only below the signal threshold (but with a link), with the chance per scene
+        /// <summary>"Say again?": only below the signal threshold (but with a link), with the chance per scene
         /// and at most once per cooldown s. roll is 0..1.</summary>
         public static bool SayAgainDue(float signal, bool connected, float threshold, double roll, float chance,
                                        float sinceLast, float cooldown)
@@ -218,24 +218,33 @@ namespace Lonapse
             return sinceLast >= cooldown && roll < chance;
         }
 
-        /// <summary>Plan v6: the mood a probe repeats a beep in after "say again?". Proud and bored cores get annoyed.</summary>
+        /// <summary>The mood a probe repeats a beep in after "say again?". Proud and bored cores get annoyed.</summary>
         public static string RepeatMood(string mood)
         {
             if (mood == "proud" || mood == "bored") return "offended";
             return string.IsNullOrEmpty(mood) ? HappyMood : mood;
         }
 
-        /// <summary>1-based mission day. A day is 6 h with kerbinTime, else 24 h. Negative or NaN time gives day 1.</summary>
-        public static int MissionDay(double missionTime, bool kerbinTime)
+        /// <summary>A stock Kerbin day and an Earth day, in seconds.</summary>
+        public const double KerbinDay = 6.0 * 3600.0, EarthDay = 24.0 * 3600.0;
+
+        /// <summary>The day length to count with. A missing or broken value gives the Kerbin day.</summary>
+        public static double SaneDay(double dayLength)
+        {
+            return double.IsNaN(dayLength) || double.IsInfinity(dayLength) || dayLength < 60.0 ? KerbinDay : dayLength;
+        }
+
+        /// <summary>1-based mission day for a day of dayLength seconds (the game clock, so mods like Kronometer
+        /// count). Negative or NaN time gives day 1.</summary>
+        public static int MissionDay(double missionTime, double dayLength)
         {
             if (double.IsNaN(missionTime) || missionTime <= 0) return 1;
-            double day = kerbinTime ? 6.0 * 3600.0 : 24.0 * 3600.0;
-            double d = Math.Floor(missionTime / day);
+            double d = Math.Floor(missionTime / SaneDay(dayLength));
             if (d > int.MaxValue - 1) return int.MaxValue;
             return (int)d + 1;
         }
 
-        /// <summary>Plan v6: the probe calls Mission Control on its own (probe_hail) only when it is awake, the link
+        /// <summary>The probe calls Mission Control on its own (probe_hail) only when it is awake, the link
         /// works and the flight is not in a serious phase.</summary>
         public static bool HailMayStart(string phase, bool link, bool asleep)
         {

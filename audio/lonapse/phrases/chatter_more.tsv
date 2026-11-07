@@ -1,5 +1,5 @@
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	spanish	english	spanish_rt
-# Lonapse 0.6.0 lines (cm_). Written as drafts, converted to this table.															
+# More calm chatter (cm_).															
 cm_001_1	chatter	chatter	calm	crew	cm_001	1	both	orbit	any	any	any	any	Control, los bocadillos vuelven a flotar.	Control, the snacks are floating again. | Control, snacks are floating again. | Control, the snacks escaped again.	
 cm_001_2	chatter	chatter	calm	mc	cm_001	2	m	orbit	any	any	any	any	Cogedlos. Salen del presupuesto.	Catch them. They come out of the budget. | Catch them. They're on the budget. | Grab them. Accounting is watching.	
 cm_002_1	chatter	chatter	calm	crew	cm_002	1	both	goofy	any	any	any	any	Control, ¿qué tal el becario?	Control, how's the intern? | Control, how's the intern doing? | Control, any news about the intern?	

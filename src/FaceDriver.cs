@@ -1,4 +1,4 @@
-// Kerbal faces (v4 feature 2): the face of a speaking kerbal matches the line, and kerbals in the same part turn their
+// Kerbal faces: the face of a speaking kerbal matches the line, and kerbals in the same part turn their
 // head toward the speaker. MouthDriver (the jaw) is separate and untouched.
 //
 // Expression. The stock kerbalExpressionSystem.Update computes `expression` (whee - panic, positive is a grin,
@@ -8,6 +8,8 @@
 // reliable for a plugin assembly loaded at runtime). It sets the same parameter again: the
 // stock value moved toward the mood of the line by a weight (faceWeight). The stock field itself is never written, so
 // the stock lerp goes on undisturbed and the face returns to it when the weight eases back to 0 after the line.
+// Between lines the stress still caps the face (FaceMath.IdleMood): from the kerbal's own tenseAt it looks more and
+// more scared, clearly scared at its panicAt and full fear at 1, even while stock KSP would grin at speed and G.
 // Listeners in the same vessel get half the mood. LateUpdate reads the parameter back (after the Animator) and the
 // status shows "override ok" or "override lost" when the value is not ours.
 //
@@ -61,6 +63,8 @@ namespace Lonapse
             public bool listening;
             public float moodTarget;           // kept while the weight eases out
             public float stress;               // the kerbal's own stress (KerbalVoice.sk), caps the happy side
+            public float faceStress;           // stress smoothed for the face (FaceMath.StressCap)
+            public float tenseAt, panicAt;     // the kerbal's own thresholds, so the face turns scared with the voice
             public bool badass;
             public float moodW;
             public float lastExpr;
@@ -264,7 +268,8 @@ namespace Lonapse
                     // head turn: the first speaker in the same part
                     if (f.lookAt == null && SamePart(f, sp)) { f.lookAt = sp; f.lookScale = 1f; }
                 }
-                if (heard) { f.listening = true; f.moodTarget = mood * FaceMath.ListenerScale; }
+                // a listener reacts to the line, but not with more fear than its own stress gives
+                if (heard) { f.listening = true; f.moodTarget = FaceMath.ListenerMood(mood, f.faceStress, f.tenseAt, f.panicAt); }
             }
             // the speaker glances at the nearest listener in the same part
             for (int i = 0; i < speakers.Count; i++)
@@ -281,14 +286,18 @@ namespace Lonapse
                 if (best != null) { sp.lookAt = best; sp.lookScale = FaceMath.GlanceScale; }
             }
 
-            // expression weights; the SetFloat itself runs in ExpressionLoop, after the stock Update
+            // expression weights. The SetFloat itself runs in ExpressionLoop, after the stock Update.
             float testMood = FaceMath.TestMood(now - testStart);
             foreach (Face f in faces.Values)
             {
                 bool engaged = f.speaking || f.listening;
                 KerbalVoice kv = host.roster != null ? host.roster.Find(f.name) : null;
                 f.stress = kv != null ? kv.sk : 0f;
+                // smoothed for the face, so a short stress jump does not make it twitch (about 0.7 s to follow)
+                f.faceStress = FaceMath.Follow(f.faceStress, f.stress, dt, 1.5f);
                 f.badass = kv != null && kv.BadassEffective;
+                f.tenseAt = kv != null ? kv.tenseAt : 0.3f;
+                f.panicAt = kv != null ? kv.PanicNow : 0.7f;
                 f.moodW = FaceMath.Ramp(f.moodW, engaged || test, dt, MoodRise, MoodFall);
                 if (test) f.moodTarget = testMood; // the fade after the test starts from the last test value
             }
@@ -309,8 +318,16 @@ namespace Lonapse
                 if (!f.hasExpr || f.anim == null || f.kes == null) continue;
                 // the face keeps its fear and follows the stress: a calm line never turns a scared face into a grin
                 float stockMood = exprSign < 0f ? -f.kes.expression : f.kes.expression;
-                float mood = exprTest ? exprTestMood : FaceMath.HeldMood(f.moodTarget, stockMood, f.stress, f.badass);
-                float w = exprTest ? 1f : FaceMath.Smooth01(f.moodW) * exprWeight;
+                float mood, w;
+                if (exprTest) { mood = exprTestMood; w = 1f; }
+                else
+                {
+                    // between lines the stress still caps the face, so it does not grin between two scared lines
+                    float lw = FaceMath.Smooth01(f.moodW);
+                    mood = FaceMath.FaceMood(f.moodTarget, lw, stockMood, f.faceStress, f.tenseAt, f.panicAt);
+                    if (lw <= 0f && mood >= stockMood - 1e-4f) continue;   // nothing to change: leave the stock face
+                    w = exprWeight;
+                }
                 if (w <= 0f) continue;
                 f.lastExpr = FaceMath.Blend(f.kes.expression, mood, w, exprSign);
                 f.anim.SetFloat(f.exprHash, f.lastExpr);

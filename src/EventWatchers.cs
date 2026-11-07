@@ -1,4 +1,4 @@
-// v4 events (plan v4, features 4 to 8 and 10): pure watchers, tested offline. No UnityEngine, no KSP types.
+// Game events: pure watchers, tested offline. No UnityEngine, no KSP types.
 // GameEventHub feeds them from GameEvents and the FlightSample and hands the EventRequests to the director.
 // Every watcher takes the time in seconds ("now", any monotonic clock) and the tuning values as arguments,
 // so a changed setting applies at once and the tests need no Settings object.
@@ -27,7 +27,7 @@ namespace Lonapse
         }
     }
 
-    /// <summary>Pending-list priority (plan v4, Director API): crew_lost > part_lost > power > signal > science > soi.</summary>
+    /// <summary>Pending-list priority (Director API): crew_lost > part_lost > power > signal > science > soi.</summary>
     public static class EventPriority
     {
         public const int Soi = 1, Science = 2, Signal = 3, Power = 4, PartLost = 5, CrewLost = 6;
@@ -47,7 +47,7 @@ namespace Lonapse
         public const float PartLostMaxAge = 8f;     // only a fresh explosion is worth a call
         public const float PowerMaxAge = 120f;
         public const float SignalMaxAge = 30f;      // a stale "signal back" sounds wrong
-        public const float ScienceMaxAge = 600f;    // 0.6.0: was 90 s, a science line now waits through an ascent or reentry
+        public const float ScienceMaxAge = 600f;    // was 90 s, a science line now waits through an ascent or reentry
         public const float SoiMaxAge = 120f;        // a "welcome to" long after the SOI change sounds wrong
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace Lonapse
     /// A blocked result is dropped, not queued.</summary>
     public class ScienceWatcher
     {
-        /// <summary>0.6.0 (user test: experiments run right after each other got no line): experiments that come
-        /// during the overall cooldown wait here, one per topic, and come out one per cooldown.</summary>
+        /// <summary>Experiments that come during the overall cooldown wait here, one per topic, and come out one per
+        /// cooldown. Without it, experiments run right after each other got no line.</summary>
         public const int MaxQueued = 3;
         /// <summary>A queued experiment older than this (s) is dropped: a remark long after it sounds wrong.</summary>
         public const double MaxWait = 120.0;
@@ -343,14 +343,72 @@ namespace Lonapse
 
         public bool Tick(double now, double delay, double maxAge, out EventRequest r)
         {
+            return Tick(now, delay, maxAge, null, out r);
+        }
+
+        /// <summary>stillLost (null: everyone) checks each name again when the call is due. A kerbal that came back in
+        /// the meantime (frozen, thawed) is dropped and can be reported again later.</summary>
+        public bool Tick(double now, double delay, double maxAge, Predicate<string> stillLost, out EventRequest r)
+        {
             r = default(EventRequest);
             if (pending.Count == 0 || now - firstAt < delay) return false;
             lastNames.Clear();
-            lastNames.AddRange(pending);
+            foreach (string n in pending)
+            {
+                if (stillLost == null || stillLost(n)) lastNames.Add(n);
+                else reported.Remove(n);
+            }
             pending.Clear();
+            if (lastNames.Count == 0) return false;
             r = EventWatchers.Make(EventWatchers.CrewLost, "tense", EventWatchers.Any, "", false, (float)maxAge,
                                    EventPriority.CrewLost);
             return true;
         }
+    }
+
+    /// <summary>
+    /// Gathers names of one kind of moment (DeepFreeze freezes one kerbal at a time) into one group. One line then
+    /// names the group. With the start of each freeze known (busy), the group is due Grace seconds after the last one
+    /// ended while no other runs. Without it, Quiet seconds after the last name. Always MaxAge after the first.
+    /// </summary>
+    public class NameBatch
+    {
+        public const double Quiet = 9.0, Grace = 3.0, MaxAge = 60.0;
+        public readonly List<string> names = new List<string>();
+        private double first, last;
+
+        public int Count { get { return names.Count; } }
+
+        public void Add(double now, string name)
+        {
+            if (string.IsNullOrEmpty(name) || names.Contains(name)) return;
+            if (names.Count == 0) first = now;
+            last = now;
+            names.Add(name);
+        }
+
+        /// <summary>The group when it is due (and empties the batch), else null. Without start events: Quiet.</summary>
+        public List<string> Take(double now) { return Take(now, false, Quiet); }
+
+        /// <summary>busy: a freeze (or thaw) of this group is still running. wait: the seconds after the last name.</summary>
+        public List<string> Take(double now, bool busy, double wait)
+        {
+            if (names.Count == 0) return null;
+            if (now - first < MaxAge && (busy || now - last < wait)) return null;
+            var r = new List<string>(names);
+            names.Clear();
+            return r;
+        }
+
+        /// <summary>The event id for a group of n: id for one, id_two for two, id_group for three or more.</summary>
+        public static string IdFor(string id, int n)
+        {
+            return n <= 1 ? id : n == 2 ? id + "_two" : id + "_group";
+        }
+
+        /// <summary>Drops a name that is no longer in this state (thawed again before the line).</summary>
+        public void Remove(string name) { names.Remove(name); }
+
+        public void Clear() { names.Clear(); }
     }
 }

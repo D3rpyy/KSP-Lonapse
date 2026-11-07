@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.8.1
+
+**Tourists get their own voice, DeepFreeze is supported and the runtime voice no longer cuts the audio or crashes the game.** Most of this version comes from your feedback on 0.8.0. Thanks for the reports!
+
+### New
+
+- **Tourists.** Tourists have their own lines. They chat with the crew, with each other and on the radio, and they sound like what they are: passengers who never trained. Under stress they panic and ask silly questions instead of reporting like a pilot. Mission Control no longer talks to them about a career they don't have. 60 new chats: a tourist talking to the crew, the crew talking to a tourist and two tourists together.
+- **Tourist ships with a probe core.** A ship with only tourists and a probe core runs in probe mode, with the probe as the crew. Now and then a tourist calls a stage and the probe answers.
+- **DeepFreeze.** Freezing a kerbal no longer makes Mission Control think they died. The crew and Mission Control talk about it instead: a freeze, a thaw (the thawed kerbal speaks first) and a kerbal who came out comatose after a power failure. Two kerbals get one line with both names, three or more a line for the whole group. If everyone aboard is frozen, Mission Control still calls the freezer. A kerbal who dies frozen is still reported. The lines only load when DeepFreeze is installed, and they have their own switch in the Mods tab. Tested with DeepFreeze Updated 1.33.0.3.
+
+### Changed
+
+- **Voices load with the save.** The Piper voices load once when a save opens and stay loaded for the whole session. The flight start no longer cuts the audio.
+- **Panic sounds less harsh.** Panic clips are never cut off, get no extra stress pitch or distortion and play a little softer. Mission Control stays steady.
+- **Faces follow the stress.** Faces get more scared step by step, at each kerbal's own stress levels. A kerbal who listens shows no more fear than they feel themselves.
+- **Lines fit the ship.** Lines about solar panels, RCS, landing legs, chutes and the heat shield only play when the ship has that part, in the right state.
+- **More answers.** 14 Mission Control lines that had no reply now have one, and a kerbal that Mission Control calls by name answers more often.
+- **Planet packs.** The mission day follows the game clock, so packs with their own day length (JNSQ, RSS, Kronometer) get the right day. KSP.log says which day length is used. Sunrises use the star the planet goes around, for packs with more than one star.
+- **The runtime voice runs below the game** in priority, so it takes less from the game.
+
+### Fixed
+
+- A crash in flight: a log line from the runtime voice reached the KSP debug console from another thread.
+- A cabin with a tourist no longer goes quiet when the tourist has nothing to say. The rest of the crew chats instead.
+
+### For modders
+
+- **Compat lines.** Lonapse can now ship lines for another mod in `GameData/Lonapse/Compat/<Assembly>/`. They load only when that plugin is loaded, and they count as lines of that mod in the Mods tab. A mod's own row with the same id wins.
+- **The named kerbal.** When `Trigger` names a kerbal and that kerbal is gone or out cold by the time the line plays, nobody else says their chat. Only the Mission Control line can still play.
+
 ## 0.8.0
 
 **Your kerbals talk more, and with each other.** They answer Mission Control, talk over the radio between ships and on EVA, keep talking without a signal, and chat during time warp. Additionally, I spent some time trying to improve the talking animations the kerbals have. Most new lines need the runtime voice, so "Speak names and new lines at runtime" in the General tab should be on.

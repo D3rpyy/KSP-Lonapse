@@ -1,4 +1,4 @@
-// Lonapse phrase table: the reversed-text helpers and the TSV parser for phrases.tsv (plan v2 4.7 and 5.4, plan v3).
+// Lonapse phrase table: the reversed-text helpers and the TSV parser for phrases.tsv.
 // Pure C# (C# 4 syntax, no Unity). Compiled by tests/run.sh with plain Mono.
 using System;
 using System.Collections.Generic;
@@ -18,19 +18,19 @@ namespace Lonapse
         public string Scene;
         public int Seq;
         public string Gender;
-        // Flight phase of the row (plan v3): any, a phase name, serious or goofy. "any" when the table has no column.
+        // Flight phase of the row: any, a phase name, serious or goofy. "any" when the table has no column.
         public string Phase = "any";
-        // Stress cause of the row (plan v3): any or a StressModel component name. "any" when the table has no column.
+        // Stress cause of the row: any or a StressModel component name. "any" when the table has no column.
         public string Cause = "any";
-        // Plan v4: the crew speaker must have this trait (any pilot engineer scientist tourist). "any" without column.
+        // The crew speaker must have this trait (any pilot engineer scientist tourist). "any" without column.
         public string Trait = "any";
-        // Plan v4: the crew speaker persona (any badass brave nervous dim veteran). "any" without column.
+        // The crew speaker persona (any badass brave nervous dim veteran). "any" without column.
         public string Persona = "any";
-        // Plan v4: topic (science: experiment id, soi_enter: home, otherwise any). "any" without column.
+        // Topic (science: experiment id, soi_enter: home, otherwise any). "any" without column.
         public string Topic = "any";
-        // Plan v5: probe core of the scene (any or a ProbeCores key). "any" without column or when empty.
+        // Probe core of the scene (any or a ProbeCores key). "any" without column or when empty.
         public string Core = "any";
-        // Plan v5: beep mood of a probe row (a ProbeCores.Moods value). Empty on every other row.
+        // Beep mood of a probe row (a ProbeCores.Moods value). Empty on every other row.
         public string Beep = "";
         // Body key of a {body} variant (kerbin, mun, ..., generic). Empty for a row without {body}.
         public string Body = "";
@@ -55,10 +55,10 @@ namespace Lonapse
 
         public bool HasBody { get { return !string.IsNullOrEmpty(Body); } }
 
-        // Plan v5: a probe row has no voice clip, only a subtitle (and a beep at runtime)
+        // A probe row has no voice clip, only a subtitle (and a beep at runtime)
         public bool SubtitleOnly { get { return PhraseTable.IsSubtitleOnlyRole(Role); } }
 
-        // Subtitle text: English only (user request), the Lonapse text when a table has no english column
+        // Subtitle text: English only, the Lonapse text when a table has no english column
         public string SubtitleText
         {
             get { return !string.IsNullOrEmpty(English) ? English : LonapseText; }
@@ -77,46 +77,46 @@ namespace Lonapse
             "chatter", "staging", "chute_semi", "chute_full", "throttle_full", "throttle_cut",
             "dock_approach", "dock_close", "dock_hard", "docked", "touchdown", "splashdown", "relief",
             "plan_node", "burn_soon", "station_check", "eva_check", "eva_fall", "countdown",
-            // plan v4
+            // game events
             "soi_enter", "science", "part_lost", "power_low", "power_ok", "signal_lost", "signal_back", "crew_lost",
-            // plan v5 (probe mode)
+            // probe mode
             "probe_chat", "probe_sleepy",
-            // plan v6 (probe mode): the probe calls Mission Control first, stress per cause, "say again?" on a weak
+            // probe mode: the probe calls Mission Control first, stress per cause, "say again?" on a weak
             // signal, milestones, rover driving, data transmission
             "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover", "probe_data",
-            // 0.6.0: the probe and the crew on one vessel talk in the cabin
+            // The probe and the crew on one vessel talk in the cabin
             ProbeCrewEvent };
         /// <summary>
-        /// 0.6.0 (user request): a crewed vessel with a probe core. The probe beeps in the cabin and a crew member
+        /// A crewed vessel with a probe core. The probe beeps in the cabin and a crew member
         /// answers, or the other way around. Probe and crew rows, no MC rows, never in a serious phase. Not a probe
         /// mode event: it only plays with crew aboard. Same as PROBE_CREW_EVENT in audio/build_lonapse.py.
         /// </summary>
         public const string ProbeCrewEvent = "probe_crew";
-        // Plan v5 and v6: events that only play in probe mode. Same as PROBE_EVENTS in audio/build_lonapse.py.
+        // Events that only play in probe mode. Same as PROBE_EVENTS in audio/build_lonapse.py.
         public static readonly string[] ProbeEvents = {
             "probe_chat", "probe_sleepy", "probe_hail", "probe_stress", "probe_say_again", "probe_milestone", "probe_rover",
             "probe_data" };
-        // Plan v5: existing events that also have probe scenes (marked by a core or a probe-mode role).
+        // Existing events that also have probe scenes (marked by a core or a probe-mode role).
         // Same as PROBE_VARIANT_EVENTS in audio/build_lonapse.py.
         public static readonly string[] ProbeVariantEvents = {
             "science", "power_low", "power_ok", "soi_enter", "part_lost", "signal_lost", "signal_back",
-            // plan v6: the probe reacts to the flight events and callouts too
+            // The probe reacts to the flight events and callouts too
             "touchdown", "splashdown", "docked", "burn_soon", "staging", "chute_semi", "chute_full", "throttle_full",
             "throttle_cut", "plan_node" };
         public static readonly string[] Severities = { "chatter", "callout", "warning" };
         public static readonly string[] Bands = { "calm", "tense", "panic", "none" };
         public static readonly string[] Roles = { "crew", "mc", "probe" };
-        // Plan v5 roles. Subtitle-only roles only have english (spanish stays empty). Plan v6 removed the room roles
-        // (flight, intern, coffee) and the diary: in probe mode only Mission Control and the probe talk.
+        // Roles. Subtitle-only roles only have english (spanish stays empty). In probe mode only Mission Control and
+        // the probe talk.
         public const string RoleProbe = "probe";
         public const string RoleCrew = "crew";
         public static readonly string[] SubtitleOnlyRoles = { "probe" };
         // Roles that only appear in probe mode (every role except crew and mc)
         public static readonly string[] ProbeRoles = { "probe" };
-        // Plan v6: a probe subtitle is short and the same form everywhere: "[beeps excitedly]", "[beeps very slowly]".
+        // A probe subtitle is short and the same form everywhere: "[beeps excitedly]", "[beeps very slowly]".
         static readonly Regex ProbeSubtitleRe = new Regex(@"^\[beeps( [a-z]+){1,3}\]$", RegexOptions.CultureInvariant);
         public static bool ProbeSubtitleOk(string english) { return english != null && ProbeSubtitleRe.IsMatch(english); }
-        // Plan v5 column values: core any or a ProbeCores key, beep a ProbeCores mood
+        // Column values: core any or a ProbeCores key, beep a ProbeCores mood
         public static readonly string[] Cores = BuildCores();
         public static string[] Moods { get { return ProbeCores.Moods; } }
 
@@ -142,7 +142,7 @@ namespace Lonapse
             return null;
         }
 
-        /// <summary>Plan v5: a scene for probe mode. True when its core is not any, when a line has a probe-mode
+        /// <summary>A scene for probe mode. True when its core is not any, when a line has a probe-mode
         /// role (probe), or when its event is a probe-only event. Crew pickers skip
         /// these scenes, probe mode uses only these.</summary>
         public static bool IsProbeScene(PhraseScene sc)
@@ -157,7 +157,7 @@ namespace Lonapse
             return (string.IsNullOrEmpty(rowCore) ? Any : rowCore) == (string.IsNullOrEmpty(current) ? Any : current);
         }
 
-        /// <summary>Plan v5: probe scenes (IsProbeScene) with this event whose phase matches and whose core fits.
+        /// <summary>Probe scenes (IsProbeScene) with this event whose phase matches and whose core fits.
         /// coreExact: only scenes with exactly this core (null core: only any scenes). Otherwise the core scenes and
         /// the any scenes. The caller can try exact first and fall back. Band is not filtered.</summary>
         public List<PhraseScene> ProbeScenesFor(string evt, string core, string phase, bool coreExact,
@@ -297,22 +297,41 @@ namespace Lonapse
         public const string GenericBody = "generic";
         /// <summary>The home body: body scenes listed in NOT_AT_HOME (build_lonapse.py) have no variant for it.</summary>
         public const string HomeBody = "kerbin";
-        // Plan v4, same values as TRAITS, PERSONAS and TOPICS_BY_EVENT in audio/build_lonapse.py
+        // Same values as TRAITS, PERSONAS and TOPICS_BY_EVENT in audio/build_lonapse.py
         public const string Any = "any";
-        public static readonly string[] Traits = { "any", "pilot", "engineer", "scientist", "tourist" };
+        public static readonly string[] Traits = { "any", "pilot", "engineer", "scientist", "tourist", "to_tourist", "tourist_pair" };
         public static readonly string[] Personas = { "any", "badass", "brave", "nervous", "dim", "veteran" };
         public static readonly string[] ScienceTopics = {
             "any", "crewreport", "evareport", "mysterygoo", "surfacesample", "mobilematerialslab",
             "temperaturescan", "barometerscan", "seismicscan", "gravityscan", "atmosphereanalysis",
             "asteroidsample", "cometsample", "infraredtelescope", "magnetometer", "roc" };
         public static readonly string[] SoiTopics = { "any", "home" };
-        // Plan v6: probe staging (what the stage holds), milestones and rover moments
+        // Probe staging (what the stage holds), milestones and rover moments
         public static readonly string[] StagingTopics = { "any", "separation", "ignition" };
         public static readonly string[] MilestoneTopics = { "any", "day1", "day10", "day100", "day365", "orbit", "landing" };
         public static readonly string[] RoverTopics = { "any", "fast", "air", "tilt", "idle" };
-        // User test: a scene about solar panels (chatter, power_low, power_ok) only plays on a ship that has one.
+        // probe_crew topic staging: a tourist calls the stage, the probe reacts (only tourists aboard, at a staging)
+        public const string StagingJokeTopic = "staging";
+        public static readonly string[] ProbeCrewTopics = { "any", StagingJokeTopic };
+        // A scene about solar panels (chatter, power_low, power_ok) only plays on a ship that has one.
+        // Chatter also has part topics: prechute (a chute is still packed and none is open), chuteopen (a chute
+        // is open) and heatshield (the ship has a heat shield).
         public const string SolarTopic = "solar";
+        public const string PreChuteTopic = "prechute";
+        public const string ChuteOpenTopic = "chuteopen";
+        public const string HeatShieldTopic = "heatshield";
         public static readonly string[] SolarTopics = { "any", SolarTopic };
+        public static readonly string[] ChatterTopics = { "any", SolarTopic, PreChuteTopic, ChuteOpenTopic, HeatShieldTopic };
+
+        /// <summary>A part topic only plays when the ship has that part in that state. Other topics always pass.</summary>
+        public static bool PartTopicOk(string topic, bool hasSolar, bool hasShield, bool chuteStowed, bool chuteOpen)
+        {
+            if (topic == SolarTopic) return hasSolar;
+            if (topic == HeatShieldTopic) return hasShield;
+            if (topic == PreChuteTopic) return chuteStowed && !chuteOpen;
+            if (topic == ChuteOpenTopic) return chuteOpen;
+            return true;
+        }
 
         /// <summary>
         /// Topic cycle for the Debug tab phrase test: "" (any) first, then every science topic and the soi_enter
@@ -348,7 +367,7 @@ namespace Lonapse
             PhaseColumn, CauseColumn, LonapseColumn, FolderColumn, BodyColumn, EnglishColumn,
             TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn, SpanishRtColumn };
 
-        // Topics allowed for an event: ScienceTopics for science, SoiTopics for soi_enter, v6 StagingTopics,
+        // Topics allowed for an event: ScienceTopics for science, SoiTopics for soi_enter, StagingTopics,
         // MilestoneTopics and RoverTopics, only "any" otherwise.
         public static string[] TopicsFor(string ev)
         {
@@ -357,11 +376,13 @@ namespace Lonapse
             if (ev == "staging") return StagingTopics;
             if (ev == "probe_milestone") return MilestoneTopics;
             if (ev == "probe_rover") return RoverTopics;
-            if (ev == "chatter" || ev == "power_low" || ev == "power_ok") return SolarTopics;
+            if (ev == ProbeCrewEvent) return ProbeCrewTopics;
+            if (ev == "chatter") return ChatterTopics;
+            if (ev == "power_low" || ev == "power_ok") return SolarTopics;
             return new string[] { Any };
         }
 
-        // Explosion words (plan v4), only allowed in part_lost rows. Same rule as EXPLOSION_RE in build_lonapse.py:
+        // Explosion words, only allowed in part_lost rows. Same rule as EXPLOSION_RE in build_lonapse.py:
         // a word that starts with explo (not explor), boom, blast (not "blast off"), explot or estall, or "blew up",
         // "blew apart", "blew out", "blew off". Case-insensitive.
         static readonly Regex ExplosionRe = new Regex(
@@ -375,7 +396,7 @@ namespace Lonapse
 
         // Sounds/ folder of a row. Must match folder_for in
         // audio/build_lonapse.py (the tests compare both on the built table).
-        // Plan v5: the subtitle-only roles have no clip and no folder ("").
+        // The subtitle-only roles have no clip and no folder ("").
         public static string FolderFor(string role, string severity, string band, string ev)
         {
             if (IsSubtitleOnlyRole(role)) return "";
@@ -524,7 +545,7 @@ namespace Lonapse
                     if (e.Spanish.Length == 0) bad.Add("spanish is empty");
                     if (hasEnglish && e.English.Length == 0) bad.Add("english is empty");
                 }
-                // plan v5: core, beep and the probe-mode roles and events
+                // Core, beep and the probe-mode roles and events
                 if (Array.IndexOf(Cores, e.Core) < 0) bad.Add("unknown core '" + e.Core + "'");
                 if (e.Role == RoleProbe)
                 {
@@ -623,7 +644,7 @@ namespace Lonapse
             return true;
         }
 
-        // ---- phase and cause matching (plan v3) ----
+        // ---- phase and cause matching ----
         // Same meaning as FlightPhase.Matches: "any" (or null or empty) on either side matches everything,
         // "serious" stands for launch, ascent, reentry and descent, "goofy" for prelaunch, orbit, coast and landed.
         // Kept here so PhraseTable compiles on its own in the offline tests.
@@ -650,7 +671,7 @@ namespace Lonapse
             return rowCause == current;
         }
 
-        // ---- trait, persona and topic matching (plan v4) ----
+        // ---- trait, persona and topic matching ----
         // "any" (or null or empty) on either side matches everything. Pass null to not filter.
 
         public static bool TraitMatches(string rowTrait, string current) { return AnyOrEqual(rowTrait, current); }
@@ -685,7 +706,7 @@ namespace Lonapse
             return topicExact ? TopicMatchesExact(sc.Topic, topic) : TopicMatches(sc.Topic, topic);
         }
 
-        // ---- scenes (plan v2, req 20) ----
+        // ---- scenes ----
 
         // True when this row has a clip for the gender "m" or "f". Mission Control rows only exist as "m".
         public static bool HasGender(PhraseEntry e, string g)
@@ -750,7 +771,7 @@ namespace Lonapse
             return r;
         }
 
-        // Plan v4: the same plus trait, persona and topic (SceneMatches). Null trait, persona or topic does not filter.
+        // The same plus trait, persona and topic (SceneMatches). Null trait, persona or topic does not filter.
         public List<PhraseScene> ScenesFor(string evt, string band, string phase, string cause,
                                            string trait, string persona, string topic, bool topicExact,
                                            Predicate<PhraseScene> filter)
@@ -779,9 +800,9 @@ namespace Lonapse
     public sealed class PhraseScene
     {
         public readonly string Id, Event, Band, Severity, Phase, Cause;
-        // Plan v4, "any" when the table has no column
+        // "any" when the table has no column
         public readonly string Trait, Persona, Topic;
-        // Plan v5: probe core of the scene, "any" when the table has no column
+        // Probe core of the scene, "any" when the table has no column
         public readonly string Core;
         // Every row of the scene, body variants included, ordered by seq and then body
         public readonly List<PhraseEntry> AllLines = new List<PhraseEntry>();
@@ -791,10 +812,10 @@ namespace Lonapse
         public readonly List<string> Bodies = new List<string>();
         public int CrewLines { get; private set; }
         public int McLines { get; private set; }
-        // Plan v5: lines with a probe-mode role (probe) and subtitle-only lines
+        // Lines with a probe-mode role (probe) and subtitle-only lines
         public int ProbeRoleLines { get; private set; }
         public int SubtitleOnlyLines { get; private set; }
-        // Plan v5: see PhraseTable.IsProbeScene
+        // See PhraseTable.IsProbeScene
         public bool IsProbe { get; private set; }
         public bool FemaleOk { get; private set; }   // every crew line has an "f" clip
         public bool MaleOk { get; private set; }     // every crew line has an "m" clip

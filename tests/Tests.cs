@@ -169,7 +169,7 @@ public static class Tests
             Check(m.impulse <= 1f, "impulse capped at 1", null);
         }
 
-        // ---- user feedback 0.4.0: a reaction wheel roll does not cause panic, sudden events still count at once ----
+        // ---- a reaction wheel roll does not cause panic, sudden events still count at once ----
         {
             StressModel m = Fresh();
             FlightSample s = Calm(); s.omega = 2.5;   // small ship rolled with E on reaction wheels
@@ -230,13 +230,13 @@ public static class Tests
             Near(m.comp[StressModel.Fuel], 0, 0, "fuel: full tanks plus spent SRB under throttle gives no fuel stress");
         }
 
-        // ---- phase 2: rails warp gate ----
+        // ---- rails warp gate ----
         Check(DcMath.IsRailsWarp(true, 5f), "warp: rails 5x closes the gate", null);
         Check(DcMath.IsRailsWarp(true, 2f), "warp: rails 2x closes the gate (no more >10x rule)", null);
         Check(!DcMath.IsRailsWarp(true, 1f), "warp: rails mode at 1x is not warp", null);
         Check(!DcMath.IsRailsWarp(false, 4f), "warp: physics warp 4x keeps playing", null);
 
-        // ---- phase 2: docking watcher ----
+        // ---- docking watcher ----
         {
             Tuning t = new Tuning();
             float dt = 0.1f;
@@ -330,7 +330,7 @@ public static class Tests
             Check(m.comp[StressModel.Spin] > 0.99f, "docking quiet: EndQuietMotion restores spin at once", null);
         }
 
-        // ---- phase 2: warp ping cooldown, intercom pitch gap ----
+        // ---- warp ping cooldown, intercom pitch gap ----
         Check(DcMath.WarpPingAllowed(100f, -999f, 15f), "warp ping: first one allowed", null);
         Check(!DcMath.WarpPingAllowed(110f, 100f, 15f), "warp ping: no second ping within 15 s", null);
         Check(DcMath.WarpPingAllowed(116f, 100f, 15f), "warp ping: allowed again after 15 s", null);
@@ -346,7 +346,7 @@ public static class Tests
             Check(Math.Abs(jeb.basePitch - bob.basePitch) >= 0.05f, "intercom pitch: Jeb and Bob already distinct", null);
         }
 
-        // ---- phase 2: station mode and intercom ----
+        // ---- station mode and intercom ----
         Near(DcMath.MeanInterval(0f, 110f, 1f, 1f * 0.5f), 220.0, 0.01, "station: rate factor 0.5 doubles the quiet interval");
         Near(DcMath.IntercomInterval(240f, false, false, 2.5f, 2f), 240.0, 1e-3, "intercom: base interval 240 s");
         Near(DcMath.IntercomInterval(240f, true, false, 2.5f, 2f), 96.0, 1e-3, "intercom: station/base 2.5x more often");
@@ -373,11 +373,21 @@ public static class Tests
                   "intercom: kerbals out due to G do not count", null);
         }
 
-        // ---- 0.3.0: crew delivery ----
+        // ---- crew delivery ----
         Near(DcMath.CrewPitch(1.0f, 0f, 0f, 2f, 1.2f), 1.0, 1e-6, "pitch: calm kerbal at base pitch");
         Near(DcMath.CrewPitch(1.0f, 1f, 0f, 2f, 1.2f), Math.Pow(2, 2.0 / 12), 1e-4, "pitch: stress 1 adds 2 semitones (x1.122)");
         Near(DcMath.CrewPitch(1.12f, 1f, 0f, 2f, 1.2f), 1.2, 1e-6, "pitch: total capped at 1.2");
         Near(DcMath.CrewPitch(1.0f, 0f, 1f, 2f, 1.2f), 0.88, 1e-6, "pitch: full G strain lowers 12%");
+        Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, true), 1.0, 1e-6, "pitch: recorded panic clip gets no stress raise");
+        Near(DcMath.CrewPitch(1.05f, 1f, 1f, 0.5f, 1.12f, true), 1.05 * 0.88, 1e-6, "pitch: recorded panic keeps base pitch and G drop");
+        Near(DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f, false), DcMath.CrewPitch(1.0f, 1f, 0f, 0.5f, 1.12f), 1e-6, "pitch: other clips unchanged");
+        Check(DcMath.TruncFraction(1f, 0.85f, 0.8f, true) == 1f && Math.Abs(DcMath.TruncFraction(1f, 0.85f, 0.8f, false) - 0.8f) < 1e-6,
+              "truncation: a recorded panic clip is never cut, other lines still are", null);
+        Near(DcMath.CrewVolume(0f), 0.70, 1e-6, "volume: calm crew line 0.70");
+        Near(DcMath.CrewVolume(1f), 0.90, 1e-6, "volume: full stress crew line 0.90 (about 2 dB louder)");
+        Near(20 * Math.Log10(DcMath.CrewVolume(1f) / DcMath.CrewVolume(0f)), 2.18, 0.05, "volume: crew stress range about 2 dB");
+        Check(DcMath.CrewVolume(5f) == DcMath.CrewVolume(1f) && DcMath.CalloutVolume(0f) > DcMath.CrewVolume(0f) && DcMath.McVolume == 0.75f,
+              "volume: clamped, callouts a little higher, Mission Control steady", null);
         Near(DcMath.TruncFraction(0.8f, 0.85f, 0.8f), 1.0, 1e-6, "truncation: none below sk 0.85");
         Near(DcMath.TruncFraction(1.0f, 0.85f, 0.8f), 0.8, 1e-6, "truncation: at most 20% cut at sk 1");
         {
@@ -387,7 +397,7 @@ public static class Tests
             Check(t3.descentMaxH == 500f && t3.descentVolHi <= 0.5f, "descent blips: only below 500 m, softer volume", null);
         }
 
-        // ---- 0.3.0: intercom click ----
+        // ---- intercom click ----
         {
             float[] c1 = ClickSynth.Generate(44100, 12345, 0.025f), c2 = ClickSynth.Generate(44100, 12345, 0.025f);
             float peak = 0f; double e1 = 0, e2 = 0;
@@ -399,7 +409,7 @@ public static class Tests
             Check(same, "click: deterministic for a seed", null);
         }
 
-        // ---- 0.3.0: callouts (staging, parachutes) ----
+        // ---- callouts (staging, parachutes) ----
         {
             CalloutGate g = new CalloutGate();
             Check(g.TryShared(10f, 1.5f), "callout: first stage callout allowed", null);
@@ -430,7 +440,7 @@ public static class Tests
             Check(KerbalVoice.PickCallout(cl, rng) == null, "callout: nobody when all are out", null);
         }
 
-        // ---- 0.3.0: docking close-approach phase ----
+        // ---- docking close-approach phase ----
         {
             Tuning t = new Tuning();
             DockingWatcher dw = new DockingWatcher();
@@ -470,7 +480,7 @@ public static class Tests
             Check(wasClose && !dw.closePhase, "docking close: backing out beyond 40 m ends the phase", null);
         }
 
-        // ---- 0.3.0: settings migration ----
+        // ---- settings migration ----
         {
             Settings old = new Settings();
             old.tuning.intercomInterval = 240f; old.tuning.stationMcFactor = 0.5f; old.tuning.descentMaxH = 3000f;
@@ -487,7 +497,7 @@ public static class Tests
                   "migration: a current file is left alone", null);
         }
 
-        // ---- 0.3.1: stress-driven intercom ----
+        // ---- stress-driven intercom ----
         {
             Tuning t = new Tuning();
             float lo = DcMath.IntercomInterval(t.intercomInterval, false, false, t.intercomStationBoost, t.intercomQuietBoost);
@@ -761,7 +771,7 @@ public static class Tests
                 "k1\tchatter\tchatter\tcalm\tcrew\ts1\t1\tboth\tHola\taloH\tcrew/panic" }, eBadFolder);
             Check(eBadFolder.Count == 1, "folder: a folder column that breaks the rule is rejected", eBadFolder.Count.ToString());
 
-            // ---- scenes (req 20) ----
+            // ---- scenes ----
             {
                 List<string> es = new List<string>();
                 PhraseTable st = PhraseTable.Parse(new List<string> {
@@ -838,7 +848,7 @@ public static class Tests
                 Check(allKeys, "countdown: the built table has every countdown clip and the abort scream", null);
             }
 
-            // ---- pacing rules (req 9, 11, 14, 18) ----
+            // ---- pacing rules (11, 14, 18) ----
             Check(PacingRules.StationChoice("auto", 0.2f, 0.6f) == StationAction.Check && PacingRules.StationChoice("auto", 0.7f, 0.6f) == StationAction.Exchange,
                   "station: auto is check-in below burstBand and exchange above", null);
             Check(PacingRules.StationChoice("check", 0.9f, 0.6f) == StationAction.Check && PacingRules.StationChoice("exchange", 0.1f, 0.6f) == StationAction.Exchange,
@@ -851,7 +861,7 @@ public static class Tests
             Check(!PacingRules.PanicAllowed(10f, 5f, 8f, true) && PacingRules.PanicAllowed(14f, 5f, 8f, true) && !PacingRules.PanicAllowed(14f, 5f, 8f, false),
                   "panic: global gap and speaker cooldown both gate a panic line", null);
 
-            // ---- air arbiter: intercom vs radio (user report: intercom over the radio) ----
+            // ---- air arbiter: intercom vs radio (intercom over the radio) ----
             Check(!AirRules.IntercomMayStart(true, false, false, 99f) && !AirRules.IntercomMayStart(false, true, false, 99f)
                   && !AirRules.IntercomMayStart(false, false, true, 99f), "air: no chat while the radio plays, is queued or pending", null);
             Check(!AirRules.IntercomMayStart(false, false, false, 1.9f) && AirRules.IntercomMayStart(false, false, false, 2.0f),
@@ -863,7 +873,7 @@ public static class Tests
             Check(AirRules.ChatShouldYield(true, true) && !AirRules.ChatShouldYield(false, true) && !AirRules.ChatShouldYield(true, false),
                   "air: the chat yields only between turns and only when radio waits", null);
             Check(!AirRules.ChatPausedTooLong(20f) && AirRules.ChatPausedTooLong(20.1f), "air: a chat paused over 20 s is dropped", null);
-            // ---- air queue: a started chat holds the air, no chat right before the radio (user report: radio cut into a chat) ----
+            // ---- air queue: a started chat holds the air, no chat right before the radio (radio cut into a chat) ----
             Check(AirRules.ChatHoldsAir(true, true, false) && AirRules.ChatHoldsAir(false, false, true)
                   && !AirRules.ChatHoldsAir(false, true, false) && !AirRules.ChatHoldsAir(true, false, false),
                   "air: a started chat with items left, or an audible line, holds the air", null);
@@ -925,7 +935,7 @@ public static class Tests
         return fail == 0 ? 0 : 1;
     }
 
-    // ---- plan v5 phase 2: director rules in probe mode (ProbeRules) ----
+    // ---- director rules in probe mode (ProbeRules) ----
     static void ProbeRulesTests()
     {
         Near(ProbeRules.BeepPitch(0f, false, 1.35f), 1f, 1e-5f, "probe rules: beep pitch 1 at stress 0");
@@ -962,7 +972,7 @@ public static class Tests
               && ProbeRules.PlanFor("science") == ProbeEventPlan.Radio && ProbeRules.PlanFor("signal_back") == ProbeEventPlan.Radio
               && ProbeRules.PlanFor("touchdown") == ProbeEventPlan.Radio && ProbeRules.PlanFor("burn_soon") == ProbeEventPlan.Radio,
               "probe rules: crew_lost and signal_lost dropped, the rest radio", null);
-        // plan v6: only Mission Control and the probe talk in probe mode
+        // Only Mission Control and the probe talk in probe mode
         Check(PhraseTable.Roles.Length == 3 && Array.IndexOf(PhraseTable.Roles, "diary") < 0 && Array.IndexOf(PhraseTable.Roles, "flight") < 0 && Array.IndexOf(PhraseTable.Roles, "intern") < 0
               && Array.IndexOf(PhraseTable.Roles, "coffee") < 0 && Array.IndexOf(PhraseTable.Events, "room_chat") < 0
               && Array.IndexOf(PhraseTable.Events, "probe_bet_open") < 0 && PhraseTable.IsProbeEvent("probe_hail"),
@@ -992,14 +1002,14 @@ public static class Tests
             "ph_a_1\tprobe_hail\tchatter\tcalm\tprobe\tph_a\t1\tboth\tgoofy\tany\tany\tcurious\t\t[beeps curiously]",
             "ph_a_2\tprobe_hail\tchatter\tcalm\tmc\tph_a\t2\tm\tgoofy\tany\tany\t\tSi\tYes?",
             "td_a_1\ttouchdown\tchatter\tnone\tprobe\ttd_a\t1\tboth\tany\tany\tany\thappy\t\t[beeps with relief]" };
-        // plan v6: the diary role and the long probe subtitles are rejected
+        // The diary role and the long probe subtitles are rejected
         List<string> badErrs = new List<string>();
         PhraseTable.Parse(new List<string> { rows[0],
             "dy_a_1\tprobe_chat\tchatter\tcalm\tdiary\tdy_a\t1\tboth\tany\tany\tany\t\t\tDay 3.",
             "lb_a_1\tprobe_chat\tchatter\tcalm\tprobe\tlb_a\t1\tboth\tany\tany\tany\thappy\t\t[beeps excitedly, then a song]" }, badErrs);
         Check(badErrs.Count == 2, "probe rules v6: diary role and long probe subtitle rejected", string.Join(" | ", badErrs.ToArray()));
 
-        // 0.6.0: probe and crew in the cabin (probe_crew). Probe and crew rows, never MC. A probe scene, so the crew
+        // Probe and crew in the cabin (probe_crew). Probe and crew rows, never MC. A probe scene, so the crew
         // pickers skip it, and it is found by its event like the probe events.
         List<string> pcErr = new List<string>();
         PhraseTable pct = PhraseTable.Parse(new List<string> { rows[0],
@@ -1058,9 +1068,9 @@ public static class Tests
         }
     }
 
-    // ==== v4 review fixes: event max ages, debug topic cycle, expression override check, badass with effects ====
-    // ---- plan v5: probe cores, sleep hysteresis ----
-    // 0.6.0 line memory: a shuffle bag over the changing scene lists
+    // ==== event max ages, debug topic cycle, expression override check, badass with effects ====
+    // ---- probe cores, sleep hysteresis ----
+    // line memory: a shuffle bag over the changing scene lists
 
     static void SceneMemoryTests()
     {
@@ -1256,7 +1266,7 @@ public static class Tests
               "runtime voice: spoken value and subtitle digits are rounded the same way",
               RuntimeLines.Words("alt_km", 12.46) + " / " + RuntimeLines.Digits("alt_km", 12.46) + " ; " + RuntimeLines.Words("alt_km", 7.46) + " / " + RuntimeLines.Digits("alt_km", 7.46));
 
-        // big numbers stay short (user report: 15 000 000 km was a long string of words)
+        // big numbers stay short (15 000 000 km was a long string of words)
         object[][] big = {
             new object[] { "alt_km", 15000000.0, "quince millones", "15 million" },
             new object[] { "alt_km", 15340000.0, "quince millones", "15 million" },
@@ -1359,9 +1369,48 @@ public static class Tests
         foreach (RuntimeTemplate t in rtAll) { int c0; kindCount.TryGetValue(t.Kind, out c0); kindCount[t.Kind] = c0 + 1; }
         var kc = new List<string>();
         foreach (var kv in kindCount) kc.Add(kv.Key + " " + kv.Value);
-        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5 && kindCount.Count == RuntimeLines.Kinds.Length - RuntimeLines.ModKinds.Length,
+        Check(rtErr.Count == 0 && rtAll.Count >= 40 && rtVersions > rtAll.Count && rtFiles.Count >= 5
+              && System.Linq.Enumerable.All(RuntimeLines.Kinds, k => kindCount.ContainsKey(k) || Array.IndexOf(RuntimeLines.ModKinds, k) >= 0),
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
+        {
+            // a report that talks to one kerbal by name gets a reply of its own (to=), not only the generic ones
+            var noReply = new List<string>();
+            foreach (RuntimeTemplate t in rtAll)
+            {
+                if (t.Kind != "report" || !t.NamesKerbal) continue;
+                bool has = false;
+                foreach (RuntimeTemplate r in rtAll)
+                    if (r.Kind == "reply")
+                        foreach (string to in r.To)
+                            if (to == t.Id || (to.EndsWith("*") && t.Id.StartsWith(to.Substring(0, to.Length - 1)))) has = true;
+                if (!has) noReply.Add(t.Id);
+            }
+            Check(noReply.Count == 0, "runtime voice: every report that names a kerbal has its own reply", string.Join(" ", noReply.ToArray()));
+            // tourists: the career lines are for crew who work here, tourists get their own lines, answers and chats
+            var careerOpen = new List<string>();
+            int tourReports = 0, tourReplies = 0, tourA = 0, tourB = 0, tourPair = 0;
+            foreach (RuntimeTemplate t in rtAll)
+            {
+                if (t.Kind == "report" && t.Where.StartsWith("crew.tsv") && !t.Id.StartsWith("rt_crew_tourist"))
+                {
+                    bool gated = false;
+                    foreach (var c in t.Checks) if (c.Key == "is_tourist" && c.Value.Value == 0) gated = true;
+                    if (!gated) careerOpen.Add(t.Id);
+                }
+                if (t.Kind == "report" && RuntimeLines.ForTourist(t)) tourReports++;
+                if (t.Kind == "reply" && RuntimeLines.ForTourist(t)) tourReplies++;
+                if (t.Kind == "chat")
+                {
+                    bool sa = Persona.ChatSideFits(t.TraitA, "tourist") && t.TraitA != null, sb = Persona.ChatSideFits(t.TraitB, "tourist") && t.TraitB != null;
+                    if (sa && sb) tourPair++; else if (sa) tourA++; else if (sb) tourB++;
+                }
+            }
+            Check(careerOpen.Count == 0 && tourReports >= 5 && tourReplies >= 6 && tourA >= 24 && tourB >= 23 && tourPair >= 24,
+                  "runtime voice: career lines skip tourists, tourists have own reports (" + tourReports + "), answers (" + tourReplies
+                  + ") and chats (" + tourA + " tourist to crew, " + tourB + " crew to tourist, " + tourPair + " two tourists)",
+                  string.Join(" ", careerOpen.ToArray()));
+        }
         var rtBadErr = new List<string>();
         RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
             "rt_b\tnope\t\tB.\tB.", "rt_c\treport\t\tC {fuel}.\tC.", "rt_d\treport\t\tD {nothing}.\tD {nothing}.", "x_e\treport\t\tE.\tE.",
@@ -1564,13 +1613,54 @@ public static class Tests
                 ModEventInfo repair = ModEvents.Info(withMod, "examplemod.repair_done");
                 ModEventInfo supplies = ModEvents.Info(withMod, "examplemod.supplies_low");
                 ModEventInfo exp = ModEvents.Info(withMod, "examplemod.experiment_done");
-                List<string> modIds = ModEvents.Ids(withMod);
+                List<string> modIds = ModEvents.Ids(withMod).FindAll(i => i.StartsWith("examplemod.", StringComparison.Ordinal));
                 Check(modErr.Count == 0 && mine.Count >= 10 && withMod.Count == rtAll.Count + mine.Count
                       && repair.HasChat && repair.HasMc && repair.Cooldown == 180 && repair.Priority == 1 && repair.Who == "any"
                       && supplies.Priority == 2 && supplies.Cooldown == 600 && exp.Who == "mc" && exp.Priority == 0 && exp.HasLines
                       && !ModEvents.Info(withMod, "examplemod.nothing").HasLines && modIds.Count == 3 && modIds[0] == "examplemod.experiment_done",
                       "mod API: the example mod file parses next to the Lonapse files, with its meta settings",
                       mine.Count + " mod templates; " + string.Join(" ; ", modErr.ToArray()));
+                // DeepFreeze: the lines Lonapse ships in Compat/DeepFreeze, read as that mod's files
+                {
+                    string dfPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Compat/DeepFreeze/deepfreeze.tsv"));
+                    var dfFiles = new List<KeyValuePair<string, IList<string>>>(rtFiles);
+                    dfFiles.Add(new KeyValuePair<string, IList<string>>("DeepFreeze/Lonapse/deepfreeze.tsv",
+                        System.IO.File.ReadAllLines(dfPath, System.Text.Encoding.UTF8)));
+                    var dfErr = new List<string>();
+                    List<RuntimeTemplate> dfAll = RuntimeLines.ParseAll(dfFiles, dfErr);
+                    var dfBad = new List<string>(dfErr);
+                    foreach (string ev in new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" })
+                        for (int n = 1; n <= 4; n++)
+                        {
+                            string id = NameBatch.IdFor(ev, n);
+                            ModEventInfo inf = ModEvents.Info(dfAll, id);
+                            if (!inf.HasLines || !inf.HasChat || !inf.HasMc) dfBad.Add(id + " misses chat or Mission Control lines");
+                            if (inf.Cooldown != 0) dfBad.Add(id + " cooldown " + inf.Cooldown);
+                        }
+                    var dfN = new Dictionary<string, string[]>();
+                    foreach (string k in RuntimeLines.NameSlots) dfN[k] = new[] { "Nombre", "Name" };
+                    dfN["x_frozen"] = new[] { "Jeb", "Jeb" };
+                    dfN["x_frozen2"] = new[] { "Bill", "Bill" };
+                    var dfV = new Dictionary<string, double>();
+                    foreach (string k in RuntimeLines.NumberSlots) dfV[k] = 50;
+                    dfV["x_count"] = 4;
+                    int dfCount = 0;
+                    foreach (RuntimeTemplate t in dfAll)
+                    {
+                        if (!t.Where.StartsWith("DeepFreeze/Lonapse/", StringComparison.Ordinal)) continue;
+                        dfCount++;
+                        if (t.Kind == "event" && !dfAll.Exists(r => r.Kind == "reply" && r.To.Contains(t.Id))) dfBad.Add(t.Id + " has no reply");
+                        for (int v = 0; v < t.Versions.Count; v++)
+                        {
+                            string a1, a2;
+                            if (!RuntimeLines.Fill(t, v, dfV, dfN, out a1, out a2) || a1.IndexOf('{') >= 0 || a2.IndexOf('{') >= 0)
+                                dfBad.Add(t.Id + " version " + (v + 1) + " does not fill");
+                        }
+                    }
+                    Check(dfBad.Count == 0 && dfCount >= 50 && !rtAll.Exists(t => t.Id.StartsWith("rt_deepfreeze") || t.Id.StartsWith("rt_chat_deepfreeze")),
+                          "DeepFreeze: the Compat lines parse as the mod DeepFreeze, frozen, thawed and comatose for one, two and a group have chats, Mission Control lines and replies, no cooldown ("
+                          + dfCount + ")", string.Join(" ; ", dfBad.ToArray()));
+                }
 
                 // mod events never mix with the stock events, the stock lines never answer them
                 RuntimeTemplate anySci = withMod.Find(t => t.Id == "rt_chat_snolink_1");
@@ -2078,9 +2168,9 @@ public static class Tests
         PhraseScene sc = null;
         foreach (PhraseScene x in t1.Scenes) if (x.Id == "ss") sc = x;
         Check(sc != null && sc.HasSlots, "slots: the scene knows it has slots", null);
-        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, true, "Kerbin", "Lander II", 1234);
-        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, false, null, "", 25600)["alt_km"] == "26"
-              && !SubtitleSlots.FlightValues(0, false, null, "", 0).ContainsKey("vessel"),
+        var flight = SubtitleSlots.FlightValues(6 * 3600.0 * 2 + 5, ProbeRules.KerbinDay, "Kerbin", "Lander II", 1234);
+        Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 25600)["alt_km"] == "26"
+              && !SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 0).ContainsKey("vessel"),
               "slots: flight values (mission day from 1, km, empty names left out)", flight["day"] + " " + flight["alt_km"]);
         var pp = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\thelmet", "thing\tsock" }, null);
         var un = new List<string>();
@@ -2200,7 +2290,7 @@ public static class Tests
         }
     }
 
-    // 0.6.0: the C# probe beep synth must give the same samples as audio/build_clips.py
+    // The C# probe beep synth must give the same samples as audio/build_clips.py
     static void ProbeSynthTests()
     {
         string here = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -2291,7 +2381,7 @@ public static class Tests
             Check(true, "probe synth: 21 clips of one voice rendered", sw.ElapsedMilliseconds + " ms on this machine");
         }
 
-        // extras and mood patterns of a voice's own (0.6.0)
+        // extras and mood patterns of a voice's own
         {
             ProbeVoiceSpec baseV = ProbeVoiceSpec.Stock()[1];   // okto: triangle, swing
             int baseLen = ProbeSynth.Beep(baseV, "happy", 0, null).Length;
@@ -2363,7 +2453,7 @@ public static class Tests
                   "probe voice: extras and moods survive the settings round trip", null);
         }
 
-        // registry and the pick per vessel (0.6.0)
+        // registry and the pick per vessel
         {
             ProbeVoiceSpec cfgVoice = new ProbeVoiceSpec("modcore", 610, "saw", "even", 0.2);
             ProbeVoiceSpec cfgOkto = new ProbeVoiceSpec("okto", 900, "triangle", "swing", 0.35);   // a mod changes OKTO
@@ -2664,7 +2754,7 @@ public static class Tests
         Check(ok && r.maxAge == 600f, "events: science request carries the 600 s max age", ok ? r.maxAge.ToString() : "no request");
     }
 
-    // ==== v2 T1: pure core modules (Pacing, MixMath, SignalMath, RadioProfile, DescentSequence, ThrottleWatch, Audit) ====
+    // ==== pure core modules (Pacing, MixMath, SignalMath, RadioProfile, DescentSequence, ThrottleWatch, Audit) ====
     static class CoreModuleTests
     {
         static double MagDb(double[] c, double f, double sr)
@@ -2802,7 +2892,7 @@ public static class Tests
             Near(SignalMath.FromDistance(-5, 100, 1000), 1.0, 1e-9, "core: FromDistance negative clamps to 1");
             Near(SignalMath.FromDistance(double.NaN, 100, 1000), 0.0, 1e-9, "core: FromDistance NaN gives 0");
 
-            // ---- SignalMath: EVA relay (plan v6) ----
+            // ---- SignalMath: EVA relay ----
             Near(SignalMath.RelaySignal(0, 0.8, 0.5, 1.0, 2.3), 0.8, 1e-9, "core: EVA relay near the ship carries the ship signal");
             Near(SignalMath.RelaySignal(0, 0.8, 1.65, 1.0, 2.3), 0.4, 1e-9, "core: EVA relay halfway the suit range halves it");
             Near(SignalMath.RelaySignal(0, 0.8, 3.0, 1.0, 2.3), 0.0, 1e-9, "core: EVA relay out of suit range is 0");
@@ -2932,7 +3022,7 @@ public static class Tests
         }
     }
 
-    // ==== v2 T3: stress and crew model (Rover, Eva, DockImpulse, launch cap, gender pitch) ====
+    // ==== stress and crew model (Rover, Eva, DockImpulse, launch cap, gender pitch) ====
     static class StressCrewTests
     {
         static readonly Band[] AllBands = { Band.Calm, Band.Tense, Band.Panic };
@@ -2947,7 +3037,7 @@ public static class Tests
                   && StressModel.Names[StressModel.Rover] == "rover" && StressModel.Names[StressModel.Eva] == "eva",
                   "v2 stress: old indices kept, Rover 8, Eva 9", null);
 
-            // ---- rover (req 13) ----
+            // ---- rover ----
             Near(StressModel.RoverComponent(5f, 0f, 0f, 0f, t), 0, 1e-6, "rover: flat road at 5 m/s gives 0");
             Near(StressModel.RoverComponent(25f, 3f, 0f, 0f, t), 1, 1e-6, "rover: 25 m/s over rough ground (roughness 3) gives 1");
             Near(StressModel.RoverComponent(25f, 0.5f, 0f, 0f, t), 0, 1e-6, "rover: speed alone on smooth ground gives 0");
@@ -2960,7 +3050,7 @@ public static class Tests
             StressModel rm2 = Fresh(); Tests.Run(rm2, Calm(), 1f, 0.1f);
             Check(rm2.comp[StressModel.Rover] == 0f && rm2.comp[StressModel.Eva] == 0f, "rover and eva: zero for a plain ship", null);
 
-            // ---- docking impulse (req 14) ----
+            // ---- docking impulse ----
             Near(StressModel.DockImpulse(0.2f, 0.2f, 0.5f, 0.35f), 0, 1e-6, "dock impulse: soft capture at 0.2 m/s gives 0");
             Near(StressModel.DockImpulse(0.1f, 0.2f, 0.5f, 0.35f), 0, 1e-6, "dock impulse: slower than soft gives 0");
             Near(StressModel.DockImpulse(0.5f, 0.2f, 0.5f, 0.35f), 0.35, 1e-6, "dock impulse: hard dock at 0.5 m/s gives the full impulse");
@@ -2973,7 +3063,7 @@ public static class Tests
             dm.AddImpulse(StressModel.DockImpulse(0.5f, 0.2f, 0.5f, 0.35f), true);
             Check(dm.impulse > 0.34f, "dock impulse: hard dock inside the quiet window is critical and counts", "impulse " + dm.impulse.ToString("0.000"));
 
-            // ---- EVA (req 12) ----
+            // ---- EVA ----
             FlightSample jet = Calm();
             jet.eva = true; jet.omega = 1.0; jet.evaThrusting = true; jet.fuelFrac = 1; jet.evaPropFrac = 1; jet.evaEcFrac = 1; jet.crewDist = 50;
             StressModel jm = Fresh(); Tests.Run(jm, jet, 5f, 0.1f);
@@ -3017,7 +3107,7 @@ public static class Tests
             Near(FuelMath.EvaFraction(0, 0), 1, 1e-9, "eva fuel: no mono max gives 1 (no stress)");
             Near(FuelMath.EvaFraction(200, 100), 1, 1e-9, "eva fuel: clamped to 1");
 
-            // ---- launch cap (req 10) ----
+            // ---- launch cap ----
             Check(KerbalVoice.LaunchMaxBand(true, 5000, 10000, false) == Band.Tense, "launch cap: Tense below 10 km with no failure", null);
             Check(KerbalVoice.LaunchMaxBand(true, 5000, 10000, true) == Band.Panic, "launch cap: a real failure lifts the cap", null);
             Check(KerbalVoice.LaunchMaxBand(true, 12000, 10000, false) == Band.Panic, "launch cap: above 10 km there is no cap", null);
@@ -3053,7 +3143,7 @@ public static class Tests
             Tests.Run(lc, spin, 1f, 0.1f);
             Check(StressModel.RealFailure(0, 0.92f, false, lc.lossOfControlTime), "loss of control: 2.5 s at 4.5 rad/s is a failure", "time " + lc.lossOfControlTime.ToString("0.00"));
 
-            // ---- gender pitch (req 8) and cooldown key ----
+            // ---- gender pitch and cooldown key ----
             KerbalVoice fem = KerbalVoice.Create("Valentina Kerman", 0.5f, 0.5f, true, true);
             KerbalVoice mal = KerbalVoice.Create("Bill Kerman", 0.5f, 0.5f, false, false);
             KerbalVoice val4 = KerbalVoice.Create("Valentina Kerman", 0.5f, 0.5f, true);
@@ -3070,7 +3160,7 @@ public static class Tests
         }
     }
 
-    // ==== v4: persona, phrase table columns, event watchers, faces, subtitle layout, new settings ====
+    // ==== persona, phrase table columns, event watchers, faces, subtitle layout, new settings ====
     static class V4Tests
     {
         static string Short(List<string> items, int max)
@@ -3229,7 +3319,9 @@ public static class Tests
                                                  EventWatchers.PowerOk, EventWatchers.SignalLost, EventWatchers.SignalBack, EventWatchers.CrewLost })
                 if (Array.IndexOf(PhraseTable.Events, ev) < 0) evMissing.Add(ev);
             Check(evMissing.Count == 0, "v4 table: every watcher event is a table event", Short(evMissing, 4));
-            Check(Array.IndexOf(PhraseTable.Traits, "any") == 0 && Persona.TraitKeys.Length == PhraseTable.Traits.Length - 1
+            // the table traits: any, the KSP jobs and the two intercom pair traits for tourists
+            Check(Array.IndexOf(PhraseTable.Traits, "any") == 0 && Persona.TraitKeys.Length == PhraseTable.Traits.Length - 3
+                  && Array.IndexOf(PhraseTable.Traits, Persona.ToTourist) > 0 && Array.IndexOf(PhraseTable.Traits, Persona.TouristPair) > 0
                   && Array.TrueForAll(Persona.TraitKeys, x => Array.IndexOf(PhraseTable.Traits, x) > 0)
                   && Array.TrueForAll(Persona.PersonaKeys, x => Array.IndexOf(PhraseTable.Personas, x) > 0)
                   && Persona.PersonaKeys.Length == PhraseTable.Personas.Length - 1,
@@ -3390,6 +3482,31 @@ public static class Tests
             Check(!cl.Tick(10, 3, 600, out r) && !cl.OnLost(10, "Bill Kerman"), "events: each kerbal reported once", null);
             cl.Reset();
             Check(cl.KnownCount == 0 && !cl.OnLost(11, "Bill Kerman"), "events: crew Reset forgets the flight", null);
+            // DeepFreeze: a kerbal that is back (thawed) when the call is due is dropped and can be lost later
+            cl.Know("Bill Kerman"); cl.Know("Jebediah Kerman");
+            cl.OnLost(20, "Bill Kerman"); cl.OnLost(20, "Jebediah Kerman");
+            Check(cl.Tick(24, 3, 600, n => n == "Jebediah Kerman", out r) && cl.lastNames.Count == 1 && cl.lastNames[0] == "Jebediah Kerman",
+                  "events: crew_lost names only the kerbals still lost", string.Join(", ", cl.lastNames.ToArray()));
+            Check(cl.OnLost(30, "Bill Kerman") && !cl.Tick(34, 3, 600, n => false, out r) && cl.pending.Count == 0,
+                  "events: a dropped kerbal can be reported again, nobody still lost gives no call", null);
+
+            // DeepFreeze groups: one line for kerbals frozen one after another
+            NameBatch nb = new NameBatch();
+            nb.Add(0, "Jebediah Kerman"); nb.Add(8, "Bill Kerman"); nb.Add(9, "Bill Kerman");
+            Check(nb.Take(16.5) == null && nb.Count == 2, "DeepFreeze group: still open while a freeze came less than 9 s ago", null);
+            List<string> grp = nb.Take(17.5);
+            Check(grp != null && grp.Count == 2 && grp[0] == "Jebediah Kerman" && nb.Count == 0 && nb.Take(100) == null,
+                  "DeepFreeze group: due 9 s after the last freeze, each name once, then empty", grp == null ? "null" : string.Join(", ", grp.ToArray()));
+            for (int i = 0; i < 10; i++) nb.Add(200 + i * 10, "K" + i);
+            Check(nb.Take(260) != null, "DeepFreeze group: a long row of freezes plays after 60 s at the latest", null);
+            NameBatch nb2 = new NameBatch();
+            nb2.Add(300, "Jebediah Kerman");
+            Check(nb2.Take(310, true, NameBatch.Grace) == null, "DeepFreeze group: waits while the next freeze runs", null);
+            nb2.Add(311, "Bill Kerman");
+            Check(nb2.Take(313.5, false, NameBatch.Grace) == null && nb2.Take(314.1, false, NameBatch.Grace).Count == 2,
+                  "DeepFreeze group: with the starts known, due 3 s after the last freeze ends", null);
+                        Check(NameBatch.IdFor("deepfreeze.frozen", 1) == "deepfreeze.frozen" && NameBatch.IdFor("deepfreeze.frozen", 2) == "deepfreeze.frozen_two"
+                  && NameBatch.IdFor("deepfreeze.frozen", 7) == "deepfreeze.frozen_group", "DeepFreeze group: one, two and group event ids", null);
 
             // priorities
             Check(EventPriority.CrewLost > EventPriority.PartLost && EventPriority.PartLost > EventPriority.Power && EventPriority.Power > EventPriority.Signal
@@ -3528,7 +3645,7 @@ public static class Tests
                       "subtitle: custom position from subtitleX/Y, clamped on screen", null);
                 SubColumn bad = SubtitleLayout.Column("bogus", float.NaN, 0f, new HudScales(float.NaN, 0f, -1f, 99f, 1f), float.NaN, float.NaN);
                 Check(!float.IsNaN(bad.x) && !float.IsNaN(bad.anchorY) && bad.w >= 1f, "subtitle: Column survives NaN and zero input", null);
-                // 0.6.0 subtitleWidth: a factor on the preset width, never past the HUD, the position stays
+                // subtitleWidth: a factor on the preset width, never past the HUD, the position stays
                 bool widthOk = true;
                 string widthBad = null;
                 string[] wpos = { SubtitleLayout.AboveNavball, SubtitleLayout.Custom, SubtitleLayout.TopLeft, SubtitleLayout.BottomLeft };
@@ -3650,7 +3767,7 @@ public static class Tests
         static void SettingsTests()
         {
             {
-                // user test: EVA breathing speeds up gradually while running
+                // EVA breathing speeds up gradually while running
                 Check(DcMath.EvaRunLevel(0.5f, 1f, 3f) == 0f && Math.Abs(DcMath.EvaRunLevel(2f, 1f, 3f) - 0.5f) < 1e-5f && DcMath.EvaRunLevel(9f, 1f, 3f) == 1f
                       && DcMath.EvaRunLevel(float.NaN, 1f, 3f) == 0f && DcMath.EvaRunLevel(2.5f, 0f, 0f) == 1f,
                       "eva breath: run level 0 at walk speed, 1 at run speed, fallback speeds", null);
@@ -3724,7 +3841,7 @@ public static class Tests
         }
     }
 
-    // ==== v3: phrase source tables, flight phase, mouth math, new settings, body lines ====
+    // ==== phrase source tables, flight phase, mouth math, new settings, body lines ====
     static class V3Tests
     {
         // Minimum counts the finished table (about 1000 source rows) must reach.
@@ -3831,7 +3948,7 @@ public static class Tests
             Check(pe.Count == 0, "v3 tables: PhraseTable.Parse reads the concatenated files without errors (" + t.Count + " rows)", Short(pe, 5));
             Check(rows.Count >= MinSourceRows, "v3 tables: at least " + MinSourceRows + " source rows", rows.Count + " rows");
             {
-                // user test: in launch and ascent Mission Control never talked to the probe (every probe_chat row was goofy)
+                // In launch and ascent Mission Control never talked to the probe (every probe_chat row was goofy)
                 List<string> noChat = new List<string>();
                 // the lines each stock core uses (a core without own lines yet borrows generic, ProbeCores.DefaultLines)
                 var lineSets = new List<string>();
@@ -3927,7 +4044,7 @@ public static class Tests
             Check(shortList.Count == 0, "v3 tables: rows per cause >= " + MinPerCause,
                   shortList.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortList.ToArray()));
 
-            // panic lines name their cause. 0.6.0: tense crew lines may be generic (cause any). With only one generic
+            // panic lines name their cause. Tense crew lines may be generic (cause any). With only one generic
             // tense scene (an MC line) that scene played every time the cause had just been talked about.
             List<string> noCause = new List<string>();
             foreach (SrcRow r in rows)
@@ -3935,7 +4052,7 @@ public static class Tests
                     && r["cause"] == "any" && !NonVerbal(r))
                     noCause.Add(r["clip_key"]);
             Check(noCause.Count == 0, "v3 tables: crew panic chatter has a cause (screams and interjections excepted)", Short(noCause, 8));
-            // 0.6.0 probe_crew scenes: a probe row and a crew row, no MC, never in a serious phase
+            // probe_crew scenes: a probe row and a crew row, no MC, never in a serious phase
             var pcScenes = new Dictionary<string, List<SrcRow>>();
             foreach (SrcRow r in rows)
                 if (r["event"] == "probe_crew")
@@ -3970,7 +4087,7 @@ public static class Tests
             }
             Check(fire.Count == 0, "v3 tables: fire, flame, smoke, burning only in staging, throttle, burn, countdown or heat/plasma rows", Short(fire, 6));
 
-            // plan v4: explosion words (PhraseTable.HasExplosionWord, plus the old explod/explot patterns) only in part_lost
+            // Explosion words (PhraseTable.HasExplosionWord, plus the old explod/explot patterns) only in part_lost
             List<string> boom = new List<string>();
             int boomOk = 0;
             foreach (SrcRow r in rows)
@@ -3991,14 +4108,14 @@ public static class Tests
             foreach (SrcRow r in rows)
             {
                 bool es = r["spanish"].Contains("{body}"), en = r["english"].Contains("{body}");
-                // plan v5: a subtitle-only row (probe) has no spanish, {body} sits only in english
+                // A subtitle-only row (probe) has no spanish, {body} sits only in english
                 if (PhraseTable.IsSubtitleOnlyRole(r["role"])) { if (en) bodyRows++; continue; }
                 if (es != en) body.Add(r["clip_key"]);
                 if (es && en) bodyRows++;
             }
             Check(body.Count == 0, "v3 tables: {body} in both spanish and english or in neither (" + bodyRows + " rows with {body})", Short(body, 6));
 
-            // kept from the v2 source table test
+            // kept from the first source table test
             int screams = 0, mcPanic = 0, badScream = 0;
             foreach (PhraseEntry e in t.Entries)
             {
@@ -4016,7 +4133,7 @@ public static class Tests
             Check(sep >= 3 && ign >= 3 && anyKind >= 2, "v3 tables: separation, ignition and neutral staging scenes", sep + " / " + ign + " / " + anyKind);
         }
 
-        // ---- plan v4 source checks: new columns, scene agreement, topics and the minimum scene counts ----
+        // ---- source checks: new columns, scene agreement, topics and the minimum scene counts ----
         static string Col(SrcRow r, string c) { string v = r[c]; return string.IsNullOrEmpty(v) ? "any" : v; }
 
         static readonly System.Text.RegularExpressions.Regex JokeWords = new System.Text.RegularExpressions.Regex(
@@ -4052,7 +4169,7 @@ public static class Tests
             }
             Check(mixed.Count == 0, "v4 tables: all rows of a scene share trait, persona and topic", Short(mixed, 6));
 
-            // scene list per event; a scene's tags come from its first row
+            // scene list per event. A scene's tags come from its first row.
             Func<string, List<List<SrcRow>>> scenes = ev =>
             {
                 List<List<SrcRow>> l = new List<List<SrcRow>>();
@@ -4152,6 +4269,43 @@ public static class Tests
                 Check(shortG.Count == 0, "v4 tables: every persona and every trait has >= 4 scenes",
                       shortG.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortG.ToArray()));
             }
+            // tourists: enough intercom dialogues for each pair, calm and tense, and radio scenes with Mission Control
+            {
+                var need = new List<string>();
+                foreach (string tr in new[] { "tourist", "to_tourist", "tourist_pair" })
+                    foreach (string band in new[] { "calm", "tense" })
+                    {
+                        int n = 0;
+                        foreach (string sc in order)
+                        {
+                            List<SrcRow> l = byScene[sc];
+                            if (Col(l[0], "trait") == tr && l[0]["band"] == band && l.Count >= 2 && !hasMc(l)) n++;
+                        }
+                        int min = band == "calm" ? 14 : 5;
+                        if (n < min) need.Add(tr + " " + band + " " + n + "/" + min);
+                    }
+                int radio = 0, tense = 0, panic = 0, withProbe = 0, stageJoke = 0;
+                foreach (string sc in order)
+                {
+                    List<SrcRow> l = byScene[sc];
+                    if (Col(l[0], "trait") != "tourist") continue;
+                    bool probeRow = false;
+                    foreach (SrcRow r in l) if (r["role"] == "probe") probeRow = true;
+                    if (l[0]["event"] == "probe_crew" && probeRow) { if (Col(l[0], "topic") == "staging") stageJoke++; else withProbe++; continue; }
+                    if (l[0]["event"] != "chatter" || (l.Count >= 2 && !hasMc(l))) continue; // radio only, not intercom
+                    if (l[0]["band"] == "calm" && hasMc(l)) radio++;
+                    if (l[0]["band"] == "tense") tense++;
+                    if (l[0]["band"] == "panic") panic++;
+                }
+                if (radio < 12) need.Add("tourist radio " + radio + "/12");
+                // under stress a tourist only says tourist lines on the radio, so there must be plenty
+                if (tense < 20) need.Add("tourist tense radio " + tense + "/20");
+                if (panic < 12) need.Add("tourist panic radio " + panic + "/12");
+                if (withProbe < 12) need.Add("tourist with the probe " + withProbe + "/12");
+                if (stageJoke < 6) need.Add("tourist calls the stage " + stageJoke + "/6");
+                Check(need.Count == 0, "v4 tables: tourists have their own dialogues for every pair (tourist to crew, crew to tourist, two tourists) and radio scenes",
+                      string.Join(", ", need.ToArray()));
+            }
             // persona scenes are crew lines: a persona scene must have a crew line (the persona is the crew speaker's)
             {
                 List<string> noCrew = new List<string>();
@@ -4245,7 +4399,7 @@ public static class Tests
                 Check(padOk && launchInstant, "phase: pad gives prelaunch (also at throttle), liftoff gives launch at once", null);
                 Check(!double.IsNaN(ascentAt) && ascentAt >= liftoff + 20, "phase: launch becomes ascent after 20 s and 1500 m (plus the 5 s hold)",
                       "ascent at +" + (ascentAt - liftoff).ToString("0.0") + " s");
-                // above the atmosphere, still thrusting: ascent; then orbit
+                // above the atmosphere, still thrusting: ascent, then orbit
                 note(c.Update(In(PhaseSituation.SUB_ORBITAL, 50, 75000, 75000, 0, 1), t)); t += dt;
                 bool burnAscent = c.Current == FlightPhase.Ascent;
                 double orbitAt = Feed(c, In(PhaseSituation.ORBITING, 0, 80000, 80000, 0, 0), t, t + 30, dt, FlightPhase.Orbit);
@@ -4321,11 +4475,70 @@ public static class Tests
                 Check(MouthMath.EnvelopeOpen(0.1f) == 0f && MouthMath.EnvelopeOpen(0.8f) == 1f && MouthMath.EnvelopeOpen(1f) == 1f
                       && Math.Abs(MouthMath.EnvelopeOpen(0.46f) - 0.5f) < 1e-4,
                       "mouth track: closed in pauses, wide on the loud syllables", "");
-                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, false) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, false) == -1f
-                      && FaceMath.HeldMood(0.8f, 0f, 0.1f, false) == 0.8f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.8f, false)) < 1e-5
-                      && FaceMath.HeldMood(0.8f, 0f, 1f, false) < -0.3f && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.8f, true) - 0.4f) < 1e-5
-                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, false) == -0.5f,
+                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, 0.3f, 0.7f) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, 0.3f, 0.7f) == -1f
+                      && FaceMath.HeldMood(0.8f, 0f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.HeldMood(0.8f, 0f, 1f, 0.3f, 0.7f) == -1f
+                      && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.7f, 0.3f, 0.7f) - FaceMath.FaceAtPanic) < 1e-5
+                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, 0.3f, 0.7f) == -0.5f,
                       "face: a calm line keeps a scared face scared, stress caps the grin, a fearful line still shows", "");
+                // the thresholds of a real test crew (KSP.log 2026-11-06): Sidfrod 0.29/0.66, Mae (badass) 0.35/0.83
+                Check(FaceMath.StressCap(0.2f, 0.29f, 0.66f) == 1f && FaceMath.StressCap(0.29f, 0.29f, 0.66f) == 1f
+                      && Math.Abs(FaceMath.StressCap(0.66f, 0.29f, 0.66f) + 0.5f) < 1e-5 && FaceMath.StressCap(1f, 0.29f, 0.66f) == -1f
+                      && Math.Abs(FaceMath.StressCap(0.83f, 0.35f, 0.83f) + 0.5f) < 1e-5,
+                      "face: free below the own tenseAt, clearly scared at the own panicAt, full fear at 1", "");
+                Check(FaceMath.StressCap(0.66f, 0.35f, 0.83f) > FaceMath.StressCap(0.66f, 0.29f, 0.66f) + 0.4f,
+                      "face: at the same stress a braver kerbal (later thresholds) looks less scared", "");
+                bool down = true; float prevCap = 2f;
+                for (int i = 0; i <= 40; i++) { float c = FaceMath.StressCap(i / 40f, 0.31f, 0.69f); if (c > prevCap + 1e-6f) down = false; prevCap = c; }
+                Check(down, "face: fear grows step by step with stress (never less scared at more stress)", "");
+                Check(FaceMath.StressCap(0.5f, float.NaN, float.NaN) <= 1f && FaceMath.StressCap(float.NaN, 0.3f, 0.7f) == 1f
+                      && FaceMath.StressCap(1f, 0.3f, 1.05f) >= -1f && FaceMath.StressCap(0.9f, 0.5f, 0.5f) < FaceMath.FaceAtPanic + 1e-5f,
+                      "face: bad or crossed thresholds (escalated panicAt over 1, panicAt = tenseAt) stay sane", "");
+                Check(FaceMath.ListenerMood(-1f, 0.1f, 0.35f, 0.83f) == 0f
+                      && Math.Abs(FaceMath.ListenerMood(-1f, 0.83f, 0.35f, 0.83f) + 0.5f) < 1e-5
+                      && Math.Abs(FaceMath.ListenerMood(-0.5f, 1f, 0.35f, 0.83f) + 0.25f) < 1e-5
+                      && Math.Abs(FaceMath.ListenerMood(0.8f, 0.9f, 0.35f, 0.83f) - 0.4f) < 1e-5,
+                      "face: a calm listener does not copy a panicking speaker's fear, a stressed one may, a grin still passes", "");
+                Check(DcMath.CrewDistortion(1f, 0f, true) == 0f && Math.Abs(DcMath.CrewDistortion(1f, 1f, true) - 0.1f) < 1e-5
+                      && Math.Abs(DcMath.CrewDistortion(1f, 0f, false) - 0.3f) < 1e-5 && DcMath.CrewDistortion(0.4f, 0f, false) == 0f,
+                      "voice: a recorded panic clip gets no stress distortion on top, a calm line none, a stressed one at most 0.3", "");
+                var tour = new Persona(0.5f, 0.5f, false, false, "Tourist");
+                var pilot = new Persona(0.5f, 0.5f, false, false, "Pilot");
+                Check(tour.IsTourist && !pilot.IsTourist && tour.TraitMatches("tourist_pair") && !pilot.TraitMatches("tourist_pair")
+                      && pilot.TraitMatches("to_tourist") && !tour.TraitMatches("to_tourist") && !pilot.TraitMatches("tourist"),
+                      "tourist: pair traits check speaker A (tourist_pair a tourist, to_tourist anyone else)", "");
+                Check(Persona.PairFits("tourist_pair", true, true) && !Persona.PairFits("tourist", true, true) && !Persona.PairFits("any", true, true)
+                      && Persona.PairFits("tourist", true, false) && !Persona.PairFits("any", true, false)
+                      && Persona.PairFits("to_tourist", false, true) && !Persona.PairFits("any", false, true) && !Persona.PairFits("pilot", false, true)
+                      && Persona.PairFits("any", false, false) && Persona.PairFits("pilot", false, false)
+                      && !Persona.PairFits("tourist", false, false) && !Persona.PairFits("to_tourist", false, false) && !Persona.PairFits("tourist_pair", false, false),
+                      "tourist: an intercom chat with a tourist only takes the dialogues written for that pair, one without never a tourist scene", "");
+                Check(!Persona.RadioFits("any", "staging", "none", true) && Persona.RadioFits("tourist", "staging", "none", true)
+                      && Persona.RadioFits("any", "staging", "none", false) && !Persona.RadioFits("any", "chatter", "calm", true)
+                      && Persona.RadioFits("tourist", "chatter", "calm", true) && !Persona.RadioFits("any", "chatter", "panic", true)
+                      && !Persona.RadioFits("any", "chatter", "tense", true) && Persona.RadioFits("any", "chatter", "panic", true, true)
+                      && Persona.RadioFits("tourist", "chatter", "tense", true)
+                      && !Persona.RadioFits("any", "power_low", "tense", true) && !Persona.RadioFits("to_tourist", "chatter", "calm", false)
+                      && !Persona.RadioFits("tourist_pair", "chatter", "calm", true),
+                      "tourist: on the radio a tourist only says tourist scenes (calm and stressed) and screams, pair scenes never on the radio", "");
+                Check(Persona.ChatSideFits(null, "pilot brave") && !Persona.ChatSideFits(null, "tourist") && !Persona.ChatSideFits("pilot", "tourist")
+                      && Persona.ChatSideFits("tourist", "tourist dim") && RuntimeLines.JobOk("tourist", "tourist dim"),
+                      "tourist: a runtime chat side only takes a tourist when it asks for one", "");
+                Check(Array.IndexOf(PhraseTable.TopicsFor("probe_crew"), "staging") > 0 && Array.IndexOf(PhraseTable.TopicsFor("chatter"), "staging") < 0,
+                      "tourist: probe_crew has the staging topic (a tourist calls the stage, the probe reacts)", "");
+                Check(PhraseTable.PartTopicOk("prechute", false, false, true, false) && !PhraseTable.PartTopicOk("prechute", false, false, true, true)
+                      && !PhraseTable.PartTopicOk("prechute", false, false, false, false) && PhraseTable.PartTopicOk("chuteopen", false, false, false, true)
+                      && !PhraseTable.PartTopicOk("chuteopen", false, false, true, false) && !PhraseTable.PartTopicOk("heatshield", true, false, true, true)
+                      && PhraseTable.PartTopicOk("heatshield", false, true, false, false) && !PhraseTable.PartTopicOk("solar", false, true, true, true)
+                      && PhraseTable.PartTopicOk("any", false, false, false, false),
+                      "parts: arm-the-chutes talk only before any chute opens, chute-open talk only after, shield talk only with a shield", "");
+                Check(FaceMath.IdleMood(0.8f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.IdleMood(0.8f, 1f, 0.3f, 0.7f) == -1f
+                      && FaceMath.IdleMood(-0.8f, 0.4f, 0.3f, 0.7f) == -0.8f && Math.Abs(FaceMath.IdleMood(0.8f, 0.7f, 0.3f, 0.7f) + 0.5f) < 1e-5,
+                      "face: between lines a grinning stock face is capped by stress, a scared one stays scared", "");
+                Check(Math.Abs(FaceMath.FaceMood(-1f, 0f, 0.5f, 0.1f, 0.3f, 0.7f) - 0.5f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(-1f, 1f, 0.5f, 0.1f, 0.3f, 0.7f) + 1f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(-1f, 0.5f, 0.5f, 0.1f, 0.3f, 0.7f) + 0.25f) < 1e-5
+                      && Math.Abs(FaceMath.FaceMood(0.8f, 0f, 0.8f, 1f, 0.3f, 0.7f) + 1f) < 1e-5,
+                      "face: no stress is the old stock to line blend, high stress holds the fear between lines", "");
                 float fa = 0f, sl = 0f, peak = 0f, steady = 0f;
                 for (int i = 0; i < 30; i++) peak = Math.Max(peak, FaceMath.Accent(ref fa, ref sl, 1f, 0.01f));
                 for (int i = 0; i < 400; i++) steady = FaceMath.Accent(ref fa, ref sl, 1f, 0.01f);
@@ -4402,7 +4615,7 @@ public static class Tests
                 Check(st.mouthAnimation && !st.mouthDebug, "settings: mouthAnimation on, mouthDebug off by default", null);
             }
 
-            // ---- plan v6: probe callouts, say again, milestones, rover moments, data beeps ----
+            // ---- probe callouts, say again, milestones, rover moments, data beeps ----
             {
                 Check(ProbeRules.CalloutMcAllowed(0.1, 0.35f, 30f, 20f), "v6: callout MC answer when the roll and the gap allow it", null);
                 Check(!ProbeRules.CalloutMcAllowed(0.1, 0.35f, 10f, 20f), "v6: no callout MC answer inside the gap", null);
@@ -4414,29 +4627,33 @@ public static class Tests
                 Check(!ProbeRules.SayAgainDue(float.NaN, true, 0.35f, 0.1, 0.35f, 200f, 120f), "v6: no say again on a NaN signal", null);
                 Check(ProbeRules.RepeatMood("proud") == "offended" && ProbeRules.RepeatMood("bored") == "offended"
                       && ProbeRules.RepeatMood("scared") == "scared" && ProbeRules.RepeatMood(null) == "happy", "v6: RepeatMood", null);
-                Check(ProbeRules.MissionDay(0, true) == 1 && ProbeRules.MissionDay(6 * 3600.0 - 1, true) == 1
-                      && ProbeRules.MissionDay(6 * 3600.0, true) == 2 && ProbeRules.MissionDay(24 * 3600.0, false) == 2
-                      && ProbeRules.MissionDay(double.NaN, true) == 1, "v6: MissionDay with Kerbin and Earth days", null);
+                Check(ProbeRules.MissionDay(0, ProbeRules.KerbinDay) == 1 && ProbeRules.MissionDay(6 * 3600.0 - 1, ProbeRules.KerbinDay) == 1
+                      && ProbeRules.MissionDay(6 * 3600.0, ProbeRules.KerbinDay) == 2 && ProbeRules.MissionDay(24 * 3600.0, ProbeRules.EarthDay) == 2
+                      && ProbeRules.MissionDay(double.NaN, ProbeRules.KerbinDay) == 1, "v6: MissionDay with Kerbin and Earth days", null);
+                // JNSQ with Kronometer: 12 h days, so 13 Kerbin days of MET is day 7
+                Check(ProbeRules.MissionDay(13 * 6 * 3600.0, 12 * 3600.0) == 7 && ProbeRules.MissionDay(13 * 6 * 3600.0, double.NaN) == 14
+                      && ProbeRules.MissionDay(100, 0) == 1, "MissionDay with a modded day length and a broken one", null);
+                Check(SubtitleSlots.FlightValues(25 * 3600.0, 12 * 3600.0, null, null, double.NaN)["day"] == "3", "the {day} slot uses the game day length", null);
                 Check(ProbeRules.BeepSubtitle("scared") == "[beeps nervously]" && PhraseTable.ProbeSubtitleOk(ProbeRules.DataSubtitle),
                       "v6: mood subtitle and data subtitle have the short form", null);
 
                 double day = 6 * 3600.0;
                 ProbeMilestones ms = new ProbeMilestones();
-                Check(ms.Update("a", 2.5 * day, true, false, false, "Kerbin") == null, "v6: first sight of a vessel replays nothing", null);
-                Check(ms.Update("a", 3 * day, true, false, false, "Kerbin") == null, "v6: day 1 passed before first sight stays quiet", null);
-                Check(ms.Update("a", 10 * day, true, false, false, "Kerbin") == "day10", "v6: day 10 milestone", null);
-                Check(ms.Update("a", 10.5 * day, true, false, false, "Kerbin") == null, "v6: a milestone plays once", null);
-                Check(ms.Update("a", 10.6 * day, true, true, false, "Kerbin") == "orbit" && ms.Update("a", 10.7 * day, true, true, false, "Kerbin") == null,
+                Check(ms.Update("a", 2.5 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: first sight of a vessel replays nothing", null);
+                Check(ms.Update("a", 3 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: day 1 passed before first sight stays quiet", null);
+                Check(ms.Update("a", 10 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == "day10", "v6: day 10 milestone", null);
+                Check(ms.Update("a", 10.5 * day, ProbeRules.KerbinDay, false, false, "Kerbin") == null, "v6: a milestone plays once", null);
+                Check(ms.Update("a", 10.6 * day, ProbeRules.KerbinDay, true, false, "Kerbin") == "orbit" && ms.Update("a", 10.7 * day, ProbeRules.KerbinDay, true, false, "Kerbin") == null,
                       "v6: first orbit of a body once", null);
-                Check(ms.Update("a", 10.8 * day, true, true, false, "Mun") == "orbit", "v6: first orbit of another body", null);
-                Check(ms.Update("a", 400 * day, true, true, false, "Mun") == "day365", "v6: several days at once give only the highest", null);
-                Check(ms.Update("a", 401 * day, true, true, false, "Mun") == null, "v6: the skipped day 100 is marked done", null);
+                Check(ms.Update("a", 10.8 * day, ProbeRules.KerbinDay, true, false, "Mun") == "orbit", "v6: first orbit of another body", null);
+                Check(ms.Update("a", 400 * day, ProbeRules.KerbinDay, true, false, "Mun") == "day365", "v6: several days at once give only the highest", null);
+                Check(ms.Update("a", 401 * day, ProbeRules.KerbinDay, true, false, "Mun") == null, "v6: the skipped day 100 is marked done", null);
                 Check(ms.TakeLanding("a", "Mun") && !ms.TakeLanding("a", "Mun") && ms.TakeLanding("a", "Minmus"), "v6: first landing per body once", null);
                 ProbeMilestones ms2 = new ProbeMilestones();
-                ms2.Update("b", 0.5 * day, true, false, true, "Kerbin");
-                Check(!ms2.TakeLanding("b", "Kerbin") && ms2.Update("b", 1.2 * day, true, false, true, "Kerbin") == "day1",
+                ms2.Update("b", 0.5 * day, ProbeRules.KerbinDay, false, true, "Kerbin");
+                Check(!ms2.TakeLanding("b", "Kerbin") && ms2.Update("b", 1.2 * day, ProbeRules.KerbinDay, false, true, "Kerbin") == "day1",
                       "v6: landed at first sight is no first landing, day 1 still plays", null);
-                Check(ms2.Update(null, day, true, false, false, "Kerbin") == null && !ms2.TakeLanding("", "Kerbin"), "v6: no vessel id, no milestone", null);
+                Check(ms2.Update(null, day, ProbeRules.KerbinDay, false, false, "Kerbin") == null && !ms2.TakeLanding("", "Kerbin"), "v6: no vessel id, no milestone", null);
 
                 Tuning tu = new Tuning();
                 RoverMoments rm = new RoverMoments();

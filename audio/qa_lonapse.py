@@ -11,7 +11,7 @@ and the clips <build>/Sounds/<folder>/<clip_key>_<m|f>.ogg, decodes every clip w
 
   errors (exit 1)
     - a clip the table needs is missing, or an OGG under Sounds/crew or Sounds/control is not in the table
-    - duration out of bounds (callout 0.3 to 3.0 s, other 0.3 to 9 s, tuned on the v2 build)
+    - duration out of bounds (callout 0.3 to 3.0 s, other 0.3 to 9 s, tuned on a full build)
     - seconds per letter outside 0.5 to 2.0 times the median of its voice and band group
       (texts of 10 letters or more, screams excepted)
     - peak above -1.0 dBFS, or clipped samples
@@ -27,7 +27,7 @@ Writes:
     <build>/lonapse/review/review.m3u   the same sample as a playlist
 
 The sample holds --per-stratum clips per (source file, phase, band, role), plus --per-stratum clips per
-(event, band, role, topic) for the plan v4 events (soi_enter, science, part_lost, power_low, power_ok,
+(event, band, role, topic) for the game events (soi_enter, science, part_lost, power_low, power_ok,
 signal_lost, signal_back, crew_lost) and per (trait, persona) for the tagged crew rows, so every new event and
 every crew type gets clips on the page. It also holds every flagged clip and every clip whose decoded audio
 changed since the previous qa_report.json. Verdicts live in the browser
@@ -56,7 +56,7 @@ FRAME = bl.FRAME
 
 # Hard limits give an error, soft limits a warning. Durations are in seconds, levels in dBFS.
 LIMITS = {
-    # v2 build data: crew callouts 0.34 to 0.92 s, Mission Control confirmations up to 2.73 s,
+    # Measured on a full build: crew callouts 0.34 to 0.92 s, Mission Control confirmations up to 2.73 s,
     # one-word replies down to 0.34 s, the longest line about 6 s.
     "dur_callout": (0.25, 3.0),   # countdown "tres" renders at 0.30 s
     "dur_callout_warn": (0.35, 2.5),

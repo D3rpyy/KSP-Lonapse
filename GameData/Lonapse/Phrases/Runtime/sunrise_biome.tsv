@@ -6,7 +6,7 @@ rt_sunrise	sunrise		{vessel}, ahí sale el sol otra vez. Buenos días. | Amanece
 rt_sunrise_first	sunrise	sunrises=1	Vuestro primer amanecer en órbita. Disfrutadlo. | Primer amanecer del vuelo. Precioso, ¿verdad?	Your first sunrise in orbit. Enjoy it. | First sunrise of the flight. Beautiful, isn't it?
 rt_sunrise_count	sunrise	sunrises>=2	Amanecer número {sunrises} de este vuelo. Seguimos contando. | Ya van {sunrises} amaneceres. Aquí abajo solo hemos visto uno.	Sunrise number {sunrises} this flight. We're still counting. | That's {sunrises} sunrises. Down here we've only seen one.
 rt_sunrise_many	sunrise	sunrises>=20	{sunrises} amaneceres. Ya no sabéis qué día es, ¿verdad?	{sunrises} sunrises. You don't know what day it is anymore, do you?
-rt_sunrise_ec	sunrise	ec<50	Sale el sol. Batería al {ec} por ciento. Los paneles lo agradecen.	Here comes the sun. Battery at {ec} percent. The panels are grateful.
+rt_sunrise_ec	sunrise	ec<50 has_solar=1	Sale el sol. Batería al {ec} por ciento. Los paneles lo agradecen.	Here comes the sun. Battery at {ec} percent. The panels are grateful.
 rt_biome	report	orbit flight suborbital	Pasáis por encima de {biome}. | Debajo tenéis {biome}. Saludad. | Según el mapa, estáis sobre {biome}.	You're passing over {biome}. | Below you is {biome}. Wave. | According to the map, you're over {biome}.
 rt_biome_landed	report	landed	Os tenemos en {biome}, en {body}. | {biome}. Buen sitio para aparcar.	We have you at {biome}, on {body}. | {biome}. Nice place to park.
 rt_chat_sunrise_1	chat	orbit sunrises>=3	{other}, llevamos {sunrises} amaneceres. | Ya he visto {sunrises} amaneceres en este vuelo.	{other}, that's {sunrises} sunrises. | I've seen {sunrises} sunrises this flight.

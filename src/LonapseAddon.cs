@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.8.0";
+        public const string Version = "0.8.1";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -25,20 +25,23 @@ namespace Lonapse
 
         public VoiceChannel[] crew = new VoiceChannel[0];
         public VoiceChannel control, controlBed, staticCh;
-        public VoiceChannel crewBed;   // 0.6.0: static loop under crew radio lines (radioStatic)
+        public VoiceChannel crewBed;   // static loop under crew radio lines (radioStatic)
         public VoiceChannel[] beep = new VoiceChannel[0];
         public VoiceChannel[] allChannels = new VoiceChannel[0];
 
         public ChatterDirector director;
-        public RuntimeVoice runtimeVoice;  // experimental: lines spoken at runtime by Piper (Debug tab test)
+        public RuntimeVoice runtimeVoice;  // lines spoken at runtime by Piper: RuntimeVoice.Shared, kept across scenes
         public BeepDirector beeps;
         public BlackoutMachine blackout;
         private SettingsWindow window;
         private DebugOverlay overlay;
-        public MouthDriver mouth;         // req 9: talking kerbals (jaw follows the playing voice line)
-        public FaceDriver face;           // v4 feature 2: expression follows the line, head turns to the speaker
+        public MouthDriver mouth;         // talking kerbals (jaw follows the playing voice line)
+        public FaceDriver face;           // expression follows the line, head turns to the speaker
         public PortraitRefresh portraits; // portraits rendered again at the end of the frame, after the jaw and head writes
-        public GameEventHub events;       // v4 features 4 to 8 and 10: game events to director.PlayEvent
+        public GameEventHub events;       // game events to director.PlayEvent
+        private DeepFreezeBridge deepFreeze;   // DeepFreeze freeze and thaw as mod events, when it is installed
+        /// <summary>A DeepFreeze freeze or thaw is running or its line waits: the director starts no other talk.</summary>
+        public bool ModHoldsAir { get { return deepFreeze != null && deepFreeze.Busy; } }
         private bool eventsTickFailed;    // log a failing hub Tick once, never kill Update
 
         public bool gateOpen;
@@ -67,11 +70,11 @@ namespace Lonapse
         public readonly CalloutGate callouts = new CalloutGate();
         public readonly ChuteTracker chutes = new ChuteTracker();
         public VoiceChannel clickCh;
-        public VoiceChannel calloutCh;    // req 2: callouts never wait for a free crew channel
-        public VoiceChannel keyCh;        // req 6, 16: radio key-up and key-down (desk click or headset squelch)
-        public VoiceChannel breathCh;     // req 15: helmet breathing bed on EVA
+        public VoiceChannel calloutCh;    // callouts never wait for a free crew channel
+        public VoiceChannel keyCh;        // 16: radio key-up and key-down (desk click or headset squelch)
+        public VoiceChannel breathCh;     // helmet breathing bed on EVA
 
-        // v2
+        // radio profile and signal
         public RadioProfile profile;
         public readonly SignalProvider signal = new SignalProvider();
         public readonly PlanWatcher plan = new PlanWatcher();
@@ -79,37 +82,39 @@ namespace Lonapse
         private ThrottleWatch throttle;
         public Subtitles subtitles = new Subtitles();
         public bool evaMode;              // gate open on an EVA kerbal with evaRadio on
-        public bool launchPhase;          // req 10: from the pad until launchCapAlt (or landed again)
-        private readonly RecentMax closing = new RecentMax(0.5f); // req 14: closing speed just before contact
+        public bool launchPhase;          // from the pad until launchCapAlt (or landed again)
+        private readonly RecentMax closing = new RecentMax(0.5f); // closing speed just before contact
         public float lastDockSpeed = -1f;
         private bool hardDockPending;
-        // req 3: ducking of the game audio through the listener
+        // Ducking of the game audio through the listener
         private float listenerBase = -1f, lastWrittenListener = -1f;
         public float duckGain = 1f;
         private int duckMisses;
         private bool duckDisabled;
         private bool lastSubtitles;
 
-        // plan v5 probe mode: an uncrewed vessel with a probe core (minimumCrew 0) opens the gate in probe mode
+        // probe mode: an uncrewed vessel with a probe core (minimumCrew 0) opens the gate in probe mode
         public bool probeMode;
+        public bool frozenShip;           // nobody awake aboard, DeepFreeze has them frozen: only Mission Control talks (mod events, crew_lost)
+        public bool touristCabin;         // probe mode with only tourists aboard: the probe flies, the tourists talk among themselves and to it
         public string probeCoreKey;       // ProbeCores key of the root-most probe core, null outside probe mode
         public ProbeSleepState probeSleepState = ProbeSleepState.Awake;
         private readonly ProbeSleep probeSleep = new ProbeSleep();
-        // plan v6: milestones (session memory per vessel), rover moments and data beeps of the probe
+        // Milestones (session memory per vessel), rover moments and data beeps of the probe
         private readonly ProbeMilestones milestones = new ProbeMilestones();
         private readonly RoverMoments roverMoments = new RoverMoments();
         private readonly DataBeeps dataBeeps = new DataBeeps();
         private float probeMomentPoll;
         public double missionTime;        // s, active vessel mission time
-        public bool kerbinTime = true;    // GameSettings.KERBIN_TIME (6 h days)
+        public double dayLength = ProbeRules.KerbinDay;    // seconds per day on the game clock
         private readonly List<ModuleCommand> probeCmds = new List<ModuleCommand>();
         private readonly List<string> probeNames = new List<string>();
-        // 0.6.0 probe voices: every core part root first, the voices that exist, and the result of the pick
+        // probe voices: every core part root first, the voices that exist, and the result of the pick
         private readonly List<ProbeCorePart> probeCoreParts = new List<ProbeCorePart>();
         private static List<ProbeVoiceSpec> configVoices;   // LONAPSE_PROBE_VOICE nodes, read once per game session
         public ProbeVoiceRegistry probeVoices = new ProbeVoiceRegistry();
 
-        // 0.6.0 line memory: one for the game session, read from and written to PluginData/played.txt
+        // line memory: one for the game session, read from and written to PluginData/played.txt
         private static SceneMemory lineMemory;
         public static SceneMemory LineMemory { get { return lineMemory ?? (lineMemory = LoadLineMemory()); } }
 
@@ -185,7 +190,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Static level from the signal chain (req 17), 0 at full signal.</summary>
+        /// <summary>Static level from the signal chain, 0 at full signal.</summary>
         public float StaticLevel { get { return signal.StaticLevel(settings); } }
         private float chutePollTimer;
         private int lastPolledStage = int.MinValue;
@@ -218,6 +223,7 @@ namespace Lonapse
         private void Awake()
         {
             Instance = this;
+            Log.SetMainThread();
             try
             {
                 settings = Settings.Load();
@@ -285,6 +291,8 @@ namespace Lonapse
                 events = new GameEventHub();
                 events.Init(this);
                 events.play = director.PlayEvent;
+                deepFreeze = new DeepFreezeBridge();
+                deepFreeze.Init(this);
 
                 LogGainInputs();
                 Subscribe();
@@ -302,11 +310,13 @@ namespace Lonapse
 
         private void OnDestroy()
         {
+            Log.Flush();
             if (ReferenceEquals(Instance, this)) Instance = null;
             started = false;
             gateOpen = false;
             RestoreListener();
-            try { if (runtimeVoice != null) runtimeVoice.Dispose(); runtimeVoice = null; }
+            // the Piper processes stay for the next flight (RuntimeVoiceHost), only this flight's callbacks go
+            try { if (runtimeVoice != null) runtimeVoice.DropCallbacks(); runtimeVoice = null; }
             catch (Exception e) { Log.Exception("OnDestroy.runtimeVoice", e); }
             try
             {
@@ -315,6 +325,7 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnDestroy.channels", e); }
             try { Unsubscribe(); } catch (Exception e) { Log.Exception("OnDestroy.events", e); }
             try { if (events != null) events.Dispose(); } catch (Exception e) { Log.Exception("OnDestroy.eventHub", e); }
+            try { if (deepFreeze != null) deepFreeze.Dispose(); } catch (Exception e) { Log.Exception("OnDestroy.deepFreeze", e); }
             try { if (window != null) { window.ReleaseLock(); window.RemoveButton(); } } catch (Exception e) { Log.Exception("OnDestroy.button", e); }
             try { InputLockManager.RemoveControlLock("Lonapse_window"); } catch (Exception) { }
             try { if (settingsDirty && settings != null) settings.Save(); } catch (Exception e) { Log.Exception("OnDestroy.save", e); }
@@ -523,7 +534,7 @@ namespace Lonapse
             {
                 if (!started || !InvolvesActive(a)) return;
                 Tuning tu = settings.tuning;
-                // req 14: the closing speed of the last half second decides between soft capture and hard dock
+                // The closing speed of the last half second decides between soft capture and hard dock
                 lastDockSpeed = closing.Max;
                 float imp = StressModel.DockImpulse(lastDockSpeed, tu.dockSoftSpeed, tu.dockHardSpeed, tu.impulseDockHard);
                 stress.QuietMotion(tu.dockQuietTime);
@@ -591,7 +602,7 @@ namespace Lonapse
         private bool evaFallSeen;   // this ragdoll episode already had its eva_fall lines
         private float lastEvaFall = -1e9f;
 
-        /// <summary>User test: an EVA kerbal that ragdolls on the ground (a trip, a fall, a hard landing) gets eva_fall
+        /// <summary>An EVA kerbal that ragdolls on the ground (a trip, a fall, a hard landing) gets eva_fall
         /// lines instead of the touchdown lines. Once per ragdoll episode, at most once per evaFallCooldown s.</summary>
         private void PollEvaFall()
         {
@@ -686,6 +697,7 @@ namespace Lonapse
 
         private void Update()
         {
+            Log.Flush(); // the lines the Piper threads logged
             if (!started) return;
             try
             {
@@ -721,7 +733,7 @@ namespace Lonapse
                     signal.Reset();
                     closing.Clear();
                     hardDockPending = false;
-                    // subtitles stay: a line that is still playing keeps its subtitle after a switch (user report)
+                    // subtitles stay: a line that is still playing keeps its subtitle after a switch
                     alarmCh.FadeOutOnce(0.5f);
                     alarmHoldLeft = 0f;
                     try { launchPhase = v != null && v.situation == Vessel.Situations.PRELAUNCH; } catch (Exception) { launchPhase = false; }
@@ -746,7 +758,7 @@ namespace Lonapse
                         if (face != null) face.CrewChanged();
                     }
                 }
-                // persona switch (v4 feature 1): the settings window writes the bool, the roster applies it to every voice
+                // persona switch: the settings window writes the bool, the roster applies it to every voice
                 if (settings.personalityEffects != roster.personalityEffects) roster.SetPersonalityEffects(settings.personalityEffects);
 
                 bool nowPaused = IsPaused();
@@ -762,7 +774,7 @@ namespace Lonapse
                 if (paused)
                 {
                     RestoreListener(); // the pause menu owns the master volume
-                    // everything frozen; sources are paused, directors do not run
+                    // everything frozen: sources are paused, directors do not run
                     TickEvents(0f); // handlers that fire during the pause still see a live hub, its clock stands still
                     if (overlay != null) overlay.Tick(dt);
                     return;
@@ -812,7 +824,7 @@ namespace Lonapse
                 roster.UpdateStress(stress.stress);
                 profile = RadioProfiles.Select(stationMode, evaMode, settings.radioProfile);
                 signal.Update(dt, v, settings);
-                // after the sample and the signal; also with the gate closed, so the crew_lost delay runs after the
+                // after the sample and the signal. Also with the gate closed, so the crew_lost delay runs after the
                 // active vessel is destroyed (the director keeps the pending call until the gate opens again)
                 TickEvents(dt);
                 // the whole crew is gone: a pending crew_lost may still play its MC call with the gate closed
@@ -826,7 +838,8 @@ namespace Lonapse
                 countdown.Update(dt, v);
                 PollPlan(v, dt);
 
-                if (gateOpen)
+                if (gateOpen && frozenShip) director.UpdateFrozenShip(dt);
+                else if (gateOpen)
                 {
                     blackout.Update(dt);
                     director.Update(dt);
@@ -860,6 +873,7 @@ namespace Lonapse
         private void TickEvents(float dt)
         {
             if (events == null) return;
+            try { if (deepFreeze != null) deepFreeze.Tick(dt); } catch (Exception e) { Log.Exception("DeepFreezeBridge.Tick", e); }
             try { events.Tick(dt, sample); }
             catch (Exception e)
             {
@@ -896,7 +910,7 @@ namespace Lonapse
             }
         }
 
-        // ---------------------------------------------------------------- probe mode (plan v5)
+        // ---------------------------------------------------------------- probe mode
 
         /// <summary>
         /// Finds the probe cores (ModuleCommand with minimumCrew 0) root-first on a vessel or part count change or a
@@ -923,7 +937,7 @@ namespace Lonapse
             probePollLeft -= dt;
             if (probePollLeft > 0f) return;
             probePollLeft = 0.25f;
-            try { kerbinTime = GameSettings.KERBIN_TIME; } catch (Exception) { }
+            dayLength = DayLengthLogged();
             try { missionTime = v != null ? v.missionTime : 0.0; } catch (Exception) { missionTime = 0.0; }
             if (probeCoreKey == null || !settings.probeSleep)
             {
@@ -1096,7 +1110,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Plan v6: true once per vessel and body, the first landing there this session (milestone).</summary>
+        /// <summary>True once per vessel and body, the first landing there this session (milestone).</summary>
         public bool ProbeFirstLanding()
         {
             if (!probeMode || !settings.probeMilestones) return false;
@@ -1109,7 +1123,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Plan v6, probe mode only: milestones (mission days, first orbit) as events, rover moments as events and the
+        /// Probe mode only: milestones (mission days, first orbit) as events, rover moments as events and the
         /// data beeps while an antenna sends. Milestones also run with the gate closed (time warp): the event waits.
         /// </summary>
         private void UpdateProbeMoments(Vessel v, float dt)
@@ -1134,7 +1148,7 @@ namespace Lonapse
                 if (settings.probeMilestones)
                 {
                     bool orbiting = v.situation == Vessel.Situations.ORBITING;
-                    string m = milestones.Update(v.id.ToString(), missionTime, kerbinTime, orbiting, v.LandedOrSplashed, sample.body);
+                    string m = milestones.Update(v.id.ToString(), missionTime, dayLength, orbiting, v.LandedOrSplashed, sample.body);
                     if (m != null)
                     {
                         Log.Info("Probe milestone: " + m + " (" + sample.body + ")");
@@ -1158,6 +1172,8 @@ namespace Lonapse
             warpChatter = false;
             evaMode = false;
             probeMode = false;
+            touristCabin = false;
+            frozenShip = false;
             if (!settings.enabled) return RDisabled;
             if (settings.muted) return RMuted;
             if (!HighLogic.LoadedSceneIsFlight) return RScene;
@@ -1165,19 +1181,79 @@ namespace Lonapse
             if (ReferenceEquals(v, destroyedVessel)) return RDestroyed;
             if (!v.loaded) return RNotLoaded;
             bool eva = v.isEVA;
-            // req 15: an EVA kerbal has a suit radio to Mission Control (one kerbal per EVA vessel)
+            // An EVA kerbal has a suit radio to Mission Control (one kerbal per EVA vessel)
             if (eva && (!settings.evaRadio || v.GetCrewCount() != 1)) { evaMode = false; return REva; }
             if (v.GetCrewCount() <= 0)
             {
-                // plan v5: no crew but a probe core opens the gate in probe mode. Without one it stays RNoCrew, so
+                // No crew but a probe core opens the gate in probe mode. Without one it stays RNoCrew, so
                 // FinalCallAllowed (crew_lost with the gate closed) keeps working for crewed flights.
-                if (!settings.probeMode || probeCoreKey == null) return RNoCrew;
+                if (settings.probeMode && probeCoreKey != null) probeMode = true;
+                else if (deepFreeze != null && deepFreeze.FrozenAboard > 0) frozenShip = true;   // Mission Control can still call the freezer
+                else return RNoCrew;
+            }
+            else if (!eva && settings.probeMode && probeCoreKey != null && OnlyTourists(v))
+            {
+                // tourists cannot fly: the probe core is the crew, Mission Control talks to it
                 probeMode = true;
+                touristCabin = true;
             }
             if (railsWarp && !settings.warpChatter) return RWarp;
             warpChatter = railsWarp;
             evaMode = eva;
             return GateOpenReason;
+        }
+
+        /// <summary>Seconds per day on the game clock. Mods like Kronometer replace the date formatter, so JNSQ and
+        /// rescale packs count their own day. Without a formatter the game setting picks 6 h or 24 h.</summary>
+        public static double DayLength()
+        {
+            string from;
+            return DayLength(out from);
+        }
+
+        /// <summary>DayLength, with where it came from for the log: the game clock (its formatter type) or the
+        /// game setting.</summary>
+        public static double DayLength(out string from)
+        {
+            try
+            {
+                var f = KSPUtil.dateTimeFormatter;
+                if (f != null && f.Day > 0) { from = "game clock " + f.GetType().Name; return ProbeRules.SaneDay(f.Day); }
+            }
+            catch (Exception) { }
+            from = "game setting";
+            try { return GameSettings.KERBIN_TIME ? ProbeRules.KerbinDay : ProbeRules.EarthDay; }
+            catch (Exception) { return ProbeRules.KerbinDay; }
+        }
+
+        private static double loggedDay = double.NaN;
+
+        /// <summary>The day length, logged once and again when it changes (the calendar setting).</summary>
+        private static double DayLengthLogged()
+        {
+            string from;
+            double d = DayLength(out from);
+            if (d != loggedDay)
+            {
+                loggedDay = d;
+                Log.Info("Day length: " + (d / 3600.0).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
+                         + " h (from the " + from + ")");
+            }
+            return d;
+        }
+
+        /// <summary>Every kerbal aboard is a tourist (and there is at least one).</summary>
+        private static bool OnlyTourists(Vessel v)
+        {
+            try
+            {
+                List<ProtoCrewMember> crew = v.GetVesselCrew();
+                if (crew == null || crew.Count == 0) return false;
+                foreach (ProtoCrewMember c in crew)
+                    if (c == null || Persona.TraitKey(c.trait) != Persona.Tourist) return false;
+                return true;
+            }
+            catch (Exception) { return false; }
         }
 
         private static bool ReadRailsWarp()
@@ -1210,7 +1286,7 @@ namespace Lonapse
             catch (Exception) { return 1f; }
         }
 
-        // ---------------------------------------------------------------- ducking (req 3)
+        // ---------------------------------------------------------------- ducking
 
         /// <summary>Takes the listener value as the base, unless it is the value we wrote ourselves.</summary>
         private void ReadListenerBase()
@@ -1257,7 +1333,7 @@ namespace Lonapse
             lastWrittenListener = -1f;
         }
 
-        // ---------------------------------------------------------------- v2 pollers
+        // ---------------------------------------------------------------- pollers
 
         /// <summary>Req 10: panic only after a real failure while the launch is below launchCapAlt.</summary>
         private void UpdateLaunchCap()
@@ -1296,7 +1372,7 @@ namespace Lonapse
             if (plan.planDue && director.EnqueuePlan()) plan.planDue = false;
         }
 
-        /// <summary>EVA breathing bed of the radio profile (req 15). Fades out outside EVA.</summary>
+        /// <summary>EVA breathing bed of the radio profile. Fades out outside EVA.</summary>
         /// <summary>Master alarm: fades in slowly while the vessel stress is at or above alarmStress, holds a few seconds, fades out slowly.</summary>
         private void UpdateAlarm(float dt)
         {
@@ -1314,7 +1390,7 @@ namespace Lonapse
             if (alarmCh.Busy) alarmCh.volumeScale = tu.alarmVolume;
         }
 
-        public float evaExertion;   // 0..1, EVA running builds it up slowly (user test)
+        public float evaExertion;   // 0..1, EVA running builds it up slowly
 
         private void UpdateBreath(float dt)
         {
@@ -1429,8 +1505,9 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// 0.6.0 (user test: a crew report was lost on EVA): true when the switch is a kerbal going out on EVA or
-        /// coming back, or between a kerbal and a ship close by. Waiting science lines then stay.
+        /// True when the switch is a kerbal going out on EVA or
+        /// coming back, or between a kerbal and a ship close by. Waiting science lines then stay (a crew report was lost on EVA
+        /// without this).
         /// </summary>
         private static bool IsEvaHop(Vessel from, Vessel to)
         {
