@@ -292,9 +292,11 @@ namespace Lonapse
         }
 
         /// <summary>DeepFreeze: a frozen kerbal died with the freezer. The roster status stays Dead, so no status change
-        /// comes for it.</summary>
-        public void OnFrozenKerbalDied(string name)
+        /// comes for it. aboard: DeepFreeze listed them in the active vessel, also when the ship was loaded with them
+        /// frozen (then the crew list never had them).</summary>
+        public void OnFrozenKerbalDied(string name, bool aboard)
         {
+            if (aboard) crewLoss.Know(name);
             if (crewLoss.OnLost(now, name)) Log.Info("Crew lost: " + Names.Localize(name) + " (died frozen)");
         }
 

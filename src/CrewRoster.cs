@@ -572,12 +572,14 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Out cold: G-LOC, or comatose after a DeepFreeze emergency thaw. DeepFreeze makes such a kerbal
-        /// the Tourist type while the job stays, so a Tourist type with another job is comatose.</summary>
+        /// <summary>Names DeepFreeze lists as comatose (DeepFreezeBridge keeps it). Empty without DeepFreeze.</summary>
+        public static readonly HashSet<string> comatose = new HashSet<string>(StringComparer.Ordinal);
+
+        /// <summary>Out cold: G-LOC, or comatose after a DeepFreeze emergency thaw.</summary>
         private static bool IsOut(ProtoCrewMember pcm)
         {
             if (pcm == null) return false;
-            return pcm.outDueToG || (pcm.type == ProtoCrewMember.KerbalType.Tourist && pcm.trait != "Tourist");
+            return pcm.outDueToG || comatose.Contains(pcm.name);
         }
 
         public int SpeakableCount() { return KerbalVoice.SpeakableCount(voices); }
