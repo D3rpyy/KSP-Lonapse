@@ -97,6 +97,9 @@ namespace Lonapse
         }
 
         /// <summary>LonapseApi.Cancel: drops a waiting mod event that has not played yet. True when one was waiting.</summary>
+        /// <summary>A mod event whose id starts with prefix waits to play.</summary>
+        public bool ModWaiting(string prefix) { return modQueue.Waiting(prefix); }
+
         public bool CancelModEvent(string id)
         {
             if (id == null || !modQueue.Cancel(id)) return false;

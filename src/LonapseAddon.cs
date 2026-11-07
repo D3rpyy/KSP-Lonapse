@@ -40,6 +40,8 @@ namespace Lonapse
         public PortraitRefresh portraits; // portraits rendered again at the end of the frame, after the jaw and head writes
         public GameEventHub events;       // game events to director.PlayEvent
         private DeepFreezeBridge deepFreeze;   // DeepFreeze freeze and thaw as mod events, when it is installed
+        /// <summary>A DeepFreeze freeze or thaw is running or its line waits: the director starts no other talk.</summary>
+        public bool ModHoldsAir { get { return deepFreeze != null && deepFreeze.Busy; } }
         private bool eventsTickFailed;    // log a failing hub Tick once, never kill Update
 
         public bool gateOpen;

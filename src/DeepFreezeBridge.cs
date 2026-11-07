@@ -17,6 +17,7 @@ namespace Lonapse
         private LonapseAddon host;
         private EventData<Part, ProtoCrewMember> onFrozen, onThaw, onComatose, onAwake;
         private EventData<ProtoCrewMember> onDied;
+        private EventData<Part, string> onFreezing, onThawing, onFreezeAbort, onThawAbort;   // starts and aborts, by name
 
         public bool Active { get { return onFrozen != null || onThaw != null; } }
 
@@ -35,17 +36,27 @@ namespace Lonapse
                 onThaw = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalThaw");
                 onComatose = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalSetComatose");
                 onAwake = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalUnSetComatose");
+                onFreezing = Field<EventData<Part, string>>(t, "onKerbalFreezing");
+                onThawing = Field<EventData<Part, string>>(t, "onKerbalThawing");
+                onFreezeAbort = Field<EventData<Part, string>>(t, "onKerbalFreezeAbort");
+                onThawAbort = Field<EventData<Part, string>>(t, "onKerbalThawAbort");
                 onDied = Field<EventData<ProtoCrewMember>>(t, "onFrozenKerbalDied");
                 if (onFrozen != null) onFrozen.Add(OnFrozen);
                 if (onThaw != null) onThaw.Add(OnThaw);
                 if (onComatose != null) onComatose.Add(OnComatose);
                 if (onDied != null) onDied.Add(OnDied);
                 if (onAwake != null) onAwake.Add(OnAwake);
+                if (onFreezing != null) onFreezing.Add(OnFreezing);
+                if (onThawing != null) onThawing.Add(OnThawing);
+                if (onFreezeAbort != null) onFreezeAbort.Add(OnFreezeAbort);
+                if (onThawAbort != null) onThawAbort.Add(OnThawAbort);
+                startsKnown = onFreezing != null && onThawing != null;
                 FindList(t.Assembly);
                 if (onFrozen == null || onThaw == null || onComatose == null || onDied == null)
                     Log.Warn("DeepFreeze: not every event was found, those get no lines (a new DeepFreeze version?)");
                 Log.Info("DeepFreeze found: freeze " + (onFrozen != null) + ", thaw " + (onThaw != null)
-                         + ", comatose " + (onComatose != null) + ", died frozen " + (onDied != null) + ", frozen list " + (frozenProp != null));
+                         + ", comatose " + (onComatose != null) + ", died frozen " + (onDied != null) + ", frozen list " + (frozenProp != null)
+                         + ", starts " + startsKnown);
             }
             catch (Exception e) { Log.Exception("DeepFreezeBridge.Init", e); }
         }
@@ -59,9 +70,15 @@ namespace Lonapse
                 if (onComatose != null) onComatose.Remove(OnComatose);
                 if (onDied != null) onDied.Remove(OnDied);
                 if (onAwake != null) onAwake.Remove(OnAwake);
+                if (onFreezing != null) onFreezing.Remove(OnFreezing);
+                if (onThawing != null) onThawing.Remove(OnThawing);
+                if (onFreezeAbort != null) onFreezeAbort.Remove(OnFreezeAbort);
+                if (onThawAbort != null) onThawAbort.Remove(OnThawAbort);
             }
             catch (Exception e) { Log.Exception("DeepFreezeBridge.Dispose", e); }
             onFrozen = onThaw = onComatose = onAwake = null;
+            onFreezing = onThawing = onFreezeAbort = onThawAbort = null;
+            freezing.Clear(); thawing.Clear();
             frozenBatch.Clear(); thawedBatch.Clear(); comatoseBatch.Clear();
             frozenAboard.Clear();
             CrewRoster.comatose.Clear();
@@ -149,12 +166,57 @@ namespace Lonapse
         private readonly NameBatch frozenBatch = new NameBatch(), thawedBatch = new NameBatch(), comatoseBatch = new NameBatch();
         private Part frozenPart, thawedPart, comatosePart;
 
-        private void OnFrozen(Part p, ProtoCrewMember k) { if (k != null) { frozenBatch.Add(clock, k.name); frozenPart = p; } }
-        private void OnThaw(Part p, ProtoCrewMember k) { if (k != null) { thawedBatch.Add(clock, k.name); thawedPart = p; } }
+        // a freeze or thaw that started and has not ended: the group waits for it. Name to start time.
+        private readonly Dictionary<string, double> freezing = new Dictionary<string, double>(), thawing = new Dictionary<string, double>();
+        private bool startsKnown;
+        /// <summary>A start without an end (a vessel switch, a DeepFreeze error) stops counting after this.</summary>
+        private const double StuckAfter = 30.0;
+
+        private void OnFreezing(Part p, string name) { if (name != null) freezing[name] = clock; }
+        private void OnThawing(Part p, string name) { if (name != null) thawing[name] = clock; }
+        private void OnFreezeAbort(Part p, string name) { if (name != null) freezing.Remove(name); }
+        private void OnThawAbort(Part p, string name) { if (name != null) thawing.Remove(name); }
+
+        private void OnFrozen(Part p, ProtoCrewMember k)
+        {
+            if (k == null) return;
+            freezing.Remove(k.name);
+            frozenBatch.Add(clock, k.name);
+            frozenPart = p;
+        }
+
+        private void OnThaw(Part p, ProtoCrewMember k)
+        {
+            if (k == null) return;
+            thawing.Remove(k.name);
+            thawedBatch.Add(clock, k.name);
+            thawedPart = p;
+        }
+
+        private bool Running(Dictionary<string, double> d)
+        {
+            if (d.Count == 0) return false;
+            var old = new List<string>();
+            foreach (var kv in d) if (clock - kv.Value > StuckAfter) old.Add(kv.Key);
+            foreach (string n in old) d.Remove(n);
+            return d.Count > 0;
+        }
+
+        /// <summary>A freeze or thaw is running, a group is open, or its line still waits: other talk holds off, so
+        /// no ordinary radio call comes between the freezer and its line.</summary>
+        public bool Busy
+        {
+            get
+            {
+                return freezing.Count > 0 || thawing.Count > 0 || frozenBatch.Count > 0 || thawedBatch.Count > 0 || comatoseBatch.Count > 0
+                       || (host != null && host.director != null && host.director.ModWaiting("deepfreeze."));
+            }
+        }
 
         private void OnComatose(Part p, ProtoCrewMember k)
         {
             if (k == null) return;
+            thawing.Remove(k.name);
             CrewRoster.comatose.Add(k.name);
             comatoseBatch.Add(clock, k.name);
             comatosePart = p;
@@ -166,10 +228,18 @@ namespace Lonapse
             clock += dt;
             listLeft -= dt;
             if (listLeft <= 0f) { listLeft = 1f; ReadList(); }
+            // with the starts known: Grace s after the last end while none runs. Else Quiet s after the last end.
+            double wait = startsKnown ? NameBatch.Grace : NameBatch.Quiet;
+            bool fz = startsKnown && Running(freezing), th = startsKnown && Running(thawing);
             List<string> g;
-            if ((g = frozenBatch.Take(clock)) != null) Offer(Frozen, frozenPart, g, false);
-            if ((g = thawedBatch.Take(clock)) != null) Offer(Thawed, thawedPart, g, true);
-            if ((g = comatoseBatch.Take(clock)) != null) Offer(Comatose, comatosePart, g, false);
+            if ((g = frozenBatch.Take(clock, fz, wait)) != null) Offer(Frozen, frozenPart, g, false);
+            if ((g = thawedBatch.Take(clock, th, wait)) != null)
+            {
+                // an emergency thaw ends comatose: those get the comatose line, not the groggy hello
+                g.RemoveAll(n => CrewRoster.comatose.Contains(n));
+                if (g.Count > 0) Offer(Thawed, thawedPart, g, true);
+            }
+            if ((g = comatoseBatch.Take(clock, th, wait)) != null) Offer(Comatose, comatosePart, g, false);
         }
 
         private void OnDied(ProtoCrewMember k)

@@ -129,6 +129,13 @@ namespace Lonapse
 
         /// <summary>The next event to play now, or null: the highest priority first, then the oldest. minPriority:
         /// the lowest priority the air allows now (0 all, 2 only high, 3 none). Taking it starts its cooldown.</summary>
+        /// <summary>An event whose id starts with prefix is waiting.</summary>
+        public bool Waiting(string prefix)
+        {
+            foreach (Entry e in pending) if (e.Id.StartsWith(prefix, StringComparison.Ordinal)) return true;
+            return false;
+        }
+
         public Entry Take(double now, int minPriority)
         {
             Expire(now);

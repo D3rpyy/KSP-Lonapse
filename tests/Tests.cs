@@ -3499,7 +3499,13 @@ public static class Tests
                   "DeepFreeze group: due 9 s after the last freeze, each name once, then empty", grp == null ? "null" : string.Join(", ", grp.ToArray()));
             for (int i = 0; i < 10; i++) nb.Add(200 + i * 10, "K" + i);
             Check(nb.Take(260) != null, "DeepFreeze group: a long row of freezes plays after 60 s at the latest", null);
-            Check(NameBatch.IdFor("deepfreeze.frozen", 1) == "deepfreeze.frozen" && NameBatch.IdFor("deepfreeze.frozen", 2) == "deepfreeze.frozen_two"
+            NameBatch nb2 = new NameBatch();
+            nb2.Add(300, "Jebediah Kerman");
+            Check(nb2.Take(310, true, NameBatch.Grace) == null, "DeepFreeze group: waits while the next freeze runs", null);
+            nb2.Add(311, "Bill Kerman");
+            Check(nb2.Take(313.5, false, NameBatch.Grace) == null && nb2.Take(314.1, false, NameBatch.Grace).Count == 2,
+                  "DeepFreeze group: with the starts known, due 3 s after the last freeze ends", null);
+                        Check(NameBatch.IdFor("deepfreeze.frozen", 1) == "deepfreeze.frozen" && NameBatch.IdFor("deepfreeze.frozen", 2) == "deepfreeze.frozen_two"
                   && NameBatch.IdFor("deepfreeze.frozen", 7) == "deepfreeze.frozen_group", "DeepFreeze group: one, two and group event ids", null);
 
             // priorities

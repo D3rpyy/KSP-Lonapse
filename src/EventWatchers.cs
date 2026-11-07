@@ -367,12 +367,13 @@ namespace Lonapse
     }
 
     /// <summary>
-    /// Gathers names of one kind of moment (DeepFreeze freezes one kerbal at a time) into one group: the group is
-    /// due when Quiet seconds passed without a new name, or MaxAge after the first. One line then names the group.
+    /// Gathers names of one kind of moment (DeepFreeze freezes one kerbal at a time) into one group. One line then
+    /// names the group. With the start of each freeze known (busy), the group is due Grace seconds after the last one
+    /// ended while no other runs. Without it, Quiet seconds after the last name. Always MaxAge after the first.
     /// </summary>
     public class NameBatch
     {
-        public const double Quiet = 9.0, MaxAge = 60.0;
+        public const double Quiet = 9.0, Grace = 3.0, MaxAge = 60.0;
         public readonly List<string> names = new List<string>();
         private double first, last;
 
@@ -386,10 +387,14 @@ namespace Lonapse
             names.Add(name);
         }
 
-        /// <summary>The group when it is due (and empties the batch), else null.</summary>
-        public List<string> Take(double now)
+        /// <summary>The group when it is due (and empties the batch), else null. Without start events: Quiet.</summary>
+        public List<string> Take(double now) { return Take(now, false, Quiet); }
+
+        /// <summary>busy: a freeze (or thaw) of this group is still running. wait: the seconds after the last name.</summary>
+        public List<string> Take(double now, bool busy, double wait)
         {
-            if (names.Count == 0 || (now - last < Quiet && now - first < MaxAge)) return null;
+            if (names.Count == 0) return null;
+            if (now - first < MaxAge && (busy || now - last < wait)) return null;
             var r = new List<string>(names);
             names.Clear();
             return r;

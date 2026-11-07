@@ -2077,7 +2077,10 @@ namespace Lonapse
             if (IntercomAudible) lastChatClock = clock;
             UpdatePendingCallout();
             UpdateEvents();
-            RuntimeTick();
+            // a DeepFreeze group is busy: no new chatter, report or chat starts until its line played
+            bool modHold = host.ModHoldsAir;
+            if (modHold) holdoff = Math.Max(holdoff, 0.5f);
+            if (!modHold) RuntimeTick();
             ModTick();
             ProcessQueue();
 
