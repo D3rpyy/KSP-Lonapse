@@ -2,7 +2,8 @@
 # Refresh GameData/Lonapse in the repo from the builds, then zip it as dist/Lonapse-<version>.zip.
 # Usage: ./package.sh
 # Needs the KSP DLLs to compile (KSP_DIR or .ksp_dir, see build.sh) and a finished audio build:
-#   python3 -I audio/build_clips.py   (beeps, static)
+#   python3 -I audio/build_clips.py   (beeps, radio static and breathing in sfx)
+#   python3 -I audio/build_sfx.py     (docking effects from audio/sfx_sources, into sfx)
 #   python3 -I audio/build_lonapse.py (voices, phrase table)
 #   ./fetch_runtime.sh                (runtime voice: Piper and the voices, into audio/build/runtime/Runtime)
 # Commit the changed GameData/ afterwards.
@@ -24,7 +25,7 @@ grep -q "^## $VERSION" CHANGELOG.md || { echo "ERROR: CHANGELOG.md has no entry 
 
 SOUNDS="$REPO/audio/build/Sounds"
 TABLE="$REPO/audio/build/lonapse/phrases.tsv"
-for d in beeps static crew control; do
+for d in beeps sfx sfx/airlock_dock sfx/airlock_undock crew control; do
   [[ -d "$SOUNDS/$d" ]] || { echo "ERROR: $SOUNDS/$d is missing, build the audio first" >&2; exit 1; }
 done
 [[ -f "$TABLE" ]] || { echo "ERROR: $TABLE is missing, run audio/build_lonapse.py first" >&2; exit 1; }

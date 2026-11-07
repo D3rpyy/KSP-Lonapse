@@ -2,8 +2,12 @@
 
 The voice clips in `Sounds/crew/` and `Sounds/control/` are loñapsE lines spoken by Piper voices (below).
 
-Beeps (`Sounds/beeps/`) and static (`Sounds/static/`) are synthesized by `build_clips.py` with
-ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and plain Python. They contain no recorded material.
+Beeps (`Sounds/beeps/`) and the radio static and breathing in `Sounds/sfx/` (`burst`, `loop`, `squelch`,
+`breath_loop`) are synthesized by `build_clips.py` with ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and
+plain Python. They contain no recorded material.
+
+The docking effects (`Sounds/sfx/airlock_dock`, `airlock_undock`) are made by `build_sfx.py` from the
+recordings in `audio/sfx_sources/`. The source and licence of those recordings are not written down here yet.
 
 No audio from the Chatterer mod or any other mod was used.
 

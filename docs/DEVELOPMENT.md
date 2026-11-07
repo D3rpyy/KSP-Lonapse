@@ -80,10 +80,10 @@ clips each folder has against its target, in red when it has too few.
 | `beeps/ping`, `beeps/descent`, `beeps/stage` | 3, 2, 2 | telemetry, descent blips, stage tone |
 | `beeps/landing`, `beeps/splashdown` | 1 each | optional touchdown tones |
 | `beeps/quindar_in`, `beeps/quindar_out` | 1 each | MC transmission tones |
-| `static/burst`, `static/loop`, `static/squelch` | 6, 2, 2 | blackout static, MC bed, squelch tail |
+| `sfx/burst`, `sfx/loop`, `sfx/squelch` | 6, 2, 2 | blackout static, MC bed, squelch tail |
 | `beeps/click_desk` | 1 | station and base radio key click |
 | `beeps/headset_open`, `beeps/headset_close` | 1 each | ship and EVA radio key-up and key-down (short squelch noise) |
-| `static/breath_loop` | 1 | helmet breathing on EVA |
+| `sfx/breath_loop` | 1 | helmet breathing on EVA |
 | `beeps/roger` | 1 | roger beep at the end of a crew transmission |
 
 The crew and control folders hold the voice clips, named `<clip_key>_m.ogg` and `<clip_key>_f.ogg`. Male kerbals get

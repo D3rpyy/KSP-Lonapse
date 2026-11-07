@@ -38,6 +38,10 @@ namespace Lonapse
         // --- Phase 2: docking ---
         public float dockApproachDist = 50f, dockApproachSpeed = 2f, dockApproachHold = 1.0f, dockRearmDist = 100f;
         public float dockGuardDist = 3f, dockQuietTime = 2.0f, dockClosingRate = 0.05f, dockGuardMax = 5f;
+        // Chance of a docking call when none of the three docking signs hold (DockIntent), 1 when all hold. The ports must face within dockIntentAngle degrees.
+        public float dockIntentBase = 0.3f, dockIntentAngle = 45f;
+        // Seconds of one approach during which other chatter waits (from the approach call, while the crew is calm).
+        public float dockChatHold = 240f;
 
         // --- Phase 2: station and base mode ---
         // EVA: more radio, like a real EVA with constant comms (rate factor on the talk interval)
@@ -381,6 +385,7 @@ namespace Lonapse
         public float crewVolume = 1.0f;
         public float controlVolume = 0.8f;
         public float beepVolume = 0.6f;
+        public float sfxVolume = 0.8f;          // sound effects of the ship itself (docking), not a radio sound
         public float staticVolume = 0.5f;
         public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old, harsher level)
         public float intercomVolume = 0.8f;
@@ -436,6 +441,7 @@ namespace Lonapse
         public bool runtimeScience = true;          // with runtimeVoice: science points and contract funds
         public bool signalDropouts = true;          // weak signal: MC lines drop out and crunch
         public bool masterAlarm = true;             // soft caution tone in the background while a kerbal panics
+        public bool dockingSfx = true;              // airlock sounds on dock and undock
         // --- Mouths ---
         public bool mouthAnimation = true;          // kerbals move their jaw while they talk
         public bool mouthDebug = false;             // log and show mouth driver details
@@ -608,6 +614,7 @@ namespace Lonapse
             crewVolume = DcMath.Clamp(DcMath.Finite(crewVolume), 0f, 1f);
             controlVolume = DcMath.Clamp(DcMath.Finite(controlVolume), 0f, 1f);
             beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 1f);
+            sfxVolume = DcMath.Clamp(DcMath.Finite(sfxVolume), 0f, 1f);
             staticVolume = DcMath.Clamp(DcMath.Finite(staticVolume), 0f, 1f);
             weakSignalVolume = DcMath.Clamp(DcMath.Finite(weakSignalVolume), 0f, 1f);
             intercomVolume = DcMath.Clamp(DcMath.Finite(intercomVolume), 0f, 1f);
@@ -743,6 +750,7 @@ namespace Lonapse
                 n.TryGetValue("crewVolume", ref s.crewVolume);
                 n.TryGetValue("controlVolume", ref s.controlVolume);
                 n.TryGetValue("beepVolume", ref s.beepVolume);
+                n.TryGetValue("sfxVolume", ref s.sfxVolume);
                 n.TryGetValue("staticVolume", ref s.staticVolume);
                 n.TryGetValue("weakSignalVolume", ref s.weakSignalVolume);
                 n.TryGetValue("intercomVolume", ref s.intercomVolume);
@@ -796,6 +804,7 @@ namespace Lonapse
                 n.TryGetValue("modTools", ref s.modTools);
                 n.TryGetValue("signalDropouts", ref s.signalDropouts);
                 n.TryGetValue("masterAlarm", ref s.masterAlarm);
+                n.TryGetValue("dockingSfx", ref s.dockingSfx);
                 n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
                 n.TryGetValue("mouthDebug", ref s.mouthDebug);
                 n.TryGetValue("personalityEffects", ref s.personalityEffects);
@@ -895,6 +904,7 @@ namespace Lonapse
                 n.AddValue("crewVolume", F(crewVolume));
                 n.AddValue("controlVolume", F(controlVolume));
                 n.AddValue("beepVolume", F(beepVolume));
+                n.AddValue("sfxVolume", F(sfxVolume));
                 n.AddValue("staticVolume", F(staticVolume));
                 n.AddValue("weakSignalVolume", F(weakSignalVolume));
                 n.AddValue("intercomVolume", F(intercomVolume));
@@ -946,6 +956,7 @@ namespace Lonapse
                 n.AddValue("modTools", modTools);
                 n.AddValue("signalDropouts", signalDropouts);
                 n.AddValue("masterAlarm", masterAlarm);
+                n.AddValue("dockingSfx", dockingSfx);
                 n.AddValue("mouthAnimation", mouthAnimation);
                 n.AddValue("mouthDebug", mouthDebug);
                 n.AddValue("personalityEffects", personalityEffects);

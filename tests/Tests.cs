@@ -240,6 +240,49 @@ public static class Tests
         {
             Tuning t = new Tuning();
             float dt = 0.1f;
+            Check(DockIntent.Count(DockIntent.All) == 3 && DockIntent.Count(DockIntent.Armed | DockIntent.Facing) == 2 && DockIntent.Count(0) == 0, "dock intent: sign count", null);
+            Check(Math.Abs(DockIntent.Chance(0, 0.3f) - 0.3f) < 1e-4f && Math.Abs(DockIntent.Chance(DockIntent.All, 0.3f) - 1f) < 1e-4f, "dock intent: chance is the base with no sign and 1 with all", null);
+            Check(Math.Abs(DockIntent.Chance(DockIntent.Compatible | DockIntent.Armed, 0.3f) - (0.3f + 0.7f * 2f / 3f)) < 1e-4f, "dock intent: chance grows with each sign", null);
+            Check(DockIntent.Chance(0, float.NaN) == 0f && DockIntent.Chance(0, 5f) == 1f, "dock intent: a bad base is clamped", null);
+            Check(DockIntent.AxesFace(-1f, 45f) && DockIntent.AxesFace(-0.8f, 45f) && !DockIntent.AxesFace(-0.6f, 45f) && !DockIntent.AxesFace(1f, 45f) && !DockIntent.AxesFace(0f, 45f), "dock intent: ports face within the angle", null);
+            {
+                // far callouts: once each at 500, 250 and 100 m, again after the target went away and came back
+                Tuning ft = new Tuning(); DockingWatcher fw = new DockingWatcher(); object fo = new object();
+                System.Collections.Generic.List<float> seenFar = new System.Collections.Generic.List<float>();
+                float fd = 700f;
+                for (int i = 0; i < 4000 && fd > 20f; i++)
+                {
+                    fd -= 0.5f; fw.Update(true, fo, fd, -1f, 5f, 0.1f, ft);
+                    if (fw.farCalloutDue > 0f) { seenFar.Add(fw.farCalloutDue); fw.farCalloutDue = -1f; }
+                }
+                Check(seenFar.Count == 3 && seenFar[0] == 500f && seenFar[1] == 250f && seenFar[2] == 100f, "docking: far callouts at 500, 250 and 100 m once each", "got " + string.Join(" ", seenFar.ConvertAll(x => x.ToString("0")).ToArray()));
+                for (int i = 0; i < 1500; i++) { fd += 0.5f; fw.Update(true, fo, fd, -1f, 5f, 0.1f, ft); }
+                seenFar.Clear();
+                for (int i = 0; i < 4000 && fd > 20f; i++)
+                {
+                    fd -= 0.5f; fw.Update(true, fo, fd, -1f, 5f, 0.1f, ft);
+                    if (fw.farCalloutDue > 0f) { seenFar.Add(fw.farCalloutDue); fw.farCalloutDue = -1f; }
+                }
+                Check(seenFar.Count == 3, "docking: far callouts come again after moving away", "got " + seenFar.Count);
+            }
+            {
+                // the approach holds other chatter from the approach call until the time is up, the dock or the target going away
+                Tuning ht = new Tuning(); DockingWatcher hw = new DockingWatcher(); object ho = new object();
+                float hd = 150f; bool fired2 = false;
+                for (int i = 0; i < 4000 && !fired2; i++) { hd -= 0.1f; fired2 = hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht); }
+                hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht);   // the hold starts with the frame after the call
+                Check(fired2 && hw.HoldsChat(ht), "docking: chatter waits once the approach call is made", null);
+                for (int i = 0; i < 100; i++) hw.Update(true, ho, 40f, -1f, 0.1f, 1f, ht);
+                Check(hw.HoldsChat(ht), "docking: the hold is still on after 100 s", "time " + hw.approachTime.ToString("0"));
+                for (int i = 0; i < 150; i++) hw.Update(true, ho, 40f, -1f, 0.1f, 1f, ht);
+                Check(!hw.HoldsChat(ht), "docking: the chatter hold ends after dockChatHold seconds", "time " + hw.approachTime.ToString("0"));
+                hw = new DockingWatcher(); hd = 150f; fired2 = false;
+                for (int i = 0; i < 4000 && !fired2; i++) { hd -= 0.1f; fired2 = hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht); }
+                hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht);
+                bool holdBefore = hw.HoldsChat(ht);
+                hw.OnDocked();
+                Check(holdBefore && !hw.HoldsChat(ht), "docking: docking ends the chatter hold", null);
+            }
             // normal approach from far away: closing at 1 m/s
             DockingWatcher dw = new DockingWatcher();
             object tgt = new object();
@@ -2943,7 +2986,7 @@ public static class Tests
                 RadioProfile sh = RadioProfiles.Get(RadioContext.Ship);
                 Check(st.HighPassHz == 350f && st.LowPassHz == 2800f && st.Distortion == 0.30f && st.BedClip == null, "core: station profile values", null);
                 Check(sh.HighPassHz == 300f && sh.LowPassHz == 3600f && sh.Distortion == 0.20f && sh.BedClip == null, "core: ship profile values", null);
-                Check(ev.HighPassHz == 400f && ev.LowPassHz == 2600f && ev.Distortion == 0.25f && ev.BedClip == "static/breath_loop" && ev.BedGain == 0.6f, "core: EVA profile values", null);
+                Check(ev.HighPassHz == 400f && ev.LowPassHz == 2600f && ev.Distortion == 0.25f && ev.BedClip == "sfx/breath_loop" && ev.BedGain == 0.6f, "core: EVA profile values", null);
                 Check(RadioProfiles.Select(false, false, "auto") == sh, "core: select ship by default", null);
                 Check(RadioProfiles.Select(true, false, "auto") == st, "core: select station", null);
                 Check(RadioProfiles.Select(false, true, "auto") == ev, "core: select EVA", null);

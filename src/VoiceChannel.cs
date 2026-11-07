@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lonapse
 {
-    public enum ChannelKind { Crew, Control, ControlBed, Beep, Static, IntercomClick, Breath }
+    public enum ChannelKind { Crew, Control, ControlBed, Beep, Static, IntercomClick, Breath, Sfx }
 
     public class VoiceChannel
     {

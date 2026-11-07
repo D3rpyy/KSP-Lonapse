@@ -932,23 +932,139 @@ namespace Lonapse
             if (v == null) return;
             try
             {
-                ITargetable t = v.targetObject;
-                if (t == null || t.GetTransform() == null) return;
-                Vector3d to = (Vector3d)t.GetTransform().position - (Vector3d)v.transform.position;
-                double dist = to.magnitude;
-                Vector3d rel = v.obt_velocity - t.GetObtVelocity();
-                double closing = dist > 0.1 ? Vector3d.Dot(rel, to / dist) : 0;
-                var nums = new Dictionary<string, double> { { "dist_m", dist }, { "close_ms", closing } };
+                var nums = new Dictionary<string, double>();
                 var names = new Dictionary<string, string[]>();
-                Vessel tv = t.GetVessel();
-                string tn = tv != null ? Names.Of(tv) : null;
-                string say = tn != null && !tn.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(tn) : null;
-                if (say != null) names["target"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(tn) };
-                string[] own = VesselNames();
-                if (own != null) names["vessel"] = own;
+                if (!DockValues(v, nums, names)) return;
                 QueueKind("dock", SituationOf(v), nums, names, ResponseDelay(host.stress.stress) + 0.5f, false);
             }
             catch (Exception e) { Log.Debug("Runtime voice dock: " + e.Message); }
+        }
+
+        /// <summary>Distance and closing speed to the target and the names of the target and the own ship. False
+        /// without a target.</summary>
+        bool DockValues(Vessel v, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            ITargetable t = v.targetObject;
+            if (t == null || t.GetTransform() == null) return false;
+            Vector3d to = (Vector3d)t.GetTransform().position - (Vector3d)v.transform.position;
+            double dist = to.magnitude;
+            Vector3d rel = v.obt_velocity - t.GetObtVelocity();
+            nums["dist_m"] = dist;
+            nums["close_ms"] = dist > 0.1 ? Vector3d.Dot(rel, to / dist) : 0;
+            Vessel tv = t.GetVessel();
+            string tn = tv != null ? Names.Of(tv) : null;
+            string say = tn != null && !tn.StartsWith("#", StringComparison.Ordinal) ? RuntimeLines.VesselSpeakable(tn) : null;
+            if (say != null) names["target"] = new[] { RuntimeSpeech.Respell(say), RuntimeLines.CleanName(tn) };
+            string[] own = VesselNames();
+            if (own != null) names["vessel"] = own;
+            return true;
+        }
+
+        // ---------------- undocking and the close approach ----------------
+
+        /// <summary>Real seconds after the undock until the crew speaks: the airlock sound runs about six seconds.</summary>
+        const float UndockLineDelay = 5.5f;
+        float undockDue = -1f;
+
+        /// <summary>The ship undocked (onPartUndock): the crew speaks once the airlock sound is done.</summary>
+        public void NoteUndock()
+        {
+            if (!host.probeMode && (!RuntimeOn || !host.settings.runtimeReports)) return;
+            undockDue = clock + UndockLineDelay;
+        }
+
+        void TickUndock()
+        {
+            if (undockDue < 0f || clock < undockDue) return;
+            undockDue = -1f;
+            if (!host.CanStartAudio || radioSilent || !host.settings.radioEnabled) return;
+            if (host.probeMode)
+            {
+                // no crew: the probe beeps and Mission Control answers
+                string why = PlayProbeCallout("undocked", null, "undock");
+                Log.Info("Probe undock " + (why == null ? "beeps queued" : "not played: " + why));
+                if (why == null) QueueMc("undock", false, -1f);
+                return;
+            }
+            bool ok = CrewThenMc("undock", "undock", false);
+            Log.Info("Runtime voice: undock " + (ok ? "lines queued" : "no line fits"));
+        }
+
+        /// <summary>The close approach of a calm docking: a kerbal calls the distance, with a link Mission Control
+        /// answers. False when the runtime voice has nothing to say.</summary>
+        public bool RuntimeDockClose()
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports || radioSilent || !host.settings.radioEnabled) return false;
+            return CrewThenMc("dockclose", "dock_close", true);
+        }
+
+        /// <summary>The distance callout at 30, 15 and 5 m: a kerbal says the distance (event chat on=dockcallout, with
+        /// dist_m the threshold). False when the runtime voice has no line for it, then the caller tries the rest.</summary>
+        public bool RuntimeDockCallout(float threshold)
+        {
+            if (host.probeMode)
+            {
+                // no crew to call the distance: the probe beeps, curious at 30 and 15 m, proud at 5 m, and Mission Control answers
+                string why = PlayProbeCallout(threshold >= 10f ? "dock_callout_far" : "dock_callout_near", null, "docking " + threshold.ToString("0") + " m");
+                if (why != null) Log.Info("Probe docking callout at " + threshold.ToString("0") + " m not played: " + why);
+                else QueueMc("dock_callout", true, threshold);
+                return true;
+            }
+            if (!RuntimeOn || !host.settings.runtimeReports || radioSilent || !host.settings.radioEnabled || !host.CanStartAudio) return false;
+            bool ok = CrewThenMc("dockcallout", "dock_callout", true, threshold);
+            Log.Info("Runtime voice: docking callout at " + threshold.ToString("0") + " m " + (ok ? "queued" : "no line fits"));
+            return ok;
+        }
+
+        /// <summary>A kerbal says a line alone over the radio (an event chat on=ev), then with a link Mission Control
+        /// answers with a line of mcKind. Without a chat that fits, Mission Control still speaks. withDock: the values
+        /// of the docking target (dist_m, close_ms, {target}) are in both, read again when Mission Control speaks.</summary>
+        bool CrewThenMc(string ev, string mcKind, bool withDock, float distOverride = -1f)
+        {
+            Vessel v = ActiveVessel;
+            if (v == null) return false;
+            KerbalVoice k = PickRested() ?? host.roster.Own;
+            if (k == null) return false;
+            bool reach = !McUnreachable && host.signal.connected;
+            var evNums = new Dictionary<string, double>();
+            var evNames = new Dictionary<string, string[]>();
+            try
+            {
+                if (withDock && !DockValues(v, evNums, evNames)) return false;
+                if (distOverride > 0f) evNums["dist_m"] = distOverride;
+            }
+            catch (Exception e) { Log.Debug("Runtime voice " + ev + ": " + e.Message); return false; }
+            Action mc = () => QueueMc(mcKind, withDock, distOverride);
+            bool ok = EventChat(ev, k, null, evNames, reach ? mc : null, evNums);
+            if (!ok && reach) { mc(); return true; }
+            return ok;
+        }
+
+        /// <summary>A Mission Control line of a kind, with the docking values when withDock. distOverride (when above 0)
+        /// is the distance of a callout, so Mission Control repeats the callout and not the exact range. Nothing without a
+        /// link to Mission Control or without the runtime voice.</summary>
+        void QueueMc(string mcKind, bool withDock, float distOverride)
+        {
+            if (!RuntimeOn || !host.settings.runtimeReports || McUnreachable || !host.signal.connected) return;
+            Vessel av = ActiveVessel;
+            if (av == null) return;
+            string sit = SituationOf(av) ?? "other";
+            var nums = new Dictionary<string, double>();
+            var names = new Dictionary<string, string[]>();
+            CollectValues(av, sit, nums, names, false);
+            try
+            {
+                if (withDock && !DockValues(av, nums, names)) return;
+                if (distOverride > 0f) nums["dist_m"] = distOverride;
+            }
+            catch (Exception) { return; }
+            QueueKind(mcKind, sit, nums, names, ResponseDelay(host.stress.stress) + 0.4f, false);
+        }
+
+        /// <summary>After a probe's own docking beeps: Mission Control answers with a line of mcKind.</summary>
+        public void ProbeDockMc(string mcKind, bool withDock)
+        {
+            QueueMc(mcKind, withDock, -1f);
         }
 
         /// <summary>Share of intercom chats that are a runtime chat (real values), when one fits.</summary>

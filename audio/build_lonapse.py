@@ -13,7 +13,7 @@ Kerbal register, and writes OGG Vorbis clips into the merged Sounds/ tree, in th
 Subtitle-only rows (role probe) have an empty spanish and get no clip. They are only in phrases.tsv,
 the plugin shows their english and plays a probe beep for them.
 
-This script owns Sounds/crew and Sounds/control. Sounds/beeps and Sounds/static belong to build_clips.py.
+This script owns Sounds/crew and Sounds/control. Sounds/beeps and most of Sounds/sfx belong to build_clips.py (the docking effects in Sounds/sfx belong to build_sfx.py).
 
 Usage:
     python3 -I audio/build_lonapse.py [--clean] [--verify-only] [--validate-only] [--fetch-voices] [--jobs N]

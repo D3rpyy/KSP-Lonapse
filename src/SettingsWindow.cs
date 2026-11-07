@@ -502,6 +502,7 @@ namespace Lonapse
             s.calloutVolume = Volume("Callouts", s.calloutVolume, 2f);
             s.beepVolume = Volume("Beeps", s.beepVolume);
             s.staticVolume = Volume("Static", s.staticVolume);
+            s.sfxVolume = Volume("Sound effects", s.sfxVolume);
             s.evaRadioVolume = Volume("EVA radio", s.evaRadioVolume);
             s.duckDepth = Row("Lower game audio", s.duckDepth, 0f, 0.8f, Mathf.Round(s.duckDepth * 100f), "0'%'");
             Hint("Static: bursts, crackle and radio clicks. Lower game audio: how much the game gets quieter while someone talks.");
@@ -513,6 +514,7 @@ namespace Lonapse
             Hint("Crew-to-crew chats sound like the radio instead of a voice in the cabin.");
             s.rogerBeep = Toggle(s.rogerBeep, "Roger beep");
             s.masterAlarm = Toggle(s.masterAlarm, "Master alarm at very high stress");
+            s.dockingSfx = Toggle(s.dockingSfx, "Airlock sounds on dock and undock");
         }
 
         private void DrawCrew(Settings s)

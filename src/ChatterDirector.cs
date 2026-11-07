@@ -1089,9 +1089,9 @@ namespace Lonapse
                 {
                     VoiceChannel b = host.controlBed;
                     if (!host.signal.connected) return StartResult.Instant;
-                    if (!b.Busy && ClipLibrary.CountOf("static/loop") > 0)
+                    if (!b.Busy && ClipLibrary.CountOf("sfx/loop") > 0)
                     {
-                        AudioClip clip = ClipLibrary.Next("static/loop", rng);
+                        AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
                         // weaker signal, louder bed
                         // radioStatic: extra static at any signal, on top of the weak-signal part
                         if (clip != null) b.Play(clip, DcMath.Clamp01(tu.controlBedVolume + DcMath.StaticCurve(cfg.radioStatic) * RadioStaticMcBed
@@ -1104,7 +1104,7 @@ namespace Lonapse
                     return StartResult.Instant;
                 case UttKind.StaticBurst:
                 {
-                    AudioClip clip = ClipLibrary.Next("static/burst", rng);
+                    AudioClip clip = ClipLibrary.Next("sfx/burst", rng);
                     if (clip == null) return StartResult.Skip;
                     VoiceChannel st = host.staticCh;
                     if (st.Busy) st.Stop();
@@ -1179,7 +1179,7 @@ namespace Lonapse
             if (u != null) { u.entry = e; u.rt = PlanMc(e, to); }
             Enqueue(UttKind.ControlFx, "beeps/quindar_out", 0.03f, 0f, null);
             Enqueue(UttKind.BedStop, null, 0f, 0f, null);
-            Enqueue(UttKind.ControlFx, "static/squelch", 0.02f, 0f, null);
+            Enqueue(UttKind.ControlFx, "sfx/squelch", 0.02f, 0f, null);
         }
 
         /// <summary>
@@ -1686,7 +1686,14 @@ namespace Lonapse
         /// <summary>Docking approach: short crew call, Mission Control answers.</summary>
         public void EnqueueDockingApproach()
         {
-            if (host.probeMode) return;
+            if (host.probeMode)
+            {
+                // the probe has no crew to call it: its own beeps (a probe scene for the event when there is one)
+                string why = PlayProbeCallout("dock_approach", null, "docking approach");
+                if (why != null) Log.Info("Probe docking approach not played: " + why);
+                else RuntimeDock();   // Mission Control answers with the distance and the closing speed
+                return;
+            }
             if (!host.CanStartAudio || radioSilent || count + 10 > Capacity) return;
             if (!EnqueueRadioScene(PickScene("dock_approach", null, null), null, U(0f, 0.4f)) && !PhraseClips.Loaded)
             {
@@ -1700,9 +1707,17 @@ namespace Lonapse
         /// <summary>Close approach (within ~30 m and closing): crew calm or tense by closing speed, MC answers.</summary>
         public void EnqueueDockingClose(bool tense)
         {
-            if (host.probeMode) return;
+            if (host.probeMode)
+            {
+                string why = PlayProbeCallout(tense ? "dock_close_tense" : "dock_close", null, "docking close approach");
+                if (why != null) Log.Info("Probe docking close exchange not played: " + why);
+                else ProbeDockMc("dock_close", true);
+                return;
+            }
             if (!host.CanStartAudio || radioSilent || !host.settings.radioEnabled || HasRadioItems()) return;
             if (tense && EnqueueRadioScene(PickScene("dock_close", null, null), null, U(0f, 0.3f))) return;
+            // a calm close approach: the runtime voice calls the distance, the recorded scenes are for the tense one
+            if (!tense && RuntimeDockClose()) return;
             if (PhraseClips.Loaded) return;
             EnqueueCrew(tense ? "crew/tense" : "crew/calm", U(0f, 0.3f), 0f);
             EnqueueMcFor("dock_approach", ResponseDelay(0.2f));
@@ -2018,7 +2033,8 @@ namespace Lonapse
             lastChatClock = clock;
             chatLimit = IntercomAbortLimit;   // a blackout chat keeps the blackout limit after the blackout ends
             // keep the two voices audibly apart even when their base pitches are close
-            float nudge = DcMath.PairPitchNudge(a.Pitch, b.Pitch, Tu.intercomMinPitchGap);
+            float nudge = DcMath.PairPitchNudge(a.Pitch, b.Pitch, Tu.intercomMinPitchGap,
+                                               DcMath.CrewPitchMin, Math.Max(DcMath.CrewPitchMin, Tu.crewPitchMax));
             for (int i = 0; i < turns; i++)
             {
                 bool second = (i % 2) == 1;
@@ -2047,9 +2063,14 @@ namespace Lonapse
             ProcessQueue();
         }
 
+        /// <summary>An approach is on and the crew is calm: no other chatter, chat, report or event call starts. The docking
+        /// calls themselves are not held. At higher stress everything runs as usual again.</summary>
+        bool DockHoldNow { get { return host.DockingHoldsAir && host.stress.stress < Tu.intercomMaxStress; } }
+
         public void Update(float dt)
         {
             clock += dt;
+            TickUndock();
             Tuning tu = Tu;
             float s = host.stress.stress;
             float rate = host.settings.rateMultiplier * (host.stationMode ? tu.stationRateFactor : 1f)
@@ -2078,7 +2099,7 @@ namespace Lonapse
             UpdatePendingCallout();
             // a DeepFreeze group is busy: no new event call, chatter, report or chat starts until its line played.
             // Events wait in their list (with their max age), the group takes seconds.
-            bool modHold = host.ModHoldsAir;
+            bool modHold = host.ModHoldsAir || DockHoldNow;
             if (modHold) holdoff = Math.Max(holdoff, 0.5f);
             else UpdateEvents();
             if (!modHold) RuntimeTick();
@@ -2366,8 +2387,8 @@ namespace Lonapse
         {
             VoiceChannel b = host.crewBed;
             float amount = host.settings.radioStatic;
-            if (b == null || amount <= 0f || b.Busy || ClipLibrary.CountOf("static/loop") == 0) return;
-            AudioClip clip = ClipLibrary.Next("static/loop", rng);
+            if (b == null || amount <= 0f || b.Busy || ClipLibrary.CountOf("sfx/loop") == 0) return;
+            AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
             if (clip != null) b.Play(clip, DcMath.Clamp01(RadioStaticCrewBed * DcMath.StaticCurve(amount)), 1f, true, 0.08f);
         }
 

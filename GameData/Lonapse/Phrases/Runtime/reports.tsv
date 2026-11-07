@@ -14,11 +14,14 @@ id	kind	when	spanish	english
 #          recorded calm chatter scene that ends with a Mission Control statement.				
 #          sunrise: Mission Control at a sunrise in orbit, now and then (sunrise_biome.tsv)				
 #          eva: Mission Control to a kerbal on EVA, also the report on EVA. flag: after a flag is planted (eva_flag.tsv)				
+#          undock: Mission Control after the crew's line at an undock (undock.tsv). dock_close: Mission Control at the close				
+#          approach of a calm docking (dock_close.tsv). dock_callout: Mission Control after a distance callout. They answer an				
+#          event chat on=undock, on=dockclose or on=dockcallout, and the beeps of a probe.				
 #          chat: an intercom chat between two kerbals. Id rt_chat_<name>_<seq>, one row per line, seq 1, 2, 3.				
 #          Kerbal A speaks the odd lines, kerbal B the even ones. Only line 1 has a when. A chat stays in one file.				
 #          A chat with on_eva=1 is for two EVA kerbals (eva_chats.tsv), one with apart=1 for two kerbals of different				
 #          vessels nearby (radio_chats.tsv). Both play over the radio, the others only in one cabin.				
-#          An event chat has on= in the when (on=flag on=surfacesample ...): it only plays on that event and may have				
+#          An event chat has on= in the when (on=flag on=undock on=dockclose on=surfacesample ...): it only plays on that event and may have				
 #          one line, for a kerbal alone (event_chats.tsv).				
 # when     empty or any: always. A situation (orbit flight suborbital landed escape) and/or checks like fuel<25				
 #          or node_min>=2. Several situations: one must match. Every check must hold.				

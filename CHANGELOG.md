@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.8.2
+
+### New
+
+- **Airlock sounds.** Docking and undocking have an airlock sound now. It plays on contact when you dock and when you undock. It has its own Sound effects volume and a switch, Airlock sounds on dock and undock, in the settings.
+- **Undocking talks.** About five seconds after an undock, when the airlock sound is done, a kerbal says a line over the radio, for example We're free. With a link, Mission Control answers. A probe beeps and Mission Control answers it. These lines use the runtime voice.
+- **A calm docking is no longer silent.** A slow close approach, under 0.4 m/s, used to get no lines at all. Now a kerbal calls the distance and Mission Control answers. A fast, tense approach still plays the recorded scenes.
+- **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. A probe beeps for each of them, and for the approach and the close approach too. Before, a probe was silent until the dock itself.
+- **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
+- **The ship checks that you mean to dock.** A docking call comes more often when the target has a free port of the same size, one of your ports is armed and the two ports face each other. Creeping up on debris or an asteroid now rarely gets a docking call.
+
+### Changed
+
+- **Radio static and EVA breathing moved.** The clips in `Sounds/static` are now in `Sounds/sfx`, the same audio under new names. When you copy a new version over an old one, delete the old `Sounds/static` folder.
+- **KSP.log says why.** It names the docking target, tells you when an approach call can not come because the target was already close, and logs the three port signs and the chance for every call.
+
+### For modders
+
+- The runtime tables have three new kinds, `undock`, `dock_close` and `dock_callout`, and three new events for `on=`, `undock`, `dockclose` and `dockcallout`. The lines are in `Phrases/Runtime/undock.tsv` and `dock_close.tsv`.
+- New settings `sfxVolume` and `dockingSfx`, and new tuning values `dockIntentBase`, `dockIntentAngle` and `dockChatHold`.
+
 ## 0.8.1
 
 **Tourists get their own voice, DeepFreeze is supported and the runtime voice no longer cuts the audio or crashes the game.** Most of this version comes from your feedback on 0.8.0. Thanks for the reports!

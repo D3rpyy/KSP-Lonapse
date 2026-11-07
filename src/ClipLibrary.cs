@@ -38,13 +38,14 @@ namespace Lonapse
             "control/calm", "control/tense",
             "beeps/ping", "beeps/descent", "beeps/stage", "beeps/landing", "beeps/splashdown",
             "beeps/quindar_in", "beeps/quindar_out",
-            "static/burst", "static/loop", "static/squelch",
-            "beeps/click_desk", "beeps/headset_open", "beeps/headset_close", "static/breath_loop", "beeps/master_alarm",
+            "sfx/burst", "sfx/loop", "sfx/squelch",
+            "beeps/click_desk", "beeps/headset_open", "beeps/headset_close", "sfx/breath_loop", "beeps/master_alarm",
             "beeps/roger",
+            "sfx/airlock_dock", "sfx/airlock_undock",
         };
 
         // one entry per folder in BaseFolders, in the same order
-        private static readonly int[] BaseMinimums = { 24, 24, 24, 8, 8, 24, 12, 3, 2, 2, 1, 1, 1, 1, 6, 2, 2, 1, 1, 1, 1, 1, 1 };
+        private static readonly int[] BaseMinimums = { 24, 24, 24, 8, 8, 24, 12, 3, 2, 2, 1, 1, 1, 1, 6, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         // Built clips per probe beep folder (build_clips.py)
         public const int ProbeBeepMinimum = 3;

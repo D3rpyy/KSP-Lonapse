@@ -46,9 +46,9 @@ FOLDERS = {
     "beeps/splashdown": dict(min=1,  count=2,  lo=0.4,  hi=1.2,  rms=-22.0, kind="beep"),
     "beeps/quindar_in": dict(min=1,  count=1,  lo=0.25, hi=0.25, rms=-22.0, kind="beep"),
     "beeps/quindar_out": dict(min=1, count=1,  lo=0.25, hi=0.25, rms=-22.0, kind="beep"),
-    "static/burst":     dict(min=6,  count=8,  lo=0.2,  hi=1.5,  rms=-24.0, kind="static"),
-    "static/loop":      dict(min=2,  count=3,  lo=4.0,  hi=8.0,  rms=-24.0, kind="loop"),
-    "static/squelch":   dict(min=2,  count=3,  lo=0.12, hi=0.30, rms=-24.0, kind="static"),
+    "sfx/burst":     dict(min=6,  count=8,  lo=0.2,  hi=1.5,  rms=-24.0, kind="static"),
+    "sfx/loop":      dict(min=2,  count=3,  lo=4.0,  hi=8.0,  rms=-24.0, kind="loop"),
+    "sfx/squelch":   dict(min=2,  count=3,  lo=0.12, hi=0.30, rms=-24.0, kind="static"),
     # Radio profiles. Added at the end so the existing folders keep their RNG streams.
     # click_desk: station profile open click, 5 dB hotter than the other beeps because a 15 to 26 ms
     # click measures quiet at -22. headset_*: ship/EVA push-to-talk static (radio-band noise, no tone).
@@ -56,7 +56,7 @@ FOLDERS = {
     "beeps/click_desk":   dict(min=2, count=3, lo=0.015, hi=0.030, rms=-17.0, kind="beep"),
     "beeps/headset_open": dict(min=2, count=2, lo=0.150, hi=0.300, rms=-22.0, kind="beep"),
     "beeps/headset_close": dict(min=2, count=2, lo=0.150, hi=0.300, rms=-22.0, kind="beep"),
-    "static/breath_loop": dict(min=1, count=2, lo=6.0, hi=8.0, rms=-30.0, kind="loop"),
+    "sfx/breath_loop": dict(min=1, count=2, lo=6.0, hi=8.0, rms=-30.0, kind="loop"),
     # Roger beep at the end of a crew transmission.
     "beeps/roger":        dict(min=1, count=2, lo=0.08, hi=0.20, rms=-22.0, kind="beep"),
     # master_alarm: soft two-tone caution loop for panic moments. The plugin plays it far in the background.
@@ -613,9 +613,18 @@ def gate_noise(x, rng, on=(0.004, 0.03), off=(0.0, 0.05), floor=0.08):
     return y
 
 
+# These folders were Sounds/static/<name> before they moved to Sounds/sfx/<name>. The random seeds
+# still use the old folder names, so the moved clips are the same audio as before.
+LEGACY_FOLDERS = {
+    "sfx/burst": "static/burst", "sfx/loop": "static/loop", "sfx/squelch": "static/squelch",
+    "sfx/breath_loop": "static/breath_loop",
+}
+
+
 def make_static(folder, i, seed):
-    rng = random.Random("%d:%s:%d" % (seed, folder, i))
-    nseed = 1000 + i + 37 * len(folder) + seed * 101
+    legacy = LEGACY_FOLDERS.get(folder, folder)
+    rng = random.Random("%d:%s:%d" % (seed, legacy, i))
+    nseed = 1000 + i + 37 * len(legacy) + seed * 101
     name = folder.split("/")[1]
     if name == "burst":
         dur = rng.uniform(0.3, 1.3)
@@ -684,10 +693,10 @@ def make_static(folder, i, seed):
         # long tail). Under it a faint suit-fan hiss so the helmet never goes fully silent.
         # The mix gets a short double echo (6 and 11 ms) and a low-pass: a small closed space.
         # The breaths sit inside the loop and are silent at both ends, so only the fan hiss crosses
-        # the seam, and that is crossfaded like static/loop.
+        # the seam, and that is crossfaded like sfx/loop.
         L = int(SR * 8.0)
         X = int(SR * 0.5)
-        nseed = 3000 + i + 37 * len(folder) + seed * 101
+        nseed = 3000 + i + 37 * len(legacy) + seed * 101
         inh = noise(nseed, 8.1, "pink", "highpass=f=700,bandpass=f=1900:width_type=q:w=0.9")
         exh = noise(nseed + 1, 8.1, "pink", "highpass=f=200,bandpass=f=950:width_type=q:w=0.6")
         breath = [0.0] * L
@@ -779,7 +788,7 @@ def verify(manifest_entries):
         for f in files:
             if not NAME_RE.match(f):
                 failures.append("%s: bad file name %s" % (folder, f))
-    for top in ("beeps", "static"):
+    for top in ("beeps", "sfx"):
         for p in (SOUNDS / top).rglob("*"):
             if p.is_file() and p.suffix.lower() != ".wav":
                 failures.append("non-wav file under Sounds/%s: %s" % (top, p))
@@ -963,7 +972,9 @@ def main():
     if args.clean:
         # Only what this script owns: the work cache, its own output folders and its manifest.
         # The Lonapse voices in Sounds/crew and Sounds/control are left alone.
-        owned = [WORK, MANIFEST] + [SOUNDS / top for top in ("beeps", "static")]
+        # Sounds/sfx also holds the effects of build_sfx.py, so only this script's own sfx folders go, plus
+        # the old Sounds/static folder from before the move.
+        owned = [WORK, MANIFEST, SOUNDS / "beeps", SOUNDS / "static"] + [out_root(f) / f for f in FOLDERS if f.startswith("sfx/")]
         for d in owned:
             if d.is_dir():
                 shutil.rmtree(d)

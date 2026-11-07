@@ -107,7 +107,7 @@ namespace Lonapse
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
                                                   "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag",
-                                                  "event", "meta", "experiment", "device", "contract" };
+                                                  "event", "meta", "experiment", "device", "contract", "undock", "dock_close", "dock_callout" };
         /// <summary>Kinds only other mods use (Lonapse itself ships no rows of them).</summary>
         public static readonly string[] ModKinds = { "event", "meta", "experiment", "device", "contract" };
         /// <summary>Registration rows: a mod names one of its own experiments, Breaking Ground parts or contract
@@ -224,7 +224,7 @@ namespace Lonapse
         /// or a mod's experiment row), deploy for a deployed part (deploy or a mod's device row), else null.</summary>
         public static string GeneralOf(IList<RuntimeTemplate> all, string topic)
         {
-            if (topic == null || topic == "flag") return null;
+            if (topic == null || topic == "flag" || topic == "undock" || topic == "dockclose" || topic == "dockcallout") return null;
             if (topic == "deploy") return "deploy";
             if (!IsModEvent(topic)) return "science";
             RuntimeTemplate m = RegisteredTopic(all, topic);
@@ -236,7 +236,7 @@ namespace Lonapse
 
         /// <summary>The events of on=: flag (a flag planted), deploy (a Breaking Ground part deployed), science
         /// (any experiment) and the science topics of EventWatchers (evareport, surfacesample, roc ...).</summary>
-        public static readonly string[] Events = { "flag", "deploy", "science", "evareport", "surfacesample", "roc",
+        public static readonly string[] Events = { "flag", "undock", "dockclose", "dockcallout", "deploy", "science", "evareport", "surfacesample", "roc",
             "crewreport", "mysterygoo", "mobilematerialslab", "temperaturescan", "barometerscan", "seismicscan",
             "gravityscan", "atmosphereanalysis", "asteroidsample", "cometsample", "infraredtelescope", "magnetometer", "other" };
 

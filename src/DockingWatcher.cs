@@ -32,6 +32,24 @@ namespace Lonapse
         public float closeTimer;
         public static readonly float[] CalloutDistances = { 30f, 15f, 5f };
         private readonly bool[] calloutDone = new bool[3];
+
+        // far callouts: the range drops through 500, 250 and 100 m while closing, before the approach call. Each comes once
+        // per approach and comes again after the target went further than 1.15 x its distance.
+        public static readonly float[] FarCalloutDistances = { 500f, 250f, 100f };
+        private readonly bool[] farDone = new bool[3];
+        public float farCalloutDue = -1f;   // distance threshold crossed, consumer sets back to -1
+
+        // The approach is on from the approach call until docking, undock, a lost target or the target further than dockRearmDist.
+        // Other chatter waits for dockChatHold s of it.
+        public bool approachActive;
+        public float approachTime;
+        public bool HoldsChat(Tuning tu) { return approachActive && approachTime < tu.dockChatHold; }
+
+        private void ResetFar()
+        {
+            farCalloutDue = -1f;
+            for (int i = 0; i < farDone.Length; i++) farDone[i] = false;
+        }
         public System.Random rng = new System.Random(7);
 
         public const float RangeRateTau = 0.5f;
@@ -71,6 +89,9 @@ namespace Lonapse
             holdTimer = 0f;
             prevDist = -1f;
             lastTarget = null;
+            approachActive = false;
+            approachTime = 0f;
+            ResetFar();
             ResetClose();
         }
 
@@ -92,12 +113,18 @@ namespace Lonapse
                 rangeRate = 0f;
                 prevDist = -1f;
                 guardActive = false;
+                approachActive = false;
+                approachTime = 0f;
+                ResetFar();
                 ResetClose();
                 return false;
             }
             if (!ReferenceEquals(target, lastTarget))
             {
                 lastTarget = target;
+                ResetFar();
+                approachActive = false;
+                approachTime = 0f;
                 armed = false;
                 fired = false;
                 seenFar = false;
@@ -159,6 +186,9 @@ namespace Lonapse
             if (dist > tu.dockApproachDist) ResetClose();
 
             UpdateClose(distBefore, dist, dt, tu);
+            UpdateFar(distBefore, dist, tu);
+            approachActive = fired && dist < tu.dockRearmDist;
+            if (approachActive) approachTime += dt; else approachTime = 0f;
 
             if (!armed || !seenFar) { holdTimer = 0f; return false; }
             bool closing = rangeRate < -tu.dockClosingRate;
@@ -222,6 +252,23 @@ namespace Lonapse
             }
         }
 
+        /// <summary>Far callouts: the range first drops through 500, 250 or 100 m while closing.</summary>
+        private void UpdateFar(float distBefore, float dist, Tuning tu)
+        {
+            bool closing = rangeRate < -tu.dockClosingRate;
+            for (int i = 0; i < FarCalloutDistances.Length; i++)
+            {
+                float th = FarCalloutDistances[i];
+                if (dist > th * 1.15f) { farDone[i] = false; continue; }
+                if (farDone[i]) continue;
+                if (dist <= th && distBefore > th && closing)
+                {
+                    farDone[i] = true;
+                    farCalloutDue = th;   // the nearest threshold crossed in this frame wins
+                }
+            }
+        }
+
         /// <summary>Parts broke during a couple: stop hiding motion for the rest of this approach.</summary>
         public void BreakGuard()
         {
@@ -239,7 +286,51 @@ namespace Lonapse
             lastTarget = null;
             prevDist = -1f;
             rangeRate = 0f;
+            approachActive = false;
+            approachTime = 0f;
+            ResetFar();
             ResetClose();
+        }
+    }
+
+    /// <summary>
+    /// Whether the player really means to dock, from the ports. Three signs (bit flags): a free port on the target
+    /// of the same size as one of ours, one of our ports armed, and the two ports facing each other. The more hold,
+    /// the likelier the docking calls and callouts play.
+    /// </summary>
+    public static class DockIntent
+    {
+        public const int Compatible = 1, Armed = 2, Facing = 4;
+        public const int All = Compatible | Armed | Facing;
+
+        public static int Count(int flags)
+        {
+            int n = 0;
+            if ((flags & Compatible) != 0) n++;
+            if ((flags & Armed) != 0) n++;
+            if ((flags & Facing) != 0) n++;
+            return n;
+        }
+
+        /// <summary>Two port axes face each other when they are about opposite: their dot product is at most
+        /// -cos(maxAngleDeg). The direction the axes point (out of the port or into it) does not matter.</summary>
+        public static bool AxesFace(float dot, float maxAngleDeg)
+        {
+            return dot <= -(float)Math.Cos(maxAngleDeg * Math.PI / 180.0);
+        }
+
+        /// <summary>Chance that a docking call plays: baseChance with none of the signs, 1 with all three.</summary>
+        public static float Chance(int flags, float baseChance)
+        {
+            float b = DcMath.Clamp(DcMath.Finite(baseChance), 0f, 1f);
+            return b + (1f - b) * Count(flags) / 3f;
+        }
+
+        public static string Describe(int flags)
+        {
+            return ((flags & Compatible) != 0 ? "compatible port" : "no compatible port") + ", "
+                 + ((flags & Armed) != 0 ? "own port armed" : "own port not armed") + ", "
+                 + ((flags & Facing) != 0 ? "ports facing" : "ports not facing");
         }
     }
 
@@ -272,6 +363,51 @@ namespace Lonapse
                     if (n != null) list.Add(n);
                 }
             }
+        }
+
+        static bool StateIs(ModuleDockingNode n, string prefix)
+        {
+            string s = null;
+            try { s = n.state; } catch (Exception) { }
+            return s != null && s.StartsWith(prefix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// DockIntent flags of the best pair of ports (most signs, then the nearest): the target port, or any port of
+        /// the target vessel, against each of our ports. Uses the node lists PortDistance filled, so call that first.
+        /// A free target port is "Ready", an armed own port "Ready" or "Acquire". 0 when a side has no port.
+        /// </summary>
+        public int Intent(ITargetable t, float maxAngleDeg)
+        {
+            ModuleDockingNode tn = t as ModuleDockingNode;
+            if (tn != null && tn.nodeTransform == null) tn = null;
+            int bestFlags = 0;
+            float bestDist = float.MaxValue;
+            bool any = false;
+            for (int i = 0; i < own.Count; i++)
+            {
+                ModuleDockingNode a = own[i];
+                if (a == null || a.nodeTransform == null) continue;
+                bool armed = StateIs(a, "Ready") || StateIs(a, "Acquire");
+                int count = tn != null ? 1 : other.Count;
+                for (int j = 0; j < count; j++)
+                {
+                    ModuleDockingNode b = tn != null ? tn : other[j];
+                    if (b == null || b.nodeTransform == null) continue;
+                    int f = 0;
+                    if (armed) f |= DockIntent.Armed;
+                    if (string.Equals(a.nodeType, b.nodeType, StringComparison.OrdinalIgnoreCase) && StateIs(b, "Ready")) f |= DockIntent.Compatible;
+                    if (DockIntent.AxesFace(Vector3.Dot(a.nodeTransform.forward, b.nodeTransform.forward), maxAngleDeg)) f |= DockIntent.Facing;
+                    float d = (a.nodeTransform.position - b.nodeTransform.position).magnitude;
+                    if (!any || DockIntent.Count(f) > DockIntent.Count(bestFlags) || (DockIntent.Count(f) == DockIntent.Count(bestFlags) && d < bestDist))
+                    {
+                        any = true;
+                        bestFlags = f;
+                        bestDist = d;
+                    }
+                }
+            }
+            return bestFlags;
         }
 
         /// <summary>Port-to-port distance, or -1 when either side has no usable docking node.</summary>

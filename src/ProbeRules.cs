@@ -122,6 +122,13 @@ namespace Lonapse
                 case Splashdown: return "curious";
                 case Docked: return HappyMood;
                 case BurnSoon: return "curious";
+                // Docking: the probe notices the target, gets nervous when it closes fast, and counts down the distance
+                case "dock_approach": return "curious";
+                case "undocked": return HappyMood;
+                case "dock_close": return "curious";
+                case "dock_close_tense": return ScaredMood;
+                case "dock_callout_far": return "curious";
+                case "dock_callout_near": return "proud";
                 case "staging": return HappyMood;
                 case "chute_semi": case "chute_full": return HappyMood;
                 case "throttle_full": return "proud";

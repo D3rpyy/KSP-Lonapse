@@ -8,7 +8,8 @@ Two scripts build everything the plugin plays:
 
 | Folder | Built by |
 |---|---|
-| `Sounds/beeps/`, `Sounds/static/` | `build_clips.py` (WAV, synthesized, no recordings) |
+| `Sounds/beeps/`, `Sounds/sfx/burst`, `loop`, `squelch`, `breath_loop` | `build_clips.py` (WAV, synthesized, no recordings) |
+| `Sounds/sfx/airlock_dock`, `airlock_undock` | `build_sfx.py` (WAV, made from the recordings in `audio/sfx_sources/`) |
 | `Sounds/crew/`, `Sounds/control/` | `build_lonapse.py` (loñapsE voices from Piper TTS, OGG) |
 
 Both scripts write into `audio/build/Sounds/`, and that folder is what ships to the game. Each script only touches its
@@ -26,7 +27,7 @@ python3 -I audio/build_clips.py --verify-only      # re-check an existing build
 
 | Flag | Effect |
 |---|---|
-| `--clean` | Delete `audio/work/`, `audio/build/manifest.json`, `Sounds/beeps` and `Sounds/static`. The voice folders are kept. |
+| `--clean` | Delete `audio/work/`, `audio/build/manifest.json`, `Sounds/beeps`, the four `Sounds/sfx` folders of `build_clips.py` and the old `Sounds/static`. The voice folders and the docking effects are kept. |
 | `--install` | After a successful build, sync the whole `audio/build/Sounds/` tree (WAV and OGG) into `GameData/Lonapse/Sounds/` and copy the phrase table to `GameData/Lonapse/Phrases/phrases.tsv`. Copies new or changed files and deletes stale files, only inside that folder. Aborts when `GameData/Squad` is missing, and when the voices are not built yet. The game folder comes from `KSP_DIR` or the first line of `.ksp_dir` in the repo root. |
 | `--seed N` | Random seed (default 1). The same seed gives byte-identical WAV files. |
 
@@ -85,9 +86,9 @@ sample.
 | `beeps/splashdown` | 2 | Descending, warbled sweep |
 | `beeps/quindar_in` | 1 | 2525 Hz, 0.25 s, 5 ms fades |
 | `beeps/quindar_out` | 1 | 2475 Hz, 0.25 s, 5 ms fades |
-| `static/burst` | 8 | Gated, band-passed crackle and hiss with pops |
-| `static/loop` | 3 | 5 to 7 s radio hiss, start and end crossfaded so it loops without a click |
-| `static/squelch` | 3 | Short squelch tail with a falling chirp |
+| `sfx/burst` | 8 | Gated, band-passed crackle and hiss with pops |
+| `sfx/loop` | 3 | 5 to 7 s radio hiss, start and end crossfaded so it loops without a click |
+| `sfx/squelch` | 3 | Short squelch tail with a falling chirp |
 
 Levels (gated RMS over 10 ms frames above max(-50 dBFS, loudest frame - 30 dB), as measured by ffmpeg
 `astats`): beeps -22 dBFS, static -24 dBFS, all within 1 dB. Peaks stay at or below
@@ -119,12 +120,12 @@ and noise.
 | `beeps/click_desk` | 3 | Desk-microphone click for the station profile. Band-passed white noise (1.8 to 3 kHz center, slightly random) with a fast exponential decay (tau 2.5 to 4.5 ms). 15 to 26 ms long, 5 ms fade in, 6 ms fade out. Set to -17 dBFS gated RMS, 5 dB hotter than the other beeps, because a click this short measures quiet at -22. |
 | `beeps/headset_open` | 2 | Push-to-talk static for the ship and EVA profiles (key-up). White noise in a radio band of about 350 Hz to 3.4 kHz (two passes of each filter for a steeper edge), a random carrier flutter every 5 to 14 ms (depth about 35 %), and soft tanh saturation. Comes up in 4 ms, holds, falls away over the last 60 ms. 0.20 to 0.26 s. No tone, no clicks. |
 | `beeps/headset_close` | 2 | The squelch tail (key-down). Same noise, slightly brighter (low-pass 4.2 kHz), starts at full level and decays over the whole clip. 0.16 to 0.22 s. |
-| `static/breath_loop` | 2 | EVA helmet breathing, exactly 8.0 s, two breaths per loop. Inhale: pink noise in a narrow band near 1.9 kHz, 1.0 to 1.3 s, smooth bell envelope. A short hold. Exhale: wider band near 0.95 kHz, 1.4 to 1.8 s, quick onset and a long tail. Under it a faint suit-fan hiss (pink noise, 120 Hz to 1.4 kHz, crossfaded over 0.5 s at the seam). The mix gets a short double echo (6 and 11 ms) and a low-pass at 3 kHz, for a small closed helmet. The filters run over the loop's own tail first, so the seam has the same history as a wrap. |
+| `sfx/breath_loop` | 2 | EVA helmet breathing, exactly 8.0 s, two breaths per loop. Inhale: pink noise in a narrow band near 1.9 kHz, 1.0 to 1.3 s, smooth bell envelope. A short hold. Exhale: wider band near 0.95 kHz, 1.4 to 1.8 s, quick onset and a long tail. Under it a faint suit-fan hiss (pink noise, 120 Hz to 1.4 kHz, crossfaded over 0.5 s at the seam). The mix gets a short double echo (6 and 11 ms) and a low-pass at 3 kHz, for a small closed helmet. The filters run over the loop's own tail first, so the seam has the same history as a wrap. |
 | `beeps/roger` | 2 | Roger beep when the crew lets go of the key. One 1250 Hz tone of 110 ms, or a quick rising pair (1050 then 1400 Hz). |
 | `beeps/master_alarm` | 1 | Soft caution loop for very high stress, exactly 2.0 s. 660 Hz and 880 Hz alternate every 0.5 s with 0.12 s raised-cosine crossfades, a faint second harmonic and a 4 Hz tremolo (0.6 to 1.0). Every part has a whole number of cycles in 2 s, so the seam is clean. The plugin plays it at `alarmVolume` 0.12. |
 
 Levels: the beeps are at -22 dBFS gated RMS, except the desk click at -17 dBFS, and the breath bed is at
--30 dBFS. The bed is deliberately 6 dB quieter than `static/loop` (-24 dBFS), so it stays under the
+-30 dBFS. The bed is deliberately 6 dB quieter than `sfx/loop` (-24 dBFS), so it stays under the
 voices and the static. The headset squelch sits at the same file level as the other beeps. Its softer feel comes from the runtime gain
 (`evaRadioVolume` and the profile), not from a lower file level. All peaks stay below -1.3 dBFS.
 

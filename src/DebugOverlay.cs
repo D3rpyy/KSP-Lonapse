@@ -70,7 +70,8 @@ namespace Lonapse
                   .Append(dw.relSpeed.ToString("0.00", Inv)).Append(" m/s, range rate ").Append(dw.rangeRate.ToString("0.00", Inv))
                   .Append(", seenFar ").Append(dw.seenFar).Append(", armed ").Append(dw.armed)
                   .Append(dw.InGuard(host.settings.tuning) ? ", guard " + dw.guardTime.ToString("0.0", Inv) + " s" : "")
-                  .Append(dw.guardBroken ? ", guard broken" : "").Append(dw.closePhase ? ", CLOSE" : "").Append('\n');
+                  .Append(dw.guardBroken ? ", guard broken" : "").Append(dw.closePhase ? ", CLOSE" : "")
+                  .Append(", ").Append(DockIntent.Describe(host.DockIntentFlags)).Append('\n');
             if (st.motionQuietLeft > 0f) sb.Append("docking motion quiet ").Append(st.motionQuietLeft.ToString("0.0", Inv)).Append(" s\n");
             ChatterDirector cd = host.director;
             sb.Append("v2: profile ").Append(host.profile != null ? host.profile.Name : "-")

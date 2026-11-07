@@ -1,0 +1,34 @@
+id	kind	when	spanish	english
+# Runtime voice: the close approach of a calm docking (30 m and closing slower than the tense speed). A kerbal says a line alone over the radio				
+# (event chat on=dockclose), with a link to Mission Control it answers with a line of kind dock_close. A fast, tense approach plays the recorded dock_close scenes instead.				
+# The format is explained at the top of reports.tsv.				
+rt_chat_dclose1_1	chat	on=dockclose dist_m>=2	A {dist_m} metros. Vamos despacio. | {dist_m} metros. Todo bajo control.	{dist_m} meters. Nice and slow. | {dist_m} meters. All under control.
+rt_chat_dclose2_1	chat	on=dockclose	Puerto a la vista. Alineando. | Casi en el puerto. Alineando.	Port in sight. Aligning. | Nearly at the port. Aligning.
+rt_chat_dclose3_1	chat	on=dockclose	Ya casi. Pulso firme. | Despacio, despacio.	Almost there. Steady hands. | Slowly, slowly.
+rt_chat_dclose4_1	chat	on=dockclose	Cerca de {target}. Todo en orden. | {target} justo delante.	Close to {target}. All in order. | {target} dead ahead.
+rt_chat_dclose5_1	chat	on=dockclose	Velocidad baja, puertos alineados. | Cerca. Muy cerca.	Low speed, ports aligned. | Close. Very close.
+rt_dclose_1	dock_close		Os vemos bien. Seguid así. | Buena aproximación. Seguid así.	Looking good. Keep it up. | Good approach. Keep it up.
+rt_dclose_2	dock_close	dist_m>=2	{target} a {dist_m} metros. Con calma. | Vais bien hacia {target}. Con calma.	{target} at {dist_m} meters. Take it easy. | You're on course for {target}. Take it easy.
+rt_dclose_3	dock_close		Alineación correcta. Sin prisas. | Vuestra alineación es buena. Sin prisas.	Alignment is good. No hurry. | Your alignment is good. No hurry.
+rt_dclose_4	dock_close		Velocidad perfecta. Así se hace. | Muy buena velocidad de acercamiento.	Perfect speed. That's how it's done. | Very good closing speed.
+rt_dclose_5	dock_close	close_ms>=0.1	Os acercáis a {close_ms} metros por segundo. Perfecto. | {close_ms} metros por segundo. Justo lo que queremos.	You're closing at {close_ms} meters per second. Perfect. | {close_ms} meters per second. Just what we want.
+rt_dclose_6	dock_close		Casi estáis. Despacio y sin sustos. | Ya casi. Sin sustos.	Almost there. Slow and no scares. | Almost there. No scares.
+# Distance callouts at 30, 15 and 5 m (event chat on=dockcallout, dist_m is the distance of the callout).				
+rt_chat_dcall1_1	chat	on=dockcallout dist_m>=25	{dist_m} metros. | Estamos a {dist_m} metros. | {dist_m} metros. Todo bien.	{dist_m} meters. | We're at {dist_m} meters. | {dist_m} meters. All good.
+rt_chat_dcall2_1	chat	on=dockcallout dist_m>=10 dist_m<25	{dist_m} metros. Despacio. | Quedan {dist_m} metros.	{dist_m} meters. Slowly. | {dist_m} meters to go.
+rt_chat_dcall3_1	chat	on=dockcallout dist_m<10	{dist_m} metros. Casi. | {dist_m} metros. Sin movimientos bruscos.	{dist_m} meters. Almost. | {dist_m} meters. No sudden moves.
+rt_chat_dcall4_1	chat	on=dockcallout dist_m>=10	Aproximación a {dist_m} metros. | {dist_m} metros del puerto.	Approach at {dist_m} meters. | {dist_m} meters from the port.
+rt_chat_dcall5_1	chat	on=dockcallout dist_m<25	Faltan {dist_m} metros. | {dist_m} metros. Puertos casi alineados.	{dist_m} meters left. | {dist_m} meters. Ports almost aligned.
+# Mission Control after a distance callout (kind dock_callout, dist_m is the distance of the callout). Also after the beeps of a probe.				
+rt_dcallmc_1	dock_callout	dist_m>=25	Os vemos a {dist_m} metros. Todo bien. | Confirmado, {dist_m} metros. Seguid así.	We see you at {dist_m} meters. All good. | Confirmed, {dist_m} meters. Keep it up.
+rt_dcallmc_2	dock_callout	dist_m>=25	Copiado, {dist_m} metros. Con calma.	Copy, {dist_m} meters. Take it easy.
+rt_dcallmc_3	dock_callout	dist_m>=10 dist_m<25	Copiado, {dist_m} metros. Despacio en el último tramo.	Copy, {dist_m} meters. Easy on the last stretch.
+rt_dcallmc_4	dock_callout	dist_m>=10 dist_m<25	{dist_m} metros. La alineación se ve bien.	{dist_m} meters. Alignment looks good.
+rt_dcallmc_5	dock_callout	dist_m<10	{dist_m} metros. Ya casi. Suave.	{dist_m} meters. Almost there. Gently.
+rt_dcallmc_6	dock_callout	dist_m<10	{dist_m} metros. Contacto inminente. Suave.	{dist_m} meters. Contact soon. Gently.
+# Far callouts at 500, 250 and 100 m (dist_m>=75), crew and Mission Control.				
+rt_chat_dcall6_1	chat	on=dockcallout dist_m>=75	Objetivo a {dist_m} metros. Nos acercamos. | {dist_m} metros. Aproximación en marcha.	Target at {dist_m} meters. Closing in. | {dist_m} meters. Approach under way.
+rt_chat_dcall7_1	chat	on=dockcallout dist_m>=75	{target} a {dist_m} metros. | A {dist_m} metros de {target}.	{target} at {dist_m} meters. | {dist_m} meters from {target}.
+rt_chat_dcall8_1	chat	on=dockcallout dist_m>=75	{dist_m} metros. Preparando el atraque. | Todo listo para el atraque, {dist_m} metros.	{dist_m} meters. Preparing to dock. | All set for docking, {dist_m} meters.
+rt_dcallmc_7	dock_callout	dist_m>=75	Os seguimos a {dist_m} metros. Buena aproximación. | {dist_m} metros del objetivo. Todo en orden.	We follow you at {dist_m} meters. Good approach. | {dist_m} meters from the target. All in order.
+rt_dcallmc_8	dock_callout	dist_m>=75	Copiado, {dist_m} metros. Preparad el atraque.	Copy, {dist_m} meters. Prepare to dock.

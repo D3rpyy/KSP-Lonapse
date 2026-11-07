@@ -167,6 +167,14 @@ namespace Lonapse
         private float probePollLeft;
 
         public VoiceChannel alarmCh;      // soft master alarm while a kerbal panics, far in the background
+        private const float DockIntentRange = 600f;   // m, the port signs are read inside the furthest far callout
+        /// <summary>An approach is on (from the approach call): other chatter waits.</summary>
+        public bool DockingHoldsAir { get { return docking != null && settings != null && docking.HoldsChat(settings.tuning); } }
+        private Vessel dockLogTarget;
+        private bool dockEnterLogged;
+        public int DockIntentFlags { get { return dockIntent; } }
+        private int dockIntent;        // DockIntent flags of the nearest port pair, 0 beyond the approach distance
+        public VoiceChannel sfxCh;        // sound effects of the ship itself: airlock on dock and undock, no radio filtering
         private float alarmHoldLeft;
 
         /// <summary>Extra answer delay far from Kerbin: lightDelayScale * log10(1 + km / 10000), capped.</summary>
@@ -352,7 +360,8 @@ namespace Lonapse
             keyCh = new VoiceChannel(t, "radioKey", ChannelKind.Static, 70, 200f, 8000f, 0f, false);
             breathCh = new VoiceChannel(t, "breath", ChannelKind.Breath, 110, 100f, 4000f, 0f, false);
             alarmCh = new VoiceChannel(t, "alarm", ChannelKind.Breath, 125, 300f, 3500f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh };
+            sfxCh = new VoiceChannel(t, "sfx", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -488,11 +497,23 @@ namespace Lonapse
                 {
                     docking.Reset();
                     Log.Info("Undocked: " + (p.partInfo != null ? p.partInfo.title : p.name));
+                    PlaySfx("sfx/airlock_undock");
+                    director.NoteUndock();
                 }
             }
             catch (Exception e) { Log.Exception("OnPartUndock", e); }
         }
         private void OnCrewMoved(GameEvents.FromToAction<Part, Part> a) { roster.dirty = true; }
+
+        /// <summary>One sound effect of the ship on the sfx channel. Same gate as every other sound, and the setting.</summary>
+        private void PlaySfx(string folder)
+        {
+            if (!CanStartAudio || !settings.dockingSfx) return;
+            AudioClip c = ClipLibrary.Next(folder, rng);
+            if (c == null) return;
+            sfxCh.Play(c, 1f, 1f, false, 0f);
+            Log.Info("Sound effect: " + folder);
+        }
 
         /// <summary>A kerbal goes out: the director keeps the time, for the lines that fit only the start of an EVA.</summary>
         private void OnCrewOnEva(GameEvents.FromToAction<Part, Part> a)
@@ -533,6 +554,7 @@ namespace Lonapse
             try
             {
                 if (!started || !InvolvesActive(a)) return;
+                PlaySfx("sfx/airlock_dock");
                 Tuning tu = settings.tuning;
                 // The closing speed of the last half second decides between soft capture and hard dock
                 lastDockSpeed = closing.Max;
@@ -906,6 +928,7 @@ namespace Lonapse
                 case ChannelKind.ControlBed: return settings.controlVolume;
                 case ChannelKind.Beep: return settings.beepVolume;
                 case ChannelKind.Breath: return settings.crewVolume;
+                case ChannelKind.Sfx: return settings.sfxVolume;
                 default: return settings.staticVolume;
             }
         }
@@ -1463,37 +1486,85 @@ namespace Lonapse
                         dist = (a.position - b.position).magnitude;
                         rel = (v.GetObtVelocity() - t.GetObtVelocity()).magnitude;
                         valid = !float.IsNaN(dist) && !float.IsNaN(rel);
-                        if (valid && dist < settings.tuning.dockApproachDist) portDist = dockGeo.PortDistance(v, tv, t);
+                        if (valid && dist < DockIntentRange)
+                        {
+                            portDist = dockGeo.PortDistance(v, tv, t);
+                            dockIntent = dockGeo.Intent(t, settings.tuning.dockIntentAngle);
+                        }
                     }
                 }
             }
             catch (Exception e) { valid = false; Log.Exception("UpdateDocking", e); }
+            if (!valid || dist >= DockIntentRange) dockIntent = 0;
 
             if (valid && dist < 200f) closing.Add(rel, dt); else closing.Add(0f, dt);
             if (docking.Update(valid, tv, dist, portDist, rel, dt, settings.tuning))
             {
-                Log.Info("Docking approach: " + dist.ToString("0.0") + " m at " + rel.ToString("0.00") + " m/s");
-                director.EnqueueDockingApproach(); // checks CanStartAudio itself
+                float chance = DockIntent.Chance(dockIntent, settings.tuning.dockIntentBase);
+                bool play = rng.NextDouble() < chance;
+                Log.Info("Docking approach: " + dist.ToString("0.0") + " m at " + rel.ToString("0.00") + " m/s (" + DockIntent.Describe(dockIntent)
+                         + ", chance " + chance.ToString("0.00") + (play ? "" : ", skipped") + ")");
+                if (play) director.EnqueueDockingApproach(); // checks CanStartAudio itself
             }
             Tuning tu = settings.tuning;
+            float intentChance = DockIntent.Chance(dockIntent, tu.dockIntentBase);
+            // Say in the log why a docking call does or does not come, one line per target and one on entering the approach distance
+            if (!valid) { dockLogTarget = null; dockEnterLogged = false; }
+            else
+            {
+                if (!ReferenceEquals(tv, dockLogTarget))
+                {
+                    dockLogTarget = tv;
+                    dockEnterLogged = false;
+                    Log.Info("Docking target: " + Names.Of(tv) + " at " + dist.ToString("0") + " m, "
+                             + (docking.seenFar ? "seen far away, the approach call can come" : "closer than " + tu.dockApproachDist.ToString("0") + " m already: no approach call until it has been beyond that"));
+                }
+                if (dist < tu.dockApproachDist && !dockEnterLogged)
+                {
+                    dockEnterLogged = true;
+                    Log.Info("Docking: within " + tu.dockApproachDist.ToString("0") + " m, seenFar " + docking.seenFar + ", armed " + docking.armed + ", fired " + docking.fired
+                             + ", rel " + rel.ToString("0.00") + " m/s (call under " + tu.dockApproachSpeed.ToString("0.0") + "), range rate " + docking.rangeRate.ToString("0.00")
+                             + " (call below -" + tu.dockClosingRate.ToString("0.00") + "), " + DockIntent.Describe(dockIntent));
+                }
+                if (dist > tu.dockApproachDist + 10f) dockEnterLogged = false;
+            }
             if (docking.closePhaseJustStarted)
             {
                 docking.closePhaseJustStarted = false;
                 Log.Info("Docking close approach started: " + dist.ToString("0.0") + " m, closing at " + docking.ClosingSpeed.ToString("0.00") + " m/s");
             }
+            if (docking.farCalloutDue > 0f)
+            {
+                float th = docking.farCalloutDue;
+                docking.farCalloutDue = -1f;
+                DockCallout(th, intentChance, tu);
+            }
             if (docking.calloutDue > 0f)
             {
                 float th = docking.calloutDue;
                 docking.calloutDue = -1f;
-                string why = director.PlayCallout(null, "crew/calm", tu.dockCalloutLen, "docking " + th.ToString("0") + " m");
-                if (why != null) Log.Info("Docking callout at " + th.ToString("0") + " m not spoken: " + why);
+                DockCallout(th, intentChance, tu);
             }
             if (docking.closeExchangeDue)
             {
                 docking.closeExchangeDue = false;
-                director.EnqueueDockingClose(docking.ClosingSpeed >= tu.dockTenseClosing); // checks the gate itself
+                if (rng.NextDouble() >= intentChance) Log.Info("Docking close exchange skipped by chance " + intentChance.ToString("0.00"));
+                else director.EnqueueDockingClose(docking.ClosingSpeed >= tu.dockTenseClosing); // checks the gate itself
             }
             if (docking.InGuard(settings.tuning)) stress.QuietMotion(settings.tuning.dockQuietTime);
+        }
+
+        /// <summary>One distance callout (far or near): by chance, from the runtime voice, else the old callout path.</summary>
+        private void DockCallout(float th, float intentChance, Tuning tu)
+        {
+            if (rng.NextDouble() >= intentChance)
+            {
+                Log.Info("Docking callout at " + th.ToString("0") + " m skipped by chance " + intentChance.ToString("0.00") + " (" + DockIntent.Describe(dockIntent) + ")");
+                return;
+            }
+            if (director.RuntimeDockCallout(th)) return;
+            string why = director.PlayCallout(null, "crew/calm", tu.dockCalloutLen, "docking " + th.ToString("0") + " m");
+            if (why != null) Log.Info("Docking callout at " + th.ToString("0") + " m not spoken: " + why);
         }
 
         /// <summary>A destroyed Unity object (e.g. a docking port that blew up) still passes a plain C# null check.</summary>

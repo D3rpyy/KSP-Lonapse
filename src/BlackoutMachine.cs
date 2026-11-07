@@ -99,7 +99,7 @@ namespace Lonapse
                         staticDuration = U(tu.staticMin, tu.staticMax);
                         crackleLeft = U(tu.crackleMin, tu.crackleMax);
                         host.director.staticChop = true;
-                        AudioClip loop = ClipLibrary.Next("static/loop", rng);
+                        AudioClip loop = ClipLibrary.Next("sfx/loop", rng);
                         if (loop != null) host.staticCh.Play(loop, 1f, 1f, true, tu.staticRampTime);
                     }
                     break;
@@ -110,7 +110,7 @@ namespace Lonapse
                     if (crackleLeft <= 0f)
                     {
                         crackleLeft = U(tu.crackleMin, tu.crackleMax);
-                        AudioClip burst = ClipLibrary.Next("static/burst", rng);
+                        AudioClip burst = ClipLibrary.Next("sfx/burst", rng);
                         if (burst != null)
                         {
                             // overlay crackle on the static loop (OneShot goes through the same source, so it

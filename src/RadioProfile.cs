@@ -44,7 +44,7 @@ namespace Lonapse
             Context = RadioContext.Eva, Name = "Eva",
             HighPassHz = 400f, LowPassHz = 2600f, Distortion = 0.25f,
             OpenClip = "beeps/headset_open", CloseClip = "beeps/headset_close",
-            BedClip = "static/breath_loop", BedGain = 0.6f   // the loop itself sits at about -30 dBFS RMS
+            BedClip = "sfx/breath_loop", BedGain = 0.6f   // the loop itself sits at about -30 dBFS RMS
         };
 
         public static RadioProfile Get(RadioContext context)
