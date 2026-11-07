@@ -1,5 +1,5 @@
 // DeepFreeze (DeepFreeze Updated): its freeze, thaw and comatose events become Lonapse mod events, so the lines in
-// Phrases/Runtime/deepfreeze.tsv play on them. DeepFreeze is found through reflection, there is no dependency.
+// Compat/DeepFreeze/deepfreeze.tsv play on them. DeepFreeze is found through reflection, there is no dependency.
 // Without DeepFreeze nothing is subscribed.
 #if !DC_OFFLINE_TEST
 using System;
@@ -23,8 +23,9 @@ namespace Lonapse
             host = owner;
             try
             {
+                if (!PhraseClips.AssemblyLoaded("DeepFreeze")) return;
                 Type t = FindEvents();
-                if (t == null) return;
+                if (t == null) { Log.Warn("DeepFreeze is installed but DF.DFGameEvents is missing: no freeze or thaw lines (a new DeepFreeze version?)"); return; }
                 onFrozen = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalFrozen");
                 onThaw = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalThaw");
                 onComatose = Field<EventData<Part, ProtoCrewMember>>(t, "onKerbalSetComatose");
@@ -33,6 +34,8 @@ namespace Lonapse
                 if (onThaw != null) onThaw.Add(OnThaw);
                 if (onComatose != null) onComatose.Add(OnComatose);
                 if (onDied != null) onDied.Add(OnDied);
+                if (onFrozen == null || onThaw == null || onComatose == null || onDied == null)
+                    Log.Warn("DeepFreeze: not every event was found, those get no lines (a new DeepFreeze version?)");
                 Log.Info("DeepFreeze found: freeze " + (onFrozen != null) + ", thaw " + (onThaw != null)
                          + ", comatose " + (onComatose != null) + ", died frozen " + (onDied != null));
             }

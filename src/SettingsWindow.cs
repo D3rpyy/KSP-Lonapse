@@ -979,7 +979,7 @@ namespace Lonapse
                 foreach (var kv in PhraseClips.modTemplateCounts)
                 {
                     bool on = !PhraseClips.mutedMods.Contains(kv.Key);
-                    bool non = Toggle(on, kv.Key + " (" + kv.Value + " lines)");
+                    bool non = Toggle(on, kv.Key + " (" + kv.Value + " lines" + (PhraseClips.compatMods.Contains(kv.Key) ? ", by Lonapse" : "") + ")");
                     if (non == on) continue;
                     if (non) PhraseClips.mutedMods.Remove(kv.Key); else PhraseClips.mutedMods.Add(kv.Key);
                     changed = true;

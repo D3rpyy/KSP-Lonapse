@@ -1442,7 +1442,6 @@ public static class Tests
         foreach (string k in RuntimeLines.NumberSlots) full[k] = 50;
         var fullN = new Dictionary<string, string[]>();
         foreach (string k in RuntimeLines.NameSlots) fullN[k] = new[] { "Nombre", "Name" };
-        fullN["x_frozen"] = new[] { "Jeb", "Jeb" };   // the DeepFreeze lines (deepfreeze.tsv)
         var badT = new List<string>();
         foreach (RuntimeTemplate t in rtAll)
         for (int v = 0; v < t.Versions.Count; v++)
@@ -1621,21 +1620,42 @@ public static class Tests
                       && !ModEvents.Info(withMod, "examplemod.nothing").HasLines && modIds.Count == 3 && modIds[0] == "examplemod.experiment_done",
                       "mod API: the example mod file parses next to the Lonapse files, with its meta settings",
                       mine.Count + " mod templates; " + string.Join(" ; ", modErr.ToArray()));
-                // DeepFreeze: Lonapse's own lines for the events the bridge sends
+                // DeepFreeze: the lines Lonapse ships in Compat/DeepFreeze, read as that mod's files
                 {
-                    var dfIds = new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" };
-                    var dfBad = new List<string>();
-                    foreach (string id in dfIds)
+                    string dfPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Compat/DeepFreeze/deepfreeze.tsv"));
+                    var dfFiles = new List<KeyValuePair<string, IList<string>>>(rtFiles);
+                    dfFiles.Add(new KeyValuePair<string, IList<string>>("DeepFreeze/Lonapse/deepfreeze.tsv",
+                        System.IO.File.ReadAllLines(dfPath, System.Text.Encoding.UTF8)));
+                    var dfErr = new List<string>();
+                    List<RuntimeTemplate> dfAll = RuntimeLines.ParseAll(dfFiles, dfErr);
+                    var dfBad = new List<string>(dfErr);
+                    foreach (string id in new[] { "deepfreeze.frozen", "deepfreeze.thawed", "deepfreeze.comatose" })
                     {
-                        ModEventInfo inf = ModEvents.Info(rtAll, id);
+                        ModEventInfo inf = ModEvents.Info(dfAll, id);
                         if (!inf.HasLines || !inf.HasChat || !inf.HasMc) dfBad.Add(id + " misses chat or Mission Control lines");
                         if (inf.Cooldown != 60) dfBad.Add(id + " cooldown " + inf.Cooldown);
                     }
-                    foreach (RuntimeTemplate t in rtAll)
-                        if (t.Where.StartsWith("deepfreeze.tsv") && t.Kind == "event"
-                            && !rtAll.Exists(r => r.Kind == "reply" && r.To.Contains(t.Id))) dfBad.Add(t.Id + " has no reply");
-                    Check(dfBad.Count == 0, "DeepFreeze: frozen, thawed and comatose have chats, Mission Control lines and replies",
-                          string.Join(" ; ", dfBad.ToArray()));
+                    var dfN = new Dictionary<string, string[]>();
+                    foreach (string k in RuntimeLines.NameSlots) dfN[k] = new[] { "Nombre", "Name" };
+                    dfN["x_frozen"] = new[] { "Jeb", "Jeb" };
+                    var dfV = new Dictionary<string, double>();
+                    foreach (string k in RuntimeLines.NumberSlots) dfV[k] = 50;
+                    int dfCount = 0;
+                    foreach (RuntimeTemplate t in dfAll)
+                    {
+                        if (!t.Where.StartsWith("DeepFreeze/Lonapse/", StringComparison.Ordinal)) continue;
+                        dfCount++;
+                        if (t.Kind == "event" && !dfAll.Exists(r => r.Kind == "reply" && r.To.Contains(t.Id))) dfBad.Add(t.Id + " has no reply");
+                        for (int v = 0; v < t.Versions.Count; v++)
+                        {
+                            string a1, a2;
+                            if (!RuntimeLines.Fill(t, v, dfV, dfN, out a1, out a2) || a1.IndexOf('{') >= 0 || a2.IndexOf('{') >= 0)
+                                dfBad.Add(t.Id + " version " + (v + 1) + " does not fill");
+                        }
+                    }
+                    Check(dfBad.Count == 0 && dfCount >= 20 && !rtAll.Exists(t => t.Id.StartsWith("rt_deepfreeze") || t.Id.StartsWith("rt_chat_deepfreeze")),
+                          "DeepFreeze: the Compat lines parse as the mod DeepFreeze, frozen, thawed and comatose have chats, Mission Control lines and replies ("
+                          + dfCount + ")", string.Join(" ; ", dfBad.ToArray()));
                 }
 
                 // mod events never mix with the stock events, the stock lines never answer them

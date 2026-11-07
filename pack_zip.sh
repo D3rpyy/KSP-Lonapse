@@ -29,11 +29,11 @@ LIST="$(unzip -Z1 "$ZIP")"
 n=$(grep -cE '\.(wav|ogg)$' <<<"$LIST" || true)
 r=$(grep -c 'PluginData/Runtime/' <<<"$LIST" || true)
 for f in Plugins/Lonapse.dll PluginData/Runtime/windows/piper.exe PluginData/Runtime/linux/piper \
-         Phrases/phrases.tsv Phrases/pools.tsv Phrases/Runtime/reports.tsv Patches/Lonapse_StockCores.cfg; do
+         Phrases/phrases.tsv Phrases/pools.tsv Phrases/Runtime/reports.tsv Patches/Lonapse_StockCores.cfg Compat/DeepFreeze/deepfreeze.tsv; do
   grep -qx "GameData/Lonapse/$f" <<<"$LIST" || { echo "ERROR: $f is missing from the zip" >&2; exit 1; }
 done
 # the old tables that moved (Phrases/Runtime, the spanish_rt column) must not ship again
-for f in Phrases/runtime.tsv Phrases/slots_es.tsv; do
+for f in Phrases/runtime.tsv Phrases/slots_es.tsv Phrases/Runtime/deepfreeze.tsv; do
   if grep -qx "GameData/Lonapse/$f" <<<"$LIST"; then echo "ERROR: old $f is in the zip, remove it from GameData" >&2; exit 1; fi
 done
 echo "Packed: $ZIP ($(stat -c %s "$ZIP") bytes, $n sound files, $r runtime voice entries)"

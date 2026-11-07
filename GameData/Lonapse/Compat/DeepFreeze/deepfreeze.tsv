@@ -1,5 +1,5 @@
 id	kind	when	spanish	english
-# Runtime voice: DeepFreeze. Lonapse sends these events itself when DeepFreeze is installed, no other mod is needed.				
+# Runtime voice: lines for DeepFreeze, shipped by Lonapse. They load only when DeepFreeze is installed, as the mod DeepFreeze in the Mods tab. Lonapse sends the events itself.				
 # deepfreeze.frozen: a kerbal is frozen. Somebody else aboard says line 1. deepfreeze.thawed: the thawed kerbal says				
 # line 1. deepfreeze.comatose: the freezer lost power and the kerbal came out comatose, somebody else talks.				
 # x_frozen is the first name of the frozen, thawed or comatose kerbal. No gendered words about them in the Spanish.				
