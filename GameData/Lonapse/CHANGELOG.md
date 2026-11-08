@@ -4,20 +4,20 @@
 
 ### New
 
-- **Airlock sounds.** Docking and undocking have an airlock sound now. It plays on contact when you dock and when you undock. 
-- **Undocking talks.** About five seconds after an undock, when the airlock sound is done, a kerbal says a line over the radio. A probe beeps does this too with beeps.
+- **Airlock sounds.** Docking and undocking have an airlock sound now. It plays on contact when you dock and when you undock.
+- **Undocking talks.** About five seconds after an undock, when the airlock sound is done, a kerbal says a line over the radio. A probe does this too, with beeps.
 - **A calm docking is no longer silent.** A slow close approach, under 0.4 m/s, used to get no lines at all. Now a kerbal calls the distance and Mission Control answers. A fast, tense approach still plays the recorded scenes.
-- **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. The same goes for the probes Before, a probe was silent until the dock itself.
+- **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. The same goes for probes. Before, a probe was silent until the dock itself.
 - **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
 - **The mod checks that you mean to dock.** Before the docking calls start, you must target another ship. The mod looks for three signs: the target has a free port of the same size, you fly from one of your ports (Control From Here) or target a port, and the two ports face each other. With two of them the docking call always comes, so a normal docking needs no Control From Here. With one it often comes. Going up on debris or an asteroid now rarely gets a docking call.
 - Added new settings under Sounds to toggle the new sound effects.
 - **Flag sound.** Planting a flag has its own sound.
-- **Enter/exit sound** Entering and exiting the ship now have sounds too.
+- **Enter and exit sounds.** Entering and exiting the ship now have sounds too.
 - **Jetpack sounds.** Switching the EVA jetpack on or off has a click and a hiss. While the thrusters fire, a soft hiss loops under the radio and fades out when you let go.
 - **Ground thuds.** A kerbal who falls over on the ground gets a heavy thud, at the same moment as the fall lines. Landing after a jump or a jetpack flight gets a lighter one.
-- **Footsteps.** An EVA kerbal makes footsteps. Walking, running, backwards and sideways follow the playing walking animation. I
+- **Footsteps.** An EVA kerbal makes footsteps. Walking, running, backwards and sideways follow the playing walking animation.
 - **Volume sliders for the sound effects.** Hatch, airlock, jetpack (switch and thrusters together), helmet breathing, ground thud and footsteps each have a slider to adjust the volume.
-- **Science talk is spoken live now.**  The lines can say what really was tested by the player. Every stock experiment has 28 to 31 talks of its own, and 29 more fit any experiment. There are 535 total talks. If you do multiple experiments at the same time, they will be sent as 1 batched radio message instead of X separate radio messages
+- **Science talk is spoken live now.** The lines can say what really was tested by the player. Every stock experiment has 28 to 31 talks of its own, and 29 more fit any experiment. There are 535 total talks. If you do multiple experiments at the same time, they will be sent as 1 batched radio message instead of separate radio messages.
 - **More probe talk.** Every probe core has 10 new scenes with Mission Control: chats, hails and sleepy moments, in the character of that core. These are done on runtime.
 
 ### Changed
