@@ -482,6 +482,7 @@ namespace Lonapse
             calmSaid.Clear();
             classifier.Reset(); // new vessel: its own phase, no hold from the old one
             ResetEventsForVessel(evaHop);
+            if (!evaHop) sciBatch = null;   // experiments of the old vessel
             wasProbeMode = false; // the probe timers start fresh on the next probe-mode frame
         }
 
@@ -2099,7 +2100,8 @@ namespace Lonapse
             UpdatePendingCallout();
             // a DeepFreeze group is busy: no new event call, chatter, report or chat starts until its line played.
             // Events wait in their list (with their max age), the group takes seconds.
-            bool modHold = host.ModHoldsAir || DockHoldNow;
+            ScienceTick();
+            bool modHold = host.ModHoldsAir || DockHoldNow || ScienceHoldNow;
             if (modHold) holdoff = Math.Max(holdoff, 0.5f);
             else UpdateEvents();
             if (!modHold) RuntimeTick();

@@ -20,8 +20,9 @@ namespace Lonapse
             "funds_total", "sci_total", "rep", "contracts", "dist_m", "close_ms", "height_m", "vspeed_ms",
             "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
             "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
-            "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist" };
-        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract" };
+            "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist",
+            "temp_c", "press_kpa", "grav_g", "sci_flight", "exp_runs", "exp_count", "data_sent" };
+        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list" };
         public static readonly string[] Persons = { "other", "self", "kerbal" };
         /// <summary>Values the director gives every recorded line, with or without the runtime voice.</summary>
         public static readonly string[] Flight = { "day", "here", "vessel", "alt_km" };
@@ -50,11 +51,13 @@ namespace Lonapse
         /// <summary>Not a pool: every number, name and person slot.</summary>
         public static bool IsReserved(string name) { return IsNumber(name) || IsName(name) || IsPerson(name) || IsModSlot(name); }
 
-        /// <summary>Keys said with one decimal below 10: km, min, h, deg, m/s and science points (sci, sci_left, con_sci).</summary>
+        /// <summary>Keys said with one decimal below 10: km, min, h, deg, m/s, kPa, g and science points (sci, sci_left,
+        /// con_sci, sci_flight).</summary>
         public static bool HasDecimals(string key)
         {
             return key.EndsWith("_km", StringComparison.Ordinal) || key.EndsWith("_min", StringComparison.Ordinal) || key.EndsWith("_h", StringComparison.Ordinal)
-                   || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key == "sci" || key == "sci_left" || key == "con_sci";
+                   || key.EndsWith("_deg", StringComparison.Ordinal) || key.EndsWith("_ms", StringComparison.Ordinal) || key.EndsWith("_kpa", StringComparison.Ordinal) || key.EndsWith("_g", StringComparison.Ordinal)
+                   || key == "sci" || key == "sci_left" || key == "con_sci" || key == "sci_flight";
         }
     }
 }

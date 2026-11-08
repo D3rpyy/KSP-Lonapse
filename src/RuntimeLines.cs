@@ -58,6 +58,9 @@ namespace Lonapse
         /// <summary>An event chat: a chat with on=.</summary>
         public bool IsEvent { get { return Kind == "chat" && On.Count > 0; } }
 
+        /// <summary>Science talk only: Mission Control speaks line 1 (who=mc in the when column), the kerbal line 2.</summary>
+        public bool McFirst { get { return Kind == "science_talk" && Who == "mc"; } }
+
         /// <summary>A chat between two kerbals of different vessels nearby (a check on apart): it plays over the
         /// radio.</summary>
         public bool AboutApart
@@ -107,7 +110,7 @@ namespace Lonapse
     {
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
                                                   "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag",
-                                                  "event", "meta", "experiment", "device", "contract", "undock", "dock_close", "dock_callout" };
+                                                  "event", "meta", "experiment", "device", "contract", "undock", "dock_close", "dock_callout", "science_talk" };
         /// <summary>Kinds only other mods use (Lonapse itself ships no rows of them).</summary>
         public static readonly string[] ModKinds = { "event", "meta", "experiment", "device", "contract" };
         /// <summary>Registration rows: a mod names one of its own experiments, Breaking Ground parts or contract
@@ -162,8 +165,13 @@ namespace Lonapse
             nums["landings"] = lands.Count;
             nums["stars"] = Math.Max(0, stars);
         }
-        /// <summary>A chat line: rt_chat_&lt;name&gt;_&lt;seq&gt;. The lines of one name form one chat, seq from 1.</summary>
+        /// <summary>A chat line: rt_chat_&lt;name&gt;_&lt;seq&gt;, a science talk line rt_st_&lt;name&gt;_&lt;seq&gt;. The
+        /// lines of one name form one chat, seq from 1.</summary>
         static readonly Regex ChatId = new Regex(@"^(rt_chat_[a-z0-9_]+?)_([0-9]+)$");
+        static readonly Regex TalkId = new Regex(@"^(rt_st_[a-z0-9_]+?)_([0-9]+)$");
+        /// <summary>Kinds whose rows are lines of a group (a chat, a science talk).</summary>
+        static bool IsGroupKind(string kind) { return kind == "chat" || kind == "science_talk"; }
+        static Match GroupMatch(RuntimeTemplate t) { return (t.Kind == "science_talk" ? TalkId : ChatId).Match(t.Id); }
 
         static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
@@ -292,7 +300,7 @@ namespace Lonapse
             }
             foreach (RuntimeTemplate t in r)
             {
-                bool sci = t.Kind == "science" || t.Kind == "science_pts", con = IsContractKind(t.Kind);
+                bool sci = t.Kind == "science" || t.Kind == "science_pts" || t.Kind == "science_talk", con = IsContractKind(t.Kind);
                 if (!sci && !con) continue;
                 foreach (string o in t.On)
                 {
@@ -308,14 +316,20 @@ namespace Lonapse
                 }
             }
             r.RemoveAll(t => dropReg.Contains(t));
-            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only
+            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only.
+            // Science talks the same with rt_st_<name>_<seq>, and line 1 needs on= (the experiment).
             var groups = new Dictionary<string, List<RuntimeTemplate>>();
             var drop = new HashSet<RuntimeTemplate>();
             foreach (RuntimeTemplate t in r)
             {
-                if (t.Kind != "chat") continue;
-                Match m = ChatId.Match(t.Id);
-                if (!m.Success) { if (errors != null) errors.Add(t.Where + " (" + t.Id + "): a chat id is rt_chat_<name>_<seq>"); drop.Add(t); continue; }
+                if (!IsGroupKind(t.Kind)) continue;
+                Match m = GroupMatch(t);
+                if (!m.Success)
+                {
+                    if (errors != null) errors.Add(t.Where + " (" + t.Id + "): " + (t.Kind == "chat" ? "a chat id is rt_chat_<name>_<seq>" : "a science talk id is rt_st_<name>_<seq>"));
+                    drop.Add(t);
+                    continue;
+                }
                 List<RuntimeTemplate> g;
                 if (!groups.TryGetValue(m.Groups[1].Value, out g)) groups[m.Groups[1].Value] = g = new List<RuntimeTemplate>();
                 g.Add(t);
@@ -324,16 +338,19 @@ namespace Lonapse
             {
                 kv.Value.Sort((x, y) => ChatSeq(x).CompareTo(ChatSeq(y)));
                 string why = null;
-                if (kv.Value.Count < 2 && kv.Value[0].On.Count == 0) why = "a chat needs at least 2 lines (an event chat with on= may have 1)";
+                bool talk = kv.Value[0].Kind == "science_talk";
+                if (talk && kv.Value.Count < 2) why = "a science talk needs at least 2 lines (the kerbal and Mission Control)";
+                else if (talk && kv.Value[0].On.Count == 0) why = "line 1 of a science talk needs on= (the experiment, or on=science)";
+                else if (kv.Value.Count < 2 && kv.Value[0].On.Count == 0) why = "a chat needs at least 2 lines (an event chat with on= may have 1)";
                 string file0 = FileOf(kv.Value[0].Where);
                 for (int i = 0; i < kv.Value.Count && why == null; i++)
                 {
                     if (ChatSeq(kv.Value[i]) != i + 1) why = "seq must go 1, 2, 3 without gaps";
                     else if (FileOf(kv.Value[i].Where) != file0) why = "all lines of a chat go in one file";
                     else if (i > 0 && (kv.Value[i].Checks.Count > 0 || kv.Value[i].Situations.Count > 0 || kv.Value[i].On.Count > 0
-                                       || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null)) why = "only line 1 has a when";
+                                       || kv.Value[i].TraitA != null || kv.Value[i].TraitB != null || kv.Value[i].Who != null)) why = "only line 1 has a when";
                 }
-                if (why != null) { if (errors != null) errors.Add("runtime chat " + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
+                if (why != null) { if (errors != null) errors.Add((talk ? "runtime science talk " : "runtime chat ") + kv.Key + ": " + why); foreach (var t in kv.Value) drop.Add(t); }
             }
             r.RemoveAll(t => drop.Contains(t));
             return r;
@@ -394,9 +411,9 @@ namespace Lonapse
                     {
                         string ev = on.Groups[1].Value;
                         bool mod = IsModEvent(ev);
-                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "event" && t.Kind != "meta"
+                        if (t.Kind != "chat" && t.Kind != "science" && t.Kind != "science_pts" && t.Kind != "science_talk" && t.Kind != "event" && t.Kind != "meta"
                             && !IsRegKind(t.Kind) && !IsContractKind(t.Kind))
-                            bad.Add("'" + tok + "' only works in a chat, a science or contract line, an event, a meta, an experiment, a device or a contract row");
+                            bad.Add("'" + tok + "' only works in a chat, a science talk, a science or contract line, an event, a meta, an experiment, a device or a contract row");
                         else if ((t.Kind == "event" || t.Kind == "meta" || IsRegKind(t.Kind) || IsContractKind(t.Kind)) && !mod)
                             bad.Add("an event, meta, experiment, device, contract row or contract line needs a mod event mod.event, not '" + ev + "'");
                         else if (!mod && Array.IndexOf(Events, ev) < 0) bad.Add("unknown event '" + ev + "' (" + string.Join(" ", Events) + ", or a mod event mod.event)");
@@ -426,6 +443,14 @@ namespace Lonapse
                         else bad.Add("bad meta value '" + tok + "' (cooldown=<seconds>, priority=low|normal|high, who=crew|mc|any)");
                         continue;
                     }
+                    if (mt.Success && t.Kind == "science_talk" && mt.Groups[1].Value == "who")
+                    {
+                        // who starts a science talk: crew (the default) or mc
+                        string mv = mt.Groups[2].Value;
+                        if (mv == "mc" || mv == "crew") t.Who = mv;
+                        else bad.Add("bad '" + tok + "' (who=crew or who=mc in a science talk)");
+                        continue;
+                    }
                     Match to = ToRe.Match(tok);
                     if (to.Success)
                     {
@@ -437,7 +462,8 @@ namespace Lonapse
                     if (tm.Success)
                     {
                         string job = tm.Groups[2].Value;
-                        if (t.Kind != "chat") bad.Add("'" + tok + "' only works in a chat");
+                        if (t.Kind != "chat" && !(t.Kind == "science_talk" && tm.Groups[1].Value == "a"))
+                            bad.Add("'" + tok + "' only works in a chat" + (t.Kind == "science_talk" ? " (a science talk has a=, the kerbal who did the experiment)" : ""));
                         else if (Array.IndexOf(Persona.TraitKeys, job) < 0 && Array.IndexOf(Persona.PersonaKeys, job) < 0)
                             bad.Add("unknown job or persona '" + job + "' (pilot engineer scientist tourist, badass brave nervous dim veteran)");
                         else if (tm.Groups[1].Value == "a") t.TraitA = t.TraitA == null ? job : t.TraitA + " " + job;
@@ -491,20 +517,69 @@ namespace Lonapse
 
         static int ChatSeq(RuntimeTemplate t)
         {
-            Match m = ChatId.Match(t.Id);
+            Match m = GroupMatch(t);
             return m.Success ? int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture) : 0;
         }
 
         /// <summary>The chats of the templates: lists of lines in seq order. Line 1 holds the when.</summary>
         public static List<List<RuntimeTemplate>> Chats(IList<RuntimeTemplate> all)
         {
+            return Groups(all, "chat");
+        }
+
+        /// <summary>The science talks of the templates: lists of lines in seq order. Line 1 holds the when.</summary>
+        public static List<List<RuntimeTemplate>> Talks(IList<RuntimeTemplate> all)
+        {
+            return Groups(all, "science_talk");
+        }
+
+        /// <summary>A science talk for a batch: line 1 checks exp_count (exp_count>=2). Only batches use those, a
+        /// single experiment never.</summary>
+        public static bool ForBatch(List<RuntimeTemplate> talk)
+        {
+            if (talk == null || talk.Count == 0) return false;
+            foreach (var c in talk[0].Checks) if (c.Key == "exp_count") return true;
+            return false;
+        }
+
+        /// <summary>The checks of the template besides exp_count and data_sent: a talk that only fits now has one.
+        /// Sent or kept is no rare moment, so a talk that checks only that is no special one.</summary>
+        public static int SpecialChecks(RuntimeTemplate t)
+        {
+            int n = 0;
+            if (t != null) foreach (var c in t.Checks) if (c.Key != "exp_count" && c.Key != "data_sent") n++;
+            return n;
+        }
+
+        /// <summary>A list of words for {exp_list}: { "a, b y c", "a, b and c" }. More than max words: the first max
+        /// and "y más", "and more". Spanish "y" is "e" before a word that starts with an i sound.</summary>
+        public static string[] ListWords(IList<string> es, IList<string> en, int max)
+        {
+            int n = Math.Min(es.Count, en.Count);
+            if (n == 0) return new[] { "", "" };
+            bool more = n > max;
+            if (more) n = max;
+            var e = new List<string>();
+            var g = new List<string>();
+            for (int i = 0; i < n; i++) { e.Add(es[i]); g.Add(en[i]); }
+            if (more) return new[] { string.Join(", ", e.ToArray()) + " y más", string.Join(", ", g.ToArray()) + " and more" };
+            if (n == 1) return new[] { e[0], g[0] };
+            string last = e[n - 1];
+            string and = last.StartsWith("i", StringComparison.OrdinalIgnoreCase) || last.StartsWith("hi", StringComparison.OrdinalIgnoreCase)
+                         ? " e " : " y ";
+            return new[] { string.Join(", ", e.GetRange(0, n - 1).ToArray()) + and + last,
+                           string.Join(", ", g.GetRange(0, n - 1).ToArray()) + (n > 2 ? ", and " : " and ") + g[n - 1] };
+        }
+
+        static List<List<RuntimeTemplate>> Groups(IList<RuntimeTemplate> all, string kind)
+        {
             var map = new Dictionary<string, List<RuntimeTemplate>>();
             var order = new List<string>();
             if (all != null)
                 foreach (RuntimeTemplate t in all)
                 {
-                    if (t.Kind != "chat") continue;
-                    Match m = ChatId.Match(t.Id);
+                    if (t.Kind != kind) continue;
+                    Match m = GroupMatch(t);
                     if (!m.Success) continue;
                     List<RuntimeTemplate> g;
                     if (!map.TryGetValue(m.Groups[1].Value, out g)) { map[m.Groups[1].Value] = g = new List<RuntimeTemplate>(); order.Add(m.Groups[1].Value); }
@@ -530,6 +605,28 @@ namespace Lonapse
             for (int i = 1; i < chat.Count; i++)
                 if (FillableVersions(chat[i], nums, i % 2 == 0 ? namesA : namesB).Count == 0) return false;
             return true;
+        }
+
+        /// <summary>Line 1 of a science talk fits (situation, checks and the job of the kerbal), and every line has a
+        /// version that fills with the names of its speaker: the kerbal (namesCrew) and Mission Control (namesMc) take
+        /// turns, the kerbal first unless the talk is who=mc. job: the keys of the kerbal (Persona.ChatKeys), null: not
+        /// checked.</summary>
+        public static bool TalkFits(List<RuntimeTemplate> talk, string situation, Dictionary<string, double> nums,
+                                    Dictionary<string, string[]> namesCrew, Dictionary<string, string[]> namesMc, string job = null)
+        {
+            if (talk == null || talk.Count == 0) return false;
+            if (!JobOk(talk[0].TraitA, job) || !Persona.ChatSideFits(talk[0].TraitA, job)) return false;
+            if (!Holds(talk[0], situation, nums)) return false;
+            for (int i = 0; i < talk.Count; i++)
+                if (FillableVersions(talk[i], nums, TalkCrewLine(talk, i) ? namesCrew : namesMc).Count == 0) return false;
+            return true;
+        }
+
+        /// <summary>Line i of a science talk is the kerbal's (else Mission Control's).</summary>
+        public static bool TalkCrewLine(List<RuntimeTemplate> talk, int i)
+        {
+            bool mcFirst = talk != null && talk.Count > 0 && talk[0].McFirst;
+            return (i % 2 == 0) != mcFirst;
         }
 
         /// <summary>The text holds the name as a whole word (not inside another word), ignoring case.</summary>

@@ -138,7 +138,12 @@ namespace Lonapse
         /// <summary>A queued experiment older than this (s) is dropped: a remark long after it sounds wrong.</summary>
         public const double MaxWait = 120.0;
 
-        private struct Queued { public string topic; public string body; public double since; public double maxAge; }
+        private struct Queued { public string topic; public string body; public double since; public double maxAge; public string subject; public float amount; }
+
+        /// <summary>The subject id and data amount of the experiment of the last request (OnExperiment or Tick), for
+        /// the runtime voice.</summary>
+        public string firedSubject;
+        public float firedAmount;
 
         private double lastAny = double.NegativeInfinity;
         private readonly Dictionary<string, double> lastTopic = new Dictionary<string, double>();
@@ -146,14 +151,14 @@ namespace Lonapse
 
         public int QueuedCount { get { return queue.Count; } }
 
-        public void Reset() { lastAny = double.NegativeInfinity; lastTopic.Clear(); queue.Clear(); }
+        public void Reset() { lastAny = double.NegativeInfinity; lastTopic.Clear(); queue.Clear(); firedSubject = null; firedAmount = 0f; }
 
         /// <summary>
         /// An experiment result. True with a request when it may play now. During the overall cooldown it is queued
         /// (false, Tick gives it later). The same topic within topicCooldown, or already queued, is ignored.
         /// </summary>
         public bool OnExperiment(double now, string subjectID, string bodyKey, double cooldown, double topicCooldown,
-                                 double maxAge, out EventRequest r)
+                                 double maxAge, out EventRequest r, float amount = 0f)
         {
             r = default(EventRequest);
             string id = EventWatchers.ExperimentId(subjectID);
@@ -164,9 +169,12 @@ namespace Lonapse
             for (int i = 0; i < queue.Count; i++) if (queue[i].topic == topic) return false;
             if (now - lastAny < cooldown || queue.Count > 0)
             {
-                if (queue.Count < MaxQueued) queue.Add(new Queued { topic = topic, body = bodyKey, since = now, maxAge = maxAge });
+                if (queue.Count < MaxQueued)
+                    queue.Add(new Queued { topic = topic, body = bodyKey, since = now, maxAge = maxAge, subject = subjectID, amount = amount });
                 return false;
             }
+            firedSubject = subjectID;
+            firedAmount = amount;
             r = Fire(now, topic, bodyKey, maxAge);
             return true;
         }
@@ -179,6 +187,8 @@ namespace Lonapse
             if (queue.Count == 0 || now - lastAny < cooldown) return false;
             Queued q = queue[0];
             queue.RemoveAt(0);
+            firedSubject = q.subject;
+            firedAmount = q.amount;
             r = Fire(now, q.topic, q.body, q.maxAge);
             return true;
         }

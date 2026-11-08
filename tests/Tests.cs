@@ -1422,6 +1422,156 @@ public static class Tests
               "runtime voice: Phrases/Runtime parses (" + rtFiles.Count + " files, " + rtVersions + " versions), every kind has templates (" + rtAll.Count + ": " + string.Join(", ", kc.ToArray()) + ")",
               string.Join(" ; ", rtErr.ToArray()));
         {
+            // science talk: every stock experiment has its talks, a talk without a when always fills (every line keeps
+            // a version without values), a version with a value only when the value is there
+            List<List<RuntimeTemplate>> talks = RuntimeLines.Talks(rtAll);
+            var perTopic = new Dictionary<string, int>();
+            var emptyFail = new List<string>();
+            var noNums = new Dictionary<string, double>();
+            var crewN = new Dictionary<string, string[]> { { "self", new[] { "Jeb", "Jeb" } } };
+            var mcN = new Dictionary<string, string[]> { { "kerbal", new[] { "Jeb", "Jeb" } } };
+            foreach (List<RuntimeTemplate> t in talks)
+            {
+                foreach (string o in t[0].On) { int c0; perTopic.TryGetValue(o, out c0); perTopic[o] = c0 + 1; }
+                bool plain = t[0].Checks.Count == 0 && t[0].Situations.Count == 0;
+                if (plain && !RuntimeLines.TalkFits(t, "orbit", noNums, new Dictionary<string, string[]>(), new Dictionary<string, string[]>(), "scientist"))
+                    emptyFail.Add(t[0].Id);
+            }
+            var lowTopics = new List<string>();
+            foreach (string expId in EventWatchers.KnownExperiments)
+            {
+                int talkN;
+                if (expId != "other" && (!perTopic.TryGetValue(expId, out talkN) || talkN < 22)) lowTopics.Add(expId + " " + talkN);
+            }
+            Check(talks.Count >= 338 && lowTopics.Count == 0 && perTopic.ContainsKey("science") && emptyFail.Count == 0,
+                  "science talk: every stock experiment has at least 22 talks, the talks without a when fill without any value (" + talks.Count + " talks)",
+                  "low " + string.Join(",", lowTopics.ToArray()) + " no fill " + string.Join(",", emptyFail.ToArray()));
+
+            // with every value there, every version of every talk line fills (no slot the director never gives)
+            var allNums = new Dictionary<string, double>();
+            foreach (string n in Slots.Numbers) allNums[n] = 5;
+            var allNames = new Dictionary<string, string[]>();
+            foreach (string n in Slots.Names) allNames[n] = new[] { "Mun", "Mun" };
+            allNames["self"] = allNames["kerbal"] = new[] { "Jeb", "Jeb" };
+            var noFill = new List<string>();
+            int talkVersions = 0;
+            foreach (List<RuntimeTemplate> t in talks)
+                foreach (RuntimeTemplate line in t)
+                    for (int v = 0; v < line.Versions.Count; v++)
+                    {
+                        string fs, fe;
+                        talkVersions++;
+                        if (!RuntimeLines.Fill(line, v, allNums, allNames, out fs, out fe)) noFill.Add(line.Id + " v" + (v + 1));
+                    }
+            var special = talks.FindAll(t => t[0].Checks.Count > 0 || t[0].Situations.Count > 0);
+            var firstTalk = talks.Find(t => t[0].Id == "rt_st_x_first_1");
+            var firstNums = new Dictionary<string, double> { { "sci_first", 1 }, { "sci", 3 } };
+            var firstNames = new Dictionary<string, string[]>(crewN) { { "exp", new[] { "goo", "goo" } }, { "here", new[] { "Mun", "Mun" } } };
+            var firstMc = new Dictionary<string, string[]>(mcN) { { "exp", new[] { "goo", "goo" } }, { "here", new[] { "Mun", "Mun" } } };
+            Check(noFill.Count == 0 && special.Count >= 70 && firstTalk != null
+                  && RuntimeLines.TalkFits(firstTalk, "landed", firstNums, firstNames, firstMc)
+                  && !RuntimeLines.TalkFits(firstTalk, "landed", new Dictionary<string, double> { { "sci_first", 0 } }, firstNames, firstMc),
+                  "science talk: every version fills with all values (" + talkVersions + " versions), " + special.Count + " talks fit only now (first data ...)",
+                  string.Join(",", noFill.ToArray()));
+
+            int talkTopic = 0, talkSci = 0;
+            foreach (List<RuntimeTemplate> t in talks)
+                if (!t[0].On.Contains("science")) { talkTopic++; if (t[0].TraitA == "scientist") talkSci++; }
+            Check(talkTopic > 0 && talkSci * 4 >= talkTopic && talkSci * 3 <= talkTopic * 2,
+                  "science talk: a fair share of the talks about one experiment need a scientist", talkSci + " of " + talkTopic);
+
+            var medal = talks.Find(t => t[0].Id == "rt_st_medal_1");
+            var goo = talks.Find(t => t[0].Id == "rt_st_mysterygoo_a_1");
+            Check(medal != null && medal[0].McFirst && !RuntimeLines.TalkCrewLine(medal, 0) && RuntimeLines.TalkCrewLine(medal, 1)
+                  && goo != null && !goo[0].McFirst && RuntimeLines.TalkCrewLine(goo, 0) && !RuntimeLines.TalkCrewLine(goo, 1)
+                  && goo[0].TraitA == "scientist"
+                  && RuntimeLines.TalkFits(goo, "orbit", noNums, crewN, mcN, "scientist")
+                  && !RuntimeLines.TalkFits(goo, "orbit", noNums, crewN, mcN, "pilot"),
+                  "science talk: the kerbal starts, who=mc lets Mission Control start, a=scientist only fits a scientist", null);
+
+            RuntimeTemplate temp = talks.Find(t => t[0].Id == "rt_st_temperature_a03_1")[0];
+            var tempNums = new Dictionary<string, double> { { "temp_c", -12.4 } };
+            string tsp = null, ten = null;
+            int tv = temp.Versions.FindIndex(v => v[1].Contains("{temp_c}"));
+            bool tFilled = tv >= 0 && RuntimeLines.Fill(temp, tv, tempNums, crewN, out tsp, out ten);
+            Check(tv >= 0 && !RuntimeLines.FillableVersions(temp, noNums, crewN).Contains(tv)
+                  && RuntimeLines.FillableVersions(temp, tempNums, crewN).Contains(tv) && tFilled && ten.Contains("-12 degrees"),
+                  "science talk: a thermometer version with {temp_c} only plays with the reading, and says it", tFilled ? ten : "not filled");
+
+            var talkErr = new List<string>();
+            var talkBad = RuntimeLines.ParseAll(new[] { new KeyValuePair<string, IList<string>>("t.tsv", new List<string> {
+                "id\tkind\twhen\tspanish\tenglish",
+                "rt_st_ok_1\tscience_talk\ton=crewreport a=pilot\tA.\tA.", "rt_st_ok_2\tscience_talk\t\tB.\tB.",
+                "rt_st_one_1\tscience_talk\ton=crewreport\tC.\tC.",
+                "rt_st_noon_1\tscience_talk\t\tD.\tD.", "rt_st_noon_2\tscience_talk\t\tE.\tE.",
+                "rt_st_bjob_1\tscience_talk\ton=science b=pilot\tF.\tF.", "rt_st_bjob_2\tscience_talk\t\tG.\tG.",
+                "rt_st_who_1\tscience_talk\ton=science who=probe\tH.\tH.", "rt_st_who_2\tscience_talk\t\tI.\tI.",
+                "rt_st_late_1\tscience_talk\ton=science\tJ.\tJ.", "rt_st_late_2\tscience_talk\twho=mc\tK.\tK.",
+                "rt_chat_st_1\tscience_talk\ton=science\tL.\tL.", "rt_chat_st_2\tscience_talk\t\tM.\tM." }) }, talkErr);
+            var okTalks = RuntimeLines.Talks(talkBad);
+            string talkErrs = string.Join(" ; ", talkErr.ToArray());
+            Check(okTalks.Count == 1 && okTalks[0][0].Id == "rt_st_ok_1" && okTalks[0][0].TraitA == "pilot"
+                  && System.Linq.Enumerable.All(new[] { "b=pilot", "who=probe", "rt_st_one", "rt_st_noon", "rt_st_late", "rt_chat_st_1" }, talkErrs.Contains),
+                  "science talk: bad talks are reported (one line, no on=, b=, a bad who=, a when after line 1, a chat id)",
+                  string.Join(" ; ", talkErr.ToArray()));
+
+            // batch talks: experiments run close together in one talk. A single experiment (no exp_count) never fits
+            // one, a batch of two fills every talk without an extra check with only the batch values
+            var batchTalks = talks.FindAll(RuntimeLines.ForBatch);
+            var batchNums = new Dictionary<string, double> { { "exp_count", 2 } };
+            var batchCrew = new Dictionary<string, string[]>(crewN) { { "exp_list", new[] { "x", "goo and pressure" } } };
+            var batchMc = new Dictionary<string, string[]>(mcN) { { "exp_list", new[] { "x", "goo and pressure" } } };
+            var batchSingle = new List<string>();
+            var batchNoFill = new List<string>();
+            var singleNums = new Dictionary<string, double>(allNums);
+            singleNums.Remove("exp_count");
+            foreach (List<RuntimeTemplate> t in batchTalks)
+            {
+                if (RuntimeLines.TalkFits(t, "orbit", singleNums, allNames, allNames, "scientist")) batchSingle.Add(t[0].Id);
+                bool plainBatch = RuntimeLines.SpecialChecks(t[0]) == 0 && t[0].Situations.Count == 0 && t[0].TraitA != "scientist"
+                                  && t[0].Checks.Count == 1 && t[0].Checks[0].Value.Value <= 2;
+                if (plainBatch && !RuntimeLines.TalkFits(t, "orbit", batchNums, batchCrew, batchMc, "pilot")) batchNoFill.Add(t[0].Id);
+            }
+            Check(batchTalks.Count >= 30 && batchSingle.Count == 0 && batchNoFill.Count == 0,
+                  "science talk: " + batchTalks.Count + " batch talks, a single experiment never fits one, a batch of two always fills",
+                  "single " + string.Join(",", batchSingle.ToArray()) + " no fill " + string.Join(",", batchNoFill.ToArray()));
+
+            // sent or kept: a talk that says the data arrived needs data_sent=1, a kept talk data_sent=0, and that
+            // check alone does not make a talk one that only fits now
+            var fresh = talks.Find(t => t[0].Id == "rt_st_fresh_data_1");
+            var keepSafe = talks.Find(t => t[0].Id == "rt_st_keep_safe_1");
+            var sentN = new Dictionary<string, double> { { "data_sent", 1 } };
+            var keptN = new Dictionary<string, double> { { "data_sent", 0 } };
+            var expCrew = new Dictionary<string, string[]>(crewN) { { "exp", new[] { "x", "goo" } }, { "here", new[] { "x", "Mun" } } };
+            var expMc = new Dictionary<string, string[]>(mcN) { { "exp", new[] { "x", "goo" } }, { "here", new[] { "x", "Mun" } } };
+            Check(fresh != null && keepSafe != null
+                  && RuntimeLines.TalkFits(fresh, "orbit", sentN, expCrew, expMc) && !RuntimeLines.TalkFits(fresh, "orbit", keptN, expCrew, expMc)
+                  && !RuntimeLines.TalkFits(fresh, "orbit", noNums, expCrew, expMc)
+                  && RuntimeLines.TalkFits(keepSafe, "orbit", keptN, expCrew, expMc) && !RuntimeLines.TalkFits(keepSafe, "orbit", sentN, expCrew, expMc)
+                  && RuntimeLines.SpecialChecks(keepSafe[0]) == 0,
+                  "science talk: data that arrived needs data_sent=1, kept data gets its own talks (data_sent=0)", null);
+
+            // no link: experiments run close together get a batch chat among the kerbals, one experiment never does
+            var nlChats = RuntimeLines.Chats(rtAll).FindAll(c => c[0].Checks.Exists(k => k.Key == "link" && k.Value.Value == 0) && c[0].On.Contains("science"));
+            var nlBatch = nlChats.FindAll(RuntimeLines.ForBatch);
+            var nlBatchNums = new Dictionary<string, double> { { "link", 0 }, { "exp_count", 2 }, { "data_sent", 0 } };
+            var nlNamesA = new Dictionary<string, string[]> { { "self", new[] { "Jeb", "Jeb" } }, { "other", new[] { "Bill", "Bill" } }, { "exp_list", new[] { "x", "goo and pressure" } } };
+            var nlNamesB = new Dictionary<string, string[]> { { "self", new[] { "Bill", "Bill" } }, { "other", new[] { "Jeb", "Jeb" } }, { "exp_list", new[] { "x", "goo and pressure" } } };
+            var nlBatchFit = nlBatch.FindAll(c => RuntimeLines.ChatFits(c, "orbit", nlBatchNums, nlNamesA, nlNamesB, "pilot", "pilot"));
+            Check(nlChats.Count >= 20 && nlBatch.Count >= 5 && nlBatchFit.Count >= 4 && nlBatch.Exists(c => c.Count == 1) && nlBatch.Exists(c => c.Count > 1),
+                  "science without a link: " + nlChats.Count + " chats, " + nlBatch.Count + " for a batch (alone and with a crewmate), " + nlBatchFit.Count + " fit a batch of two",
+                  null);
+
+            string[] l1 = RuntimeLines.ListWords(new[] { "moco" }, new[] { "goo" }, 4);
+            string[] l2 = RuntimeLines.ListWords(new[] { "moco", "presión" }, new[] { "goo", "pressure" }, 4);
+            string[] l3 = RuntimeLines.ListWords(new[] { "moco", "presión", "informe" }, new[] { "goo", "pressure", "report" }, 4);
+            string[] l5 = RuntimeLines.ListWords(new[] { "a", "b", "c", "d", "e" }, new[] { "a", "b", "c", "d", "e" }, 4);
+            Check(l1[1] == "goo" && l2[0] == "moco y presión" && l2[1] == "goo and pressure"
+                  && l3[0] == "moco, presión e informe" && l3[1] == "goo, pressure, and report"
+                  && l5[0] == "a, b, c, d y más" && l5[1] == "a, b, c, d and more",
+                  "science talk: {exp_list} joins the experiments (y, e before an i sound, and more)", l3[0] + " / " + l3[1] + " / " + l5[1]);
+        }
+        {
             // the shipped Phrases/Extra tables after the shipped phrases.tsv, as PhraseClips.Build reads them: no bad
             // row, no key or scene twice, and every probe core has its runtime-only scenes
             string gdPhrases = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases"));
@@ -4282,22 +4432,14 @@ public static class Tests
                 Check(any >= 10 && home >= 3 && noBody.Count == 0, "v4 tables: soi_enter >= 10 {body} scenes and >= 3 home scenes",
                       any + " any, " + home + " home, without {body}: " + Short(noBody, 4));
             }
-            // science: >= 2 scenes per topic, >= 8 any scenes, about half of the topic scenes for a scientist
+            // science: the crew science talk is runtime only (Phrases/Runtime/science_talk.tsv), so the recorded
+            // tables have no crew science scene. Only the probe scenes of the event (probe_events, probe_cores) stay.
             {
                 List<List<SrcRow>> s = scenes("science");
-                List<string> shortT = new List<string>();
-                int sci = 0, topicScenes = 0;
-                foreach (string topic in PhraseTable.ScienceTopics)
-                {
-                    int n = s.FindAll(l => Col(l[0], "topic") == topic).Count;
-                    int need = topic == "any" ? 8 : 2;
-                    if (n < need) shortT.Add(topic + " " + n + "/" + need);
-                }
+                List<string> crew = new List<string>();
                 foreach (List<SrcRow> l in s)
-                    if (Col(l[0], "topic") != "any") { topicScenes++; if (Col(l[0], "trait") == "scientist") sci++; }
-                Check(shortT.Count == 0, "v4 tables: science >= 2 scenes per topic and >= 8 any scenes (" + s.Count + " scenes)", Short(shortT, 6));
-                Check(topicScenes > 0 && sci * 3 >= topicScenes && sci * 3 <= topicScenes * 2,
-                      "v4 tables: about half of the science topic scenes need a scientist", sci + " of " + topicScenes);
+                    if (l.Exists(x => x["role"] == "crew" || (x["role"] == "mc" && !l.Exists(y => y["role"] == "probe")))) crew.Add(l[0]["scene"]);
+                Check(crew.Count == 0, "v4 tables: no recorded crew science scene, science talk is runtime only (" + s.Count + " probe scenes)", Short(crew, 6));
             }
             // part_lost: 4 calm, 8 tense crew, 6 panic, 6 MC tense replies
             {

@@ -1117,6 +1117,14 @@ namespace Lonapse
             if (GUILayout.Button("Test warp line")) RuntimeTest(d, x => x.DebugWarpLine(), "DebugWarpLine");
             if (GUILayout.Button("Test sunrise")) RuntimeTest(d, x => x.DebugSunrise(), "DebugSunrise");
             GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            // the experiment of the Topic above, a random one when it is not a science topic
+            if (GUILayout.Button("Test science talk")) RuntimeTest(d, x => x.DebugScienceTalk(testTopic), "DebugScienceTalk");
+            // not a setting: drawn without a director too (same controls in Layout and Repaint)
+            bool special = GUILayout.Toggle(d != null && d.debugTalkSpecial, "Only talks that fit now");
+            if (d != null) d.debugTalkSpecial = special;
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button("Test science batch (3 experiments at once)")) RuntimeTest(d, x => x.DebugScienceBatch(), "DebugScienceBatch");
             GUILayout.Label(string.IsNullOrEmpty(runtimeTestStatus) ? " " : runtimeTestStatus);   // always drawn: keeps the control count stable
 
             GUILayout.Label("Current phase: " + (d != null ? (d.CurrentPhase ?? "-") : "-"));

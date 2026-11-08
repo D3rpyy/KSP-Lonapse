@@ -5,7 +5,8 @@
 //   new rows rows without a clip (GameData/Lonapse/Phrases/Extra/*.tsv) are spoken at runtime
 //   reports  now and then Mission Control reads out real values (Phrases/Runtime): orbit, speed, fuel, power, the next
 //            burn, funds and more. Also once per descent (height, speed) and after a docking approach (distance)
-//   science  after a science reaction, the experiment, the body and the science points
+//   science  a science talk after an experiment (ChatterDirector.Science.cs), and the experiment, the body and the
+//            science points after it
 //   contract a completed contract with its funds, a failed one
 // A line that has a clip falls back to it when Piper is not done in time. A line without a clip waits longer and is
 // skipped when it still has no sound. Reports, science and contract lines are queued only once their clip is ready.
@@ -801,19 +802,26 @@ namespace Lonapse
 
         /// <summary>The experiment of the science line being picked (QueueKind filters the science lines with on=).</summary>
         string runtimeTopic;
-        /// <summary>Experiments done by a kerbal outside: a runtime chat about them instead of a recorded scene.</summary>
+        /// <summary>Experiments done by a kerbal outside: sometimes an event chat about them (EvaChatShare) instead of a
+        /// science talk, a remark of the kerbal alone or with a kerbal nearby, and then the science line.</summary>
         static readonly string[] EvaScience = { "evareport", "surfacesample", "roc" };
-        const double EvaScienceChance = 0.7, EventSoloChance = 0.5;
+        const double EvaChatShare = 0.3, EventSoloChance = 0.5;
         float lastDeployClock = -999f;
 
-        /// <summary>The kerbal who did an experiment: the kerbal outside on EVA, aboard mostly a scientist.</summary>
+        /// <summary>The kerbal who did an experiment: the kerbal outside on EVA. Aboard a scientist who can talk when
+        /// there is one, else another crew member, a rested one first. Never a tourist: no science talk fits one.
+        /// Null when nobody fits.</summary>
         KerbalVoice ScienceKerbal()
         {
             Vessel v = ActiveVessel;
             if (v != null && v.isEVA) return host.roster.Own;
             var sci = host.roster.voices.FindAll(k => CanChat(k) && k.persona != null && k.persona.trait == "scientist");
-            if (sci.Count > 0 && rng.NextDouble() < 0.7) return sci[rng.Next(sci.Count)];
-            return PickRested();
+            if (sci.Count > 0) return sci[rng.Next(sci.Count)];
+            var crew = host.roster.voices.FindAll(k => CanChat(k) && (k.persona == null || !k.persona.IsTourist));
+            if (crew.Count == 0) return null;
+            var rested = crew.FindAll(k => cool.Ready(k.CooldownKey, clock, Tu.speakerCooldown));
+            if (rested.Count > 0) crew = rested;
+            return crew[rng.Next(crew.Count)];
         }
 
         /// <summary>{exp} for a science line: the Spanish words go in reversed, like the rest of the text.</summary>
@@ -824,26 +832,45 @@ namespace Lonapse
             return new[] { LonapseText.ReverseText(w[0]), w[1] };
         }
 
-        /// <summary>From GameEventHub, before the science event: true when the runtime voice takes it over. An EVA
-        /// report, a surface sample or a surface feature (EvaScienceChance): the kerbal says something about it with
-        /// the biome and the body (alone, or with a kerbal nearby), then Mission Control gives the science. Without a
-        /// link to Mission Control every experiment: the kerbals talk about it among themselves. False: the
-        /// recorded science scene plays as before.</summary>
+        /// <summary>From GameEventHub, before the science event: true when the runtime voice takes it over. With a
+        /// link a science talk: the kerbal who did it reports and Mission Control answers (science_talk.tsv). An EVA
+        /// report, a surface sample or a surface feature is sometimes (EvaChatShare) an event chat instead: the kerbal
+        /// says something about it (alone, or with a kerbal nearby), then Mission Control gives the science. Without a
+        /// link the kerbals talk about it among themselves. False: nothing fits, the event goes on as it is (the crew
+        /// science scenes have no recording, so a crew gets no science talk then).</summary>
         public bool RuntimeScienceTakeover(string subjectId, float dataAmount, string bodyName)
         {
             if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled) return false;
             string topic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId);
             bool reach = !McUnreachable && host.signal.connected;
             bool eva = Array.IndexOf(EvaScience, topic) >= 0;
-            if (reach && (!eva || rng.NextDouble() >= EvaScienceChance)) return false;
             KerbalVoice k = ScienceKerbal();
             if (k == null) return false;
+            if (reach && !(eva && rng.NextDouble() < EvaChatShare))
+            {
+                bool talked = ScienceTalk(topic, subjectId, dataAmount, bodyName, k);
+                Log.Info("Runtime voice: science " + topic + (talked ? " talk queued" : ": no science talk fits"));
+                if (talked || !eva) return talked;
+            }
             KerbalVoice partner = PartnerOf(k);
             if (reach && rng.NextDouble() < EventSoloChance) partner = null;   // often the kerbal alone reports to Control
             var extra = new Dictionary<string, string[]> { { "exp", ExpNames(subjectId) } };
-            Action after = null;
-            if (reach) after = () => RuntimeScience(subjectId, dataAmount, bodyName, true);
-            bool ok = EventChat(topic, k, partner, extra, after) || (partner != null && EventChat(topic, k, null, extra, after));
+            // without a link nothing can be sent: the data stays aboard
+            var extraNums = new Dictionary<string, double>();
+            if (!reach) extraNums["data_sent"] = 0;
+            else if (!double.IsNaN(sciSentNow)) extraNums["data_sent"] = sciSentNow;
+            // kept aboard: Mission Control has not received the data, so no points line
+            bool points = reach && !SciKept;
+            // the science hold covers the chat too: Rendering until it is queued, then Playing
+            Action after = () =>
+            {
+                ScienceChatQueued();
+                if (points) RuntimeScience(subjectId, dataAmount, bodyName, true);
+            };
+            ScienceChatStarting();
+            bool ok = EventChat(topic, k, partner, extra, after, extraNums)
+                      || (partner != null && EventChat(topic, k, null, extra, after, extraNums));
+            if (!ok) ScienceChatFailed();
             Log.Info("Runtime voice: science " + topic + (ok ? " chat queued" + (reach ? ", Mission Control after it" : ", no link") : ": no chat fits"));
             return ok;
         }
@@ -1160,6 +1187,8 @@ namespace Lonapse
                 if (recentRuntime.Contains(c[0].Id)) continue;
                 // an event chat: only the chats about ev. A kerbal alone says a one-line one, two kerbals a real chat.
                 if (ev != null ? !RuntimeLines.OnFits(c[0], ev, evGen) || solo != (c.Count == 1) : c[0].IsEvent) continue;
+                // a chat for a science batch (exp_count) only for a batch, never for one experiment
+                if (ev != null && RuntimeLines.ForBatch(c) != numsA.ContainsKey("exp_count")) continue;
                 if (RuntimeLines.ChatFits(c, sit, numsA, namesA, namesB, jobA, jobB)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, false));
                 // an event chat starts with the kerbal who did it: never swapped
                 else if (ev == null && RuntimeLines.ChatFits(c, sit, numsB, namesB, namesA, jobB, jobA)) fit.Add(new KeyValuePair<List<RuntimeTemplate>, bool>(c, true));
@@ -1382,30 +1411,7 @@ namespace Lonapse
             var nums = new Dictionary<string, double>();
             var names = new Dictionary<string, string[]>();
             FlightValues(nums, names);
-            double pts = double.NaN, left = double.NaN;
-            bool first = false;
-            try
-            {
-                if (ResearchAndDevelopment.Instance != null)
-                {
-                    ScienceSubject sub = ResearchAndDevelopment.GetSubjectByID(subjectId);
-                    if (sub != null)
-                    {
-                        float mul = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
-                        pts = ResearchAndDevelopment.GetScienceValue(dataAmount, sub, 1f) * mul;
-                        first = sub.science < 0.01f;
-                        left = (sub.scienceCap - sub.science) * mul - pts;
-                    }
-                }
-            }
-            catch (Exception) { pts = left = double.NaN; }
-            if (!double.IsNaN(pts) && pts >= 0.05) nums["sci"] = pts;
-            if (!double.IsNaN(left)) nums["sci_left"] = Math.Max(0, left);
-            if (!double.IsNaN(pts)) nums["sci_first"] = first ? 1 : 0;
-            // the experiment words are Spanish: reversed like the rest, so they go in a raw mark already reversed
-            names["exp"] = ExpNames(subjectId);
-            string[] b = BodyNames(bodyName);
-            if (b != null) { names["body"] = b; names["here"] = b; }
+            ScienceValues(subjectId, dataAmount, bodyName, nums, names);
             // after the reaction scene: it is queued first, this waits behind it
             float delay = ResponseDelay(host.stress.stress) + 0.8f;
             runtimeTopic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId);

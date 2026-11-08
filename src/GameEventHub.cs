@@ -45,6 +45,7 @@ namespace Lonapse
             {
                 GameEvents.onVesselSOIChanged.Add(OnSoiChanged);
                 GameEvents.OnExperimentDeployed.Add(OnExperimentDeployed);
+                GameEvents.OnTriggeredDataTransmission.Add(OnDataTransmission);
                 GameEvents.onGroundSciencePartDeployed.Add(OnGroundPartDeployed);
                 GameEvents.onPartDie.Add(OnPartDie);
                 GameEvents.onKerbalStatusChange.Add(OnKerbalStatusChange);
@@ -64,6 +65,7 @@ namespace Lonapse
             {
                 GameEvents.onVesselSOIChanged.Remove(OnSoiChanged);
                 GameEvents.OnExperimentDeployed.Remove(OnExperimentDeployed);
+                GameEvents.OnTriggeredDataTransmission.Remove(OnDataTransmission);
                 GameEvents.onGroundSciencePartDeployed.Remove(OnGroundPartDeployed);
                 GameEvents.onPartDie.Remove(OnPartDie);
                 GameEvents.onKerbalStatusChange.Remove(OnKerbalStatusChange);
@@ -99,7 +101,11 @@ namespace Lonapse
                 if (science.Tick(now, tu.scienceCooldown, out r))
                 {
                     Log.Info("Event science (from the queue): topic " + r.topic);
-                    if (Enabled && cfg.eventScience) Send(r);
+                    string bn = v != null && v.mainBody != null ? v.mainBody.bodyName : null;
+                    // runtime voice: a science talk, like an experiment that did not have to wait
+                    bool talk = Enabled && cfg.eventScience && host.director != null && science.firedSubject != null
+                                && host.director.RuntimeScienceTakeover(science.firedSubject, science.firedAmount, bn);
+                    if (!talk && Enabled && cfg.eventScience) Send(r);
                 }
                 if (partLoss.Tick(now, tu.partLostWindow, tu.partLostCooldown, lastPanic, out r))
                 {
@@ -193,9 +199,14 @@ namespace Lonapse
                 if (v == null) return;
                 Tuning tu = host.settings.tuning;
                 string bodyKey = v.mainBody != null ? FlightPhase.BodyKey(v.mainBody.bodyName) : FlightPhase.GenericBody;
+                // every experiment counts for {sci_flight} and {exp_runs}, also one in a cooldown
+                if (host.director != null) host.director.NoteExperiment(data.subjectID, data.dataAmount);
+                // runtime voice with a link: experiments run close together become one science talk, no cooldown
+                if (host.director != null && host.director.ScienceBatchTakes(data.subjectID, data.dataAmount,
+                                                                              v.mainBody != null ? v.mainBody.bodyName : null)) return;
                 EventRequest r;
                 if (science.OnExperiment(now, data.subjectID, bodyKey, tu.scienceCooldown, tu.scienceTopicCooldown,
-                                         EventWatchers.MaxAgeFor(EventWatchers.Science, tu.eventMaxAge, tu.eventMaxAge), out r))
+                                         EventWatchers.MaxAgeFor(EventWatchers.Science, tu.eventMaxAge, tu.eventMaxAge), out r, data.dataAmount))
                 {
                     Log.Info("Event science: " + data.subjectID + " -> topic " + r.topic);
                     // runtime voice: an EVA experiment, or any without a link, as a chat with the biome and the body
@@ -209,6 +220,19 @@ namespace Lonapse
                 else Log.Debug("Science " + data.subjectID + (science.QueuedCount > 0 ? " queued or skipped (" + science.QueuedCount + " waiting)" : " skipped (cooldown)"));
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnExperimentDeployed", e); }
+        }
+
+        /// <summary>Data goes out by antenna: an experiment of the science batch that is no longer aboard was sent,
+        /// not reset.</summary>
+        private void OnDataTransmission(ScienceData data, Vessel v, bool aborted)
+        {
+            try
+            {
+                // only data the active vessel sends: another vessel's antenna says nothing about this batch
+                if (data != null && !aborted && host.director != null && v != null && ReferenceEquals(v, FlightGlobals.ActiveVessel))
+                    host.director.NoteTransmitted(data.subjectID);
+            }
+            catch (Exception e) { Log.Exception("GameEventHub.OnDataTransmission", e); }
         }
 
         /// <summary>Breaking Ground: a kerbal on EVA deployed a ground science part close by.</summary>

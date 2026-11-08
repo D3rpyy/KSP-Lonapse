@@ -120,9 +120,9 @@ The settings of `meta` are all optional:
 
 ### Kinds Lonapse triggers itself
 
-These 12 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
-report. They play on those moments, never on your event. A `science` or `science_pts` row may only have
-`on=yourmod.topic` when an `experiment` or `device` row registers that topic. A `contract_funds`, `contract_done` or
+These 13 kinds play on moments that Lonapse finds itself. Your file may add rows of them too, for example an extra
+report. They play on those moments, never on your event. A `science`, `science_pts` or `science_talk` row may only
+have `on=yourmod.topic` when an `experiment` or `device` row registers that topic. A `contract_funds`, `contract_done` or
 `contract_failed` row may only have it when a `contract` row registers it. Otherwise it is an error, because it could
 never play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of these kinds cannot use them.
 
@@ -133,6 +133,7 @@ never play: use `event` for that. Your `{x_...}` slots never have a value there,
 | `land` | Once per descent, low and coming down: the height and the speed. |
 | `science` | After an experiment, when its science value is not known. |
 | `science_pts` | After an experiment, with its science points. |
+| `science_talk` | After an experiment, with a link: the kerbal who did it reports and Mission Control answers. Ids `rt_st_<name>_<seq>`, one row per line, the kerbal speaks the odd lines. Line 1 has the when: `on=` the experiment (`on=science` for any), optionally `a=scientist`, `who=mc` (Mission Control starts) and checks. Extra values: `{temp_c}`, `{press_kpa}`, `{grav_g}`, `{sci_flight}`, `{exp_runs}`. A talk with the check `exp_count>=2` is for experiments run close together: only such a batch uses it, with `{exp_count}`, `{exp_list}` (the experiments) and `{sci}` (the total). `data_sent=1` is for data that went out by antenna, `data_sent=0` for data kept aboard. A line that says the data arrived needs `data_sent=1`. |
 | `contract_funds` | A contract is done and pays funds. |
 | `contract_done` | A contract is done without funds. |
 | `contract_failed` | A contract failed. |
@@ -164,8 +165,8 @@ calls it "the experiment", and only the general science lines play. An `experime
   A stock id is an error, Lonapse has its own words for those.
 - `on=` names its topic. Each topic and each id has one `experiment` row.
 - `{exp}` now says "soil analysis" in the subtitle and "análisis del suelo" in the voice.
-- `science` and `science_pts` lines with `on=yourmod.soil` play only after this experiment, most of the time when
-  there is one. The general science lines can still play for it too.
+- `science`, `science_pts` and `science_talk` lines with `on=yourmod.soil` play only after this experiment, most of
+  the time when there is one. The general science lines can still play for it too.
 - Event chats with `on=yourmod.soil` play when the kerbals talk about it themselves: without a link to Mission
   Control. Event chats with `on=science` can play for it too.
 
