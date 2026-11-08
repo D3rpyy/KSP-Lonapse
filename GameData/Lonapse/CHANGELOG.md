@@ -14,23 +14,24 @@
 - **Flag sound.** Planting a flag has its own sound.
 - **Enter/exit sound** Entering and exiting the ship now have sounds too.
 - **Jetpack sounds.** Switching the EVA jetpack on or off has a click and a hiss. While the thrusters fire, a soft hiss loops under the radio and fades out when you let go.
-- **Ground thuds.** A kerbal who falls over on the ground gets a heavy thud, at the same moment as the fall lines. Landing after a jump or a jetpack flight gets a lighter one, louder the faster the fall. Small hops and steps stay quiet.
-- **Footsteps.** An EVA kerbal makes footsteps. Walking, running, backwards and sideways follow the playing walking animation. In low gravity a step is the touchdown after each bound or jump. There are no steps in the air, on a ladder or in a fall.
-- **Volume sliders for the sound effects.** Hatch, airlock, jetpack (switch and thrusters together), helmet breathing, ground thud and footsteps each have a slider under Sounds. 80% is the old loudness. Above 80% the effect is boosted, and loud hits can distort a little.
+- **Ground thuds.** A kerbal who falls over on the ground gets a heavy thud, at the same moment as the fall lines. Landing after a jump or a jetpack flight gets a lighter one.
+- **Footsteps.** An EVA kerbal makes footsteps. Walking, running, backwards and sideways follow the playing walking animation. I
+- **Volume sliders for the sound effects.** Hatch, airlock, jetpack (switch and thrusters together), helmet breathing, ground thud and footsteps each have a slider to adjust the volume.
 - **Science talk is spoken live now.**  The lines can say what really was tested by the player. Every stock experiment has 28 to 31 talks of its own, and 29 more fit any experiment. There are 535 total talks. If you do multiple experiments at the same time, they will be sent as 1 batched radio message instead of X separate radio messages
 - **More probe talk.** Every probe core has 10 new scenes with Mission Control: chats, hails and sleepy moments, in the character of that core. These are done on runtime.
 
 ### Changed
 
 - **The settings window is wider.** The name column is wider too, so long names fit and the value at the right of a slider stays in view.
-- **Sound effects ignore the EVA radio volume.** The airlock, hatch, thud, footstep and jetpack sounds are the ship or the kerbal, not the suit radio.
 
 ### Fixed
 
 - **Fall lines wait until the kerbal is calm.** After a fall, the talk starts when the kerbal has not been tumbling for 1.5 s, and at the latest 12 s after the first fall. Before, it could start in the middle of a second fall.
 
 - **Kerbals no longer sometimes sound very deep and slow.** Each kerbal plays at their own pitch, pushed apart from the rest of the crew and lowered a little under G. For a low-voiced kerbal this could undo the whole Kerbal shift. It happened most on stations with many kerbals, in intercom chats and under high G. The pitch now has a floor, so every kerbal keeps the Kerbal sound. On a big station the voices sit a bit closer together because of this. G strain lowers the voice by at most 6% instead of 12%.
+
 - **Tense and panicking kerbals no longer sound like chipmunks.** Under stress the crew voice went up in pitch, in the recordings and again in game. That is gone. A tense or panicking kerbal now has their normal voice and only talks a bit faster.
+
 - **Reset data gets no report.** The talk waits until the results dialog is closed. An experiment you reset or discard there is left out. Data you keep or transmit still gets its report.
 
 ### For modders
