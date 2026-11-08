@@ -300,8 +300,8 @@ namespace Lonapse
     /// <summary>
     /// Whether the player really means to dock, from the ports. Three signs (bit flags): a free port on the target
     /// of the same size as one of ours, one of our ports armed (free and chosen: the ship is controlled from it or the
-    /// player targeted a port, not only the vessel), and the two ports facing each other. The more hold,
-    /// the likelier the docking calls and callouts play.
+    /// player targeted a port, not only the vessel), and the two ports facing each other. Two of the three make
+    /// the docking calls and callouts sure, one makes them likelier.
     /// </summary>
     public static class DockIntent
     {
@@ -324,11 +324,12 @@ namespace Lonapse
             return dot <= -(float)Math.Cos(maxAngleDeg * Math.PI / 180.0);
         }
 
-        /// <summary>Chance that a docking call plays: baseChance with none of the signs, 1 with all three.</summary>
+        /// <summary>Chance that a docking call plays: baseChance with none of the signs, halfway with one, 1 with two
+        /// or three. A normal docking (a free port of the same size, ports facing) is sure without "Control From Here".</summary>
         public static float Chance(int flags, float baseChance)
         {
             float b = DcMath.Clamp(DcMath.Finite(baseChance), 0f, 1f);
-            return b + (1f - b) * Count(flags) / 3f;
+            return b + (1f - b) * Math.Min(Count(flags), 2) / 2f;
         }
 
         public static string Describe(int flags)

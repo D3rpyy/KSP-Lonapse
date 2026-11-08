@@ -242,7 +242,10 @@ public static class Tests
             float dt = 0.1f;
             Check(DockIntent.Count(DockIntent.All) == 3 && DockIntent.Count(DockIntent.Armed | DockIntent.Facing) == 2 && DockIntent.Count(0) == 0, "dock intent: sign count", null);
             Check(Math.Abs(DockIntent.Chance(0, 0.3f) - 0.3f) < 1e-4f && Math.Abs(DockIntent.Chance(DockIntent.All, 0.3f) - 1f) < 1e-4f, "dock intent: chance is the base with no sign and 1 with all", null);
-            Check(Math.Abs(DockIntent.Chance(DockIntent.Compatible | DockIntent.Armed, 0.3f) - (0.3f + 0.7f * 2f / 3f)) < 1e-4f, "dock intent: chance grows with each sign", null);
+            Check(Math.Abs(DockIntent.Chance(DockIntent.Compatible, 0.3f) - 0.65f) < 1e-4f, "dock intent: one sign is halfway", null);
+            Check(Math.Abs(DockIntent.Chance(DockIntent.Compatible | DockIntent.Facing, 0.3f) - 1f) < 1e-4f
+                  && Math.Abs(DockIntent.Chance(DockIntent.Armed | DockIntent.Facing, 0.3f) - 1f) < 1e-4f,
+                  "dock intent: two signs are sure, no Control From Here needed", null);
             Check(DockIntent.Chance(0, float.NaN) == 0f && DockIntent.Chance(0, 5f) == 1f, "dock intent: a bad base is clamped", null);
             Check(DockIntent.AxesFace(-1f, 45f) && DockIntent.AxesFace(-0.8f, 45f) && !DockIntent.AxesFace(-0.6f, 45f) && !DockIntent.AxesFace(1f, 45f) && !DockIntent.AxesFace(0f, 45f), "dock intent: ports face within the angle", null);
             {

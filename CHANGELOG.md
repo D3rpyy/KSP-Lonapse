@@ -9,7 +9,7 @@
 - **A calm docking is no longer silent.** A slow close approach, under 0.4 m/s, used to get no lines at all. Now a kerbal calls the distance and Mission Control answers. A fast, tense approach still plays the recorded scenes.
 - **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. The same goes for the probes Before, a probe was silent until the dock itself.
 - **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
-- **The mod checks that you mean to dock.** Before the docking calls start, you must target another ship. A docking call comes when the target has a free port of the same size, you fly from one of your ports (Control From Here) or target a port, or the two ports face each other. Going up on debris or an asteroid now rarely gets a docking call.
+- **The mod checks that you mean to dock.** Before the docking calls start, you must target another ship. The mod looks for three signs: the target has a free port of the same size, you fly from one of your ports (Control From Here) or target a port, and the two ports face each other. With two of them the docking call always comes, so a normal docking needs no Control From Here. With one it often comes. Going up on debris or an asteroid now rarely gets a docking call.
 - Added new settings under Sounds to toggle the new sound effects.
 - **Flag sound.** Planting a flag has its own sound.
 - **Enter/exit sound** Entering and exiting the ship now have sounds too.
