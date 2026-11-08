@@ -27,7 +27,9 @@ namespace Lonapse
 
         public bool CapturingKey { get { return capturing; } }
 
-        private const float WindowWidth = 340f;
+        private const float WindowWidth = 480f;
+        private const float NameWidth = 190f;     // label column of a slider row, wide enough for "Jetpack (switch and thrusters)"
+        private const float ValueWidth = 52f;
         private bool pendingSave; // a toggle flipped this frame: save once after the window is drawn
 
         public SettingsWindow(LonapseAddon host)
@@ -224,7 +226,7 @@ namespace Lonapse
             return c.text;
         }
 
-        private GUIStyle headerStyle, valueStyle, hintStyle;
+        private GUIStyle headerStyle, valueStyle, hintStyle, toggleStyle;
 
         /// <summary>Small grey line under a control that says what it does.</summary>
         private void Hint(string text)
@@ -242,12 +244,12 @@ namespace Lonapse
         private float Row(string name, float v, float min, float max, float shown, string fmt)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(name, GUILayout.Width(118f));
+            GUILayout.Label(name, GUILayout.Width(NameWidth));
             GUILayout.BeginVertical();
             GUILayout.Space(8f);
             float nv = GUILayout.HorizontalSlider(v, min, max);
             GUILayout.EndVertical();
-            GUILayout.Label(Label(name, shown, fmt), valueStyle, GUILayout.Width(46f));
+            GUILayout.Label(Label(name, shown, fmt), valueStyle, GUILayout.Width(ValueWidth));
             GUILayout.EndHorizontal();
             if (Math.Abs(nv - v) > 1e-5f) host.settingsDirty = true;
             return nv;
@@ -271,7 +273,8 @@ namespace Lonapse
         /// <summary>Toggle that saves the settings right after this window pass when it flips.</summary>
         private bool Toggle(bool v, string text)
         {
-            bool nv = GUILayout.Toggle(v, text);
+            if (toggleStyle == null) { toggleStyle = new GUIStyle(GUI.skin.toggle) { wordWrap = true }; }
+            bool nv = GUILayout.Toggle(v, text, toggleStyle);
             if (nv != v) { host.settingsDirty = true; pendingSave = true; }
             return nv;
         }
@@ -409,7 +412,10 @@ namespace Lonapse
                 int nt = GUILayout.SelectionGrid(tab, AllTabs, 4);
                 if (nt != tab) pendingTab = nt;
                 GUILayout.Space(4f);
-                scrolls[tab] = GUILayout.BeginScrollView(scrolls[tab], GUILayout.Height(Math.Min(460f, Screen.height * 0.6f)));
+                // no horizontal scrollbar: nothing in a tab may be wider than the window, or the value at the right of a
+                // slider would be pushed out of sight
+                scrolls[tab] = GUILayout.BeginScrollView(scrolls[tab], false, false, GUIStyle.none, GUI.skin.verticalScrollbar,
+                                                         GUILayout.Height(Math.Min(460f, Screen.height * 0.6f)));
                 GUILayout.BeginVertical();
                 switch (tab)
                 {
@@ -518,7 +524,19 @@ namespace Lonapse
             s.soiSfx = Toggle(s.soiSfx, "Ping when entering a new sphere of influence");
             s.hatchSfx = Toggle(s.hatchSfx, "Hatch sounds on EVA exit and boarding");
             s.flagSfx = Toggle(s.flagSfx, "Sound when a flag is planted");
+            s.jetpackSfx = Toggle(s.jetpackSfx, "Sound when the EVA jetpack is switched on or off");
+            s.thudSfx = Toggle(s.thudSfx, "Thud when a kerbal lands hard or falls on EVA");
+            s.footstepSfx = Toggle(s.footstepSfx, "Footsteps on EVA");
+            s.jetpackLoopSfx = Toggle(s.jetpackLoopSfx, "Thruster hiss while the EVA jetpack is firing");
             s.evaBreathing = Toggle(s.evaBreathing, "Helmet breathing on EVA");
+            Header("Sound effect volumes");
+            s.hatchVolume = Volume("Hatch", s.hatchVolume);
+            s.dockingVolume = Volume("Airlock (dock and undock)", s.dockingVolume);
+            s.jetpackVolume = Volume("Jetpack (switch and thrusters)", s.jetpackVolume);
+            s.breathVolume = Volume("Helmet breathing", s.breathVolume);
+            s.thudVolume = Volume("Ground thud (EVA)", s.thudVolume);
+            s.footstepVolume = Volume("Footsteps (EVA)", s.footstepVolume);
+            Hint("80% is the normal loudness. Above 80% the effect is boosted, and loud hits can distort a little.");
         }
 
         private void DrawCrew(Settings s)
@@ -850,7 +868,7 @@ namespace Lonapse
             s.subtitleColors = Toggle(s.subtitleColors, "Colour per speaker");
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Position", GUILayout.Width(118f));
+            GUILayout.Label("Position", GUILayout.Width(NameWidth));
             int pd = StepButton(SubtitleLayout.PresetCaption(pendingPos ?? s.subtitlePos));
             if (pd != 0) pendingPos = SubtitleLayout.StepPreset(pendingPos ?? s.subtitlePos, pd);
             GUILayout.EndHorizontal();

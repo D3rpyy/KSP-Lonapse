@@ -19,6 +19,8 @@ namespace Lonapse
         private AudioEchoFilter echo;
         private AudioReverbFilter reverb;  // crew channels only, used by the intercom preset
         private TremoloDsp trem;
+        private GainDsp gainDsp;          // sfx and breath channels: boost above the default of a volume slider
+        public float userGain = 1f;       // linear, from a sound effect volume slider (slider / 0.8). Above 1 the boost runs in GainDsp
         private VoiceDsp dsp;             // crew and control: presence EQ, compressor, voice boost
         public float boost = 1f;          // linear voice gain (voiceBoostDb, calloutVolume), applied in VoiceDsp
         public bool compressor = true;
@@ -113,6 +115,8 @@ namespace Lonapse
             trem = go.AddComponent<TremoloDsp>();
             try { trem.sampleRate = AudioSettings.outputSampleRate; } catch (Exception) { trem.sampleRate = 48000f; }
             trem.depth = 0f;
+
+            if (kind == ChannelKind.Sfx || kind == ChannelKind.Breath) gainDsp = go.AddComponent<GainDsp>();
 
             if (kind == ChannelKind.Crew || kind == ChannelKind.Control)
             {
@@ -402,7 +406,9 @@ namespace Lonapse
                 dsp.compressorOn = compressor;
                 if (!on) boostMul = boost; // no DSP: boost through the source volume (clamped at 1)
             }
-            float vol = categoryVolume * volumeScale * gain * globalMul * tremMul * boostMul;
+            float ug = DcMath.Clamp(DcMath.Finite(userGain), 0f, 4f);
+            if (gainDsp != null) gainDsp.gain = ug > 1f ? ug : 1f;
+            float vol = categoryVolume * volumeScale * gain * globalMul * tremMul * boostMul * (gainDsp != null && ug > 1f ? 1f : ug);
             src.volume = DcMath.Clamp01(DcMath.Finite(vol));
         }
 

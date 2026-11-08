@@ -108,7 +108,7 @@ The breathing speeds up when your kerbal runs. Running builds exertion over abou
 over 30 s (`evaExertFall`). At its peak the breathing is 1.4x as fast (`evaBreathRate`) and 1.5x as loud
 (`evaBreathGain`). Hops and falls never count as a landing or as something hitting the kerbal. Tumbling on the
 ground doesn't count as spinning, also not in the first 3 s after a fall (`evaSettleTime`). When your kerbal falls over, they have a short talk with
-Mission Control about it, at most once every 45 s (`evaFallCooldown`).
+Mission Control about it, at most once every 45 s (`evaFallCooldown`). Falls in a row count as one. The talk waits until the kerbal has been calm for 1.5 s (`evaFallSettle`), and starts anyway 12 s after the first fall (`evaFallMaxWait`).
 
 When nobody is left on board (EVA, a crew transfer, switching to another vessel) everything fades out within 0.3 s.
 When the vessel is destroyed the sound stops at once. The pause menu pauses all sounds. Map view keeps playing.

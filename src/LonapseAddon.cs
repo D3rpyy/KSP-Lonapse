@@ -72,6 +72,9 @@ namespace Lonapse
         public VoiceChannel clickCh;
         public VoiceChannel calloutCh;    // callouts never wait for a free crew channel
         public VoiceChannel keyCh;        // 16: radio key-up and key-down (desk click or headset squelch)
+        public VoiceChannel stepCh;       // footsteps, apart from the other effects
+        public VoiceChannel groundCh;     // ground thuds, apart from sfxCh so a thud and a jetpack click never cut each other off
+        public VoiceChannel thrustCh;     // jetpack thruster hiss loop on EVA
         public VoiceChannel breathCh;     // helmet breathing bed on EVA
 
         // radio profile and signal
@@ -359,9 +362,12 @@ namespace Lonapse
             calloutCh = new VoiceChannel(t, "callout", ChannelKind.Crew, 40, tu.crewHp, tu.crewLpCalm, 0f, true);
             keyCh = new VoiceChannel(t, "radioKey", ChannelKind.Static, 70, 200f, 8000f, 0f, false);
             breathCh = new VoiceChannel(t, "breath", ChannelKind.Breath, 110, 100f, 4000f, 0f, false);
+            stepCh = new VoiceChannel(t, "footstep", ChannelKind.Sfx, 94, 10f, 22000f, 0f, false);
+            groundCh = new VoiceChannel(t, "groundThud", ChannelKind.Sfx, 96, 10f, 22000f, 0f, false);
+            thrustCh = new VoiceChannel(t, "jetpackThrust", ChannelKind.Sfx, 96, 10f, 22000f, 0f, false);
             alarmCh = new VoiceChannel(t, "alarm", ChannelKind.Breath, 125, 300f, 3500f, 0f, false);
             sfxCh = new VoiceChannel(t, "sfx", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh };
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, thrustCh, groundCh, stepCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -512,29 +518,39 @@ namespace Lonapse
         /// <summary>A kerbal goes out: the hatch opens.</summary>
         private void OnHatchExit(GameEvents.FromToAction<Part, Part> a)
         {
-            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_open", settings.hatchSfx); }
+            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_open", settings.hatchSfx, settings.hatchVolume); }
             catch (Exception e) { Log.Exception("OnHatchExit", e); }
         }
 
         /// <summary>A kerbal comes back in: the hatch closes.</summary>
         private void OnHatchBoard(GameEvents.FromToAction<Part, Part> a)
         {
-            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_close", settings.hatchSfx); }
+            try { if (started && InvolvesActive(a)) PlaySfx("sfx/hatch_close", settings.hatchSfx, settings.hatchVolume); }
             catch (Exception e) { Log.Exception("OnHatchBoard", e); }
         }
 
         /// <summary>One sound effect of the ship on the sfx channel. Same gate as every other sound, and the setting.</summary>
-        private void PlaySfx(string folder) { PlaySfx(folder, settings.dockingSfx); }
+        private void PlaySfx(string folder) { PlaySfx(folder, settings.dockingSfx, settings.dockingVolume); }
 
         /// <summary>The ping of a new sphere of influence. Called by the event hub.</summary>
         public void PlaySoiSfx() { PlaySfx("sfx/soi_change", settings.soiSfx); }
 
-        private void PlaySfx(string folder, bool enabled)
+        /// <summary>Slider value to linear gain: the default slider position (80%) is gain 1, as loud as before the sliders.</summary>
+        private static float SliderGain(float slider) { return slider / Settings.SfxVolumeDefault; }
+
+        private void PlaySfx(string folder, bool enabled) { PlaySfx(folder, enabled, Settings.SfxVolumeDefault); }
+
+        private void PlaySfx(string folder, bool enabled, float slider) { PlaySfx(folder, enabled, slider, 1f); }
+
+        private void PlaySfx(string folder, bool enabled, float slider, float scale) { PlaySfx(folder, enabled, slider, scale, sfxCh); }
+
+        private void PlaySfx(string folder, bool enabled, float slider, float scale, VoiceChannel ch)
         {
             if (!CanStartAudio || !enabled) return;
             AudioClip c = ClipLibrary.Next(folder, rng);
             if (c == null) return;
-            sfxCh.Play(c, 1f, 1f, false, 0f);
+            ch.userGain = SliderGain(slider);
+            ch.Play(c, DcMath.Clamp01(scale), 1f, false, 0f);
             Log.Info("Sound effect: " + folder);
         }
 
@@ -577,6 +593,220 @@ namespace Lonapse
                 flagPlanting = now;
             }
             catch (Exception e) { flagEva = null; Log.Exception("TickFlagPress", e); }
+        }
+
+        private bool thudAirborne;      // the EVA kerbal was off the ground last frame
+        private float thudAirTime;      // s in the air since the last landing
+        private float thudFallSpeed;    // fastest downward speed in that time, m/s
+        private bool thudRagdollSeen;   // this ragdoll episode already had its thud
+        private float thudLastLight = -1e9f;
+        private float lastThudTime = -1e9f;     // a thud and a footstep never play together
+
+        private static bool IsOnLadder(KerbalEVA eva)
+        {
+            try { return eva.OnALadder; } catch (Exception) { return false; }
+        }
+
+        private KFSMState stepPrevState;       // state of the EVA kerbal last frame
+        private float stepDist;                // m walked or run since the last step
+        private float lastStepTime = -1e9f;
+        private float stepAir;                 // s off the ground since the last touchdown
+        private bool stepPrevLanded;
+        private float stepLandedTime = -1e9f;  // last time the kerbal stood on the ground
+        private bool stepWalking;
+        private string stepGait;               // name of the gait animation that sets the rhythm
+        private int stepGaitIndex;             // half cycles of that animation so far
+
+        private static void PickGait(KerbalAnimationState k, string name, ref string best, ref float bestWeight, ref float cycles)
+        {
+            if (k == null) return;
+            UnityEngine.AnimationState s = k.State;
+            if (s == null || !s.enabled || s.weight <= bestWeight) return;
+            best = name; bestWeight = s.weight; cycles = s.normalizedTime;
+        }
+
+        /// <summary>The gait animation with the most weight (above 0.5), and how many cycles it has played.</summary>
+        private static bool ReadGaitAnimation(KerbalEVA eva, out string name, out float cycles)
+        {
+            name = null; cycles = 0f;
+            try
+            {
+                KerbalAnimationManager am = eva.Animations;
+                if (am == null) return false;
+                float w = 0.5f;
+                PickGait(am.walkFwd, "walkFwd", ref name, ref w, ref cycles);
+                PickGait(am.run, "run", ref name, ref w, ref cycles);
+                PickGait(am.walkBack, "walkBack", ref name, ref w, ref cycles);
+                PickGait(am.strafeLeft, "strafeLeft", ref name, ref w, ref cycles);
+                PickGait(am.strafeRight, "strafeRight", ref name, ref w, ref cycles);
+                return name != null;
+            }
+            catch (Exception) { name = null; return false; }
+        }
+
+        /// <summary>
+        /// Footsteps from real ground contact, not from state names. Walking and running: one step per stride length of
+        /// distance while the kerbal stands on the ground (a short loss of contact under 0.3 s does not count, a
+        /// walking kerbal flickers between landed and flying). Low gravity: KSP bounds, and a step is the touchdown
+        /// after a bound, when the ground flag turns on. Never a step in the air, on a ladder, in a ragdoll, under
+        /// jetpack thrust, or within 0.4 s of a thud. Every change of state is logged so a wrong guess can be seen.
+        /// </summary>
+        private void TickFootsteps(Vessel v, float dt)
+        {
+            try
+            {
+                KerbalEVA eva = flagEva;
+                KFSMState st = eva != null && eva.fsm != null ? eva.fsm.CurrentState : null;
+                if (v == null || !v.isEVA || !evaMode || !sample.valid || st == null || sample.evaRagdoll || IsOnLadder(eva))
+                {
+                    stepPrevState = null; stepDist = 0f; stepAir = 0f; stepPrevLanded = sample.landed; stepWalking = false;
+                    return;
+                }
+                Tuning tu = settings.tuning;
+                float now = Time.unscaledTime;
+                bool boundGr = ReferenceEquals(st, eva.st_bound_gr_acd) || ReferenceEquals(st, eva.st_bound_gr_fps);
+                bool boundNow = boundGr || ReferenceEquals(st, eva.st_bound_fl);
+                bool boundPrev = stepPrevState != null && (ReferenceEquals(stepPrevState, eva.st_bound_gr_acd)
+                    || ReferenceEquals(stepPrevState, eva.st_bound_gr_fps) || ReferenceEquals(stepPrevState, eva.st_bound_fl));
+                if (!ReferenceEquals(st, stepPrevState) && !boundNow && !boundPrev)
+                    Log.Info("Footstep state: " + (stepPrevState != null ? stepPrevState.name : "-") + " -> " + st.name
+                             + " (speed " + sample.srfSpeed.ToString("0.0") + " m/s, landed " + sample.landed + ")");
+                bool landed = sample.landed;
+                bool step = false, touchdown = false;
+                float vol = 0.5f;
+
+                if (landed) stepLandedTime = now;
+                else stepAir += dt;
+                if (landed && !stepPrevLanded)
+                {
+                    // touchdown after a bound, a jump or a short hop: one step, whatever state the kerbal was in (on a low
+                    // gravity body a long bound goes through Landing or Idle (Floating)). A walking kerbal that flickers
+                    // off the ground for a moment has a short stepAir, so it is no touchdown.
+                    if (stepAir >= 0.15f) { step = true; touchdown = true; vol = 0.8f; }
+                    stepAir = 0f;
+                }
+                stepPrevLanded = landed;
+
+                float speed = (float)sample.srfSpeed;
+                // only the real Walk and Run states: Jumping, Landing and Idle (Floating) are not steps of a gait
+                bool inRun = ReferenceEquals(st, eva.st_run_acd) || ReferenceEquals(st, eva.st_run_fps);
+                bool inWalk = ReferenceEquals(st, eva.st_walk_acd) || ReferenceEquals(st, eva.st_walk_fps);
+                bool walking = (inRun || inWalk) && now - stepLandedTime < 0.3f && !sample.evaThrusting && speed > 0.3f;
+                if (walking)
+                {
+                    bool run = inRun;
+                    vol = run ? 0.95f : 0.7f;
+                    string gait; float cycles;
+                    if (ReadGaitAnimation(eva, out gait, out cycles))
+                    {
+                        // the playing gait animation (forward, back, left, right, run) sets the rhythm: two steps a cycle
+                        int idx = (int)Math.Floor((cycles + tu.stepAnimOffset) * 2f);
+                        if (!string.Equals(gait, stepGait))
+                        {
+                            Log.Info("Footstep gait: " + gait + (run ? " (run)" : " (walk)"));
+                            stepGait = gait;
+                        }
+                        else if (idx > stepGaitIndex) step = true;
+                        stepGaitIndex = idx;
+                        stepDist = 0f;
+                    }
+                    else
+                    {
+                        // no animation found: one step per stride length of distance
+                        stepGait = null;
+                        float len = Math.Max(0.2f, run ? tu.stepLengthRun : tu.stepLengthWalk);
+                        if (!stepWalking) stepDist = len * 0.6f;      // the first step comes soon after the start
+                        stepDist += speed * dt;
+                        if (stepDist >= len) { stepDist -= len; step = true; }
+                    }
+                }
+                else { stepDist = 0f; stepGait = null; }
+                stepWalking = walking;
+                stepPrevState = st;
+                if (!step || now - lastStepTime < (touchdown ? tu.stepMinGapBound : tu.stepMinGap) || now - lastThudTime < 0.4f) return;
+                lastStepTime = now;
+                PlaySfx("sfx/footstep", settings.footstepSfx, settings.footstepVolume, vol, stepCh);
+            }
+            catch (Exception e) { stepPrevState = null; Log.Exception("TickFootsteps", e); }
+        }
+
+        /// <summary>
+        /// Two ground sounds for an EVA kerbal. A heavy thud when a ragdoll begins on the ground (a fall or a trip, the
+        /// same moment as the eva_fall lines). A light thud, louder with the fall speed, when a hop or a jetpack flight
+        /// ends. A landing needs a minimum time in the air and fall speed (thudMinAir, thudMinSpeed), so the small hops
+        /// of low gravity and the steps of a walk stay quiet.
+        /// </summary>
+        private void TickGroundThud(Vessel v, float dt)
+        {
+            try
+            {
+                if (v == null || !v.isEVA || !evaMode || !sample.valid)
+                {
+                    thudAirborne = false; thudAirTime = 0f; thudFallSpeed = 0f; thudRagdollSeen = false;
+                    return;
+                }
+                Tuning tu = settings.tuning;
+                float now = Time.unscaledTime;
+                if (!sample.landed)
+                {
+                    thudAirborne = true;
+                    thudAirTime += dt;
+                    // a new fall after a flight is a new episode, also when the kerbal never stood up in between.
+                    // The short bounce right after an impact (under 0.5 s) still belongs to the old one.
+                    if (thudRagdollSeen && (!sample.evaRagdoll || thudAirTime > 0.5f)) thudRagdollSeen = false;
+                    float down = (float)Math.Max(0.0, -sample.vs);
+                    if (down > thudFallSpeed) thudFallSpeed = down;
+                    return;
+                }
+                float span = Math.Max(0.1f, tu.thudHardSpeed - tu.thudMinSpeed);
+                float k = DcMath.Clamp01((thudFallSpeed - tu.thudMinSpeed) / span);
+                if (sample.evaRagdoll)
+                {
+                    if (!thudRagdollSeen)
+                    {
+                        thudRagdollSeen = true;
+                        lastThudTime = now;
+                        Log.Info("Ground thud (fall): air " + thudAirTime.ToString("0.0") + " s, " + thudFallSpeed.ToString("0.0") + " m/s");
+                        PlaySfx("sfx/thud_heavy", settings.thudSfx, settings.thudVolume, 0.6f + 0.4f * DcMath.Clamp01(thudFallSpeed / tu.thudHardSpeed), groundCh);
+                    }
+                }
+                else
+                {
+                    thudRagdollSeen = false;
+                    bool ok = thudAirTime >= tu.thudMinAir && thudFallSpeed >= tu.thudMinSpeed && now - thudLastLight > 0.3f;
+                    if (thudAirborne && thudAirTime >= 0.3f)
+                        Log.Info("Ground thud (landing): air " + thudAirTime.ToString("0.0") + " s, " + thudFallSpeed.ToString("0.0") + " m/s, " + (ok ? "played" : "too soft or too short"));
+                    if (thudAirborne && ok)
+                    {
+                        thudLastLight = now;
+                        lastThudTime = now;
+                        PlaySfx("sfx/thud_light", settings.thudSfx, settings.thudVolume, 0.35f + 0.65f * k, groundCh);
+                    }
+                }
+                thudAirborne = false; thudAirTime = 0f; thudFallSpeed = 0f;
+            }
+            catch (Exception e) { thudAirborne = false; Log.Exception("TickGroundThud", e); }
+        }
+
+        private int jetpackState = -1;     // -1 unknown (new EVA kerbal), 0 off, 1 on, as last seen
+        private KerbalEVA jetpackEva;      // the kerbal that state belongs to
+
+        /// <summary>
+        /// The jetpack sound plays when the deployed state flips. The first frame on a kerbal only reads the state,
+        /// so going out on EVA or switching to another kerbal stays quiet. Uses the kerbal found by TickFlagPress.
+        /// </summary>
+        private void TickJetpackSwitch(Vessel v)
+        {
+            try
+            {
+                if (v == null || !v.isEVA || flagEva == null) { jetpackState = -1; return; }
+                if (!ReferenceEquals(flagEva, jetpackEva)) { jetpackEva = flagEva; jetpackState = -1; }
+                int now = flagEva.JetpackDeployed ? 1 : 0;
+                if (jetpackState >= 0 && now != jetpackState)
+                    PlaySfx(now == 1 ? "sfx/jetpack_on" : "sfx/jetpack_off", settings.jetpackSfx, settings.jetpackVolume);
+                jetpackState = now;
+            }
+            catch (Exception e) { jetpackState = -1; Log.Exception("TickJetpackSwitch", e); }
         }
 
         /// <summary>A flag stands: Mission Control and the kerbal who planted it have something to say.</summary>
@@ -677,18 +907,33 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnStageActivate", e); }
         }
 
-        private bool evaFallSeen;   // this ragdoll episode already had its eva_fall lines
+        private bool evaFallPending;     // a fall happened and its lines wait for the kerbal to settle
+        private float evaFallSince;      // when the first fall of this series began
+        private float evaFallLastRagdoll;// last time the kerbal was a ragdoll
         private float lastEvaFall = -1e9f;
 
-        /// <summary>An EVA kerbal that ragdolls on the ground (a trip, a fall, a hard landing) gets eva_fall
-        /// lines instead of the touchdown lines. Once per ragdoll episode, at most once per evaFallCooldown s.</summary>
+        /// <summary>An EVA kerbal that ragdolls on the ground (a trip, a fall, a hard landing) gets eva_fall lines
+        /// instead of the touchdown lines. A series of falls (tumbling, getting up and falling again) counts as one:
+        /// the lines start when the kerbal has been calm for evaFallSettle s, or evaFallMaxWait s after the first fall.
+        /// At most once per evaFallCooldown s.</summary>
         private void PollEvaFall()
         {
-            if (!evaMode || !sample.valid || !sample.evaRagdoll) { evaFallSeen = false; return; }
-            if (evaFallSeen || !sample.landed) return;
-            evaFallSeen = true;
+            if (!evaMode || !sample.valid) { evaFallPending = false; return; }
             float now = Time.unscaledTime;
-            if (now - lastEvaFall < settings.tuning.evaFallCooldown) return;
+            Tuning tu = settings.tuning;
+            if (sample.evaRagdoll)
+            {
+                evaFallLastRagdoll = now;
+                if (!evaFallPending && sample.landed) { evaFallPending = true; evaFallSince = now; }
+                if (!evaFallPending || now - evaFallSince < tu.evaFallMaxWait) return;
+            }
+            else if (!evaFallPending || now - evaFallLastRagdoll < tu.evaFallSettle || !sample.landed)
+            {
+                // not settled yet, or still in the air after a fall: keep waiting, but not forever
+                if (!evaFallPending || now - evaFallSince < tu.evaFallMaxWait) return;
+            }
+            evaFallPending = false;
+            if (now - lastEvaFall < tu.evaFallCooldown) return;
             if (director.EnqueueEvaFall()) lastEvaFall = now;
         }
 
@@ -863,6 +1108,9 @@ namespace Lonapse
                 UpdateStationMode(v);
                 UpdateDocking(v, dt);
                 TickFlagPress(v);
+                TickJetpackSwitch(v);
+                TickGroundThud(v, dt);
+                TickFootsteps(v, dt);
 
                 string reason = EvaluateGate(v);
                 bool open = ReferenceEquals(reason, GateOpenReason);
@@ -927,6 +1175,7 @@ namespace Lonapse
                 }
 
                 UpdateBreath(dt);
+                UpdateJetpackThrust();
                 UpdateAlarm(dt);
                 EnforceCategoryToggles();
                 UpdateChannels(dt);
@@ -973,7 +1222,7 @@ namespace Lonapse
                 VoiceChannel c = allChannels[i];
                 c.SetDsp(settings.useDsp);
                 float mul = finalCall && ReferenceEquals(c, control) ? settings.masterVolume * gameGain : globalMul;
-                if (ReferenceEquals(c, sfxCh)) mul = sfxMul;
+                if (c.kind == ChannelKind.Sfx) mul = sfxMul;   // sfxCh, thrustCh and groundCh
                 c.Update(dt, CategoryVolume(c), mul);
             }
         }
@@ -1473,6 +1722,26 @@ namespace Lonapse
             if (alarmCh.Busy) alarmCh.volumeScale = tu.alarmVolume;
         }
 
+        /// <summary>
+        /// The thruster hiss loops for as long as KerbalEVA.JetpackIsThrusting is true (sample.evaThrusting).
+        /// It fades in quickly and out a little slower, so short taps do not click.
+        /// </summary>
+        private void UpdateJetpackThrust()
+        {
+            bool want = CanStartAudio && settings.jetpackLoopSfx && evaMode && sample.valid && sample.evaThrusting
+                        && ClipLibrary.CountOf("sfx/jetpack_loop") > 0;
+            thrustCh.userGain = SliderGain(settings.jetpackVolume);
+            if (want)
+            {
+                if (!thrustCh.Busy || thrustCh.FadingOut)
+                {
+                    AudioClip c = ClipLibrary.Next("sfx/jetpack_loop", rng);
+                    if (c != null) thrustCh.Play(c, 1f, 1f, true, 0.08f);
+                }
+            }
+            else thrustCh.FadeOutOnce(0.15f);
+        }
+
         public float evaExertion;   // 0..1, EVA running builds it up slowly
 
         private void UpdateBreath(float dt)
@@ -1483,6 +1752,7 @@ namespace Lonapse
             evaExertion = DcMath.Exertion(evaExertion, run, dt, tu.evaExertRise, tu.evaExertFall);
             bool want = gateOpen && settings.radioEnabled && settings.evaBreathing && p != null && p.BedClip != null && ClipLibrary.CountOf(p.BedClip) > 0;
             float rate = 1f + (tu.evaBreathRate - 1f) * evaExertion;
+            breathCh.userGain = SliderGain(settings.breathVolume);
             float gain = p != null ? p.BedGain * (1f + (tu.evaBreathGain - 1f) * evaExertion) : 0f;
             if (want && !breathCh.Busy)
             {

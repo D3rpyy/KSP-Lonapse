@@ -184,6 +184,18 @@ namespace Lonapse
         public float evaRelayFullKm = 1.0f, evaRelayZeroKm = 2.3f;
         // EVA fall: least gap in s between two eva_fall exchanges
         public float evaFallCooldown = 45f;
+        // EVA fall: the lines wait until the kerbal has not been a ragdoll for evaFallSettle s (more falls may follow),
+        // and start anyway after evaFallMaxWait s from the first fall
+        public float evaFallSettle = 1.5f, evaFallMaxWait = 12f;
+        // EVA ground thud: a landing counts after at least thudMinAir s in the air and a fall of thudMinSpeed m/s.
+        // The light thud grows from the quietest at thudMinSpeed to its loudest at thudHardSpeed m/s.
+        public float thudMinAir = 0.6f, thudMinSpeed = 1.5f, thudHardSpeed = 8f;
+        // EVA footsteps: in the Walk and Run states one step per stepLengthWalk / stepLengthRun m (one foot). After a bound or a
+        // jump a step is the touchdown. No step closer than stepMinGap s to the last one, stepMinGapBound s after a touchdown.
+        public float stepLengthWalk = 0.35f, stepLengthRun = 0.6f, stepMinGap = 0.12f, stepMinGapBound = 0.6f;
+        // EVA footsteps in the Walk and Run states follow the playing gait animation: two steps per cycle, shifted by this
+        // fraction of a cycle (0..1) if the sound lands before or after the foot
+        public float stepAnimOffset = 0f;
         // EVA breathing: running builds exertion over evaExertRise s and it fades over evaExertFall s.
         // At full exertion the breath loop plays evaBreathRate times as fast and evaBreathGain times as loud.
         public float evaExertRise = 20f, evaExertFall = 30f, evaBreathRate = 1.4f, evaBreathGain = 1.5f;
@@ -445,6 +457,17 @@ namespace Lonapse
         public bool evaBreathing = true;            // helmet breathing under the radio on EVA
         public bool flagSfx = true;                 // a thud and a flutter when a kerbal plants a flag
         public bool hatchSfx = true;                // hatch sounds when a kerbal goes out on EVA and comes back in
+        public const float SfxVolumeDefault = 0.8f;   // slider value that plays as loud as before the sliders existed
+        public float hatchVolume = SfxVolumeDefault;     // hatch sounds
+        public float dockingVolume = SfxVolumeDefault;   // airlock sounds on dock and undock
+        public float jetpackVolume = SfxVolumeDefault;   // jetpack switch sounds and the thruster hiss together
+        public float breathVolume = SfxVolumeDefault;    // helmet breathing on EVA
+        public bool thudSfx = true;                 // a dull thud when an EVA kerbal lands hard or falls
+        public float thudVolume = SfxVolumeDefault;      // ground thuds
+        public bool footstepSfx = true;             // footsteps of an EVA kerbal on the ground
+        public float footstepVolume = SfxVolumeDefault;  // footsteps
+        public bool jetpackLoopSfx = true;          // a gas hiss under the radio for as long as the EVA jetpack thrusts
+        public bool jetpackSfx = true;              // a gas click and hiss when a kerbal switches the EVA jetpack on or off
         public bool soiSfx = true;                  // a soft ping when the ship enters a new sphere of influence
         // --- Mouths ---
         public bool mouthAnimation = true;          // kerbals move their jaw while they talk
@@ -626,6 +649,12 @@ namespace Lonapse
             beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 1f);
             sfxVolume = DcMath.Clamp(DcMath.Finite(sfxVolume), 0f, 1f);
             staticVolume = DcMath.Clamp(DcMath.Finite(staticVolume), 0f, 1f);
+            thudVolume = DcMath.Clamp(DcMath.Finite(thudVolume), 0f, 1f);
+            footstepVolume = DcMath.Clamp(DcMath.Finite(footstepVolume), 0f, 1f);
+            hatchVolume = DcMath.Clamp(DcMath.Finite(hatchVolume), 0f, 1f);
+            dockingVolume = DcMath.Clamp(DcMath.Finite(dockingVolume), 0f, 1f);
+            jetpackVolume = DcMath.Clamp(DcMath.Finite(jetpackVolume), 0f, 1f);
+            breathVolume = DcMath.Clamp(DcMath.Finite(breathVolume), 0f, 1f);
             weakSignalVolume = DcMath.Clamp(DcMath.Finite(weakSignalVolume), 0f, 1f);
             intercomVolume = DcMath.Clamp(DcMath.Finite(intercomVolume), 0f, 1f);
             if (float.IsNaN(rateMultiplier) || float.IsInfinity(rateMultiplier)) rateMultiplier = 1f;
@@ -762,6 +791,14 @@ namespace Lonapse
                 n.TryGetValue("beepVolume", ref s.beepVolume);
                 n.TryGetValue("sfxVolume", ref s.sfxVolume);
                 n.TryGetValue("staticVolume", ref s.staticVolume);
+                n.TryGetValue("hatchVolume", ref s.hatchVolume);
+                n.TryGetValue("footstepVolume", ref s.footstepVolume);
+                n.TryGetValue("footstepSfx", ref s.footstepSfx);
+                n.TryGetValue("thudVolume", ref s.thudVolume);
+                n.TryGetValue("thudSfx", ref s.thudSfx);
+                n.TryGetValue("dockingVolume", ref s.dockingVolume);
+                n.TryGetValue("jetpackVolume", ref s.jetpackVolume);
+                n.TryGetValue("breathVolume", ref s.breathVolume);
                 n.TryGetValue("weakSignalVolume", ref s.weakSignalVolume);
                 n.TryGetValue("intercomVolume", ref s.intercomVolume);
                 n.TryGetValue("intercomEnabled", ref s.intercomEnabled);
@@ -818,6 +855,8 @@ namespace Lonapse
                 n.TryGetValue("soiSfx", ref s.soiSfx);
                 n.TryGetValue("hatchSfx", ref s.hatchSfx);
                 n.TryGetValue("flagSfx", ref s.flagSfx);
+                n.TryGetValue("jetpackSfx", ref s.jetpackSfx);
+                n.TryGetValue("jetpackLoopSfx", ref s.jetpackLoopSfx);
                 n.TryGetValue("evaBreathing", ref s.evaBreathing);
                 n.TryGetValue("mouthAnimation", ref s.mouthAnimation);
                 n.TryGetValue("mouthDebug", ref s.mouthDebug);
@@ -920,6 +959,14 @@ namespace Lonapse
                 n.AddValue("beepVolume", F(beepVolume));
                 n.AddValue("sfxVolume", F(sfxVolume));
                 n.AddValue("staticVolume", F(staticVolume));
+                n.AddValue("hatchVolume", F(hatchVolume));
+                n.AddValue("footstepVolume", F(footstepVolume));
+                n.AddValue("footstepSfx", footstepSfx);
+                n.AddValue("thudVolume", F(thudVolume));
+                n.AddValue("thudSfx", thudSfx);
+                n.AddValue("dockingVolume", F(dockingVolume));
+                n.AddValue("jetpackVolume", F(jetpackVolume));
+                n.AddValue("breathVolume", F(breathVolume));
                 n.AddValue("weakSignalVolume", F(weakSignalVolume));
                 n.AddValue("intercomVolume", F(intercomVolume));
                 n.AddValue("intercomEnabled", intercomEnabled);
@@ -974,6 +1021,8 @@ namespace Lonapse
                 n.AddValue("soiSfx", soiSfx);
                 n.AddValue("hatchSfx", hatchSfx);
                 n.AddValue("flagSfx", flagSfx);
+                n.AddValue("jetpackSfx", jetpackSfx);
+                n.AddValue("jetpackLoopSfx", jetpackLoopSfx);
                 n.AddValue("evaBreathing", evaBreathing);
                 n.AddValue("mouthAnimation", mouthAnimation);
                 n.AddValue("mouthDebug", mouthDebug);

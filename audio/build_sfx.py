@@ -44,11 +44,17 @@ EFFECTS = {
     "hatch_open":     "hatch_open.wav",
     "hatch_close":    "hatch_close.wav",
     "flag_plant":     "flag_plant.wav",
+    "jetpack_on":     "jetpack_on.wav",
+    "jetpack_off":    "jetpack_off.wav",
+    "footstep":       "footstep.wav",         # synthesized when this file is missing, three steps
+    "thud_heavy":     "thud_heavy.wav",       # synthesized when this file is missing
+    "thud_light":     "thud_light.wav",       # same
+    "jetpack_loop":   "jetpack_loop.wav",     # synthesized when this file is missing
 }
 
 # Effects that only get louder: one plain gain to a loudness target (LUFS), no body lift, so the recording keeps its
 # own shape. The limiter catches the peaks above the ceiling. -16 LUFS is about the airlock.
-GAIN_ONLY = {"flag_plant": -16.0}
+GAIN_ONLY = {"flag_plant": -16.0, "jetpack_on": -20.0, "jetpack_off": -20.0, "jetpack_loop": -26.0}
 
 
 # Effects that are synthesized because there is no recording: name -> list of (freq Hz, start s, length s, amp).
@@ -56,6 +62,77 @@ GAIN_ONLY = {"flag_plant": -16.0}
 SYNTH = {
     "soi_change": [(880.0, 0.00, 0.22, 0.50), (1318.5, 0.16, 0.45, 0.45)],
 }
+
+
+def build_loop_synth(name, out_dir):
+    """The thrust loop of the jetpack: a soft gas hiss (band-passed noise) that repeats without a click.
+    A recording in audio/sfx_sources/jetpack_loop.wav is used instead when that file exists."""
+    dur, xf = 3.0, 0.25
+    raw = bc.noise(7, dur + xf, "white", "highpass=f=900,lowpass=f=6500,lowpass=f=5000")
+    n, m = int(round(dur * SR)), int(round(xf * SR))
+    x = raw[:n]
+    for k in range(m):      # equal-power crossfade of the extra tail into the head, so the loop point has no seam
+        a = math.sin(0.5 * math.pi * k / m)
+        b = math.cos(0.5 * math.pi * k / m)
+        x[k] = x[k] * a + raw[n + k] * b
+    x = bc.normalize(x, -30.0, fades=False)
+    path = out_dir / name / ("sfx_%s_000.wav" % name)
+    bc.write_wav(path, x)
+    bc.log("synth   %-34s %.2f s  peak %.1f dBFS  (synthesized loop)" % (path.name, len(x) / SR, bc.db(max(abs(v) for v in x))))
+
+
+# The ground thuds, synthesized (a recording in audio/sfx_sources/ is used instead when it exists): (start Hz, end Hz, pitch fall time s, body decay s, noise lowpass Hz,
+# noise level, noise decay s, length s, peak dBFS). A sine that drops in pitch plus a short dull noise burst.
+THUDS = {
+    "thud_heavy": (95.0, 38.0, 0.10, 0.16, 350.0, 0.55, 0.05, 0.60, -2.0),
+    "thud_light": (140.0, 70.0, 0.06, 0.08, 500.0, 0.40, 0.03, 0.30, -5.0),
+}
+
+
+def build_step_synth(name, out_dir):
+    """The footsteps: a short dull tap (low-passed noise plus a small low thump), three variants so a walk does not
+    repeat one sample. A recording in audio/sfx_sources/footstep.wav is used instead when that file exists."""
+    import random
+    rng = random.Random("footstep")
+    for i in range(3):
+        dur = 0.16
+        n = int(round(dur * SR))
+        lp = int(rng.uniform(900, 1500))
+        noise = bc.noise(21 + i, dur, "white", "lowpass=f=%d,lowpass=f=%d" % (lp, lp))
+        f0, f1 = rng.uniform(120, 160), rng.uniform(60, 80)
+        tn, ta = rng.uniform(0.020, 0.032), rng.uniform(0.030, 0.045)
+        x, ph = [], 0.0
+        for k in range(n):
+            t = k / SR
+            ph += 2.0 * math.pi * (f1 + (f0 - f1) * math.exp(-t / 0.02)) / SR
+            att = min(1.0, t / 0.002)
+            x.append(att * (math.sin(ph) * math.exp(-t / ta) * 0.7 + (noise[k] if k < len(noise) else 0.0) * 1.6 * math.exp(-t / tn)))
+        peak = max(abs(v) for v in x)
+        x = [v * (10 ** (-3.0 / 20.0) / peak) for v in x]
+        x = bc.fade_edges(x, 0, int(SR * 0.01))
+        path = out_dir / name / ("sfx_%s_%03d.wav" % (name, i))
+        bc.write_wav(path, x)
+        bc.log("synth   %-34s %.2f s  peak %.1f dBFS  (synthesized step)" % (path.name, len(x) / SR, bc.db(max(abs(v) for v in x))))
+
+
+def build_thud_synth(name, out_dir):
+    f0, f1, tf, ta, lp, nl, tn, dur, pk = THUDS[name]
+    n = int(round(dur * SR))
+    noise = bc.noise(11 if name == "thud_heavy" else 12, dur, "white", "lowpass=f=%d,lowpass=f=%d" % (lp, lp))
+    x, ph = [], 0.0
+    for k in range(n):
+        t = k / SR
+        f = f1 + (f0 - f1) * math.exp(-t / tf)
+        ph += 2.0 * math.pi * f / SR
+        att = min(1.0, t / 0.003)
+        body = math.sin(ph) * math.exp(-t / ta) * att
+        x.append(body + (noise[k] if k < len(noise) else 0.0) * nl * 2.0 * math.exp(-t / tn) * att)
+    peak = max(abs(v) for v in x)
+    x = [v * (10 ** (pk / 20.0) / peak) for v in x]
+    x = bc.fade_edges(x, 0, int(SR * 0.01))
+    path = out_dir / name / ("sfx_%s_000.wav" % name)
+    bc.write_wav(path, x)
+    bc.log("synth   %-34s %.2f s  peak %.1f dBFS  (synthesized thud)" % (path.name, len(x) / SR, bc.db(max(abs(v) for v in x))))
 
 
 def build_synth(name, out_dir):
@@ -90,6 +167,12 @@ def source_lufs(src):
 
 def build(name, out_dir):
     src = SOURCES / EFFECTS[name]
+    if not src.is_file() and name == "footstep":
+        return build_step_synth(name, out_dir)
+    if not src.is_file() and name in THUDS:
+        return build_thud_synth(name, out_dir)
+    if not src.is_file() and name == "jetpack_loop":
+        return build_loop_synth(name, out_dir)
     if not src.is_file():
         bc.die("missing source %s" % src)
     path = out_dir / name / ("sfx_%s_000.wav" % name)

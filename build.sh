@@ -181,7 +181,7 @@ fi
 # Only audio files: a .cfg under GameData would be parsed by KSP. --delete removes clips that are no longer built.
 if [[ $NO_SOUNDS -eq 0 ]]; then
   SND="$REPO/audio/build/Sounds"
-  for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant crew control; do [[ -d "$SND/$d" ]] || SND="$REPO/GameData/Lonapse/Sounds"; done
+  for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant sfx/jetpack_on sfx/jetpack_off sfx/jetpack_loop sfx/thud_heavy sfx/thud_light sfx/footstep crew control; do [[ -d "$SND/$d" ]] || SND="$REPO/GameData/Lonapse/Sounds"; done
   if [[ -d "$SND" ]]; then
     mkdir -p "$GD/Sounds"
     case "$GD/Sounds" in */GameData/Lonapse/Sounds) ;; *) echo "ERROR: sounds path sanity check failed" >&2; exit 1 ;; esac

@@ -10,21 +10,28 @@
 - **Distance callouts.** At 500, 250 and 100 m, and again at 30, 15 and 5 m, a kerbal calls the distance and Mission Control answers. The same goes for the probes Before, a probe was silent until the dock itself.
 - **Other chatter waits during a docking approach.** From the approach call until the dock, an undock, a lost target or at most 240 s, no other chatter, chat, report or event call starts. Crew lost and parts lost still come through, and so does everything once the crew gets stressed.
 - **The mod checks that you mean to dock.** Before the docking calls start, you must target another ship. A docking call comes when the target has a free port of the same size, one of your ports is armed or the two ports face each other. Going up on debris or an asteroid now rarely gets a docking call.
-- Added new settings under Sounds to toggle the newsound effects.
+- Added new settings under Sounds to toggle the new sound effects.
 - **Flag sound.** Planting a flag has its own sound.
 - **Enter/exit sound** Entering and exiting the ship now have sounds too.
-- **Science talk is spoken live now.** After an experiment the kerbal who did it reports and Mission Control answers, in the runtime voice. The lines can say what really happened: the biome, the science points, the first data from a place, the science of this flight, and what the thermometer, barometer or gravity scanner reads. Every stock experiment has 28 to 31 talks of its own, and 29 more fit any experiment. 535 in all, with the batch talks and the talks for kept data below. A talk you have not heard yet comes first, so the same lines repeat far less. Science talk needs the runtime voice: without Piper an experiment gets no talk. The recorded science scenes are gone.
-- **Many experiments at once give one report.** Experiments you run together become one talk: the ones in the same results dialog, or the ones an action group runs. The kerbal names them and Mission Control gives the total points. 38 talks are made for this. A science talk no longer waits 30 seconds per experiment. It starts about a second after you close the results dialog, or two seconds after the last experiment when there is no dialog.
-- **Science talk is not cut off or dropped any more.** Chatter, reports and chats wait while a science talk is being made and while it plays. When the radio queue is full, the talk waits up to 20 seconds for room instead of being dropped.
-- **Reset data gets no report.** The talk waits until the results dialog is closed. An experiment you reset or discard there is left out. Data you keep or transmit still gets its report.
-- **Kept data is not "received".** When you press Keep, Mission Control no longer says it got the data. The kerbal stores it and Mission Control asks to bring it home. Lines that say the data arrived only play after a transmission. 23 new talks for kept and sent data. After kept data there is no points line.
-- **Science without a link.** Experiments without a link to Mission Control go into a batch too, with the same Reset check. The kerbals talk about it among themselves, or one kerbal alone. 32 new chats, some for one experiment and 6 for several at once.
+- **Jetpack sounds.** Switching the EVA jetpack on or off has a click and a hiss. While the thrusters fire, a soft hiss loops under the radio and fades out when you let go.
+- **Ground thuds.** A kerbal who falls over on the ground gets a heavy thud, at the same moment as the fall lines. Landing after a jump or a jetpack flight gets a lighter one, louder the faster the fall. Small hops and steps stay quiet.
+- **Footsteps.** An EVA kerbal makes footsteps. Walking, running, backwards and sideways follow the playing walking animation. In low gravity a step is the touchdown after each bound or jump. There are no steps in the air, on a ladder or in a fall.
+- **Volume sliders for the sound effects.** Hatch, airlock, jetpack (switch and thrusters together), helmet breathing, ground thud and footsteps each have a slider under Sounds. 80% is the old loudness. Above 80% the effect is boosted, and loud hits can distort a little.
+- **Science talk is spoken live now.**  The lines can say what really was tested by the player. Every stock experiment has 28 to 31 talks of its own, and 29 more fit any experiment. There are 535 total talks. If you do multiple experiments at the same time, they will be sent as 1 batched radio message instead of X separate radio messages
 - **More probe talk.** Every probe core has 10 new scenes with Mission Control: chats, hails and sleepy moments, in the character of that core. These are done on runtime.
+
+### Changed
+
+- **The settings window is wider.** The name column is wider too, so long names fit and the value at the right of a slider stays in view.
+- **Sound effects ignore the EVA radio volume.** The airlock, hatch, thud, footstep and jetpack sounds are the ship or the kerbal, not the suit radio.
 
 ### Fixed
 
+- **Fall lines wait until the kerbal is calm.** After a fall, the talk starts when the kerbal has not been tumbling for 1.5 s, and at the latest 12 s after the first fall. Before, it could start in the middle of a second fall.
+
 - **Kerbals no longer sometimes sound very deep and slow.** Each kerbal plays at their own pitch, pushed apart from the rest of the crew and lowered a little under G. For a low-voiced kerbal this could undo the whole Kerbal shift. It happened most on stations with many kerbals, in intercom chats and under high G. The pitch now has a floor, so every kerbal keeps the Kerbal sound. On a big station the voices sit a bit closer together because of this. G strain lowers the voice by at most 6% instead of 12%.
-- **Tense and panicking kerbals no longer sound like chipmunks.** Under stress the crew voice went up in pitch, in the recordings and again in game. That is gone. A tense or panicking kerbal now has their normal voice and only talks a bit faster. 
+- **Tense and panicking kerbals no longer sound like chipmunks.** Under stress the crew voice went up in pitch, in the recordings and again in game. That is gone. A tense or panicking kerbal now has their normal voice and only talks a bit faster.
+- **Reset data gets no report.** The talk waits until the results dialog is closed. An experiment you reset or discard there is left out. Data you keep or transmit still gets its report.
 
 ### For modders
 

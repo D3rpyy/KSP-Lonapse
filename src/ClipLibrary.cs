@@ -41,7 +41,7 @@ namespace Lonapse
             "sfx/burst", "sfx/loop", "sfx/squelch",
             "beeps/click_desk", "beeps/headset_open", "beeps/headset_close", "sfx/breath_loop", "beeps/master_alarm",
             "beeps/roger",
-            "sfx/airlock_dock", "sfx/airlock_undock", "sfx/soi_change", "sfx/hatch_open", "sfx/hatch_close", "sfx/flag_plant",
+            "sfx/airlock_dock", "sfx/airlock_undock", "sfx/soi_change", "sfx/hatch_open", "sfx/hatch_close", "sfx/flag_plant", "sfx/jetpack_on", "sfx/jetpack_off", "sfx/jetpack_loop", "sfx/thud_heavy", "sfx/thud_light", "sfx/footstep",
         };
 
         // one entry per folder in BaseFolders, in the same order
