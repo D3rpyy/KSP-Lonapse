@@ -852,6 +852,8 @@ namespace Lonapse
                 Log.Info("Runtime voice: science " + topic + (talked ? " talk queued" : ": no science talk fits"));
                 if (talked || !eva) return talked;
             }
+            // one science talk at a time: a talk being made or waiting for room keeps its clips (the event waits)
+            if (sciPhase == SciPhase.Rendering || sciPhase == SciPhase.Waiting) return false;
             KerbalVoice partner = PartnerOf(k);
             if (reach && rng.NextDouble() < EventSoloChance) partner = null;   // often the kerbal alone reports to Control
             var extra = new Dictionary<string, string[]> { { "exp", ExpNames(subjectId) } };

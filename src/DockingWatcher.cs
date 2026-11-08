@@ -43,6 +43,9 @@ namespace Lonapse
         // Other chatter waits for dockChatHold s of it.
         public bool approachActive;
         public float approachTime;
+        public bool callSkipped;    // the consumer skipped the approach call (no intent to dock): no chatter hold
+        /// <summary>The approach call that Update just returned is not played: other chatter does not wait for it.</summary>
+        public void SkipApproach() { callSkipped = true; approachActive = false; approachTime = 0f; }
         public bool HoldsChat(Tuning tu) { return approachActive && approachTime < tu.dockChatHold; }
 
         private void ResetFar()
@@ -187,7 +190,7 @@ namespace Lonapse
 
             UpdateClose(distBefore, dist, dt, tu);
             UpdateFar(distBefore, dist, tu);
-            approachActive = fired && dist < tu.dockRearmDist;
+            approachActive = fired && !callSkipped && dist < tu.dockRearmDist;
             if (approachActive) approachTime += dt; else approachTime = 0f;
 
             if (!armed || !seenFar) { holdTimer = 0f; return false; }
@@ -199,6 +202,7 @@ namespace Lonapse
                 {
                     armed = false;
                     fired = true;
+                    callSkipped = false;
                     holdTimer = 0f;
                     return true;
                 }
@@ -295,7 +299,8 @@ namespace Lonapse
 
     /// <summary>
     /// Whether the player really means to dock, from the ports. Three signs (bit flags): a free port on the target
-    /// of the same size as one of ours, one of our ports armed, and the two ports facing each other. The more hold,
+    /// of the same size as one of ours, one of our ports armed (free and chosen: the ship is controlled from it or the
+    /// player targeted a port, not only the vessel), and the two ports facing each other. The more hold,
     /// the likelier the docking calls and callouts play.
     /// </summary>
     public static class DockIntent
@@ -329,7 +334,7 @@ namespace Lonapse
         public static string Describe(int flags)
         {
             return ((flags & Compatible) != 0 ? "compatible port" : "no compatible port") + ", "
-                 + ((flags & Armed) != 0 ? "own port armed" : "own port not armed") + ", "
+                 + ((flags & Armed) != 0 ? "own port armed (control or port target)" : "own port not armed") + ", "
                  + ((flags & Facing) != 0 ? "ports facing" : "ports not facing");
         }
     }
@@ -375,12 +380,16 @@ namespace Lonapse
         /// <summary>
         /// DockIntent flags of the best pair of ports (most signs, then the nearest): the target port, or any port of
         /// the target vessel, against each of our ports. Uses the node lists PortDistance filled, so call that first.
-        /// A free target port is "Ready", an armed own port "Ready" or "Acquire". 0 when a side has no port.
+        /// A free target port is "Ready". An own port is armed when it is free ("Ready" or "Acquire", a closed shielded
+        /// port is not) and chosen: the ship is controlled from it, or the player targeted a port. "Ready" alone is the
+        /// idle state of every free port, so it shows no intent. 0 when a side has no port.
         /// </summary>
         public int Intent(ITargetable t, float maxAngleDeg)
         {
             ModuleDockingNode tn = t as ModuleDockingNode;
             if (tn != null && tn.nodeTransform == null) tn = null;
+            Part control = null;
+            try { if (ownVessel != null) control = ownVessel.GetReferenceTransformPart(); } catch (Exception) { }
             int bestFlags = 0;
             float bestDist = float.MaxValue;
             bool any = false;
@@ -388,7 +397,8 @@ namespace Lonapse
             {
                 ModuleDockingNode a = own[i];
                 if (a == null || a.nodeTransform == null) continue;
-                bool armed = StateIs(a, "Ready") || StateIs(a, "Acquire");
+                bool chosen = tn != null || (control != null && ReferenceEquals(a.part, control));
+                bool armed = chosen && (StateIs(a, "Ready") || StateIs(a, "Acquire"));
                 int count = tn != null ? 1 : other.Count;
                 for (int j = 0; j < count; j++)
                 {

@@ -282,6 +282,11 @@ public static class Tests
                 bool holdBefore = hw.HoldsChat(ht);
                 hw.OnDocked();
                 Check(holdBefore && !hw.HoldsChat(ht), "docking: docking ends the chatter hold", null);
+                hw = new DockingWatcher(); hd = 150f; fired2 = false;
+                for (int i = 0; i < 4000 && !fired2; i++) { hd -= 0.1f; fired2 = hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht); }
+                hw.SkipApproach();
+                hw.Update(true, ho, hd, -1f, 1f, 0.1f, ht);
+                Check(fired2 && !hw.HoldsChat(ht), "docking: a skipped approach call holds no chatter", null);
             }
             // normal approach from far away: closing at 1 m/s
             DockingWatcher dw = new DockingWatcher();

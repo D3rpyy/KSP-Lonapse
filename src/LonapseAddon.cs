@@ -177,7 +177,8 @@ namespace Lonapse
         private bool dockEnterLogged;
         public int DockIntentFlags { get { return dockIntent; } }
         private int dockIntent;        // DockIntent flags of the nearest port pair, 0 beyond the approach distance
-        public VoiceChannel sfxCh;        // sound effects of the ship itself: airlock on dock and undock, no radio filtering
+        public VoiceChannel sfxCh;        // short sound effects (hatch, SOI ping, flag, jetpack switch), no radio filtering
+        public VoiceChannel airlockCh;    // airlock on dock and undock, apart from sfxCh so a later effect does not cut it off
         private float alarmHoldLeft;
 
         /// <summary>Extra answer delay far from Kerbin: lightDelayScale * log10(1 + km / 10000), capped.</summary>
@@ -367,7 +368,8 @@ namespace Lonapse
             thrustCh = new VoiceChannel(t, "jetpackThrust", ChannelKind.Sfx, 96, 10f, 22000f, 0f, false);
             alarmCh = new VoiceChannel(t, "alarm", ChannelKind.Breath, 125, 300f, 3500f, 0f, false);
             sfxCh = new VoiceChannel(t, "sfx", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, thrustCh, groundCh, stepCh };
+            airlockCh = new VoiceChannel(t, "airlock", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, airlockCh, thrustCh, groundCh, stepCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -529,8 +531,8 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("OnHatchBoard", e); }
         }
 
-        /// <summary>One sound effect of the ship on the sfx channel. Same gate as every other sound, and the setting.</summary>
-        private void PlaySfx(string folder) { PlaySfx(folder, settings.dockingSfx, settings.dockingVolume); }
+        /// <summary>An airlock sound on its own channel. Same gate as every other sound, and the setting.</summary>
+        private void PlaySfx(string folder) { PlaySfx(folder, settings.dockingSfx, settings.dockingVolume, 1f, airlockCh); }
 
         /// <summary>The ping of a new sphere of influence. Called by the event hub.</summary>
         public void PlaySoiSfx() { PlaySfx("sfx/soi_change", settings.soiSfx); }
@@ -1222,7 +1224,7 @@ namespace Lonapse
                 VoiceChannel c = allChannels[i];
                 c.SetDsp(settings.useDsp);
                 float mul = finalCall && ReferenceEquals(c, control) ? settings.masterVolume * gameGain : globalMul;
-                if (c.kind == ChannelKind.Sfx) mul = sfxMul;   // sfxCh, thrustCh and groundCh
+                if (c.kind == ChannelKind.Sfx) mul = sfxMul;   // sfxCh, airlockCh, thrustCh, groundCh and stepCh
                 c.Update(dt, CategoryVolume(c), mul);
             }
         }
@@ -1835,6 +1837,7 @@ namespace Lonapse
                 Log.Info("Docking approach: " + dist.ToString("0.0") + " m at " + rel.ToString("0.00") + " m/s (" + DockIntent.Describe(dockIntent)
                          + ", chance " + chance.ToString("0.00") + (play ? "" : ", skipped") + ")");
                 if (play) director.EnqueueDockingApproach(); // checks CanStartAudio itself
+                else docking.SkipApproach();
             }
             Tuning tu = settings.tuning;
             float intentChance = DockIntent.Chance(dockIntent, tu.dockIntentBase);

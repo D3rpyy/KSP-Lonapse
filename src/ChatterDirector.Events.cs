@@ -266,6 +266,7 @@ namespace Lonapse
             // a DeepFreeze group is busy: the event waits a few seconds, its line comes right after the freezer line
             if (host.ModHoldsAir && r.ev != EventWatchers.CrewLost) return AddPending(r, "a DeepFreeze line goes first");
             if (DockHoldNow && r.ev != EventWatchers.CrewLost && r.ev != EventWatchers.PartLost) return AddPending(r, "a docking is going on");
+            if (ScienceHoldNow && r.ev != EventWatchers.CrewLost && r.ev != EventWatchers.PartLost) return AddPending(r, "a science talk is going on");
             string why;
             EvGo go = TryEvent(r, out why);
             if (go == EvGo.Played) return true;
