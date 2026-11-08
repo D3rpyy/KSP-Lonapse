@@ -6,8 +6,23 @@ Beeps (`Sounds/beeps/`) and the radio static and breathing in `Sounds/sfx/` (`bu
 `breath_loop`) are synthesized by `build_clips.py` with ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and
 plain Python. They contain no recorded material.
 
-The docking effects (`Sounds/sfx/airlock_dock`, `airlock_undock`, `hatch_open`, `hatch_close`) and the flag plant (`flag_plant`) are made by `build_sfx.py` from the
-recordings in `audio/sfx_sources/`. The source and licence of those recordings are not written down here yet.
+The flag plant (`Sounds/sfx/flag_plant`) is made by `build_sfx.py` from `audio/sfx_sources/flag_plant.wav`, which uses
+these two recordings:
+
+| Recording | Author | License |
+|---|---|---|
+| "metal sliding sounds.wav" | BruceFenn_190335 | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) |
+| "Sliding_Metal_02.wav" | RSilveira_88 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+The two recordings are changed: they are mixed and edited with effects in Audacity into one flag sound. Then
+`build_sfx.py` raises the loudness to a fixed level and limits the peaks.
+
+The other recorded effects (`Sounds/sfx/airlock_dock`, `airlock_undock`, `hatch_open`, `hatch_close`, `jetpack_on`
+and `jetpack_off`) are made by `build_sfx.py` from the recordings in `audio/sfx_sources/`. The source and licence of
+those recordings are not written down here yet.
+
+The thruster hiss (`jetpack_loop`), the ground thuds (`thud_heavy`, `thud_light`) and the footsteps (`footstep`) are
+synthesized by `build_sfx.py` from filtered noise and sine tones. They contain no recorded material.
 
 The sphere of influence ping (`Sounds/sfx/soi_change`) is synthesized by `build_sfx.py` from sine notes. It contains no
 recorded material.
