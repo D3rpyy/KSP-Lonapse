@@ -40,9 +40,20 @@ namespace Lonapse
         private float probeWidth;
         private readonly Func<string, float> measure;
 
+        // short log of the last lines for the Comms page on RasterPropMonitor screens (RpmCommsPage).
+        // Apart from the entries above: those switch off when they leave the screen, the log keeps them.
+        public const int LogCap = 8;
+        private sealed class LogEntry { public string who, line; public float end; public bool merge; }
+        private readonly LogEntry[] log = new LogEntry[LogCap];   // oldest .. newest
+        private int logCount;
+
+        /// <summary>Goes up by one for every line that enters the log, so a reader knows when to rebuild.</summary>
+        public int LogVersion { get; private set; }
+
         public Subtitles()
         {
             for (int i = 0; i < Cap; i++) entries[i] = new Entry();
+            for (int i = 0; i < LogCap; i++) log[i] = new LogEntry();
             measure = Measure;
         }
 
@@ -54,6 +65,15 @@ namespace Lonapse
 
         /// <summary>Show with its own hold time after the line (the countdown keeps the default, one number a second).</summary>
         public void Show(string who, string line, float seconds, float hold)
+        {
+            Show(who, line, seconds, hold, false);
+        }
+
+        /// <summary>
+        /// <paramref name="merge"/>: this line takes the place of the newest log line when that one was a merge line of
+        /// the same speaker too. The countdown uses it, so ten numbers do not push the whole log off the screen.
+        /// </summary>
+        public void Show(string who, string line, float seconds, float hold, bool merge)
         {
             if (string.IsNullOrEmpty(line)) return;
             // newest at the end: rotate the oldest entry object to the end and reuse it
@@ -70,6 +90,48 @@ namespace Lonapse
             e.start = Time.unscaledTime;
             e.end = e.start + SubtitleLayout.Duration(seconds, hold);
             e.active = true;
+            AddToLog(who, line, e.end, merge);
+        }
+
+        private void AddToLog(string who, string line, float end, bool merge)
+        {
+            LogEntry last = logCount > 0 ? log[logCount - 1] : null;
+            if (!(merge && last != null && last.merge && last.who == who))
+            {
+                if (logCount < LogCap) logCount++;
+                else
+                {
+                    LogEntry first = log[0];
+                    for (int i = 0; i < LogCap - 1; i++) log[i] = log[i + 1];
+                    log[LogCap - 1] = first;
+                }
+                last = log[logCount - 1];
+            }
+            last.who = who;
+            last.line = line;
+            last.end = end;
+            last.merge = merge;
+            LogVersion++;
+        }
+
+        /// <summary>
+        /// Copies the log, oldest first, into <paramref name="dst"/> and returns how many lines it holds.
+        /// A line is live while its subtitle is still on screen. No allocation.
+        /// </summary>
+        public int CopyLog(RpmLine[] dst)
+        {
+            if (dst == null) return 0;
+            float now = Time.unscaledTime;
+            int n = Math.Min(logCount, dst.Length);
+            int from = logCount - n;
+            for (int i = 0; i < n; i++)
+            {
+                LogEntry l = log[from + i];
+                dst[i].who = l.who;
+                dst[i].text = l.line;
+                dst[i].live = l.end > now;
+            }
+            return n;
         }
 
         /// <summary>Two sample lines (crew, then MC) so the user can check position, size and colours.</summary>
@@ -83,6 +145,8 @@ namespace Lonapse
         public void Clear()
         {
             for (int i = 0; i < Cap; i++) { entries[i].active = false; entries[i].end = 0f; }
+            logCount = 0;
+            LogVersion++;
         }
 
         /// <summary>Number of entries that are still on screen.</summary>

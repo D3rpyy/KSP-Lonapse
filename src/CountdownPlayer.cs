@@ -94,7 +94,7 @@ namespace Lonapse
             c.extraDistortion = 0f;
             c.dropout = 0f;
             if (host.settings.subtitles && host.subtitles != null)
-                host.subtitles.Show("MC", PhraseClips.Subtitle(e), Math.Min(c.duration, 0.95f), SubtitleLayout.DefaultHold);
+                host.subtitles.Show("MC", PhraseClips.Subtitle(e), Math.Min(c.duration, 0.95f), SubtitleLayout.DefaultHold, true);
             return true;
         }
 

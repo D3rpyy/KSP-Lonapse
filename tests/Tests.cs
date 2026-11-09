@@ -979,6 +979,7 @@ public static class Tests
               "countdown: up says 1 .. 10, down says 10 .. 1, both end with liftoff", null);
         SceneMemoryTests();
         SubtitleSlotTests();
+        RpmPageTests();
         RuntimeSpeechTests();
         ProbeCoreTests();
         ProbeSynthTests();
@@ -2382,6 +2383,88 @@ public static class Tests
     }
 
     // Experimental (procedural talk): subtitle slots, filled in game. The spanish (the audio) stays general.
+    // visible characters of an RPM row: colour tags removed, "[[]" counts as one "["
+    static string RpmVisible(string row)
+    {
+        var b = new System.Text.StringBuilder();
+        for (int i = 0; i < row.Length; i++)
+        {
+            if (row[i] == '[')
+            {
+                if (string.CompareOrdinal(row, i, "[[]", 0, 3) == 0) { b.Append('['); i += 2; continue; }
+                int close = row.IndexOf(']', i);
+                if (close > i && row[i + 1] == '#') { i = close; continue; }
+            }
+            b.Append(row[i]);
+        }
+        return b.ToString();
+    }
+
+    static RpmLine RpmL(string who, string text, bool live)
+    {
+        RpmLine l; l.who = who; l.text = text; l.live = live; return l;
+    }
+
+    static void RpmPageTests()
+    {
+        Check(RpmPageText.Escape("a [b] c") == "a [[]b] c", "rpm: an opening bracket is escaped as [[]", RpmPageText.Escape("a [b] c"));
+        Check(RpmPageText.Escape("x $&$ y").IndexOf("$&$", StringComparison.Ordinal) < 0
+              && RpmPageText.Escape("$&$&$&$").IndexOf("$&$", StringComparison.Ordinal) < 0,
+              "rpm: no variable list separator survives", RpmPageText.Escape("$&$&$&$"));
+        Check(RpmPageText.Clean("It\u2019s \u201Cgo\u201D \u2013 now\u2026\nok") == "It's \"go\" - now... ok",
+              "rpm: typographic quotes, dashes and line breaks become plain ASCII", RpmPageText.Clean("It\u2019s \u201Cgo\u201D \u2013 now\u2026\nok"));
+        Check(RpmPageText.Tag(new[] { 1f, 0.5f, 0f }) == "[#ff8000ff]", "rpm: colour tag from RGB", RpmPageText.Tag(new[] { 1f, 0.5f, 0f }));
+
+        List<string> w = RpmPageText.Wrap("Houston, this is a test subtitle. Long lines wrap to two rows and then end in dots.", 20, 10);
+        bool fits = w.Count > 1;
+        foreach (string r in w) if (r.Length > 20) fits = false;
+        Check(fits && string.Join(" ", w.ToArray()) == "Houston, this is a test subtitle. Long lines wrap to two rows and then end in dots.",
+              "rpm: wrap keeps every word and stays within the width", string.Join("|", w.ToArray()));
+        List<string> lw = RpmPageText.Wrap("Supercalifragilisticexpialidocious", 10, 10);
+        Check(lw.Count == 4 && lw[0] == "Supercalif" && lw[3] == "ious", "rpm: a word longer than a row is split", string.Join("|", lw.ToArray()));
+        List<string> cut = RpmPageText.Wrap("one two three four five six seven eight nine ten eleven twelve", 10, 2);
+        Check(cut.Count == 2 && cut[1].EndsWith("...") && cut[1].Length <= 10, "rpm: too many rows ends in dots on the last row", string.Join("|", cut.ToArray()));
+
+        Check(RpmPageText.Title("Comms", 40).Length == 40 && RpmPageText.Title("Comms", 40).Contains(" Comms "),
+              "rpm: title spans the screen width", RpmPageText.Title("Comms", 40));
+
+        string empty = RpmPageText.Build(new RpmLine[0], 0, 40, 20, null, true, true);
+        Check(empty.Contains(RpmPageText.EmptyText), "rpm: an empty log says no comms", null);
+        Check(RpmPageText.Off(40, null).Contains("Subtitles are off"), "rpm: with subtitles off the page says so", null);
+
+        // eight lines on a 40 x 20 screen: the newest one is at the bottom, the oldest drop off the top
+        RpmLine[] log = new RpmLine[8];
+        for (int i = 0; i < 8; i++)
+            log[i] = RpmL(i % 2 == 0 ? "MC" : "Jebediah Kerman", "Line " + i + " with a few words, so it takes two rows here and there on the screen.", i >= 6);
+        string page = RpmPageText.Build(log, 8, 40, 20, null, true, true);
+        string[] rows = page.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        bool width = true;
+        foreach (string r in rows) if (RpmVisible(r).Length > 40) width = false;
+        Check(rows.Length <= 20 && width, "rpm: the page stays inside 40 x 20", rows.Length + " rows");
+        Check(page.Contains("Line 7") && !page.Contains("Line 0") && RpmVisible(rows[rows.Length - 1]).Contains("screen"),
+              "rpm: newest line at the bottom, oldest dropped", RpmVisible(rows[rows.Length - 1]));
+        Check(page.Contains("Mission Control") && page.Contains("Jebediah Kerman"), "rpm: speaker rows, MC shown as Mission Control", null);
+        Check(page.Contains(RpmPageText.Tag(SubtitleLayout.McColor)), "rpm: a live MC line has the amber colour", null);
+
+        string noSpeaker = RpmPageText.Build(log, 8, 40, 20, null, false, true);
+        Check(!noSpeaker.Contains("Mission Control"), "rpm: speaker rows follow the speaker name setting", null);
+
+        // a tiny screen still shows the start of the newest line
+        string tiny = RpmPageText.Build(log, 8, 16, 3, null, true, true);
+        string[] trows = tiny.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        Check(trows.Length == 3 && RpmVisible(trows[1]).StartsWith("Jebediah"),
+              "rpm: a small screen shows the newest speaker first", string.Join("|", trows));
+        string padded = RpmPageText.Pad(page, 1);
+        string[] prows = padded.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        Check(prows.Length == rows.Length + 1 && prows[0].Length == 0 && prows[1] == rows[0],
+              "rpm: top rows for an overlay come before the title", null);
+        string alcor = RpmPageText.Build(log, 8, 40, 18, "================ Comms =================", true, true);
+        Check(alcor.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length <= 18 && alcor.StartsWith("================ Comms"),
+              "rpm: the ALCOR area of 40 x 18 with its own title", null);
+        Check(RpmPageText.Build(new[] { RpmL("MC", "  ", true) }, 1, 40, 20, null, true, true).Contains(RpmPageText.EmptyText),
+              "rpm: a blank line is not shown", null);
+    }
+
     static void SubtitleSlotTests()
     {
         var perr = new List<string>();
