@@ -2402,7 +2402,7 @@ public static class Tests
 
     static RpmLine RpmL(string who, string text, bool live)
     {
-        RpmLine l; l.who = who; l.text = text; l.live = live; return l;
+        RpmLine l = new RpmLine(); l.who = who; l.text = text; l.live = live; return l;
     }
 
     static void RpmPageTests()
@@ -2461,6 +2461,22 @@ public static class Tests
         string alcor = RpmPageText.Build(log, 8, 40, 18, "================ Comms =================", true, true);
         Check(alcor.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length <= 18 && alcor.StartsWith("================ Comms"),
               "rpm: the ALCOR area of 40 x 18 with its own title", null);
+        RpmLine note = RpmL(null, "SOI change: Kerbin to Mun", true); note.note = true;
+        List<string> nb = RpmPageText.Block(note, 40, true, true);
+        Check(nb.Count == 1 && RpmVisible(nb[0]) == "* SOI change: Kerbin to Mun", "rpm: a note is one row with a star and no speaker",
+              nb.Count > 0 ? RpmVisible(nb[0]) : "none");
+        string withFooter = RpmPageText.Build(log, 8, 40, 20, null, true, true, "[ENTER] Start countdown");
+        string[] frows = withFooter.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        Check(frows.Length == 20 && RpmVisible(frows[19]) == "[ENTER] Start countdown" && RpmVisible(frows[18]).Length == 0
+              && withFooter.Contains("Line 7"),
+              "rpm: the button hint is on the bottom row with a blank row above, the newest line still shows", RpmVisible(frows[19]));
+        string emptyFooter = RpmPageText.Build(new RpmLine[0], 0, 40, 20, null, true, true, "[ENTER] Start countdown");
+        Check(emptyFooter.Contains(RpmPageText.EmptyText) && emptyFooter.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length == 20,
+              "rpm: an empty log with the hint still fills the screen to the bottom row", null);
+        Check(RpmPageText.ClampScroll(5, 8) == 5 && RpmPageText.ClampScroll(9, 8) == 7 && RpmPageText.ClampScroll(-2, 8) == 0
+              && RpmPageText.ClampScroll(3, 0) == 0, "rpm: scrolling stops at the oldest line and at the newest", null);
+        Check(RpmPageText.KeepPlace(2, 3, 32) == 5 && RpmPageText.KeepPlace(0, 3, 32) == 0 && RpmPageText.KeepPlace(30, 5, 32) == 31,
+              "rpm: new lines keep a scrolled view in place, the newest view follows them", null);
         Check(RpmPageText.Build(new[] { RpmL("MC", "  ", true) }, 1, 40, 20, null, true, true).Contains(RpmPageText.EmptyText),
               "rpm: a blank line is not shown", null);
     }

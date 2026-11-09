@@ -819,6 +819,12 @@ namespace Lonapse
             esc.Bump(tu.panicEscStep > 0f ? tu.panicEscCap / tu.panicEscStep : 0f);
         }
 
+        // the comms log on RPM screens notes the roger beep. Two in a row without a line between give one note.
+        private void NoteRoger()
+        {
+            if (host.subtitles != null) host.subtitles.Note("Roger beep", true);
+        }
+
         private void ShowSubtitle(PhraseEntry e, string who, float seconds)
         {
             if (e == null || !host.settings.subtitles || host.subtitles == null) return;
@@ -991,6 +997,7 @@ namespace Lonapse
                         RadioProfile rp = Profile;
                         string f = !chatStarted ? rp.OpenClip : (cfg.rogerBeep ? "beeps/roger" : rp.CloseClip);
                         AudioClip key = ClipLibrary.CountOf(f) > 0 ? ClipLibrary.Next(f, rng) : null;
+                        if (key != null && f == "beeps/roger") NoteRoger();
                         if (key != null) { clip = key; clickVol = f == "beeps/roger" ? tu.radioKeyVolume * 0.75f : tu.radioKeyVolume; }
                     }
                     if (clip == null) return StartResult.Skip;
@@ -1036,6 +1043,7 @@ namespace Lonapse
                     VoiceChannel k = host.keyCh;
                     if (k.Busy) k.Stop();
                     k.Play(clip, tu.radioKeyVolume * 0.75f, 1f, false, 0f);
+                    NoteRoger();
                     ch = k;
                     return StartResult.Started;
                 }

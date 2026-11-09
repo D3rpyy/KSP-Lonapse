@@ -14,6 +14,7 @@ namespace Lonapse
         public string who;     // speaker display name or "MC"
         public string text;
         public bool live;      // still on screen as a subtitle, older lines are drawn dimmer
+        public bool note;      // an event note without a speaker (roger beep, SOI change), one short row
     }
 
     public static class RpmPageText
@@ -23,9 +24,18 @@ namespace Lonapse
         public const string OffText = "Subtitles are off in the Lonapse settings.";
 
         private static readonly float[] OldColor = { 0.55f, 0.58f, 0.64f };
+        private static readonly float[] NoteColor = { 0.60f, 0.86f, 0.74f };
+        private static readonly float[] FooterColor = { 0.81f, 0.89f, 0.96f };
 
         /// <summary>The page text for a screen of <paramref name="width"/> by <paramref name="height"/> characters.</summary>
         public static string Build(RpmLine[] lines, int count, int width, int height, string title, bool showSpeaker, bool colors)
+        {
+            return Build(lines, count, width, height, title, showSpeaker, colors, null);
+        }
+
+        /// <summary>With <paramref name="footer"/> (a button hint) on the bottom row of the screen.</summary>
+        public static string Build(RpmLine[] lines, int count, int width, int height, string title, bool showSpeaker, bool colors,
+                                   string footer)
         {
             if (width < 8) width = 8;
             if (height < 2) height = 2;
@@ -34,7 +44,8 @@ namespace Lonapse
 
             var rows = new List<string>(height);
             rows.Add(Escape(string.IsNullOrEmpty(title) ? Title("Comms", width) : Fit(title, width)));
-            int body = height - 1;
+            bool hasFooter = !string.IsNullOrEmpty(footer) && height >= 4;
+            int body = height - 1 - (hasFooter ? 2 : 0);   // the footer keeps a blank row above it
 
             // blocks from the newest line back, until the screen is full
             var blocks = new List<List<string>>();
@@ -64,7 +75,28 @@ namespace Lonapse
                 rows.AddRange(blocks[i]);
                 if (i > 0) rows.Add(string.Empty);
             }
+            if (hasFooter)
+            {
+                while (rows.Count < height - 1) rows.Add(string.Empty);
+                rows.Add(Tag(FooterColor) + Escape(Fit(footer, width)));
+            }
             return string.Join(Environment.NewLine, rows.ToArray());
+        }
+
+        // ---- scrolling (RpmCommsPage keeps the position)
+
+        /// <summary>0 .. count - 1: the oldest line always stays on the screen.</summary>
+        public static int ClampScroll(int scroll, int count)
+        {
+            if (count <= 0 || scroll < 0) return 0;
+            return scroll > count - 1 ? count - 1 : scroll;
+        }
+
+        /// <summary>A scrolled view moves up with the lines that came in, so it keeps showing the same lines.</summary>
+        public static int KeepPlace(int scroll, int added, int count)
+        {
+            if (scroll <= 0 || added <= 0) return scroll;
+            return ClampScroll(scroll + added, count);
         }
 
         /// <summary>Empty rows above the page, for a monitor whose overlay draws over the top rows.</summary>
@@ -98,6 +130,12 @@ namespace Lonapse
             var rows = new List<string>(MaxRowsPerLine + 1);
             string text = Clean(line.text);
             if (text.Length == 0) return rows;
+            if (line.note)
+            {
+                string nc = Tag(line.live ? NoteColor : OldColor);
+                foreach (string r in Wrap("* " + text, width, 2)) rows.Add(nc + Escape(r));
+                return rows;
+            }
             string label = showSpeaker ? SubtitleLayout.SpeakerLabel(Clean(line.who)) : null;
             if (!string.IsNullOrEmpty(label))
             {

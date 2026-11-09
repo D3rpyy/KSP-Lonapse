@@ -42,13 +42,17 @@ namespace Lonapse
 
         // short log of the last lines for the Comms page on RasterPropMonitor screens (RpmCommsPage).
         // Apart from the entries above: those switch off when they leave the screen, the log keeps them.
-        public const int LogCap = 8;
-        private sealed class LogEntry { public string who, line; public float end; public bool merge; }
+        public const int LogCap = 32;
+        public const float NoteSeconds = 4f;   // how long a note counts as live (bright) on the page
+        private sealed class LogEntry { public string who, line; public float end; public bool merge, note; }
         private readonly LogEntry[] log = new LogEntry[LogCap];   // oldest .. newest
         private int logCount;
 
         /// <summary>Goes up by one for every line that enters the log, so a reader knows when to rebuild.</summary>
         public int LogVersion { get; private set; }
+
+        /// <summary>Lines added as a new row (a merge does not count), so a scrolled page can keep its place.</summary>
+        public int LogAdded { get; private set; }
 
         public Subtitles()
         {
@@ -90,14 +94,26 @@ namespace Lonapse
             e.start = Time.unscaledTime;
             e.end = e.start + SubtitleLayout.Duration(seconds, hold);
             e.active = true;
-            AddToLog(who, line, e.end, merge);
+            AddToLog(who, line, e.end, merge, false);
         }
 
-        private void AddToLog(string who, string line, float end, bool merge)
+        /// <summary>
+        /// An event note for the comms log only (roger beep, SOI change), never in the subtitle overlay.
+        /// <paramref name="merge"/>: a repeat of the same note right after it refreshes that one instead of adding a row.
+        /// </summary>
+        public void Note(string text, bool merge)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            if (settings != null && !settings.subtitles) return;
+            AddToLog(text, text, Time.unscaledTime + NoteSeconds, merge, true);
+        }
+
+        private void AddToLog(string who, string line, float end, bool merge, bool note)
         {
             LogEntry last = logCount > 0 ? log[logCount - 1] : null;
-            if (!(merge && last != null && last.merge && last.who == who))
+            if (!(merge && last != null && last.merge && last.note == note && last.who == who))
             {
+                LogAdded++;
                 if (logCount < LogCap) logCount++;
                 else
                 {
@@ -111,6 +127,7 @@ namespace Lonapse
             last.line = line;
             last.end = end;
             last.merge = merge;
+            last.note = note;
             LogVersion++;
         }
 
@@ -127,9 +144,10 @@ namespace Lonapse
             for (int i = 0; i < n; i++)
             {
                 LogEntry l = log[from + i];
-                dst[i].who = l.who;
+                dst[i].who = l.note ? null : l.who;
                 dst[i].text = l.line;
                 dst[i].live = l.end > now;
+                dst[i].note = l.note;
             }
             return n;
         }

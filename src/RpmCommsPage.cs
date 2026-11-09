@@ -17,10 +17,20 @@ namespace Lonapse
         [KSPField] public int screenWidth = 0;
         [KSPField] public int screenHeight = 0;
         [KSPField] public int topRows = 0;
+        // index of the button in the monitor's globalButtons that starts or stops the countdown, -1 for none.
+        // On the stock RPM MFD and the ALCOR MFDs 2 is ENTER.
+        [KSPField] public int countdownButton = -1;
+        [KSPField] public string countdownButtonName = "ENTER";
+        // buttons to scroll the log: up to older lines, down to newer ones. -1 for none. 0 and 1 are UP and DOWN.
+        [KSPField] public int scrollUpButton = -1;
+        [KSPField] public int scrollDownButton = -1;
 
         private readonly RpmLine[] lines = new RpmLine[Subtitles.LogCap];
         private string response = string.Empty;
-        private int lastVersion = -1, lastLive = -1, lastW = -1, lastH = -1, lastFlags = -1;
+        private int lastVersion = -1, lastLive = -1, lastW = -1, lastH = -1, lastFlags = -1, lastCount = -1;
+        private string footerStart, footerStop;
+        private int scroll;            // how many of the newest lines are hidden below, 0 shows the newest
+        private int lastAdded = -1, lastScroll = -1;
         private Subtitles lastSource;
         private bool failed;
 
@@ -41,17 +51,30 @@ namespace Lonapse
                 {
                     count = subs.CopyLog(lines);
                     for (int i = 0; i < count; i++) if (lines[i].live) live |= 1 << i;
+                    if (lastAdded >= 0 && ReferenceEquals(subs, lastSource)) scroll = RpmPageText.KeepPlace(scroll, subs.LogAdded - lastAdded, count);
+                    lastAdded = subs.LogAdded;
                 }
+                scroll = RpmPageText.ClampScroll(scroll, count);
+                int cd = CountdownState(host);
                 int version = subs != null ? subs.LogVersion : -1;
                 if (version == lastVersion && live == lastLive && flags == lastFlags && width == lastW
-                    && height == lastH && ReferenceEquals(subs, lastSource))
+                    && height == lastH && cd == lastCount && scroll == lastScroll && ReferenceEquals(subs, lastSource))
                     return response;
 
-                lastVersion = version; lastLive = live; lastFlags = flags; lastW = width; lastH = height;
+                lastVersion = version; lastLive = live; lastFlags = flags; lastW = width; lastH = height; lastCount = cd;
+                lastScroll = scroll;
                 lastSource = subs;
+                if (footerStart == null)
+                {
+                    footerStart = "[" + countdownButtonName + "] Start countdown";
+                    footerStop = "[" + countdownButtonName + "] Stop countdown";
+                }
+                string footer = cd == 2 ? footerStop : cd == 1 ? footerStart : null;
+                if (scroll > 0) footer = scroll + (scroll == 1 ? " newer line" : " newer lines") + " below [DOWN]";
+                // scrolled: the hidden newest lines are simply left out, so the line above them sits at the bottom
                 string page = flags == 1
                     ? RpmPageText.Off(width, pageTitle)
-                    : RpmPageText.Build(lines, count, width, height, pageTitle, (flags & 4) != 0, (flags & 8) != 0);
+                    : RpmPageText.Build(lines, count - scroll, width, height, pageTitle, (flags & 4) != 0, (flags & 8) != 0, footer);
                 response = RpmPageText.Pad(page, topRows);
             }
             catch (Exception e)
@@ -61,6 +84,37 @@ namespace Lonapse
                 Log.Exception("RPM comms page", e);
             }
             return response;
+        }
+
+        /// <summary>RPM calls this for a button press while the page is shown (buttonClickMethod in the patch).</summary>
+        public void ButtonProcessor(int buttonID)
+        {
+            if (buttonID < 0) return;
+            if (buttonID == scrollUpButton) { scroll++; return; }     // ShowComms clamps it to the log
+            if (buttonID == scrollDownButton) { if (scroll > 0) scroll--; return; }
+            if (buttonID != countdownButton) return;
+            try
+            {
+                LonapseAddon host = LonapseAddon.Instance;
+                if (host == null) return;
+                Log.Info("Countdown button on an RPM screen");
+                host.ToggleCountdown();
+            }
+            catch (Exception e) { Log.Exception("RPM countdown button", e); }
+        }
+
+        /// <summary>RPM calls this when the page is shown or left (pageActiveMethod). Back on the page: the newest lines.</summary>
+        public void PageActive(bool active, int pageNumber)
+        {
+            if (active) scroll = 0;
+        }
+
+        // 0 no hint, 1 the countdown can start, 2 it is running
+        private int CountdownState(LonapseAddon host)
+        {
+            if (countdownButton < 0 || host == null || host.countdown == null) return 0;
+            if (host.countdown.Running) return 2;
+            return host.countdown.WhyNot(FlightGlobals.ActiveVessel) == null ? 1 : 0;
         }
     }
 }
