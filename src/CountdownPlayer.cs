@@ -59,7 +59,7 @@ namespace Lonapse
             Log.Info("Countdown started" + (host.settings.countdownAutoStage ? " (auto stage on liftoff)" : ""));
         }
 
-        /// <summary>Stops the count. With scream, launch control yells "¡haaaaaaA!", when sound is allowed.</summary>
+        /// <summary>Stops the count. With scream, launch control calls "Launch cancelled.", when sound is allowed.</summary>
         public void Abort(string why, bool scream = false)
         {
             if (!count.Running) return;

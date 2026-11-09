@@ -411,7 +411,7 @@ namespace Lonapse
         public bool showDebug = false;
         public string muteKey = "Y";
         public string muteModifier = "LeftAlt";
-        public string countdownKey = "C";           // launch countdown hotkey (start, or stop with the yell), "None" = off
+        public string countdownKey = "C";           // launch countdown hotkey (start, or stop with "Launch cancelled"), "None" = off
         public string countdownModifier = "LeftAlt";
         public bool useGameVolume = true;
         public bool useDsp = true;

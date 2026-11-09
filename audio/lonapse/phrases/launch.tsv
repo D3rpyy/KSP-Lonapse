@@ -36,7 +36,7 @@ countdown_08	countdown	callout	none	mc	countdown_s1	8	m	any	any	Ocho.	Eight
 countdown_09	countdown	callout	none	mc	countdown_s1	9	m	any	any	Neuve.	Nine	
 countdown_10	countdown	callout	none	mc	countdown_s1	10	m	any	any	Diez.	Ten	
 countdown_liftoff	countdown	callout	none	mc	countdown_s1	11	m	any	any	¡Despegue!	Liftoff!	
-countdown_abort	countdown	callout	none	mc	countdown_abort	1	m	any	any	¡Aaaaaaah!	Aaaaaaah!	
+countdown_abort	countdown	callout	none	mc	countdown_abort	1	m	any	any	¡Lanzamiento cancelado!	Launch cancelled.	
 staging_ign_01	staging	callout	none	crew	staging_ign_01	1	both	any	any	¡Ignición!	Ignition! | Ignition! | We have ignition!	
 staging_ign_02	staging	callout	none	crew	staging_ign_02	1	both	any	any	¡Encendido!	Lit! | Lit! | It's lit!	
 staging_ign_03	staging	callout	none	crew	staging_ign_03	1	both	any	any	Motores en marcha.	Engines running. | Engines running. | Engines are running.	

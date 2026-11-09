@@ -2262,7 +2262,7 @@ namespace Lonapse
             if (count && (countdownModifier == KeyCode.None || ModifierHeld(countdownModifier))) ToggleCountdown();
         }
 
-        /// <summary>Countdown hotkey: starts the count on the pad, or stops a running count (with the yell).</summary>
+        /// <summary>Countdown hotkey: starts the count on the pad, or stops a running count (with "Launch cancelled.").</summary>
         public void ToggleCountdown()
         {
             if (countdown == null) return;

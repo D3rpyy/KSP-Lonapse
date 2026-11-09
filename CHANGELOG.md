@@ -14,6 +14,7 @@
 
 ### Changed
 
+- **Stopping the countdown says "Launch cancelled."** Launch control used to yell "Aaaaaaah!" when you stopped the count. It is a calm call now, with the subtitle "Launch cancelled."
 - **The probe calls Mission Control more often.** The call gap now defaults to 2 minutes and goes from 1 to 10 minutes (before 6 minutes, 1 to 30). A gap you saved yourself stays, unless it is over 10 minutes.
 - **Squelch and roger beeps follow Sound effects.** The key-up and key-down sounds of the radio, the roger beep, the squelch and the tones of Mission Control used to follow the Static slider. That slider is for the radio static. They follow Sound effects now, and at the default setting they are as loud as before.
 - **Pings and tones have a fixed level.** The pings, the descent beeps, the stage tone and the landing tones no longer follow the Beeps slider. They keep the old default level.
