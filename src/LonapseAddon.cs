@@ -76,6 +76,9 @@ namespace Lonapse
         public VoiceChannel groundCh;     // ground thuds, apart from sfxCh so a thud and a jetpack click never cut each other off
         public VoiceChannel thrustCh;     // jetpack thruster hiss loop on EVA
         public VoiceChannel breathCh;     // helmet breathing bed on EVA
+        public VoiceChannel cabinCh;      // fan loop of the cabin in IVA
+        public VoiceChannel cabinDownCh;  // the cabin power down, apart from the loop so the two can overlap
+        private readonly CabinAmbience cabin = new CabinAmbience();
 
         // radio profile and signal
         public RadioProfile profile;
@@ -370,7 +373,9 @@ namespace Lonapse
             alarmCh = new VoiceChannel(t, "alarm", ChannelKind.Breath, 125, 300f, 3500f, 0f, false);
             sfxCh = new VoiceChannel(t, "sfx", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
             airlockCh = new VoiceChannel(t, "airlock", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, airlockCh, thrustCh, groundCh, stepCh };
+            cabinCh = new VoiceChannel(t, "cabin", ChannelKind.Sfx, 115, 10f, 22000f, 0f, false);
+            cabinDownCh = new VoiceChannel(t, "cabinPowerDown", ChannelKind.Sfx, 115, 10f, 22000f, 0f, false);
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, airlockCh, thrustCh, groundCh, stepCh, cabinCh, cabinDownCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -1178,6 +1183,7 @@ namespace Lonapse
                 }
 
                 UpdateBreath(dt);
+                UpdateCabin();
                 UpdateJetpackThrust();
                 UpdateAlarm(dt);
                 EnforceCategoryToggles();
@@ -1779,6 +1785,44 @@ namespace Lonapse
                 breathCh.src.pitch = rate;
                 breathCh.volumeScale = gain;
             }
+        }
+
+        /// <summary>The player looks through the eyes of a kerbal: IVA, or the internal view of a part.</summary>
+        private static bool InIva()
+        {
+            try
+            {
+                CameraManager cm = CameraManager.Instance;
+                if (cm == null) return false;
+                return cm.currentCameraMode == CameraManager.CameraMode.IVA || cm.currentCameraMode == CameraManager.CameraMode.Internal;
+            }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>Fan loop of the cabin in IVA, and the power down when the batteries run flat (CabinAmbience).</summary>
+        private void UpdateCabin()
+        {
+            bool inCabin = CanStartAudio && settings.cabinSfx && !evaMode && InIva();
+            bool wasPowered = cabin.Powered;
+            cabin.Step(inCabin, sample.valid, sample.ecFrac, sample.ecMax, settings.tuning.powerMinMax);
+            if (wasPowered != cabin.Powered && inCabin) Log.Info("Cabin power " + (cabin.Powered ? "back" : "lost"));
+            float g = SliderGain(settings.cabinVolume);
+            cabinCh.userGain = g;
+            cabinDownCh.userGain = g;
+            if (cabin.PowerDownNow)
+            {
+                // the power down starts as loud as the loop, so the loop only needs a short fade under the relay
+                cabinCh.FadeOutOnce(0.15f);
+                AudioClip d = ClipLibrary.Next("sfx/cabin_power_down", rng);
+                if (d != null) { cabinDownCh.Play(d, 1f, 1f, false, 0f); Log.Info("Sound effect: sfx/cabin_power_down"); }
+            }
+            else if (cabin.LoopWanted && !cabinCh.Busy)
+            {
+                AudioClip c = ClipLibrary.Next("sfx/cabin_loop", rng);
+                if (c != null) cabinCh.Play(c, 1f, 1f, true, cabin.FadeIn);
+            }
+            else if (!cabin.LoopWanted) cabinCh.FadeOutOnce(0.8f);
+            if (!inCabin) cabinDownCh.FadeOutOnce(0.5f);
         }
 
         /// <summary>Immediate stop of every source, queue cleared, scheduler and blackout reset.</summary>

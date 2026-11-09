@@ -84,6 +84,7 @@ clips each folder has against its target, in red when it has too few.
 | `beeps/click_desk` | 1 | station and base radio key click |
 | `beeps/headset_open`, `beeps/headset_close` | 1 each | ship and EVA radio key-up and key-down (short squelch noise) |
 | `sfx/breath_loop` | 1 | helmet breathing on EVA |
+| `sfx/cabin_loop`, `sfx/cabin_power_down` | 1 each | cabin fans and hum in IVA, and the power down when the batteries run flat |
 | `beeps/roger` | 1 | roger beep at the end of a crew transmission |
 
 The crew and control folders hold the voice clips, named `<clip_key>_m.ogg` and `<clip_key>_f.ogg`. Male kerbals get

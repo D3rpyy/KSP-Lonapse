@@ -980,6 +980,7 @@ public static class Tests
         SceneMemoryTests();
         SubtitleSlotTests();
         RpmPageTests();
+        CabinTests();
         RuntimeSpeechTests();
         ProbeCoreTests();
         ProbeSynthTests();
@@ -2403,6 +2404,42 @@ public static class Tests
     static RpmLine RpmL(string who, string text, bool live)
     {
         RpmLine l = new RpmLine(); l.who = who; l.text = text; l.live = live; return l;
+    }
+
+    static void CabinTests()
+    {
+        // full batteries, 100 EC capacity, the power events need 5
+        CabinAmbience c = new CabinAmbience();
+        c.Step(false, true, 1.0, 100, 5);
+        Check(!c.LoopWanted && !c.PowerDownNow, "cabin: outside IVA no sound", null);
+        c.Step(true, true, 1.0, 100, 5);
+        Check(c.LoopWanted && c.FadeIn == CabinAmbience.FadeInIva, "cabin: into IVA with power the loop fades in", null);
+        c.Step(true, true, 0.005, 100, 5);
+        Check(c.LoopWanted && c.Powered, "cabin: low batteries but not flat keep the fans going", null);
+        c.Step(true, true, 0.0, 100, 5);
+        Check(!c.LoopWanted && c.PowerDownNow && !c.Powered, "cabin: flat batteries give the power down once", null);
+        c.Step(true, true, 0.0, 100, 5);
+        Check(!c.LoopWanted && !c.PowerDownNow, "cabin: the power down plays only once", null);
+        c.Step(true, true, 0.005, 100, 5);
+        Check(!c.LoopWanted, "cabin: a trickle of charge does not bring the fans back (hysteresis)", null);
+        c.Step(true, true, 0.05, 100, 5);
+        Check(c.LoopWanted && c.FadeIn == CabinAmbience.FadeInPowerBack, "cabin: power back, the fans spin up slowly", null);
+
+        CabinAmbience q = new CabinAmbience();
+        q.Step(true, true, 0.0, 100, 5);
+        Check(!q.LoopWanted && !q.PowerDownNow, "cabin: into IVA without power stays quiet, nothing to spin down", null);
+        q.Step(false, true, 0.0, 100, 5);
+        q.Step(false, true, 1.0, 100, 5);
+        q.Step(true, true, 1.0, 100, 5);
+        Check(q.LoopWanted && q.FadeIn == CabinAmbience.FadeInIva, "cabin: charged outside IVA, back in IVA the normal fade", null);
+
+        CabinAmbience small = new CabinAmbience();
+        small.Step(true, true, 0.0, 2, 5);
+        Check(small.LoopWanted && small.Powered, "cabin: less capacity than the power events need counts as powered", null);
+        small.Step(true, false, 0.0, 100, 5);
+        Check(small.LoopWanted, "cabin: an invalid sample keeps the last power state", null);
+        small.Step(false, true, 1.0, 100, 5);
+        Check(!small.LoopWanted && !small.PowerDownNow, "cabin: leaving IVA never plays the power down", null);
     }
 
     static void RpmPageTests()

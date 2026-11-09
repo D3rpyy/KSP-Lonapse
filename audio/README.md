@@ -10,7 +10,7 @@ Two scripts build everything the plugin plays:
 |---|---|
 | `Sounds/beeps/`, `Sounds/sfx/burst`, `loop`, `squelch`, `breath_loop` | `build_clips.py` (WAV, synthesized, no recordings) |
 | `Sounds/sfx/airlock_dock`, `airlock_undock`, `hatch_open`, `hatch_close`, `flag_plant` | `build_sfx.py` (WAV, made from the recordings in `audio/sfx_sources/`. `flag_plant` only gets a plain gain up to -1.3 dBFS) |
-| `Sounds/sfx/soi_change` | `build_sfx.py` (WAV, synthesized, no recordings) |
+| `Sounds/sfx/soi_change`, `cabin_loop`, `cabin_power_down` | `build_sfx.py` (WAV, synthesized, no recordings) |
 | `Sounds/crew/`, `Sounds/control/` | `build_lonapse.py` (loñapsE voices from Piper TTS, OGG) |
 
 Both scripts write into `audio/build/Sounds/`, and that folder is what ships to the game. Each script only touches its

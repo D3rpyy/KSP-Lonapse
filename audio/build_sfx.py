@@ -81,6 +81,93 @@ def build_loop_synth(name, out_dir):
     bc.log("synth   %-34s %.2f s  peak %.1f dBFS  (synthesized loop)" % (path.name, len(x) / SR, bc.db(max(abs(v) for v in x))))
 
 
+# The cabin in IVA, synthesized: fan noise with a slow swell, the fan blade tone, mains hum and a faint inverter whine.
+# cabin_loop is 8 s and loops without a seam: every tone and every slow swell fits a whole number of times in 8 s,
+# and only the noise needs a crossfade. cabin_power_down is the same cabin at the moment the power goes: a relay
+# clunk, then the motor spins down (every tone falls in pitch), the air noise flutters slower with the blades and
+# the cabin goes quiet. It gets the gain of the loop, so it starts as loud as the loop it takes over from.
+CABIN = ("cabin_loop", "cabin_power_down")
+CABIN_LOOP_S = 8.0
+CABIN_DOWN_S = 9.0
+CABIN_NOISE_AF = "highpass=f=140,lowpass=f=1300,equalizer=f=320:t=q:w=1:g=3"
+CABIN_BLADE = ((118.0, 0.10), (236.0, 0.05), (354.0, 0.03))
+CABIN_HUM = ((60.0, 0.06), (120.0, 0.05), (180.0, 0.025))
+CABIN_WHINE_HZ = 1150.0
+
+
+def cabin_loop_raw():
+    """The loop before its gain: noise with a 0.125 Hz swell plus the tones."""
+    dur, xf = CABIN_LOOP_S, 0.5
+    n, m = int(round(dur * SR)), int(round(xf * SR))
+    raw = bc.noise(31, dur + xf + 0.05, "pink", CABIN_NOISE_AF)
+    noise = raw[:n]
+    for k in range(m):      # equal-power crossfade of the extra tail into the head, so the noise has no seam
+        a = math.sin(0.5 * math.pi * k / m)
+        b = math.cos(0.5 * math.pi * k / m)
+        noise[k] = noise[k] * a + raw[n + k] * b
+    x = []
+    for k in range(n):
+        t = k / SR
+        swell = 1.0 - 0.06 * (1.0 + math.sin(2.0 * math.pi * 0.125 * t))
+        v = noise[k] * swell
+        for f, a in CABIN_BLADE + CABIN_HUM:
+            v += a * math.sin(2.0 * math.pi * f * t)
+        v += 0.006 * (0.7 + 0.3 * math.sin(2.0 * math.pi * 0.25 * t)) * math.sin(2.0 * math.pi * CABIN_WHINE_HZ * t)
+        x.append(v)
+    return x
+
+
+def cabin_power_down_raw():
+    """The power down before its gain, from the moment the power goes (t = 0)."""
+    n = int(round(CABIN_DOWN_S * SR))
+    noise = bc.noise(32, CABIN_DOWN_S + 0.05, "pink", CABIN_NOISE_AF)
+    relay_noise = bc.noise(33, 0.3, "white", "lowpass=f=4000")
+
+    def phase(f, tau, t):   # cycles of a tone that starts at f Hz and falls with time constant tau
+        return f * tau * (1.0 - math.exp(-t / tau))
+
+    x = []
+    for k in range(n):
+        t = k / SR
+        flutter = 1.0 - 0.25 * (1.0 - math.exp(-t / 0.3)) * (1.0 - math.sin(2.0 * math.pi * phase(9.0, 1.6, t)))
+        v = noise[k] * 0.94 * math.exp(-t / 2.2) * flutter
+        pb, ph, pw = phase(118.0, 1.6, t), phase(60.0, 1.3, t), phase(CABIN_WHINE_HZ, 1.1, t)
+        for (f, a) in CABIN_BLADE:
+            v += math.exp(-t / 1.8) * a * math.sin(2.0 * math.pi * pb * f / 118.0)
+        for (f, a) in CABIN_HUM:
+            v += math.exp(-t / 1.4) * a * math.sin(2.0 * math.pi * ph * f / 60.0)
+        # the whine jumps up a little as the relay drops out, then falls with the motor
+        w = math.exp(-t / 1.6)
+        v += w * (0.006 * 0.85 + 0.02 * math.exp(-t / 0.6)) * math.sin(2.0 * math.pi * pw)
+        v += w * 0.008 * math.sin(2.0 * math.pi * 1.5 * pw)
+        if t < 0.25:        # the relay: a low thump and a short click
+            v += 0.5 * math.exp(-t / 0.04) * math.sin(2.0 * math.pi * 75.0 * t)
+            v += 0.35 * math.exp(-t / 0.004) * relay_noise[k]
+        x.append(v)
+    return x
+
+
+def build_cabin(out_dir):
+    """Both cabin sounds. The loop is normalized to -30 dBFS like the helmet breathing, the power down gets the
+    same gain."""
+    loop = cabin_loop_raw()
+    target = 10 ** (-30.0 / 20.0)
+    gain = target / bc.rms(loop)
+    loop = [v * gain for v in loop]
+    down = [v * gain for v in cabin_power_down_raw()]
+    down = bc.fade_edges(down, int(SR * 0.004), int(SR * 0.5))   # no click at the start, the tail is silent already
+    down = bc.limit(down)
+    for name, x in (("cabin_loop", loop), ("cabin_power_down", down)):
+        path = out_dir / name / ("sfx_%s_000.wav" % name)
+        bc.write_wav(path, x)
+        extra = ""
+        if name == "cabin_loop":
+            steps = sorted(abs(x[k + 1] - x[k]) for k in range(len(x) - 1))
+            extra = "  seam step %.4f (99.9%% of steps under %.4f)" % (abs(x[0] - x[-1]), steps[int(0.999 * (len(steps) - 1))])
+        bc.log("synth   %-34s %.2f s  rms %.1f dBFS  peak %.1f dBFS%s" %
+               (path.name, len(x) / SR, bc.db(bc.rms(x)), bc.db(max(abs(v) for v in x)), extra))
+
+
 # The ground thuds, synthesized (a recording in audio/sfx_sources/ is used instead when it exists): (start Hz, end Hz, pitch fall time s, body decay s, noise lowpass Hz,
 # noise level, noise decay s, length s, peak dBFS). A sine that drops in pitch plus a short dull noise burst.
 THUDS = {
@@ -200,15 +287,20 @@ def main():
     if a.list:
         for n, f in EFFECTS.items():
             bc.log("%s  from %s" % (n, f))
-        for n in list(SYNTH):
+        for n in list(SYNTH) + list(CABIN):
             bc.log("%s  synthesized" % n)
         return
-    names = a.effects or (list(EFFECTS) + list(SYNTH))
+    names = a.effects or (list(EFFECTS) + list(SYNTH) + list(CABIN))
     for n in names:
-        if n not in EFFECTS and n not in SYNTH:
+        if n not in EFFECTS and n not in SYNTH and n not in CABIN:
             bc.die("unknown effect '%s', try --list" % n)
+    cabin_done = False
     for n in names:
-        if n in SYNTH:
+        if n in CABIN:
+            if not cabin_done:     # the two cabin sounds share one gain, so they are always built together
+                build_cabin(a.out)
+                cabin_done = True
+        elif n in SYNTH:
             build_synth(n, a.out)
         else:
             build(n, a.out)

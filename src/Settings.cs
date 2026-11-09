@@ -469,6 +469,8 @@ namespace Lonapse
         public bool jetpackLoopSfx = true;          // a gas hiss under the radio for as long as the EVA jetpack thrusts
         public bool jetpackSfx = true;              // a gas click and hiss when a kerbal switches the EVA jetpack on or off
         public bool soiSfx = true;                  // a soft ping when the ship enters a new sphere of influence
+        public bool cabinSfx = true;                // fans and hum of the cabin in IVA, a power down when the batteries run flat
+        public float cabinVolume = SfxVolumeDefault;     // cabin sound in IVA
         // --- Mouths ---
         public bool mouthAnimation = true;          // kerbals move their jaw while they talk
         public bool mouthDebug = false;             // log and show mouth driver details
@@ -655,6 +657,7 @@ namespace Lonapse
             dockingVolume = DcMath.Clamp(DcMath.Finite(dockingVolume), 0f, 1f);
             jetpackVolume = DcMath.Clamp(DcMath.Finite(jetpackVolume), 0f, 1f);
             breathVolume = DcMath.Clamp(DcMath.Finite(breathVolume), 0f, 1f);
+            cabinVolume = DcMath.Clamp(DcMath.Finite(cabinVolume), 0f, 1f);
             weakSignalVolume = DcMath.Clamp(DcMath.Finite(weakSignalVolume), 0f, 1f);
             intercomVolume = DcMath.Clamp(DcMath.Finite(intercomVolume), 0f, 1f);
             if (float.IsNaN(rateMultiplier) || float.IsInfinity(rateMultiplier)) rateMultiplier = 1f;
@@ -799,6 +802,7 @@ namespace Lonapse
                 n.TryGetValue("dockingVolume", ref s.dockingVolume);
                 n.TryGetValue("jetpackVolume", ref s.jetpackVolume);
                 n.TryGetValue("breathVolume", ref s.breathVolume);
+                n.TryGetValue("cabinVolume", ref s.cabinVolume);
                 n.TryGetValue("weakSignalVolume", ref s.weakSignalVolume);
                 n.TryGetValue("intercomVolume", ref s.intercomVolume);
                 n.TryGetValue("intercomEnabled", ref s.intercomEnabled);
@@ -853,6 +857,7 @@ namespace Lonapse
                 n.TryGetValue("masterAlarm", ref s.masterAlarm);
                 n.TryGetValue("dockingSfx", ref s.dockingSfx);
                 n.TryGetValue("soiSfx", ref s.soiSfx);
+                n.TryGetValue("cabinSfx", ref s.cabinSfx);
                 n.TryGetValue("hatchSfx", ref s.hatchSfx);
                 n.TryGetValue("flagSfx", ref s.flagSfx);
                 n.TryGetValue("jetpackSfx", ref s.jetpackSfx);
@@ -967,6 +972,7 @@ namespace Lonapse
                 n.AddValue("dockingVolume", F(dockingVolume));
                 n.AddValue("jetpackVolume", F(jetpackVolume));
                 n.AddValue("breathVolume", F(breathVolume));
+                n.AddValue("cabinVolume", F(cabinVolume));
                 n.AddValue("weakSignalVolume", F(weakSignalVolume));
                 n.AddValue("intercomVolume", F(intercomVolume));
                 n.AddValue("intercomEnabled", intercomEnabled);
@@ -1019,6 +1025,7 @@ namespace Lonapse
                 n.AddValue("masterAlarm", masterAlarm);
                 n.AddValue("dockingSfx", dockingSfx);
                 n.AddValue("soiSfx", soiSfx);
+                n.AddValue("cabinSfx", cabinSfx);
                 n.AddValue("hatchSfx", hatchSfx);
                 n.AddValue("flagSfx", flagSfx);
                 n.AddValue("jetpackSfx", jetpackSfx);

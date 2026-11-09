@@ -529,11 +529,14 @@ namespace Lonapse
             s.footstepSfx = Toggle(s.footstepSfx, "Footsteps on EVA");
             s.jetpackLoopSfx = Toggle(s.jetpackLoopSfx, "Thruster hiss while the EVA jetpack is firing");
             s.evaBreathing = Toggle(s.evaBreathing, "Helmet breathing on EVA");
+            s.cabinSfx = Toggle(s.cabinSfx, "Cabin sound in IVA");
+            Hint("Fans and hum in the cabin while you look through a kerbal's eyes. When the batteries run flat the cabin powers down.");
             Header("Sound effect volumes");
             s.hatchVolume = Volume("Hatch", s.hatchVolume);
             s.dockingVolume = Volume("Airlock (dock and undock)", s.dockingVolume);
             s.jetpackVolume = Volume("Jetpack (switch and thrusters)", s.jetpackVolume);
             s.breathVolume = Volume("Helmet breathing", s.breathVolume);
+            s.cabinVolume = Volume("Cabin (IVA)", s.cabinVolume);
             s.thudVolume = Volume("Ground thud (EVA)", s.thudVolume);
             s.footstepVolume = Volume("Footsteps (EVA)", s.footstepVolume);
             Hint("80% is the normal loudness. Above 80% the effect is boosted, and loud hits can distort a little.");

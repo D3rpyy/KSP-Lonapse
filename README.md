@@ -38,6 +38,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   also works with only one kerbal aboard. You can turn it off in the Probes tab.
 - **EVA suit radio.** Breathing in the helmet that speeds up when you run, short check-ins with Mission Control and a
   few words when your kerbal falls over. The suit relays through a ship nearby.
+- **Cabin sound in IVA.** Fans and a soft hum in the cabin while you look through a kerbal's eyes. When the batteries run flat, the cabin powers down and goes quiet.
 - **Animated talking kerbals.** Jaws move when a Kerbal talks and the others turn their heads to the speaker. This is visible in EVA, IVA and in the
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all). If you want a real countdown from 10, pick Down in the General tab.
