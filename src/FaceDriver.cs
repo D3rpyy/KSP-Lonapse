@@ -3,9 +3,14 @@
 //
 // Expression. The stock kerbalExpressionSystem.Update computes `expression` (whee - panic, positive is a grin,
 // negative is fear) and calls animator.SetFloat("Expression", expression). Update here only works out the moods. The
-// SetFloat pass runs in a coroutine that resumes on `yield return null`: coroutines resume after every Update of the
-// frame and before the Animator evaluates, whatever the script execution order is (DefaultExecutionOrder is not
-// reliable for a plugin assembly loaded at runtime). It sets the same parameter again: the
+// SetFloat pass runs from two PlayerLoop hooks (LoopHook): right before PreLateUpdate.DirectorUpdateAnimationBegin,
+// where Animators in Normal mode evaluate, and right before FixedUpdate.DirectorFixedUpdate, where Animators in Fixed
+// mode (AnimatePhysics before Unity 6) evaluate inside the physics step. Both points come after the stock Update in
+// every engine version, so ours is the last SetFloat before the Animator reads it. The older way, a coroutine on
+// `yield return null`, relied on coroutines resuming between Update and the Animator. That order is not guaranteed
+// in newer Unity versions and it never covered Fixed-mode Animators, so it is kept only as a fallback for when a
+// hook cannot be installed. The pass is idempotent, so running it several times a frame changes nothing. It sets
+// the same parameter again: the
 // stock value moved toward the mood of the line by a weight (faceWeight). The stock field itself is never written, so
 // the stock lerp goes on undisturbed and the face returns to it when the weight eases back to 0 after the line.
 // Between lines the stress still caps the face (FaceMath.IdleMood): from the kerbal's own tenseAt it looks more and
@@ -110,6 +115,11 @@ namespace Lonapse
         private bool exprPass, exprTest;
         private float exprSign = 1f, exprTestMood, exprWeight;
         private Coroutine exprLoop;
+        private bool hookAnim, hookFixed;       // PlayerLoop hooks installed (LoopHook)
+        private bool lostLogged;
+        private static FaceDriver current;      // the instance the PlayerLoop hooks call
+        private sealed class ExprBeforeAnimation { }       // PlayerLoop marker types
+        private sealed class ExprBeforeFixedAnimation { }
         private int overrideOk, overrideLost;   // LateUpdate read-back of the written frames since the last status
         private string status = "face: idle";
 
@@ -169,6 +179,7 @@ namespace Lonapse
             if (preCullCb == null) preCullCb = OnCameraPreCull;
             Camera.onPreCull -= preCullCb;
             Camera.onPreCull += preCullCb;
+            InstallHooks();
             exprLoop = StartCoroutine(ExpressionLoop());
         }
 
@@ -177,18 +188,56 @@ namespace Lonapse
             if (preCullCb != null) Camera.onPreCull -= preCullCb;
             active = false;
             exprPass = false;
+            RemoveHooks();
             if (exprLoop != null) { StopCoroutine(exprLoop); exprLoop = null; }
         }
 
+        /// <summary>The SetFloat pass right before the Animator evaluates, in both update modes (see the header).</summary>
+        private void InstallHooks()
+        {
+            current = this;
+            try
+            {
+                hookAnim = LoopHook.Insert(typeof(ExprBeforeAnimation),
+                    typeof(UnityEngine.PlayerLoop.PreLateUpdate.DirectorUpdateAnimationBegin), HookApply);
+                hookFixed = LoopHook.Insert(typeof(ExprBeforeFixedAnimation),
+                    typeof(UnityEngine.PlayerLoop.FixedUpdate.DirectorFixedUpdate), HookApply);
+            }
+            catch (Exception e) { Log.Exception("FaceDriver.InstallHooks", e); }
+            Log.Info("Face: expression pass " + (hookAnim ? "before the Animator" : "in a coroutine (no animation hook)") +
+                     (hookFixed ? ", also before Fixed-mode Animators" : ", no hook for Fixed-mode Animators"));
+        }
+
+        private void RemoveHooks()
+        {
+            if (ReferenceEquals(current, this)) current = null;
+            try
+            {
+                if (hookAnim) LoopHook.Remove(typeof(ExprBeforeAnimation));
+                if (hookFixed) LoopHook.Remove(typeof(ExprBeforeFixedAnimation));
+            }
+            catch (Exception e) { Log.Exception("FaceDriver.RemoveHooks", e); }
+            hookAnim = hookFixed = false;
+        }
+
+        private static void HookApply()
+        {
+            FaceDriver d = current;
+            if (d == null) return;   // Unity null: destroyed
+            try { d.ApplyExpression(); }
+            catch (Exception e) { d.exprPass = false; Log.Exception("FaceDriver.HookApply", e); }
+        }
+
         /// <summary>
-        /// Resumes once per frame after every Update (the stock kerbalExpressionSystem.Update included) and before the
-        /// Animator evaluates, so our SetFloat is the last one of the frame.
+        /// Fallback: resumes once per frame after Update. Before Unity 6 this was also before the Animator; with the
+        /// hooks installed it only repeats the same write.
         /// </summary>
         private IEnumerator ExpressionLoop()
         {
             while (true)
             {
                 yield return null;
+                if (hookAnim) continue;
                 try { ApplyExpression(); }
                 catch (Exception e) { exprPass = false; Log.Exception("FaceDriver.ExpressionLoop", e); }
             }
@@ -197,6 +246,7 @@ namespace Lonapse
         private void OnDestroy()
         {
             if (preCullCb != null) Camera.onPreCull -= preCullCb;
+            RemoveHooks();
             active = false;
             try { RestoreAll(); } catch (Exception) { }
             faces.Clear();
@@ -214,6 +264,7 @@ namespace Lonapse
 
         private void TickExpression()
         {
+            exprPass = false;   // set again at the end when this frame's weights are ready
             Settings s = host != null ? host.settings : null;
             bool on = s != null && host.Started && HighLogic.LoadedSceneIsFlight && (s.faceExpressions || s.headTurn);
             if (!on)
@@ -308,11 +359,13 @@ namespace Lonapse
             exprPass = exprOn;
         }
 
-        /// <summary>The SetFloat pass (coroutine): the stock value moved toward the mood, only while a weight is up.</summary>
+        /// <summary>
+        /// The SetFloat pass: the stock value moved toward the mood, only while a weight is up. Idempotent (it only
+        /// reads this frame's weights and the stock value), so the hooks and the fallback may each run it.
+        /// </summary>
         private void ApplyExpression()
         {
             if (!exprPass) return;
-            exprPass = false; // once per Update
             foreach (Face f in faces.Values)
             {
                 if (!f.hasExpr || f.anim == null || f.kes == null) continue;
@@ -344,6 +397,13 @@ namespace Lonapse
                 bool ok = FaceMath.OverrideHeld(f.anim.GetFloat(f.exprHash), f.lastExpr);
                 f.exprLost = !ok;
                 if (ok) overrideOk++; else overrideLost++;
+                if (!ok && !lostLogged)
+                {
+                    lostLogged = true;
+                    Log.Info("Face: expression override lost on " + f.name + " (wrote " + f.lastExpr.ToString("0.00") + ", read " +
+                             f.anim.GetFloat(f.exprHash).ToString("0.00") + ", Animator " + f.anim.updateMode + "/" + f.anim.cullingMode +
+                             ", hooks " + (hookAnim ? "anim" : "-") + (hookFixed ? "+fixed" : "") + ")");
+                }
             }
         }
 
@@ -765,6 +825,7 @@ namespace Lonapse
             if (dbg)
             {
                 Log.Info("Face: " + (eva ? "EVA " : "IVA ") + name + ": expression " + (f.hasExpr ? "yes" : "no") +
+                         (f.anim != null ? " (Animator " + f.anim.updateMode + "/" + f.anim.cullingMode + ")" : "") +
                          ", head " + (head != null ? head.name : "not found"));
             }
             return f;
