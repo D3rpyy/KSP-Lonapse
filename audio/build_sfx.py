@@ -89,6 +89,7 @@ def build_loop_synth(name, out_dir):
 CABIN = ("cabin_loop", "cabin_power_down")
 CABIN_LOOP_S = 8.0
 CABIN_DOWN_S = 9.0
+CABIN_RMS_DB = -26.0      # 4 dB above the helmet breathing, at -30 the cabin was too soft in the game
 CABIN_NOISE_AF = "highpass=f=140,lowpass=f=1300,equalizer=f=320:t=q:w=1:g=3"
 CABIN_BLADE = ((118.0, 0.10), (236.0, 0.05), (354.0, 0.03))
 CABIN_HUM = ((60.0, 0.06), (120.0, 0.05), (180.0, 0.025))
@@ -148,10 +149,9 @@ def cabin_power_down_raw():
 
 
 def build_cabin(out_dir):
-    """Both cabin sounds. The loop is normalized to -30 dBFS like the helmet breathing, the power down gets the
-    same gain."""
+    """Both cabin sounds. The loop is normalized to CABIN_RMS_DB, the power down gets the same gain."""
     loop = cabin_loop_raw()
-    target = 10 ** (-30.0 / 20.0)
+    target = 10 ** (CABIN_RMS_DB / 20.0)
     gain = target / bc.rms(loop)
     loop = [v * gain for v in loop]
     down = [v * gain for v in cabin_power_down_raw()]

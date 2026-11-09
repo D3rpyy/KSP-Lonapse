@@ -372,6 +372,40 @@ namespace Lonapse
             return Palette[ColorIndex(who)];
         }
 
+        // ------------------------------------------------ telemetry
+
+        /// <summary>Speaker label of a telemetry ping subtitle.</summary>
+        public const string TelemetrySpeaker = "Telemetry";
+
+        private static readonly string[] TelemetryWithLink =
+        {
+            "Downlink ping. Link at {0}%.",
+            "Data packet sent. Signal {0}%.",
+            "Telemetry burst away. Link {0}%.",
+            "Housekeeping data sent. Signal {0}%.",
+        };
+        private static readonly string[] TelemetryNoLink =
+        {
+            "Downlink ping.",
+            "Data packet sent.",
+            "Telemetry burst away.",
+            "Housekeeping data sent.",
+        };
+
+        /// <summary>
+        /// The subtitle of a telemetry ping. With <paramref name="hasLink"/> it reads the link strength (0..1) as a percent,
+        /// without (no CommNet or RemoteTech) only the event. <paramref name="variant"/> picks the wording.
+        /// </summary>
+        public static string TelemetryLine(int variant, float signal, bool hasLink)
+        {
+            string[] set = hasLink ? TelemetryWithLink : TelemetryNoLink;
+            int i = ((variant % set.Length) + set.Length) % set.Length;
+            if (!hasLink) return set[i];
+            if (float.IsNaN(signal) || float.IsInfinity(signal)) signal = 0f;
+            int pct = (int)Math.Round(Math.Max(0f, Math.Min(1f, signal)) * 100f);
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, set[i], pct);
+        }
+
         // ------------------------------------------------ timing and sizes
 
         /// <summary>How long an entry stays: the line plus 0.6 s, at least 1.2 s.</summary>

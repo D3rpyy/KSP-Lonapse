@@ -824,7 +824,7 @@ namespace Lonapse
         // the comms log on RPM screens notes the roger beep. Two in a row without a line between give one note.
         private void NoteRoger()
         {
-            if (host.subtitles != null) host.subtitles.Note("Roger beep", true);
+            if (host.subtitles != null) host.subtitles.Note("Roger", true);
         }
 
         private void ShowSubtitle(PhraseEntry e, string who, float seconds)

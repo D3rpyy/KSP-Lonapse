@@ -173,12 +173,26 @@ namespace Lonapse
             return DcMath.DescentInterval(d, tu.descentSlow, tu.descentFast);
         }
 
+        /// <summary>
+        /// A line for the ping in the subtitles, with the link strength when CommNet or RemoteTech give one. Two pings in a
+        /// row merge into one line on the RPM comms page.
+        /// </summary>
+        private void ShowPingSubtitle()
+        {
+            if (!host.settings.subtitles || host.subtitles == null) return;
+            SignalProvider s = host.signal;
+            bool hasLink = s != null && s.source != SignalSource.None;
+            string text = SubtitleLayout.TelemetryLine(rng.Next(), hasLink ? s.signal : 1f, hasLink);
+            host.subtitles.Show(SubtitleLayout.TelemetrySpeaker, text, 0.6f, host.settings.subtitleHold, true);
+        }
+
         /// <summary>One soft telemetry ping. Returns the channel or null.</summary>
         public VoiceChannel PlayPing()
         {
             if (!host.CanStartAudio || host.director.radioSilent || host.director.mcBlackout || !host.settings.beepsEnabled) return null;
             if (ClipLibrary.CountOf("beeps/ping") == 0) return null;
             if (pingSeqPing > 0f || pingSeqClose > 0f) return null; // one keyed ping at a time
+            ShowPingSubtitle();
             float open = KeyClip(true);
             if (open <= 0f)
             {

@@ -37,6 +37,17 @@ namespace Lonapse
         public static string Build(RpmLine[] lines, int count, int width, int height, string title, bool showSpeaker, bool colors,
                                    string footer)
         {
+            bool olderHidden;
+            return Build(lines, count, width, height, title, showSpeaker, colors, footer, out olderHidden);
+        }
+
+        /// <summary>
+        /// <paramref name="olderHidden"/>: older lines did not fit above the ones shown. Scrolling up only goes on while
+        /// it is true, so the oldest line never scrolls off the bottom of a half empty screen.
+        /// </summary>
+        public static string Build(RpmLine[] lines, int count, int width, int height, string title, bool showSpeaker, bool colors,
+                                   string footer, out bool olderHidden)
+        {
             if (width < 8) width = 8;
             if (height < 2) height = 2;
             if (lines == null) count = 0;
@@ -49,7 +60,7 @@ namespace Lonapse
 
             // blocks from the newest line back, until the screen is full
             var blocks = new List<List<string>>();
-            int used = 0;
+            int used = 0, oldestShown = count;
             for (int i = count - 1; i >= 0 && used < body; i--)
             {
                 List<string> b = Block(lines[i], width, showSpeaker, colors);
@@ -58,12 +69,15 @@ namespace Lonapse
                 if (used + need > body)
                 {
                     // the newest line always shows, cut to the rows that are left
-                    if (blocks.Count == 0) { b.RemoveRange(body, b.Count - body); blocks.Add(b); used = body; }
+                    if (blocks.Count == 0) { b.RemoveRange(body, b.Count - body); blocks.Add(b); used = body; oldestShown = i; }
                     break;
                 }
                 blocks.Add(b);
                 used += need;
+                oldestShown = i;
             }
+            olderHidden = false;
+            for (int j = 0; j < oldestShown && !olderHidden; j++) if (Clean(lines[j].text).Length > 0) olderHidden = true;
 
             if (blocks.Count == 0)
             {

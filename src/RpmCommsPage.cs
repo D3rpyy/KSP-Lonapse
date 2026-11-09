@@ -31,6 +31,7 @@ namespace Lonapse
         private string footerStart, footerStop;
         private int scroll;            // how many of the newest lines are hidden below, 0 shows the newest
         private int lastAdded = -1, lastScroll = -1;
+        private bool olderHidden;      // the last page left older lines out above, so UP has something to show
         private Subtitles lastSource;
         private bool failed;
 
@@ -66,15 +67,17 @@ namespace Lonapse
                 lastSource = subs;
                 if (footerStart == null)
                 {
-                    footerStart = "[" + countdownButtonName + "] Start countdown";
-                    footerStop = "[" + countdownButtonName + "] Stop countdown";
+                    footerStart = "Start countdown (" + countdownButtonName + ")";
+                    footerStop = "Stop countdown (" + countdownButtonName + ")";
                 }
                 string footer = cd == 2 ? footerStop : cd == 1 ? footerStart : null;
-                if (scroll > 0) footer = scroll + (scroll == 1 ? " newer line" : " newer lines") + " below [DOWN]";
+                if (scroll > 0) footer = scroll + (scroll == 1 ? " newer line" : " newer lines") + " below (DOWN)";
                 // scrolled: the hidden newest lines are simply left out, so the line above them sits at the bottom
                 string page = flags == 1
                     ? RpmPageText.Off(width, pageTitle)
-                    : RpmPageText.Build(lines, count - scroll, width, height, pageTitle, (flags & 4) != 0, (flags & 8) != 0, footer);
+                    : RpmPageText.Build(lines, count - scroll, width, height, pageTitle, (flags & 4) != 0, (flags & 8) != 0, footer,
+                                        out olderHidden);
+                if (flags == 1) olderHidden = false;
                 response = RpmPageText.Pad(page, topRows);
             }
             catch (Exception e)
@@ -90,7 +93,9 @@ namespace Lonapse
         public void ButtonProcessor(int buttonID)
         {
             if (buttonID < 0) return;
-            if (buttonID == scrollUpButton) { scroll++; return; }     // ShowComms clamps it to the log
+            Log.Info("RPM comms page: button " + buttonID);
+            // up only while older lines are left out above, so the page never empties at the top of the log
+            if (buttonID == scrollUpButton) { if (olderHidden) { scroll++; olderHidden = false; } return; }
             if (buttonID == scrollDownButton) { if (scroll > 0) scroll--; return; }
             if (buttonID != countdownButton) return;
             try

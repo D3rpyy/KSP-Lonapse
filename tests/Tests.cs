@@ -2510,6 +2510,19 @@ public static class Tests
         string emptyFooter = RpmPageText.Build(new RpmLine[0], 0, 40, 20, null, true, true, "[ENTER] Start countdown");
         Check(emptyFooter.Contains(RpmPageText.EmptyText) && emptyFooter.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length == 20,
               "rpm: an empty log with the hint still fills the screen to the bottom row", null);
+        bool hidden;
+        RpmPageText.Build(log, 8, 40, 20, null, true, true, null, out hidden);
+        bool hiddenTop;
+        RpmPageText.Build(log, 2, 40, 20, null, true, true, null, out hiddenTop);
+        Check(hidden && !hiddenTop, "rpm: older lines left out above are reported, a log that fits is not (UP stops there)", null);
+        RpmLine[] blankOld = { RpmL("MC", "  ", false), RpmL("MC", "Hello", true) };
+        bool hiddenBlank;
+        RpmPageText.Build(blankOld, 2, 40, 20, null, true, true, null, out hiddenBlank);
+        Check(!hiddenBlank, "rpm: a blank old line does not count as something to scroll to", null);
+        Check(SubtitleLayout.TelemetryLine(0, 0.874f, true) == "Downlink ping. Link at 87%."
+              && SubtitleLayout.TelemetryLine(5, 2f, true) == "Data packet sent. Signal 100%."
+              && SubtitleLayout.TelemetryLine(-1, 0.5f, false) == "Housekeeping data sent.",
+              "telemetry: the ping line reads the link in percent, without a link only the event", SubtitleLayout.TelemetryLine(0, 0.874f, true));
         Check(RpmPageText.ClampScroll(5, 8) == 5 && RpmPageText.ClampScroll(9, 8) == 7 && RpmPageText.ClampScroll(-2, 8) == 0
               && RpmPageText.ClampScroll(3, 0) == 0, "rpm: scrolling stops at the oldest line and at the newest", null);
         Check(RpmPageText.KeepPlace(2, 3, 32) == 5 && RpmPageText.KeepPlace(0, 3, 32) == 0 && RpmPageText.KeepPlace(30, 5, 32) == 31,

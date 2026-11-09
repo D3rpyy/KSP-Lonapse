@@ -9,6 +9,7 @@
 - **`{probe}` in lines.** The slot gives the name of the probe, the same name as the subtitle shows. A recorded line keeps its audio, the subtitle shows the name. With the runtime voice on, a `spanish_rt` version with `{probe}` has the voice say the name.
 
 - **Comms page on RasterPropMonitor screens.** With RasterPropMonitor installed, the stock MFD and the ASET ALCOR MFDs get a Comms page with the subtitles of the last lines. ENTER starts or stops the countdown, UP and DOWN scroll the log. Roger beeps and SOI changes show as short notes. Lonapse has no reference to RPM, the page only appears when RPM is there (`Patches/Lonapse_RPM.cfg`).
+- **Telemetry pings in the subtitles.** A telemetry ping now shows a short line from "Telemetry", like "Downlink ping. Link at 87%." With CommNet or RemoteTech it reads the real link strength.
 - **Cabin sound in IVA.** In IVA you hear the cabin: fans, a soft hum and a faint whine. When the batteries run flat a relay clunks and the fans and the motor spin down until the cabin is quiet. When the power comes back the fans spin up again. It has its own toggle and volume slider in the Sound tab and follows Sound effects. A part with less than 5 EC capacity never powers down.
 
 ### Changed
