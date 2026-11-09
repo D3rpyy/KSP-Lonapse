@@ -134,6 +134,7 @@ The slots:
 
 - `{pool}` is a value from `pools.tsv`. The same slot gives the same value in every line of one scene. `{pool:2}` is another value from the same pool. The game uses every value of a pool once before one comes back, and remembers that in `PluginData/played.txt` as `slot:<pool>:<value>`.
 - `{day}` (mission day, from 1), `{here}` (the current body), `{vessel}` (the vessel name) and `{alt_km}` (altitude in km) come from the flight.
+- `{probe}` is the name of the probe, as the subtitle shows it (the `displayName` of the voice or the part, else the part title). It only has a value in probe mode, so use it in probe scenes. A recorded Mission Control clip cannot say it, so the subtitle shows the name and the clip keeps its general words. With the runtime voice on, a `spanish_rt` version with `{probe}` has Piper say the name.
 - `{other}` and `{self}` are the first names of the two kerbals in an intercom chat. They only work in intercom scenes.
 - A value at the start of a sentence gets a capital letter.
 
@@ -171,7 +172,7 @@ clip_key	...	spanish	english	spanish_rt
 - An empty piece means the recorded clip says that version. A row with an empty `spanish_rt` plays its recording for every version.
 - A piece uses the slots of its English version, or fewer. Leave out the `[conditions]`, they come from the English.
 - A pool value with an article: `{el thing}`, `{un thing}`, `{del thing}` and `{al thing}` give el/la/los/las and the like, by the gender of the value.
-- Body names that are not a slot are written backwards, like in `bodies.tsv`: "nibréK" is heard as Kérbin. `{here}` and `{vessel}` are said as names.
+- Body names that are not a slot are written backwards, like in `bodies.tsv`: "nibréK" is heard as Kérbin. `{here}`, `{vessel}` and `{probe}` are said as names.
 - A file without the column still loads. An empty last cell may lose its tab, that is fine.
 
 The Spanish of a pool value is the `spanish` column of `pools.tsv`. Put `m:`, `f:`, `mp:` or `fp:` before it when a line uses the value with an article: `f:piedra de la suerte`.

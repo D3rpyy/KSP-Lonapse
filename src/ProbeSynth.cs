@@ -63,8 +63,8 @@ namespace Lonapse
             if (values.TryGetValue("lines", out s))
             {
                 string l = s.Trim().ToLowerInvariant();
-                if (Array.IndexOf(ProbeCores.Keys, l) >= 0) v.Lines = l;
-                else if (errors != null) errors.Add(v.Name + ": lines '" + s + "' is not a stock core, using generic");
+                if (ProbeCores.IsLinesKey(l)) v.Lines = l;
+                else if (errors != null) errors.Add(v.Name + ": lines '" + s + "' is not a stock core or a registered lineset, using generic");
             }
             if (values.TryGetValue("baseHz", out s))
             {

@@ -68,12 +68,83 @@ namespace Lonapse
             return Generic;
         }
 
-        /// <summary>Display name for a core key ("Probe" for snob, generic and unknown keys).</summary>
+        /// <summary>Display name for a core key or a lineset id ("Probe" for snob, generic and unknown keys).</summary>
         public static string DisplayName(string key)
         {
             int i = Array.IndexOf(Keys, key);
-            return i >= 0 ? DisplayNames[i] : "Probe";
+            if (i >= 0) return DisplayNames[i];
+            string n;
+            return key != null && linesets.TryGetValue(key, out n) ? n : "Probe";
         }
+
+        // ---- linesets: lines of a mod or a player, next to the stock cores ----
+        // A lineset is an id in the core column of the phrase table. It is registered from a LONAPSE_PROBE_LINES node
+        // before the table and the voices are read, so a row or a voice can name it.
+        private static readonly Dictionary<string, string> linesets = new Dictionary<string, string>();
+        public const int MaxLinesetIdLength = 32;
+
+        /// <summary>A lineset id: a to z, 0 to 9 and _, at most 32 characters, not "any" and not a stock core key.</summary>
+        public static bool ValidLinesetId(string id)
+        {
+            if (string.IsNullOrEmpty(id) || id.Length > MaxLinesetIdLength || id == "any" || Array.IndexOf(Keys, id) >= 0) return false;
+            for (int i = 0; i < id.Length; i++)
+            {
+                char c = id[i];
+                if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_')) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Registers a lineset from the values of a LONAPSE_PROBE_LINES node (name, displayName). The id is lowercased.
+        /// False with a message in <paramref name="errors"/> when the id is bad. A second node with the same id keeps
+        /// the first and reports it. A missing displayName gives "Probe".
+        /// </summary>
+        public static bool RegisterLineset(IDictionary<string, string> values, List<string> errors)
+        {
+            string id;
+            if (values == null || !values.TryGetValue("name", out id) || string.IsNullOrEmpty(id = id.Trim().ToLowerInvariant()))
+            {
+                if (errors != null) errors.Add("lineset without a name");
+                return false;
+            }
+            if (!ValidLinesetId(id))
+            {
+                if (errors != null) errors.Add("lineset '" + id + "': the name must be a to z, 0 to 9 and _, at most " + MaxLinesetIdLength
+                                               + " characters, and not 'any' or a stock core");
+                return false;
+            }
+            if (linesets.ContainsKey(id))
+            {
+                if (errors != null) errors.Add("lineset '" + id + "' is registered twice, the first one stays");
+                return false;
+            }
+            string dn;
+            linesets[id] = values.TryGetValue("displayName", out dn) && !string.IsNullOrEmpty(dn.Trim()) ? dn.Trim() : "Probe";
+            return true;
+        }
+
+        public static bool IsLineset(string id) { return id != null && linesets.ContainsKey(id); }
+
+        /// <summary>True for a stock core key or a registered lineset: a value the lines of a voice can name.</summary>
+        public static bool IsLinesKey(string key)
+        {
+            return key != null && (Array.IndexOf(Keys, key) >= 0 || linesets.ContainsKey(key));
+        }
+
+        /// <summary>The stock keys, then the registered linesets in name order. For the window.</summary>
+        public static string[] LinesKeys()
+        {
+            var ids = new List<string>(linesets.Keys);
+            ids.Sort(StringComparer.Ordinal);
+            string[] r = new string[Keys.Length + ids.Count];
+            Array.Copy(Keys, r, Keys.Length);
+            ids.CopyTo(r, Keys.Length);
+            return r;
+        }
+
+        /// <summary>Forgets every lineset. For tests.</summary>
+        public static void ClearLinesets() { linesets.Clear(); }
 
         /// <summary>Cores that have their own sound and name but no lines of their own yet. Until their scenes are
         /// written (phrase table core column) they borrow the neutral generic lines. Remove a key here once its lines

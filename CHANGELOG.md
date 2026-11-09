@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.8.3
+
+### New
+
+- **Probe beeps can be louder.** The "Beeps" slider is now called "Probe beeps" and goes up to 200%. Above 100% the beeps get extra gain, with a soft limiter so they do not distort. The slider only changes the beeps of a probe: its answers, hails and the beep in a crewed cabin.
+- **Your own probe lines.** A mod or a player can register a lineset with a `LONAPSE_PROBE_LINES` node (`name`, `displayName`) and write the lines in a table of their own. Module Manager is not needed. A voice picks the lineset with `lines = <name>` and so does `ModuleLonapse`. In the Lonapse window the Lines button also steps through your linesets.
+- **`{probe}` in lines.** The slot gives the name of the probe, the same name as the subtitle shows. A recorded line keeps its audio, the subtitle shows the name. With the runtime voice on, a `spanish_rt` version with `{probe}` has the voice say the name.
+
+- **Comms page on RasterPropMonitor screens.** With RasterPropMonitor installed, the stock MFD and the ASET ALCOR MFDs get a Comms page with the subtitles of the last lines. ENTER starts or stops the countdown, UP and DOWN scroll the log. Roger beeps and SOI changes show as short notes. Lonapse has no reference to RPM, the page only appears when RPM is there (`Patches/Lonapse_RPM.cfg`).
+
+### Changed
+
+- **The probe calls Mission Control more often.** The call gap now defaults to 2 minutes and goes from 1 to 10 minutes (before 6 minutes, 1 to 30). A gap you saved yourself stays, unless it is over 10 minutes.
+- **Squelch and roger beeps follow Sound effects.** The key-up and key-down sounds of the radio, the roger beep, the squelch and the tones of Mission Control used to follow the Static slider. That slider is for the radio static. They follow Sound effects now, and at the default setting they are as loud as before.
+- **Pings and tones have a fixed level.** The pings, the descent beeps, the stage tone and the landing tones no longer follow the Beeps slider. They keep the old default level.
+
+### For modders
+
+- Probe line files of a mod go in `GameData/<Mod>/Lonapse/Probe/*.tsv`, in the format of `Phrases/Extra`. The core column may name a registered lineset. An unknown core is still refused.
+- `ModuleLonapse` has a new field `lines`, and a `LONAPSE_PROBE_VOICE` may name a lineset in `lines`. The module wins over the voice, except for a voice the player picked in the window.
+- New slot `{probe}` (a flight value, only in probe mode).
+
 ## 0.8.2
 
 ### New

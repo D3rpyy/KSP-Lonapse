@@ -41,6 +41,7 @@ LonapseWrapper.Trigger("yourmod.repair_done", vessel, kerbal,
 
 `Trigger` returns true when Lonapse accepted the event. It then plays when the radio is free, usually within a few
 seconds. It is dropped when it waited 90 s. `Trigger` returns false when:
+
 - Lonapse is not installed or not running
 - no lines for the event are loaded
 - the vessel or kerbal is not the active one or close to it
@@ -51,6 +52,7 @@ seconds. It is dropped when it waited 90 s. `Trigger` returns false when:
 KSP.log says why, on a line that starts with `[Lonapse] Mod event`.
 
 Other calls:
+
 - `LonapseWrapper.Installed`: Lonapse is installed.
 - `LonapseWrapper.Available`: Lonapse is running in flight.
 - `LonapseWrapper.ApiVersion`: 1, or 0 without Lonapse.
@@ -70,14 +72,14 @@ It is a tab separated text file, UTF-8, with the columns `id kind when spanish e
 the Lonapse runtime lines. It is explained at the top of `GameData/Lonapse/Phrases/Runtime/reports.tsv`. Lonapse reads
 every `.tsv` in your `Lonapse` folder at the first flight scene. KSP itself ignores `.tsv` files.
 
-| id | kind | when | spanish | english |
-|---|---|---|---|---|
-| `rt_chat_yourmod_repair_1` | `chat` | `on=yourmod.repair_done` | {other}, ya está arreglado: {x_part}. | {other}, it's fixed: {x_part}. |
-| `rt_chat_yourmod_repair_2` | `chat` |  | Buen trabajo. ¿Has usado cinta? | Good work. Did you use tape? |
-| `rt_chat_yourmod_repairsolo_1` | `chat` | `on=yourmod.repair_done` | Reparación terminada. | Repair done. |
-| `rt_yourmod_repair` | `event` | `on=yourmod.repair_done` | {kerbal}, buen trabajo. | {kerbal}, good work. |
-| `rt_re_yourmod_repair` | `reply` | `to=rt_yourmod_repair` | Gracias. | Thanks. |
-| `rt_yourmod_repair_meta` | `meta` | `on=yourmod.repair_done cooldown=180 priority=normal who=any` |  |  |
+| id                             | kind    | when                                                          | spanish                               | english                        |
+| ------------------------------ | ------- | ------------------------------------------------------------- | ------------------------------------- | ------------------------------ |
+| `rt_chat_yourmod_repair_1`     | `chat`  | `on=yourmod.repair_done`                                      | {other}, ya está arreglado: {x_part}. | {other}, it's fixed: {x_part}. |
+| `rt_chat_yourmod_repair_2`     | `chat`  |                                                               | Buen trabajo. ¿Has usado cinta?       | Good work. Did you use tape?   |
+| `rt_chat_yourmod_repairsolo_1` | `chat`  | `on=yourmod.repair_done`                                      | Reparación terminada.                 | Repair done.                   |
+| `rt_yourmod_repair`            | `event` | `on=yourmod.repair_done`                                      | {kerbal}, buen trabajo.               | {kerbal}, good work.           |
+| `rt_re_yourmod_repair`         | `reply` | `to=rt_yourmod_repair`                                        | Gracias.                              | Thanks.                        |
+| `rt_yourmod_repair_meta`       | `meta`  | `on=yourmod.repair_done cooldown=180 priority=normal who=any` |                                       |                                |
 
 In the file itself the columns are separated by tabs, and the header row comes first. To start your own
 file, copy [docs/api/example_mod.tsv](api/example_mod.tsv) rather than these tables.
@@ -90,33 +92,33 @@ The `kind` column says what a row is and when it plays. There are 19 kinds.
 
 These 4 kinds play when your mod calls `Trigger`.
 
-| Kind | What it is | Needs |
-|---|---|---|
-| `chat` | An event chat. The kerbal who did it says line 1, and another kerbal nearby answers. A chat of one line is for a kerbal alone. | `on=yourmod.event` on line 1 |
-| `event` | A Mission Control line about the event. `{kerbal}` is the kerbal who did it. | `on=yourmod.event` |
-| `reply` | The kerbal answers your `event` line, right after it. `to=rt_yourmod_*` answers every line whose id starts with that. | `to=<id of your event line>` |
-| `meta` | The settings of one event. It has no text. | `on=yourmod.event` |
+| Kind    | What it is                                                                                                                     | Needs                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `chat`  | An event chat. The kerbal who did it says line 1, and another kerbal nearby answers. A chat of one line is for a kerbal alone. | `on=yourmod.event` on line 1 |
+| `event` | A Mission Control line about the event. `{kerbal}` is the kerbal who did it.                                                   | `on=yourmod.event`           |
+| `reply` | The kerbal answers your `event` line, right after it. `to=rt_yourmod_*` answers every line whose id starts with that.          | `to=<id of your event line>` |
+| `meta`  | The settings of one event. It has no text.                                                                                     | `on=yourmod.event`           |
 
 3 more kinds register a thing of your mod that Lonapse already notices itself. They do not need `Trigger`, see
 [Your own experiments, parts and contracts](#your-own-experiments-parts-and-contracts). Each has one version of text
 without slots: the words for its slot.
 
-| Kind | What it registers | Its slot | Needs |
-|---|---|---|---|
-| `experiment` | An experiment that runs through KSP science | `{exp}` | `on=yourmod.topic id=<experimentID>` |
-| `device` | A Breaking Ground part you can deploy | `{device}` | `on=yourmod.topic id=<part name>` |
-| `contract` | A contract type | `{contract}` | `on=yourmod.topic id=<contract class name>` |
+| Kind         | What it registers                           | Its slot     | Needs                                       |
+| ------------ | ------------------------------------------- | ------------ | ------------------------------------------- |
+| `experiment` | An experiment that runs through KSP science | `{exp}`      | `on=yourmod.topic id=<experimentID>`        |
+| `device`     | A Breaking Ground part you can deploy       | `{device}`   | `on=yourmod.topic id=<part name>`           |
+| `contract`   | A contract type                             | `{contract}` | `on=yourmod.topic id=<contract class name>` |
 
 Chat ids are `rt_chat_<name>_<seq>`, with seq 1, 2, 3 and so on, one row per line. Only line 1 has a `when`. All
 lines of a chat go in one file. Only replies with your `to=` answer your `event` lines.
 
 The settings of `meta` are all optional:
 
-| Setting | What it does | Default |
-|---|---|---|
-| `cooldown=<seconds>` | The event plays at most once in that time. | 120 |
-| `priority=low\|normal\|high` | High skips the 30 s gap between two mod events, and still plays when the crew is stressed. | normal |
-| `who=crew\|mc\|any` | Only the event chats, only Mission Control, or both. With `any` and both kinds present, the chat plays 60 % of the time. | any |
+| Setting                      | What it does                                                                                                             | Default |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `cooldown=<seconds>`         | The event plays at most once in that time.                                                                               | 120     |
+| `priority=low\|normal\|high` | High skips the 30 s gap between two mod events, and still plays when the crew is stressed.                               | normal  |
+| `who=crew\|mc\|any`          | Only the event chats, only Mission Control, or both. With `any` and both kinds present, the chat plays 60 % of the time. | any     |
 
 ### Kinds Lonapse triggers itself
 
@@ -126,23 +128,24 @@ have `on=yourmod.topic` when an `experiment` or `device` row registers that topi
 `contract_failed` row may only have it when a `contract` row registers it. Otherwise it is an error, because it could
 never play: use `event` for that. Your `{x_...}` slots never have a value there, so a row of these kinds cannot use them.
 
-| Kind | When it plays |
-|---|---|
-| `report` | Now and then: Mission Control reports on the vessel (orbit, fuel, power, crew and more). |
-| `dock` | After a docking approach call: the distance and closing speed to the target. |
-| `land` | Once per descent, low and coming down: the height and the speed. |
-| `science` | After an experiment, when its science value is not known. |
-| `science_pts` | After an experiment, with its science points. |
-| `science_talk` | After an experiment, with a link: the kerbal who did it reports and Mission Control answers. Ids `rt_st_<name>_<seq>`, one row per line, the kerbal speaks the odd lines. Line 1 has the when: `on=` the experiment (`on=science` for any), optionally `a=scientist`, `who=mc` (Mission Control starts) and checks. Extra values: `{temp_c}`, `{press_kpa}`, `{grav_g}`, `{sci_flight}`, `{exp_runs}`. A talk with the check `exp_count>=2` is for experiments run close together: only such a batch uses it, with `{exp_count}`, `{exp_list}` (the experiments) and `{sci}` (the total). `data_sent=1` is for data that went out by antenna, `data_sent=0` for data kept aboard. A line that says the data arrived needs `data_sent=1`. |
-| `contract_funds` | A contract is done and pays funds. |
-| `contract_done` | A contract is done without funds. |
-| `contract_failed` | A contract failed. |
-| `warp` | Now and then in time warp on rails. |
-| `sunrise` | Now and then at a sunrise in orbit. |
-| `eva` | Now and then: Mission Control to a kerbal on EVA. |
-| `flag` | Right after a flag is planted. |
+| Kind              | When it plays                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `report`          | Now and then: Mission Control reports on the vessel (orbit, fuel, power, crew and more).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `dock`            | After a docking approach call: the distance and closing speed to the target.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `land`            | Once per descent, low and coming down: the height and the speed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `science`         | After an experiment, when its science value is not known.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `science_pts`     | After an experiment, with its science points.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `science_talk`    | After an experiment, with a link: the kerbal who did it reports and Mission Control answers. Ids `rt_st_<name>_<seq>`, one row per line, the kerbal speaks the odd lines. Line 1 has the when: `on=` the experiment (`on=science` for any), optionally `a=scientist`, `who=mc` (Mission Control starts) and checks. Extra values: `{temp_c}`, `{press_kpa}`, `{grav_g}`, `{sci_flight}`, `{exp_runs}`. A talk with the check `exp_count>=2` is for experiments run close together: only such a batch uses it, with `{exp_count}`, `{exp_list}` (the experiments) and `{sci}` (the total). `data_sent=1` is for data that went out by antenna, `data_sent=0` for data kept aboard. A line that says the data arrived needs `data_sent=1`. |
+| `contract_funds`  | A contract is done and pays funds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `contract_done`   | A contract is done without funds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `contract_failed` | A contract failed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `warp`            | Now and then in time warp on rails.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `sunrise`         | Now and then at a sunrise in orbit.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `eva`             | Now and then: Mission Control to a kerbal on EVA.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `flag`            | Right after a flag is planted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 `chat` and `reply` also work without your event:
+
 - A `chat` without `on=` is a normal chat. It plays now and then on the intercom in one cabin. With `on_eva=1` it
   plays on the suit radio between two EVA kerbals, and with `apart=1` on the radio between two vessels nearby.
 - A `reply` without `to=` can answer a `report`, `warp`, `sunrise` or `eva` line, or a recorded Mission Control line.
@@ -155,11 +158,11 @@ Does your mod add an experiment that runs through the KSP science system, a `Mod
 `experimentID`? Then Lonapse sees it like a stock experiment. You do not call `Trigger` for it. Without help Lonapse
 calls it "the experiment", and only the general science lines play. An `experiment` row fixes that:
 
-| id | kind | when | spanish | english |
-|---|---|---|---|---|
-| `rt_yourmod_soil_exp` | `experiment` | `on=yourmod.soil id=yourSoilScan` | análisis del suelo | soil analysis |
-| `rt_sci_yourmod_soil` | `science` | `on=yourmod.soil` | Recibimos el {exp}. | We have the {exp}. |
-| `rt_chat_yourmod_soilsolo_1` | `chat` | `on=yourmod.soil` | Ya tengo el {exp}. | I have the {exp}. |
+| id                           | kind         | when                              | spanish             | english            |
+| ---------------------------- | ------------ | --------------------------------- | ------------------- | ------------------ |
+| `rt_yourmod_soil_exp`        | `experiment` | `on=yourmod.soil id=yourSoilScan` | análisis del suelo  | soil analysis      |
+| `rt_sci_yourmod_soil`        | `science`    | `on=yourmod.soil`                 | Recibimos el {exp}. | We have the {exp}. |
+| `rt_chat_yourmod_soilsolo_1` | `chat`       | `on=yourmod.soil`                 | Ya tengo el {exp}.  | I have the {exp}.  |
 
 - `id=` is the `experimentID` of your experiment, the part of the subject id before the `@`. Case does not matter.
   A stock id is an error, Lonapse has its own words for those.
@@ -180,10 +183,10 @@ Does your mod add a part with a `ModuleGroundSciencePart`, one that a kerbal on 
 deploy itself. Without help it calls the part by what it does ("the antenna", "the generator", "the gadget"). A
 `device` row gives it its own words and a topic:
 
-| id | kind | when | spanish | english |
-|---|---|---|---|---|
-| `rt_yourmod_drill_dev` | `device` | `on=yourmod.drill id=yourDrillRig` | el taladro | the drill rig |
-| `rt_chat_yourmod_drillsolo_1` | `chat` | `on=yourmod.drill` | {device} ya está montado. | Done, {device} is set up. |
+| id                            | kind     | when                               | spanish                   | english                   |
+| ----------------------------- | -------- | ---------------------------------- | ------------------------- | ------------------------- |
+| `rt_yourmod_drill_dev`        | `device` | `on=yourmod.drill id=yourDrillRig` | el taladro                | the drill rig             |
+| `rt_chat_yourmod_drillsolo_1` | `chat`   | `on=yourmod.drill`                 | {device} ya está montado. | Done, {device} is set up. |
 
 - `id=` is the part name, the `name` in the part's cfg. A stock Breaking Ground part is an error.
 - `{device}` says "the drill rig". The words include the article, because the slot stands for the whole thing.
@@ -195,10 +198,10 @@ deploy itself. Without help it calls the part by what it does ("the antenna", "t
 Does your mod add contracts? Lonapse already says something when a contract is done or failed. A `contract` row lets
 your contract type have its own lines:
 
-| id | kind | when | spanish | english |
-|---|---|---|---|---|
-| `rt_yourmod_salvage_con` | `contract` | `on=yourmod.salvage id=YourSalvageContract` | el rescate de chatarra | the salvage job |
-| `rt_con_yourmod_salvage` | `contract_funds` | `on=yourmod.salvage` | Listo: {contract}. Os pagan {funds} fondos. | Done: {contract}. It pays {funds} funds. |
+| id                       | kind             | when                                        | spanish                                     | english                                  |
+| ------------------------ | ---------------- | ------------------------------------------- | ------------------------------------------- | ---------------------------------------- |
+| `rt_yourmod_salvage_con` | `contract`       | `on=yourmod.salvage id=YourSalvageContract` | el rescate de chatarra                      | the salvage job                          |
+| `rt_con_yourmod_salvage` | `contract_funds` | `on=yourmod.salvage`                        | Listo: {contract}. Os pagan {funds} fondos. | Done: {contract}. It pays {funds} funds. |
 
 - `id=` is the class name of your contract, the C# type that derives from `Contracts.Contract`.
 - `{contract}` says "the salvage job". A line with `{contract}` only plays for a registered contract type.
@@ -214,7 +217,7 @@ your contract type have its own lines:
 - `spanish` is the text the voice speaks. `english` is the subtitle. Several versions go in one cell, split by `|`,
   in the same order in both columns. One version is picked each time.
 - Each version uses the same slots in both languages. Your own slots start with `x_`: `{x_part}`, `{x_days}`.
-- The Lonapse slots work too: `{other}` and `{self}` in a chat, `{kerbal}`, `{vessel}`, `{here}` (the body),
+- The Lonapse slots work too: `{other}` and `{self}` in a chat, `{kerbal}`, `{vessel}`, `{probe}` (the name of the probe, in probe mode), `{here}` (the body),
   `{biome}`, `{day}` and the numbers of the vessel. The list is in the header of `reports.tsv`.
 - `when` takes the checks of Lonapse (`landed`, `orbit`, `link=0`, `a=scientist` in a chat) and checks on your own
   numbers: `x_days>=2`. A line only plays when all its slots have a value and its checks hold.
@@ -223,6 +226,15 @@ your contract type have its own lines:
 - A line that says "Control" is dropped when the vessel has no link to Mission Control. Without a link only the
   event chats play, so write a chat with `link=0` if your event should be heard there too.
 - A bad row is skipped and logged as `[Lonapse] Lonapse runtime: <file>:<line>`. The rest of your file still works.
+
+## Lines for a probe
+
+A mod can also bring its own lines for a probe core, a lineset. That does not go through `Lonapse.Trigger`: the scenes
+play on the moments Lonapse finds itself, for the probe that has the lineset. Register the lineset with a
+`LONAPSE_PROBE_LINES` node, put the table in `GameData/<YourMod>/Lonapse/Probe/*.tsv` (the format of
+`Phrases/Extra`, with the lineset in the `core` column) and name it in `lines` on `ModuleLonapse` or on a
+`LONAPSE_PROBE_VOICE`. The steps are in the README, under "Your own lines for a probe", and the example files are
+`docs/api/example_lineset.cfg` and `docs/api/example_lineset.tsv`. `{probe}` gives the name of the probe.
 
 ## What players see
 

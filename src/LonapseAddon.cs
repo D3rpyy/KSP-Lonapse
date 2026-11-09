@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.8.2";
+        public const string Version = "0.8.3";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -238,6 +238,7 @@ namespace Lonapse
             Log.SetMainThread();
             try
             {
+                ProbeLinesetNodes.Load();   // before the settings: a PROBE_VOICE there may name a lineset
                 settings = Settings.Load();
                 if (settings.migrated) { settings.migrated = false; settings.Save(); } // write the new keys once
                 Log.verbose = settings.verboseLog;
@@ -1223,21 +1224,30 @@ namespace Lonapse
             {
                 VoiceChannel c = allChannels[i];
                 c.SetDsp(settings.useDsp);
+                if (c.kind == ChannelKind.Beep) c.userGain = c.probeBeep ? Math.Max(1f, settings.beepVolume) : 1f;   // the slider above 100% is linear gain
                 float mul = finalCall && ReferenceEquals(c, control) ? settings.masterVolume * gameGain : globalMul;
                 if (c.kind == ChannelKind.Sfx) mul = sfxMul;   // sfxCh, airlockCh, thrustCh, groundCh and stepCh
                 c.Update(dt, CategoryVolume(c), mul);
             }
         }
 
+        // pings, descent, stage and landing tones: not on the Probe beeps slider, they keep the old default level
+        private const float OtherBeepVolume = 0.6f;
+
+        // squelch and roger beeps follow the Sound effects slider. At the default slider they are as loud as they were
+        // on the Static slider (default 0.5)
+        private const float KeySoundScale = 0.5f;
+
         private float CategoryVolume(VoiceChannel c)
         {
+            if (ReferenceEquals(c, keyCh) || c.keySound) return settings.sfxVolume * KeySoundScale;
             switch (c.kind)
             {
                 case ChannelKind.Crew: return c.intercom ? settings.intercomVolume : settings.crewVolume;
                 case ChannelKind.IntercomClick: return settings.intercomVolume;
                 case ChannelKind.Control:
                 case ChannelKind.ControlBed: return settings.controlVolume;
-                case ChannelKind.Beep: return settings.beepVolume;
+                case ChannelKind.Beep: return c.probeBeep ? Math.Min(settings.beepVolume, 1f) : OtherBeepVolume;   // above 100% the rest is gain, see UpdateChannels
                 case ChannelKind.Breath: return settings.crewVolume;
                 case ChannelKind.Sfx: return settings.sfxVolume;
                 default: return settings.staticVolume;
@@ -1344,8 +1354,8 @@ namespace Lonapse
             int dat;
             ProbeVoiceSpec def = ProbeVoicePick.Resolve(probeCoreParts, null, probeVoices, out dat, out probeDefaultWhy);
             probeDefaultVoice = def != null ? def.Name : null;
-            // the phrase table's core column: a custom voice uses the lines of the stock core it names
-            probeCoreKey = probeVoice != null ? probeVoice.Lines : null;
+            // the phrase table's core column: the module's lines, else the lines of the voice (a stock core or a lineset)
+            probeCoreKey = ProbeVoicePick.LinesFor(probeCoreParts, at, probeVoiceWhy, probeVoice);
         }
 
         /// <summary>
@@ -1422,7 +1432,7 @@ namespace Lonapse
                 probeCmds.Add(c);
                 string partName = p.partInfo != null && !string.IsNullOrEmpty(p.partInfo.name) ? p.partInfo.name : p.name;
                 probeNames.Add(partName);
-                string mv = null, dn = null;
+                string mv = null, dn = null, ln = null;
                 int prio = 0;
                 for (int k = 0; k < p.Modules.Count; k++)
                 {
@@ -1431,6 +1441,7 @@ namespace Lonapse
                     mv = ml.voice;
                     prio = ml.priority;
                     dn = ml.displayName;
+                    ln = ml.lines;
                     // a mod may give a localization tag (#autoLOC_... or its own #LOC_...)
                     if (!string.IsNullOrEmpty(dn) && dn.Trim().StartsWith("#", StringComparison.Ordinal))
                     {
@@ -1439,7 +1450,7 @@ namespace Lonapse
                     }
                     break;
                 }
-                probeCoreParts.Add(new ProbeCorePart(partName, mv, prio, dn));
+                probeCoreParts.Add(new ProbeCorePart(partName, mv, prio, dn, ln));
                 return; // one entry per part
             }
         }

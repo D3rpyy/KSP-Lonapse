@@ -546,7 +546,8 @@ namespace Lonapse
                     if (hasEnglish && e.English.Length == 0) bad.Add("english is empty");
                 }
                 // Core, beep and the probe-mode roles and events
-                if (Array.IndexOf(Cores, e.Core) < 0) bad.Add("unknown core '" + e.Core + "'");
+                if (Array.IndexOf(Cores, e.Core) < 0 && !ProbeCores.IsLineset(e.Core))
+                    bad.Add("unknown core '" + e.Core + "' (a stock core, or a lineset from a LONAPSE_PROBE_LINES node)");
                 if (e.Role == RoleProbe)
                 {
                     if (Array.IndexOf(Moods, e.Beep) < 0)

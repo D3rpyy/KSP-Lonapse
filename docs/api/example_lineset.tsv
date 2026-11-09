@@ -1,0 +1,13 @@
+clip_key	event	severity	band	role	scene	seq	gender	phase	cause	trait	persona	topic	core	beep	spanish	spanish_rt	english
+# Example lines for your own probe lineset 'pip', see example_lineset.cfg. Put a file like this in GameData/<YourMod>/Lonapse/Probe/																	
+# (or in GameData/Lonapse/Phrases/Extra/ for your own game) and restart KSP. The format is that of Phrases/Extra.																	
+# core is the name of your LONAPSE_PROBE_LINES node. A scene is one exchange: Mission Control (role mc), the probe (role probe).																	
+# The probe has no voice, only a subtitle like [beeps happily] and a beep mood: happy offended curious scared sleepy proud bored.																	
+# Mission Control has no recording here. The runtime voice (Piper) speaks the spanish column, or spanish_rt when it is there.																	
+# {probe} is the name of the probe in the subtitle. It goes in the english and in spanish_rt, never in the spanish column.																	
+# Without the runtime voice Mission Control shows its subtitle only. New clip keys: start with a prefix of your own, here px_pip_.																	
+px_pip_chat_01_1	probe_chat	chatter	calm	mc	px_pip_chat_01	1	m	goofy	any	any	any	any	pip		Hola, ¿qué tal la vista hoy?	Hola, {probe}, ¿qué tal la vista hoy?	Hello {probe}, how's the view today?
+px_pip_chat_01_2	probe_chat	chatter	calm	probe	px_pip_chat_01	2	both	goofy	any	any	any	any	pip	happy			[beeps happily]
+px_pip_chat_01_3	probe_chat	chatter	calm	mc	px_pip_chat_01	3	m	goofy	any	any	any	any	pip		Me alegro. Sigue así.		Glad to hear it. Keep it up.
+px_pip_chat_02_1	probe_chat	chatter	calm	mc	px_pip_chat_02	1	m	goofy	any	any	any	any	pip		¿Todo bien por ahí arriba?	{probe}, ¿todo bien por ahí arriba?	{probe}, all well up there?
+px_pip_chat_02_2	probe_chat	chatter	calm	probe	px_pip_chat_02	2	both	goofy	any	any	any	any	pip	proud			[beeps proudly]

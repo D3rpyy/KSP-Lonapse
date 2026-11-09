@@ -54,7 +54,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 
 ## Install
 
-1. Download `Lonapse-0.8.2.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
+1. Download `Lonapse-0.8.3.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
@@ -137,6 +137,7 @@ part from another mod, or only when Lonapse is installed, use a Module Manager p
         voice = myprobe     // a stock voice or a LONAPSE_PROBE_VOICE name
         priority = 0        // with several cores on a vessel, the highest wins
         displayName = STP   // optional, the subtitle name of this part
+        lines = mylines     // optional, your own lines for this probe (see below)
     }
 }
 ```
@@ -152,6 +153,30 @@ stock core's voice.
 
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.
+
+## Your own lines for a probe
+
+The probe talk (Mission Control and the probe) is written per stock core. A mod or a player can add a set of lines of
+their own, a lineset, without Module Manager:
+
+1. Register it with a `LONAPSE_PROBE_LINES` node in any `.cfg`. `name` is a to z, 0 to 9 and `_` (at most 32
+   characters, not `any` and not a stock core). `displayName` is optional.
+2. Write the lines in a table with the format of `GameData/Lonapse/Phrases/Extra/probe_runtime.tsv` and put the name
+   in the `core` column. A mod puts the file in `GameData/<Mod>/Lonapse/Probe/*.tsv`. For your own game,
+   `GameData/Lonapse/Phrases/Extra/` works too. Restart KSP after a change.
+3. Give a probe the lines with `lines = <name>` in a `LONAPSE_PROBE_VOICE` or on `ModuleLonapse`. The module wins over
+   the voice, except for a voice you picked yourself in the Lonapse window. There the Lines button steps through your
+   linesets after the stock cores.
+
+Mission Control has no recording for these lines. The runtime voice (Piper) speaks the `spanish` column, or the
+`spanish_rt` column when it is there. Without the runtime voice Mission Control shows its subtitle only. The probe
+beeps, and its subtitle is a line like `[beeps happily]`. Scenes of your lineset are mixed with the scenes for any core, and are
+twice as likely to be picked. So a lineset with a few scenes still works for every event.
+
+`{probe}` in the English (and in `spanish_rt`) is the name of the probe, the same name as the subtitle shows. A
+recorded line cannot say it, so it only shows in the subtitle there. Mistakes in a table or a node are written to
+`KSP.log` with `[Lonapse]` in front. A full example is in [docs/api](docs/api): `example_lineset.cfg` and
+`example_lineset.tsv`.
 
 ## Lines for your own mod
 

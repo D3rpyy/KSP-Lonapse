@@ -178,7 +178,7 @@ namespace Lonapse
 
         // --- Probe hails, EVA relay and breathing, probe callouts and moments. ---
         // probe hails (the probe beeps first, Mission Control answers): mean gap in s. Replaces roomInterval.
-        public float hailInterval = 360f;
+        public float hailInterval = 120f;
         // EVA relay: an EVA kerbal reaches Mission Control through a nearby ship. The suit link to the ship is full up
         // to evaRelayFullKm and gone at evaRelayZeroKm (KSP unloads vessels at about 2.5 km).
         public float evaRelayFullKm = 1.0f, evaRelayZeroKm = 2.3f;
@@ -356,7 +356,7 @@ namespace Lonapse
             faceExpressionSign = faceExpressionSign < 0f ? -1f : 1f;
 
             // probe mode, EVA relay and moments
-            hailInterval = DcMath.Clamp(hailInterval, 60f, 1800f);
+            hailInterval = DcMath.Clamp(hailInterval, 60f, 600f);
             evaRelayFullKm = DcMath.Clamp(evaRelayFullKm, 0.01f, 100f);
             evaBreathRate = DcMath.Clamp(evaBreathRate, 1f, 2f);
             evaBreathGain = DcMath.Clamp(evaBreathGain, 1f, 3f);
@@ -396,7 +396,7 @@ namespace Lonapse
         public float masterVolume = 0.8f;
         public float crewVolume = 1.0f;
         public float controlVolume = 0.8f;
-        public float beepVolume = 0.6f;
+        public float beepVolume = 0.6f;   // 0..2, above 1 the beeps get extra gain
         public float sfxVolume = 1.0f;          // sound effects of the ship itself (docking), not a radio sound
         public float staticVolume = 0.5f;
         public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old, harsher level)
@@ -646,7 +646,7 @@ namespace Lonapse
             masterVolume = DcMath.Clamp(DcMath.Finite(masterVolume), 0f, 1f);
             crewVolume = DcMath.Clamp(DcMath.Finite(crewVolume), 0f, 1f);
             controlVolume = DcMath.Clamp(DcMath.Finite(controlVolume), 0f, 1f);
-            beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 1f);
+            beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 2f);
             sfxVolume = DcMath.Clamp(DcMath.Finite(sfxVolume), 0f, 1f);
             staticVolume = DcMath.Clamp(DcMath.Finite(staticVolume), 0f, 1f);
             thudVolume = DcMath.Clamp(DcMath.Finite(thudVolume), 0f, 1f);

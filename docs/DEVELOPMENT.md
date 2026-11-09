@@ -184,7 +184,7 @@ These keys are not all in the window, but you can edit them in the file:
 | `evaRadio` | `True` | EVA suit radio |
 | `evaRadioVolume` | `0.8` | Volume of everything on EVA, 0 to 1 |
 | `evaRelay` | `True` | The EVA suit radio reaches Mission Control through a nearby ship with a control point |
-| `probeHail` | `True` | Probe mode: the probe calls Mission Control on its own, about every `hailInterval` (360 s) divided by `rateMultiplier` |
+| `probeHail` | `True` | Probe mode: the probe calls Mission Control on its own, about every `hailInterval` (120 s) divided by `rateMultiplier` |
 | `probeCallouts` | `True` | Probe mode: the probe beeps at staging, chutes and throttle, MC answers now and then (`probeCalloutMcChance` 0.35, at most once per `probeCalloutMcGap` 20 s) |
 | `probePlanTalk` | `True` | Probe mode: MC tells the probe about a new maneuver node and the burn warning |
 | `probeStressTalk` | `True` | Probe mode: under stress MC calms the probe about the main cause (heat, spin, g, fuel, ...) |

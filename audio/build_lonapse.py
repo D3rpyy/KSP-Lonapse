@@ -185,10 +185,10 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
                 "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist",
                 "temp_c", "press_kpa", "grav_g", "sci_flight", "exp_runs", "exp_count", "data_sent"]
-NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list"]
+NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list", "probe"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
-FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km"]
+FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km", "probe"]
 # Numbers only the runtime voice can say: a version that uses one needs its spanish_rt (Slots.IsRuntimeNumber)
 RUNTIME_NUMBERS = [n for n in NUMBER_SLOTS if n not in FLIGHT_SLOTS]
 # In a subtitle template, intercom only (SubtitleSlots.PersonSlots)

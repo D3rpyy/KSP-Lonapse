@@ -127,10 +127,43 @@ namespace Lonapse
     }
 
     /// <summary>
+    /// Reads the LONAPSE_PROBE_LINES nodes from GameData (name, displayName) and registers them as linesets, so the
+    /// core column of a table and the lines of a voice can name them. Works without Module Manager. Once per session.
+    /// </summary>
+    public static class ProbeLinesetNodes
+    {
+        public const string NodeName = "LONAPSE_PROBE_LINES";
+        private static bool loaded;
+
+        public static void Load()
+        {
+            if (loaded) return;
+            try
+            {
+                if (GameDatabase.Instance == null) return;
+                loaded = true;
+                foreach (ConfigNode n in GameDatabase.Instance.GetConfigNodes(NodeName))
+                {
+                    var d = new Dictionary<string, string>();
+                    for (int i = 0; i < n.values.Count; i++) d[n.values[i].name] = n.values[i].value;
+                    var errs = new List<string>();
+                    ProbeCores.RegisterLineset(d, errs);
+                    foreach (string e in errs) Log.Warn(NodeName + ": " + e);
+                }
+                string[] ids = ProbeCores.LinesKeys();
+                if (ids.Length > ProbeCores.Keys.Length)
+                    Log.Info("Probe linesets from GameData: " + string.Join(", ", ids, ProbeCores.Keys.Length, ids.Length - ProbeCores.Keys.Length));
+            }
+            catch (Exception e) { Log.Exception(NodeName, e); }
+        }
+    }
+
+    /// <summary>
     /// Gives a probe core part its Lonapse voice. Added with a Module Manager patch, for example:
     /// <code>@PART[myProbeCore]:NEEDS[Lonapse] { MODULE { name = ModuleLonapse  voice = okto  priority = 0 } }</code>
     /// voice is a stock voice or the name of a LONAPSE_PROBE_VOICE node. On a vessel with several cores the highest
-    /// priority wins. A voice the player picks in the Lonapse window wins over both. displayName (optional, may be a
+    /// priority wins. A voice the player picks in the Lonapse window wins over both. lines (optional) is a lineset from a
+    /// LONAPSE_PROBE_LINES node or a stock core, for the lines the probe and Mission Control say. displayName (optional, may be a
     /// #autoLOC tag) is the subtitle name of the part. It wins over the voice's own displayName, so several parts can
     /// share one voice.
     /// </summary>
@@ -139,6 +172,7 @@ namespace Lonapse
         [KSPField] public string voice = "";
         [KSPField] public int priority = 0;
         [KSPField] public string displayName = "";
+        [KSPField] public string lines = "";   // phrase table core: a stock core or a lineset, wins over the lines of the voice
 
         public override string GetInfo() { return string.Empty; }   // nothing in the editor part info
         public override string GetModuleDisplayName() { return "Lonapse probe voice"; }

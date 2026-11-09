@@ -6,7 +6,7 @@
 //   name    a name from KSP: the body, the vessel, a docking target, a science experiment
 //   person  a kerbal: other (the one spoken to), self (the speaker), kerbal (the one Mission Control talks to)
 //
-// day, alt_km, here and vessel are there on every flight, also without the runtime voice (FlightSlots). The other
+// day, alt_km, here, vessel and probe are there on every flight (probe: the name of the probe, only in probe mode), also without the runtime voice (FlightSlots). The other
 // numbers only reach a recorded line when the runtime voice is on, because the recording cannot say them.
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
@@ -22,10 +22,10 @@ namespace Lonapse
             "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
             "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist",
             "temp_c", "press_kpa", "grav_g", "sci_flight", "exp_runs", "exp_count", "data_sent" };
-        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list" };
+        public static readonly string[] Names = { "here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list", "probe" };
         public static readonly string[] Persons = { "other", "self", "kerbal" };
         /// <summary>Values the director gives every recorded line, with or without the runtime voice.</summary>
-        public static readonly string[] Flight = { "day", "here", "vessel", "alt_km" };
+        public static readonly string[] Flight = { "day", "here", "vessel", "alt_km", "probe" };
 
         public static bool IsNumber(string name) { return Array.IndexOf(Numbers, name) >= 0; }
         public static bool IsName(string name) { return Array.IndexOf(Names, name) >= 0; }

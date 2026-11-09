@@ -97,14 +97,18 @@ namespace Lonapse
         public string moduleVoice;   // ModuleLonapse.voice, null or empty without the module
         public int priority;         // ModuleLonapse.priority, 0 without the module
         public string displayName;   // ModuleLonapse.displayName, null or empty without one
+        public string moduleLines;   // ModuleLonapse.lines (a stock core or a lineset), null or empty without one
 
         public ProbeCorePart(string partName, string moduleVoice, int priority)
             : this(partName, moduleVoice, priority, null) { }
 
         public ProbeCorePart(string partName, string moduleVoice, int priority, string displayName)
+            : this(partName, moduleVoice, priority, displayName, null) { }
+
+        public ProbeCorePart(string partName, string moduleVoice, int priority, string displayName, string moduleLines)
         {
             this.partName = partName; this.moduleVoice = moduleVoice; this.priority = priority;
-            this.displayName = displayName;
+            this.displayName = displayName; this.moduleLines = moduleLines;
         }
     }
 
@@ -123,6 +127,26 @@ namespace Lonapse
             if (cores == null || coreIndex < 0 || coreIndex >= cores.Count) return null;
             string n = cores[coreIndex].displayName;
             return string.IsNullOrEmpty(n) || n.Trim().Length == 0 ? null : n.Trim();
+        }
+
+        /// <summary>
+        /// The phrase table core of a vessel: the ModuleLonapse lines of the deciding core when it names a stock core
+        /// or a registered lineset, else the lines of the voice. A voice the player picked in the window keeps its own
+        /// lines, because the player chose the whole voice.
+        /// </summary>
+        public static string LinesFor(IList<ProbeCorePart> cores, int coreIndex, Why why, ProbeVoiceSpec voice)
+        {
+            if (voice == null) return null;
+            if (why != Why.Player && cores != null && coreIndex >= 0 && coreIndex < cores.Count)
+            {
+                string l = cores[coreIndex].moduleLines;
+                if (!string.IsNullOrEmpty(l))
+                {
+                    l = l.Trim().ToLowerInvariant();
+                    if (ProbeCores.IsLinesKey(l)) return l;
+                }
+            }
+            return voice.Lines;
         }
 
         /// <summary>

@@ -464,6 +464,12 @@ namespace Lonapse
             if (b != null) { names["body"] = b; names["here"] = b; }
             string[] vn = v.isEVA ? ShipNames() : VesselNames();
             if (vn != null) names["vessel"] = vn;
+            try
+            {
+                string pn = host.probeMode ? RuntimeLines.CleanName(host.ProbeDisplayName) : null;
+                if (!string.IsNullOrEmpty(pn)) names["probe"] = new[] { RuntimeSpeech.Respell(pn), pn };
+            }
+            catch (Exception) { }
             try { if (v.mainBody != null) nums["at_home"] = v.mainBody == FlightGlobals.GetHomeBody() ? 1 : 0; } catch (Exception) { }
             // the biome under the vessel, said as a name (Kerbin's "Water" reads badly in a sentence, left out)
             try

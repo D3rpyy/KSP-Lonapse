@@ -2514,6 +2514,22 @@ public static class Tests
         Check(flight["day"] == "3" && flight["alt_km"] == "1.2" && SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 25600)["alt_km"] == "26"
               && !SubtitleSlots.FlightValues(0, ProbeRules.EarthDay, null, "", 0).ContainsKey("vessel"),
               "slots: flight values (mission day from 1, km, empty names left out)", flight["day"] + " " + flight["alt_km"]);
+        // {probe}: the probe name from the flight values, left out outside probe mode
+        var pflight = SubtitleSlots.FlightValues(0, ProbeRules.KerbinDay, "Kerbin", "Lander II", 1234, "QBE");
+        var pfilled = SubtitleSlots.Fill(new List<PhraseEntry> { new PhraseEntry { ClipKey = "pr", English = "Hello {probe}, how is {vessel}?" } },
+                                         new SlotPools(), pflight, null, null, null);
+        Check(pflight["probe"] == "QBE" && pfilled[0].English == "Hello QBE, how is Lander II?"
+              && !SubtitleSlots.FlightValues(0, ProbeRules.KerbinDay, "Kerbin", "Lander II", 1234).ContainsKey("probe")
+              && Slots.IsName("probe") && Slots.IsFlight("probe") && !Slots.IsRuntimeNumber("probe") && Slots.IsReserved("probe"),
+              "slots: {probe} is a flight name slot, filled with the probe name and left out of other flights", pfilled[0].English);
+        {
+            // the runtime voice says the probe name as a name
+            var rtLines = new List<PhraseEntry> { new PhraseEntry { ClipKey = "pr2", Role = "mc", Spanish = "Hola", English = "Hi {probe}.",
+                SpanishRt = new List<string> { "Hola, {probe}." } } };
+            var spoken = SubtitleSlots.Fill(rtLines, new SlotPools(), pflight, null, null, null, null, true);
+            Check(spoken[0].RuntimeSpanish != null && spoken[0].RuntimeSpanish.StartsWith("Hola, ") && spoken[0].RuntimeSpanish.Contains("QBE"),
+                  "slots: the runtime Spanish of {probe} is marked as a name", spoken[0].RuntimeSpanish);
+        }
         var pp = SlotPools.Parse(new List<string> { "pool\tenglish", "thing\thelmet", "thing\tsock" }, null);
         var un = new List<string>();
         List<PhraseEntry> f = SubtitleSlots.Fill(sc.Lines, pp, flight,
@@ -2989,6 +3005,94 @@ public static class Tests
 
         FlightSample fs = new FlightSample();
         Check(fs.probeCoreKey == null && !fs.probeAsleep, "probe: FlightSample defaults mean no probe", null);
+
+        LinesetTests();
+    }
+
+    static void LinesetTests()
+    {
+        ProbeCores.ClearLinesets();
+        var errs = new List<string>();
+        Check(ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", " My_Probe2 " }, { "displayName", " Pip " } }, errs)
+              && errs.Count == 0 && ProbeCores.IsLineset("my_probe2") && ProbeCores.DisplayName("my_probe2") == "Pip",
+              "lineset: a node registers a lowercase id with its display name", string.Join(" ; ", errs.ToArray()));
+        errs.Clear();
+        bool noName = !ProbeCores.RegisterLineset(new Dictionary<string, string>(), errs);
+        bool badChars = !ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "my probe" } }, errs);
+        bool stockClash = !ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "okto" } }, errs);
+        bool anyClash = !ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "any" } }, errs);
+        bool tooLong = !ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", new string('a', 33) } }, errs);
+        bool twice = !ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "my_probe2" }, { "displayName", "Other" } }, errs);
+        Check(noName && badChars && stockClash && anyClash && tooLong && twice && errs.Count == 6 && ProbeCores.DisplayName("my_probe2") == "Pip",
+              "lineset: no name, bad characters, a stock key, any, a long id and a double id are refused", errs.Count.ToString());
+        ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "aaa" } }, null);
+        string[] keys = ProbeCores.LinesKeys();
+        Check(keys.Length == ProbeCores.Keys.Length + 2 && keys[0] == ProbeCores.Keys[0] && keys[ProbeCores.Keys.Length] == "aaa"
+              && keys[keys.Length - 1] == "my_probe2" && ProbeCores.DisplayName("aaa") == "Probe" && ProbeCores.IsLinesKey("okto") && !ProbeCores.IsLinesKey("nope"),
+              "lineset: LinesKeys is the stock keys then the linesets in name order", string.Join(" ", keys));
+
+        // the phrase table: the core column accepts a registered lineset, not an unknown id
+        string head = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\ttrait\tpersona\ttopic\tcore\tbeep\tspanish\tenglish";
+        Func<string, string> row = core => "px_t_1\tprobe_chat\tchatter\tcalm\tmc\tpx_t\t1\tm\tgoofy\tany\tany\tany\tany\t" + core + "\t\tHola\tHello";
+        var e1 = new List<string>();
+        PhraseTable t1 = PhraseTable.Parse(new List<string> { head, row("my_probe2") }, e1);
+        var e2 = new List<string>();
+        PhraseTable t2 = PhraseTable.Parse(new List<string> { head, row("unknownset") }, e2);
+        Check(e1.Count == 0 && t1.Entries.Count == 1 && t1.Entries[0].Core == "my_probe2",
+              "lineset: a table row with a registered lineset in the core column is accepted", string.Join(" ; ", e1.ToArray()));
+        Check(e2.Count == 1 && e2[0].Contains("unknown core") && t2.Entries.Count == 0,
+              "lineset: an unregistered core in the table is still refused", string.Join(" ; ", e2.ToArray()));
+        Check(PhraseTable.CoreMatches("my_probe2", "my_probe2") && !PhraseTable.CoreMatches("my_probe2", "okto") && PhraseTable.CoreMatches("any", "my_probe2"),
+              "lineset: scenes of a lineset match only that lineset, any scenes match too", null);
+
+        // a voice names a lineset in lines
+        var verrs = new List<string>();
+        ProbeVoiceSpec lv = ProbeVoiceSpec.FromValues(new Dictionary<string, string> { { "name", "pipvoice" }, { "lines", "My_Probe2" } }, verrs);
+        ProbeVoiceSpec bad = ProbeVoiceSpec.FromValues(new Dictionary<string, string> { { "name", "pipvoice" }, { "lines", "nosuch" } }, verrs);
+        Check(lv != null && lv.Lines == "my_probe2" && bad != null && bad.Lines == ProbeCores.Generic && verrs.Count == 1,
+              "lineset: a voice may name a lineset in lines, an unknown name falls back to generic with a warning", string.Join(" ; ", verrs.ToArray()));
+
+        // ModuleLonapse lines: the deciding core's module wins, except for a voice the player chose
+        var reg = ProbeVoiceRegistry.Build(new List<ProbeVoiceSpec> { lv }, null);
+        var parts = new List<ProbeCorePart> { new ProbeCorePart("modProbe", "pipvoice", 0, null, "AAA") };
+        int at;
+        ProbeVoicePick.Why why;
+        ProbeVoiceSpec picked = ProbeVoicePick.Resolve(parts, null, reg, out at, out why);
+        Check(ProbeVoicePick.LinesFor(parts, at, why, picked) == "aaa", "lineset: the module's lines win over the lines of the voice", null);
+        var plain = new List<ProbeCorePart> { new ProbeCorePart("modProbe", "pipvoice", 0) };
+        picked = ProbeVoicePick.Resolve(plain, null, reg, out at, out why);
+        Check(ProbeVoicePick.LinesFor(plain, at, why, picked) == "my_probe2", "lineset: without module lines the voice decides", null);
+        var badLines = new List<ProbeCorePart> { new ProbeCorePart("modProbe", "pipvoice", 0, null, "nosuch") };
+        picked = ProbeVoicePick.Resolve(badLines, null, reg, out at, out why);
+        Check(ProbeVoicePick.LinesFor(badLines, at, why, picked) == "my_probe2", "lineset: module lines that name nothing known are ignored", null);
+        picked = ProbeVoicePick.Resolve(parts, new Dictionary<string, string> { { ProbeCores.Normalise("modProbe"), "pipvoice" } }, reg, out at, out why);
+        Check(why == ProbeVoicePick.Why.Player && ProbeVoicePick.LinesFor(parts, at, why, picked) == "my_probe2",
+              "lineset: a voice the player picked keeps its own lines", null);
+        Check(ProbeVoicePick.LinesFor(parts, 0, ProbeVoicePick.Why.None, null) == null, "lineset: no voice, no lines", null);
+
+        // the example in docs/api stays valid: the cfg registers pip, the table parses clean with pip registered
+        {
+            string dir = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../docs/api"));
+            string exTsv = System.IO.Path.Combine(dir, "example_lineset.tsv"), exCfg = System.IO.Path.Combine(dir, "example_lineset.cfg");
+            if (System.IO.File.Exists(exTsv) && System.IO.File.Exists(exCfg))
+            {
+                ProbeCores.ClearLinesets();
+                var ee = new List<string>();
+                PhraseTable noSet = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8)), ee);
+                bool refused = ee.Count > 0 && noSet.Entries.Count == 0;
+                ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "pip" } }, null);
+                ee.Clear();
+                PhraseTable ex = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8)), ee);
+                bool probeRows = false;
+                foreach (PhraseEntry pe in ex.Entries) probeRows |= pe.Role == "probe" && pe.Core == "pip";
+                Check(refused && ee.Count == 0 && ex.Entries.Count == 5 && probeRows && ex.Scenes.Count == 2
+                      && System.IO.File.ReadAllText(exCfg).Contains("name = pip"),
+                      "lineset: docs/api/example_lineset.tsv parses clean once its lineset is registered, and not before",
+                      ee.Count + " errors, " + ex.Entries.Count + " rows, " + string.Join(" ; ", ee.ToArray()));
+            }
+            else Console.WriteLine("INFO  lineset example not found next to the tests");
+        }
+        ProbeCores.ClearLinesets();
     }
 
     static void ProbeSettingsTests()
@@ -2997,10 +3101,10 @@ public static class Tests
         Tuning t = d.tuning;
         Check(d.probeMode && d.probePetTalk && d.probeHail && d.probeSleep,
               "settings v5: probe bools default true", null);
-        Check(t.hailInterval == 360f && t.probeRateFactor == 1.0f
+        Check(t.hailInterval == 120f && t.probeRateFactor == 1.0f
               && t.probeDrowsyFrac == 0.15f && t.probeSleepFrac == 0.03f && t.probeBeepPitchMax == 1.35f, "settings v5: TUNING defaults of the plan", null);
         Tuning t0 = new Tuning(); t0.Sanitize();
-        Check(t0.hailInterval == 360f && t0.probeRateFactor == 1.0f
+        Check(t0.hailInterval == 120f && t0.probeRateFactor == 1.0f
               && t0.probeDrowsyFrac == 0.15f && t0.probeSleepFrac == 0.03f && t0.probeBeepPitchMax == 1.35f, "settings v5: Sanitize keeps the defaults", null);
 
         // round trip of the TUNING node: Save and Load copy every public float by reflection under its own name
@@ -3025,7 +3129,7 @@ public static class Tests
         Tuning bt = new Tuning();
         bt.hailInterval = 1e5f; bt.probeRateFactor = float.NaN; bt.probeDrowsyFrac = 0.05f; bt.probeSleepFrac = 0.1f;
         bt.probeBeepPitchMax = 0.5f; bt.Sanitize();
-        Check(bt.hailInterval == 1800f && bt.probeRateFactor == 1.0f && bt.probeSleepFrac == 0.05f && bt.probeBeepPitchMax == 1f,
+        Check(bt.hailInterval == 600f && bt.probeRateFactor == 1.0f && bt.probeSleepFrac == 0.05f && bt.probeBeepPitchMax == 1f,
               "settings v5: Sanitize clamps probe tuning and keeps sleep at or below drowsy", bt.probeSleepFrac.ToString());
         Near(DcMath.StaticCurve(0f), 0.0, 1e-6, "radio static: 0 % is silent");
         Near(DcMath.StaticCurve(0.25f), 0.5, 1e-6, "radio static: 25 % is half the full level");

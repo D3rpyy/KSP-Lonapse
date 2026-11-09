@@ -194,6 +194,7 @@ namespace Lonapse
                     RadioProfile p = Profile;
                     b.SetBand(p.HighPassHz, p.LowPassHz);
                     b.Play(clip, 0.7f, pitch, false, 0f);
+                    b.probeBeep = true;
                     b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion) + 0.3f * host.StaticLevel * cfg.weakSignalVolume;
                     b.dropout = host.Dropout; // a weak signal chops the beeps like the MC lines
                     if (staticChop) b.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
@@ -228,6 +229,7 @@ namespace Lonapse
             RadioProfile p = Profile;
             b.SetBand(p.HighPassHz, p.LowPassHz);
             b.Play(clip, 0.7f, 1f, false, 0f);
+            b.probeBeep = true;
             b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion);
             b.dropout = 0f;
             // label for the player: nothing for an unchanged stock voice, "changed" for an edited stock voice,
@@ -686,6 +688,7 @@ namespace Lonapse
                 b.baseDistortion = 0f;
             }
             b.Play(clip, CabinBeepVolume, ProbeDrowsy ? 0.9f : 1f, false, 0f);
+            b.probeBeep = true;
             b.dropout = 0f;   // same cabin: no signal dropouts
             ShowProbeSubtitle(who, text, Math.Max(2.5f, b.duration + 1f));
             cabinBeepCh = b;

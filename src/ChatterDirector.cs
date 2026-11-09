@@ -273,7 +273,7 @@ namespace Lonapse
             return d;
         }
 
-        /// <summary>day, here, vessel and alt_km: there on every flight.</summary>
+        /// <summary>day, here, vessel, alt_km and probe (probe mode only): there on every flight.</summary>
         private System.Collections.Generic.Dictionary<string, string> BaseFlightValues()
         {
             string here = null, vessel = null;
@@ -294,7 +294,9 @@ namespace Lonapse
             catch (Exception) { }
             if (!string.IsNullOrEmpty(bodyOverride)) here = char.ToUpperInvariant(bodyOverride[0]) + bodyOverride.Substring(1);
             if (here == "Mun") here = "the Mun";   // as KSP writes it, a capital at a sentence start
-            return SubtitleSlots.FlightValues(host.missionTime, LonapseAddon.DayLength(), here, vessel, alt);
+            string probe = null;
+            try { if (host.probeMode) probe = host.ProbeDisplayName; } catch (Exception) { }   // the subtitle name of the probe
+            return SubtitleSlots.FlightValues(host.missionTime, LonapseAddon.DayLength(), here, vessel, alt, probe);
         }
 
         private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)
@@ -989,6 +991,7 @@ namespace Lonapse
                     }
                     AudioClip clip = ClipLibrary.Click;
                     float clickVol = tu.intercomClickVolume;
+                    bool keyed = false;   // a squelch or roger beep instead of the cabin click
                     if (cfg.intercomRadioFx)
                     {
                         // radio keying instead of the cabin click: squelch when the first speaker keys up, a roger
@@ -998,13 +1001,14 @@ namespace Lonapse
                         string f = !chatStarted ? rp.OpenClip : (cfg.rogerBeep ? "beeps/roger" : rp.CloseClip);
                         AudioClip key = ClipLibrary.CountOf(f) > 0 ? ClipLibrary.Next(f, rng) : null;
                         if (key != null && f == "beeps/roger") NoteRoger();
-                        if (key != null) { clip = key; clickVol = f == "beeps/roger" ? tu.radioKeyVolume * 0.75f : tu.radioKeyVolume; }
+                        if (key != null) { clip = key; keyed = true; clickVol = f == "beeps/roger" ? tu.radioKeyVolume * 0.75f : tu.radioKeyVolume; }
                     }
                     if (clip == null) return StartResult.Skip;
                     // dedicated source: a click is never skipped because crew channels are busy
                     VoiceChannel c = host.clickCh;
                     if (c.Busy) c.Stop();
                     c.Play(clip, clickVol, 1f, false, 0f);
+                    c.keySound = keyed;
                     ch = c;
                     return StartResult.Started;
                 }
@@ -1090,6 +1094,7 @@ namespace Lonapse
                     bool isQuindar = u.folder != null && u.folder.StartsWith("beeps/", StringComparison.Ordinal);
                     // quindar tones sit with the beep level, squelch with the control level
                     c.Play(clip, isQuindar ? 0.45f : 0.7f, 1f, false, 0f);
+                    c.keySound = true;
                     c.baseDistortion = isQuindar ? 0.05f : tu.controlDistortion;
                     ch = c;
                     return StartResult.Started;

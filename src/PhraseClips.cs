@@ -76,6 +76,7 @@ namespace Lonapse
                     Array.Sort(files, StringComparer.Ordinal);
                     foreach (string f in files) { rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8)); extraFiles++; }
                 }
+                extraFiles += AddModProbeFiles(rows);
                 table = PhraseTable.Parse(rows, errors);
             }
             catch (Exception e)
@@ -282,6 +283,38 @@ namespace Lonapse
 
         /// <summary>The .tsv files in GameData/&lt;Mod&gt;/Lonapse/ of every other mod, sorted by mod and name. A mod
         /// folder that cannot be read is skipped.</summary>
+        /// <summary>The probe line files of other mods: GameData/&lt;Mod&gt;/Lonapse/Probe/*.tsv, same format as
+        /// Phrases/Extra (a core column that names a lineset from LONAPSE_PROBE_LINES). Added after the Lonapse rows.
+        /// Returns the number of files read.</summary>
+        static int AddModProbeFiles(List<string> rows)
+        {
+            int n = 0;
+            string gd = Path.Combine(KSPUtil.ApplicationRootPath, "GameData");
+            if (!Directory.Exists(gd)) return 0;
+            string[] mods = Directory.GetDirectories(gd);
+            Array.Sort(mods, StringComparer.Ordinal);
+            foreach (string m in mods)
+            {
+                string mod = Path.GetFileName(m);
+                if (mod == "Lonapse") continue;
+                try
+                {
+                    string dir = Path.Combine(Path.Combine(m, "Lonapse"), "Probe");
+                    if (!Directory.Exists(dir)) continue;
+                    string[] paths = Directory.GetFiles(dir, "*.tsv");
+                    Array.Sort(paths, StringComparer.Ordinal);
+                    foreach (string f in paths)
+                    {
+                        rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8));
+                        n++;
+                        Log.Info("Lonapse: probe lines of " + mod + "/Lonapse/Probe/" + Path.GetFileName(f));
+                    }
+                }
+                catch (Exception e) { Log.Warn("Lonapse: probe lines of " + mod + " not read: " + e.Message); }
+            }
+            return n;
+        }
+
         static List<KeyValuePair<string, IList<string>>> ModLineFiles()
         {
             var r = new List<KeyValuePair<string, IList<string>>>();

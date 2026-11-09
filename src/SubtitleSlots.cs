@@ -603,6 +603,7 @@ namespace Lonapse
             {
                 case "other":
                 case "self":
+                case "probe":
                     return RuntimeSpeech.MarkName(RuntimeLines.CleanName(v));
                 case "vessel":
                     string say = v.StartsWith("#", StringComparison.Ordinal) ? null : RuntimeLines.VesselSpeakable(v);
@@ -673,10 +674,18 @@ namespace Lonapse
         public static Dictionary<string, string> FlightValues(double missionTime, double dayLength, string here,
                                                               string vessel, double altM)
         {
+            return FlightValues(missionTime, dayLength, here, vessel, altM, null);
+        }
+
+        /// <summary>As above, with probe: the subtitle name of the probe ({probe}), null outside probe mode.</summary>
+        public static Dictionary<string, string> FlightValues(double missionTime, double dayLength, string here,
+                                                              string vessel, double altM, string probe)
+        {
             var d = new Dictionary<string, string>();
             d["day"] = ProbeRules.MissionDay(missionTime, dayLength).ToString(System.Globalization.CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(here)) d["here"] = here;
             if (!string.IsNullOrEmpty(vessel)) d["vessel"] = vessel;
+            if (!string.IsNullOrEmpty(probe)) d["probe"] = probe;
             if (!double.IsNaN(altM) && !double.IsInfinity(altM))
             {
                 double km = Math.Max(0, altM) / 1000.0;

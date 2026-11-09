@@ -20,6 +20,8 @@ namespace Lonapse
         private AudioReverbFilter reverb;  // crew channels only, used by the intercom preset
         private TremoloDsp trem;
         private GainDsp gainDsp;          // sfx and breath channels: boost above the default of a volume slider
+        public bool keySound;             // the clip playing is a radio key sound (squelch, roger beep): the Sound effects slider, set by the caller after Play
+        public bool probeBeep;            // the clip playing is a probe beep (the Probe beeps slider), set by the caller after Play
         public float userGain = 1f;       // linear, from a sound effect volume slider (slider / 0.8). Above 1 the boost runs in GainDsp
         private VoiceDsp dsp;             // crew and control: presence EQ, compressor, voice boost
         public float boost = 1f;          // linear voice gain (voiceBoostDb, calloutVolume), applied in VoiceDsp
@@ -116,7 +118,7 @@ namespace Lonapse
             try { trem.sampleRate = AudioSettings.outputSampleRate; } catch (Exception) { trem.sampleRate = 48000f; }
             trem.depth = 0f;
 
-            if (kind == ChannelKind.Sfx || kind == ChannelKind.Breath) gainDsp = go.AddComponent<GainDsp>();
+            if (kind == ChannelKind.Sfx || kind == ChannelKind.Breath || kind == ChannelKind.Beep) gainDsp = go.AddComponent<GainDsp>();
 
             if (kind == ChannelKind.Crew || kind == ChannelKind.Control)
             {
@@ -184,6 +186,8 @@ namespace Lonapse
             }
             clipName = clip.name ?? "";
             boost = 1f;
+            probeBeep = false;
+            keySound = false;
             phraseKey = null;
             dropout = 0f;
             duration = clip.length / Math.Max(0.05f, Math.Abs(src.pitch));

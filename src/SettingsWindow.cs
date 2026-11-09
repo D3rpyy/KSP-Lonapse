@@ -506,7 +506,7 @@ namespace Lonapse
             s.crewVolume = Volume("Crew", s.crewVolume);
             s.intercomVolume = Volume("Intercom", s.intercomVolume);
             s.calloutVolume = Volume("Callouts", s.calloutVolume, 2f);
-            s.beepVolume = Volume("Beeps", s.beepVolume);
+            s.beepVolume = Volume("Probe beeps", s.beepVolume, 2f);
             s.staticVolume = Volume("Static", s.staticVolume);
             s.sfxVolume = Volume("Sound effects", s.sfxVolume);
             s.evaRadioVolume = Volume("EVA radio", s.evaRadioVolume);
@@ -585,7 +585,7 @@ namespace Lonapse
             s.probePetTalk = Toggle(s.probePetTalk, "Mission Control talks to the probe");
             s.probeHail = Toggle(s.probeHail, "Probe calls Mission Control");
             s.probeSleep = Toggle(s.probeSleep, "Sleepy on low power");
-            float h = Row("Call gap", tu.hailInterval, 60f, 1800f, tu.hailInterval / 60f, "0.#' min'");
+            float h = Row("Call gap", tu.hailInterval, 60f, 600f, tu.hailInterval / 60f, "0.#' min'");
             tu.hailInterval = Mathf.Round(h / 10f) * 10f;
             Hint("Average time between two calls from the probe to Mission Control.");
 
@@ -708,7 +708,7 @@ namespace Lonapse
             GUILayout.BeginHorizontal();
             GUILayout.Label("Lines of", GUILayout.Width(60f));
             int ld = StepButton(have ? ProbeCores.DisplayName(v.Lines) + " (" + v.Lines + ")" : "-");
-            if (ld != 0 && have) EditVoice(s).Lines = Step(ProbeCores.Keys, v.Lines, ld);
+            if (ld != 0 && have) EditVoice(s).Lines = Step(ProbeCores.LinesKeys(), v.Lines, ld);
             GUILayout.EndHorizontal();
             Hint("Wave and rhythm shape the sound, glide slides from note to note. Lines of: whose phrase table lines the probe gets.");
             GUILayout.Label(have && v.Moods.Count > 0 ? "Own moods (from a config): " + string.Join(", ", new List<string>(v.Moods.Keys).ToArray())
