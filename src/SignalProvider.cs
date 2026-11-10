@@ -33,6 +33,8 @@ namespace Lonapse
         private float candidateTime;
         private float pollLeft;
         private bool loggedRaw;
+        private bool relayLogged, lastRelayConnected;
+        private string lastRelayName;
 
         // RemoteTech by reflection (soft dependency, never a hard reference)
         private bool rtProbed;
@@ -43,6 +45,7 @@ namespace Lonapse
             pollLeft = 0f;
             candidate = SignalSource.None;
             candidateTime = 0f;
+            relayLogged = false;
         }
 
         public void Update(float dt, Vessel v, Settings cfg)
@@ -94,11 +97,19 @@ namespace Lonapse
                 case SignalSource.Distance: signal = distSignal; connected = true; break;
                 default: signal = 1f; connected = true; break;
             }
+            if (!overrideActive && v != null && v.isEVA && cfg.evaRelay)
+            {
+                if (!relayLogged || lastRelayName != relayName || lastRelayConnected != connected)
+                    Log.Info("EVA relay: " + (relayName != null ? relayName + " at " + relayKm.ToString("0.00") + " km" : "no ship in suit range")
+                             + ", " + source + ", " + (connected ? "connected" : "no link to KSC"));
+                relayLogged = true; lastRelayName = relayName; lastRelayConnected = connected;
+            }
+            else relayLogged = false;
         }
 
         /// <summary>Reads CommNet, RemoteTech and the distance fallback for one vessel. active: the active vessel
         /// (logs the raw CommNet value once and fills distanceKm and occluded).</summary>
-        private Link ReadLink(Vessel v, Settings cfg, bool active)
+        private Link ReadLink(Vessel v, Settings cfg, bool active, bool relay = false)
         {
             Link l = new Link { cnSignal = 1f, rtSignal = 1f, distSignal = 1f, cnConnected = true, rtConnected = true };
             try
@@ -106,8 +117,23 @@ namespace Lonapse
                 l.commNetOn = HighLogic.CurrentGame != null && HighLogic.CurrentGame.Parameters.Difficulty.EnableCommNet;
                 if (l.commNetOn && v.Connection != null)
                 {
-                    l.cnConnected = v.Connection.IsConnected;
-                    double raw = v.Connection.SignalStrength;
+                    double raw;
+                    var connection = v.Connection;
+                    if (relay && connection.Comm != null && connection.Comm.Net != null)
+                    {
+                        // An inactive/empty ship can have a stale controlPath. Read its actual route home from
+                        // the network instead of depending on command ownership or the active vessel's cache.
+                        // Keep the scratch path separate from the ship's controlPath and its control state.
+                        var path = new CommNet.CommPath();
+                        l.cnConnected = connection.Comm.Net.FindHome(connection.Comm, path);
+                        raw = l.cnConnected ? path.signalStrength : 0.0;
+                        if (!l.cnConnected && EvaRadioLink.TryRead(v, out raw)) l.cnConnected = true;
+                    }
+                    else
+                    {
+                        l.cnConnected = connection.IsConnected;
+                        raw = connection.SignalStrength;
+                    }
                     if (active && !loggedRaw) { loggedRaw = true; Log.Info("CommNet SignalStrength raw value " + raw.ToString("0.000")); }
                     l.cnSignal = l.cnConnected ? DcMath.Clamp01((float)raw) : 0f;
                     l.commNetOk = !double.IsNaN(raw);
@@ -145,7 +171,7 @@ namespace Lonapse
                     double km = (s.GetWorldPos3D() - pos).magnitude / 1000.0;
                     double suit = SignalMath.FromDistance(km, tu.evaRelayFullKm, tu.evaRelayZeroKm);
                     if (suit <= 0.0) continue;
-                    Link l = ReadLink(s, cfg, false);
+                    Link l = ReadLink(s, cfg, false, true);
                     double sig = l.commNetOn && l.commNetOk ? l.cnSignal : (l.rtOk ? l.rtSignal : (l.distOk ? l.distSignal : 1f));
                     double score = sig * suit;
                     if (score > bestScore) { bestScore = score; best = s; bestLink = l; bestKm = km; }

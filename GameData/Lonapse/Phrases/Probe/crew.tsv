@@ -29,24 +29,7 @@ pc_012_1	pc_012_1	pc_012	1	probe	flight.probe_crew	intercom				0		[beeps a long 
 pc_012_2	pc_012_2	pc_012	2	kerbal_a	flight.probe_crew	intercom				0	Más despacio, que tomo notas.	Slower, I'm taking notes.	calm	chatter	both	idle	any	any	any	any	any						
 pc_012_3	pc_012_3	pc_012	3	probe	flight.probe_crew	intercom				0		[beeps even faster]	calm	chatter	both	idle	any	any	any	any	any	offended					
 pc_013_1	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la comida?	What do you think of the food?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v02	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la pasta de aperitivo?	How do you like the snack paste?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v03	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del queso en tubo?	How do you like the tube cheese?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v04	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del fideos liofilizados?	How do you like the freeze-dried noodles?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v05	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del alubias espaciales?	How do you like the space beans?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v06	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del famoso chile de Jeb?	How do you like the Jeb's famous chili?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v07	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del huevos en polvo?	How do you like the powdered eggs?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v08	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del guiso misterioso?	How do you like the mystery stew?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v09	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del barritas de algas?	How do you like the algae bars?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v10	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del raciones de emergencia?	How do you like the emergency rations?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v11	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la sopa recalentada?	How do you like the reheated soup?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v12	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del pescado deshidratado?	How do you like the dehydrated fish?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v13	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la pizza fría?	How do you like the cold pizza?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v14	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del tacos espaciales?	How do you like the space tacos?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v15	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del puré de zanahoria?	How do you like the carrot puree?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v16	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del café instantáneo?	How do you like the instant coffee?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v17	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del cohetes de gominola?	How do you like the gummy rockets?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v18	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del pudin rehidratado?	How do you like the rehydrated pudding?	calm	chatter	both	idle	any	any	any	any	any						
-pc_013_1__v19	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del helado liofilizado?	How do you like the freeze-dried ice cream?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v02	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas {snack_supply}?	How do you like the {snack_supply}?	calm	chatter	both	idle	any	any	any	any	any						
 pc_013_2	pc_013_2	pc_013	2	probe	flight.probe_crew	intercom				0		[beeps cheerfully]	calm	chatter	both	idle	any	any	any	any	any	happy					
 pc_013_3	pc_013_3	pc_013	3	kerbal_a	flight.probe_crew	intercom				0	Claro, tú no la tienes que comer.	Sure, you don't have to eat it.	calm	chatter	both	idle	any	any	any	any	any						
 pc_014_1	pc_014_1	pc_014	1	probe	flight.probe_crew	intercom				0		[beeps at the snacks]	calm	chatter	both	idle	any	any	any	any	any	curious					
@@ -143,14 +126,7 @@ pc_049_3	pc_049_3	pc_049	3	kerbal_a	flight.probe_crew	intercom				0	Con un sí o
 pc_050_1	pc_050_1	pc_050	1	probe	flight.probe_crew	intercom				0		[beeps at the snacks]	calm	chatter	both	idle	any	any	any	any	any	offended					
 pc_050_2	pc_050_2	pc_050	2	kerbal_a	flight.probe_crew	intercom				0	Las migas no te van a hacer daño. Creo.	The crumbs won't hurt you. I think.	calm	chatter	both	idle	any	any	any	any	any						
 pc_051_1	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a las cartas.	I'm going to teach you to play cards.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v02	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a veo veo.	Let me teach you I spy.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v03	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a piedra, papel o tijera.	Let me teach you rock paper scissors.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v04	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a las veinte preguntas.	Let me teach you twenty questions.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v05	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a quién flota más tiempo.	Let me teach you who can float the longest.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v06	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a adivinar el aperitivo.	Let me teach you guess the snack.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v07	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a esconder la llave inglesa.	Let me teach you hide the wrench.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v08	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a adivinar el planeta.	Let me teach you guess the planet.	calm	chatter	both	idle	any	any	any	any	any						
-pc_051_1__v09	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a quién parpadea primero.	Let me teach you who blinks first.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v02	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a {cabin_game}.	Let me teach you {cabin_game}.	calm	chatter	both	idle	any	any	any	any	any						
 pc_051_2	pc_051_2	pc_051	2	probe	flight.probe_crew	intercom				0		[beeps eagerly]	calm	chatter	both	idle	any	any	any	any	any	curious					
 pc_051_3	pc_051_3	pc_051	3	kerbal_a	flight.probe_crew	intercom				0	Ya has ganado. ¿Cómo has ganado?	You already won. How did you win?	calm	chatter	both	idle	any	any	any	any	any						
 pc_051_4	pc_051_4	pc_051	4	probe	flight.probe_crew	intercom				0		[beeps innocently]	calm	chatter	both	idle	any	any	any	any	any	proud					

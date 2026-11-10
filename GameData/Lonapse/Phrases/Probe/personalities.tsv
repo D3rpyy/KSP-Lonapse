@@ -26,23 +26,6 @@ pk_mk2drone_chat_long_1_4	pk_mk2drone_chat_long_1_4	pk_mk2drone_chat_long_1	4	pr
 pk_mk2drone_chat_long_1_5	pk_mk2drone_chat_long_1_5	pk_mk2drone_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Vale. Voy a desenchufar algo, por si acaso.	Okay. I'm going to unplug something, just in case.	calm	chatter	m	idle	any	any	any	any	mk2drone						
 pk_mk2drone_chute_1	pk_mk2drone_chute_1	pk_mk2drone_chute	1	probe	flight.chute_full	radio				0		[beeps calmly]	none	chatter	both	any	any	any	any	any	mk2drone	happy					
 pk_mk2drone_chute_2	pk_mk2drone_chute_2	pk_mk2drone_chute	2	mission_control	flight.chute_full	radio				0	Paracaídas abierto. Esta vez nadie se ha desmayado.	Chute open. This time nobody fainted.	none	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_data_1	pk_mk2drone_data_1	pk_mk2drone_data	1	probe	flight.probe_data	radio				0		[beeps a fast stream]	calm	chatter	both	any	any	any	any	any	mk2drone	proud					
-pk_mk2drone_data_2	pk_mk2drone_data_2	pk_mk2drone_data	2	mission_control	flight.probe_data	radio				0	Recibido, dron. Demasiado rápido para leerlo.	Copy, drone. Too fast to read.	calm	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_dock_1	pk_mk2drone_dock_1	pk_mk2drone_dock	1	probe	flight.docked	radio				0		[beeps at the port]	none	chatter	both	any	any	any	any	any	mk2drone	curious					
-pk_mk2drone_dock_2	pk_mk2drone_dock_2	pk_mk2drone_dock	2	mission_control	flight.docked	radio				0	Acoplado. Por favor, no te copies a la estación.	Docked. Please don't copy yourself into the station.	none	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_hail_01_1	pk_mk2drone_hail_01_1	pk_mk2drone_hail_01	1	probe	flight.probe_hail	radio				0		[beeps out of nowhere]	calm	chatter	both	idle	any	any	any	any	mk2drone	curious					
-pk_mk2drone_hail_01_2	pk_mk2drone_hail_01_2	pk_mk2drone_hail_01	2	mission_control	flight.probe_hail	radio				0	Sí, dron, estamos aquí. Todos. Por ahora.	Yes, drone, we're here. All of us. For now.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-pk_mk2drone_hail_02_1	pk_mk2drone_hail_02_1	pk_mk2drone_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a long calculation]	calm	chatter	both	idle	any	any	any	any	mk2drone	proud					
-pk_mk2drone_hail_02_2	pk_mk2drone_hail_02_2	pk_mk2drone_hail_02	2	mission_control	flight.probe_hail	radio				0	No hacía falta calcular la ruta a nuestras casas.	You didn't need to calculate the route to our houses.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-pk_mk2drone_hail_02_3	pk_mk2drone_hail_02_3	pk_mk2drone_hail_02	3	probe	flight.probe_hail	radio				0		[beeps innocently]	calm	chatter	both	idle	any	any	any	any	mk2drone	happy					
-pk_mk2drone_hail_03_1	pk_mk2drone_hail_03_1	pk_mk2drone_hail_03	1	probe	flight.probe_hail	radio				0		[beeps politely]	calm	chatter	both	idle	any	any	any	any	mk2drone	happy					
-pk_mk2drone_hail_03_2	pk_mk2drone_hail_03_2	pk_mk2drone_hail_03	2	mission_control	flight.probe_hail	radio				0	Hola, dron. Qué educado. Qué sospechoso.	Hi, drone. How polite. How suspicious.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-pk_mk2drone_hail_04_1	pk_mk2drone_hail_04_1	pk_mk2drone_hail_04	1	probe	flight.probe_hail	radio				0		[beeps flatly]	calm	chatter	both	idle	any	any	any	any	mk2drone	bored					
-pk_mk2drone_hail_04_2	pk_mk2drone_hail_04_2	pk_mk2drone_hail_04	2	mission_control	flight.probe_hail	radio				0	¿Aburrido? Antes aquí había un piloto que gritaba mucho.	Bored? There used to be a pilot here who screamed a lot.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-pk_mk2drone_ms_day1_1	pk_mk2drone_ms_day1_1	pk_mk2drone_ms_day1	1	mission_control	flight.probe_milestone	radio				0	Un día de vuelo, dron. Ningún piloto se ha quejado.	One day of flight, drone. No pilot has complained.	calm	chatter	m	any	any	any	any	day1	mk2drone						
-pk_mk2drone_ms_day1_2	pk_mk2drone_ms_day1_2	pk_mk2drone_ms_day1	2	probe	flight.probe_milestone	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	day1	mk2drone	proud					
-pk_mk2drone_ms_landing_1	pk_mk2drone_ms_landing_1	pk_mk2drone_ms_landing	1	probe	flight.probe_milestone	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	landing	mk2drone	proud					
-pk_mk2drone_ms_landing_2	pk_mk2drone_ms_landing_2	pk_mk2drone_ms_landing	2	mission_control	flight.probe_milestone	radio				0	Primer aterrizaje aquí. Sin sudor y sin gritos.	First landing here. No sweat and no screaming.	calm	chatter	m	any	any	any	any	landing	mk2drone						
 pk_mk2drone_pl_1	pk_mk2drone_pl_1	pk_mk2drone_pl	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	any	any	any	any	mk2drone	scared					
 pk_mk2drone_pl_2	pk_mk2drone_pl_2	pk_mk2drone_pl	2	mission_control	flight.part_lost	radio				0	Dron, hemos perdido una pieza. Al menos tú no gritas.	Drone, we lost a part. At least you don't scream.	tense	warning	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_pl_3	pk_mk2drone_pl_3	pk_mk2drone_pl	3	probe	flight.part_lost	radio				0		[beeps calmly]	tense	warning	both	any	any	any	any	any	mk2drone	bored					
@@ -53,27 +36,16 @@ pk_mk2drone_pow_low_1	pk_mk2drone_pow_low_1	pk_mk2drone_pow_low	1	probe	flight.p
 pk_mk2drone_pow_low_2	pk_mk2drone_pow_low_2	pk_mk2drone_pow_low	2	mission_control	flight.power_low	radio				0	Batería baja, dron. Por fin algo que no controlas.	Low battery, drone. Finally something you don't control.	tense	warning	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_pow_ok_1	pk_mk2drone_pow_ok_1	pk_mk2drone_pow_ok	1	probe	flight.power_ok	radio				0		[beeps awake]	calm	chatter	both	any	any	any	any	any	mk2drone	happy					
 pk_mk2drone_pow_ok_2	pk_mk2drone_pow_ok_2	pk_mk2drone_pow_ok	2	mission_control	flight.power_ok	radio				0	Has vuelto, dron. Qué bien. Supongo.	You're back, drone. Great. I guess.	calm	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_say_again_1	pk_mk2drone_say_again_1	pk_mk2drone_say_again	1	mission_control	flight.probe_say_again	radio				0	Dron, ¿puedes repetir? Y sin código binario.	Drone, could you repeat? And no binary.	calm	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_say_again_2	pk_mk2drone_say_again_2	pk_mk2drone_say_again	2	probe	flight.probe_say_again	radio				0		[beeps more slowly]	calm	chatter	both	any	any	any	any	any	mk2drone	offended					
-pk_mk2drone_sci_a_1	pk_mk2drone_sci_a_1	pk_mk2drone_sci_a	1	mission_control	flight.science	radio				0	Datos del dron. Perfectos. Demasiado perfectos.	Data from the drone. Perfect. Too perfect.	calm	chatter	m	any	any	any	any	any	mk2drone						
-pk_mk2drone_sci_a_2	pk_mk2drone_sci_a_2	pk_mk2drone_sci_a	2	probe	flight.science	radio				0		[beeps smugly]	calm	chatter	both	any	any	any	any	any	mk2drone	proud					
-pk_mk2drone_sci_b_1	pk_mk2drone_sci_b_1	pk_mk2drone_sci_b	1	probe	flight.science	radio				0		[beeps thoughtfully]	calm	chatter	both	any	any	any	any	any	mk2drone	curious					
-pk_mk2drone_sci_b_2	pk_mk2drone_sci_b_2	pk_mk2drone_sci_b	2	mission_control	flight.science	radio				0	Sí, dron, ya los tenemos. No hace falta analizarnos a nosotros.	Yes, drone, we've got it. No need to analyze us too.	calm	chatter	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_sig_back_1	pk_mk2drone_sig_back_1	pk_mk2drone_sig_back	1	probe	flight.signal_back	radio				0		[beeps politely]	calm	chatter	both	any	any	any	any	any	mk2drone	happy					
 pk_mk2drone_sig_back_2	pk_mk2drone_sig_back_2	pk_mk2drone_sig_back	2	mission_control	flight.signal_back	radio				0	Señal recuperada. ¿Qué has hecho mientras no mirábamos?	Signal back. What did you do while we weren't looking?	calm	chatter	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_sleepy_01_1	pk_mk2drone_sleepy_01_1	pk_mk2drone_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Dron, ¿entras en modo de ahorro?	Drone, going into power saving mode?	calm	chatter	m	idle	any	any	any	any	mk2drone						
 pk_mk2drone_sleepy_01_2	pk_mk2drone_sleepy_01_2	pk_mk2drone_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps in standby]	calm	chatter	both	idle	any	any	any	any	mk2drone	sleepy					
 pk_mk2drone_sleepy_02_1	pk_mk2drone_sleepy_02_1	pk_mk2drone_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Duerme, dron. Y no sueñes con dominar el mundo.	Sleep, drone. And no dreaming about world domination.	calm	chatter	m	idle	any	any	any	any	mk2drone						
 pk_mk2drone_sleepy_02_2	pk_mk2drone_sleepy_02_2	pk_mk2drone_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	mk2drone	sleepy					
-pk_mk2drone_soi_2	pk_mk2drone_soi_2	pk_mk2drone_soi	2	probe	flight.soi_enter	radio				0		[beeps innocently]	calm	chatter	both	any	any	any	any	any	mk2drone	happy					
 pk_mk2drone_splash_1	pk_mk2drone_splash_1	pk_mk2drone_splash	1	probe	flight.splashdown	radio				0		[beeps at the water]	none	chatter	both	any	any	any	any	any	mk2drone	curious					
 pk_mk2drone_splash_2	pk_mk2drone_splash_2	pk_mk2drone_splash	2	mission_control	flight.splashdown	radio				0	Un avión en el agua, dron. Eso no lo calculaste.	A plane in the water, drone. You didn't calculate that.	none	chatter	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_stg_1	pk_mk2drone_stg_1	pk_mk2drone_stg	1	probe	flight.staging	radio				0		[beeps a cold farewell]	none	chatter	both	any	any	any	any	separation	mk2drone	bored					
 pk_mk2drone_stg_2	pk_mk2drone_stg_2	pk_mk2drone_stg	2	mission_control	flight.staging	radio				0	Ni una lágrima por esa pieza, ¿eh, dron?	Not one tear for that part, huh, drone?	none	chatter	m	any	any	any	any	separation	mk2drone						
-pk_mk2drone_stress_heat_1	pk_mk2drone_stress_heat_1	pk_mk2drone_stress_heat	1	mission_control	flight.probe_stress	radio				0	Dron, temperatura alta. Un piloto ya estaría gritando.	Drone, high temperature. A pilot would be screaming by now.	tense	chatter	m	any	heat	any	any	any	mk2drone						
-pk_mk2drone_stress_heat_2	pk_mk2drone_stress_heat_2	pk_mk2drone_stress_heat	2	probe	flight.probe_stress	radio				0		[beeps calmly]	tense	chatter	both	any	heat	any	any	any	mk2drone	bored					
-pk_mk2drone_stress_spin_1	pk_mk2drone_stress_spin_1	pk_mk2drone_stress_spin	1	probe	flight.probe_stress	radio				0		[beeps calmly]	tense	chatter	both	any	spin	any	any	any	mk2drone	proud					
-pk_mk2drone_stress_spin_2	pk_mk2drone_stress_spin_2	pk_mk2drone_stress_spin	2	mission_control	flight.probe_stress	radio				0	Estás girando, dron, y ni te inmutas. Da un poco de miedo.	You're spinning, drone, and you don't even flinch. It's a bit scary.	tense	chatter	m	any	spin	any	any	any	mk2drone						
 pk_mk2drone_td_1	pk_mk2drone_td_1	pk_mk2drone_td	1	probe	flight.touchdown	radio				0		[beeps calmly]	none	chatter	both	any	any	any	any	any	mk2drone	proud					
 pk_mk2drone_td_2	pk_mk2drone_td_2	pk_mk2drone_td	2	mission_control	flight.touchdown	radio				0	Aterrizaje perfecto. Los pilotos de pruebas están celosos.	Perfect landing. The test pilots are jealous.	none	chatter	m	any	any	any	any	any	mk2drone						
 pk_mk2drone_thc_1	pk_mk2drone_thc_1	pk_mk2drone_thc	1	probe	flight.throttle_cut	radio				0		[beeps flatly]	none	chatter	both	any	any	any	any	any	mk2drone	bored					
@@ -104,23 +76,6 @@ pk_mpo_chat_long_1_4	pk_mpo_chat_long_1_4	pk_mpo_chat_long_1	4	probe	flight.prob
 pk_mpo_chat_long_1_5	pk_mpo_chat_long_1_5	pk_mpo_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Vale, vale. Ya leeremos el informe.	Okay, okay. We'll read the report.	calm	chatter	m	idle	any	any	any	any	mpo						
 pk_mpo_chute_1	pk_mpo_chute_1	pk_mpo_chute	1	probe	flight.chute_full	radio				0		[beeps in surprise]	none	chatter	both	any	any	any	any	any	mpo	curious					
 pk_mpo_chute_2	pk_mpo_chute_2	pk_mpo_chute	2	mission_control	flight.chute_full	radio				0	Sí, MPO, llevas paracaídas. Nosotros también nos sorprendimos.	Yes, MPO, you have a parachute. We were surprised too.	none	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_data_1	pk_mpo_data_1	pk_mpo_data	1	probe	flight.probe_data	radio				0		[beeps a huge stream]	calm	chatter	both	any	any	any	any	any	mpo	proud					
-pk_mpo_data_2	pk_mpo_data_2	pk_mpo_data	2	mission_control	flight.probe_data	radio				0	Recibido, MPO. Vamos a necesitar otro disco duro.	Copy, MPO. We're going to need another hard drive.	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_dock_1	pk_mpo_dock_1	pk_mpo_dock	1	probe	flight.docked	radio				0		[beeps at the port]	none	chatter	both	any	any	any	any	any	mpo	curious					
-pk_mpo_dock_2	pk_mpo_dock_2	pk_mpo_dock	2	mission_control	flight.docked	radio				0	Acoplado. ¿Vienes a enseñarle tus datos a alguien?	Docked. Here to show someone your data?	none	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_hail_01_1	pk_mpo_hail_01_1	pk_mpo_hail_01	1	probe	flight.probe_hail	radio				0		[beeps loud and clear]	calm	chatter	both	idle	any	any	any	any	mpo	curious					
-pk_mpo_hail_01_2	pk_mpo_hail_01_2	pk_mpo_hail_01	2	mission_control	flight.probe_hail	radio				0	Te oímos, MPO. Te oye todo el sistema.	We hear you, MPO. The whole system hears you.	calm	chatter	m	idle	any	any	any	any	mpo						
-pk_mpo_hail_02_1	pk_mpo_hail_02_1	pk_mpo_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a new finding]	calm	chatter	both	idle	any	any	any	any	mpo	proud					
-pk_mpo_hail_02_2	pk_mpo_hail_02_2	pk_mpo_hail_02	2	mission_control	flight.probe_hail	radio				0	¿Otro descubrimiento? Apúntalo, lo miramos luego.	Another discovery? Write it down, we'll look later.	calm	chatter	m	idle	any	any	any	any	mpo						
-pk_mpo_hail_03_1	pk_mpo_hail_03_1	pk_mpo_hail_03	1	probe	flight.probe_hail	radio				0		[beeps a question]	calm	chatter	both	idle	any	any	any	any	mpo	curious					
-pk_mpo_hail_03_2	pk_mpo_hail_03_2	pk_mpo_hail_03	2	mission_control	flight.probe_hail	radio				0	No, MPO, todavía no vamos a Moho.	No, MPO, we're not going to Moho yet.	calm	chatter	m	idle	any	any	any	any	mpo						
-pk_mpo_hail_03_3	pk_mpo_hail_03_3	pk_mpo_hail_03	3	probe	flight.probe_hail	radio				0		[beeps impatiently]	calm	chatter	both	idle	any	any	any	any	mpo	offended					
-pk_mpo_hail_04_1	pk_mpo_hail_04_1	pk_mpo_hail_04	1	probe	flight.probe_hail	radio				0		[beeps warmly]	calm	chatter	both	idle	any	any	any	any	mpo	happy					
-pk_mpo_hail_04_2	pk_mpo_hail_04_2	pk_mpo_hail_04	2	mission_control	flight.probe_hail	radio				0	Hola, MPO. Hoy suenas contento.	Hi, MPO. You sound happy today.	calm	chatter	m	idle	any	any	any	any	mpo						
-pk_mpo_ms_day10_1	pk_mpo_ms_day10_1	pk_mpo_ms_day10	1	mission_control	flight.probe_milestone	radio				0	Diez días observando, MPO. Y no te cansas.	Ten days of observing, MPO. And you're not tired.	calm	chatter	m	any	any	any	any	day10	mpo						
-pk_mpo_ms_day10_2	pk_mpo_ms_day10_2	pk_mpo_ms_day10	2	probe	flight.probe_milestone	radio				0		[beeps tirelessly]	calm	chatter	both	any	any	any	any	day10	mpo	proud					
-pk_mpo_ms_orbit_1	pk_mpo_ms_orbit_1	pk_mpo_ms_orbit	1	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	orbit	mpo	proud					
-pk_mpo_ms_orbit_2	pk_mpo_ms_orbit_2	pk_mpo_ms_orbit	2	mission_control	flight.probe_milestone	radio				0	En órbita, observador. Que empiece la ciencia.	In orbit, observer. Let the science begin.	calm	chatter	m	any	any	any	any	orbit	mpo						
 pk_mpo_pl_1	pk_mpo_pl_1	pk_mpo_pl	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	any	any	any	any	mpo	scared					
 pk_mpo_pl_2	pk_mpo_pl_2	pk_mpo_pl	2	mission_control	flight.part_lost	radio				0	Tranquilo, MPO. Tus instrumentos siguen ahí.	Easy, MPO. Your instruments are still there.	tense	warning	m	any	any	any	any	any	mpo						
 pk_mpo_pl_3	pk_mpo_pl_3	pk_mpo_pl	3	probe	flight.part_lost	radio				0		[beeps relieved]	tense	warning	both	any	any	any	any	any	mpo	happy					
@@ -131,30 +86,16 @@ pk_mpo_pow_low_1	pk_mpo_pow_low_1	pk_mpo_pow_low	1	probe	flight.power_low	radio	
 pk_mpo_pow_low_2	pk_mpo_pow_low_2	pk_mpo_pow_low	2	mission_control	flight.power_low	radio				0	Energía baja, MPO. Hasta un observador tiene que cerrar los ojos.	Low power, MPO. Even an observer has to close its eyes.	tense	warning	m	any	any	any	any	any	mpo						
 pk_mpo_pow_ok_1	pk_mpo_pow_ok_1	pk_mpo_pow_ok	1	probe	flight.power_ok	radio				0		[beeps eagerly]	calm	chatter	both	any	any	any	any	any	mpo	happy					
 pk_mpo_pow_ok_2	pk_mpo_pow_ok_2	pk_mpo_pow_ok	2	mission_control	flight.power_ok	radio				0	¡Bienvenido, MPO! Sigue observando.	Welcome back, MPO! Keep observing.	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_say_again_1	pk_mpo_say_again_1	pk_mpo_say_again	1	mission_control	flight.probe_say_again	radio				0	¿MPO? Con tu antena, el problema debe de ser nuestro.	MPO? With your antenna, the problem must be ours.	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_say_again_2	pk_mpo_say_again_2	pk_mpo_say_again	2	probe	flight.probe_say_again	radio				0		[beeps patiently]	calm	chatter	both	any	any	any	any	any	mpo	proud					
-pk_mpo_sci_a_1	pk_mpo_sci_a_1	pk_mpo_sci_a	1	mission_control	flight.science	radio				0	Datos del MPO. Con notas a pie de página.	Data from the MPO. With footnotes.	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_sci_a_2	pk_mpo_sci_a_2	pk_mpo_sci_a	2	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	mpo	proud					
-pk_mpo_sci_b_1	pk_mpo_sci_b_1	pk_mpo_sci_b	1	probe	flight.science	radio				0		[beeps triumphantly]	calm	chatter	both	any	any	any	any	any	mpo	proud					
-pk_mpo_sci_b_2	pk_mpo_sci_b_2	pk_mpo_sci_b	2	mission_control	flight.science	radio				0	Sí, MPO, lo guardamos con el resto de tu colección.	Yes, MPO, we'll keep it with the rest of your collection.	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_sci_c_1	pk_mpo_sci_c_1	pk_mpo_sci_c	1	mission_control	flight.science	radio				0	MPO, ¿cuántos experimentos llevas ahí dentro?	MPO, how many experiments are you carrying in there?	calm	chatter	m	any	any	any	any	any	mpo						
-pk_mpo_sci_c_2	pk_mpo_sci_c_2	pk_mpo_sci_c	2	probe	flight.science	radio				0		[beeps a long list]	calm	chatter	both	any	any	any	any	any	mpo	proud					
 pk_mpo_sig_back_1	pk_mpo_sig_back_1	pk_mpo_sig_back	1	probe	flight.signal_back	radio				0		[beeps loud and clear]	calm	chatter	both	any	any	any	any	any	mpo	proud					
 pk_mpo_sig_back_2	pk_mpo_sig_back_2	pk_mpo_sig_back	2	mission_control	flight.signal_back	radio				0	Señal de vuelta. Con esa antena nunca te perdemos mucho tiempo.	Signal back. With that antenna we never lose you for long.	calm	chatter	m	any	any	any	any	any	mpo						
 pk_mpo_sleepy_01_1	pk_mpo_sleepy_01_1	pk_mpo_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	MPO, ¿poca energía? Con todo ese sol ahí fuera.	MPO, low power? With all that sun out there.	calm	chatter	m	idle	any	any	any	any	mpo						
 pk_mpo_sleepy_01_2	pk_mpo_sleepy_01_2	pk_mpo_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	mpo	sleepy					
 pk_mpo_sleepy_02_1	pk_mpo_sleepy_02_1	pk_mpo_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Descansa, observador. Los datos pueden esperar.	Rest, observer. The data can wait.	calm	chatter	m	idle	any	any	any	any	mpo						
 pk_mpo_sleepy_02_2	pk_mpo_sleepy_02_2	pk_mpo_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps reluctantly]	calm	chatter	both	idle	any	any	any	any	mpo	sleepy					
-pk_mpo_soi_2	pk_mpo_soi_2	pk_mpo_soi	2	probe	flight.soi_enter	radio				0		[beeps thoughtfully]	calm	chatter	both	any	any	any	any	any	mpo	curious					
 pk_mpo_splash_1	pk_mpo_splash_1	pk_mpo_splash	1	probe	flight.splashdown	radio				0		[beeps indignantly]	none	chatter	both	any	any	any	any	any	mpo	offended					
 pk_mpo_splash_2	pk_mpo_splash_2	pk_mpo_splash	2	mission_control	flight.splashdown	radio				0	Agua. Lo contrario de Moho. Lo siento, MPO.	Water. The opposite of Moho. Sorry, MPO.	none	chatter	m	any	any	any	any	any	mpo						
 pk_mpo_stg_1	pk_mpo_stg_1	pk_mpo_stg	1	probe	flight.staging	radio				0		[beeps a farewell]	none	chatter	both	any	any	any	any	separation	mpo	happy					
 pk_mpo_stg_2	pk_mpo_stg_2	pk_mpo_stg	2	mission_control	flight.staging	radio				0	Una pieza menos, MPO. Más ligero para la ciencia.	One part less, MPO. Lighter for science.	none	chatter	m	any	any	any	any	separation	mpo						
-pk_mpo_stress_heat_1	pk_mpo_stress_heat_1	pk_mpo_stress_heat	1	mission_control	flight.probe_stress	radio				0	MPO, sube la temperatura.	MPO, temperature rising.	tense	chatter	m	any	heat	any	any	any	mpo						
-pk_mpo_stress_heat_2	pk_mpo_stress_heat_2	pk_mpo_stress_heat	2	probe	flight.probe_stress	radio				0		[beeps contentedly]	tense	chatter	both	any	heat	any	any	any	mpo	happy					
-pk_mpo_stress_heat_3	pk_mpo_stress_heat_3	pk_mpo_stress_heat	3	mission_control	flight.probe_stress	radio				0	Claro. A ti esto te encanta.	Of course. You love this.	tense	chatter	m	any	heat	any	any	any	mpo						
-pk_mpo_stress_spin_1	pk_mpo_stress_spin_1	pk_mpo_stress_spin	1	probe	flight.probe_stress	radio				0		[beeps dizzily]	tense	chatter	both	any	spin	any	any	any	mpo	scared					
-pk_mpo_stress_spin_2	pk_mpo_stress_spin_2	pk_mpo_stress_spin	2	mission_control	flight.probe_stress	radio				0	MPO, estás girando. Las observaciones van a salir borrosas.	MPO, you're spinning. The observations will come out blurry.	tense	chatter	m	any	spin	any	any	any	mpo						
 pk_mpo_td_1	pk_mpo_td_1	pk_mpo_td	1	probe	flight.touchdown	radio				0		[beeps in surprise]	none	chatter	both	any	any	any	any	any	mpo	curious					
 pk_mpo_td_2	pk_mpo_td_2	pk_mpo_td	2	mission_control	flight.touchdown	radio				0	¿Aterrizado? Eras un orbitador, MPO.	Landed? You were an orbiter, MPO.	none	chatter	m	any	any	any	any	any	mpo						
 pk_mpo_thc_1	pk_mpo_thc_1	pk_mpo_thc	1	probe	flight.throttle_cut	radio				0		[beeps attentively]	none	chatter	both	any	any	any	any	any	mpo	curious					
@@ -185,22 +126,6 @@ pk_mtm_chat_long_1_4	pk_mtm_chat_long_1_4	pk_mtm_chat_long_1	4	probe	flight.prob
 pk_mtm_chat_long_1_5	pk_mtm_chat_long_1_5	pk_mtm_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Vale. Es un motor iónico. Lo entiendo.	Okay. It's an ion engine. I get it.	calm	chatter	m	idle	any	any	any	any	mtm						
 pk_mtm_chute_1	pk_mtm_chute_1	pk_mtm_chute	1	probe	flight.chute_full	radio				0		[beeps in surprise]	none	chatter	both	any	any	any	any	any	mtm	curious					
 pk_mtm_chute_2	pk_mtm_chute_2	pk_mtm_chute	2	mission_control	flight.chute_full	radio				0	¿Un paracaídas en un módulo de transferencia? Vale.	A parachute on a transfer module? Okay.	none	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_data_1	pk_mtm_data_1	pk_mtm_data	1	probe	flight.probe_data	radio				0		[beeps a steady stream]	calm	chatter	both	any	any	any	any	any	mtm	happy					
-pk_mtm_data_2	pk_mtm_data_2	pk_mtm_data	2	mission_control	flight.probe_data	radio				0	Recibido, MTM. Despacio pero seguro.	Copy, MTM. Slow but steady.	calm	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_dock_1	pk_mtm_dock_1	pk_mtm_dock	1	probe	flight.docked	radio				0		[beeps at the port]	none	chatter	both	any	any	any	any	any	mtm	happy					
-pk_mtm_dock_2	pk_mtm_dock_2	pk_mtm_dock	2	mission_control	flight.docked	radio				0	Acoplado, MTM. ¿Recoges otra carga?	Docked, MTM. Picking up another load?	none	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_hail_01_1	pk_mtm_hail_01_1	pk_mtm_hail_01	1	probe	flight.probe_hail	radio				0		[beeps steadily]	calm	chatter	both	idle	any	any	any	any	mtm	happy					
-pk_mtm_hail_01_2	pk_mtm_hail_01_2	pk_mtm_hail_01	2	mission_control	flight.probe_hail	radio				0	Hola, MTM. Sigues en marcha, ¿eh?	Hi, MTM. Still going, huh?	calm	chatter	m	idle	any	any	any	any	mtm						
-pk_mtm_hail_02_1	pk_mtm_hail_02_1	pk_mtm_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a question]	calm	chatter	both	idle	any	any	any	any	mtm	curious					
-pk_mtm_hail_02_2	pk_mtm_hail_02_2	pk_mtm_hail_02	2	mission_control	flight.probe_hail	radio				0	Sí, MTM, la carga va bien atada.	Yes, MTM, the cargo is tied down well.	calm	chatter	m	idle	any	any	any	any	mtm						
-pk_mtm_hail_03_1	pk_mtm_hail_03_1	pk_mtm_hail_03	1	probe	flight.probe_hail	radio				0		[beeps very slowly]	calm	chatter	both	idle	any	any	any	any	mtm	bored					
-pk_mtm_hail_03_2	pk_mtm_hail_03_2	pk_mtm_hail_03	2	mission_control	flight.probe_hail	radio				0	Ya sabemos que el viaje es largo. Lo dijiste ayer.	We know the trip is long. You said so yesterday.	calm	chatter	m	idle	any	any	any	any	mtm						
-pk_mtm_hail_04_1	pk_mtm_hail_04_1	pk_mtm_hail_04	1	probe	flight.probe_hail	radio				0		[beeps a delivery report]	calm	chatter	both	idle	any	any	any	any	mtm	proud					
-pk_mtm_hail_04_2	pk_mtm_hail_04_2	pk_mtm_hail_04	2	mission_control	flight.probe_hail	radio				0	Entrega a tiempo. Como siempre, MTM.	Delivered on time. As always, MTM.	calm	chatter	m	idle	any	any	any	any	mtm						
-pk_mtm_ms_day100_1	pk_mtm_ms_day100_1	pk_mtm_ms_day100	1	mission_control	flight.probe_milestone	radio				0	Cien días, MTM. Y sigues empujando.	One hundred days, MTM. And you're still pushing.	calm	chatter	m	any	any	any	any	day100	mtm						
-pk_mtm_ms_day100_2	pk_mtm_ms_day100_2	pk_mtm_ms_day100	2	probe	flight.probe_milestone	radio				0		[beeps steadily]	calm	chatter	both	any	any	any	any	day100	mtm	proud					
-pk_mtm_ms_orbit_1	pk_mtm_ms_orbit_1	pk_mtm_ms_orbit	1	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	orbit	mtm	proud					
-pk_mtm_ms_orbit_2	pk_mtm_ms_orbit_2	pk_mtm_ms_orbit	2	mission_control	flight.probe_milestone	radio				0	En órbita, grandullón. Primera parada.	In orbit, big guy. First stop.	calm	chatter	m	any	any	any	any	orbit	mtm						
 pk_mtm_pl_1	pk_mtm_pl_1	pk_mtm_pl	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	any	any	any	any	mtm	scared					
 pk_mtm_pl_2	pk_mtm_pl_2	pk_mtm_pl	2	mission_control	flight.part_lost	radio				0	MTM, has perdido algo. Espero que no fuera la carga.	MTM, you lost something. I hope it wasn't the cargo.	tense	warning	m	any	any	any	any	any	mtm						
 pk_mtm_pl_3	pk_mtm_pl_3	pk_mtm_pl	3	probe	flight.part_lost	radio				0		[beeps nervously]	tense	warning	both	any	any	any	any	any	mtm	scared					
@@ -210,26 +135,14 @@ pk_mtm_pow_low_1	pk_mtm_pow_low_1	pk_mtm_pow_low	1	probe	flight.power_low	radio	
 pk_mtm_pow_low_2	pk_mtm_pow_low_2	pk_mtm_pow_low	2	mission_control	flight.power_low	radio				0	¿Batería baja? ¿Tú? Eso sí que es raro.	Low battery? You? Now that's strange.	tense	warning	m	any	any	any	any	any	mtm						
 pk_mtm_pow_ok_1	pk_mtm_pow_ok_1	pk_mtm_pow_ok	1	probe	flight.power_ok	radio				0		[beeps eagerly]	calm	chatter	both	any	any	any	any	any	mtm	happy					
 pk_mtm_pow_ok_2	pk_mtm_pow_ok_2	pk_mtm_pow_ok	2	mission_control	flight.power_ok	radio				0	Bienvenido, grandullón. A trabajar.	Welcome back, big guy. Back to work.	calm	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_say_again_1	pk_mtm_say_again_1	pk_mtm_say_again	1	mission_control	flight.probe_say_again	radio				0	MTM, ¿puedes repetir?	MTM, could you repeat?	calm	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_say_again_2	pk_mtm_say_again_2	pk_mtm_say_again	2	probe	flight.probe_say_again	radio				0		[beeps slowly and clearly]	calm	chatter	both	any	any	any	any	any	mtm	bored					
-pk_mtm_sci_a_1	pk_mtm_sci_a_1	pk_mtm_sci_a	1	mission_control	flight.science	radio				0	¿Datos del MTM? No sabíamos que hacías ciencia.	Data from the MTM? We didn't know you did science.	calm	chatter	m	any	any	any	any	any	mtm						
-pk_mtm_sci_a_2	pk_mtm_sci_a_2	pk_mtm_sci_a	2	probe	flight.science	radio				0		[beeps indignantly]	calm	chatter	both	any	any	any	any	any	mtm	offended					
-pk_mtm_sci_b_1	pk_mtm_sci_b_1	pk_mtm_sci_b	1	probe	flight.science	radio				0		[beeps modestly]	calm	chatter	both	any	any	any	any	any	mtm	proud					
-pk_mtm_sci_b_2	pk_mtm_sci_b_2	pk_mtm_sci_b	2	mission_control	flight.science	radio				0	Buen trabajo, MTM. Esta vez la fama es tuya.	Good work, MTM. This time the fame is yours.	calm	chatter	m	any	any	any	any	any	mtm						
 pk_mtm_sig_back_1	pk_mtm_sig_back_1	pk_mtm_sig_back	1	probe	flight.signal_back	radio				0		[beeps steadily]	calm	chatter	both	any	any	any	any	any	mtm	happy					
 pk_mtm_sig_back_2	pk_mtm_sig_back_2	pk_mtm_sig_back	2	mission_control	flight.signal_back	radio				0	Ahí estás, MTM. Sin prisa, como siempre.	There you are, MTM. No hurry, as always.	calm	chatter	m	any	any	any	any	any	mtm						
 pk_mtm_sleepy_01_1	pk_mtm_sleepy_01_1	pk_mtm_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	¿Cansado, grandullón? Hasta los camiones paran.	Tired, big guy? Even trucks stop.	calm	chatter	m	idle	any	any	any	any	mtm						
 pk_mtm_sleepy_01_2	pk_mtm_sleepy_01_2	pk_mtm_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	mtm	sleepy					
 pk_mtm_sleepy_02_1	pk_mtm_sleepy_02_1	pk_mtm_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	MTM, ¿cómo te has quedado sin energía con cuatro mil?	MTM, how did you run out of power with four thousand?	calm	chatter	m	idle	any	any	any	any	mtm						
 pk_mtm_sleepy_02_2	pk_mtm_sleepy_02_2	pk_mtm_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps sheepishly]	calm	chatter	both	idle	any	any	any	any	mtm	sleepy					
-pk_mtm_soi_2	pk_mtm_soi_2	pk_mtm_soi	2	probe	flight.soi_enter	radio				0		[beeps contentedly]	calm	chatter	both	any	any	any	any	any	mtm	happy					
 pk_mtm_stg_1	pk_mtm_stg_1	pk_mtm_stg	1	probe	flight.staging	radio				0		[beeps a proud farewell]	none	chatter	both	any	any	any	any	separation	mtm	happy					
 pk_mtm_stg_2	pk_mtm_stg_2	pk_mtm_stg	2	mission_control	flight.staging	radio				0	Una pieza menos que llevar, MTM.	One less thing to carry, MTM.	none	chatter	m	any	any	any	any	separation	mtm						
-pk_mtm_stress_fuel_1	pk_mtm_stress_fuel_1	pk_mtm_stress_fuel	1	mission_control	flight.probe_stress	radio				0	MTM, el combustible baja.	MTM, fuel is getting low.	tense	chatter	m	any	fuel	any	any	any	mtm						
-pk_mtm_stress_fuel_2	pk_mtm_stress_fuel_2	pk_mtm_stress_fuel	2	probe	flight.probe_stress	radio				0		[beeps worriedly]	tense	chatter	both	any	fuel	any	any	any	mtm	scared					
-pk_mtm_stress_fuel_3	pk_mtm_stress_fuel_3	pk_mtm_stress_fuel	3	mission_control	flight.probe_stress	radio				0	Tranquilo. Con xenón se llega lejos.	Easy. Xenon goes a long way.	tense	chatter	m	any	fuel	any	any	any	mtm						
-pk_mtm_stress_gforce_1	pk_mtm_stress_gforce_1	pk_mtm_stress_gforce	1	mission_control	flight.probe_stress	radio				0	Aguanta, MTM. No te hicieron para correr.	Hang on, MTM. You weren't built for speed.	tense	chatter	m	any	gforce	any	any	any	mtm						
-pk_mtm_stress_gforce_2	pk_mtm_stress_gforce_2	pk_mtm_stress_gforce	2	probe	flight.probe_stress	radio				0		[beeps stubbornly]	tense	chatter	both	any	gforce	any	any	any	mtm	proud					
 pk_mtm_td_1	pk_mtm_td_1	pk_mtm_td	1	probe	flight.touchdown	radio				0		[beeps in surprise]	none	chatter	both	any	any	any	any	any	mtm	curious					
 pk_mtm_td_2	pk_mtm_td_2	pk_mtm_td	2	mission_control	flight.touchdown	radio				0	¿Aterrizado? Eres un módulo de transferencia, MTM.	Landed? You're a transfer module, MTM.	none	chatter	m	any	any	any	any	any	mtm						
 pk_mtm_thc_1	pk_mtm_thc_1	pk_mtm_thc	1	probe	flight.throttle_cut	radio				0		[beeps contentedly]	none	chatter	both	any	any	any	any	any	mtm	bored					
@@ -261,24 +174,6 @@ pk_qbe_chat_long_1_4	pk_qbe_chat_long_1_4	pk_qbe_chat_long_1	4	probe	flight.prob
 pk_qbe_chat_long_1_5	pk_qbe_chat_long_1_5	pk_qbe_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Todo te parece grande, ¿verdad?	Everything looks big to you, right?	calm	chatter	m	idle	any	any	any	any	qbe						
 pk_qbe_chute_1	pk_qbe_chute_1	pk_qbe_chute	1	probe	flight.chute_full	radio				0		[beeps gently]	none	chatter	both	any	any	any	any	any	qbe	happy					
 pk_qbe_chute_2	pk_qbe_chute_2	pk_qbe_chute	2	mission_control	flight.chute_full	radio				0	Un paracaídas entero para ti solo, cubito.	A whole parachute just for you, little cube.	none	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_data_1	pk_qbe_data_1	pk_qbe_data	1	probe	flight.probe_data	radio				0		[beeps a tiny stream]	calm	chatter	both	any	any	any	any	any	qbe	happy					
-pk_qbe_data_2	pk_qbe_data_2	pk_qbe_data	2	mission_control	flight.probe_data	radio				0	Recibido, QBE. Pocos datos, mucho entusiasmo.	Copy, QBE. Little data, lots of enthusiasm.	calm	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_dock_1	pk_qbe_dock_1	pk_qbe_dock	1	probe	flight.docked	radio				0		[beeps at the port]	none	chatter	both	any	any	any	any	any	qbe	curious					
-pk_qbe_dock_2	pk_qbe_dock_2	pk_qbe_dock	2	mission_control	flight.docked	radio				0	¿Te han recogido, QBE? Así que el regreso sí era una opción.	Someone picked you up, QBE? So return was an option after all.	none	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_hail_01_1	pk_qbe_hail_01_1	pk_qbe_hail_01	1	probe	flight.probe_hail	radio				0		[beeps a tiny hello]	calm	chatter	both	idle	any	any	any	any	qbe	happy					
-pk_qbe_hail_01_2	pk_qbe_hail_01_2	pk_qbe_hail_01	2	mission_control	flight.probe_hail	radio				0	Hola, cubito. Te oímos.	Hi, little cube. We hear you.	calm	chatter	m	idle	any	any	any	any	qbe						
-pk_qbe_hail_02_1	pk_qbe_hail_02_1	pk_qbe_hail_02	1	probe	flight.probe_hail	radio				0		[beeps hopefully]	calm	chatter	both	idle	any	any	any	any	qbe	curious					
-pk_qbe_hail_02_2	pk_qbe_hail_02_2	pk_qbe_hail_02	2	mission_control	flight.probe_hail	radio				0	Sí, QBE, alguien vendrá a buscarte. Algún día.	Yes, QBE, someone will come get you. Someday.	calm	chatter	m	idle	any	any	any	any	qbe						
-pk_qbe_hail_02_3	pk_qbe_hail_02_3	pk_qbe_hail_02	3	probe	flight.probe_hail	radio				0		[beeps worriedly]	calm	chatter	both	idle	any	any	any	any	qbe	scared					
-pk_qbe_hail_03_1	pk_qbe_hail_03_1	pk_qbe_hail_03	1	probe	flight.probe_hail	radio				0		[beeps very loudly]	calm	chatter	both	idle	any	any	any	any	qbe	proud					
-pk_qbe_hail_03_2	pk_qbe_hail_03_2	pk_qbe_hail_03	2	mission_control	flight.probe_hail	radio				0	Mucho ruido para alguien tan pequeño.	A lot of noise for someone so small.	calm	chatter	m	idle	any	any	any	any	qbe						
-pk_qbe_hail_04_1	pk_qbe_hail_04_1	pk_qbe_hail_04	1	probe	flight.probe_hail	radio				0		[beeps slowly]	calm	chatter	both	idle	any	any	any	any	qbe	bored					
-pk_qbe_hail_04_2	pk_qbe_hail_04_2	pk_qbe_hail_04	2	mission_control	flight.probe_hail	radio				0	¿Aburrido? Eres un cubo. No puedes ni girar.	Bored? You're a cube. You can't even turn.	calm	chatter	m	idle	any	any	any	any	qbe						
-pk_qbe_hail_04_3	pk_qbe_hail_04_3	pk_qbe_hail_04	3	probe	flight.probe_hail	radio				0		[beeps indignantly]	calm	chatter	both	idle	any	any	any	any	qbe	offended					
-pk_qbe_ms_day1_1	pk_qbe_ms_day1_1	pk_qbe_ms_day1	1	mission_control	flight.probe_milestone	radio				0	Un día entero, QBE. Con esa batería, es un milagro.	A whole day, QBE. With that battery, it's a miracle.	calm	chatter	m	any	any	any	any	day1	qbe						
-pk_qbe_ms_day1_2	pk_qbe_ms_day1_2	pk_qbe_ms_day1	2	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	day1	qbe	proud					
-pk_qbe_ms_orbit_1	pk_qbe_ms_orbit_1	pk_qbe_ms_orbit	1	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	orbit	qbe	proud					
-pk_qbe_ms_orbit_2	pk_qbe_ms_orbit_2	pk_qbe_ms_orbit	2	mission_control	flight.probe_milestone	radio				0	En órbita, cubito. Nada mal para una caja.	In orbit, little cube. Not bad for a box.	calm	chatter	m	any	any	any	any	orbit	qbe						
 pk_qbe_pl_1	pk_qbe_pl_1	pk_qbe_pl	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	any	any	any	any	qbe	scared					
 pk_qbe_pl_2	pk_qbe_pl_2	pk_qbe_pl	2	mission_control	flight.part_lost	radio				0	Tranquilo, QBE. Esa pieza costaba más que tú.	Easy, QBE. That part cost more than you.	tense	warning	m	any	any	any	any	any	qbe						
 pk_qbe_pl_3	pk_qbe_pl_3	pk_qbe_pl	3	probe	flight.part_lost	radio				0		[beeps indignantly]	tense	warning	both	any	any	any	any	any	qbe	offended					
@@ -288,25 +183,14 @@ pk_qbe_pow_low_1	pk_qbe_pow_low_1	pk_qbe_pow_low	1	probe	flight.power_low	radio	
 pk_qbe_pow_low_2	pk_qbe_pow_low_2	pk_qbe_pow_low	2	mission_control	flight.power_low	radio				0	Ya lo sabemos, cubito. Cinco unidades. Duerme.	We know, little cube. Five units. Sleep.	tense	warning	m	any	any	any	any	any	qbe						
 pk_qbe_pow_ok_1	pk_qbe_pow_ok_1	pk_qbe_pow_ok	1	probe	flight.power_ok	radio				0		[beeps eagerly]	calm	chatter	both	any	any	any	any	any	qbe	happy					
 pk_qbe_pow_ok_2	pk_qbe_pow_ok_2	pk_qbe_pow_ok	2	mission_control	flight.power_ok	radio				0	¡Buenos días, cubito!	Good morning, little cube!	calm	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_say_again_1	pk_qbe_say_again_1	pk_qbe_say_again	1	mission_control	flight.probe_say_again	radio				0	¿Puedes repetir, cubito? Hablas muy bajito.	Can you repeat, little cube? You talk very quietly.	calm	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_say_again_2	pk_qbe_say_again_2	pk_qbe_say_again	2	probe	flight.probe_say_again	radio				0		[beeps a bit louder]	calm	chatter	both	any	any	any	any	any	qbe	offended					
-pk_qbe_sci_a_1	pk_qbe_sci_a_1	pk_qbe_sci_a	1	mission_control	flight.science	radio				0	¡Datos del QBE! Pequeños, pero datos.	Data from the QBE! Small, but data.	calm	chatter	m	any	any	any	any	any	qbe						
-pk_qbe_sci_a_2	pk_qbe_sci_a_2	pk_qbe_sci_a	2	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	qbe	proud					
-pk_qbe_sci_b_1	pk_qbe_sci_b_1	pk_qbe_sci_b	1	probe	flight.science	radio				0		[beeps delightedly]	calm	chatter	both	any	any	any	any	any	qbe	happy					
-pk_qbe_sci_b_2	pk_qbe_sci_b_2	pk_qbe_sci_b	2	mission_control	flight.science	radio				0	Sí, QBE, lo tenemos. Descansa un poco.	Yes, QBE, we got it. Rest a bit.	calm	chatter	m	any	any	any	any	any	qbe						
 pk_qbe_sig_back_1	pk_qbe_sig_back_1	pk_qbe_sig_back	1	probe	flight.signal_back	radio				0		[beeps very eagerly]	calm	chatter	both	any	any	any	any	any	qbe	happy					
 pk_qbe_sig_back_2	pk_qbe_sig_back_2	pk_qbe_sig_back	2	mission_control	flight.signal_back	radio				0	¡Ahí estás, cubito! Creíamos que te habíamos perdido.	There you are, little cube! We thought we'd lost you.	calm	chatter	m	any	any	any	any	any	qbe						
 pk_qbe_sleepy_01_1	pk_qbe_sleepy_01_1	pk_qbe_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	QBE, cinco unidades de carga no dan para mucho.	QBE, five units of charge don't go very far.	calm	chatter	m	idle	any	any	any	any	qbe						
 pk_qbe_sleepy_01_2	pk_qbe_sleepy_01_2	pk_qbe_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	qbe	sleepy					
 pk_qbe_sleepy_02_1	pk_qbe_sleepy_02_1	pk_qbe_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	¿Otra vez sin batería, cubito?	Out of battery again, little cube?	calm	chatter	m	idle	any	any	any	any	qbe						
 pk_qbe_sleepy_02_2	pk_qbe_sleepy_02_2	pk_qbe_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps very sleepily]	calm	chatter	both	idle	any	any	any	any	qbe	sleepy					
-pk_qbe_soi_2	pk_qbe_soi_2	pk_qbe_soi	2	probe	flight.soi_enter	radio				0		[beeps excitedly]	calm	chatter	both	any	any	any	any	any	qbe	happy					
 pk_qbe_stg_1	pk_qbe_stg_1	pk_qbe_stg	1	probe	flight.staging	radio				0		[beeps a farewell]	none	chatter	both	any	any	any	any	separation	qbe	happy					
 pk_qbe_stg_2	pk_qbe_stg_2	pk_qbe_stg	2	mission_control	flight.staging	radio				0	Ahora estás solo, cubito. Como siempre.	You're on your own now, little cube. As always.	none	chatter	m	any	any	any	any	separation	qbe						
-pk_qbe_stress_gforce_1	pk_qbe_stress_gforce_1	pk_qbe_stress_gforce	1	mission_control	flight.probe_stress	radio				0	Aguanta, cubito. Pesas setenta kilos, puedes con esto.	Hang on, little cube. You weigh seventy kilos, you can take it.	tense	chatter	m	any	gforce	any	any	any	qbe						
-pk_qbe_stress_gforce_2	pk_qbe_stress_gforce_2	pk_qbe_stress_gforce	2	probe	flight.probe_stress	radio				0		[beeps bravely]	tense	chatter	both	any	gforce	any	any	any	qbe	proud					
-pk_qbe_stress_spin_1	pk_qbe_stress_spin_1	pk_qbe_stress_spin	1	probe	flight.probe_stress	radio				0		[beeps in circles]	tense	chatter	both	any	spin	any	any	any	qbe	scared					
-pk_qbe_stress_spin_2	pk_qbe_stress_spin_2	pk_qbe_stress_spin	2	mission_control	flight.probe_stress	radio				0	QBE, no tienes ruedas de reacción. Solo aguanta.	QBE, you have no reaction wheels. Just hang on.	tense	chatter	m	any	spin	any	any	any	qbe						
 pk_qbe_td_1	pk_qbe_td_1	pk_qbe_td	1	probe	flight.touchdown	radio				0		[beeps bouncily]	none	chatter	both	any	any	any	any	any	qbe	happy					
 pk_qbe_td_2	pk_qbe_td_2	pk_qbe_td	2	mission_control	flight.touchdown	radio				0	¿Un aterrizaje? Eso no estaba en el plan, QBE.	A landing? That wasn't in the plan, QBE.	none	chatter	m	any	any	any	any	any	qbe						
 pk_qbe_thf_1	pk_qbe_thf_1	pk_qbe_thf	1	probe	flight.throttle_full	radio				0		[beeps very bravely]	none	chatter	both	any	any	any	any	any	qbe	happy					
@@ -354,12 +238,6 @@ pp_any_serious_17_2	pp_any_serious_17_2	pp_any_serious_17	2	probe	flight.probe_c
 pp_any_serious_17_3	pp_any_serious_17_3	pp_any_serious_17	3	mission_control	flight.probe_chat	radio				0	No te confíes.	Don't get cocky.	calm	chatter	m	descent	any	any	any	any	any						
 pp_any_serious_18_1	pp_any_serious_18_1	pp_any_serious_18	1	mission_control	flight.probe_chat	radio				0	Sonda, ¿todo bien por ahí?	Probe, all good out there?	calm	chatter	m	serious	any	any	any	any	any						
 pp_any_serious_18_2	pp_any_serious_18_2	pp_any_serious_18	2	probe	flight.probe_chat	radio				0		[beeps a short yes]	calm	chatter	both	serious	any	any	any	any	any	happy					
-pp_data_any_1_1	pp_data_any_1_1	pp_data_any_1	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	happy					
-pp_data_any_1_2	pp_data_any_1_2	pp_data_any_1	2	mission_control	flight.probe_data	radio				0	Recibiendo datos.	Receiving data.	calm	chatter	m	any	any	any	any	any	any						
-pp_data_any_2_1	pp_data_any_2_1	pp_data_any_2	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	happy					
-pp_data_any_2_2	pp_data_any_2_2	pp_data_any_2	2	mission_control	flight.probe_data	radio				0	Datos entrando. Gracias.	Data coming in. Thanks.	calm	chatter	m	any	any	any	any	any	any						
-pp_data_any_3_1	pp_data_any_3_1	pp_data_any_3	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	happy					
-pp_data_any_3_2	pp_data_any_3_2	pp_data_any_3	2	mission_control	flight.probe_data	radio				0	Te leemos. Sigue enviando.	We read you. Keep sending.	calm	chatter	m	any	any	any	any	any	any						
 pp_generic_chat_01_1	pp_generic_chat_01_1	pp_generic_chat_01	1	mission_control	flight.probe_chat	radio				0	Hola, sonda.	Hello, probe.	calm	chatter	m	idle	any	any	any	any	generic						
 pp_generic_chat_01_2	pp_generic_chat_01_2	pp_generic_chat_01	2	probe	flight.probe_chat	radio				0		[beeps cheerfully]	calm	chatter	both	idle	any	any	any	any	generic	happy					
 pp_generic_chat_01_3	pp_generic_chat_01_3	pp_generic_chat_01	3	mission_control	flight.probe_chat	radio				0	Bien. Igualmente.	Good. You too.	calm	chatter	m	idle	any	any	any	any	generic						
@@ -381,16 +259,6 @@ pp_generic_chat_long_1_2	pp_generic_chat_long_1_2	pp_generic_chat_long_1	2	probe
 pp_generic_chat_long_1_3	pp_generic_chat_long_1_3	pp_generic_chat_long_1	3	mission_control	flight.probe_chat	radio				0	¿Una vez es sí?	One beep means yes?	calm	chatter	m	idle	any	any	any	any	generic						
 pp_generic_chat_long_1_4	pp_generic_chat_long_1_4	pp_generic_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps twice]	calm	chatter	both	idle	any	any	any	any	generic	happy					
 pp_generic_chat_long_1_5	pp_generic_chat_long_1_5	pp_generic_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Vale. Ahora no sabemos nada.	Okay. Now we know nothing.	calm	chatter	m	idle	any	any	any	any	generic						
-pp_generic_hail_01_1	pp_generic_hail_01_1	pp_generic_hail_01	1	probe	flight.probe_hail	radio				0		[beeps cheerfully]	calm	chatter	both	idle	any	any	any	any	generic	happy					
-pp_generic_hail_01_2	pp_generic_hail_01_2	pp_generic_hail_01	2	mission_control	flight.probe_hail	radio				0	Hola a ti también, sonda.	Hello to you too, probe.	calm	chatter	m	idle	any	any	any	any	generic						
-pp_generic_hail_02_1	pp_generic_hail_02_1	pp_generic_hail_02	1	probe	flight.probe_hail	radio				0		[beeps questioningly]	calm	chatter	both	idle	any	any	any	any	generic	curious					
-pp_generic_hail_02_2	pp_generic_hail_02_2	pp_generic_hail_02	2	mission_control	flight.probe_hail	radio				0	No sabemos la respuesta. Ni la pregunta.	We don't know the answer. Or the question.	calm	chatter	m	idle	any	any	any	any	generic						
-pp_generic_hail_02_3	pp_generic_hail_02_3	pp_generic_hail_02	3	probe	flight.probe_hail	radio				0		[beeps thoughtfully]	calm	chatter	both	idle	any	any	any	any	generic	curious					
-pp_generic_hail_03_1	pp_generic_hail_03_1	pp_generic_hail_03	1	probe	flight.probe_hail	radio				0		[beeps twice slowly]	calm	chatter	both	idle	any	any	any	any	generic	bored					
-pp_generic_hail_03_2	pp_generic_hail_03_2	pp_generic_hail_03	2	mission_control	flight.probe_hail	radio				0	Recibido. Las dos.	Copy. Both of them.	calm	chatter	m	idle	any	any	any	any	generic						
-pp_generic_hail_04_1	pp_generic_hail_04_1	pp_generic_hail_04	1	probe	flight.probe_hail	radio				0		[beeps rhythmically]	calm	chatter	both	idle	any	any	any	any	generic	happy					
-pp_generic_hail_04_2	pp_generic_hail_04_2	pp_generic_hail_04	2	mission_control	flight.probe_hail	radio				0	¿Eso era una canción?	Was that a song?	calm	chatter	m	idle	any	any	any	any	generic						
-pp_generic_hail_04_3	pp_generic_hail_04_3	pp_generic_hail_04	3	probe	flight.probe_hail	radio				0		[beeps proudly]	calm	chatter	both	idle	any	any	any	any	generic	proud					
 pp_generic_sleepy_01_1	pp_generic_sleepy_01_1	pp_generic_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Sonda, ¿sigues despierta?	Probe, still awake?	calm	chatter	m	idle	any	any	any	any	generic						
 pp_generic_sleepy_01_2	pp_generic_sleepy_01_2	pp_generic_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	generic	sleepy					
 pp_generic_sleepy_02_1	pp_generic_sleepy_02_1	pp_generic_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Buenas noches, sonda.	Good night, probe.	calm	chatter	m	idle	any	any	any	any	generic						
@@ -415,52 +283,11 @@ pp_hecs_chat_long_1_2	pp_hecs_chat_long_1_2	pp_hecs_chat_long_1	2	probe	flight.p
 pp_hecs_chat_long_1_3	pp_hecs_chat_long_1_3	pp_hecs_chat_long_1	3	mission_control	flight.probe_chat	radio				0	¿Y el resumen?	And the summary?	calm	chatter	m	idle	any	any	any	any	hecs						
 pp_hecs_chat_long_1_4	pp_hecs_chat_long_1_4	pp_hecs_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps nervously]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
 pp_hecs_chat_long_1_5	pp_hecs_chat_long_1_5	pp_hecs_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Nos vale.	That'll do.	calm	chatter	m	idle	any	any	any	any	hecs						
-pp_hecs_hail_01_1	pp_hecs_hail_01_1	pp_hecs_hail_01	1	probe	flight.probe_hail	radio				0		[beeps worriedly]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
-pp_hecs_hail_01_2	pp_hecs_hail_01_2	pp_hecs_hail_01	2	mission_control	flight.probe_hail	radio				0	HECS, no es nada. Nunca es nada.	HECS, it's nothing. It's always nothing.	calm	chatter	m	idle	any	any	any	any	hecs						
-pp_hecs_hail_01_3	pp_hecs_hail_01_3	pp_hecs_hail_01	3	probe	flight.probe_hail	radio				0		[beeps even more worriedly]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
-pp_hecs_hail_02_1	pp_hecs_hail_02_1	pp_hecs_hail_02	1	probe	flight.probe_hail	radio				0		[beeps inquisitively]	calm	chatter	both	idle	any	any	any	any	hecs	curious					
-pp_hecs_hail_02_2	pp_hecs_hail_02_2	pp_hecs_hail_02	2	mission_control	flight.probe_hail	radio				0	Sí, HECS, la lista está al día.	Yes, HECS, the checklist is up to date.	calm	chatter	m	idle	any	any	any	any	hecs						
-pp_hecs_hail_03_1	pp_hecs_hail_03_1	pp_hecs_hail_03	1	probe	flight.probe_hail	radio				0		[beeps anxiously]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
-pp_hecs_hail_03_2	pp_hecs_hail_03_2	pp_hecs_hail_03	2	mission_control	flight.probe_hail	radio				0	Lo hemos visto. Medio grado. Sobreviviremos.	We saw it. Half a degree. We'll survive.	calm	chatter	m	idle	any	any	any	any	hecs						
-pp_hecs_hail_03_3	pp_hecs_hail_03_3	pp_hecs_hail_03	3	probe	flight.probe_hail	radio				0		[beeps doubtfully]	calm	chatter	both	idle	any	any	any	any	hecs	curious					
-pp_hecs_hail_04_1	pp_hecs_hail_04_1	pp_hecs_hail_04	1	probe	flight.probe_hail	radio				0		[beeps very tidily]	calm	chatter	both	idle	any	any	any	any	hecs	proud					
-pp_hecs_hail_04_2	pp_hecs_hail_04_2	pp_hecs_hail_04	2	mission_control	flight.probe_hail	radio				0	Informe perfecto, HECS. Como siempre.	Perfect report, HECS. As always.	calm	chatter	m	idle	any	any	any	any	hecs						
 pp_hecs_sleepy_01_1	pp_hecs_sleepy_01_1	pp_hecs_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	HECS, puedes descansar.	HECS, you can rest now.	calm	chatter	m	idle	any	any	any	any	hecs						
 pp_hecs_sleepy_01_2	pp_hecs_sleepy_01_2	pp_hecs_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	hecs	sleepy					
 pp_hecs_sleepy_02_1	pp_hecs_sleepy_02_1	pp_hecs_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Las comprobaciones pueden esperar.	The checks can wait.	calm	chatter	m	idle	any	any	any	any	hecs						
 pp_hecs_sleepy_02_2	pp_hecs_sleepy_02_2	pp_hecs_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps worriedly]	calm	chatter	both	idle	any	any	any	any	hecs	sleepy					
 pp_hecs_sleepy_02_3	pp_hecs_sleepy_02_3	pp_hecs_sleepy_02	3	mission_control	flight.probe_sleepy	radio				0	Te lo prometo.	I promise.	calm	chatter	m	idle	any	any	any	any	hecs						
-pp_ms_day100_any_1_1	pp_ms_day100_any_1_1	pp_ms_day100_any_1	1	mission_control	flight.probe_milestone	radio				0	Cien días. Eres toda una veterana.	One hundred days. You're quite the veteran.	calm	chatter	m	any	any	any	any	day100	any						
-pp_ms_day100_any_1_2	pp_ms_day100_any_1_2	pp_ms_day100_any_1	2	probe	flight.probe_milestone	radio				0		[beeps with pride]	calm	chatter	both	any	any	any	any	day100	any	proud					
-pp_ms_day100_hecs_1_1	pp_ms_day100_hecs_1_1	pp_ms_day100_hecs_1	1	mission_control	flight.probe_milestone	radio				0	HECS, cien días sin un solo problema.	HECS, one hundred days without a single problem.	calm	chatter	m	any	any	any	any	day100	hecs						
-pp_ms_day100_hecs_1_2	pp_ms_day100_hecs_1_2	pp_ms_day100_hecs_1	2	probe	flight.probe_milestone	radio				0		[beeps suspiciously]	calm	chatter	both	any	any	any	any	day100	hecs	curious					
-pp_ms_day100_snob_1_1	pp_ms_day100_snob_1_1	pp_ms_day100_snob_1	1	probe	flight.probe_milestone	radio				0		[beeps expectantly]	calm	chatter	both	any	any	any	any	day100	snob	proud					
-pp_ms_day100_snob_1_2	pp_ms_day100_snob_1_2	pp_ms_day100_snob_1	2	mission_control	flight.probe_milestone	radio				0	Sí, su excelencia, cien días. Hay pastel.	Yes, your excellency, one hundred days. There's cake.	calm	chatter	m	any	any	any	any	day100	snob						
-pp_ms_day10_any_1_1	pp_ms_day10_any_1_1	pp_ms_day10_any_1	1	mission_control	flight.probe_milestone	radio				0	Diez días de misión. Todo en orden.	Ten days of mission. All in order.	calm	chatter	m	any	any	any	any	day10	any						
-pp_ms_day10_any_1_2	pp_ms_day10_any_1_2	pp_ms_day10_any_1	2	probe	flight.probe_milestone	radio				0		[beeps contentedly]	calm	chatter	both	any	any	any	any	day10	any	happy					
-pp_ms_day10_okto_1_1	pp_ms_day10_okto_1_1	pp_ms_day10_okto_1	1	probe	flight.probe_milestone	radio				0		[beeps a statistic]	calm	chatter	both	any	any	any	any	day10	okto	proud					
-pp_ms_day10_okto_1_2	pp_ms_day10_okto_1_2	pp_ms_day10_okto_1	2	mission_control	flight.probe_milestone	radio				0	Sí, Okto, diez días exactos.	Yes, Okto, exactly ten days.	calm	chatter	m	any	any	any	any	day10	okto						
-pp_ms_day1_any_1_1	pp_ms_day1_any_1_1	pp_ms_day1_any_1	1	mission_control	flight.probe_milestone	radio				0	Primer día completo en el espacio. Felicidades.	First full day in space. Congratulations.	calm	chatter	m	any	any	any	any	day1	any						
-pp_ms_day1_any_1_2	pp_ms_day1_any_1_2	pp_ms_day1_any_1	2	probe	flight.probe_milestone	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	day1	any	proud					
-pp_ms_day1_rovemate_1_1	pp_ms_day1_rovemate_1_1	pp_ms_day1_rovemate_1	1	probe	flight.probe_milestone	radio				0		[beeps a birthday tune]	calm	chatter	both	any	any	any	any	day1	rovemate	happy					
-pp_ms_day1_rovemate_1_2	pp_ms_day1_rovemate_1_2	pp_ms_day1_rovemate_1	2	mission_control	flight.probe_milestone	radio				0	Sí, Rovemate, un día entero. Buen chico.	Yes, Rovemate, a whole day. Good boy.	calm	chatter	m	any	any	any	any	day1	rovemate						
-pp_ms_day1_stayputnik_1_1	pp_ms_day1_stayputnik_1_1	pp_ms_day1_stayputnik_1	1	mission_control	flight.probe_milestone	radio				0	Un día entero, Stayputnik. Nadie lo esperaba.	A whole day, Stayputnik. Nobody expected that.	calm	chatter	m	any	any	any	any	day1	stayputnik						
-pp_ms_day1_stayputnik_1_2	pp_ms_day1_stayputnik_1_2	pp_ms_day1_stayputnik_1	2	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	day1	stayputnik	proud					
-pp_ms_day365_any_1_1	pp_ms_day365_any_1_1	pp_ms_day365_any_1	1	mission_control	flight.probe_milestone	radio				0	Un año entero de misión. Increíble.	A whole year of mission. Incredible.	calm	chatter	m	any	any	any	any	day365	any						
-pp_ms_day365_any_1_2	pp_ms_day365_any_1_2	pp_ms_day365_any_1	2	probe	flight.probe_milestone	radio				0		[beeps triumphantly]	calm	chatter	both	any	any	any	any	day365	any	proud					
-pp_ms_day365_generic_1_1	pp_ms_day365_generic_1_1	pp_ms_day365_generic_1	1	mission_control	flight.probe_milestone	radio				0	Feliz aniversario, sonda.	Happy anniversary, probe.	calm	chatter	m	any	any	any	any	day365	generic						
-pp_ms_day365_generic_1_2	pp_ms_day365_generic_1_2	pp_ms_day365_generic_1	2	probe	flight.probe_milestone	radio				0		[beeps a celebration]	calm	chatter	both	any	any	any	any	day365	generic	happy					
-pp_ms_landing_any_1_1	pp_ms_landing_any_1_1	pp_ms_landing_any_1	1	probe	flight.probe_milestone	radio				0		[beeps triumphantly]	calm	chatter	both	any	any	any	any	landing	any	proud					
-pp_ms_landing_any_2_2	pp_ms_landing_any_2_2	pp_ms_landing_any_2	2	probe	flight.probe_milestone	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	landing	any	proud					
-pp_ms_landing_rovemate_1_1	pp_ms_landing_rovemate_1_1	pp_ms_landing_rovemate_1	1	probe	flight.probe_milestone	radio				0		[beeps very excitedly]	calm	chatter	both	any	any	any	any	landing	rovemate	happy					
-pp_ms_landing_rovemate_1_2	pp_ms_landing_rovemate_1_2	pp_ms_landing_rovemate_1	2	mission_control	flight.probe_milestone	radio				0	Sí, Rovemate, puedes explorar. Despacio.	Yes, Rovemate, you may explore. Slowly.	calm	chatter	m	any	any	any	any	landing	rovemate						
-pp_ms_orbit_any_1_1	pp_ms_orbit_any_1_1	pp_ms_orbit_any_1	1	probe	flight.probe_milestone	radio				0		[beeps triumphantly]	calm	chatter	both	any	any	any	any	orbit	any	proud					
-pp_ms_orbit_any_1_2	pp_ms_orbit_any_1_2	pp_ms_orbit_any_1	2	mission_control	flight.probe_milestone	radio				0	Órbita confirmada. Bienvenida.	Orbit confirmed. Welcome.	calm	chatter	m	any	any	any	any	orbit	any						
-pp_ms_orbit_any_2_1	pp_ms_orbit_any_2_1	pp_ms_orbit_any_2	1	mission_control	flight.probe_milestone	radio				0	Estás en órbita. Qué vista.	You're in orbit. What a view.	calm	chatter	m	any	any	any	any	orbit	any						
-pp_ms_orbit_any_2_1__v02	pp_ms_orbit_any_2_1	pp_ms_orbit_any_2	1	mission_control	flight.probe_milestone	radio				0	En órbita alrededor de {here}. Qué vista.	In orbit around {here}. Nice view.	calm	chatter	m	any	any	any	any	orbit	any						
-pp_ms_orbit_any_2_2	pp_ms_orbit_any_2_2	pp_ms_orbit_any_2	2	probe	flight.probe_milestone	radio				0		[beeps in awe]	calm	chatter	both	any	any	any	any	orbit	any	happy					
-pp_ms_orbit_stayputnik_1_1	pp_ms_orbit_stayputnik_1_1	pp_ms_orbit_stayputnik_1	1	probe	flight.probe_milestone	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	orbit	stayputnik	proud					
-pp_ms_orbit_stayputnik_1_2	pp_ms_orbit_stayputnik_1_2	pp_ms_orbit_stayputnik_1	2	mission_control	flight.probe_milestone	radio				0	En órbita, Stayputnik. Como en los viejos tiempos.	In orbit, Stayputnik. Like the old days.	calm	chatter	m	any	any	any	any	orbit	stayputnik						
 pp_okto_chat_01_1	pp_okto_chat_01_1	pp_okto_chat_01	1	mission_control	flight.probe_chat	radio				0	Okto, bonito giro.	Okto, nice turn.	calm	chatter	m	idle	any	any	any	any	okto						
 pp_okto_chat_01_2	pp_okto_chat_01_2	pp_okto_chat_01	2	probe	flight.probe_chat	radio				0		[beeps smugly]	calm	chatter	both	idle	any	any	any	any	okto	proud					
 pp_okto_chat_02_1	pp_okto_chat_02_1	pp_okto_chat_02	1	mission_control	flight.probe_chat	radio				0	¿Has calculado eso tú solo?	Did you calculate that all by yourself?	calm	chatter	m	idle	any	any	any	any	okto						
@@ -479,16 +306,6 @@ pp_okto_chat_long_1_1	pp_okto_chat_long_1_1	pp_okto_chat_long_1	1	mission_contro
 pp_okto_chat_long_1_2	pp_okto_chat_long_1_2	pp_okto_chat_long_1	2	probe	flight.probe_chat	radio				0		[beeps very fast]	calm	chatter	both	idle	any	any	any	any	okto	proud					
 pp_okto_chat_long_1_3	pp_okto_chat_long_1_3	pp_okto_chat_long_1	3	mission_control	flight.probe_chat	radio				0	Más despacio, por favor.	Slower, please.	calm	chatter	m	idle	any	any	any	any	okto						
 pp_okto_chat_long_1_4	pp_okto_chat_long_1_4	pp_okto_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps slowly and irritably]	calm	chatter	both	idle	any	any	any	any	okto	bored					
-pp_okto_hail_01_1	pp_okto_hail_01_1	pp_okto_hail_01	1	probe	flight.probe_hail	radio				0		[beeps smugly]	calm	chatter	both	idle	any	any	any	any	okto	proud					
-pp_okto_hail_01_2	pp_okto_hail_01_2	pp_okto_hail_01	2	mission_control	flight.probe_hail	radio				0	Okto, ¿otra vez corrigiendo nuestros números?	Okto, are you correcting our numbers again?	calm	chatter	m	idle	any	any	any	any	okto						
-pp_okto_hail_01_3	pp_okto_hail_01_3	pp_okto_hail_01	3	probe	flight.probe_hail	radio				0		[beeps even more smugly]	calm	chatter	both	idle	any	any	any	any	okto	proud					
-pp_okto_hail_02_1	pp_okto_hail_02_1	pp_okto_hail_02	1	probe	flight.probe_hail	radio				0		[beeps impatiently]	calm	chatter	both	idle	any	any	any	any	okto	curious					
-pp_okto_hail_02_2	pp_okto_hail_02_2	pp_okto_hail_02	2	mission_control	flight.probe_hail	radio				0	¿Ya te aburres? Te buscaremos algo más difícil.	Bored already? We'll find you something harder.	calm	chatter	m	idle	any	any	any	any	okto						
-pp_okto_hail_03_1	pp_okto_hail_03_1	pp_okto_hail_03	1	probe	flight.probe_hail	radio				0		[beeps very impatiently]	calm	chatter	both	idle	any	any	any	any	okto	bored					
-pp_okto_hail_03_2	pp_okto_hail_03_2	pp_okto_hail_03	2	mission_control	flight.probe_hail	radio				0	Paciencia, Okto. Ya llegará la maniobra.	Patience, Okto. The maneuver will come.	calm	chatter	m	idle	any	any	any	any	okto						
-pp_okto_hail_03_3	pp_okto_hail_03_3	pp_okto_hail_03	3	probe	flight.probe_hail	radio				0		[beeps with a sigh]	calm	chatter	both	idle	any	any	any	any	okto	bored					
-pp_okto_hail_04_1	pp_okto_hail_04_1	pp_okto_hail_04	1	probe	flight.probe_hail	radio				0		[beeps very precisely]	calm	chatter	both	idle	any	any	any	any	okto	proud					
-pp_okto_hail_04_2	pp_okto_hail_04_2	pp_okto_hail_04	2	mission_control	flight.probe_hail	radio				0	Gracias por la corrección. Otra vez.	Thanks for the correction. Again.	calm	chatter	m	idle	any	any	any	any	okto						
 pp_okto_sleepy_01_1	pp_okto_sleepy_01_1	pp_okto_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Okto, te noto lento.	Okto, you seem slow.	calm	chatter	m	idle	any	any	any	any	okto						
 pp_okto_sleepy_01_2	pp_okto_sleepy_01_2	pp_okto_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	okto	sleepy					
 pp_okto_sleepy_02_1	pp_okto_sleepy_02_1	pp_okto_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	¿Cuánto es dos más dos?	What's two plus two?	calm	chatter	m	idle	any	any	any	any	okto						
@@ -511,17 +328,6 @@ pp_rovemate_chat_long_1_1	pp_rovemate_chat_long_1_1	pp_rovemate_chat_long_1	1	mi
 pp_rovemate_chat_long_1_2	pp_rovemate_chat_long_1_2	pp_rovemate_chat_long_1	2	probe	flight.probe_chat	radio				0		[beeps very excitedly]	calm	chatter	both	idle	any	any	any	any	rovemate	happy					
 pp_rovemate_chat_long_1_3	pp_rovemate_chat_long_1_3	pp_rovemate_chat_long_1	3	mission_control	flight.probe_chat	radio				0	Pues muévete.	Then move.	calm	chatter	m	idle	any	any	any	any	rovemate						
 pp_rovemate_chat_long_1_4	pp_rovemate_chat_long_1_4	pp_rovemate_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps reluctantly]	calm	chatter	both	idle	any	any	any	any	rovemate	bored					
-pp_rovemate_hail_01_1	pp_rovemate_hail_01_1	pp_rovemate_hail_01	1	probe	flight.probe_hail	radio				0		[beeps excitedly]	calm	chatter	both	idle	any	any	any	any	rovemate	happy					
-pp_rovemate_hail_01_2	pp_rovemate_hail_01_2	pp_rovemate_hail_01	2	mission_control	flight.probe_hail	radio				0	¿Es una piedra? Muy bonita. Déjala.	Is that a rock? Very nice. Leave it.	calm	chatter	m	idle	any	any	any	any	rovemate						
-pp_rovemate_hail_01_3	pp_rovemate_hail_01_3	pp_rovemate_hail_01	3	probe	flight.probe_hail	radio				0		[beeps sadly]	calm	chatter	both	idle	any	any	any	any	rovemate	offended					
-pp_rovemate_hail_02_1	pp_rovemate_hail_02_1	pp_rovemate_hail_02	1	probe	flight.probe_hail	radio				0		[beeps whiningly]	calm	chatter	both	idle	any	any	any	any	rovemate	bored					
-pp_rovemate_hail_02_2	pp_rovemate_hail_02_2	pp_rovemate_hail_02	2	mission_control	flight.probe_hail	radio				0	Luego damos un paseo.	We'll go for a ride later.	calm	chatter	m	idle	any	any	any	any	rovemate						
-pp_rovemate_hail_02_3	pp_rovemate_hail_02_3	pp_rovemate_hail_02	3	probe	flight.probe_hail	radio				0		[beeps very happily]	calm	chatter	both	idle	any	any	any	any	rovemate	happy					
-pp_rovemate_hail_03_1	pp_rovemate_hail_03_1	pp_rovemate_hail_03	1	probe	flight.probe_hail	radio				0		[beeps curiously]	calm	chatter	both	idle	any	any	any	any	rovemate	curious					
-pp_rovemate_hail_03_2	pp_rovemate_hail_03_2	pp_rovemate_hail_03	2	mission_control	flight.probe_hail	radio				0	¿Qué has encontrado?	What did you find?	calm	chatter	m	idle	any	any	any	any	rovemate						
-pp_rovemate_hail_03_3	pp_rovemate_hail_03_3	pp_rovemate_hail_03	3	probe	flight.probe_hail	radio				0		[beeps happily]	calm	chatter	both	idle	any	any	any	any	rovemate	happy					
-pp_rovemate_hail_04_1	pp_rovemate_hail_04_1	pp_rovemate_hail_04	1	probe	flight.probe_hail	radio				0		[beeps affectionately]	calm	chatter	both	idle	any	any	any	any	rovemate	happy					
-pp_rovemate_hail_04_2	pp_rovemate_hail_04_2	pp_rovemate_hail_04	2	mission_control	flight.probe_hail	radio				0	Sí, eres un buen chico.	Yes, you're a good boy.	calm	chatter	m	idle	any	any	any	any	rovemate						
 pp_rovemate_sleepy_01_1	pp_rovemate_sleepy_01_1	pp_rovemate_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Rovemate, ¿otra siesta?	Rovemate, another nap?	calm	chatter	m	idle	any	any	any	any	rovemate						
 pp_rovemate_sleepy_01_2	pp_rovemate_sleepy_01_2	pp_rovemate_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps like snoring]	calm	chatter	both	idle	any	any	any	any	rovemate	sleepy					
 pp_rovemate_sleepy_02_1	pp_rovemate_sleepy_02_1	pp_rovemate_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Buen chico. A dormir.	Good boy. Time to sleep.	calm	chatter	m	idle	any	any	any	any	rovemate						
@@ -542,14 +348,6 @@ pp_rv_tilt_any_1	pp_rv_tilt_any_1	pp_rv_tilt_any	1	probe	flight.probe_rover	radi
 pp_rv_tilt_any_2	pp_rv_tilt_any_2	pp_rv_tilt_any	2	mission_control	flight.probe_rover	radio				0	Cuidado con esa pendiente.	Careful with that slope.	calm	chatter	m	any	any	any	any	tilt	any						
 pp_rv_tilt_rovemate_1	pp_rv_tilt_rovemate_1	pp_rv_tilt_rovemate	1	probe	flight.probe_rover	radio				0		[beeps sideways]	calm	chatter	both	any	any	any	any	tilt	rovemate	scared					
 pp_rv_tilt_rovemate_2	pp_rv_tilt_rovemate_2	pp_rv_tilt_rovemate	2	mission_control	flight.probe_rover	radio				0	No te vuelques, Rovemate.	Don't tip over, Rovemate.	calm	chatter	m	any	any	any	any	tilt	rovemate						
-pp_say_again_01_1	pp_say_again_01_1	pp_say_again_01	1	mission_control	flight.probe_say_again	radio				0	¿Puedes repetir? Te perdimos.	Say again? We lost you.	calm	chatter	m	any	any	any	any	any	any						
-pp_say_again_01_2	pp_say_again_01_2	pp_say_again_01	2	probe	flight.probe_say_again	radio				0		[beeps again louder]	calm	chatter	both	any	any	any	any	any	any	offended					
-pp_say_again_02_1	pp_say_again_02_1	pp_say_again_02	1	mission_control	flight.probe_say_again	radio				0	Sonda, se corta. Repite.	Probe, you're breaking up. Repeat.	calm	chatter	m	any	any	any	any	any	any						
-pp_say_again_02_2	pp_say_again_02_2	pp_say_again_02	2	probe	flight.probe_say_again	radio				0		[beeps once more]	calm	chatter	both	any	any	any	any	any	any	offended					
-pp_say_again_03_1	pp_say_again_03_1	pp_say_again_03	1	mission_control	flight.probe_say_again	radio				0	No te oímos bien. Otra vez.	We can't hear you well. Again.	calm	chatter	m	any	any	any	any	any	any						
-pp_say_again_03_2	pp_say_again_03_2	pp_say_again_03	2	probe	flight.probe_say_again	radio				0		[beeps again slowly]	calm	chatter	both	any	any	any	any	any	any	offended					
-pp_say_again_04_1	pp_say_again_04_1	pp_say_again_04	1	mission_control	flight.probe_say_again	radio				0	¿Qué fue eso? Repite, por favor.	What was that? Repeat, please.	calm	chatter	m	any	any	any	any	any	any						
-pp_say_again_04_2	pp_say_again_04_2	pp_say_again_04	2	probe	flight.probe_say_again	radio				0		[beeps it again]	calm	chatter	both	any	any	any	any	any	any	offended					
 pp_snob_chat_01_1	pp_snob_chat_01_1	pp_snob_chat_01	1	mission_control	flight.probe_chat	radio				0	Buenos días, sonda.	Good morning, probe.	calm	chatter	m	idle	any	any	any	any	snob						
 pp_snob_chat_01_2	pp_snob_chat_01_2	pp_snob_chat_01	2	probe	flight.probe_chat	radio				0		[beeps coldly]	calm	chatter	both	idle	any	any	any	any	snob	offended					
 pp_snob_chat_02_1	pp_snob_chat_02_1	pp_snob_chat_02	1	mission_control	flight.probe_chat	radio				0	¿Te gusta la vista?	Do you like the view?	calm	chatter	m	idle	any	any	any	any	snob						
@@ -568,16 +366,6 @@ pp_snob_chat_long_1_1	pp_snob_chat_long_1_1	pp_snob_chat_long_1	1	mission_contro
 pp_snob_chat_long_1_2	pp_snob_chat_long_1_2	pp_snob_chat_long_1	2	probe	flight.probe_chat	radio				0		[beeps demandingly]	calm	chatter	both	idle	any	any	any	any	snob	bored					
 pp_snob_chat_long_1_3	pp_snob_chat_long_1_3	pp_snob_chat_long_1	3	mission_control	flight.probe_chat	radio				0	No tenemos té en órbita.	We don't have tea in orbit.	calm	chatter	m	idle	any	any	any	any	snob						
 pp_snob_chat_long_1_4	pp_snob_chat_long_1_4	pp_snob_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps in disappointment]	calm	chatter	both	idle	any	any	any	any	snob	offended					
-pp_snob_hail_01_1	pp_snob_hail_01_1	pp_snob_hail_01	1	probe	flight.probe_hail	radio				0		[beeps expectantly]	calm	chatter	both	idle	any	any	any	any	snob	bored					
-pp_snob_hail_01_2	pp_snob_hail_01_2	pp_snob_hail_01	2	mission_control	flight.probe_hail	radio				0	No, su excelencia, todavía no hay mejora.	No, your excellency, no upgrade yet.	calm	chatter	m	idle	any	any	any	any	snob						
-pp_snob_hail_01_3	pp_snob_hail_01_3	pp_snob_hail_01	3	probe	flight.probe_hail	radio				0		[beeps coldly]	calm	chatter	both	idle	any	any	any	any	snob	offended					
-pp_snob_hail_02_1	pp_snob_hail_02_1	pp_snob_hail_02	1	probe	flight.probe_hail	radio				0		[beeps disapprovingly]	calm	chatter	both	idle	any	any	any	any	snob	offended					
-pp_snob_hail_02_2	pp_snob_hail_02_2	pp_snob_hail_02	2	mission_control	flight.probe_hail	radio				0	Es la misma vista de siempre.	It's the same view as always.	calm	chatter	m	idle	any	any	any	any	snob						
-pp_snob_hail_03_1	pp_snob_hail_03_1	pp_snob_hail_03	1	probe	flight.probe_hail	radio				0		[beeps imperiously]	calm	chatter	both	idle	any	any	any	any	snob	bored					
-pp_snob_hail_03_2	pp_snob_hail_03_2	pp_snob_hail_03	2	mission_control	flight.probe_hail	radio				0	Sí, su excelencia. Un informe. Enseguida.	Yes, your excellency. A report. Right away.	calm	chatter	m	idle	any	any	any	any	snob						
-pp_snob_hail_03_3	pp_snob_hail_03_3	pp_snob_hail_03	3	probe	flight.probe_hail	radio				0		[beeps approvingly]	calm	chatter	both	idle	any	any	any	any	snob	proud					
-pp_snob_hail_04_1	pp_snob_hail_04_1	pp_snob_hail_04	1	probe	flight.probe_hail	radio				0		[beeps magnificently]	calm	chatter	both	idle	any	any	any	any	snob	proud					
-pp_snob_hail_04_2	pp_snob_hail_04_2	pp_snob_hail_04	2	mission_control	flight.probe_hail	radio				0	Anotado.	Noted.	calm	chatter	m	idle	any	any	any	any	snob						
 pp_snob_sleepy_01_1	pp_snob_sleepy_01_1	pp_snob_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Su excelencia parece cansada.	Your excellency seems tired.	calm	chatter	m	idle	any	any	any	any	snob						
 pp_snob_sleepy_01_2	pp_snob_sleepy_01_2	pp_snob_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps with dignity]	calm	chatter	both	idle	any	any	any	any	snob	sleepy					
 pp_snob_sleepy_02_1	pp_snob_sleepy_02_1	pp_snob_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	¿Bajamos las luces?	Shall we dim the lights?	calm	chatter	m	idle	any	any	any	any	snob						
@@ -602,51 +390,10 @@ pp_stayputnik_chat_long_1_2	pp_stayputnik_chat_long_1_2	pp_stayputnik_chat_long_
 pp_stayputnik_chat_long_1_3	pp_stayputnik_chat_long_1_3	pp_stayputnik_chat_long_1	3	mission_control	flight.probe_chat	radio				0	¿Y no tenías ruedas de reacción?	And you had no reaction wheels?	calm	chatter	m	idle	any	any	any	any	stayputnik						
 pp_stayputnik_chat_long_1_4	pp_stayputnik_chat_long_1_4	pp_stayputnik_chat_long_1	4	probe	flight.probe_chat	radio				0		[beeps proudly]	calm	chatter	both	idle	any	any	any	any	stayputnik	proud					
 pp_stayputnik_chat_long_1_5	pp_stayputnik_chat_long_1_5	pp_stayputnik_chat_long_1	5	mission_control	flight.probe_chat	radio				0	Qué duro.	Tough times.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-pp_stayputnik_hail_01_1	pp_stayputnik_hail_01_1	pp_stayputnik_hail_01	1	probe	flight.probe_hail	radio				0		[beeps out of nowhere]	calm	chatter	both	idle	any	any	any	any	stayputnik	happy					
-pp_stayputnik_hail_01_2	pp_stayputnik_hail_01_2	pp_stayputnik_hail_01	2	mission_control	flight.probe_hail	radio				0	Sí, Stayputnik, seguimos aquí.	Yes, Stayputnik, we're still here.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-pp_stayputnik_hail_01_3	pp_stayputnik_hail_01_3	pp_stayputnik_hail_01	3	probe	flight.probe_hail	radio				0		[beeps contentedly]	calm	chatter	both	idle	any	any	any	any	stayputnik	happy					
-pp_stayputnik_hail_02_1	pp_stayputnik_hail_02_1	pp_stayputnik_hail_02	1	probe	flight.probe_hail	radio				0		[beeps hopefully]	calm	chatter	both	idle	any	any	any	any	stayputnik	curious					
-pp_stayputnik_hail_02_2	pp_stayputnik_hail_02_2	pp_stayputnik_hail_02	2	mission_control	flight.probe_hail	radio				0	Siempre te escuchamos, veterano.	We always listen, veteran.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-pp_stayputnik_hail_03_1	pp_stayputnik_hail_03_1	pp_stayputnik_hail_03	1	probe	flight.probe_hail	radio				0		[beeps on and on]	calm	chatter	both	idle	any	any	any	any	stayputnik	proud					
-pp_stayputnik_hail_03_2	pp_stayputnik_hail_03_2	pp_stayputnik_hail_03	2	mission_control	flight.probe_hail	radio				0	Lo sabemos. Nos lo contaste ayer.	We know. You told us yesterday.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-pp_stayputnik_hail_03_3	pp_stayputnik_hail_03_3	pp_stayputnik_hail_03	3	probe	flight.probe_hail	radio				0		[beeps on anyway]	calm	chatter	both	idle	any	any	any	any	stayputnik	offended					
-pp_stayputnik_hail_04_1	pp_stayputnik_hail_04_1	pp_stayputnik_hail_04	1	probe	flight.probe_hail	radio				0		[beeps slowly]	calm	chatter	both	idle	any	any	any	any	stayputnik	bored					
-pp_stayputnik_hail_04_2	pp_stayputnik_hail_04_2	pp_stayputnik_hail_04	2	mission_control	flight.probe_hail	radio				0	¿Aburrido? Eres una esfera en el espacio.	Bored? You're a ball in space.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-pp_stayputnik_hail_04_3	pp_stayputnik_hail_04_3	pp_stayputnik_hail_04	3	probe	flight.probe_hail	radio				0		[beeps indignantly]	calm	chatter	both	idle	any	any	any	any	stayputnik	offended					
 pp_stayputnik_sleepy_01_1	pp_stayputnik_sleepy_01_1	pp_stayputnik_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Stayputnik, ¿te estás durmiendo?	Stayputnik, are you nodding off?	calm	chatter	m	idle	any	any	any	any	stayputnik						
 pp_stayputnik_sleepy_01_2	pp_stayputnik_sleepy_01_2	pp_stayputnik_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	stayputnik	sleepy					
 pp_stayputnik_sleepy_02_1	pp_stayputnik_sleepy_02_1	pp_stayputnik_sleepy_02	1	mission_control	flight.probe_sleepy	radio				0	Poca batería, ¿eh, veterano?	Low on juice, eh, veteran?	calm	chatter	m	idle	any	any	any	any	stayputnik						
 pp_stayputnik_sleepy_02_2	pp_stayputnik_sleepy_02_2	pp_stayputnik_sleepy_02	2	probe	flight.probe_sleepy	radio				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	stayputnik	sleepy					
-pp_stress_any_a_1	pp_stress_any_a_1	pp_stress_any_a	1	mission_control	flight.probe_stress	radio				0	Tranquila, sonda. Estamos contigo.	Easy, probe. We're with you.	tense	chatter	m	any	any	any	any	any	any						
-pp_stress_any_a_2	pp_stress_any_a_2	pp_stress_any_a	2	probe	flight.probe_stress	radio				0		[beeps nervously]	tense	chatter	both	any	any	any	any	any	any	scared					
-pp_stress_any_b_1	pp_stress_any_b_1	pp_stress_any_b	1	probe	flight.probe_stress	radio				0		[beeps urgently]	tense	chatter	both	any	any	any	any	any	any	scared					
-pp_stress_any_b_2	pp_stress_any_b_2	pp_stress_any_b	2	mission_control	flight.probe_stress	radio				0	Lo vemos, lo vemos.	We see it, we see it.	tense	chatter	m	any	any	any	any	any	any						
-pp_stress_engine_out_any_1	pp_stress_engine_out_any_1	pp_stress_engine_out_any	1	mission_control	flight.probe_stress	radio				0	Perdimos un motor. Sin pánico.	We lost an engine. No panic.	tense	chatter	m	any	engine_out	any	any	any	any						
-pp_stress_engine_out_any_2	pp_stress_engine_out_any_2	pp_stress_engine_out_any	2	probe	flight.probe_stress	radio				0		[beeps frantically]	tense	chatter	both	any	engine_out	any	any	any	any	scared					
-pp_stress_fuel_any_1	pp_stress_fuel_any_1	pp_stress_fuel_any	1	mission_control	flight.probe_stress	radio				0	Queda poco combustible. Lo estamos viendo.	Fuel is low. We're watching it.	tense	chatter	m	any	fuel	any	any	any	any						
-pp_stress_fuel_any_2	pp_stress_fuel_any_2	pp_stress_fuel_any	2	probe	flight.probe_stress	radio				0		[beeps worriedly]	tense	chatter	both	any	fuel	any	any	any	any	scared					
-pp_stress_gforce_any_1	pp_stress_gforce_any_1	pp_stress_gforce_any	1	mission_control	flight.probe_stress	radio				0	Mucha fuerza. Ya casi está.	Lots of g. Almost done.	tense	chatter	m	any	gforce	any	any	any	any						
-pp_stress_gforce_any_2	pp_stress_gforce_any_2	pp_stress_gforce_any	2	probe	flight.probe_stress	radio				0		[beeps under strain]	tense	chatter	both	any	gforce	any	any	any	any	scared					
-pp_stress_gforce_stayputnik_1	pp_stress_gforce_stayputnik_1	pp_stress_gforce_stayputnik	1	mission_control	flight.probe_stress	radio				0	Aguanta, Stayputnik, eres más fuerte de lo que pareces.	Hold on, Stayputnik, you're tougher than you look.	tense	chatter	m	any	gforce	any	any	any	stayputnik						
-pp_stress_gforce_stayputnik_2	pp_stress_gforce_stayputnik_2	pp_stress_gforce_stayputnik	2	probe	flight.probe_stress	radio				0		[beeps bravely]	tense	chatter	both	any	gforce	any	any	any	stayputnik	proud					
-pp_stress_ground_any_1	pp_stress_ground_any_1	pp_stress_ground_any	1	mission_control	flight.probe_stress	radio				0	El suelo está cerca. Muy cerca.	The ground is close. Very close.	tense	chatter	m	any	ground	any	any	any	any						
-pp_stress_ground_any_2	pp_stress_ground_any_2	pp_stress_ground_any	2	probe	flight.probe_stress	radio				0		[beeps in alarm]	tense	chatter	both	any	ground	any	any	any	any	scared					
-pp_stress_heat_any_1	pp_stress_heat_any_1	pp_stress_heat_any	1	mission_control	flight.probe_stress	radio				0	Hace calor ahí fuera, lo sabemos.	It's hot out there, we know.	tense	chatter	m	any	heat	any	any	any	any						
-pp_stress_heat_any_2	pp_stress_heat_any_2	pp_stress_heat_any	2	probe	flight.probe_stress	radio				0		[beeps feverishly]	tense	chatter	both	any	heat	any	any	any	any	scared					
-pp_stress_heat_hecs_1	pp_stress_heat_hecs_1	pp_stress_heat_hecs	1	probe	flight.probe_stress	radio				0		[beeps in panic]	tense	chatter	both	any	heat	any	any	any	hecs	scared					
-pp_stress_heat_hecs_2	pp_stress_heat_hecs_2	pp_stress_heat_hecs	2	mission_control	flight.probe_stress	radio				0	HECS, el escudo aguanta. Confía en él.	HECS, the shield holds. Trust it.	tense	chatter	m	any	heat	any	any	any	hecs						
-pp_stress_impulse_any_1	pp_stress_impulse_any_1	pp_stress_impulse_any	1	mission_control	flight.probe_stress	radio				0	Eso fue un golpe fuerte. ¿Sigues ahí?	That was a hard knock. Still there?	tense	chatter	m	any	impulse	any	any	any	any						
-pp_stress_impulse_any_2	pp_stress_impulse_any_2	pp_stress_impulse_any	2	probe	flight.probe_stress	radio				0		[beeps faintly]	tense	chatter	both	any	impulse	any	any	any	any	scared					
-pp_stress_plasma_any_1	pp_stress_plasma_any_1	pp_stress_plasma_any	1	mission_control	flight.probe_stress	radio				0	Eso brillante es plasma. Es normal.	That glow is plasma. It's normal.	tense	chatter	m	any	plasma	any	any	any	any						
-pp_stress_plasma_any_2	pp_stress_plasma_any_2	pp_stress_plasma_any	2	probe	flight.probe_stress	radio				0		[beeps nervously]	tense	chatter	both	any	plasma	any	any	any	any	scared					
-pp_stress_q_any_1	pp_stress_q_any_1	pp_stress_q_any	1	mission_control	flight.probe_stress	radio				0	Mucha presión de aire. Aguanta un poco.	Lots of air pressure. Hang on a bit.	tense	chatter	m	any	q	any	any	any	any						
-pp_stress_q_any_2	pp_stress_q_any_2	pp_stress_q_any	2	probe	flight.probe_stress	radio				0		[beeps shakily]	tense	chatter	both	any	q	any	any	any	any	scared					
-pp_stress_spin_any_1	pp_stress_spin_any_1	pp_stress_spin_any	1	mission_control	flight.probe_stress	radio				0	Sonda, giras demasiado. Aguanta.	Probe, you're spinning too much. Hang on.	tense	chatter	m	any	spin	any	any	any	any						
-pp_stress_spin_any_2	pp_stress_spin_any_2	pp_stress_spin_any	2	probe	flight.probe_stress	radio				0		[beeps dizzily]	tense	chatter	both	any	spin	any	any	any	any	scared					
-pp_stress_spin_hecs_1	pp_stress_spin_hecs_1	pp_stress_spin_hecs	1	probe	flight.probe_stress	radio				0		[beeps very dizzily]	tense	chatter	both	any	spin	any	any	any	hecs	scared					
-pp_stress_spin_hecs_2	pp_stress_spin_hecs_2	pp_stress_spin_hecs	2	mission_control	flight.probe_stress	radio				0	Ya paramos el giro, HECS.	We're stopping the spin, HECS.	tense	chatter	m	any	spin	any	any	any	hecs						
-pp_stress_spin_stayputnik_1	pp_stress_spin_stayputnik_1	pp_stress_spin_stayputnik	1	probe	flight.probe_stress	radio				0		[beeps in circles]	tense	chatter	both	any	spin	any	any	any	stayputnik	scared					
-pp_stress_spin_stayputnik_2	pp_stress_spin_stayputnik_2	pp_stress_spin_stayputnik	2	mission_control	flight.probe_stress	radio				0	Stayputnik, no tienes control de giro. Lo sentimos.	Stayputnik, you have no attitude control. Sorry.	tense	chatter	m	any	spin	any	any	any	stayputnik						
 pm_001_1	pm_001_1	pm_001	1	mission_control	flight.throttle_full	radio				0	Empuje completo. Ahí vas.	Full thrust. There you go.	none	chatter	m	any	any	any	any	any	any						
 pm_001_2	pm_001_2	pm_001	2	probe	flight.throttle_full	radio				0		[beeps with excitement]	none	chatter	both	any	any	any	any	any	any	happy					
 pm_002_1	pm_002_1	pm_002	1	probe	flight.throttle_full	radio				0		[beeps a roar]	none	chatter	both	any	any	any	any	any	any	proud					
@@ -700,25 +447,6 @@ pm_025_2	pm_025_2	pm_025	2	mission_control	flight.chute_full	radio				0	No te ba
 pm_025_3	pm_025_3	pm_025	3	probe	flight.chute_full	radio				0		[beeps swinging more]	none	chatter	both	any	any	any	any	any	rovemate	happy					
 pm_026_1	pm_026_1	pm_026	1	probe	flight.chute_full	radio				0		[beeps an old song]	none	chatter	both	any	any	any	any	any	stayputnik	proud					
 pm_026_2	pm_026_2	pm_026	2	mission_control	flight.chute_full	radio				0	Igual que en los viejos tiempos, ¿eh?	Just like the old days, huh?	none	chatter	m	any	any	any	any	any	stayputnik						
-pm_027_1	pm_027_1	pm_027	1	probe	flight.probe_data	radio				0		[beeps a long stream]	calm	chatter	both	any	any	any	any	any	any	proud					
-pm_027_2	pm_027_2	pm_027	2	mission_control	flight.probe_data	radio				0	Recibido. Qué cantidad de datos.	Copy. That's a lot of data.	calm	chatter	m	any	any	any	any	any	any						
-pm_028_1	pm_028_1	pm_028	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	happy					
-pm_028_2	pm_028_2	pm_028	2	mission_control	flight.probe_data	radio				0	Llega todo. Los científicos están bailando.	It's all arriving. The scientists are dancing.	calm	chatter	m	any	any	any	any	any	any						
-pm_029_1	pm_029_1	pm_029	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	curious					
-pm_029_2	pm_029_2	pm_029	2	mission_control	flight.probe_data	radio				0	Datos entrando. No entiendo nada, pero me encanta.	Data coming in. I understand nothing, but I love it.	calm	chatter	m	any	any	any	any	any	any						
-pm_030_1	pm_030_1	pm_030	1	probe	flight.probe_data	radio				0		[beeps a data stream]	calm	chatter	both	any	any	any	any	any	any	proud					
-pm_030_2	pm_030_2	pm_030	2	mission_control	flight.probe_data	radio				0	Te leemos. Los científicos dicen gracias.	We read you. The scientists say thanks.	calm	chatter	m	any	any	any	any	any	any						
-pm_030_3	pm_030_3	pm_030	3	probe	flight.probe_data	radio				0		[beeps a welcome]	calm	chatter	both	any	any	any	any	any	any	happy					
-pm_031_1	pm_031_1	pm_031	1	probe	flight.probe_data	radio				0		[beeps a tidy stream]	calm	chatter	both	any	any	any	any	any	okto	proud					
-pm_031_2	pm_031_2	pm_031	2	mission_control	flight.probe_data	radio				0	Todo ordenado por fecha. Gracias, Okto.	All sorted by date. Thanks, Okto.	calm	chatter	m	any	any	any	any	any	okto						
-pm_032_1	pm_032_1	pm_032	1	probe	flight.probe_data	radio				0		[beeps very carefully]	calm	chatter	both	any	any	any	any	any	hecs	curious					
-pm_032_2	pm_032_2	pm_032	2	mission_control	flight.probe_data	radio				0	Llegan bien, HECS. No hace falta enviarlo tres veces.	It's arriving fine, HECS. No need to send it three times.	calm	chatter	m	any	any	any	any	any	hecs						
-pm_033_1	pm_033_1	pm_033	1	probe	flight.probe_data	radio				0		[beeps an excited stream]	calm	chatter	both	any	any	any	any	any	rovemate	happy					
-pm_033_2	pm_033_2	pm_033	2	mission_control	flight.probe_data	radio				0	Más despacio, Rovemate. Se nos llena la libreta.	Slower, Rovemate. Our notebook is filling up.	calm	chatter	m	any	any	any	any	any	rovemate						
-pm_034_1	pm_034_1	pm_034	1	probe	flight.probe_data	radio				0		[beeps a bored stream]	calm	chatter	both	any	any	any	any	any	snob	bored					
-pm_034_2	pm_034_2	pm_034	2	mission_control	flight.probe_data	radio				0	Gracias por compartir, su excelencia.	Thanks for sharing, your excellency.	calm	chatter	m	any	any	any	any	any	snob						
-pm_035_1	pm_035_1	pm_035	1	probe	flight.probe_data	radio				0		[beeps an old stream]	calm	chatter	both	any	any	any	any	any	stayputnik	happy					
-pm_035_2	pm_035_2	pm_035	2	mission_control	flight.probe_data	radio				0	Recibido, Stayputnik. Aún funciona como el primer día.	Copy, Stayputnik. Still works like the first day.	calm	chatter	m	any	any	any	any	any	stayputnik						
 pm_036_1	pm_036_1	pm_036	1	probe	flight.splashdown	radio				0		[beeps from the water]	none	chatter	both	any	any	any	any	any	any	scared					
 pm_036_2	pm_036_2	pm_036	2	mission_control	flight.splashdown	radio				0	Flotas, sonda. Muy bien.	You're floating, probe. Very good.	none	chatter	m	any	any	any	any	any	any						
 pm_037_1	pm_037_1	pm_037	1	mission_control	flight.splashdown	radio				0	Amerizaje. ¿Estás bien ahí abajo?	Splashdown. You okay down there?	none	chatter	m	any	any	any	any	any	any						
@@ -748,18 +476,6 @@ pm_047_2	pm_047_2	pm_047	2	mission_control	flight.touchdown	radio				0	Aterrizaj
 pm_048_1	pm_048_1	pm_048	1	mission_control	flight.touchdown	radio				0	Ha llegado su excelencia. ¿Le gusta el sitio?	Your excellency has arrived. Do you like the place?	none	chatter	m	any	any	any	any	any	snob						
 pm_048_1__v02	pm_048_1	pm_048	1	mission_control	flight.touchdown	radio				0	Bienvenida a {here}, su excelencia. ¿Es aceptable?	Welcome to {here}, your excellency. Acceptable?	none	chatter	m	any	any	any	any	any	snob						
 pm_048_2	pm_048_2	pm_048	2	probe	flight.touchdown	radio				0		[beeps unimpressed]	none	chatter	both	any	any	any	any	any	snob	bored					
-pm_049_1	pm_049_1	pm_049	1	probe	flight.docked	radio				0		[beeps at the neighbor]	none	chatter	both	any	any	any	any	any	any	happy					
-pm_049_2	pm_049_2	pm_049	2	mission_control	flight.docked	radio				0	Acoplamiento completo. Ya tienes compañía.	Docking complete. You've got company.	none	chatter	m	any	any	any	any	any	any						
-pm_050_1	pm_050_1	pm_050	1	mission_control	flight.docked	radio				0	Acoplados. Suave como una pluma.	Docked. Soft as a feather.	none	chatter	m	any	any	any	any	any	any						
-pm_050_2	pm_050_2	pm_050	2	probe	flight.docked	radio				0		[beeps proudly]	none	chatter	both	any	any	any	any	any	any	proud					
-pm_051_1	pm_051_1	pm_051	1	probe	flight.docked	radio				0		[beeps through the port]	none	chatter	both	any	any	any	any	any	any	curious					
-pm_051_2	pm_051_2	pm_051	2	mission_control	flight.docked	radio				0	Sí, ahora sois una sola nave. Portaos bien.	Yes, you're one ship now. Behave.	none	chatter	m	any	any	any	any	any	any						
-pm_052_1	pm_052_1	pm_052	1	probe	flight.docked	radio				0		[beeps hello hello hello]	none	chatter	both	any	any	any	any	any	rovemate	happy					
-pm_052_2	pm_052_2	pm_052	2	mission_control	flight.docked	radio				0	No hace falta saludar tanto, Rovemate.	You don't need to greet it that much, Rovemate.	none	chatter	m	any	any	any	any	any	rovemate						
-pm_053_1	pm_053_1	pm_053	1	probe	flight.docked	radio				0		[beeps at the neighbor]	none	chatter	both	any	any	any	any	any	snob	offended					
-pm_053_2	pm_053_2	pm_053	2	mission_control	flight.docked	radio				0	Sí, es más vieja que tú. Sé amable.	Yes, it's older than you. Be nice.	none	chatter	m	any	any	any	any	any	snob						
-pm_054_1	pm_054_1	pm_054	1	probe	flight.docked	radio				0		[beeps at the port]	none	chatter	both	any	any	any	any	any	stayputnik	curious					
-pm_054_2	pm_054_2	pm_054	2	mission_control	flight.docked	radio				0	Eso es un puerto de acoplamiento, Stayputnik. Te lo explico luego.	That's a docking port, Stayputnik. I'll explain later.	none	chatter	m	any	any	any	any	any	stayputnik						
 pm_055_1	pm_055_1	pm_055	1	mission_control	flight.burn_soon	radio				0	Encendido en un minuto. Apunta bien.	Burn in one minute. Point it right.	tense	warning	m	any	any	any	any	any	any						
 pm_055_2	pm_055_2	pm_055	2	probe	flight.burn_soon	radio				0		[beeps at attention]	tense	warning	both	any	any	any	any	any	any	curious					
 pm_056_1	pm_056_1	pm_056	1	probe	flight.burn_soon	radio				0		[beeps counting down]	tense	warning	both	any	any	any	any	any	any	scared					
@@ -772,40 +488,6 @@ pm_059_1	pm_059_1	pm_059	1	probe	flight.burn_soon	radio				0		[beeps impatiently
 pm_059_2	pm_059_2	pm_059	2	mission_control	flight.burn_soon	radio				0	Todavía no, Rovemate. Espera la marca.	Not yet, Rovemate. Wait for the mark.	tense	warning	m	any	any	any	any	any	rovemate						
 pm_060_1	pm_060_1	pm_060	1	mission_control	flight.burn_soon	radio				0	Stayputnik, encendido pronto. ¿Estás despierto?	Stayputnik, burn soon. Are you awake?	tense	warning	m	any	any	any	any	any	stayputnik						
 pm_060_2	pm_060_2	pm_060	2	probe	flight.burn_soon	radio				0		[beeps a startled yes]	tense	warning	both	any	any	any	any	any	stayputnik	sleepy					
-pm_061_1	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo. ¿Repites?	Sorry, I was eating. Say again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v02	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo la pasta de aperitivo. ¿Otra vez?	Sorry, I was eating snack paste. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v03	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el queso en tubo. ¿Otra vez?	Sorry, I was eating tube cheese. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v04	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el fideos liofilizados. ¿Otra vez?	Sorry, I was eating freeze-dried noodles. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v05	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el alubias espaciales. ¿Otra vez?	Sorry, I was eating space beans. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v06	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el famoso chile de Jeb. ¿Otra vez?	Sorry, I was eating Jeb's famous chili. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v07	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el huevos en polvo. ¿Otra vez?	Sorry, I was eating powdered eggs. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v08	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el guiso misterioso. ¿Otra vez?	Sorry, I was eating mystery stew. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v09	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el barritas de algas. ¿Otra vez?	Sorry, I was eating algae bars. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v10	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el raciones de emergencia. ¿Otra vez?	Sorry, I was eating emergency rations. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v11	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo la sopa recalentada. ¿Otra vez?	Sorry, I was eating reheated soup. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v12	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el pescado deshidratado. ¿Otra vez?	Sorry, I was eating dehydrated fish. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v13	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo la pizza fría. ¿Otra vez?	Sorry, I was eating cold pizza. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v14	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el tacos espaciales. ¿Otra vez?	Sorry, I was eating space tacos. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v15	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el puré de zanahoria. ¿Otra vez?	Sorry, I was eating carrot puree. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v16	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el café instantáneo. ¿Otra vez?	Sorry, I was eating instant coffee. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v17	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el cohetes de gominola. ¿Otra vez?	Sorry, I was eating gummy rockets. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v18	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el pudin rehidratado. ¿Otra vez?	Sorry, I was eating rehydrated pudding. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_1__v19	pm_061_1	pm_061	1	mission_control	flight.probe_say_again	radio				0	Perdón, estaba comiendo el helado liofilizado. ¿Otra vez?	Sorry, I was eating freeze-dried ice cream. Again?	calm	chatter	m	any	any	any	any	any	any						
-pm_061_2	pm_061_2	pm_061	2	probe	flight.probe_say_again	radio				0		[beeps again annoyed]	calm	chatter	both	any	any	any	any	any	any	offended					
-pm_062_1	pm_062_1	pm_062	1	mission_control	flight.probe_say_again	radio				0	Se ha cortado. Una vez más, por favor.	It cut out. Once more, please.	calm	chatter	m	any	any	any	any	any	any						
-pm_062_2	pm_062_2	pm_062	2	probe	flight.probe_say_again	radio				0		[beeps it again slowly]	calm	chatter	both	any	any	any	any	any	any	bored					
-pm_063_1	pm_063_1	pm_063	1	mission_control	flight.probe_say_again	radio				0	¿Eso era un sí o un no?	Was that a yes or a no?	calm	chatter	m	any	any	any	any	any	any						
-pm_063_2	pm_063_2	pm_063	2	probe	flight.probe_say_again	radio				0		[beeps very clearly]	calm	chatter	both	any	any	any	any	any	any	offended					
-pm_064_1	pm_064_1	pm_064	1	mission_control	flight.probe_say_again	radio				0	Hay mucho ruido. Repite más alto.	There's a lot of noise. Repeat louder.	calm	chatter	m	any	any	any	any	any	any						
-pm_064_2	pm_064_2	pm_064	2	probe	flight.probe_say_again	radio				0		[beeps very loudly]	calm	chatter	both	any	any	any	any	any	any	offended					
-pm_065_1	pm_065_1	pm_065	1	mission_control	flight.probe_say_again	radio				0	Te hemos perdido un momento. ¿Qué decías?	We lost you for a moment. What were you saying?	calm	chatter	m	any	any	any	any	any	any						
-pm_065_2	pm_065_2	pm_065	2	probe	flight.probe_say_again	radio				0		[beeps patiently again]	calm	chatter	both	any	any	any	any	any	any	curious					
-pm_066_1	pm_066_1	pm_066	1	mission_control	flight.probe_say_again	radio				0	Okto, repite. Más despacio esta vez.	Okto, repeat. Slower this time.	calm	chatter	m	any	any	any	any	any	okto						
-pm_066_2	pm_066_2	pm_066	2	probe	flight.probe_say_again	radio				0		[beeps exactly the same]	calm	chatter	both	any	any	any	any	any	okto	offended					
-pm_067_1	pm_067_1	pm_067	1	mission_control	flight.probe_say_again	radio				0	HECS, no te hemos oído. ¿Todo bien?	HECS, we didn't hear you. All good?	calm	chatter	m	any	any	any	any	any	hecs						
-pm_067_2	pm_067_2	pm_067	2	probe	flight.probe_say_again	radio				0		[beeps worriedly again]	calm	chatter	both	any	any	any	any	any	hecs	scared					
-pm_068_1	pm_068_1	pm_068	1	mission_control	flight.probe_say_again	radio				0	Disculpe, su excelencia. ¿Puede repetir?	Excuse me, your excellency. Could you repeat?	calm	chatter	m	any	any	any	any	any	snob						
-pm_068_2	pm_068_2	pm_068	2	probe	flight.probe_say_again	radio				0		[beeps with great patience]	calm	chatter	both	any	any	any	any	any	snob	offended					
 px_generic_chat_01_1	px_generic_chat_01_1	px_generic_chat_01	1	mission_control	flight.probe_chat	radio				0	Sonda, ¿qué tal el día?	Probe, how's your day?	calm	chatter	m	idle	any	any	any	any	generic						
 px_generic_chat_01_2	px_generic_chat_01_2	px_generic_chat_01	2	probe	flight.probe_chat	radio				0		[beeps cheerfully]	calm	chatter	both	idle	any	any	any	any	generic	happy					
 px_generic_chat_01_3	px_generic_chat_01_3	px_generic_chat_01	3	mission_control	flight.probe_chat	radio				0	Me alegro. Aquí, café y papeles.	Glad to hear it. Down here it's coffee and paperwork.	calm	chatter	m	idle	any	any	any	any	generic						
@@ -823,13 +505,6 @@ px_generic_chat_05_3	px_generic_chat_05_3	px_generic_chat_05	3	mission_control	f
 px_generic_chat_06_1	px_generic_chat_06_1	px_generic_chat_06	1	mission_control	flight.probe_chat	radio				0	Sonda, buen trabajo hoy.	Probe, good work today.	calm	chatter	m	idle	any	any	any	any	generic						
 px_generic_chat_06_2	px_generic_chat_06_2	px_generic_chat_06	2	probe	flight.probe_chat	radio				0		[beeps proudly]	calm	chatter	both	idle	any	any	any	any	generic	proud					
 px_generic_chat_06_3	px_generic_chat_06_3	px_generic_chat_06	3	mission_control	flight.probe_chat	radio				0	Que no se te suba a la cabeza.	Don't let it go to your head.	calm	chatter	m	idle	any	any	any	any	generic						
-px_generic_hail_01_1	px_generic_hail_01_1	px_generic_hail_01	1	probe	flight.probe_hail	radio				0		[beeps a question]	calm	chatter	both	idle	any	any	any	any	generic	curious					
-px_generic_hail_01_2	px_generic_hail_01_2	px_generic_hail_01	2	mission_control	flight.probe_hail	radio				0	Buena pregunta, sonda. Ni idea.	Good question, probe. No idea.	calm	chatter	m	idle	any	any	any	any	generic						
-px_generic_hail_02_1	px_generic_hail_02_1	px_generic_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a little tune]	calm	chatter	both	idle	any	any	any	any	generic	happy					
-px_generic_hail_02_2	px_generic_hail_02_2	px_generic_hail_02	2	mission_control	flight.probe_hail	radio				0	Bonito. ¿Otra vez?	Nice. Again?	calm	chatter	m	idle	any	any	any	any	generic						
-px_generic_hail_02_3	px_generic_hail_02_3	px_generic_hail_02	3	probe	flight.probe_hail	radio				0		[beeps the same tune]	calm	chatter	both	idle	any	any	any	any	generic	proud					
-px_generic_hail_03_1	px_generic_hail_03_1	px_generic_hail_03	1	probe	flight.probe_hail	radio				0		[beeps impatiently]	calm	chatter	both	idle	any	any	any	any	generic	bored					
-px_generic_hail_03_2	px_generic_hail_03_2	px_generic_hail_03	2	mission_control	flight.probe_hail	radio				0	Sí, sonda, estás en la lista. Pronto te toca.	Yes, probe, you're on the list. Your turn is coming.	calm	chatter	m	idle	any	any	any	any	generic						
 px_generic_sleepy_01_1	px_generic_sleepy_01_1	px_generic_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Sonda, te oigo floja.	Probe, you sound weak.	calm	chatter	m	idle	any	any	any	any	generic						
 px_generic_sleepy_01_2	px_generic_sleepy_01_2	px_generic_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	generic	sleepy					
 px_generic_sleepy_01_3	px_generic_sleepy_01_3	px_generic_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Descansa. Mañana hablamos.	Rest. We'll talk tomorrow.	calm	chatter	m	idle	any	any	any	any	generic						
@@ -850,13 +525,6 @@ px_hecs_chat_05_3	px_hecs_chat_05_3	px_hecs_chat_05	3	mission_control	flight.pro
 px_hecs_chat_06_1	px_hecs_chat_06_1	px_hecs_chat_06	1	mission_control	flight.probe_chat	radio				0	HECS, un error pequeño no es el fin del mundo.	HECS, a small error isn't the end of the world.	calm	chatter	m	idle	any	any	any	any	hecs						
 px_hecs_chat_06_2	px_hecs_chat_06_2	px_hecs_chat_06	2	probe	flight.probe_chat	radio				0		[beeps in panic]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
 px_hecs_chat_06_3	px_hecs_chat_06_3	px_hecs_chat_06	3	mission_control	flight.probe_chat	radio				0	No, no he dicho que haya uno. Era un ejemplo.	No, I didn't say there is one. It was an example.	calm	chatter	m	idle	any	any	any	any	hecs						
-px_hecs_hail_01_1	px_hecs_hail_01_1	px_hecs_hail_01	1	probe	flight.probe_hail	radio				0		[beeps urgently]	calm	chatter	both	idle	any	any	any	any	hecs	scared					
-px_hecs_hail_01_2	px_hecs_hail_01_2	px_hecs_hail_01	2	mission_control	flight.probe_hail	radio				0	¿Qué pasa, HECS? Ah. Un decimal. Tranquilo.	What is it, HECS? Oh. A decimal. Relax.	calm	chatter	m	idle	any	any	any	any	hecs						
-px_hecs_hail_02_1	px_hecs_hail_02_1	px_hecs_hail_02	1	probe	flight.probe_hail	radio				0		[beeps very neatly]	calm	chatter	both	idle	any	any	any	any	hecs	proud					
-px_hecs_hail_02_2	px_hecs_hail_02_2	px_hecs_hail_02	2	mission_control	flight.probe_hail	radio				0	Informe recibido. Ordenado y sin errores.	Report received. Neat and error free.	calm	chatter	m	idle	any	any	any	any	hecs						
-px_hecs_hail_02_3	px_hecs_hail_02_3	px_hecs_hail_02	3	probe	flight.probe_hail	radio				0		[beeps with relief]	calm	chatter	both	idle	any	any	any	any	hecs	happy					
-px_hecs_hail_03_1	px_hecs_hail_03_1	px_hecs_hail_03	1	probe	flight.probe_hail	radio				0		[beeps carefully]	calm	chatter	both	idle	any	any	any	any	hecs	curious					
-px_hecs_hail_03_2	px_hecs_hail_03_2	px_hecs_hail_03	2	mission_control	flight.probe_hail	radio				0	Sí, HECS, seguimos en contacto. Cada cinco minutos, sí.	Yes, HECS, we're still in contact. Every five minutes, yes.	calm	chatter	m	idle	any	any	any	any	hecs						
 px_hecs_sleepy_01_1	px_hecs_sleepy_01_1	px_hecs_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	HECS, apaga las comprobaciones un rato.	HECS, switch off the checks for a while.	calm	chatter	m	idle	any	any	any	any	hecs						
 px_hecs_sleepy_01_2	px_hecs_sleepy_01_2	px_hecs_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps reluctantly]	calm	chatter	both	idle	any	any	any	any	hecs	sleepy					
 px_hecs_sleepy_01_3	px_hecs_sleepy_01_3	px_hecs_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Nosotros vigilamos. Duerme.	We'll keep watch. Sleep.	calm	chatter	m	idle	any	any	any	any	hecs						
@@ -878,13 +546,6 @@ px_mk2drone_chat_05_3	px_mk2drone_chat_05_3	px_mk2drone_chat_05	3	mission_contro
 px_mk2drone_chat_06_1	px_mk2drone_chat_06_1	px_mk2drone_chat_06	1	mission_control	flight.probe_chat	radio				0	Drone, ¿te gusta trabajar con nosotros?	Drone, do you like working with us?	calm	chatter	m	idle	any	any	any	any	mk2drone						
 px_mk2drone_chat_06_2	px_mk2drone_chat_06_2	px_mk2drone_chat_06	2	probe	flight.probe_chat	radio				0		[beeps too happily]	calm	chatter	both	idle	any	any	any	any	mk2drone	happy					
 px_mk2drone_chat_06_3	px_mk2drone_chat_06_3	px_mk2drone_chat_06	3	mission_control	flight.probe_chat	radio				0	Bien. Muy bien. Sigue así.	Good. Very good. Keep it up.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-px_mk2drone_hail_01_1	px_mk2drone_hail_01_1	px_mk2drone_hail_01	1	probe	flight.probe_hail	radio				0		[beeps in monotone]	calm	chatter	both	idle	any	any	any	any	mk2drone	curious					
-px_mk2drone_hail_01_2	px_mk2drone_hail_01_2	px_mk2drone_hail_01	2	mission_control	flight.probe_hail	radio				0	Recibido, drone. Rumbo corregido. No te lo pedimos, pero gracias.	Copy, drone. Course corrected. We didn't ask, but thanks.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-px_mk2drone_hail_02_1	px_mk2drone_hail_02_1	px_mk2drone_hail_02	1	probe	flight.probe_hail	radio				0		[beeps very confidently]	calm	chatter	both	idle	any	any	any	any	mk2drone	proud					
-px_mk2drone_hail_02_2	px_mk2drone_hail_02_2	px_mk2drone_hail_02	2	mission_control	flight.probe_hail	radio				0	Sí, drone, ya sabemos que no necesitas pilotos.	Yes, drone, we know you don't need pilots.	calm	chatter	m	idle	any	any	any	any	mk2drone						
-px_mk2drone_hail_03_1	px_mk2drone_hail_03_1	px_mk2drone_hail_03	1	probe	flight.probe_hail	radio				0		[beeps a greeting]	calm	chatter	both	idle	any	any	any	any	mk2drone	happy					
-px_mk2drone_hail_03_2	px_mk2drone_hail_03_2	px_mk2drone_hail_03	2	mission_control	flight.probe_hail	radio				0	Hola, drone. ¿Por qué tienes nuestros horarios?	Hi, drone. Why do you have our schedules?	calm	chatter	m	idle	any	any	any	any	mk2drone						
-px_mk2drone_hail_03_3	px_mk2drone_hail_03_3	px_mk2drone_hail_03	3	probe	flight.probe_hail	radio				0		[beeps innocently]	calm	chatter	both	idle	any	any	any	any	mk2drone	curious					
 px_mk2drone_sleepy_01_1	px_mk2drone_sleepy_01_1	px_mk2drone_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Drone, ¿te vas a desconectar un rato?	Drone, going offline for a bit?	calm	chatter	m	idle	any	any	any	any	mk2drone						
 px_mk2drone_sleepy_01_2	px_mk2drone_sleepy_01_2	px_mk2drone_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps in standby]	calm	chatter	both	idle	any	any	any	any	mk2drone	sleepy					
 px_mk2drone_sleepy_01_3	px_mk2drone_sleepy_01_3	px_mk2drone_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Bien. Todos dormiremos mejor.	Good. We'll all sleep better.	calm	chatter	m	idle	any	any	any	any	mk2drone						
@@ -905,12 +566,6 @@ px_mpo_chat_05_2	px_mpo_chat_05_2	px_mpo_chat_05	2	probe	flight.probe_chat	radio
 px_mpo_chat_06_1	px_mpo_chat_06_1	px_mpo_chat_06	1	mission_control	flight.probe_chat	radio				0	MPO, ¿qué tal la vista desde aquí?	MPO, how's the view from here?	calm	chatter	m	idle	any	any	any	any	mpo						
 px_mpo_chat_06_2	px_mpo_chat_06_2	px_mpo_chat_06	2	probe	flight.probe_chat	radio				0		[beeps thoughtfully]	calm	chatter	both	idle	any	any	any	any	mpo	curious					
 px_mpo_chat_06_3	px_mpo_chat_06_3	px_mpo_chat_06	3	mission_control	flight.probe_chat	radio				0	Ya lo sé. Moho se ve más grande de cerca.	I know. Moho looks bigger up close.	calm	chatter	m	idle	any	any	any	any	mpo						
-px_mpo_hail_01_1	px_mpo_hail_01_1	px_mpo_hail_01	1	probe	flight.probe_hail	radio				0		[beeps excitedly]	calm	chatter	both	idle	any	any	any	any	mpo	happy					
-px_mpo_hail_01_2	px_mpo_hail_01_2	px_mpo_hail_01	2	mission_control	flight.probe_hail	radio				0	¿Otra mancha solar? Apuntada, MPO.	Another sunspot? Logged, MPO.	calm	chatter	m	idle	any	any	any	any	mpo						
-px_mpo_hail_02_1	px_mpo_hail_02_1	px_mpo_hail_02	1	probe	flight.probe_hail	radio				0		[beeps very loudly]	calm	chatter	both	idle	any	any	any	any	mpo	curious					
-px_mpo_hail_02_2	px_mpo_hail_02_2	px_mpo_hail_02	2	mission_control	flight.probe_hail	radio				0	Te oímos, MPO. Y los vecinos también.	We hear you, MPO. So do the neighbors.	calm	chatter	m	idle	any	any	any	any	mpo						
-px_mpo_hail_03_1	px_mpo_hail_03_1	px_mpo_hail_03	1	probe	flight.probe_hail	radio				0		[beeps impatiently]	calm	chatter	both	idle	any	any	any	any	mpo	bored					
-px_mpo_hail_03_2	px_mpo_hail_03_2	px_mpo_hail_03	2	mission_control	flight.probe_hail	radio				0	Sí, Moho sigue en su sitio. Todavía no vamos.	Yes, Moho is still where it was. We're not going yet.	calm	chatter	m	idle	any	any	any	any	mpo						
 px_mpo_sleepy_01_1	px_mpo_sleepy_01_1	px_mpo_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	MPO, ¿te has quedado a la sombra?	MPO, stuck in the shade?	calm	chatter	m	idle	any	any	any	any	mpo						
 px_mpo_sleepy_01_2	px_mpo_sleepy_01_2	px_mpo_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	mpo	sleepy					
 px_mpo_sleepy_01_3	px_mpo_sleepy_01_3	px_mpo_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	El sol vuelve pronto. Aguanta.	The sun comes back soon. Hang on.	calm	chatter	m	idle	any	any	any	any	mpo						
@@ -931,12 +586,6 @@ px_mtm_chat_05_3	px_mtm_chat_05_3	px_mtm_chat_05	3	mission_control	flight.probe_
 px_mtm_chat_06_1	px_mtm_chat_06_1	px_mtm_chat_06	1	mission_control	flight.probe_chat	radio				0	MTM, ¿te aburres en los viajes largos?	MTM, do you get bored on long trips?	calm	chatter	m	idle	any	any	any	any	mtm						
 px_mtm_chat_06_2	px_mtm_chat_06_2	px_mtm_chat_06	2	probe	flight.probe_chat	radio				0		[beeps very slowly]	calm	chatter	both	idle	any	any	any	any	mtm	bored					
 px_mtm_chat_06_3	px_mtm_chat_06_3	px_mtm_chat_06	3	mission_control	flight.probe_chat	radio				0	Yo también me aburriría. Gracias por aguantar.	I'd be bored too. Thanks for sticking with it.	calm	chatter	m	idle	any	any	any	any	mtm						
-px_mtm_hail_01_1	px_mtm_hail_01_1	px_mtm_hail_01	1	probe	flight.probe_hail	radio				0		[beeps steadily]	calm	chatter	both	idle	any	any	any	any	mtm	proud					
-px_mtm_hail_01_2	px_mtm_hail_01_2	px_mtm_hail_01	2	mission_control	flight.probe_hail	radio				0	Rumbo estable, MTM. Buen trabajo.	Steady course, MTM. Good work.	calm	chatter	m	idle	any	any	any	any	mtm						
-px_mtm_hail_02_1	px_mtm_hail_02_1	px_mtm_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a long sigh]	calm	chatter	both	idle	any	any	any	any	mtm	bored					
-px_mtm_hail_02_2	px_mtm_hail_02_2	px_mtm_hail_02	2	mission_control	flight.probe_hail	radio				0	Lo sé, grandullón. Ya queda menos.	I know, big guy. Not much longer.	calm	chatter	m	idle	any	any	any	any	mtm						
-px_mtm_hail_03_1	px_mtm_hail_03_1	px_mtm_hail_03	1	probe	flight.probe_hail	radio				0		[beeps contentedly]	calm	chatter	both	idle	any	any	any	any	mtm	happy					
-px_mtm_hail_03_2	px_mtm_hail_03_2	px_mtm_hail_03	2	mission_control	flight.probe_hail	radio				0	¿Contento de trabajar? Eres el único.	Happy to work? You're the only one.	calm	chatter	m	idle	any	any	any	any	mtm						
 px_mtm_sleepy_01_1	px_mtm_sleepy_01_1	px_mtm_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	MTM, apaga el motor un rato.	MTM, switch the engine off for a while.	calm	chatter	m	idle	any	any	any	any	mtm						
 px_mtm_sleepy_01_2	px_mtm_sleepy_01_2	px_mtm_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps very sleepily]	calm	chatter	both	idle	any	any	any	any	mtm	sleepy					
 px_mtm_sleepy_01_3	px_mtm_sleepy_01_3	px_mtm_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Buen descanso. El viaje sigue mañana.	Rest well. The trip goes on tomorrow.	calm	chatter	m	idle	any	any	any	any	mtm						
@@ -958,13 +607,6 @@ px_okto_chat_05_3	px_okto_chat_05_3	px_okto_chat_05	3	mission_control	flight.pro
 px_okto_chat_06_1	px_okto_chat_06_1	px_okto_chat_06	1	mission_control	flight.probe_chat	radio				0	Okto, la calculadora de la oficina te saluda.	Okto, the office calculator says hi.	calm	chatter	m	idle	any	any	any	any	okto						
 px_okto_chat_06_2	px_okto_chat_06_2	px_okto_chat_06	2	probe	flight.probe_chat	radio				0		[beeps dismissively]	calm	chatter	both	idle	any	any	any	any	okto	bored					
 px_okto_chat_06_3	px_okto_chat_06_3	px_okto_chat_06	3	mission_control	flight.probe_chat	radio				0	Qué frío eres. Es de la familia.	So cold. It's family.	calm	chatter	m	idle	any	any	any	any	okto						
-px_okto_hail_01_1	px_okto_hail_01_1	px_okto_hail_01	1	probe	flight.probe_hail	radio				0		[beeps a long formula]	calm	chatter	both	idle	any	any	any	any	okto	proud					
-px_okto_hail_01_2	px_okto_hail_01_2	px_okto_hail_01	2	mission_control	flight.probe_hail	radio				0	Gracias, Okto. Lo leemos después del café.	Thanks, Okto. We'll read it after coffee.	calm	chatter	m	idle	any	any	any	any	okto						
-px_okto_hail_02_1	px_okto_hail_02_1	px_okto_hail_02	1	probe	flight.probe_hail	radio				0		[beeps questioningly]	calm	chatter	both	idle	any	any	any	any	okto	curious					
-px_okto_hail_02_2	px_okto_hail_02_2	px_okto_hail_02	2	mission_control	flight.probe_hail	radio				0	No, Okto, no hemos redondeado. Bueno, un poco.	No, Okto, we didn't round. Well, a little.	calm	chatter	m	idle	any	any	any	any	okto						
-px_okto_hail_03_1	px_okto_hail_03_1	px_okto_hail_03	1	probe	flight.probe_hail	radio				0		[beeps with a sigh]	calm	chatter	both	idle	any	any	any	any	okto	bored					
-px_okto_hail_03_2	px_okto_hail_03_2	px_okto_hail_03	2	mission_control	flight.probe_hail	radio				0	¿Aburrido? Calcula pi otra vez.	Bored? Work out pi again.	calm	chatter	m	idle	any	any	any	any	okto						
-px_okto_hail_03_3	px_okto_hail_03_3	px_okto_hail_03	3	probe	flight.probe_hail	radio				0		[beeps happily]	calm	chatter	both	idle	any	any	any	any	okto	happy					
 px_okto_sleepy_01_1	px_okto_sleepy_01_1	px_okto_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Okto, tus cálculos van más lentos.	Okto, your math is getting slower.	calm	chatter	m	idle	any	any	any	any	okto						
 px_okto_sleepy_01_2	px_okto_sleepy_01_2	px_okto_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps drowsily]	calm	chatter	both	idle	any	any	any	any	okto	sleepy					
 px_okto_sleepy_01_3	px_okto_sleepy_01_3	px_okto_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Duerme. Los números seguirán ahí mañana.	Sleep. The numbers will still be there tomorrow.	calm	chatter	m	idle	any	any	any	any	okto						
@@ -985,12 +627,6 @@ px_qbe_chat_05_3	px_qbe_chat_05_3	px_qbe_chat_05	3	mission_control	flight.probe_
 px_qbe_chat_06_1	px_qbe_chat_06_1	px_qbe_chat_06	1	mission_control	flight.probe_chat	radio				0	QBE, ¿quieres volver a casa?	QBE, do you want to come home?	calm	chatter	m	idle	any	any	any	any	qbe						
 px_qbe_chat_06_2	px_qbe_chat_06_2	px_qbe_chat_06	2	probe	flight.probe_chat	radio				0		[beeps hopefully]	calm	chatter	both	idle	any	any	any	any	qbe	curious					
 px_qbe_chat_06_3	px_qbe_chat_06_3	px_qbe_chat_06	3	mission_control	flight.probe_chat	radio				0	Tu ficha dice vuelta opcional. Ya veremos.	Your sheet says optional return. We'll see.	calm	chatter	m	idle	any	any	any	any	qbe						
-px_qbe_hail_01_1	px_qbe_hail_01_1	px_qbe_hail_01	1	probe	flight.probe_hail	radio				0		[beeps a tiny hello]	calm	chatter	both	idle	any	any	any	any	qbe	happy					
-px_qbe_hail_01_2	px_qbe_hail_01_2	px_qbe_hail_01	2	mission_control	flight.probe_hail	radio				0	Hola, QBE. Te oímos. Casi.	Hi, QBE. We hear you. Barely.	calm	chatter	m	idle	any	any	any	any	qbe						
-px_qbe_hail_02_1	px_qbe_hail_02_1	px_qbe_hail_02	1	probe	flight.probe_hail	radio				0		[beeps questioningly]	calm	chatter	both	idle	any	any	any	any	qbe	curious					
-px_qbe_hail_02_2	px_qbe_hail_02_2	px_qbe_hail_02	2	mission_control	flight.probe_hail	radio				0	No, QBE, desde aquí no podemos girarte.	No, QBE, we can't turn you from here.	calm	chatter	m	idle	any	any	any	any	qbe						
-px_qbe_hail_03_1	px_qbe_hail_03_1	px_qbe_hail_03	1	probe	flight.probe_hail	radio				0		[beeps faintly]	calm	chatter	both	idle	any	any	any	any	qbe	scared					
-px_qbe_hail_03_2	px_qbe_hail_03_2	px_qbe_hail_03	2	mission_control	flight.probe_hail	radio				0	¿QBE? Ah, solo ahorras energía. Bien hecho.	QBE? Oh, just saving power. Well done.	calm	chatter	m	idle	any	any	any	any	qbe						
 px_qbe_sleepy_01_1	px_qbe_sleepy_01_1	px_qbe_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	QBE, se te acaba la carga.	QBE, your charge is running out.	calm	chatter	m	idle	any	any	any	any	qbe						
 px_qbe_sleepy_01_2	px_qbe_sleepy_01_2	px_qbe_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps very faintly]	calm	chatter	both	idle	any	any	any	any	qbe	sleepy					
 px_qbe_sleepy_01_3	px_qbe_sleepy_01_3	px_qbe_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Duerme, cubito. El sol te despertará.	Sleep, little cube. The sun will wake you.	calm	chatter	m	idle	any	any	any	any	qbe						
@@ -1010,13 +646,6 @@ px_rovemate_chat_05_2	px_rovemate_chat_05_2	px_rovemate_chat_05	2	probe	flight.p
 px_rovemate_chat_06_1	px_rovemate_chat_06_1	px_rovemate_chat_06	1	mission_control	flight.probe_chat	radio				0	Rovemate, ¡sentado! Bueno, quieto.	Rovemate, sit! I mean, stop.	calm	chatter	m	landed	any	any	any	any	rovemate						
 px_rovemate_chat_06_2	px_rovemate_chat_06_2	px_rovemate_chat_06	2	probe	flight.probe_chat	radio				0		[beeps obediently]	calm	chatter	both	landed	any	any	any	any	rovemate	proud					
 px_rovemate_chat_06_3	px_rovemate_chat_06_3	px_rovemate_chat_06	3	mission_control	flight.probe_chat	radio				0	Buen chico.	Good boy.	calm	chatter	m	landed	any	any	any	any	rovemate						
-px_rovemate_hail_01_1	px_rovemate_hail_01_1	px_rovemate_hail_01	1	probe	flight.probe_hail	radio				0		[beeps excitedly]	calm	chatter	both	landed	any	any	any	any	rovemate	happy					
-px_rovemate_hail_01_2	px_rovemate_hail_01_2	px_rovemate_hail_01	2	mission_control	flight.probe_hail	radio				0	¿Qué has encontrado ahora? ¿Otra piedra?	What did you find now? Another stone?	calm	chatter	m	landed	any	any	any	any	rovemate						
-px_rovemate_hail_01_3	px_rovemate_hail_01_3	px_rovemate_hail_01	3	probe	flight.probe_hail	radio				0		[beeps proudly]	calm	chatter	both	landed	any	any	any	any	rovemate	proud					
-px_rovemate_hail_02_1	px_rovemate_hail_02_1	px_rovemate_hail_02	1	probe	flight.probe_hail	radio				0		[beeps with a whine]	calm	chatter	both	landed	any	any	any	any	rovemate	bored					
-px_rovemate_hail_02_2	px_rovemate_hail_02_2	px_rovemate_hail_02	2	mission_control	flight.probe_hail	radio				0	Ya sé que llevas mucho rato quieto. Tú decidiste parar.	I know you've been sitting still for ages. You chose to stop.	calm	chatter	m	landed	any	any	any	any	rovemate						
-px_rovemate_hail_03_1	px_rovemate_hail_03_1	px_rovemate_hail_03	1	probe	flight.probe_hail	radio				0		[beeps at something]	calm	chatter	both	landed	any	any	any	any	rovemate	curious					
-px_rovemate_hail_03_2	px_rovemate_hail_03_2	px_rovemate_hail_03	2	mission_control	flight.probe_hail	radio				0	Rovemate, eso es una de tus ruedas.	Rovemate, that's one of your wheels.	calm	chatter	m	landed	any	any	any	any	rovemate						
 px_rovemate_sleepy_01_1	px_rovemate_sleepy_01_1	px_rovemate_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Rovemate, ¿una siesta en mitad del camino?	Rovemate, a nap in the middle of the road?	calm	chatter	m	landed	any	any	any	any	rovemate						
 px_rovemate_sleepy_01_2	px_rovemate_sleepy_01_2	px_rovemate_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps a yawn]	calm	chatter	both	landed	any	any	any	any	rovemate	sleepy					
 px_rovemate_sleepy_01_3	px_rovemate_sleepy_01_3	px_rovemate_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Vale. Que sea corta.	Okay. Keep it short.	calm	chatter	m	landed	any	any	any	any	rovemate						
@@ -1037,13 +666,6 @@ px_snob_chat_05_3	px_snob_chat_05_3	px_snob_chat_05	3	mission_control	flight.pro
 px_snob_chat_06_1	px_snob_chat_06_1	px_snob_chat_06	1	mission_control	flight.probe_chat	radio				0	Su excelencia, hay un pequeño retraso.	Your excellency, there's a small delay.	calm	chatter	m	idle	any	any	any	any	snob						
 px_snob_chat_06_2	px_snob_chat_06_2	px_snob_chat_06	2	probe	flight.probe_chat	radio				0		[beeps very icily]	calm	chatter	both	idle	any	any	any	any	snob	offended					
 px_snob_chat_06_3	px_snob_chat_06_3	px_snob_chat_06	3	mission_control	flight.probe_chat	radio				0	Lo siento muchísimo. Hablaré con el becario.	I'm terribly sorry. I'll talk to the intern.	calm	chatter	m	idle	any	any	any	any	snob						
-px_snob_hail_01_1	px_snob_hail_01_1	px_snob_hail_01	1	probe	flight.probe_hail	radio				0		[beeps a complaint]	calm	chatter	both	idle	any	any	any	any	snob	bored					
-px_snob_hail_01_2	px_snob_hail_01_2	px_snob_hail_01	2	mission_control	flight.probe_hail	radio				0	Sí, su excelencia. Tomamos nota de la queja.	Yes, your excellency. Complaint noted.	calm	chatter	m	idle	any	any	any	any	snob						
-px_snob_hail_01_3	px_snob_hail_01_3	px_snob_hail_01	3	probe	flight.probe_hail	radio				0		[beeps graciously]	calm	chatter	both	idle	any	any	any	any	snob	proud					
-px_snob_hail_02_1	px_snob_hail_02_1	px_snob_hail_02	1	probe	flight.probe_hail	radio				0		[beeps sharply]	calm	chatter	both	idle	any	any	any	any	snob	offended					
-px_snob_hail_02_2	px_snob_hail_02_2	px_snob_hail_02	2	mission_control	flight.probe_hail	radio				0	Perdón por la espera, su excelencia. Había cola.	Sorry for the wait, your excellency. There was a queue.	calm	chatter	m	idle	any	any	any	any	snob						
-px_snob_hail_03_1	px_snob_hail_03_1	px_snob_hail_03	1	probe	flight.probe_hail	radio				0		[beeps imperiously]	calm	chatter	both	idle	any	any	any	any	snob	curious					
-px_snob_hail_03_2	px_snob_hail_03_2	px_snob_hail_03	2	mission_control	flight.probe_hail	radio				0	Enseguida, su excelencia. Lo que usted mande.	Right away, your excellency. Whatever you say.	calm	chatter	m	idle	any	any	any	any	snob						
 px_snob_sleepy_01_1	px_snob_sleepy_01_1	px_snob_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Su excelencia, ¿desea retirarse?	Your excellency, do you wish to retire?	calm	chatter	m	idle	any	any	any	any	snob						
 px_snob_sleepy_01_2	px_snob_sleepy_01_2	px_snob_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps elegantly]	calm	chatter	both	idle	any	any	any	any	snob	sleepy					
 px_snob_sleepy_01_3	px_snob_sleepy_01_3	px_snob_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Buenas noches, su excelencia.	Good night, your excellency.	calm	chatter	m	idle	any	any	any	any	snob						
@@ -1064,13 +686,6 @@ px_stayputnik_chat_05_3	px_stayputnik_chat_05_3	px_stayputnik_chat_05	3	mission_
 px_stayputnik_chat_06_1	px_stayputnik_chat_06_1	px_stayputnik_chat_06	1	mission_control	flight.probe_chat	radio				0	Stayputnik, ¿sigues dando vueltas sin control?	Stayputnik, still tumbling around?	calm	chatter	m	idle	any	any	any	any	stayputnik						
 px_stayputnik_chat_06_2	px_stayputnik_chat_06_2	px_stayputnik_chat_06	2	probe	flight.probe_chat	radio				0		[beeps stubbornly]	calm	chatter	both	idle	any	any	any	any	stayputnik	offended					
 px_stayputnik_chat_06_3	px_stayputnik_chat_06_3	px_stayputnik_chat_06	3	mission_control	flight.probe_chat	radio				0	Vale. Es un giro con estilo.	Fine. It's a stylish spin.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-px_stayputnik_hail_01_1	px_stayputnik_hail_01_1	px_stayputnik_hail_01	1	probe	flight.probe_hail	radio				0		[beeps very loudly]	calm	chatter	both	idle	any	any	any	any	stayputnik	curious					
-px_stayputnik_hail_01_2	px_stayputnik_hail_01_2	px_stayputnik_hail_01	2	mission_control	flight.probe_hail	radio				0	Te oímos, Stayputnik. Te oye todo el centro espacial.	We hear you, Stayputnik. The whole space center hears you.	calm	chatter	m	idle	any	any	any	any	stayputnik						
-px_stayputnik_hail_02_1	px_stayputnik_hail_02_1	px_stayputnik_hail_02	1	probe	flight.probe_hail	radio				0		[beeps a little tune]	calm	chatter	both	idle	any	any	any	any	stayputnik	happy					
-px_stayputnik_hail_02_2	px_stayputnik_hail_02_2	px_stayputnik_hail_02	2	mission_control	flight.probe_hail	radio				0	¿Eso es una canción de tu época?	Is that a song from your day?	calm	chatter	m	idle	any	any	any	any	stayputnik						
-px_stayputnik_hail_02_3	px_stayputnik_hail_02_3	px_stayputnik_hail_02	3	probe	flight.probe_hail	radio				0		[beeps proudly]	calm	chatter	both	idle	any	any	any	any	stayputnik	proud					
-px_stayputnik_hail_03_1	px_stayputnik_hail_03_1	px_stayputnik_hail_03	1	probe	flight.probe_hail	radio				0		[beeps impatiently]	calm	chatter	both	idle	any	any	any	any	stayputnik	bored					
-px_stayputnik_hail_03_2	px_stayputnik_hail_03_2	px_stayputnik_hail_03	2	mission_control	flight.probe_hail	radio				0	Paciencia, veterano. Pronto te mandamos algo que hacer.	Patience, veteran. We'll send you something to do soon.	calm	chatter	m	idle	any	any	any	any	stayputnik						
 px_stayputnik_sleepy_01_1	px_stayputnik_sleepy_01_1	px_stayputnik_sleepy_01	1	mission_control	flight.probe_sleepy	radio				0	Stayputnik, se te nota cansado.	Stayputnik, you sound tired.	calm	chatter	m	idle	any	any	any	any	stayputnik						
 px_stayputnik_sleepy_01_2	px_stayputnik_sleepy_01_2	px_stayputnik_sleepy_01	2	probe	flight.probe_sleepy	radio				0		[beeps very slowly]	calm	chatter	both	idle	any	any	any	any	stayputnik	sleepy					
 px_stayputnik_sleepy_01_3	px_stayputnik_sleepy_01_3	px_stayputnik_sleepy_01	3	mission_control	flight.probe_sleepy	radio				0	Descansa. Te lo has ganado.	Rest. You've earned it.	calm	chatter	m	idle	any	any	any	any	stayputnik						

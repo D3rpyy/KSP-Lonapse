@@ -2,45 +2,67 @@
 
 ## 0.9.0
 
-- Crew and Probe dialogue now share one alternative-row schema, parser and selector. Each bilingual alternative has its own condition and preference; padded `conditions` cells and pipe-separated wordings are retired from shipped tables. Existing mod formats remain supported through compatibility readers.
-
-- Dialogue IDs no longer require `rt_`; old mod IDs and saved repetition history remain compatible. Optional scene columns move structure out of `when` and inherit shared settings from the first row. Generated planet-specific copies now use `{body}` templates, including custom bodies.
-
-- All crew and Mission Control speech now uses Piper. Dialogue lives in category tables under `Phrases/Crew` and `Phrases/Probe`; recordings, `phrases.tsv`, and `pools.tsv` no longer ship. Probe lineset IDs, ModuleLonapse selection and beep voices retain their behavior. Speech requires Windows/Linux; macOS no longer has a recorded-speech fallback.
+Most voicelines are now generated at runtime! This will open up possibilities for even more dynamic voicelines in the future! Also Russian and Chinese names are now supported! And for those of you that play IVA or in VR, Lonapse has RasterPropMonitor support too! You can find the page by pressing the "Sci/Comms" button! Additionally, the radio sound FX have been reworked to make it sound like the Kerbals are using a worse headset.
 
 ### New
 
-- **Probe beeps can be louder.** The "Beeps" slider is now called "Probe beeps" and goes up to 200%. Above 100% the beeps get extra gain, with a soft limiter so they do not distort. The slider only changes the beeps of a probe: its answers, hails and the beep in a crewed cabin.
-- **Your own probe lines.** A mod or a player can register a lineset with a `LONAPSE_PROBE_LINES` node (`name`, `displayName`) and write the lines in a table of their own. Module Manager is not needed. A voice picks the lineset with `lines = <name>` and so does `ModuleLonapse`. In the Lonapse window the Lines button also steps through your linesets.
-- **`{probe}` in lines.** The variable gives the name of the probe. Paired Spanish speech and English subtitles use the same current name.
+- **More dialogue in every category.** Each Crew and Probe category now has at least 200 distinct authored sentence templates before phrase expansion. Shared Spanish and English fragments add more paired alternatives while keeping speech and subtitles together.
 
-- **Comms page on RasterPropMonitor screens.** With RasterPropMonitor installed, the stock MFD and the ASET ALCOR MFDs get a Comms page with the subtitles of the last lines. ENTER starts or stops the countdown, UP and DOWN scroll the log. Roger beeps and SOI changes show as short notes. Lonapse has no reference to RPM, the page only appears when RPM is there (`Patches/Lonapse_RPM.cfg`).
+- **Probe beeps can be louder.** The "Beeps" slider is now called "Probe beeps". Its maximum gives twice the old maximum gain, with a soft limiter. It only changes probe answers, hails and beeps in a crewed cabin.
+
+- **Russian and Chinese names keep the Kerbal accent.** Russian Cyrillic and Chinese names are respelled for the existing Spanish voices, instead of being read as individual letters. 
+
+- **Comms page on RasterPropMonitor screens.** With RasterPropMonitor installed, the stock MFD and the ASET ALCOR MFDs get a Comms page with the subtitles of the last lines. ENTER starts or stops the countdown, UP and DOWN scroll the log. Roger beeps and SOI changes show as short notes. 
+
 - **Telemetry pings in the subtitles.** A telemetry ping now shows a short line from "Telemetry", like "Downlink ping. Link at 87%." With CommNet or RemoteTech it reads the real link strength.
-- **Cabin sound in IVA.** In IVA you hear the cabin: fans, a soft hum and a faint whine. When the batteries run flat a relay clunks and the fans and the motor spin down until the cabin is quiet. When the power comes back the fans spin up again. It has its own toggle and volume slider in the Sound tab and follows Sound effects. A part with less than 5 EC capacity never powers down.
+
+- **Cabin sound in IVA.** In IVA you hear the cabin: fans, a soft hum and a faint whine. When the batteries run flat a relay clunks and the fans and the motor spin down until the cabin is quiet. When the power comes back the fans spin up again. You can also hear  metal rattling/creaking sound effects when your thrusters are firing! It has its own toggle and volume slider in the Sound tab and follows Sound effects. 
 
 ### Changed
 
-- Separation stages play the owner-provided metal clunk in IVA. Ignition-only stages and undocking do not play it. It has its own "Cabin separation noise (IVA)" volume slider.
-- All audio volume sliders now show 0 to 100% with twice the gain of the old 100% setting at the top. Saved audio levels are retained at lower slider positions. Extra gain works on voices, beeps, static and sound effects, with a final soft limiter.
-- Undocking no longer triggers a false staging callout when KSP renumbers the stages. Docking changes reset the fallback observations while the vessel settles. Actual stage activations still call out immediately, for probes and crew.
-- The General tab has an "MC check-in gap" slider from 15 to 180 seconds. Station check-ins default to two minutes, including the first wait. Changing the slider starts a new wait immediately. Existing default settings migrate to the new interval. Healthy uncrewed stations use the station check-in timer for routine probe conversation. The separate hail timer and regular chatter no longer compete with those check-ins. Stations never initiate probe hails, including with hails enabled and probe chatter off. Routine station exchanges start with Mission Control. Stress reactions and events keep their normal behaviour.
-- Game audio stays at its normal volume while kerbals speak. The audio ducking and its slider have been removed.
-- EVA breathing has brighter resonances and a faint voiced exhale to fit the Kerbal voices. Its pace and volume stay the same.
-- Telemetry pings wait until conversations finish, including crew radio lines, queued replies and the gaps between turns. This also applies to the ping after time warp.
-- EVA reports say "outside the ship" in orbit. Walking lines require the kerbal to be on the ground, and reports have new lines for firing the jetpack in orbit around any body.
-- Water has its own EVA reports and surface sample exchanges. Dry ground and rock lines no longer play while splashed.
-- The cabin rattles in IVA while the engines thrust, using the owner's recording. It follows actual output and uses the cabin sound toggle. "Cabin fan noise (IVA)" and "Cabin thrust noise (IVA)" have separate volume sliders. The rattle is a little louder.
-- Below 0.2 vessel or personal stress, kerbal faces stay neutral or happy. Fear eases in above that point, including between spoken lines.
+- Spoken ship names no longer have a word or character limit. 
 
-- **Voices through the radio.** The crew sounds like they are talking through a headset now, with faint cabin noise behind the mic. The radio effect is softer when they shout. On EVA you hear the short resonance of the helmet. Mission Control has a fuller desk mic sound, with quiet fans and console hum behind it. When the link gets weak, the radio band gets narrower and the voice gets squeezed more. The effects run in game on the synthesized speech.
-- **One radio static slider.** The separate "Static" slider is gone. "Radio static" now sets all hiss, bursts and crackle for the crew and Mission Control, also on a weak link. It responds while a line plays, and at 0% the static is silent. Mission Control's hiss used to follow only its voice volume. Your two old static settings are combined when you update.
-- **Stopping the countdown says "Launch cancelled."** Launch control used to yell "Aaaaaaah!" when you stopped the count. It is a calm call now, with the subtitle "Launch cancelled."
-- **The probe calls Mission Control more often.** The call gap now defaults to 2 minutes and goes from 1 to 10 minutes (before 6 minutes, 1 to 30). A gap you saved yourself stays, unless it is over 10 minutes.
-- **Squelch and roger beeps follow Sound effects.** The key-up and key-down sounds of the radio, the roger beep, the squelch and the tones of Mission Control used to follow the Static slider. They follow Sound effects now, and at the default setting they are as loud as before.
-- **Pings and tones have a fixed level.** The pings, the descent beeps, the stage tone and the landing tones no longer follow the Beeps slider. They keep the old default level.
+- Separation stages play the owner-provided metal clunk in IVA. Ignition-only stages and undocking do not play it. It has its own "Cabin separation noise (IVA)" volume slider.
+
+- All audio volume sliders now show 0 to 100% with twice the gain of the old 100% setting at the top. Saved audio levels are retained at lower slider positions. Extra gain works on voices, beeps, static and sound effects, with a final soft limiter.
+
+- Undocking no longer triggers a false staging callout when KSP renumbers the stages. Docking changes reset the fallback observations while the vessel settles. Actual stage activations still call out immediately, for probes and crew.
+
+- The General tab has an "MC check-in gap" slider from 15 to 180 seconds. Station check-ins default to two minutes, including the first wait. Changing the slider starts a new wait immediately. 
+
+- Game audio stays at its normal volume while kerbals speak. The audio ducking and its slider have been removed.
+
+- EVA breathing has brighter resonances and a faint voiced exhale to try and fit the Kerbal voices. Its pace and volume stay the same.
+
+- Telemetry pings wait until conversations finish, including crew radio lines, queued replies and the gaps between turns. This also applies to the ping after time warp.
+
+- EVA reports say "outside the ship" in orbit. Walking lines require the kerbal to be on the ground, and reports have new lines for firing the jetpack in orbit around any body.
+
+- Water has its own EVA reports and surface sample exchanges. Dry ground and rock lines no longer play while splashed.
+
+- Below 0.2 vessel or personal stress, kerbal faces stay neutral or happy. Fear eases in above that point.
+
+- The crew sounds like they are talking through a headset now, with faint cabin noise behind the mic. The radio effect is softer when they shout. On EVA you hear the short resonance of the helmet. Mission Control has a fuller desk mic sound, with quiet fans and console hum behind it. When the link gets weak, the radio band gets narrower and the voice gets squeezed more. 
+
+- The separate "Static" slider is gone. "Radio static" now sets all hiss, bursts and crackle for the crew and Mission Control, also on a weak link. It responds while a line plays, and at 0% the static is silent. Mission Control's hiss used to follow only its voice volume. Your two old static settings are combined when you update.
+
+- Launch control used to yell "Aaaaaaah!" when you stopped the count. It is a calm call now, with the subtitle "Launch cancelled."
+
+- The call gap for probes to call MC now defaults to 2 minutes and goes from 1 to 10 minutes (before 6 minutes, 1 to 30). A gap you saved yourself stays, unless it is over 10 minutes.
+
+- The key-up and key-down sounds of the radio, the roger beep, the squelch and the tones of Mission Control used to follow the Static slider. They follow Sound effects now, and at the default setting they are as loud as before.
+
+- The pings, the descent beeps, the stage tone and the landing tones no longer follow the Beeps slider. They keep the old default level.
+
+### Fixed
+
+- Nearby kerbals and ships no longer add the KSC light delay to their conversations. Suit-to-suit and ship-to-ship chats also use only the normal conversational pause. Messages to and from Mission Control retain their light delay.
+- **Mission Control static no longer stays on after a line.** The loop follows actual MC speech and probe transmissions, then fades out when they end. Interrupted exchanges, dropped queue items and an empty or frozen ship cannot leave the loop running.
+- **EVA radio works when everyone is outside.** Nearby kerbals can use a powered empty ship's antennas even when stock KSP disables its command connection for lack of crew. The radio still respects suit range, antenna range, body occlusion and the remaining route to KSC. Relay changes are logged in KSP.log.
 
 ### For modders
 
+- Paired fragments in `Phrases/choices.tsv` expand into ordinary dialogue alternatives when tables load. Both languages use the same choice, with up to 256 combinations per authored alternative. See `docs/API.md` for the format and limits.
 - Probe line files of a mod go in `GameData/<Mod>/Lonapse/Probe/*.tsv`, using the same alternative-row schema as the shipped Crew and Probe categories. The core column may name a registered lineset. An unknown core is still refused.
 - `ModuleLonapse` has a new field `lines`, and a `LONAPSE_PROBE_VOICE` may name a lineset in `lines`. The module wins over the voice, except for a voice the player picked in the window.
 - New slot `{probe}` (a flight value, only in probe mode).

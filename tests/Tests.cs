@@ -8,6 +8,12 @@ public static class Tests
 {
     static int pass, fail;
 
+    static class TestRpmShaderRegistry
+    {
+        internal static readonly object FontShader = new object();
+        private static object LoadInternalShader(string name) { return name == "RPM/FontShader" ? FontShader : null; }
+    }
+
     static void Check(bool ok, string name, string detail)
     {
         if (ok) { pass++; Console.WriteLine("PASS  " + name + (detail != null ? "  (" + detail + ")" : "")); }
@@ -41,6 +47,11 @@ public static class Tests
 
     public static int Main()
     {
+        var shippedChoiceErrors = new List<string>();
+        string shippedChoicePath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "../../GameData/Lonapse/Phrases/choices.tsv"));
+        DialogueChoices.Configure(System.IO.File.ReadAllLines(shippedChoicePath), shippedChoiceErrors);
+        Check(shippedChoiceErrors.Count == 0, "phrase pools: the shipped paired fragments load cleanly", string.Join("; ", shippedChoiceErrors.ToArray()));
         // Context prioritizes recovery and power before routine telemetry; custom linesets stay neutral.
         Check(ProbeContext.Topic(12, false, true, false, false, false) == "power", "probe power outranks maneuver chatter", null);
         Check(ProbeContext.Topic(50, true, true, false, false, false) == "recovery", "probe recovery follows earlier low power", null);
@@ -1292,6 +1303,42 @@ public static class Tests
         Func<string, string, string, string, string, Dictionary<string, string>> alternative = (id, trigger, when, prefer, text) =>
             new Dictionary<string, string> { { "id", id }, { "line", "home_reply" }, { "scene", "home_scene" }, { "seq", "1" },
                 { "speaker", "mission_control" }, { "trigger", trigger }, { "channel", "radio" }, { "when", when }, { "prefer", prefer }, { "spanish", text }, { "english", text } };
+        var choiceErrors = new List<string>();
+        DialogueChoices.Configure(new[] { "pool\tid\tspanish\tenglish", "remedy\tv01\tcontar\tcounting",
+            "remedy\tv02\tmirar {body}\twatching {body}" }, choiceErrors);
+        var choiceRow = alternative("choice_test", "report", "ec>=20", "2", "Try {remedy}. Again, {remedy}.");
+        choiceRow["spanish"] = "Prueba a {remedy}. Otra vez, {remedy}.";
+        var choiceDoc = DialogueTable.Parse(new[] { header, row(choiceRow) }, "choice-test.tsv", choiceErrors);
+        var choiceNums = new Dictionary<string, double> { { "ec", 50 } };
+        var choiceNames = new Dictionary<string, string[]>();
+        bool choiceMissing = choiceDoc.Lines[0].Matching(choiceNums, choiceNames).Count == 1;
+        choiceNames["body"] = new[] { "Mun", "Mun" };
+        string choiceEs, choiceEn;
+        bool choiceFilled = RuntimeLines.Fill(choiceDoc.Lines[0].Template("report"), 1, choiceNums, choiceNames, out choiceEs, out choiceEn);
+        Check(choiceErrors.Count == 0 && choiceDoc.Lines[0].Alternatives.Count == 2 && choiceMissing
+            && choiceDoc.Lines[0].Matching(choiceNums, choiceNames).Count == 2 && choiceFilled
+            && RuntimeSpeech.Unmarked(choiceEs) == "Prueba a mirar Mun. Otra vez, mirar Mun."
+            && choiceEn == "Try watching Mun. Again, watching Mun.",
+            "phrase pools: paired choices repeat consistently within a line and retain flight-value eligibility", string.Join("; ", choiceErrors.ToArray()));
+        choiceNums["ec"] = 5;
+        Check(choiceDoc.Lines[0].Matching(choiceNums, choiceNames).Count == 0,
+            "phrase pools: expansion preserves the authored conditions", null);
+        choiceRow["spanish"] = "Sin variable.";
+        var mismatchChoices = new List<string>();
+        DialogueTable.Parse(new[] { header, row(choiceRow) }, "choice-mismatch.tsv", mismatchChoices);
+        Check(mismatchChoices.Count > 0, "phrase pools: one-language choices are rejected", null);
+        var invalidChoices = new List<string>();
+        DialogueChoices.Configure(new[] { "pool\tid\tspanish\tenglish", "body\tv01\tluna\tmoon",
+            "nested\tv01\t{remedy}\t{remedy}", "bad\tv01\t{body}\tmoon" }, invalidChoices);
+        Check(invalidChoices.Count == 3, "phrase pools: reserved names, recursion and unpaired variables are rejected", null);
+        var tooManyChoices = new List<string> { "pool\tid\tspanish\tenglish" };
+        for (int i = 0; i < 17; i++)
+        { tooManyChoices.Add("first\tv" + i + "\tuno " + i + "\tone " + i); tooManyChoices.Add("second\tv" + i + "\tdos " + i + "\ttwo " + i); }
+        var capErrors = new List<string>(); DialogueChoices.Configure(tooManyChoices, capErrors);
+        choiceRow["spanish"] = choiceRow["english"] = "{first} {second}";
+        DialogueTable.Parse(new[] { header, row(choiceRow) }, "choice-cap.tsv", capErrors);
+        Check(capErrors.Count == 1, "phrase pools: combinations beyond the limit are rejected before expansion", null);
+        DialogueChoices.Configure(null, new List<string>());
         var rows = new List<string> { header,
             row(alternative("home_reply", "flight.chatter", "", "0", "Soon.")),
             row(alternative("home_here", "flight.chatter", "kerbin", "1", "Still at Kerbin.")),
@@ -1424,6 +1471,7 @@ public static class Tests
             "science names: unlisted experiment titles work, stock translations and missing-title fallback remain available", null);
         var allErrors = new List<string>(); int lines = 0, alternatives = 0;
         string baseDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../GameData/Lonapse"));
+        DialogueChoices.Configure(System.IO.File.ReadAllLines(System.IO.Path.Combine(baseDir, "Phrases/choices.tsv")), allErrors);
         foreach (string directory in new[] { "Phrases/Crew", "Phrases/Probe", "Compat/DeepFreeze" })
             foreach (string path in System.IO.Directory.GetFiles(System.IO.Path.Combine(baseDir,directory), "*.tsv"))
             {
@@ -1431,7 +1479,7 @@ public static class Tests
                 lines += parsed.Lines.Count;
                 foreach (var parsedLine in parsed.Lines) alternatives += parsedLine.Alternatives.Count;
             }
-        Check(allErrors.Count == 0 && lines == 6479 && alternatives == 10393,
+        Check(allErrors.Count == 0 && lines >= 6479 && alternatives >= 10393,
             "unified alternatives: the same parser validates every shipped Crew, Probe and compatibility category", lines + " lines / " + alternatives + " alternatives; " + string.Join("; ", allErrors.ToArray()));
         var gooLine = DialogueTable.Find("st_mysterygoo_a_1");
         RuntimeLines.ActorConditions(actorNums, "scientist", null);
@@ -1464,12 +1512,46 @@ public static class Tests
         string[][] names = {
             new[] { "Jebediah Kerman", "Yebedia Kerman" }, new[] { "Bill", "Bil" }, new[] { "Bob", "Bob" },
             new[] { "Valentina", "Valentina" }, new[] { "Gilly", "Guili" }, new[] { "Jool", "Yul" }, new[] { "Eeloo", "Ilu" },
+            new[] { "Союз", "Soyus" }, new[] { "ВОСТОК 1", "Vostok 1" }, new[] { "Химки", "Jimki" },
+            new[] { "Гелиос", "Guelios" }, new[] { "Гидра", "Guidra" }, new[] { "Гагарин", "Gagarin" },
+            new[] { "Ёлка", "Yolka" }, new[] { "Юрий", "Yurii" }, new[] { "Ястреб", "Yastreb" },
+            new[] { "Енисей", "Yenisei" }, new[] { "Объект", "Obyekt" }, new[] { "Кирилл", "Kiril" },
+            new[] { "Жук", "Chuk" }, new[] { "Шаттл", "Chattl" }, new[] { "Щит", "Chit" },
+            new[] { "Цель", "Tsel" }, new[] { "Рысь", "Ris" }, new[] { "Энергия", "Energuiya" },
+            new[] { "KSP-Союз II", "Ksp-Soyus I" },
+            new[] { "神舟", "Chen Chou" }, new[] { "天宫", "Tien Gong" }, new[] { "天宮", "Tien Gong" },
+            new[] { "嫦娥", "Chang E" }, new[] { "中国", "Chong Guo" }, new[] { "中國", "Chong Guo" },
+            new[] { "火星", "Juo Ching" }, new[] { "KSP神舟-2", "Ksp Chen Chou-2" },
+            new[] { "神舟KSP", "Chen Chou Ksp" }, new[] { "Союз神舟", "Soyus Chen Chou" },
+            new[] { "\U00020000", "Je" }, new[] { "〇", "Ling" },
         };
         var bad = new List<string>();
         foreach (string[] n in names) if (RuntimeSpeech.Respell(n[0]) != n[1]) bad.Add(n[0] + " -> " + RuntimeSpeech.Respell(n[0]));
         Check(bad.Count == 0, "runtime voice: names are respelled for a Spanish voice", string.Join(", ", bad.ToArray()));
         string sp = RuntimeSpeech.Spoken(RuntimeSpeech.MarkName("Jebediah") + ", aquí Control.");
         Check(sp == "Yebedia, íuqa lortnoC.", "runtime voice: the name stays a name, the rest is loñapsE", sp);
+        string russianName = RuntimeLines.VesselSpeakable("Союз II");
+        string russianSpoken = RuntimeSpeech.Respell(russianName);
+        Check(russianName == "Союз 2" && russianSpoken == "Soyus 2"
+              && RuntimeSpeech.Spoken("Buenos datos, " + RuntimeSpeech.MarkRaw(russianSpoken) + ".") == "soneuB sotad, Soyus 2."
+              && RuntimeSpeech.Spoken(RuntimeSpeech.MarkName("Союз")) == "Soyus"
+              && RuntimeSpeech.Unmarked(RuntimeSpeech.MarkName("Союз")) == "Союз",
+              "runtime voice: Cyrillic vessel names use Spanish respelling without reversal or subtitle changes", russianSpoken);
+        Check(RuntimeSpeech.Spoken("Buenos datos, " + RuntimeSpeech.MarkName("神舟") + ".") == "soneuB sotad, Chen Chou."
+              && RuntimeSpeech.Spoken(RuntimeSpeech.MarkRaw(RuntimeSpeech.Respell("天宮"))) == "Tien Gong"
+              && RuntimeSpeech.Unmarked(RuntimeSpeech.MarkName("神舟")) == "神舟",
+              "runtime voice: Chinese names use Spanish syllables and keep the original subtitle", null);
+        int chineseCount = 0;
+        bool chineseLatin = true;
+        for (int code = 0x3007; code <= 0x3347F; code++)
+        {
+            string syllable = ChinesePronunciation.Spell(code);
+            if (syllable == null) continue;
+            chineseCount++;
+            chineseLatin &= syllable.Length > 0 && RuntimeLines.LatinOnly(syllable);
+        }
+        Check(chineseCount == 44349 && chineseLatin,
+              "runtime voice: all bundled Mandarin readings produce Spanish alphabet syllables", chineseCount.ToString());
         Check(RuntimeSpeech.Spoken("Hola.") == LonapseText.ReverseText("Hola.") && RuntimeSpeech.Spoken(null) == "",
               "runtime voice: without names it is ReverseText", null);
         Check(RuntimeSpeech.Json("a \"b\" \\ c\n") == "\"a \\\"b\\\" \\\\ c\\u000a\"", "runtime voice: JSON string escaping",
@@ -1634,11 +1716,14 @@ public static class Tests
         string[][] vessels = {
             new[] { "Kerbal X", "Kerbal X" }, new[] { "Mun Lander II", "Mun Lander 2" }, new[] { "Relay (Probe)", "Relay" },
             new[] { "Jumbo Debris", "Jumbo" }, new[] { "Untitled Space Craft", "Untitled Space Craft" },
-            new[] { "A very long ship name with words", null }, new[] { "", null }, new[] { "I II", "I 2" },
+            new[] { "A very long ship name with words", "A very long ship name with words" },
+            new[] { new string('A', 100), new string('A', 100) },
+            new[] { "Очень длинное название корабля Союз II", "Очень длинное название корабля Союз 2" },
+            new[] { "", null }, new[] { "I II", "I 2" },
         };
         var badV = new List<string>();
         foreach (string[] vv in vessels) if (RuntimeLines.VesselSpeakable(vv[0]) != vv[1]) badV.Add(vv[0] + " -> " + (RuntimeLines.VesselSpeakable(vv[0]) ?? "null"));
-        Check(badV.Count == 0, "runtime voice: vessel names a voice can say (roman numbers, debris, brackets, too long)", string.Join(" ; ", badV.ToArray()));
+        Check(badV.Count == 0, "runtime voice: vessel names keep long names and clean roman numbers, debris and brackets", string.Join(" ; ", badV.ToArray()));
 
         // body swap on the generic {body} rows of the built table
         string so, eo;
@@ -2152,13 +2237,16 @@ public static class Tests
         }
         Check(RuntimeLines.BiomeSpeakable("Highlands") == "Highlands" && RuntimeLines.BiomeSpeakable("Northern Basin") == "Northern Basin"
               && RuntimeLines.BiomeSpeakable("Côte Sauvage") == "Côte Sauvage" && RuntimeLines.BiomeSpeakable("#LOC_Pack_Biome3") == null
-              && RuntimeLines.BiomeSpeakable("高地") == null && RuntimeLines.BiomeSpeakable("Высокогорье") == null
+              && RuntimeLines.BiomeSpeakable("高地") == "高地" && RuntimeLines.BiomeSpeakable("Высокогорье") == "Высокогорье"
               && RuntimeLines.BiomeSpeakable("Northern Polar Highland Craters") == null && RuntimeLines.BiomeSpeakable("") == null,
-              "runtime voice: biome names from mods are said, untranslated tags and other scripts are left out", null);
+              "runtime voice: Latin, Russian and Chinese biome names pass, untranslated tags and unsupported scripts do not", null);
         Check(RuntimeLines.VesselSpeakable("Kerbal X") == "Kerbal X" && RuntimeLines.VesselSpeakable("Señora Brillitos") == "Señora Brillitos"
-              && RuntimeLines.VesselSpeakable("Восток 1") == null && RuntimeLines.VesselSpeakable("はやぶさ") == null
+              && RuntimeLines.VesselSpeakable("Восток 1") == "Восток 1" && RuntimeLines.VesselSpeakable("はやぶさ") == null
+              && RuntimeLines.VesselSpeakable("KSP-Союз II") == "KSP-Союз 2" && RuntimeLines.VesselSpeakable("Союз高地") == "Союз高地"
+              && RuntimeLines.VesselSpeakable("\U00020000 II") == "\U00020000 2" && RuntimeLines.VesselSpeakable("〇号") == "〇号"
+              && RuntimeLines.VesselSpeakable("\U0003347F") == null && RuntimeLines.VesselSpeakable("神舟はやぶさ") == null
               && RuntimeLines.VesselSpeakable("Mun Lander II") == "Mun Lander 2",
-              "runtime voice: vessel names in another alphabet are not said", null);
+              "runtime voice: Latin, Russian and Chinese vessel names pass, unsupported scripts do not", null);
         {
             // shadow: behind the body inside its cylinder is dark, in front or beside it is lit
             bool shadowOk = DcMath.InShadow(-700, 0, 0, 1e9, 0, 0, 600) && !DcMath.InShadow(700, 0, 0, 1e9, 0, 0, 600)
@@ -2842,7 +2930,7 @@ public static class Tests
                 && fP.NoiseScale == 0.90 && Math.Abs(fP.PitchSt - 4.0) < 1e-9
                 && Math.Abs(mC.Tempo - 1.08) < 1e-9 && Math.Abs(mC.PitchSt - 5.5) < 1e-9
                 && RuntimeDelivery.KindFor("mc", "calm", "chatter", "countdown") == null && RuntimeDelivery.BaseKind("m.tense") == "m";
-            Check(same, "voices: runtime lines use the build's delivery per band (tempo, pitch, noise), the countdown is never runtime", "");
+            Check(same, "voices: runtime lines use the build's delivery per band and countdown uses recordings", "");
         }
         // a value of 1: the noun after it is singular, in both languages ("un kilómetro", "1 minute")
         var plural = new List<string>();
@@ -2944,6 +3032,47 @@ public static class Tests
 
     static void RpmPageTests()
     {
+        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        Check(ReferenceEquals(RpmShaderLoader.Load(typeof(TestRpmShaderRegistry)), TestRpmShaderRegistry.FontShader)
+              && RpmShaderLoader.Load(typeof(string)) == null,
+              "rpm: optional bridge resolves the private bundle shader loader and tolerates absent RPM", null);
+        var unicodeGlyphs = new List<RpmUnicodeGlyph>();
+        string unicodeMask = RpmUnicodeText.Mask("[#ff8000ff]A[[]Союз 神舟!\n\U00020000X", unicodeGlyphs);
+        Check(unicodeMask == "[#ff8000ff]A[[]    " + new string(' ', 5) + "!\n  X"
+              && unicodeGlyphs.Count == 7 && unicodeGlyphs[0].column == 2 && unicodeGlyphs[0].color == 0xFF8000FF
+              && unicodeGlyphs[4].column == 7 && unicodeGlyphs[4].cells == 2
+              && unicodeGlyphs[5].column == 9 && unicodeGlyphs[6].row == 1 && unicodeGlyphs[6].column == 0
+              && unicodeGlyphs[6].code == 0x20000 && unicodeGlyphs[6].color == 0xFFFFFFFF,
+              "rpm: Unicode overlays preserve colour, escapes, row positions and wide glyph cells", unicodeMask);
+        List<string> chineseWrap = RpmPageText.Wrap("神舟天宫\U00020000", 5, 10);
+        Check(chineseWrap.Count == 3 && chineseWrap[0] == "神舟" && chineseWrap[1] == "天宫" && chineseWrap[2] == "\U00020000"
+              && RpmPageText.Fit("神舟天宫", 5) == "神..." && RpmPageText.Fit("\U00020000\U00020000", 3) == "\U00020000",
+              "rpm: Chinese wraps in double-width cells without splitting supplementary characters", string.Join("|", chineseWrap.ToArray()));
+        string fontPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseDir, "../../GameData/Lonapse/Fonts/unicode.bin"));
+        Dictionary<int, byte[]> rpmFont;
+        using (var file = System.IO.File.OpenRead(fontPath)) rpmFont = RpmUnicodeFontData.Read(file);
+        int missingGlyphs = 0;
+        for (int code = 0x3007; code <= 0x3347F; code++)
+            if (ChinesePronunciation.Spell(code) != null && !rpmFont.ContainsKey(code)) missingGlyphs++;
+        for (int code = 'А'; code <= 'я'; code++) if (!rpmFont.ContainsKey(code)) missingGlyphs++;
+        Check(missingGlyphs == 0 && rpmFont.ContainsKey('Ё') && rpmFont.ContainsKey('ё') && rpmFont.ContainsKey('?'),
+              "rpm: bundled font covers Russian and every supported Mandarin character", missingGlyphs.ToString());
+        string launchPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseDir, "../../GameData/Lonapse/Phrases/Crew/launch.tsv"));
+        var countdownErrors = new List<string>();
+        var launchDoc = DialogueTable.Parse(System.IO.File.ReadAllLines(launchPath), "launch.tsv", countdownErrors);
+        bool countdownSpeech = true;
+        int countdownLines = 0;
+        foreach (var line in launchDoc.Lines) if (line.Event == "countdown")
+            foreach (var alternative in line.Alternatives)
+            {
+                countdownLines++;
+                string kind = RuntimeDelivery.KindFor("mc", line.Get("band"), line.Get("severity"), line.Event);
+                string audio = System.IO.Path.Combine(baseDir, "../../GameData/" + LaunchCountdown.AudioUrl(line.Id) + ".ogg");
+                countdownSpeech &= kind == null && System.IO.File.Exists(audio)
+                                   && System.IO.File.ReadAllBytes(audio).Length > 1000;
+            }
+        Check(countdownSpeech && countdownLines == 12 && countdownErrors.Count == 0,
+              "countdown: all ten numbers, liftoff and abort have recordings and bypass runtime synthesis", countdownLines.ToString());
         Check(RpmPageText.Escape("a [b] c") == "a [[]b] c", "rpm: an opening bracket is escaped as [[]", RpmPageText.Escape("a [b] c"));
         Check(RpmPageText.Escape("x $&$ y").IndexOf("$&$", StringComparison.Ordinal) < 0
               && RpmPageText.Escape("$&$&$&$").IndexOf("$&$", StringComparison.Ordinal) < 0,

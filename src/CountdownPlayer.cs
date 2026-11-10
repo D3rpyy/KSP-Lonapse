@@ -15,8 +15,6 @@ namespace Lonapse
         private readonly System.Collections.Generic.Dictionary<string, AudioClip> speech = new System.Collections.Generic.Dictionary<string, AudioClip>();
         private readonly System.Collections.Generic.Dictionary<string, PhraseEntry> preparedLines = new System.Collections.Generic.Dictionary<string, PhraseEntry>();
         private Guid preparedVessel;
-        private int preparationTicket;
-        private bool preparing;
         private bool disposed;
         private int preparedGeneration = -1;
         private string preparationError;
@@ -28,30 +26,23 @@ namespace Lonapse
             if (preparedGeneration != PhraseClips.SceneGeneration || preparedVessel != vessel.id)
             {
                 if (Running) return;
-                foreach (AudioClip old in speech.Values) if (old != null) UnityEngine.Object.Destroy(old);
-                speech.Clear(); preparedLines.Clear(); preparationError = null; preparing = false;
-                preparedGeneration = PhraseClips.SceneGeneration; preparedVessel = vessel.id; preparationTicket++;
+                // GameDatabase owns these clips. Never destroy them on a vessel or scene change.
+                speech.Clear(); preparedLines.Clear(); preparationError = null;
+                preparedGeneration = PhraseClips.SceneGeneration; preparedVessel = vessel.id;
             }
-            if (preparing || speech.Count > 0) return;
-            preparing = true;
-            int requestedGeneration = preparedGeneration, ticket = preparationTicket;
-            Guid requestedVessel = vessel.id;
-            int remaining = 0;
-            foreach (PhraseEntry entry in PhraseClips.table.Entries) if (entry.Event == "countdown") remaining++;
-            if (remaining == 0) { preparationError = "no countdown dialogue"; return; }
-            foreach (PhraseEntry entry in PhraseClips.table.Entries)
+            if (speech.Count > 0 || preparationError != null) return;
+            // Fixed recordings are ready when KSP loads GameData, independent of Piper availability or load.
+            for (int step = 1; step <= LaunchCountdown.Liftoff + 1; step++)
             {
-                if (entry.Event != "countdown") continue;
+                string key = step <= LaunchCountdown.Liftoff ? LaunchCountdown.ClipKey(step) : LaunchCountdown.AbortKey;
+                PhraseEntry entry = PhraseClips.table.Get(key);
+                if (entry == null) { preparationError = "no countdown dialogue for " + key; continue; }
                 PhraseEntry line = host.director.ResolveSpeechLine(entry);
-                if (line == null) { preparationError = "no matching countdown speech"; if (--remaining == 0) preparing = false; continue; }
-                preparedLines[entry.ClipKey] = line;
-                PhraseClips.Render(line, false, clip => {
-                    if (disposed || ticket != preparationTicket || requestedGeneration != PhraseClips.SceneGeneration
-                        || FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.id != requestedVessel) { if (clip != null) UnityEngine.Object.Destroy(clip); return; }
-                    if (clip == null) preparationError = "countdown speech could not be prepared";
-                    else speech[line.ClipKey] = clip;
-                    if (--remaining == 0) preparing = false;
-                });
+                if (line == null) { preparationError = "no matching countdown speech"; continue; }
+                AudioClip clip = GameDatabase.Instance.GetAudioClip(LaunchCountdown.AudioUrl(key));
+                if (clip == null) { preparationError = "missing countdown recording " + key; continue; }
+                preparedLines[key] = line;
+                speech[key] = clip;
             }
         }
 
@@ -63,7 +54,6 @@ namespace Lonapse
         public void Dispose()
         {
             disposed = true;
-            foreach (AudioClip clip in speech.Values) if (clip != null) UnityEngine.Object.Destroy(clip);
             speech.Clear(); preparedLines.Clear();
         }
 
@@ -79,11 +69,9 @@ namespace Lonapse
             if (!host.settings.radioEnabled) return "radio disabled";
             if (v == null || v.situation != Vessel.Situations.PRELAUNCH) return "not on the launch pad";
             if (!PhraseClips.Loaded || PhraseClips.table.Get(LaunchCountdown.ClipKey(1)) == null) return "no countdown clips";
-            string missing = RuntimeVoice.Missing("mc");
-            if (missing != null) return missing;
             Prepare();
             if (preparationError != null) return preparationError;
-            if (preparing) return "preparing countdown speech";
+            if (speech.Count != LaunchCountdown.Liftoff + 1) return "countdown recordings are not loaded";
             return null;
         }
 
@@ -163,7 +151,7 @@ namespace Lonapse
         public void Update(float dt, Vessel v)
         {
             if (Running && (v == null || v.id != preparedVessel)) Abort("vessel changed");
-            if (v != null && v.situation == Vessel.Situations.PRELAUNCH && RuntimeVoice.Missing("mc") == null) Prepare();
+            if (v != null && v.situation == Vessel.Situations.PRELAUNCH) Prepare();
             if (quindarOutLeft > 0f)
             {
                 quindarOutLeft -= dt;

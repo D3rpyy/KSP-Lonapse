@@ -10,6 +10,8 @@ namespace Lonapse
         public const int Liftoff = Numbers + 1;
         public const string AbortKey = "countdown_abort";
 
+        public static string AudioUrl(string key) { return "Lonapse/Sounds/countdown/" + key + "_m"; }
+
         public readonly float leadIn, step;
         public bool Running { get; private set; }
         public int Said { get; private set; }   // last step said: 1..10 numbers, 11 liftoff, 0 none yet

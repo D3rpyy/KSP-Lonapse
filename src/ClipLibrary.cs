@@ -143,6 +143,7 @@ namespace Lonapse
                         int slash = rest.LastIndexOf('/');
                         if (slash <= 0) { unknown.Add(rest); continue; }
                         string folder = rest.Substring(0, slash);
+                        if (folder == "countdown") continue; // Indexed recordings owned by CountdownPlayer, not a shuffle bag.
                         ClipBag bag;
                         if (!bags.TryGetValue(folder, out bag)) { unknown.Add(folder); continue; }
                         Add(bag, c, n);

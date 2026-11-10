@@ -146,8 +146,17 @@ subtitle with the radio click and no voice. The Mods tab says `(subtitles, the r
   `Phrases/phrases.tsv` or `Phrases/pools.tsv`.
 - Exercise ordinary crew radio, cabin chats, panic, direct staging/chute callouts and the final crew-loss MC call.
   Check delivery, matching subtitles, bounded synthesis waits and cancellation after a vessel/scene switch.
-- On the pad, wait for countdown speech preparation. Count in both directions, stop it, and confirm the prepared
-  "Launch cancelled" call. Preparation must finish before timing/auto-staging begins.
+- On the pad, start the countdown immediately. Count in both directions, stop it, and confirm the recorded
+  "Launch cancelled" call. Repeat with Piper unavailable or busy. Countdown timing must not depend on synthesis.
+- On the stock RPM MFD and ALCOR 40x20 and 60x30 Comms pages, show a subtitle containing `Союз`, `神舟`, and
+  `𠀀`. Check the original glyphs, speaker colours, dim history, scrolling and Chinese wrapping. Chinese takes two
+  cells. ENTER must start and stop the countdown. Other monitor pages must retain their original fonts.
+- With a ship linked to KSC, send every kerbal outside and switch between the nearby EVA kerbals. Mission Control
+  exchanges must remain available through the empty ship. Check the `EVA relay` status in KSP.log. Move beyond suit
+  range or remove the ship's KSC route and confirm that Mission Control becomes unavailable while suit chats continue.
+- After ordinary and runtime-only MC lines, confirm the static loop fades out within 0.2 seconds of the voice ending.
+  Interrupt an exchange, clear its queue, disable radio/static, switch vessels, and freeze the last crew member.
+  None may leave continuous MC static. Probe transmissions retain their carrier only while their beeps are playing.
 - Test stock probe personalities, a custom LONAPSE_PROBE_LINES lineset, ModuleLonapse.lines/priority/displayName,
   a custom beep voice, and a player voice override. Check the existing precedence and each beep's mood/order.
 - Trigger probe telemetry, science, warp, docking and stress exchanges. Change the selected voice or vessel while
@@ -174,8 +183,8 @@ subtitle with the radio click and no voice. The Mods tab says `(subtitles, the r
   `kerbal_b` and confirm the other kerbal speaks it. Check explicit intercom/radio routing and MC radio delivery.
 - Reload a malformed row with a pipe-separated alternative or unknown variable/condition. Check the filename
   and error in KSP.log. Existing mod tables using the legacy `kind` header should still load alongside new files.
-- Reload countdown alternatives and switch vessels while speech is preparing. Old clips and subtitles must
-  never be reused for the new vessel; starting the count must wait for the current preparation to finish.
+- Reload countdown alternatives and switch vessels. Old subtitles must never be reused for the new vessel.
+  Starting the count must use the loaded recordings immediately, without waiting for Piper.
 
 ## Dialogue jobs, traits, experiment names and resource scanners
 

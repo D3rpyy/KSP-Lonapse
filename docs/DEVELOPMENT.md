@@ -13,15 +13,19 @@ All voices speak loñapsE, the language of the kerbals. That is Spanish with the
 like kerbals. How that works is in [audio/lonapse/README.md](../audio/lonapse/README.md). The credits for the voices
 are in [audio/CREDITS.md](../audio/CREDITS.md).
 
-See [Unified dialogue](API.md#one-alternative-per-row) for the canonical alternative-row category tables and optional structural columns,
+See [Unified dialogue](API.md#one-alternative-per-row) for the canonical alternative-row category tables and optional structural columns.
 The fields are `speaker` (who speaks), `job` (profession), `trait` (personality) and `type` (delivery category).
 See the [field explanations](API.md#jobs-traits-and-speaker-identities) for conditions, defaults and reply routing,
 and [ModuleLonapse](ModuleLonapse.md) for MM part integration. The old speech
-rendering sources are legacy fixtures; releases do not build or ship recordings, phrases.tsv, or pools.tsv.
+rendering sources remain as legacy fixtures and supply the twelve fixed countdown clips. Other dialogue is synthesized
+during play. Releases do not ship the old `Sounds/crew` or `Sounds/control` folders, `phrases.tsv` or `pools.tsv`.
 
 ## Building
 
 Validate category dialogue with `python3 tools/validate_dialogue.py`; `bash tests/run.sh` includes this check.
+Each Crew and Probe category needs at least 200 distinct authored sentence templates before phrase expansion.
+Shared paired fragments live in `GameData/Lonapse/Phrases/choices.tsv` and load before the category tables.
+The validator checks their translations and variables as well as the category minimum.
 
 First tell the scripts where your KSP install is. You can set `KSP_DIR`, or write the path into a file called
 `.ksp_dir` in the repo root (one line, it stays out of git).
@@ -63,6 +67,9 @@ This is what ends up in the game:
 GameData/Lonapse/
   Plugins/Lonapse.dll
   Sounds/...                (from the audio pipeline)
+  Sounds/countdown/*.ogg    (twelve fixed launch control clips)
+  Fonts/                    (RPM Unicode glyphs and license notices)
+  Phrases/choices.tsv       (shared paired Spanish and English fragments)
   Phrases/Crew/*.tsv        (crew and Mission Control dialogue)
   Phrases/Probe/*.tsv       (probe dialogue, linesets and contextual exchanges)
   Patches/*.cfg             (Module Manager patches: ModuleLonapse on the stock cores, optional MM)
@@ -70,7 +77,8 @@ GameData/Lonapse/
   PluginData/settings.cfg   (written by the plugin on first start)
 ```
 
-The plugin also runs without any sounds. It then stays silent and logs a warning for each empty folder. You can find
+Runtime dialogue needs Piper and its voices. Fixed countdown clips, beeps and effects load separately from `Sounds`.
+Missing audio folders are logged, and unavailable clips stay silent. You can find
 everything the mod logs in `KSP.log` on lines starting with `[Lonapse]`.
 
 ## Audio folders
@@ -80,10 +88,7 @@ clips each folder has against its target, in red when it has too few.
 
 | Folder | Target | Used for |
 |---|---|---|
-| `crew/calm`, `crew/tense`, `crew/panic` | 24 each | crew radio lines by stress band |
-| `crew/relief` | 8 | after blackout, touchdown and docking (falls back to `crew/calm`) |
-| `crew/callout` | 8 | one-word callouts (0.3 to 0.6 s, dry): staging, parachutes, docking distances |
-| `control/calm`, `control/tense` | 24, 12 | Mission Control |
+| `countdown` | 12 | ten numbers, liftoff and launch cancellation, available without Piper |
 | `beeps/ping`, `beeps/descent`, `beeps/stage` | 3, 2, 2 | telemetry, descent blips, stage tone |
 | `beeps/landing`, `beeps/splashdown` | 1 each | optional touchdown tones |
 | `beeps/quindar_in`, `beeps/quindar_out` | 1 each | MC transmission tones |
@@ -122,7 +127,7 @@ share remain ordinary 0 to 100% controls.
 It works while a line plays, and 0% silences that noise. A weak signal can still make the radio sound narrower or
 give it dropouts. Settings from before the single slider have their two static values combined on load.
 
-If `crew/callout` is empty, staging uses the stage tone and docking callouts use a short calm line instead.
+The old `crew` and `control` clip folders remain supported for compatibility but are not shipped.
 
 ## When does it play
 
@@ -132,7 +137,9 @@ where the probe beeps and Mission Control talks to it.
 On EVA your kerbal has a suit radio to Mission Control (`evaRadio`, on by default). You get a few check-ins, soft
 breathing in the helmet and the headset squelch. It stays calm unless something is really wrong, like running out of
 jetpack fuel far from any ship. The suit has no antenna of its own, so it relays through the best ship nearby
-(`evaRelay`). That ship needs a command pod or probe core. The kerbal gets the ship's signal, full up to 1 km
+(`evaRelay`). That ship needs a command pod or probe core. A powered empty ship can relay through its antennas
+even when stock CommNet disables its command connection for lack of crew. Antenna range, body occlusion and
+the remaining route to KSC still apply. Relay changes appear in `KSP.log`. The kerbal gets the ship's signal, full up to 1 km
 (`evaRelayFullKm`) and gone at 2.3 km (`evaRelayZeroKm`). So a weak ship signal means a weak suit radio too.
 
 The breathing has brighter air resonances and a faint voiced exhale in the Kerbal register. Each loop keeps two
@@ -157,13 +164,13 @@ cause a burst of calls.
 
 ## Settings
 
-Click the antenna button on the toolbar in flight or map view. The window has seven tabs:
+Click the antenna button on the toolbar in flight or map view. The window has eight tabs.
 
 - **General**: on or off, mute (with its hotkey), the radio, the intercom and the beeps, how much radio chatter you
   want (0.25x to 4x, for crews and probes alike) and the gap between intercom chats. Also the launch countdown with its
   hotkey and "Stage on liftoff".
-- **Sound**: all volumes (master, Mission Control, crew, intercom, callouts, beeps, static, EVA radio), how much the
-  game sound drops while someone talks, the roger beep and the master alarm.
+- **Sound** controls volumes for voices, probe beeps, radio static, EVA radio and sound effects, plus the roger beep
+  and master alarm. Game audio keeps its normal volume during speech.
 - **Crew**: throttle callouts, maneuver node talk, the answer delay far from Kerbin, which events Mission Control
   reacts to, personality, facial expressions, turning to the speaker and the EVA suit radio.
 - **Probes**: probe mode, pet talk, the probe calling on its own and sleepy on low power. Under Reactions every probe
@@ -173,6 +180,7 @@ Click the antenna button on the toolbar in flight or map view. The window has se
 - **Advanced**: landing and stage tones, voice boost, weak signal noise and dropouts, the signal mode (auto, off,
   fixed), the calm radio gap, the probe talk gap, how much a line should fit the speaker's job and character, the probe
   charge levels and beep pitch, and "Reset timing to defaults".
+- **Mods** lists mods that supply dialogue, with a toggle for each one and tools to reload and test lines.
 - **Debug**: the debug overlay, a test exchange, mouth and head turn calibration, a phrase test and the clip count per
   folder.
 
@@ -227,7 +235,7 @@ These keys are not all in the window, but you can edit them in the file:
 | `signalMode` | `auto` | `auto` (CommNet, RemoteTech, distance to KSC), `off` (static ignores the signal), `fixed`. With CommNet off in the game (and no RemoteTech) the signal is full everywhere, like the game. The distance fallback only runs when CommNet is on but unreadable |
 | `signalFixed` | `0.7` | Signal value for `fixed`, 0 to 1 |
 | `signalOcclusion` | `True` | Distance fallback: no signal when Kerbin blocks the line to KSC |
-| `subtitles` | `False` | Show an English subtitle for each line ("Enable subtitles" in the window) |
+| `subtitles` | `True` | Show an English subtitle for each line ("Show subtitles" in the window) |
 | `countdownAutoStage` | `False` | Launch countdown: activate the next stage on the liftoff call |
 | `rogerBeep` | `True` | Short beep when the crew lets go of the key |
 | `lightDelay` | `True` | MC answers later far from Kerbin: about 0.9 s at the Mun, 2 s at Minmus, up to `lightDelayMax` (10 s) at the outer planets |
@@ -236,6 +244,7 @@ These keys are not all in the window, but you can edit them in the file:
 
 The `TUNING` block holds all the numbers behind the behaviour. They are my own starting values from playing, not
 measured ones. If something feels off, this is where you can change it. The tuning tips further down help with that.
+Nearby suit-to-suit and ship-to-ship conversations use only the normal conversational pause, without the KSC light delay.
 
 ## How it behaves
 
@@ -263,9 +272,10 @@ measured ones. If something feels off, this is where you can change it. The tuni
   ignition line, and anything else (like only parachutes) a plain "Stage!".
 - **Launch countdown.** On the pad, press "Start countdown" in the window or Alt+C. Launch control counts in loñapsE,
   so it counts up: "onU, soD, serT ... zeiD", one number per second, then "¡eugepseD!" (liftoff). Staging on or after
-  "zeiD" is a normal launch. Staging earlier, or pressing stop, ends the count with a yell ("¡haaaaaaA!"). With
+  "zeiD" is a normal launch. Staging earlier, or pressing stop, ends the count with "Launch cancelled."
+  The ten numbers, liftoff and cancellation use fixed clips without waiting for Piper. With
   `countdownAutoStage` the next stage fires on the liftoff call. Chatter and throttle callouts wait during the count.
-- With `useDsp = False` the voice boost and a `calloutVolume` above 1 go through the normal volume, which stops at 1.
+- Source gains above 1 use the final soft limiter, including with `useDsp = False`.
 
 ## Hotkeys
 
@@ -306,12 +316,13 @@ What stress changes:
 - **How often they talk**: from about once every 110 s at stress 0 to once a second at stress 1 (10.5 s at 0.5),
   with some randomness on top.
 - **How the crew sounds**: calm, tense or panic lines. Under stress the crew gets a little louder (about 2 dB from
-  calm to full stress) and rougher, and the pitch goes up by at most half a semitone (`crewStressSemitones`, total
-  pitch capped by `crewPitchMax`). Panic clips get neither: the panic is already in the recording. Above personal
+  calm to full stress) and rougher. Stress no longer raises the pitch by default (`crewStressSemitones = 0`).
+  Tense and panic delivery instead speaks a little faster. Above personal
   stress 0.85 other lines can get cut off a bit. At most 2 crew voices overlap (`maxCrewVoices`).
 - **Faces**: they follow the kerbal's own thresholds, the same that switch the voice. Below `tenseAt` the face is
   free, from there it gets more and more scared, clearly scared at `panicAt` and full fear at stress 1, also between
-  lines. A brave or badass kerbal has later thresholds, so it keeps a calm face longer.
+  lines. Below 0.2 stress, faces stay neutral or happy, with fear easing in above that point.
+  A brave or badass kerbal has later thresholds, so it keeps a calm face longer.
 - **Mission Control**: gets calmer and slower the more stressed the crew is, at a steady volume.
 - **Every kerbal is different**: the name sets a fixed pitch, wobble and timbre, so Jeb always sounds like Jeb.
   Courage and stupidity change how strongly a kerbal reacts and when they move to tense or panic. Badass kerbals stay

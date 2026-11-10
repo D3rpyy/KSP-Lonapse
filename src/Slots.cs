@@ -1,5 +1,6 @@
 // The one list of every slot a line can use, for the subtitle templates (SubtitleSlots) and the runtime voice
-// (RuntimeLines). A slot that is not here is a pool from pools.tsv. Same lists as NUMBER_SLOTS, NAME_SLOTS and
+// (RuntimeLines). Paired phrase choices from choices.tsv expand before runtime filling. Legacy subtitle fixtures
+// also support pools.tsv. Same lists as NUMBER_SLOTS, NAME_SLOTS and
 // PERSON_SLOTS in audio/build_lonapse.py (the tests compare them).
 //
 //   number  a value from KSP: shown as digits in the subtitle, said in Spanish words by the runtime voice

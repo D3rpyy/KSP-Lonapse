@@ -190,7 +190,7 @@ namespace Lonapse
         {
             if (count + 4 * entries.Count > Capacity) return false;
             for (int i = 0; i < entries.Count; i++)
-                QueueSubtitle(i % 2 == 0 ? a : b, entries[i], i == 0 ? U(0.2f, 0.6f) : ResponseDelay(host.stress.stress));
+                QueueSubtitle(i % 2 == 0 ? a : b, entries[i], i == 0 ? U(0.2f, 0.6f) : LocalResponseDelay(host.stress.stress));
             return true;
         }
 

@@ -1222,10 +1222,16 @@ namespace Lonapse
             return (s >= Tu.mcTenseLo && s < Tu.mcTenseHi) ? "control/tense" : "control/calm";
         }
 
+        private float LocalResponseDelay(float s)
+        {
+            // Nearby suit and ship radios need only the ordinary conversational pause.
+            return DcMath.Lerp(1.2f, 0.35f, s) * U(0.8f, 1.2f);
+        }
+
         private float ResponseDelay(float s)
         {
-            // far from Kerbin the answer takes a little longer (light delay, at most lightDelayMax s)
-            return DcMath.Lerp(1.2f, 0.35f, s) * U(0.8f, 1.2f) + host.LightDelay;
+            // The long-distance leg to KSC still adds light delay.
+            return LocalResponseDelay(s) + host.LightDelay;
         }
 
         /// <summary>MC transmission: quindar in, line, quindar out, static bed under it, squelch tail. to: the kerbal
@@ -2457,11 +2463,8 @@ namespace Lonapse
                 {
                     host.control.radioWeakness = ReceiverWeakness;
                     host.control.dropout = host.Dropout;
-                    StartControlBed();
                 }
             }
-            if (host.controlBed.Busy)
-                host.controlBed.volumeScale = RadioNoise.ControlLevel(tu.controlBedVolume, host.StaticLevel, host.settings.weakSignalVolume);
             UpdateCrewBed();
             UpdateProbeRadio();
         }
@@ -2472,10 +2475,34 @@ namespace Lonapse
         {
             VoiceChannel b = host.controlBed;
             if (b == null || !host.CanStartAudio || !host.settings.radioEnabled || !host.signal.connected || mcBlackout || radioSilent || host.settings.radioStatic <= 0f
+                || !ControlCarrierActive
                 || b.Busy || ClipLibrary.CountOf("sfx/loop") == 0) return;
             AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
             if (clip != null)
                 b.Play(clip, RadioNoise.ControlLevel(Tu.controlBedVolume, host.StaticLevel, host.settings.weakSignalVolume), 1f, true, 0.12f);
+        }
+
+        private bool ControlCarrierActive
+        {
+            get
+            {
+                return (host.control.Busy && host.control.followRadioSignal)
+                       || (carrierRunning && host.probeMode && host.beep[1].Busy && host.beep[1].probeBeep);
+            }
+        }
+
+        // Follow the actual audio, including direct runtime MC lines that have no queued BedStop item.
+        // Probe replies share this bed and keep it alive only while their carrier is playing.
+        internal void UpdateControlBed()
+        {
+            VoiceChannel bed = host.controlBed;
+            if (bed == null) return;
+            if (!ControlCarrierActive || !host.CanStartAudio || !host.settings.radioEnabled || !host.signal.connected
+                || mcBlackout || radioSilent || host.settings.radioStatic <= 0f)
+                bed.FadeOutOnce(0.2f);
+            else if (!bed.Busy) StartControlBed();
+            if (bed.Busy)
+                bed.volumeScale = RadioNoise.ControlLevel(Tu.controlBedVolume, host.StaticLevel, host.settings.weakSignalVolume);
         }
 
         /// <summary>

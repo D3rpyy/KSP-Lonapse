@@ -39,10 +39,11 @@ bash tests/run.sh >/dev/null || { echo "ERROR: tests failed, run tests/run.sh to
 mkdir -p "$GD/Plugins" "$GD/Sounds" "$GD/Phrases"
 cp build/Lonapse.dll "$GD/Plugins/Lonapse.dll"
 # Only audio files. A .cfg under GameData would be parsed by KSP.
-rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' \
+rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --exclude='/countdown/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' \
   "$SOUNDS/" "$GD/Sounds/"
 cp LICENSE "$GD/LICENSE.txt"
 cp LICENSE-CC-BY-4.0 "$GD/LICENSE-CC-BY-4.0.txt"
+cp LICENSE-UNICODE "$GD/LICENSE-UNICODE.txt"
 cp docs/LICENSING.md "$GD/LICENSING.md"
 cp README.md CHANGELOG.md "$GD/"
 cp audio/CREDITS.md "$GD/CREDITS.md"

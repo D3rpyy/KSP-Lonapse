@@ -1,0 +1,323 @@
+pool	id	spanish	english
+heated_snack	v01	la pasta de aperitivo	snack paste
+heated_snack	v02	el queso en tubo	tube cheese
+heated_snack	v03	el fideos liofilizados	freeze-dried noodles
+heated_snack	v04	el alubias espaciales	space beans
+heated_snack	v05	el famoso chile de Jeb	Jeb's famous chili
+heated_snack	v06	el huevos en polvo	powdered eggs
+heated_snack	v07	el guiso misterioso	mystery stew
+heated_snack	v08	el barritas de algas	algae bars
+heated_snack	v09	el raciones de emergencia	emergency rations
+heated_snack	v10	la sopa recalentada	reheated soup
+heated_snack	v11	el pescado deshidratado	dehydrated fish
+heated_snack	v12	la pizza fría	cold pizza
+heated_snack	v13	el tacos espaciales	space tacos
+heated_snack	v14	el puré de zanahoria	carrot puree
+heated_snack	v15	el café instantáneo	instant coffee
+heated_snack	v16	el cohetes de gominola	gummy rockets
+heated_snack	v17	el pudin rehidratado	rehydrated pudding
+heated_snack	v18	el helado liofilizado	freeze-dried ice cream
+cabin_game	v01	veo veo	I spy
+cabin_game	v02	piedra, papel o tijera	rock paper scissors
+cabin_game	v03	las veinte preguntas	twenty questions
+cabin_game	v04	quién flota más tiempo	who can float the longest
+cabin_game	v05	adivinar el aperitivo	guess the snack
+cabin_game	v06	esconder la llave inglesa	hide the wrench
+cabin_game	v07	adivinar el planeta	guess the planet
+cabin_game	v08	quién parpadea primero	who blinks first
+personal_keepsake	v01	piedra de la suerte	lucky rock
+personal_keepsake	v02	pato de goma	rubber duck
+personal_keepsake	v03	bolígrafo espacial	space pen
+personal_keepsake	v04	bolsa de muestras	sample bag
+personal_keepsake	v05	bandera	flag
+personal_keepsake	v06	diario de vuelo	flight log
+personal_keepsake	v07	cámara	camera
+personal_keepsake	v08	cepillo de dientes	toothbrush
+personal_keepsake	v09	cuchara favorita	favorite spoon
+personal_keepsake	v10	puntal de repuesto	spare strut
+personal_keepsake	v11	barrita	snack bar
+personal_keepsake	v12	llave del róver	rover key
+personal_keepsake	v13	bocadillo	sandwich
+personal_keepsake	v14	almohada	pillow
+personal_keepsake	v15	llave inglesa de la suerte	lucky wrench
+personal_keepsake	v16	cómic	comic book
+personal_keepsake	v17	calculadora de bolsillo	pocket calculator
+personal_keepsake	v18	calcetín de la suerte	lucky sock
+personal_keepsake	v19	armónica	harmonica
+personal_keepsake	v20	libreta	notebook
+personal_keepsake	v21	yoyó	yo-yo
+personal_keepsake	v22	taza de viaje	travel mug
+personal_keepsake	v23	espejo de bolsillo	pocket mirror
+search_location	v01	del asiento	seat
+search_location	v02	del panel de control	control panel
+search_location	v03	del armario de aperitivos	snack locker
+search_location	v04	de la rejilla de ventilación	air vent
+search_location	v05	del váter	toilet
+search_location	v06	del reposacabezas	headrest
+search_location	v07	del posavasos	cup holder
+search_location	v08	del saco de dormir	sleeping bag
+search_location	v09	de la red de almacenaje	storage net
+search_location	v10	del botiquín	first aid kit
+search_location	v11	de la ventana	window
+search_location	v12	del panel de soporte vital	life support panel
+search_location	v13	de la guantera	glove box
+search_location	v14	del soporte de cascos	helmet rack
+search_location	v15	del calentador de comida	food warmer
+search_location	v16	del cajón de herramientas	tool drawer
+search_location	v17	de la bolsa de la ropa sucia	laundry bag
+cabin_food	v01	pasta de aperitivo	snack paste
+cabin_food	v02	queso en tubo	tube cheese
+cabin_food	v03	fideos liofilizados	freeze-dried noodles
+cabin_food	v04	alubias espaciales	space beans
+cabin_food	v05	famoso chile de Jeb	Jeb's famous chili
+cabin_food	v06	huevos en polvo	powdered eggs
+cabin_food	v07	guiso misterioso	mystery stew
+cabin_food	v08	barritas de algas	algae bars
+cabin_food	v09	raciones de emergencia	emergency rations
+cabin_food	v10	sopa recalentada	reheated soup
+cabin_food	v11	pescado deshidratado	dehydrated fish
+cabin_food	v12	pizza fría	cold pizza
+cabin_food	v13	tacos espaciales	space tacos
+cabin_food	v14	puré de zanahoria	carrot puree
+cabin_food	v15	café instantáneo	instant coffee
+cabin_food	v16	cohetes de gominola	gummy rockets
+cabin_food	v17	pudin rehidratado	rehydrated pudding
+cabin_food	v18	helado liofilizado	freeze-dried ice cream
+silly_ship_name	v01	‹Rocky McRocketface›	Rocky McRocketface
+silly_ship_name	v02	Tubo Grande 2	Big Tube 2
+silly_ship_name	v03	Nave Sin Título 3	Untitled Craft 3
+silly_ship_name	v04	La Venganza de Jeb	Jeb's Revenge
+silly_ship_name	v05	El Pepinillo Volador	The Flying Pickle
+silly_ship_name	v06	Segurísimo	Definitely Safe
+silly_ship_name	v07	Pum Mk1	Bang Mk1
+silly_ship_name	v08	‹Dave›	Dave
+silly_ship_name	v09	Segundo Intento	Second Try
+silly_ship_name	v10	Seguramente Bien	Probably Fine
+silly_ship_name	v11	Otra Vez No	Not Again
+strange_dream	v01	el Kraken	the Kraken
+strange_dream	v02	una ballena espacial gigante	a giant space whale
+strange_dream	v03	una nuM de queso	a Mun made of cheese
+strange_dream	v04	un puntal que hablaba	a strut that could talk
+strange_dream	v05	un róver con sentimientos	a rover with feelings
+strange_dream	v06	un propulsor que quería un abrazo	a booster that wanted a hug
+strange_dream	v07	Control de Misión, pero eran todos patos	Mission Control, but they were all ducks
+strange_dream	v08	Gene, pero era una cabra	Gene, but he was a goat
+strange_dream	v09	un núcleo de sonda que no paraba de pitar	a probe core that would not stop beeping
+strange_dream	v10	un bocadillo con órbita propia	a sandwich with its own orbit
+strange_dream	v11	un propulsor con miedo escénico	a booster with stage fright
+strange_dream	v12	un paracaídas con miedo a las alturas	a parachute that was afraid of heights
+strange_dream	v13	una llave inglesa que se iba flotando para siempre	a wrench that floated away forever
+strange_dream	v14	una bandera que quería volver a casa	a flag that wanted to go home
+cabin_fitting	v01	la manija de la escotilla	hatch handle
+cabin_fitting	v02	el botón de la radio	radio knob
+cabin_fitting	v03	la junta de la ventana	window seal
+cabin_fitting	v04	el cinturón	seat belt
+cabin_fitting	v05	la tapa del váter	toilet lid
+cabin_fitting	v06	la luz de la cabina	cabin light
+cabin_fitting	v07	la tapa de la rejilla	air vent cover
+cabin_fitting	v08	la palanca de gases	throttle lever
+cabin_fitting	v09	el posavasos	cup holder
+cabin_fitting	v10	la puerta del armario de aperitivos	snack locker door
+cabin_fitting	v11	el reposacabezas	headrest
+cabin_fitting	v12	la luz de lectura	reading light
+cabin_fitting	v13	el reposapiés	footrest
+cabin_fitting	v14	el cojín del asiento	seat cushion
+cabin_fitting	v15	el tornillo del panel	panel screw
+taped_fitting	v01	a la manija de la escotilla	hatch handle
+taped_fitting	v02	al botón de la radio	radio knob
+taped_fitting	v03	a la junta de la ventana	window seal
+taped_fitting	v04	al cinturón	seat belt
+taped_fitting	v05	a la tapa del váter	toilet lid
+taped_fitting	v06	a la luz de la cabina	cabin light
+taped_fitting	v07	a la tapa de la rejilla	air vent cover
+taped_fitting	v08	a la palanca de gases	throttle lever
+taped_fitting	v09	al posavasos	cup holder
+taped_fitting	v10	a la puerta del armario de aperitivos	snack locker door
+taped_fitting	v11	al reposacabezas	headrest
+taped_fitting	v12	a la luz de lectura	reading light
+taped_fitting	v13	al reposapiés	footrest
+taped_fitting	v14	al cojín del asiento	seat cushion
+taped_fitting	v15	al tornillo del panel	panel screw
+cabin_chore	v01	limpiar el váter	clean the toilet
+cabin_chore	v02	limpiar las ventanas	clean the windows
+cabin_chore	v03	contar los aperitivos	count the snacks
+cabin_chore	v04	hablar con Control	talk to Control
+cabin_chore	v05	limpiar los cascos	wipe the helmets
+cabin_chore	v06	ordenar las piedras	sort the rocks
+cabin_chore	v07	arreglar el posavasos	fix the cup holder
+cabin_chore	v08	leer el manual en voz alta	read the manual out loud
+cabin_chore	v09	doblar los paracaídas	fold the parachutes
+cabin_chore	v10	pulir la escotilla	polish the hatch
+cabin_chore	v11	regar las plantas	water the plants
+cabin_noise	v01	golpe	clank
+cabin_noise	v02	chirrido	squeak
+cabin_noise	v03	silbido	hiss
+cabin_noise	v04	toque	knock
+cabin_noise	v05	crujido largo	long groan
+cabin_noise	v06	pitido	beep
+cabin_noise	v07	traqueteo	rattle
+cabin_noise	v08	chasquido	pop
+cabin_noise	v09	golpe sordo	thump
+cabin_noise	v10	zumbido	buzz
+cabin_noise	v11	gorgoteo	gurgle
+previous_rattle	v01	de la manija de la escotilla	hatch handle
+previous_rattle	v02	del botón de la radio	radio knob
+previous_rattle	v03	de la junta de la ventana	window seal
+previous_rattle	v04	del cinturón	seat belt
+previous_rattle	v05	de la tapa del váter	toilet lid
+previous_rattle	v06	de la luz de la cabina	cabin light
+previous_rattle	v07	de la tapa de la rejilla	air vent cover
+previous_rattle	v08	de la palanca de gases	throttle lever
+previous_rattle	v09	del posavasos	cup holder
+previous_rattle	v10	de la puerta del armario de aperitivos	snack locker door
+previous_rattle	v11	del reposacabezas	headrest
+previous_rattle	v12	de la luz de lectura	reading light
+previous_rattle	v13	del reposapiés	footrest
+previous_rattle	v14	del cojín del asiento	seat cushion
+previous_rattle	v15	del tornillo del panel	panel screw
+control_room_rumor	v01	Gene duerme debajo de su mesa	Gene sleeps under his desk
+control_room_rumor	v02	el becario lanzó una pizza la semana pasada	the intern launched a pizza last week
+control_room_rumor	v03	Wernher se ató un propulsor a la silla	Wernher strapped a booster to his chair
+control_room_rumor	v04	Control ha perdido el manual. Otra vez	Control lost the manual. Again
+control_room_rumor	v05	el cohete nuevo son tres cohetes viejos	the new rocket is just three old rockets
+control_room_rumor	v06	Gene lloró en el último lanzamiento	Gene cried at the last launch
+control_room_rumor	v07	hay más dinero para aperitivos que para combustible	the snack budget is bigger than the fuel budget
+control_room_rumor	v08	la cafetería se ha quedado sin café	the cafeteria ran out of coffee
+control_room_rumor	v09	alguien ha pintado de rosa la torre de lanzamiento	someone painted the launch tower pink
+control_room_rumor	v10	el jefe tiene un cajón secreto de aperitivos	the boss has a secret snack drawer
+control_room_rumor	v11	el próximo cohete no tiene asientos	the next rocket has no seats
+annoying_song	v01	la canción de la cuenta atrás	the countdown song
+annoying_song	v02	la canción de los aperitivos	the snack song
+annoying_song	v03	esa musiquilla de los anuncios	that jingle from the ads
+annoying_song	v04	nibréK, dulce nibréK	Kerbin, Sweet Kerbin
+annoying_song	v05	la música del vídeo de seguridad	the theme from the safety video
+annoying_song	v06	el vals del atraque	the docking waltz
+annoying_song	v07	la nana de la plataforma	the launch pad lullaby
+annoying_song	v08	la música del ascensor	the elevator music
+wager_prize	v01	una piedra de la suerte	lucky rock
+wager_prize	v02	un pato de goma	rubber duck
+wager_prize	v03	un bolígrafo espacial	space pen
+wager_prize	v04	una bolsa de muestras	sample bag
+wager_prize	v05	una bandera	flag
+wager_prize	v06	un diario de vuelo	flight log
+wager_prize	v07	una cámara	camera
+wager_prize	v08	un cepillo de dientes	toothbrush
+wager_prize	v09	una cuchara favorita	favorite spoon
+wager_prize	v10	un puntal de repuesto	spare strut
+wager_prize	v11	una barrita	snack bar
+wager_prize	v12	una llave del róver	rover key
+wager_prize	v13	un bocadillo	sandwich
+wager_prize	v14	una almohada	pillow
+wager_prize	v15	una llave inglesa de la suerte	lucky wrench
+wager_prize	v16	un cómic	comic book
+wager_prize	v17	una calculadora de bolsillo	pocket calculator
+wager_prize	v18	un calcetín de la suerte	lucky sock
+wager_prize	v19	una armónica	harmonica
+wager_prize	v20	una libreta	notebook
+wager_prize	v21	un yoyó	yo-yo
+wager_prize	v22	una taza de viaje	travel mug
+wager_prize	v23	un espejo de bolsillo	pocket mirror
+missed_comfort	v01	la gravedad de verdad	real gravity
+missed_comfort	v02	la lluvia	rain
+missed_comfort	v03	la cafetería del centro espacial	the KSC cafeteria
+missed_comfort	v04	mi propia cama	my own bed
+missed_comfort	v05	la hierba	grass
+missed_comfort	v06	las duchas	showers
+missed_comfort	v07	el guiso misterioso de mamá	Mom's mystery stew
+missed_comfort	v08	la pizza que no está congelada	pizza that isn't frozen
+missed_comfort	v09	el aire fresco	fresh air
+missed_comfort	v10	el ruido de la ciudad	the noise of the city
+missed_comfort	v11	las puertas normales	doors that just open
+jeb_idea	v01	poner más propulsores	add more boosters
+jeb_idea	v02	dar una voltereta	do a flip
+jeb_idea	v03	comerse el Moco Misterioso	eat the Mystery Goo
+jeb_idea	v04	ir más rápido	go faster
+jeb_idea	v05	lamer la ventana	lick the window
+jeb_idea	v06	pulsar el gran botón rojo	push the big red button
+jeb_idea	v07	separar todas las etapas a la vez	stage everything at once
+jeb_idea	v08	apagar el ordenador	turn off the computer
+jeb_idea	v09	aterrizar boca abajo	land upside down
+hiccup_remedy	v01	beber boca abajo	drinking upside down
+hiccup_remedy	v02	pensar en los impuestos	thinking about taxes
+hiccup_remedy	v03	mirar fijamente el indicador de combustible	staring at the fuel gauge
+hiccup_remedy	v04	hablar con la sonda	talking to the probe
+hiccup_remedy	v05	taparte la nariz y tararear	holding your nose and humming
+hiccup_remedy	v06	contar hacia atrás desde diez	counting backwards from ten
+hiccup_remedy	v07	mirar por la ventana	looking out the window
+hiccup_remedy	v08	tomar una cucharada de queso en tubo	a spoon of tube cheese
+snore_comparison	v01	un motor Mainsail	a Mainsail
+snore_comparison	v02	una aspiradora rota	a broken vacuum
+snore_comparison	v03	una cabra enfadada	an angry goat
+snore_comparison	v04	una escotilla oxidada	a rusty hatch
+snore_comparison	v05	un cohete en la plataforma	a rocket on the pad
+snore_comparison	v06	un Kraken resfriado	a Kraken with a cold
+snore_comparison	v07	una radio rota	a broken radio
+snore_comparison	v08	una manada de róvers	a herd of rovers
+snore_comparison	v09	un despertador en un cubo	an alarm clock in a bucket
+beeping_device	v01	el indicador de combustible	fuel gauge
+beeping_device	v02	el panel de soporte vital	life support panel
+beeping_device	v03	el váter	toilet
+beeping_device	v04	el armario de aperitivos	snack locker
+beeping_device	v05	la radio	radio
+beeping_device	v06	el panel de control	control panel
+beeping_device	v07	la cafetera	coffee maker
+beeping_device	v08	la alarma de humo	smoke alarm
+beeping_device	v09	el reloj de pulsera	wristwatch
+snack_supply	v01	de la pasta de aperitivo	snack paste
+snack_supply	v02	del queso en tubo	tube cheese
+snack_supply	v03	del fideos liofilizados	freeze-dried noodles
+snack_supply	v04	del alubias espaciales	space beans
+snack_supply	v05	del famoso chile de Jeb	Jeb's famous chili
+snack_supply	v06	del huevos en polvo	powdered eggs
+snack_supply	v07	del guiso misterioso	mystery stew
+snack_supply	v08	del barritas de algas	algae bars
+snack_supply	v09	del raciones de emergencia	emergency rations
+snack_supply	v10	de la sopa recalentada	reheated soup
+snack_supply	v11	del pescado deshidratado	dehydrated fish
+snack_supply	v12	de la pizza fría	cold pizza
+snack_supply	v13	del tacos espaciales	space tacos
+snack_supply	v14	del puré de zanahoria	carrot puree
+snack_supply	v15	del café instantáneo	instant coffee
+snack_supply	v16	del cohetes de gominola	gummy rockets
+snack_supply	v17	del pudin rehidratado	rehydrated pudding
+snack_supply	v18	del helado liofilizado	freeze-dried ice cream
+secret_keepsake	v01	de la piedra de la suerte	lucky rock
+secret_keepsake	v02	del pato de goma	rubber duck
+secret_keepsake	v03	del bolígrafo espacial	space pen
+secret_keepsake	v04	de la bolsa de muestras	sample bag
+secret_keepsake	v05	de la bandera	flag
+secret_keepsake	v06	del diario de vuelo	flight log
+secret_keepsake	v07	de la cámara	camera
+secret_keepsake	v08	del cepillo de dientes	toothbrush
+secret_keepsake	v09	de la cuchara favorita	favorite spoon
+secret_keepsake	v10	del puntal de repuesto	spare strut
+secret_keepsake	v11	de la barrita	snack bar
+secret_keepsake	v12	de la llave del róver	rover key
+secret_keepsake	v13	del bocadillo	sandwich
+secret_keepsake	v14	de la almohada	pillow
+secret_keepsake	v15	de la llave inglesa de la suerte	lucky wrench
+secret_keepsake	v16	del cómic	comic book
+secret_keepsake	v17	de la calculadora de bolsillo	pocket calculator
+secret_keepsake	v18	del calcetín de la suerte	lucky sock
+secret_keepsake	v19	de la armónica	harmonica
+secret_keepsake	v20	de la libreta	notebook
+secret_keepsake	v21	del yoyó	yo-yo
+secret_keepsake	v22	de la taza de viaje	travel mug
+secret_keepsake	v23	del espejo de bolsillo	pocket mirror
+budget_excuse	v01	Recortes de presupuesto	Budget cuts
+budget_excuse	v02	‹Gene› dice que no	Gene says no
+budget_excuse	v03	El becario se lo gastó en propulsores	The intern spent it on boosters
+budget_excuse	v04	Quizá el año que viene	Maybe next year
+budget_excuse	v05	Primero rellenad el formulario veintisiete be	Fill out form 27B first
+budget_excuse	v06	Nos lo gastamos en aperitivos	We spent it on snacks
+budget_excuse	v07	Se ha perdido el formulario	The form got lost
+budget_excuse	v08	El presupuesto está en órbita	The budget is in orbit
+budget_excuse	v09	Contabilidad está de vacaciones	Accounting is on holiday
+daily_status	v01	los aperitivos aguantan	the snacks are holding up
+daily_status	v02	hoy nadie ha llorado	nobody has cried today
+daily_status	v03	el váter vuelve a funcionar	the toilet works again
+daily_status	v04	solo hemos perdido un guante	we only lost one glove
+daily_status	v05	la moral está alta. Casi siempre	morale is high. Mostly
+daily_status	v06	la ventana está limpia. Por dentro	the window is clean. On the inside
+daily_status	v07	hemos encontrado el calcetín perdido	we found the lost sock
+daily_status	v08	nadie ha tocado el botón rojo	nobody touched the red button

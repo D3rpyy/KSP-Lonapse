@@ -1,4 +1,4 @@
-> Legacy speech-rendering documentation. Shipped dialogue is now authored directly in `GameData/Lonapse/Phrases/Crew` and `Probe`. See [Unified dialogue](../../docs/API.md#one-alternative-per-row). These sources remain as historical/test fixtures.
+> Legacy speech-rendering documentation. Shipped dialogue is now authored directly in `GameData/Lonapse/Phrases/Crew` and `Probe`. See [Unified dialogue](../../docs/API.md#one-alternative-per-row). These sources remain as historical/test fixtures and supply the twelve fixed countdown clips. Other dialogue is synthesized during play.
 
 # loñapsE: the language of the kerbals
 

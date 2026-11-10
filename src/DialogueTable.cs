@@ -5,6 +5,122 @@ using System.Text.RegularExpressions;
 
 namespace Lonapse
 {
+    /// <summary>Paired sentence fragments, expanded once at load time into normal dialogue alternatives.</summary>
+    public static class DialogueChoices
+    {
+        public const int MaxAlternatives = 256;
+        static readonly Regex Variable = new Regex(@"\{([a-z][a-z0-9_]*)\}");
+        static readonly Dictionary<string, List<string[]>> pools = new Dictionary<string, List<string[]>>();
+
+        public static void Configure(IList<string> rows, List<string> errors)
+        {
+            if (errors == null) errors = new List<string>();
+            pools.Clear();
+            if (rows == null) return;
+            bool header = false;
+            var identities = new HashSet<string>();
+            var texts = new HashSet<string>();
+            int number = 0;
+            foreach (string row in rows)
+            {
+                number++;
+                if (string.IsNullOrWhiteSpace(row) || row.TrimStart().StartsWith("#")) continue;
+                if (!header)
+                {
+                    header = true;
+                    if (row.TrimEnd('\r') != "pool\tid\tspanish\tenglish")
+                    { errors.Add("choices: expected pool/id/spanish/english header"); return; }
+                    continue;
+                }
+                string[] fields = row.TrimEnd('\r').Split('\t');
+                if (fields.Length != 4) { errors.Add("choices line " + number + ": expected four columns"); continue; }
+                for (int i = 0; i < fields.Length; i++) fields[i] = fields[i].Trim();
+                string pool = fields[0];
+                if (!Regex.IsMatch(pool, @"^[a-z][a-z0-9_]*$") || Slots.IsReserved(pool) || !PhraseTable.IsKey(fields[1])
+                    || fields[2].Length == 0 || fields[3].Length == 0 || fields[2].Contains("|") || fields[3].Contains("|"))
+                { errors.Add("choices line " + number + ": invalid name or paired text"); continue; }
+                var variables = new List<HashSet<string>>();
+                bool valid = true;
+                foreach (string text in new[] { fields[2], fields[3] })
+                {
+                    var keys = new HashSet<string>();
+                    foreach (Match match in Variable.Matches(text))
+                    {
+                        string key = match.Groups[1].Value;
+                        keys.Add(key);
+                        if (!Slots.IsReserved(key)) valid = false;
+                    }
+                    if (Variable.Replace(text, "").IndexOfAny(new[] { '{', '}' }) >= 0) valid = false;
+                    variables.Add(keys);
+                }
+                if (!valid || !variables[0].SetEquals(variables[1]))
+                { errors.Add("choices line " + number + ": fragments need matching flight variables and cannot reference other pools"); continue; }
+                if (!identities.Add(pool + ":" + fields[1]) || !texts.Add(pool + ":" + fields[3]))
+                { errors.Add("choices line " + number + ": duplicate identity or English choice"); continue; }
+                List<string[]> choices;
+                if (!pools.TryGetValue(pool, out choices)) pools[pool] = choices = new List<string[]>();
+                choices.Add(new[] { fields[2], fields[3] });
+            }
+            if (!header) errors.Add("choices: expected pool/id/spanish/english header");
+        }
+
+        public static IList<string> ExpandRows(IList<string> rows, string where, List<string> errors)
+        {
+            var expanded = new List<string>();
+            int id = -1, es = -1, en = -1, width = 0, number = 0;
+            foreach (string row in rows)
+            {
+                number++;
+                if (string.IsNullOrWhiteSpace(row) || row.TrimStart().StartsWith("#")) { expanded.Add(row); continue; }
+                string[] fields = row.Split('\t');
+                if (width == 0)
+                {
+                    width = fields.Length;
+                    id = Array.IndexOf(fields, "id"); es = Array.IndexOf(fields, "spanish"); en = Array.IndexOf(fields, "english");
+                    expanded.Add(row); continue;
+                }
+                if (fields.Length != width || id < 0 || es < 0 || en < 0) { expanded.Add(row); continue; }
+                var used = new List<string>();
+                foreach (Match match in Variable.Matches(fields[es] + fields[en]))
+                {
+                    string key = match.Groups[1].Value;
+                    if (pools.ContainsKey(key) && !used.Contains(key)) used.Add(key);
+                }
+                int count = 1;
+                bool valid = true;
+                foreach (string key in used)
+                {
+                    if (!fields[es].Contains("{" + key + "}") || !fields[en].Contains("{" + key + "}"))
+                    { errors.Add(where + ":" + number + ": phrase choices must occur in both languages"); valid = false; }
+                    if (count > MaxAlternatives / pools[key].Count)
+                    { errors.Add(where + ":" + number + ": too many phrase combinations (limit " + MaxAlternatives + ")"); valid = false; break; }
+                    count *= pools[key].Count;
+                }
+                if (!valid) continue;
+                var alternatives = new List<string[]> { fields };
+                foreach (string key in used)
+                {
+                    var next = new List<string[]>();
+                    foreach (string[] alternative in alternatives)
+                        foreach (string[] choice in pools[key])
+                        {
+                            var copy = (string[])alternative.Clone();
+                            copy[es] = copy[es].Replace("{" + key + "}", choice[0]);
+                            copy[en] = copy[en].Replace("{" + key + "}", choice[1]);
+                            next.Add(copy);
+                        }
+                    alternatives = next;
+                }
+                for (int i = 0; i < alternatives.Count; i++)
+                {
+                    alternatives[i][id] = fields[id] + (i == 0 ? "" : "__choice" + i);
+                    expanded.Add(string.Join("\t", alternatives[i]));
+                }
+            }
+            return expanded;
+        }
+    }
+
     public sealed class DialogueAlternative
     {
         public string Id, Spanish, English, When;
@@ -123,6 +239,7 @@ namespace Lonapse
         public static DialogueTable Parse(IList<string> rows, string where, List<string> errors)
         {
             if (errors == null) errors = new List<string>();
+            rows = DialogueChoices.ExpandRows(rows, where, errors);
             var doc = new DialogueTable(); var lines = new Dictionary<string, DialogueLine>();
             var heads = new Dictionary<string, Dictionary<string, string>>(); var ids = new HashSet<string>();
             Dictionary<string, int> columns = null; int width = 0, number = 0;

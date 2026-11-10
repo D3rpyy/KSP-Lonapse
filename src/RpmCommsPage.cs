@@ -27,6 +27,8 @@ namespace Lonapse
 
         private readonly RpmLine[] lines = new RpmLine[Subtitles.LogCap];
         private string response = string.Empty;
+        private string displayResponse = string.Empty;
+        private RpmUnicodeOverlay unicodeOverlay;
         private int lastVersion = -1, lastLive = -1, lastW = -1, lastH = -1, lastFlags = -1, lastCount = -1;
         private string footerStart, footerStop;
         private int scroll;            // how many of the newest lines are hidden below, 0 shows the newest
@@ -37,9 +39,10 @@ namespace Lonapse
 
         public string ShowComms(int width, int height)
         {
-            if (failed) return response;
+            if (failed) return displayResponse;
             try
             {
+                int monitorWidth = width, monitorHeight = height;
                 if (screenWidth > 0) width = Math.Min(width, screenWidth);
                 if (screenHeight > 0) height = Math.Min(height, screenHeight);
                 LonapseAddon host = LonapseAddon.Instance;
@@ -60,7 +63,7 @@ namespace Lonapse
                 int version = subs != null ? subs.LogVersion : -1;
                 if (version == lastVersion && live == lastLive && flags == lastFlags && width == lastW
                     && height == lastH && cd == lastCount && scroll == lastScroll && ReferenceEquals(subs, lastSource))
-                    return response;
+                    return displayResponse;
 
                 lastVersion = version; lastLive = live; lastFlags = flags; lastW = width; lastH = height; lastCount = cd;
                 lastScroll = scroll;
@@ -79,6 +82,7 @@ namespace Lonapse
                                         out olderHidden);
                 if (flags == 1) olderHidden = false;
                 response = RpmPageText.Pad(page, topRows);
+                displayResponse = unicodeOverlay != null ? unicodeOverlay.SetPage(response, monitorWidth, monitorHeight) : response;
             }
             catch (Exception e)
             {
@@ -86,7 +90,15 @@ namespace Lonapse
                 failed = true;
                 Log.Exception("RPM comms page", e);
             }
-            return response;
+            return displayResponse;
+        }
+
+        public void HandlerReferences(UnityEngine.MonoBehaviour pageHandler, UnityEngine.MonoBehaviour backgroundHandler)
+        {
+            var overlay = backgroundHandler as RpmUnicodeOverlay;
+            if (ReferenceEquals(overlay, unicodeOverlay)) return;
+            unicodeOverlay = overlay;
+            lastVersion = -999;
         }
 
         /// <summary>RPM calls this for a button press while the page is shown (buttonClickMethod in the patch).</summary>

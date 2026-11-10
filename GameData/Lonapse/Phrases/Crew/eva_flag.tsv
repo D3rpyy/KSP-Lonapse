@@ -82,3 +82,167 @@ eva_jet_orbit_path	eva_jet_orbit_path	eva_jet_orbit_path	1	mission_control	eva	r
 eva_jet_orbit_fuel	eva_jet_orbit_fuel	eva_jet_orbit_fuel	1	mission_control	eva	radio			orbit eva_thrusting=1	0	Mochila al {jet} por ciento sobre {here}. Guarda suficiente para volver.	Jetpack at {jet} percent above {here}. Save enough to get back.	calm	chatter	both	any	any	any	any	any	any						
 re_eva_water	re_eva_water	re_eva_water	1	kerbal_a	reply	radio		eva_water*	splashed=1	0	El traje flota. Yo intento parecer profesional.	The suit floats. I'm trying to look professional.	calm	chatter	both	any	any	any	any	any	any						
 re_eva_jet_orbit	re_eva_jet_orbit	re_eva_jet_orbit	1	kerbal_a	reply	radio		eva_jet_orbit*	orbit	0	Recibido. Impulsos cortos y nada de piruetas. Por ahora.	Copy. Short bursts and no flips. For now.	calm	chatter	both	any	any	any	any	any	any						
+eva_check_01	eva_check_01	eva_check_01	1	mission_control	flight.eva_check	radio				0	¿Cómo va la salida?	How's the EVA going?	calm	chatter	m	any	any	any	any	any	any						
+eva_check_01_2	eva_check_01_2	eva_check_01	2	kerbal_a	flight.eva_check	radio				0	Va bien, Control. Disfrutando la vista.	Going well, Control. Enjoying the view.	calm	chatter	both	any	any	any	any	any	any						
+eva_check_01_2__v02	eva_check_01_2	eva_check_01	2	kerbal_a	flight.eva_check	radio				0	Muy bien. Qué vista de {here}.	Very well. Great view of {here}.	calm	chatter	both	any	any	any	any	any	any						
+eva_check_02	eva_check_02	eva_check_02	1	mission_control	flight.eva_check	radio				0	Confirma el estado del traje.	Confirm suit status.	calm	chatter	m	any	any	any	any	any	any						
+eva_check_02_2	eva_check_02_2	eva_check_02	2	kerbal_a	flight.eva_check	radio				0	Traje en verde. Todo bien.	Suit is green. All good.	calm	chatter	both	any	any	any	any	any	any						
+eva_check_s1_1	eva_check_s1_1	eva_check_s1	1	mission_control	flight.eva_check	radio				0	¿Qué tal el traje?	How's the suit?	calm	chatter	m	any	any	any	any	any	any						
+eva_check_s1_2	eva_check_s1_2	eva_check_s1	2	kerbal_a	flight.eva_check	radio				0	El traje va bien.	The suit is fine.	calm	chatter	both	any	any	any	any	any	any						
+eva_check_03	eva_check_03	eva_check_03	1	kerbal_a	flight.eva_check	radio				0	Saliendo de la escotilla.	Leaving the hatch.	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_01	ev_eva_01	ev_eva_01	1	mission_control	flight.eva_check	radio				0	¿Cómo va ahí fuera?	How's it going out there?	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_01_2	ev_eva_01_2	ev_eva_01	2	kerbal_a	flight.eva_check	radio				0	Todo bien. Aquí fuera es enorme.	All good. It's huge out here.	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_02	ev_eva_02	ev_eva_02	1	mission_control	flight.eva_check	radio				0	Revisa el combustible del propulsor.	Check your jetpack fuel.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_03	ev_eva_03	ev_eva_03	1	mission_control	flight.eva_check	radio				0	Recuerda dónde está la escotilla.	Remember where the hatch is.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_04	ev_eva_04	ev_eva_04	1	mission_control	flight.eva_check	radio				0	No te alejes demasiado de la nave.	Don't go too far from the ship.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_04__v02	ev_eva_04	ev_eva_04	1	mission_control	flight.eva_check	radio				0	No te alejes de la {vessel}.	Stay close to {vessel}.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_05	ev_eva_05	ev_eva_05	1	mission_control	flight.eva_check	radio				0	Te seguimos de cerca. Todo bien.	We're watching you closely. All good.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_06_1	ev_eva_06_1	ev_eva_06	1	mission_control	flight.eva_check	radio				0	¿Todo bien por ahí fuera?	All good out there?	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_06_2	ev_eva_06_2	ev_eva_06	2	kerbal_a	flight.eva_check	radio				0	Todo bien. ¡Qué vista!	All good. What a view!	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_06_2__v02	ev_eva_06_2	ev_eva_06	2	kerbal_a	flight.eva_check	radio				0	Todo bien. ¡Qué vista de {here}!	Fine. What a view of {here}!	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_07_1	ev_eva_07_1	ev_eva_07	1	mission_control	flight.eva_check	radio				0	¿Te queda propulsor?	Got propellant left?	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_07_2	ev_eva_07_2	ev_eva_07	2	kerbal_a	flight.eva_check	radio				0	De sobra, control.	Plenty, control.	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_08_1	ev_eva_08_1	ev_eva_08	1	kerbal_a	flight.eva_check	radio				0	Control, estoy fuera.	Control, I'm outside.	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_08_2	ev_eva_08_2	ev_eva_08	2	mission_control	flight.eva_check	radio				0	Recibido. Muévete con calma.	Copy. Move calmly.	calm	chatter	m	any	any	any	any	any	any						
+ev_eva_09	ev_eva_09	ev_eva_09	1	kerbal_a	flight.eva_check	radio				0	El traje funciona perfecto.	The suit works perfectly.	calm	chatter	both	any	any	any	any	any	any						
+ev_eva_10	ev_eva_10	ev_eva_10	1	kerbal_a	flight.eva_check	radio				0	Me encanta estar aquí fuera.	I love being out here.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_01_1	ev_evafall_01_1	ev_evafall_01	1	kerbal_a	flight.eva_fall	radio				0	¡Uy! ¡Estoy bien!	Whoa! I'm okay!	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_01_2	ev_evafall_01_2	ev_evafall_01	2	mission_control	flight.eva_fall	radio				0	Te hemos visto. Con cuidado.	We saw that. Careful.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_02_1	ev_evafall_02_1	ev_evafall_02	1	kerbal_a	flight.eva_fall	radio				0	¡Ay! El suelo está duro.	Ow! The ground is hard.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_02_1__v02	ev_evafall_02_1	ev_evafall_02	1	kerbal_a	flight.eva_fall	radio				0	¡Ay! El suelo de {here} está duro.	Ow! Hard ground on {here}.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_02_2	ev_evafall_02_2	ev_evafall_02	2	mission_control	flight.eva_fall	radio				0	Levántate despacio.	Get up slowly.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_03_1	ev_evafall_03_1	ev_evafall_03	1	mission_control	flight.eva_fall	radio				0	¿Estás bien? Eso ha sonado fuerte.	Are you okay? That sounded hard.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_03_2	ev_evafall_03_2	ev_evafall_03	2	kerbal_a	flight.eva_fall	radio				0	Sí. Solo mi orgullo.	Yes. Just my pride.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_04_1	ev_evafall_04_1	ev_evafall_04	1	kerbal_a	flight.eva_fall	radio				0	¡Lo hice a propósito!	I meant to do that!	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_04_2	ev_evafall_04_2	ev_evafall_04	2	mission_control	flight.eva_fall	radio				0	Claro que sí.	Of course you did.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_05_1	ev_evafall_05_1	ev_evafall_05	1	kerbal_a	flight.eva_fall	radio				0	¿Alguien ha visto eso?	Did anyone see that?	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_05_2	ev_evafall_05_2	ev_evafall_05	2	mission_control	flight.eva_fall	radio				0	Todo el centro de control.	All of Mission Control.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_06_1	ev_evafall_06_1	ev_evafall_06	1	kerbal_a	flight.eva_fall	radio				0	Todo bien. Casco intacto.	All good. Helmet intact.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_06_2	ev_evafall_06_2	ev_evafall_06	2	mission_control	flight.eva_fall	radio				0	Bien. Sigue.	Good. Carry on.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_07_1	ev_evafall_07_1	ev_evafall_07	1	mission_control	flight.eva_fall	radio				0	Kerbal en el suelo. ¿Nos copias?	Kerbal down. Do you copy?	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_07_2	ev_evafall_07_2	ev_evafall_07	2	kerbal_a	flight.eva_fall	radio				0	Copio. Me levanto.	Copy. Getting up.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_08_1	ev_evafall_08_1	ev_evafall_08	1	kerbal_a	flight.eva_fall	radio				0	¡Ups!	Oops!	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_08_2	ev_evafall_08_2	ev_evafall_08	2	mission_control	flight.eva_fall	radio				0	Revisa el traje.	Check your suit.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_09_1	ev_evafall_09_1	ev_evafall_09	1	kerbal_a	flight.eva_fall	radio				0	Me he caído. Otra vez.	I fell. Again.	calm	chatter	both	any	any	any	any	any	any						
+ev_evafall_09_2	ev_evafall_09_2	ev_evafall_09	2	mission_control	flight.eva_fall	radio				0	Lo estamos contando.	We're keeping count.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_10_1	ev_evafall_10_1	ev_evafall_10	1	mission_control	flight.eva_fall	radio				0	Bonito aterrizaje. Un diez.	Nice landing. A ten.	calm	chatter	m	any	any	any	any	any	any						
+ev_evafall_10_2	ev_evafall_10_2	ev_evafall_10	2	kerbal_a	flight.eva_fall	radio				0	Gracias, gracias.	Thank you, thank you.	calm	chatter	both	any	any	any	any	any	any						
+em_098_1	em_098_1	em_098	1	kerbal_a	flight.eva_fall	radio				0	¡Ay! Estoy bien.	Ouch! I'm fine.	calm	chatter	both	any	any	any	any	any	any						
+em_098_2	em_098_2	em_098	2	mission_control	flight.eva_fall	radio				0	Lo hemos visto. Cuidado.	We saw that. Careful.	calm	chatter	m	any	any	any	any	any	any						
+em_099	em_099	em_099	1	kerbal_a	flight.eva_fall	radio				0	El suelo me ha atacado.	The ground attacked me.	calm	chatter	both	any	any	any	any	any	any						
+em_100_1	em_100_1	em_100	1	kerbal_a	flight.eva_fall	radio				0	Nadie ha visto eso.	Nobody saw that.	calm	chatter	both	any	any	any	any	any	any						
+em_100_2	em_100_2	em_100	2	mission_control	flight.eva_fall	radio				0	Lo hemos visto todos.	We all saw that.	calm	chatter	m	any	any	any	any	any	any						
+em_101	em_101	em_101	1	kerbal_a	flight.eva_fall	radio				0	Me he caído. Con estilo.	I fell. With style.	calm	chatter	both	any	any	any	any	any	any						
+em_102_1	em_102_1	em_102	1	kerbal_a	flight.eva_fall	radio				0	¡Uf! Este suelo es traicionero.	Oof! This ground is treacherous.	calm	chatter	both	any	any	any	any	any	any						
+em_102_1__v02	em_102_1	em_102	1	kerbal_a	flight.eva_fall	radio				0	¡Uf! El suelo de {here} es traicionero.	Oof! Sneaky ground on {here}.	calm	chatter	both	any	any	any	any	any	any						
+em_102_2	em_102_2	em_102	2	mission_control	flight.eva_fall	radio				0	Despacio. Paso a paso.	Slowly. Step by step.	calm	chatter	m	any	any	any	any	any	any						
+chat_fflag_1	chat_fflag_1	chat_fflag	1	kerbal_a	chat	auto	flag			0	{other}, mira. Bandera plantada.	{other}, look. Flag planted.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflag_1__v02	chat_fflag_1	chat_fflag	1	kerbal_a	chat	auto	flag			0	{other}, ¿qué te parece la bandera?	{other}, what do you think of the flag?	calm	chatter	both	any	any	any	any	any	any						
+chat_fflag_2	chat_fflag_2	chat_fflag	2	kerbal_b	chat	auto	flag			0	Está torcida.	It's crooked.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflag_2__v02	chat_fflag_2	chat_fflag	2	kerbal_b	chat	auto	flag			0	Preciosa. Un poco torcida, pero preciosa.	Beautiful. A bit crooked, but beautiful.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflag_3	chat_fflag_3	chat_fflag	3	kerbal_a	chat	auto	flag			0	Es el suelo, que está torcido.	It's the ground that's crooked.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflag_3__v02	chat_fflag_3	chat_fflag	3	kerbal_a	chat	auto	flag			0	Es estilo. No lo entenderías.	It's style. You wouldn't understand.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_1	chat_fflagname_1	chat_fflagname	1	kerbal_a	chat	auto	flag			0	La he llamado {flag}.	I named it {flag}.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_1__v02	chat_fflagname_1	chat_fflagname	1	kerbal_a	chat	auto	flag			0	{other}, esta bandera se llama {flag}.	{other}, this flag is called {flag}.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_2	chat_fflagname_2	chat_fflagname	2	kerbal_b	chat	auto	flag			0	¿{flag}? Bonito nombre.	{flag}? Nice name.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_2__v02	chat_fflagname_2	chat_fflagname	2	kerbal_b	chat	auto	flag			0	¿Y por qué {flag}?	And why {flag}?	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_3	chat_fflagname_3	chat_fflagname	3	kerbal_a	chat	auto	flag			0	Me costó tres días pensarlo.	Took me three days to think of it.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagname_3__v02	chat_fflagname_3	chat_fflagname	3	kerbal_a	chat	auto	flag			0	Sonaba importante.	It sounded important.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_1	chat_fflagbody_1	chat_fflagbody	1	kerbal_a	chat	auto	flag		landed at_home=0	0	Una bandera en {here}. Esto es historia.	A flag on {here}. This is history.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_1__v02	chat_fflagbody_1	chat_fflagbody	1	kerbal_a	chat	auto	flag		landed at_home=0	0	{other}, acabamos de reclamar {here}.	{other}, we just claimed {here}.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_2	chat_fflagbody_2	chat_fflagbody	2	kerbal_b	chat	auto	flag			0	Que alguien haga una foto.	Someone take a picture.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_2__v02	chat_fflagbody_2	chat_fflagbody	2	kerbal_b	chat	auto	flag			0	Historia y polvo. Mucho polvo.	History and dust. Lots of dust.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_3	chat_fflagbody_3	chat_fflagbody	3	kerbal_a	chat	auto	flag			0	Yo salgo en la foto.	I'm in the picture.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbody_3__v02	chat_fflagbody_3	chat_fflagbody	3	kerbal_a	chat	auto	flag			0	Tú sujeta la bandera, yo poso.	You hold the flag, I'll pose.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_1	chat_fflagbiome_1	chat_fflagbiome	1	kerbal_a	chat	auto	flag		landed	0	{other}, bandera en {biome}. ¿Buen sitio?	{other}, flag in {biome}. Good spot?	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_1__v02	chat_fflagbiome_1	chat_fflagbiome	1	kerbal_a	chat	auto	flag		landed	0	{other}, he elegido {biome} para la bandera.	{other}, I picked {biome} for the flag.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_2	chat_fflagbiome_2	chat_fflagbiome	2	kerbal_b	chat	auto	flag			0	Perfecto. Aquí no molesta a nadie.	Perfect. It's not bothering anyone here.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_2__v02	chat_fflagbiome_2	chat_fflagbiome	2	kerbal_b	chat	auto	flag			0	Buena elección. Bueno, la única elección.	Good choice. Well, the only choice.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_3	chat_fflagbiome_3	chat_fflagbiome	3	kerbal_a	chat	auto	flag			0	Eso pensaba yo.	That's what I thought.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagbiome_3__v02	chat_fflagbiome_3	chat_fflagbiome	3	kerbal_a	chat	auto	flag			0	Exacto. Lo dicho.	Exactly. Like I said.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_1	chat_fflaghome_1	chat_fflaghome	1	kerbal_a	chat	auto	flag		at_home=1	0	Bandera plantada. En casa.	Flag planted. At home.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_1__v02	chat_fflaghome_1	chat_fflaghome	1	kerbal_a	chat	auto	flag		at_home=1	0	{other}, he plantado una bandera en {here}.	{other}, I planted a flag on {here}.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_2	chat_fflaghome_2	chat_fflaghome	2	kerbal_b	chat	auto	flag			0	¿En casa? Si esto ya era nuestro.	At home? This was already ours.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_2__v02	chat_fflaghome_2	chat_fflaghome	2	kerbal_b	chat	auto	flag			0	Muy patriótico. El jardinero no estará contento.	Very patriotic. The gardener won't be happy.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_3	chat_fflaghome_3	chat_fflaghome	3	kerbal_a	chat	auto	flag			0	Ahora es todavía más nuestro.	Now it's even more ours.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflaghome_3__v02	chat_fflaghome_3	chat_fflaghome	3	kerbal_a	chat	auto	flag			0	Que se aguante. Es por la ciencia.	Too bad. It's for science.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_1	chat_fflagnolink_1	chat_fflagnolink	1	kerbal_a	chat	auto	flag		link=0	0	{other}, bandera plantada. Y nadie en casa lo sabe.	{other}, flag planted. And nobody at home knows.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_1__v02	chat_fflagnolink_1	chat_fflagnolink	1	kerbal_a	chat	auto	flag		link=0	0	{other}, sin señal con casa. Tendrás que ser mi testigo.	{other}, no signal home. You'll have to be my witness.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_2	chat_fflagnolink_2	chat_fflagnolink	2	kerbal_b	chat	auto	flag			0	Yo lo he visto. Lo juro.	I saw it. I swear.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_2__v02	chat_fflagnolink_2	chat_fflagnolink	2	kerbal_b	chat	auto	flag			0	Testigo oficial. Lo apunto.	Official witness. Writing it down.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_3	chat_fflagnolink_3	chat_fflagnolink	3	kerbal_a	chat	auto	flag			0	Gracias. Se lo contamos al volver.	Thanks. We'll tell them when we're back.	calm	chatter	both	any	any	any	any	any	any						
+chat_fflagnolink_3__v02	chat_fflagnolink_3	chat_fflagnolink	3	kerbal_a	chat	auto	flag			0	Bien. Que conste en acta.	Good. Put it on the record.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsolo_1	chat_fsolo_1	chat_fsolo	1	kerbal_a	chat	auto	flag		link=0	0	Bandera plantada. No me oye nadie, pero queda muy bien.	Flag planted. Nobody can hear me, but it looks great.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsolo_1__v02	chat_fsolo_1	chat_fsolo	1	kerbal_a	chat	auto	flag		link=0	0	Sin señal con casa. Bueno, la bandera la planto igual.	No signal home. Well, I'm planting the flag anyway.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsolo_1__v03	chat_fsolo_1	chat_fsolo	1	kerbal_a	chat	auto	flag		link=0	0	Bandera plantada. Buen trabajo, yo.	Flag planted. Good job, me.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsolo_1__v04	chat_fsolo_1	chat_fsolo	1	kerbal_a	chat	auto	flag		link=0	0	Esta bandera es para mí. Bueno, para todos. Pero nadie lo sabe todavía.	This flag is for me. Well, for everyone. But nobody knows yet.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsoloname_1	chat_fsoloname_1	chat_fsoloname	1	kerbal_a	chat	auto	flag		link=0	0	Bandera {flag}, plantada. Bienvenida al mundo.	Flag {flag}, planted. Welcome to the world.	calm	chatter	both	any	any	any	any	any	any						
+chat_fsoloname_1__v02	chat_fsoloname_1	chat_fsoloname	1	kerbal_a	chat	auto	flag		link=0	0	Te llamas {flag}. Un placer. Soy tu kerbal.	Your name is {flag}. A pleasure. I'm your kerbal.	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_1	chat_evacheck_1	chat_evacheck	1	kerbal_a	chat	radio			on_eva=1	0	{other}, ¿me oyes?	{other}, can you hear me?	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_1__v02	chat_evacheck_1	chat_evacheck	1	kerbal_a	chat	radio			on_eva=1	0	{other}, prueba de radio. ¿Me recibes?	{other}, radio check. Do you copy?	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_2	chat_evacheck_2	chat_evacheck	2	kerbal_b	chat	radio				0	Alto y claro. Demasiado claro.	Loud and clear. Too clear.	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_2__v02	chat_evacheck_2	chat_evacheck	2	kerbal_b	chat	radio				0	Te oigo. Y te veo. Deja de saludar.	I hear you. And I see you. Stop waving.	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_3	chat_evacheck_3	chat_evacheck	3	kerbal_a	chat	radio				0	Perfecto. Solo quería hablar con alguien.	Great. I just wanted to talk to someone.	calm	chatter	both	any	any	any	any	any	any						
+chat_evacheck_3__v02	chat_evacheck_3	chat_evacheck	3	kerbal_a	chat	radio				0	Vale. Era para probar el botón.	Okay. I was testing the button.	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_1	chat_evapair_1	chat_evapair	1	kerbal_a	chat	radio			on_eva=1 pair_m>=30	0	{other}, estás a {pair_m} metros. ¿Te has perdido?	{other}, you're {pair_m} meters away. Are you lost?	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_1__v02	chat_evapair_1	chat_evapair	1	kerbal_a	chat	radio			on_eva=1 pair_m>=30	0	{other}, te veo muy lejos. Unos {pair_m} metros.	{other}, you look far away. About {pair_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_2	chat_evapair_2	chat_evapair	2	kerbal_b	chat	radio				0	No me he perdido. Estoy explorando.	I'm not lost. I'm exploring.	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_2__v02	chat_evapair_2	chat_evapair	2	kerbal_b	chat	radio				0	Es que aquí hay mejores vistas.	The view is better over here.	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_3	chat_evapair_3	chat_evapair	3	kerbal_a	chat	radio				0	Vale. Pero vuelve antes de la cena.	Okay. But be back before dinner.	calm	chatter	both	any	any	any	any	any	any						
+chat_evapair_3__v02	chat_evapair_3	chat_evapair	3	kerbal_a	chat	radio				0	Pues manda una foto.	Then send a picture.	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_1	chat_evajet_1	chat_evajet	1	kerbal_a	chat	radio			on_eva=1 jet<30	0	{other}, me queda el {jet} por ciento de propulsor.	{other}, I have {jet} percent propellant left.	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_1__v02	chat_evajet_1	chat_evajet	1	kerbal_a	chat	radio			on_eva=1 jet<30	0	Mi mochila está al {jet} por ciento. ¿Es mucho?	My jetpack is at {jet} percent. Is that a lot?	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_2	chat_evajet_2	chat_evajet	2	kerbal_b	chat	radio				0	Eso es poco. Deja de hacer piruetas.	That's not much. Stop doing flips.	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_2__v02	chat_evajet_2	chat_evajet	2	kerbal_b	chat	radio				0	No mucho. Nada de piruetas, por si acaso.	Not really. No flips, just in case.	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_3	chat_evajet_3	chat_evajet	3	kerbal_a	chat	radio				0	Vale. Pero la última fue preciosa.	Okay. But the last one was beautiful.	calm	chatter	both	any	any	any	any	any	any						
+chat_evajet_3__v02	chat_evajet_3	chat_evajet	3	kerbal_a	chat	radio				0	Vale, vale. Ya vuelvo.	Okay, okay. Coming back.	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_1	chat_evarock_1	chat_evarock	1	kerbal_a	chat	radio			on_eva=1 landed	0	{other}, mira esta piedra.	{other}, look at this rock.	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_1__v02	chat_evarock_1	chat_evarock	1	kerbal_a	chat	radio			on_eva=1 landed	0	{other}, ven a ver esto. Es una piedra.	{other}, come see this. It's a rock.	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_2	chat_evarock_2	chat_evarock	2	kerbal_b	chat	radio				0	Es igual que las otras mil piedras.	It's the same as the other thousand rocks.	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_2__v02	chat_evarock_2	chat_evarock	2	kerbal_b	chat	radio				0	Muy bonita. ¿Y qué tiene de especial?	Very nice. What's special about it?	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_3	chat_evarock_3	chat_evarock	3	kerbal_a	chat	radio				0	Que esta es mía.	This one is mine.	calm	chatter	both	any	any	any	any	any	any						
+chat_evarock_3__v02	chat_evarock_3	chat_evarock	3	kerbal_a	chat	radio				0	Que la he encontrado yo.	I found it.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_1	chat_evahere_1	chat_evahere	1	kerbal_a	chat	radio			on_eva=1 landed at_home=0	0	{other}, estamos de pie en {here}. ¿Te das cuenta?	{other}, we're standing on {here}. Do you realize?	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_1__v02	chat_evahere_1	chat_evahere	1	kerbal_a	chat	radio			on_eva=1 landed at_home=0	0	¿Te lo imaginas? Paseando por {here}.	Can you imagine? Walking on {here}.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_2	chat_evahere_2	chat_evahere	2	kerbal_b	chat	radio				0	Sí. Y se me ha metido polvo en el traje.	Yes. And I got dust in my suit.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_2__v02	chat_evahere_2	chat_evahere	2	kerbal_b	chat	radio				0	Lo sé. Mi madre no se lo va a creer.	I know. My mom won't believe it.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_3	chat_evahere_3	chat_evahere	3	kerbal_a	chat	radio				0	Esto va a salir en los libros.	This is going in the books.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahere_3__v02	chat_evahere_3	chat_evahere	3	kerbal_a	chat	radio				0	Hay que hacerse una foto.	We have to take a picture.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahome_1	chat_evahome_1	chat_evahome	1	kerbal_a	chat	radio			on_eva=1 landed at_home=1	0	Un paseo por {body}. Qué aventura.	A walk on {body}. What an adventure.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahome_1__v02	chat_evahome_1	chat_evahome	1	kerbal_a	chat	radio			on_eva=1 landed at_home=1	0	{other}, ¿de verdad hemos salido para esto?	{other}, did we really go outside for this?	calm	chatter	both	any	any	any	any	any	any						
+chat_evahome_2	chat_evahome_2	chat_evahome	2	kerbal_b	chat	radio				0	Desde aquí se ve el centro espacial. Hola, mamá.	You can see the space center from here. Hi, Mom.	calm	chatter	both	any	any	any	any	any	any						
+chat_evahome_2__v02	chat_evahome_2	chat_evahome	2	kerbal_b	chat	radio				0	El médico dijo que había que tomar el aire.	The doctor said we need fresh air.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_1	chat_evaorbit_1	chat_evaorbit	1	kerbal_a	chat	radio			on_eva=1 orbit	0	{other}, ¿te estás agarrando a algo?	{other}, are you holding on to something?	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_1__v02	chat_evaorbit_1	chat_evaorbit	1	kerbal_a	chat	radio			on_eva=1 orbit	0	{other}, no te sueltes, ¿eh?	{other}, don't let go, okay?	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_2	chat_evaorbit_2	chat_evaorbit	2	kerbal_b	chat	radio				0	A la nave. Y a mi dignidad.	To the ship. And to my dignity.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_2__v02	chat_evaorbit_2	chat_evaorbit	2	kerbal_b	chat	radio				0	No pensaba hacerlo. Pero ahora lo estoy pensando.	I wasn't going to. But now I'm thinking about it.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_3	chat_evaorbit_3	chat_evaorbit	3	kerbal_a	chat	radio				0	Bien. La caída es muy larga.	Good. It's a long way down.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaorbit_3__v02	chat_evaorbit_3	chat_evaorbit	3	kerbal_a	chat	radio				0	Ni se te ocurra. Nadie quiere ir a buscarte.	Don't you dare. Nobody wants to go get you.	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_1	chat_evatime_1	chat_evatime	1	kerbal_a	chat	radio			on_eva=1 eva_mins>=10	0	Llevamos {eva_mins} minutos fuera.	We've been out {eva_mins} minutes.	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_1__v02	chat_evatime_1	chat_evatime	1	kerbal_a	chat	radio			on_eva=1 eva_mins>=10	0	¿Sabes que llevamos {eva_mins} minutos aquí fuera?	Do you know we've been out here {eva_mins} minutes?	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_2	chat_evatime_2	chat_evatime	2	kerbal_b	chat	radio				0	¿Solo? Parece una hora.	Only? Feels like an hour.	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_2__v02	chat_evatime_2	chat_evatime	2	kerbal_b	chat	radio				0	Y todavía no he encontrado el baño.	And I still haven't found the bathroom.	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_3	chat_evatime_3	chat_evatime	3	kerbal_a	chat	radio				0	Aguanta un poco más.	Hold on a bit longer.	calm	chatter	both	any	any	any	any	any	any						
+chat_evatime_3__v02	chat_evatime_3	chat_evatime	3	kerbal_a	chat	radio				0	Volvemos pronto. Más o menos.	We're going back soon. More or less.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_1	chat_evaship_1	chat_evaship	1	kerbal_a	chat	radio			on_eva=1 ship_m>=40	0	{other}, ¿dónde está {vessel}?	{other}, where's {vessel}?	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_1__v02	chat_evaship_1	chat_evaship	1	kerbal_a	chat	radio			on_eva=1 ship_m>=40	0	{other}, ¿ves la nave desde ahí?	{other}, can you see the ship from there?	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_2	chat_evaship_2	chat_evaship	2	kerbal_b	chat	radio				0	A unos {ship_m} metros. La grande y brillante.	About {ship_m} meters away. The big shiny one.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_2__v02	chat_evaship_2	chat_evaship	2	kerbal_b	chat	radio				0	Sí. Está a {ship_m} metros. No se ha ido sin nosotros.	Yes. It's {ship_m} meters away. It didn't leave without us.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_3	chat_evaship_3	chat_evaship	3	kerbal_a	chat	radio				0	Menos mal. Ya me veía viviendo aquí.	Phew. I already saw myself living here.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaship_3__v02	chat_evaship_3	chat_evaship	3	kerbal_a	chat	radio				0	Bien. No quiero volver andando a casa.	Good. I don't want to walk home.	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_1	chat_evadim_1	chat_evadim	1	kerbal_a	chat	radio			on_eva=1 trait_a=dim	0	{other}, he pulsado un botón del traje.	{other}, I pressed a button on my suit.	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_1__v02	chat_evadim_1	chat_evadim	1	kerbal_a	chat	radio			on_eva=1 trait_a=dim	0	{other}, mi casco hace un ruido raro.	{other}, my helmet makes a weird noise.	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_2	chat_evadim_2	chat_evadim	2	kerbal_b	chat	radio				0	¿Y ahora qué pasa?	And what's happening now?	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_2__v02	chat_evadim_2	chat_evadim	2	kerbal_b	chat	radio				0	Vale. ¿Y qué ha pasado?	Okay. And what happened?	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_3	chat_evadim_3	chat_evadim	3	kerbal_a	chat	radio				0	Nada. Creo. Pero huele a tostada.	Nothing. I think. But it smells like toast.	calm	chatter	both	any	any	any	any	any	any						
+chat_evadim_3__v02	chat_evadim_3	chat_evadim	3	kerbal_a	chat	radio				0	No lo sé. Pero ahora tengo música.	I don't know. But now I have music.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaday_1	chat_evaday_1	chat_evaday	1	kerbal_a	chat	radio			on_eva=1 day>=3	0	Día {day} de la misión y por fin fuera.	Mission day {day} and finally outside.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaday_1__v02	chat_evaday_1	chat_evaday	1	kerbal_a	chat	radio			on_eva=1 day>=3	0	{other}, día {day} y por fin respiramos aire de traje.	{other}, day {day} and finally we breathe suit air.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaday_2	chat_evaday_2	chat_evaday	2	kerbal_b	chat	radio				0	Huele a goma. Me encanta.	Smells like rubber. I love it.	calm	chatter	both	any	any	any	any	any	any						
+chat_evaday_2__v02	chat_evaday_2	chat_evaday	2	kerbal_b	chat	radio				0	Mejor que el aire de la cabina, seguro.	Better than the cabin air, for sure.	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_1	chat_evabrave_1	chat_evabrave	1	kerbal_a	chat	radio			on_eva=1 landed trait_a=brave trait_b=nervous	0	{other}, voy a dar un salto enorme. Mira.	{other}, I'm going to do a huge jump. Watch.	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_1__v02	chat_evabrave_1	chat_evabrave	1	kerbal_a	chat	radio			on_eva=1 landed trait_a=brave trait_b=nervous	0	{other}, ¿una carrera hasta esa roca?	{other}, race you to that rock?	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_2	chat_evabrave_2	chat_evabrave	2	kerbal_b	chat	radio				0	Por favor, no. Prefiero mirar desde aquí.	Please don't. I'd rather watch from here.	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_2__v02	chat_evabrave_2	chat_evabrave	2	kerbal_b	chat	radio				0	Prefiero quedarme aquí, gracias. Sin moverme.	I'd rather stay here, thanks. Not moving.	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_3	chat_evabrave_3	chat_evabrave	3	kerbal_a	chat	radio				0	Tú te lo pierdes.	Your loss.	calm	chatter	both	any	any	any	any	any	any						
+chat_evabrave_3__v02	chat_evabrave_3	chat_evabrave	3	kerbal_a	chat	radio				0	Como quieras. Te mando una postal.	Suit yourself. I'll send you a postcard.	calm	chatter	both	any	any	any	any	any	any						

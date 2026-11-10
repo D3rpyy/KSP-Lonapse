@@ -196,6 +196,38 @@ Use `{body}` for the event's planetary body, `{here}` for the vessel's body, and
 names. Values such as `{ec}`, `{fuel}`, `{height_m}`, `{sci}` and `{funds}` come from the flight. If a value is
 missing, an alternative that needs it cannot play. Your mod's values use the `x_` prefix.
 
+### Reusable phrase choices
+
+Repeated sentence fragments live in `GameData/Lonapse/Phrases/choices.tsv`. Each pool has a readable name and
+one paired Spanish/English choice per row. For example, the `hiccup_remedy` pool contains remedies such as
+`beber boca abajo` / `drinking upside down` and `pensar en los impuestos` / `thinking about taxes`.
+
+The file has four columns, in this order.
+
+```text
+pool             id    spanish                    english
+hiccup_remedy    v01   beber boca abajo           drinking upside down
+hiccup_remedy    v02   pensar en los impuestos    thinking about taxes
+```
+
+Use actual tabs between the columns. A dialogue template can then use `Hold your breath. Or try {hiccup_remedy}.`
+with the spoken Spanish `Aguanta la respiración. O prueba a {hiccup_remedy}.`. The same pool must appear in both
+languages. Repeated occurrences of a pool in one line use the same choice. The words around a pool should fit
+every choice grammatically, so fragments can include an article or preposition when Spanish needs one.
+
+Choices expand into ordinary alternatives when the tables load. The existing line selection and repetition
+memory choose among the complete alternatives, and Spanish speech stays paired with the English subtitle.
+Different lines select their alternatives independently. A pool does not imply a shared choice across an exchange.
+
+Fragments may contain normal flight variables, such as `{body}`, but cannot reference other phrase pools.
+Flight variables still need to be available for the resulting alternative to play. Pool names cannot replace
+reserved flight variables or use the `x_` prefix. Unknown pools, mismatched language variables and duplicate
+choices are errors. Each authored alternative can expand into at most 256 combinations.
+
+The shipped category minimum is **200 distinct sentence templates per Crew or Probe category**, measured before
+pool expansion. Pool choices and their combinations do not count as extra authored templates.
+Run `python3 tools/validate_dialogue.py` to check the templates, pools and original dialogue identities.
+
 ## Triggers
 
 The trigger tells Lonapse when to ask for a line. It keeps that event's timing, queue rules and cooldowns.

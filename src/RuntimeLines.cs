@@ -1088,22 +1088,27 @@ namespace Lonapse
         static readonly string[] RomanValues = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
         /// <summary>A vessel name a voice can say: "Mun Lander II" gives "Mun Lander 2" (a digit is said in Spanish by
-        /// the voice), " Debris" and brackets go. Null for a name too long to say in a line (over 4 words or 28 letters)
-        /// and for a name with letters outside the Latin alphabet: the Spanish voice cannot say those.</summary>
+        /// the voice), " Debris" and brackets go. No length limit. Null for an empty name or one whose letters
+        /// cannot be respelled for the Spanish voice.</summary>
         public static string VesselSpeakable(string vesselName)
         {
-            string n = CleanName(vesselName);
-            if (string.IsNullOrEmpty(n) || !LatinOnly(n)) return null;
+            return SpeakableName(vesselName, false);
+        }
+
+        static string SpeakableName(string name, bool limitLength)
+        {
+            string n = CleanName(name);
+            if (string.IsNullOrEmpty(n) || !LatinOnly(RuntimeSpeech.Respell(n))) return null;
             n = Regex.Replace(n, @"\s*[\(\[].*?[\)\]]\s*", " ").Trim();
             if (n.EndsWith(" Debris", StringComparison.OrdinalIgnoreCase)) n = n.Substring(0, n.Length - 7).Trim();
             string[] words = n.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (words.Length == 0 || words.Length > 4 || n.Length > 28) return null;
+            if (words.Length == 0 || (limitLength && (words.Length > 4 || n.Length > 28))) return null;
             for (int i = 1; i < words.Length; i++)
                 if (Roman.IsMatch(words[i])) words[i] = (Array.IndexOf(RomanValues, words[i]) + 1).ToString(CultureInfo.InvariantCulture);
             var sb = new StringBuilder();
             foreach (string w in words)
             {
-                string clean = Regex.Replace(w, @"[^\p{L}\p{Nd}\-']", "");
+                string clean = Regex.Replace(w, @"[^\p{L}\p{Nd}\u3007\uD800-\uDFFF\-']", "");
                 if (clean.Length == 0) continue;
                 if (sb.Length > 0) sb.Append(' ');
                 sb.Append(clean);
@@ -1111,20 +1116,20 @@ namespace Lonapse
             return sb.Length > 0 ? sb.ToString() : null;
         }
 
-        /// <summary>A biome name a voice can say, as VesselSpeakable (so also not in another alphabet, as with KSP in
-        /// Chinese, Japanese or Russian). Null for a localization tag a planet pack left untranslated (#LOC_...).</summary>
+        /// <summary>A biome name a voice can say, as VesselSpeakable (Latin, Russian Cyrillic or supported Han).
+        /// Limited to 4 words and 28 characters. Null for a localization tag left untranslated (#LOC_...).</summary>
         public static string BiomeSpeakable(string biomeName)
         {
             string n = CleanName(biomeName);
             if (string.IsNullOrEmpty(n) || n.StartsWith("#", StringComparison.Ordinal)) return null;
-            return VesselSpeakable(n);
+            return SpeakableName(n, true);
         }
 
         /// <summary>Every letter is Latin (Basic Latin up to Latin Extended-B, so accents pass).</summary>
         public static bool LatinOnly(string text)
         {
             foreach (char c in text ?? "")
-                if (char.IsLetter(c) && c > '\u024F') return false;
+                if (char.IsSurrogate(c) || (char.IsLetter(c) && c > '\u024F')) return false;
             return true;
         }
 

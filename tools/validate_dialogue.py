@@ -13,7 +13,9 @@ CONTRACT_FIELDS = ['id', 'scene', 'seq', 'event', 'role', 'core', 'beep', 'phase
 
 
 def validate():
-    from unified_dialogue import load, legacy_view, COLUMNS
+    from unified_dialogue import load, legacy_view, COLUMNS, VARIABLE, reserved_variables
+    import csv
+    reserved = reserved_variables()
     errors, entries, categories, all_ids, line_ids, references = [], {}, 0, set(), set(), []
     paths = []
     for folder in ('Crew', 'Probe'):
@@ -24,6 +26,12 @@ def validate():
     alternatives = 0
     for path in paths:
         categories += 1
+        if path.parent.name in ('Crew', 'Probe'):
+            with path.open(encoding='utf-8') as stream:
+                authored = list(csv.DictReader((row for row in stream if row.strip() and not row.lstrip().startswith('#')), delimiter='\t'))
+            templates = {(row.get('spanish', ''), row.get('english', '')) for row in authored if row.get('english')}
+            if len(templates) < 200:
+                errors.append(f'{path.relative_to(ROOT)}: {len(templates)} distinct authored templates, minimum 200 (before phrase-pool expansion)')
         try: headers, lines = load(path)
         except (ValueError, KeyError) as exc:
             errors.append(str(exc)); continue
@@ -46,6 +54,17 @@ def validate():
                 if any('|' in alt[k] for k in ('spanish','english','when')):errors.append(f'{key}: pipe-delimited alternatives are retired')
                 if not alt['prefer'].lstrip('-').isdigit():errors.append(f'{key}: invalid preference')
                 if trigger not in ('meta','experiment','device','contract') and (not alt['english'] or alt['role']!='probe' and not alt['spanish']):errors.append(f'{key}: missing paired dialogue')
+                slot_sets = []
+                for language in ('spanish', 'english'):
+                    slots = set(VARIABLE.findall(alt[language]))
+                    slot_sets.append(slots)
+                    for slot in slots:
+                        if slot not in reserved and not re.fullmatch('x_[a-z0-9_]+', slot):
+                            errors.append(f'{key}: unknown variable or phrase pool {slot}')
+                    if re.search('[{}]', VARIABLE.sub('', alt[language])):
+                        errors.append(f'{key}: malformed variable')
+                if alt['role'] != 'probe' and slot_sets[0] != slot_sets[1]:
+                    errors.append(f'{key}: spoken/subtitle variables disagree')
                 if re.search(r'\{(?:el |un |del |al )|\{[^}]+:\d+\}',alt['spanish']):errors.append(f'{key}: unresolved vocabulary pool')
             if trigger.startswith('flight.') or trigger=='probe':
                 value=dict(line,id=key,event=trigger[7:] if trigger.startswith('flight.') else 'probe_chat')

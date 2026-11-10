@@ -12,6 +12,8 @@ mcs -sdk:4.x -define:DC_OFFLINE_TEST -warn:4 -out:"$OUT/DcTests.exe" \
     "$REPO/src/DescentSequence.cs" "$REPO/src/ThrottleWatch.cs" "$REPO/src/Audit.cs" \
     "$REPO/src/PhraseTable.cs" "$REPO/src/Slots.cs" "$REPO/src/SubtitleSlots.cs" "$REPO/src/Countdown.cs" "$REPO/src/FlightPhase.cs" "$REPO/src/MouthMath.cs" "$REPO/src/Persona.cs" \
     "$REPO/src/EventWatchers.cs" "$REPO/src/SubtitleLayout.cs" "$REPO/src/RpmPageText.cs" "$REPO/src/CabinAmbience.cs" "$REPO/src/FaceMath.cs" "$REPO/src/ProbeCore.cs" "$REPO/src/ProbeSynth.cs" "$REPO/src/ProbeVoices.cs" "$REPO/src/SceneMemory.cs" "$REPO/src/RuntimeSpeech.cs" "$REPO/src/DialogueIds.cs" "$REPO/src/RuntimeLines.cs" "$REPO/src/ModEvents.cs" "$REPO/src/ProbeRules.cs" "$REPO/src/ProbeMoments.cs" \
+    "$REPO/src/ChinesePronunciation.cs" "$REPO/src/ChinesePronunciation.Data.cs" \
+    "$REPO/src/RpmUnicodeText.cs" "$REPO/src/RpmUnicodeFontData.cs" "$REPO/src/RpmShaderLoader.cs" \
     "$REPO/src/DialogueTable.cs" "$REPO/src/RuntimeSceneTable.cs" "$REPO/src/ProbeRuntimeTable.cs" "$REPO/src/ProbeContext.cs" "$REPO/src/RadioDsp.cs" "$REPO/src/RadioNoise.cs" "$REPO/tests/RadioDspTests.cs" "$REPO/tests/Tests.cs"
 mono "$OUT/DcTests.exe"
 
@@ -24,3 +26,13 @@ mono "$OUT/ProbeHistoryTests.exe"
 mcs -sdk:4.x -warn:4 -out:"$OUT/GainDspTests.exe" \
     "$REPO/src/GainDsp.cs" "$REPO/tests/GainDspTests.cs"
 mono "$OUT/GainDspTests.exe"
+
+# The countdown uses loaded recordings and must not depend on a runtime voice implementation.
+mcs -sdk:4.x -warn:4 -out:"$OUT/CountdownPlayerTests.exe" \
+    "$REPO/src/Countdown.cs" "$REPO/src/CountdownPlayer.cs" "$REPO/tests/CountdownPlayerTests.cs"
+mono "$OUT/CountdownPlayerTests.exe"
+
+# Read real EVA provider logic against vessel and CommNet contracts, not just relay distance math.
+mcs -sdk:4.x -warn:4 -out:"$OUT/SignalProviderTests.exe" \
+    "$REPO/src/SignalProvider.cs" "$REPO/src/SignalMath.cs" "$REPO/src/EvaRadioLink.cs" "$REPO/tests/SignalProviderTests.cs"
+mono "$OUT/SignalProviderTests.exe"

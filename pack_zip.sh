@@ -28,8 +28,9 @@ cp -r "$RUNTIME" "$STAGE/GameData/Lonapse/PluginData/Runtime"
 LIST="$(unzip -Z1 "$ZIP")"
 n=$(grep -cE '\.(wav|ogg)$' <<<"$LIST" || true)
 r=$(grep -c 'PluginData/Runtime/' <<<"$LIST" || true)
-for f in Icons/button.png Plugins/Lonapse.dll PluginData/Runtime/windows/piper.exe PluginData/Runtime/linux/piper \
-         Phrases/Crew/reports.tsv Phrases/Crew/launch.tsv Phrases/Probe/personalities.tsv \
+for f in Icons/button.png Plugins/Lonapse.dll LICENSE-UNICODE.txt Fonts/unicode.bin Fonts/OFL-1.1.txt Fonts/Jigmo-CC0.txt Fonts/README.md \
+         PluginData/Runtime/windows/piper.exe PluginData/Runtime/linux/piper \
+         Phrases/choices.tsv Phrases/Crew/reports.tsv Phrases/Crew/launch.tsv Phrases/Probe/personalities.tsv \
          Phrases/Crew/intercom_chatter.tsv Phrases/Crew/radio_chatter.tsv \
          Phrases/Probe/reports.tsv Phrases/Probe/science_talk.tsv \
          Phrases/Probe/science_contracts.tsv Phrases/Probe/docking.tsv \
@@ -39,6 +40,10 @@ for f in Icons/button.png Plugins/Lonapse.dll PluginData/Runtime/windows/piper.e
          Sounds/sfx/cabin_rattle/sfx_cabin_rattle_000.wav \
          Sounds/sfx/cabin_separation/sfx_cabin_separation_000.wav; do
   grep -qx "GameData/Lonapse/$f" <<<"$LIST" || { echo "ERROR: $f is missing from the zip" >&2; exit 1; }
+done
+for key in countdown_01 countdown_02 countdown_03 countdown_04 countdown_05 countdown_06 countdown_07 \
+           countdown_08 countdown_09 countdown_10 countdown_liftoff countdown_abort; do
+  grep -qx "GameData/Lonapse/Sounds/countdown/${key}_m.ogg" <<<"$LIST" || { echo "ERROR: $key recording missing from the zip" >&2; exit 1; }
 done
 # old table locations and schemas must not ship again
 for f in Phrases/Crew/chats.tsv Phrases/Crew/chatter.tsv Phrases/Crew/cabin.tsv \

@@ -4,7 +4,7 @@
 </picture>
 
 [![KSP 1.12.x](https://img.shields.io/badge/KSP-1.12.x-blue)](https://www.kerbalspaceprogram.com/)
-[![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-green)](CHANGELOG.md)
+[![Version 0.9.0](https://img.shields.io/badge/version-0.9.0-green)](CHANGELOG.md)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey)](LICENSE)
 [![Audio: CC BY 4.0](https://img.shields.io/badge/audio-CC%20BY%204.0-lightgrey)](LICENSE-CC-BY-4.0)
 [![Runtime voice: GPL-3.0 and others](https://img.shields.io/badge/runtime%20voice-GPL--3.0%20%2B%20MIT%20%2B%20others-lightgrey)](runtime/licenses/README.md)
@@ -43,15 +43,16 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all). If you want a real countdown from 10, pick Down in the General tab.
 - **Stations and bases.** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
-- **Runtime speech throughout.** Piper speaks all crew and Mission Control dialogue while you play, including names and live values. Category tables in `Phrases/Crew` and `Phrases/Probe` contain the dialogue; no recorded voices or generated phrase/pool tables are required. Speech runs on Windows and Linux.
+- **Runtime dialogue.** Piper speaks crew and Mission Control dialogue while you play, including names and live values. Category tables in `Phrases/Crew` and `Phrases/Probe` contain the dialogue. The launch countdown uses twelve pre-generated clips so it can start immediately and keep its timing. Runtime speech runs on Windows and Linux.
   - **Names.** Mission Control ends a line with the name of the kerbal who just spoke or with your vessel's name, and kerbals on the intercom call each other by name. A planet from a mod is called by its real name.
   - **Real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, on a docking approach the distance to the target. After science it says the points, after a contract the funds.
   - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
-  - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
+  - **Crew chats with live values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
   - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
   - **Your own lines.** Add a category file under `Phrases/Crew/` or `Phrases/Probe/`, or a mod table under `GameData/YourMod/Lonapse/`. Both use the [same format](docs/API.md#one-alternative-per-row). Use Reload lines after editing. Speech waits briefly for synthesis and skips a line if it cannot be prepared.
 - **English subtitles** with a colour per speaker. Each alternative row pairs the spoken line with its subtitle. The number of subtitle lines, their size, width and position are fully customizable.
-- **Lots of dialogue.** Category tables preserve the existing crew and probe scenes, with paired spoken alternatives and contextual conversations. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
+- **RPM Comms screens** show the subtitle log, including Cyrillic and Chinese names. Chinese glyphs use two character cells to stay readable. The ENTER button starts or stops the launch countdown.
+- **Lots of dialogue.** Every Crew and Probe category has at least 200 distinct sentence templates, with paired spoken alternatives and contextual conversations. Shared bilingual fragments add more variations. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
@@ -191,6 +192,7 @@ names. Players who do not like the lines of one mod can turn them off in the Mod
 
 - Built and tested on KSP 1.12.5. Other 1.12 versions should work but I have not tried them.
 - Spoken dialogue requires the bundled Piper runtime on Windows or Linux. macOS has no supported speech runtime and no recorded-voice fallback.
+  The fixed launch countdown is available without Piper.
 - Don't run it together with Chatterer. Both would talk at the same time.
 - RemoteTech is supported for the radio signal simulation, but I have not tested it in game yet.
 
@@ -207,12 +209,24 @@ for the build and [audio/README.md](audio/README.md) for the sound pipeline.
 
 Dialogue is authored directly in [Crew](GameData/Lonapse/Phrases/Crew/) and
 [Probe](GameData/Lonapse/Phrases/Probe/) category tables. See [Unified dialogue](docs/API.md#one-alternative-per-row)
-for the base columns, optional scene fields, and scene selectors. Validate them with `python3 tools/validate_dialogue.py`. No speech recordings or generated phrase/pool tables are required.
+for the base columns, optional scene fields, and scene selectors. Shared bilingual fragments live in `Phrases/choices.tsv`.
+Validate them with `python3 tools/validate_dialogue.py`. Only the fixed countdown needs pre-generated voice clips.
 
 Routine Crew dialogue is grouped into `intercom_chatter.tsv` and `radio_chatter.tsv`. Event-triggered dialogue
 lives in `events.tsv`; its channel follows the participants.
 
 ## Runtime voice files
+
+English, Russian Cyrillic and Chinese names are respelled for the Spanish voices, so they keep the same speaker and Kerbal
+accent. For example, `Союз` is spoken from `Soyus`, `Химки` from `Jimki`, and `Гелиос` from `Guelios`. Subtitles keep
+the original names. Russian sounds and stress are approximate, just as English names are.
+Ship names have no word or character limit for speech.
+
+Chinese names use bundled Mandarin readings for 44,349 characters, including simplified and traditional forms.
+For example, `神舟` becomes `Chen Chou` and `天宫` becomes `Tien Gong`. No download or extra voice is needed while
+playing. Mandarin tones are omitted, and characters with multiple pronunciations use the dictionary's preferred
+reading, so some words and personal names will sound approximate. Other Chinese languages are read as Mandarin.
+The data and its Unicode license are described in [docs/LICENSING.md](docs/LICENSING.md).
 
 To speak lines with live values (names, numbers, bodies), Lonapse ships a copy of the Piper text to speech program
 in `GameData/Lonapse/PluginData/Runtime`. Lonapse starts it as a separate program and sends it text. It runs on your

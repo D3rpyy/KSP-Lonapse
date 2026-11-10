@@ -109,6 +109,8 @@ echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll"
 # Toolbar artwork is committed; installing does not require an SVG renderer.
 mkdir -p "$GD/Icons"
 cp -f "$REPO/GameData/Lonapse/Icons/button.png" "$GD/Icons/button.png"
+mkdir -p "$GD/Fonts"
+cp -f "$REPO"/GameData/Lonapse/Fonts/* "$GD/Fonts/"
 # Category dialogue is authored directly in Crew/ and Probe/. Extra is a legacy mod adapter.
 # Existing custom category files are preserved; the repo's category files are replaced.
 mkdir -p "$GD/Phrases" "$GD/Phrases/Crew" "$GD/Phrases/Extra" "$GD/Phrases/Probe"
@@ -166,11 +168,12 @@ done
 # docs and the version file, as in the zip
 cp -f "$REPO/LICENSE" "$GD/LICENSE.txt"
 cp -f "$REPO/LICENSE-CC-BY-4.0" "$GD/LICENSE-CC-BY-4.0.txt"
+cp -f "$REPO/LICENSE-UNICODE" "$GD/LICENSE-UNICODE.txt"
 cp -f "$REPO/docs/LICENSING.md" "$GD/LICENSING.md"
 cp -f "$REPO/README.md" "$REPO/CHANGELOG.md" "$GD/"
 cp -f "$REPO/audio/CREDITS.md" "$GD/CREDITS.md"
 cp -f "$REPO/GameData/Lonapse/Lonapse.version" "$GD/Lonapse.version"
-echo "Installed: LICENSE.txt, LICENSE-CC-BY-4.0.txt, LICENSING.md, README.md, CHANGELOG.md, CREDITS.md, Lonapse.version"
+echo "Installed: LICENSE.txt, LICENSE-CC-BY-4.0.txt, LICENSE-UNICODE.txt, LICENSING.md, README.md, CHANGELOG.md, CREDITS.md, Lonapse.version"
 
 # runtime voice: Piper and the voices, as in the zip. --delete only inside PluginData/Runtime.
 RT_SRC="$REPO/audio/build/runtime/Runtime"
@@ -197,7 +200,9 @@ if [[ $NO_SOUNDS -eq 0 ]]; then
   if [[ -d "$SND" ]]; then
     mkdir -p "$GD/Sounds"
     case "$GD/Sounds" in */GameData/Lonapse/Sounds) ;; *) echo "ERROR: sounds path sanity check failed" >&2; exit 1 ;; esac
-    rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' "$SND/" "$GD/Sounds/"
+    rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --exclude='/countdown/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' "$SND/" "$GD/Sounds/"
+    mkdir -p "$GD/Sounds/countdown"
+    cp -f "$REPO"/GameData/Lonapse/Sounds/countdown/*.ogg "$GD/Sounds/countdown/"
     # Retired stock speech folders are never used by the runtime-only release.
     rm -rf -- "$GD/Sounds/crew" "$GD/Sounds/control"
     echo "Installed sounds from: $SND"

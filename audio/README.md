@@ -1,19 +1,22 @@
 # Lonapse audio pipeline
 
-Every sound in Lonapse is made by a script. Nothing is recorded, and nothing is taken from another mod or game. This
+Lonapse combines synthesized beeps and radio noise with edited sound recordings credited in [CREDITS.md](CREDITS.md). This
 page explains how the beeps and static are built and how you can check or change them. The voices have their own page:
 [lonapse/README.md](lonapse/README.md).
 
-Two scripts build everything the plugin plays:
+These scripts build the audio assets.
 
 | Folder | Built by |
 |---|---|
 | `Sounds/beeps/`, `Sounds/sfx/burst`, `loop`, `squelch`, `breath_loop` | `build_clips.py` (WAV, synthesized, no recordings) |
 | `Sounds/sfx/airlock_dock`, `airlock_undock`, `hatch_open`, `hatch_close`, `flag_plant` | `build_sfx.py` (WAV, made from the recordings in `audio/sfx_sources/`. `flag_plant` only gets a plain gain up to -1.3 dBFS) |
 | `Sounds/sfx/soi_change`, `cabin_loop`, `cabin_power_down` | `build_sfx.py` (WAV, synthesized, no recordings) |
-| `Sounds/crew/`, `Sounds/control/` | `build_lonapse.py` (loñapsE voices from Piper TTS, OGG) |
+| `Sounds/countdown/` | Twelve fixed Piper clips from the legacy `build_lonapse.py` output, committed under `GameData/Lonapse/Sounds/countdown/` |
 
-Both scripts write into `audio/build/Sounds/`, and that folder is what ships to the game. Each script only touches its
+The effects scripts write into `audio/build/Sounds/`. Release packaging takes effects from there and countdown clips
+from `GameData/Lonapse/Sounds/countdown/`, and excludes the old `crew` and `control` speech folders.
+Other dialogue is synthesized during play from the [category tables](../docs/API.md#one-alternative-per-row).
+Each script only touches its
 own folders, so you can rebuild the beeps without losing the voices and the other way around. `build_clips.py` only
 needs Python 3 and `ffmpeg` with `ffprobe`.
 
@@ -29,7 +32,7 @@ python3 -I audio/build_clips.py --verify-only      # re-check an existing build
 | Flag | Effect |
 |---|---|
 | `--clean` | Delete `audio/work/`, `audio/build/manifest.json`, `Sounds/beeps`, the four `Sounds/sfx` folders of `build_clips.py` and the old `Sounds/static`. The voice folders and the docking effects are kept. |
-| `--install` | After a successful build, sync the whole `audio/build/Sounds/` tree (WAV and OGG) into `GameData/Lonapse/Sounds/` and copy the phrase table to `GameData/Lonapse/Phrases/phrases.tsv`. Copies new or changed files and deletes stale files, only inside that folder. Aborts when `GameData/Squad` is missing, and when the voices are not built yet. The game folder comes from `KSP_DIR` or the first line of `.ksp_dir` in the repo root. |
+| `--install` | Legacy audio installer. For the current release layout, build the effects without this flag and run `./build.sh` from the repo root to install them with the runtime dialogue and countdown clips. |
 | `--seed N` | Random seed (default 1). The same seed gives byte-identical WAV files. |
 
 When it is done, the script prints a table per folder with the number of clips, the shortest and longest clip and
@@ -38,6 +41,9 @@ game. It also writes
 `audio/build/manifest.json` with file, folder, duration, rms and peak per clip.
 
 ## Checking the voices
+
+This section describes the legacy speech-rendering fixtures. Current releases ship only the twelve fixed countdown
+recordings and synthesize other dialogue during play.
 
 There are thousands of voice clips, way too many to listen to one by one. `qa_lonapse.py` measures every clip
 and picks a small sample for you to listen to.
@@ -104,9 +110,8 @@ Want to change a sound or add your own lines? Here is how.
   named `<folder with _>_NNN.wav` with contiguous numbers from `000`. `--install` deletes files that are not in
   `audio/build/Sounds/`, so copy your clips there before installing. Aim for the same levels: about -20 dBFS RMS
   for voices, peaks under -1 dBFS.
-- **New voice lines:** add rows to the matching file in `audio/lonapse/phrases/` (see `lonapse/README.md`).
-  Check them with `python3 -I audio/build_lonapse.py --validate-only`, then build and run `qa_lonapse.py`.
-  No code change is needed.
+- **New voice lines** go in the matching category under `GameData/Lonapse/Phrases/Crew/` or `Probe/`.
+  See the [dialogue format](../docs/API.md#one-alternative-per-row), then run `python3 tools/validate_dialogue.py`.
 - **Tweaking beeps and static:** the `FOLDERS` table at the top of `build_clips.py`.
 - Never put a `.cfg` file under `Sounds/`. KSP's GameDatabase would parse it.
 

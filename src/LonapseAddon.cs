@@ -1223,6 +1223,8 @@ namespace Lonapse
 
         private void UpdateChannels(float dt)
         {
+            // Also runs with an empty/frozen ship or a closed gate, when the ordinary director tick is skipped.
+            if (director != null) director.UpdateControlBed();
             float globalMul = gateGain * settings.masterVolume * gameGain * (evaMode ? settings.evaRadioVolume : 1f);
             // a sound effect is the ship or the kerbal itself, not the suit radio: the EVA radio volume leaves it alone
             float sfxMul = gateGain * settings.masterVolume * gameGain;

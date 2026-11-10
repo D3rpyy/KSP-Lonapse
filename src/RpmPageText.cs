@@ -176,8 +176,8 @@ namespace Lonapse
                 string word = raw;
                 while (word.Length > 0)
                 {
-                    int room = cur.Length == 0 ? width : width - cur.Length - 1;
-                    if (word.Length <= room)
+                    int room = cur.Length == 0 ? width : width - RpmUnicodeText.Cells(cur.ToString()) - 1;
+                    if (RpmUnicodeText.Cells(word) <= room)
                     {
                         if (cur.Length > 0) cur.Append(' ');
                         cur.Append(word);
@@ -190,8 +190,11 @@ namespace Lonapse
                     }
                     else
                     {
-                        rows.Add(word.Substring(0, width));
-                        word = word.Substring(width);
+                        int prefix = RpmUnicodeText.PrefixLength(word, width);
+                        // A wide glyph cannot fit a one-cell row. Consume it intact rather than split UTF-16 or loop.
+                        if (prefix == 0) prefix = RpmUnicodeText.CodeAt(word, 0) > 0xFFFF ? 2 : 1;
+                        rows.Add(word.Substring(0, prefix));
+                        word = word.Substring(prefix);
                     }
                     if (rows.Count > maxRows) { cut = true; break; }
                 }
@@ -206,7 +209,7 @@ namespace Lonapse
         /// <summary>A row that ends in "..." within <paramref name="width"/>, cut at a word when one is near.</summary>
         private static string Dots(string row, int width)
         {
-            int keep = Math.Max(0, Math.Min(row.Length, width - 3));
+            int keep = RpmUnicodeText.PrefixLength(row, Math.Max(0, width - 3));
             string head = row.Substring(0, keep);
             int space = head.LastIndexOf(' ');
             if (space > (int)(keep * 0.6f)) head = head.Substring(0, space);
@@ -217,17 +220,19 @@ namespace Lonapse
         public static string Title(string name, int width)
         {
             string mid = " " + name + " ";
-            if (mid.Length >= width) return Fit(name, width);
-            int left = (width - mid.Length) / 2;
-            return new string('-', left) + mid + new string('-', width - left - mid.Length);
+            int cells = RpmUnicodeText.Cells(mid);
+            if (cells >= width) return Fit(name, width);
+            int left = (width - cells) / 2;
+            return new string('-', left) + mid + new string('-', width - left - cells);
         }
 
         /// <summary>Cut to <paramref name="width"/> characters with dots.</summary>
         public static string Fit(string s, int width)
         {
             if (s == null) return string.Empty;
-            if (s.Length <= width) return s;
-            return width <= 3 ? s.Substring(0, width) : s.Substring(0, width - 3) + "...";
+            if (RpmUnicodeText.Cells(s) <= width) return s;
+            return width <= 3 ? s.Substring(0, RpmUnicodeText.PrefixLength(s, width))
+                             : s.Substring(0, RpmUnicodeText.PrefixLength(s, width - 3)) + "...";
         }
 
         /// <summary>One line of plain text: no line breaks, typographic quotes and dashes as ASCII, trimmed.</summary>

@@ -44,3 +44,212 @@ bo_kids_2	bo_kids_2	bo_kids	2	kerbal_a	flight.chatter	radio				0	¡Hola, niños!
 bo_souvenir_1	bo_souvenir_1	bo_souvenir	1	mission_control	flight.chatter	radio				0	Recordad: no se puede llevar {body} a casa.	Remember: you can't take {body} home.	calm	chatter	m	idle	any	any	any	any	any						
 bo_souvenir_2	bo_souvenir_2	bo_souvenir	2	kerbal_a	flight.chatter	radio				0	¿Ni un trocito?	Not even a little piece?	calm	chatter	both	idle	any	any	any	any	any						
 bo_souvenir_3	bo_souvenir_3	bo_souvenir	3	mission_control	flight.chatter	radio				0	Ni un trocito.	Not even a little piece.	calm	chatter	m	idle	any	any	any	any	any						
+ic_stove_1	ic_stove_1	ic_stove	1	kerbal_a	flight.chatter	intercom				0	Creo que me he dejado la luz encendida en casa.	I think I left the light on at home.	calm	chatter	both	coast	any	any	any	any	any						
+ic_stove_1__v02	ic_stove_1	ic_stove	1	kerbal_a	flight.chatter	intercom				0	{other}, creo que me he dejado la luz encendida en casa.	{other}, I think I left the light on at home.	calm	chatter	both	coast	any	any	any	any	any						
+ic_stove_2	ic_stove_2	ic_stove	2	kerbal_b	flight.chatter	intercom				0	Estamos en el espacio.	We're in space.	calm	chatter	both	coast	any	any	any	any	any						
+ic_stove_2__v02	ic_stove_2	ic_stove	2	kerbal_b	flight.chatter	intercom				0	Estamos en el espacio, {other}.	We're in space, {other}.	calm	chatter	both	coast	any	any	any	any	any						
+ic_stove_3	ic_stove_3	ic_stove	3	kerbal_a	flight.chatter	intercom				0	Pues la factura va a ser astronómica.	Then the bill will be astronomical.	calm	chatter	both	coast	any	any	any	any	any						
+ic_mustard_1	ic_mustard_1	ic_mustard	1	kerbal_a	flight.chatter	intercom				0	¿Alguien ha visto la mostaza?	Has anyone seen the mustard?	calm	chatter	both	coast	any	any	any	any	any						
+ic_mustard_1__v02	ic_mustard_1	ic_mustard	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿dónde está la mostaza?	{other}, where's the mustard?	calm	chatter	both	coast	any	any	any	any	any						
+ic_mustard_2	ic_mustard_2	ic_mustard	2	kerbal_b	flight.chatter	intercom				0	Mira el techo.	Look at the ceiling.	calm	chatter	both	coast	any	any	any	any	any						
+ic_mustard_3	ic_mustard_3	ic_mustard	3	kerbal_a	flight.chatter	intercom				0	Ah, ahí está. Y mi bocadillo.	Ah, there it is. And my sandwich.	calm	chatter	both	coast	any	any	any	any	any						
+ic_tea_1	ic_tea_1	ic_tea	1	kerbal_a	flight.chatter	intercom				0	Mi té está flotando en bolitas.	My tea is floating in little balls.	calm	chatter	both	coast	any	any	any	any	any						
+ic_tea_1__v02	ic_tea_1	ic_tea	1	kerbal_a	flight.chatter	intercom				0	{other}, mi té se ha convertido en bolitas que flotan.	{other}, my tea turned into floating balls.	calm	chatter	both	coast	any	any	any	any	any						
+ic_tea_2	ic_tea_2	ic_tea	2	kerbal_b	flight.chatter	intercom				0	Pues cómetelo.	Then eat it.	calm	chatter	both	coast	any	any	any	any	any						
+ic_tea_3	ic_tea_3	ic_tea	3	kerbal_a	flight.chatter	intercom				0	Té masticable. Qué innovación.	Chewable tea. What an innovation.	calm	chatter	both	coast	any	any	any	any	any						
+ic_ceiling_1	ic_ceiling_1	ic_ceiling	1	kerbal_a	flight.chatter	intercom				0	Te apuesto a que no tocas el techo.	I bet you can't touch the ceiling.	calm	chatter	both	coast	any	any	any	any	any						
+ic_ceiling_2	ic_ceiling_2	ic_ceiling	2	kerbal_b	flight.chatter	intercom				0	Ya lo estoy tocando.	I'm already touching it.	calm	chatter	both	coast	any	any	any	any	any						
+ic_ceiling_3	ic_ceiling_3	ic_ceiling	3	kerbal_a	flight.chatter	intercom				0	¿Con la cabeza?	With your head?	calm	chatter	both	coast	any	any	any	any	any						
+im_003_1	im_003_1	im_003	1	kerbal_a	flight.chatter	intercom				0	Me has dado una patada.	You kicked me.	calm	chatter	both	coast	any	any	any	any	any						
+im_003_1__v02	im_003_1	im_003	1	kerbal_a	flight.chatter	intercom				0	{other}, me acabas de dar una patada.	{other}, you just kicked me.	calm	chatter	both	coast	any	any	any	any	any						
+im_003_2	im_003_2	im_003	2	kerbal_b	flight.chatter	intercom				0	Ha sido sin querer. Estaba nadando.	It was an accident. I was swimming.	calm	chatter	both	coast	any	any	any	any	any						
+im_003_3	im_003_3	im_003	3	kerbal_a	flight.chatter	intercom				0	Aquí no hay agua.	There's no water here.	calm	chatter	both	coast	any	any	any	any	any						
+im_003_4	im_003_4	im_003	4	kerbal_b	flight.chatter	intercom				0	Por eso nado tan mal.	That's why I swim so badly.	calm	chatter	both	coast	any	any	any	any	any						
+im_012_1	im_012_1	im_012	1	kerbal_a	flight.chatter	intercom				0	¿Me pasas la sal?	Pass me the salt?	calm	chatter	both	coast	any	any	any	any	any						
+im_012_1__v02	im_012_1	im_012	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿me pasas la sal?	{other}, pass the salt?	calm	chatter	both	coast	any	any	any	any	any						
+im_012_2	im_012_2	im_012	2	kerbal_b	flight.chatter	intercom				0	Toma.	Here.	calm	chatter	both	coast	any	any	any	any	any						
+im_012_3	im_012_3	im_012	3	kerbal_a	flight.chatter	intercom				0	Esa es la pimienta.	That's the pepper.	calm	chatter	both	coast	any	any	any	any	any						
+im_012_4	im_012_4	im_012	4	kerbal_b	flight.chatter	intercom				0	Ya está flotando. Cógela tú.	It's already floating. Catch it yourself.	calm	chatter	both	coast	any	any	any	any	any						
+im_027_1	im_027_1	im_027	1	kerbal_a	flight.chatter	intercom				0	¿Cuál es el plan para hoy?	What's the plan for today?	calm	chatter	both	coast	any	any	any	any	any						
+im_027_1__v02	im_027_1	im_027	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿cuál es el plan de hoy?	{other}, what's today's plan?	calm	chatter	both	coast	any	any	any	any	any						
+im_027_2	im_027_2	im_027	2	kerbal_b	flight.chatter	intercom				0	Flotar. Comer. Flotar otra vez.	Float. Eat. Float again.	calm	chatter	both	coast	any	any	any	any	any						
+im_027_3	im_027_3	im_027	3	kerbal_a	flight.chatter	intercom				0	Me gusta este plan.	I like this plan.	calm	chatter	both	coast	any	any	any	any	any						
+im_041_1	im_041_1	im_041	1	kerbal_a	flight.chatter	intercom				0	Mira qué bien floto.	Look how well I float.	calm	chatter	both	coast	any	any	any	any	any						
+im_041_1__v02	im_041_1	im_041	1	kerbal_a	flight.chatter	intercom				0	Mira qué bien floto, {other}.	Look how good I float, {other}.	calm	chatter	both	coast	any	any	any	any	any						
+im_041_2	im_041_2	im_041	2	kerbal_b	flight.chatter	intercom				0	Estás boca abajo.	You're upside down.	calm	chatter	both	coast	any	any	any	any	any						
+im_041_3	im_041_3	im_041	3	kerbal_a	flight.chatter	intercom				0	Eso es lo bonito.	That's the beauty of it.	calm	chatter	both	coast	any	any	any	any	any						
+im_055_1	im_055_1	im_055	1	kerbal_a	flight.chatter	intercom				0	¿Sabes lo que me gusta del espacio?	You know what I like about space?	calm	chatter	both	coast	any	any	any	any	any						
+im_055_1__v02	im_055_1	im_055	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿sabes qué es lo mejor del espacio?	{other}, you know the best part of space?	calm	chatter	both	coast	any	any	any	any	any						
+im_055_2	im_055_2	im_055	2	kerbal_b	flight.chatter	intercom				0	¿Qué?	What?	calm	chatter	both	coast	any	any	any	any	any						
+im_055_3	im_055_3	im_055	3	kerbal_a	flight.chatter	intercom				0	Que nadie me pide que saque la basura.	Nobody asks me to take out the trash.	calm	chatter	both	coast	any	any	any	any	any						
+im_055_4	im_055_4	im_055	4	kerbal_b	flight.chatter	intercom				0	La basura está flotando detrás de ti.	The trash is floating behind you.	calm	chatter	both	coast	any	any	any	any	any						
+im_069_1	im_069_1	im_069	1	kerbal_a	flight.chatter	intercom				0	¿Sabes qué echo de menos?	You know what I miss?	calm	chatter	both	coast	any	any	any	any	any						
+im_069_1__v02	im_069_1	im_069	1	kerbal_a	flight.chatter	intercom				0	{other}, adivina qué echo de menos.	{other}, guess what I miss.	calm	chatter	both	coast	any	any	any	any	any						
+im_069_2	im_069_2	im_069	2	kerbal_b	flight.chatter	intercom				0	¿Las ventanas con algo que ver?	Windows with something to look at?	calm	chatter	both	coast	any	any	any	any	any						
+im_069_3	im_069_3	im_069	3	kerbal_a	flight.chatter	intercom				0	Exacto.	Exactly.	calm	chatter	both	coast	any	any	any	any	any						
+im_070_1	im_070_1	im_070	1	kerbal_a	flight.chatter	intercom				0	Vamos a jugar a algo.	Let's play something.	calm	chatter	both	coast	any	any	any	any	any						
+im_070_1__v02	im_070_1	im_070	1	kerbal_a	flight.chatter	intercom				0	{other}, vamos a jugar a algo.	{other}, let's play something.	calm	chatter	both	coast	any	any	any	any	any						
+im_070_2	im_070_2	im_070	2	kerbal_b	flight.chatter	intercom				0	¿A qué?	What?	calm	chatter	both	coast	any	any	any	any	any						
+im_070_3	im_070_3	im_070	3	kerbal_a	flight.chatter	intercom				0	A quién aguanta más sin mirar la ventana.	Who can go longest without looking out the window.	calm	chatter	both	coast	any	any	any	any	any						
+im_070_4	im_070_4	im_070	4	kerbal_b	flight.chatter	intercom				0	He perdido.	I lost.	calm	chatter	both	coast	any	any	any	any	any						
+im_071_1	im_071_1	im_071	1	kerbal_a	flight.chatter	intercom				0	¿Cuánto falta para llegar?	How long until we arrive?	calm	chatter	both	coast	any	any	any	any	any						
+im_071_1__v02	im_071_1	im_071	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿cuándo llegamos?	{other}, when do we arrive?	calm	chatter	both	coast	any	any	any	any	any						
+im_071_2	im_071_2	im_071	2	kerbal_b	flight.chatter	intercom				0	Lo mismo que hace una hora, menos una hora.	Same as an hour ago, minus an hour.	calm	chatter	both	coast	any	any	any	any	any						
+im_072_1	im_072_1	im_072	1	kerbal_a	flight.chatter	intercom				0	Este viaje es largo.	This trip is long.	calm	chatter	both	coast	any	any	any	any	any						
+im_072_1__v02	im_072_1	im_072	1	kerbal_a	flight.chatter	intercom				0	{other}, este viaje es largo.	{other}, this trip is long.	calm	chatter	both	coast	any	any	any	any	any						
+im_072_2	im_072_2	im_072	2	kerbal_b	flight.chatter	intercom				0	Pero es bonito.	But it's pretty.	calm	chatter	both	coast	any	any	any	any	any						
+im_072_3	im_072_3	im_072	3	kerbal_a	flight.chatter	intercom				0	Largo y bonito. Como yo.	Long and pretty. Like me.	calm	chatter	both	coast	any	any	any	any	any						
+tu_tc_06_1	tu_tc_06_1	tu_tc_06	1	kerbal_a	flight.chatter	intercom				0	¿Cuánto falta para llegar?	How much longer?	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_tc_06_2	tu_tc_06_2	tu_tc_06	2	kerbal_b	flight.chatter	intercom				0	Un rato. Mira las estrellas.	A while. Look at the stars.	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_tc_06_3	tu_tc_06_3	tu_tc_06	3	kerbal_a	flight.chatter	intercom				0	Ya las he mirado todas.	I've looked at all of them.	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_tc_12_1	tu_tc_12_1	tu_tc_12	1	kerbal_a	flight.chatter	intercom				0	¿Qué hago si me aburro?	What do I do if I get bored?	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_tc_12_2	tu_tc_12_2	tu_tc_12	2	kerbal_b	flight.chatter	intercom				0	No tocar nada. Eso ya es mucho.	Don't touch anything. That's plenty.	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_ct_05_1	tu_ct_05_1	tu_ct_05	1	kerbal_a	flight.chatter	intercom				0	Si necesitas algo, pregunta.	If you need anything, ask.	calm	chatter	both	coast	any	to_tourist	any	any	any						
+tu_ct_05_2	tu_ct_05_2	tu_ct_05	2	kerbal_b	flight.chatter	intercom				0	¿Hay películas?	Are there any movies?	calm	chatter	both	coast	any	to_tourist	any	any	any						
+tu_ct_05_3	tu_ct_05_3	tu_ct_05	3	kerbal_a	flight.chatter	intercom				0	Hay ventana.	There's a window.	calm	chatter	both	coast	any	to_tourist	any	any	any						
+tu_ct_10_1	tu_ct_10_1	tu_ct_10	1	kerbal_a	flight.chatter	intercom				0	Tu comida está en el cajón azul.	Your food is in the blue drawer.	calm	chatter	both	coast	any	to_tourist	any	any	any						
+tu_ct_10_2	tu_ct_10_2	tu_ct_10	2	kerbal_b	flight.chatter	intercom				0	¿Esto es comida? Pensaba que era pasta de dientes.	This is food? I thought it was toothpaste.	calm	chatter	both	coast	any	to_tourist	any	any	any						
+tu_tt_05_1	tu_tt_05_1	tu_tt_05	1	kerbal_a	flight.chatter	intercom				0	Me he comido tu postre.	I ate your dessert.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_05_2	tu_tt_05_2	tu_tt_05	2	kerbal_b	flight.chatter	intercom				0	Eso era mi cena.	That was my dinner.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_05_3	tu_tt_05_3	tu_tt_05	3	kerbal_a	flight.chatter	intercom				0	Pues estaba buenísimo.	Well, it was delicious.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_06_1	tu_tt_06_1	tu_tt_06	1	kerbal_a	flight.chatter	intercom				0	¿Cuántas fotos llevas?	How many photos have you taken?	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_06_2	tu_tt_06_2	tu_tt_06	2	kerbal_b	flight.chatter	intercom				0	Cuatrocientas. Casi todas de la ventana.	Four hundred. Almost all of the window.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_06_3	tu_tt_06_3	tu_tt_06	3	kerbal_a	flight.chatter	intercom				0	Yo tengo cuatrocientas tuyas mirando la ventana.	I have four hundred of you looking at the window.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_12_1	tu_tt_12_1	tu_tt_12	1	kerbal_a	flight.chatter	intercom				0	¿Tú te mareas?	Do you get sick?	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tu_tt_12_2	tu_tt_12_2	tu_tt_12	2	kerbal_b	flight.chatter	intercom				0	Solo cuando me miras así.	Only when you look at me like that.	calm	chatter	both	coast	any	tourist_pair	any	any	any						
+tp_days_1	tp_days_1	tp_days	1	kerbal_a	flight.chatter	intercom				0	¿Cuánto tiempo llevamos aquí fuera?	How long have we been out here?	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_1__v02	tp_days_1	tp_days	1	kerbal_a	flight.chatter	intercom				0	¿Qué día es hoy?	What day is it?	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_1__v03	tp_days_1	tp_days	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿cuántos días han pasado?	{other}, how many days has it been?	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_1__v04	tp_days_1	tp_days	1	kerbal_a	flight.chatter	intercom				0	He perdido la cuenta de los días.	I've lost count of the days.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_2	tp_days_2	tp_days	2	kerbal_b	flight.chatter	intercom				0	Día {day}. Demasiados.	Day {day}. Too many.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_2__v02	tp_days_2	tp_days	2	kerbal_b	flight.chatter	intercom				0	Día {day}, creo.	Day {day}, I think.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_2__v03	tp_days_2	tp_days	2	kerbal_b	flight.chatter	intercom				0	Ni idea. ¿Día {day}?	No idea. Day {day}?	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_2__v04	tp_days_2	tp_days	2	kerbal_b	flight.chatter	intercom				0	Día {day}. Los he contado en la pared.	Day {day}. I counted on the wall.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_3	tp_days_3	tp_days	3	kerbal_a	flight.chatter	intercom				0	Creía que eran menos.	I thought it was fewer.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_3__v02	tp_days_3	tp_days	3	kerbal_a	flight.chatter	intercom				0	Parecen más.	Feels like more.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_3__v03	tp_days_3	tp_days	3	kerbal_a	flight.chatter	intercom				0	Eso no puede ser.	That can't be right.	calm	chatter	both	coast	any	any	any	any	any						
+tp_days_3__v04	tp_days_3	tp_days	3	kerbal_a	flight.chatter	intercom				0	Vaya. ¿Solo {day}?	Huh. Only {day}?	calm	chatter	both	coast	any	any	any	any	any						
+tp_home_1	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos mi casa.	I miss home.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v02	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos la gravedad de verdad.	I miss real gravity.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v03	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos la lluvia.	I miss rain.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v04	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos la cafetería del centro espacial.	I miss the KSC cafeteria.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v05	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos mi propia cama.	I miss my own bed.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v06	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos la hierba.	I miss grass.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v07	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos las duchas.	I miss showers.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v08	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos el guiso misterioso de mamá.	I miss Mom's mystery stew.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v09	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos la pizza que no está congelada.	I miss pizza that isn't frozen.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v10	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos el aire fresco.	I miss fresh air.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v11	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos el ruido de la ciudad.	I miss the noise of the city.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v12	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos las puertas normales.	I miss doors that just open.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v13	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	Echo de menos nibréK. Hasta la cafetería.	I miss Kerbin. Even the KSC cafeteria.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_1__v14	tp_home_1	tp_home	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿echas de menos {missed_comfort}?	{other}, do you miss {missed_comfort}?	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom				0	Yo también. Un poco.	Me too. A little.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v02	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom				0	Yo también. No se lo digas a Control.	Me too. Don't tell Control.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v03	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom				0	Un poco. Echo de menos {missed_comfort}.	A bit. I miss {missed_comfort}.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v14	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom				0	A veces. Sobre todo {missed_comfort}.	Sometimes. Mostly {missed_comfort}.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v25	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom			kerbin	1	Seguimos en nibréK, {other}.	We're still at Kerbin, {other}.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v26	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom			orbit kerbin	1	nibréK está justo ahí. Mira por la ventana.	Kerbin is right there. Look out the window.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_2__v27	tp_home_2	tp_home	2	kerbal_b	flight.chatter	intercom			prelaunch	1	Ni siquiera hemos despegado, {other}.	We haven't even launched, {other}.	calm	chatter	both	idle	any	any	any	any	any						
+tp_game_1	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	¿Jugamos a algo?	Want to play a game?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v02	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Juguemos a {cabin_game}.	Let's play {cabin_game}.	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v10	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿veo veo?	Bored. I spy?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v11	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿piedra, papel o tijera?	Bored. rock paper scissors?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v12	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿las veinte preguntas?	Bored. twenty questions?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v13	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿quién flota más tiempo?	Bored. who can float the longest?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v14	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿adivinar el aperitivo?	Bored. guess the snack?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v15	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿esconder la llave inglesa?	Bored. hide the wrench?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v16	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿adivinar el planeta?	Bored. guess the planet?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v17	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	Me aburro. ¿quién parpadea primero?	Bored. who blinks first?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v18	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿veo veo? ¿Por favor?	{other}, I spy? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v19	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿piedra, papel o tijera? ¿Por favor?	{other}, rock paper scissors? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v20	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿las veinte preguntas? ¿Por favor?	{other}, twenty questions? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v21	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿quién flota más tiempo? ¿Por favor?	{other}, who can float the longest? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v22	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿adivinar el aperitivo? ¿Por favor?	{other}, guess the snack? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v23	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿esconder la llave inglesa? ¿Por favor?	{other}, hide the wrench? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v24	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿adivinar el planeta? ¿Por favor?	{other}, guess the planet? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_1__v25	tp_game_1	tp_game	1	kerbal_a	flight.chatter	intercom				0	{other}, ¿quién parpadea primero? ¿Por favor?	{other}, who blinks first? Please?	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_2	tp_game_2	tp_game	2	kerbal_b	flight.chatter	intercom				0	Vale, pero empiezo yo.	Okay, but I go first.	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_2__v02	tp_game_2	tp_game	2	kerbal_b	flight.chatter	intercom				0	Bueno. Empiezo yo.	Fine. I go first.	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_2__v03	tp_game_2	tp_game	2	kerbal_b	flight.chatter	intercom				0	Solo si esta vez gano yo.	Only if I win this time.	calm	chatter	both	coast	any	any	any	any	any						
+tp_game_2__v04	tp_game_2	tp_game	2	kerbal_b	flight.chatter	intercom				0	Vale. Empiezo yo, {other}.	Okay. I go first, {other}.	calm	chatter	both	coast	any	any	any	any	any						
+cm_017_1	cm_017_1	cm_017	1	kerbal_a	flight.chatter	radio				0	¿Alguien ha visto mi otro guante?	Has anyone seen my other glove?	calm	chatter	both	coast	any	any	any	any	any						
+cm_017_2	cm_017_2	cm_017	2	mission_control	flight.chatter	radio				0	Sale en nuestra pantalla. Está flotando detrás de ti.	It's on our screen. It's floating behind you.	calm	chatter	m	coast	any	any	any	any	any						
+cm_072	cm_072	cm_072	1	kerbal_a	flight.chatter	radio				0	Me he dado cuenta de que no sé silbar sin gravedad.	I just found out I can't whistle without gravity.	calm	chatter	both	coast	any	any	any	any	any						
+cm_128_1	cm_128_1	cm_128	1	kerbal_a	flight.chatter	radio				0	Control, ¿cuánto queda de viaje?	Control, how much longer is the trip?	calm	chatter	both	coast	any	any	any	any	any						
+cm_128_2	cm_128_2	cm_128	2	mission_control	flight.chatter	radio				0	Bastante. ¿Habéis traído juegos?	Quite a while. Did you bring games?	calm	chatter	m	coast	any	any	any	any	any						
+cm_128_3	cm_128_3	cm_128	3	kerbal_a	flight.chatter	radio				0	Una baraja. Le faltan cartas.	A deck of cards. Some are missing.	calm	chatter	both	coast	any	any	any	any	any						
+cm_129_1	cm_129_1	cm_129	1	kerbal_a	flight.chatter	radio				0	Control, aquí no pasa nada de nada.	Control, nothing at all is happening here.	calm	chatter	both	coast	any	any	any	any	any						
+cm_129_2	cm_129_2	cm_129	2	mission_control	flight.chatter	radio				0	Mejor así. Sin noticias, buenas noticias.	Better that way. No news is good news.	calm	chatter	m	coast	any	any	any	any	any						
+cm_130_1	cm_130_1	cm_130	1	kerbal_a	flight.chatter	radio				0	Control, he leído el manual entero.	Control, I read the whole manual.	calm	chatter	both	coast	any	any	any	any	any						
+cm_130_2	cm_130_2	cm_130	2	mission_control	flight.chatter	radio				0	¿Y?	And?	calm	chatter	m	coast	any	any	any	any	any						
+cm_130_3	cm_130_3	cm_130	3	kerbal_a	flight.chatter	radio				0	El final es muy triste.	The ending is very sad.	calm	chatter	both	coast	any	any	any	any	any						
+cm_131_1	cm_131_1	cm_131	1	kerbal_a	flight.chatter	radio				0	Control, ¿podemos parar a tomar algo?	Control, can we stop for a drink?	calm	chatter	both	coast	any	any	any	any	any						
+cm_131_2	cm_131_2	cm_131	2	mission_control	flight.chatter	radio				0	No hay bares en el espacio.	There are no bars in space.	calm	chatter	m	coast	any	any	any	any	any						
+cm_131_3	cm_131_3	cm_131	3	kerbal_a	flight.chatter	radio				0	Todavía.	Yet.	calm	chatter	both	coast	any	any	any	any	any						
+cm_132_1	cm_132_1	cm_132	1	mission_control	flight.chatter	radio				0	Informe del viaje: vais muy bien. Y muy lejos.	Trip report: you're doing very well. And very far.	calm	chatter	m	coast	any	any	any	any	any						
+cm_132_2	cm_132_2	cm_132	2	kerbal_a	flight.chatter	radio				0	¿Muy, muy lejos?	Very, very far?	calm	chatter	both	coast	any	any	any	any	any						
+cm_132_3	cm_132_3	cm_132	3	mission_control	flight.chatter	radio				0	Muy, muy lejos.	Very, very far.	calm	chatter	m	coast	any	any	any	any	any						
+cm_133	cm_133	cm_133	1	kerbal_a	flight.chatter	radio				0	El espacio es grande. Mucho más grande que en los dibujos.	Space is big. Much bigger than in the drawings.	calm	chatter	both	coast	any	any	any	any	any						
+cm_134	cm_134	cm_134	1	kerbal_a	flight.chatter	radio				0	He empezado a contar los días. Ya voy por muchos.	I started counting the days. I'm at lots.	calm	chatter	both	coast	any	any	any	any	any						
+cm_134__v02	cm_134	cm_134	1	kerbal_a	flight.chatter	radio				0	Días contados: muchos. El día {day}, creo.	Day count: lots. Day {day}, maybe.	calm	chatter	both	coast	any	any	any	any	any						
+cm_135	cm_135	cm_135	1	mission_control	flight.chatter	radio				0	Seguimos con vosotros. Aunque tardéis en contestar.	We're still with you. Even if you're slow to answer.	calm	chatter	m	coast	any	any	any	any	any						
+cm_152_1	cm_152_1	cm_152	1	kerbal_a	flight.chatter	radio				0	Control, tengo una teoría nueva.	Control, I have a new theory.	calm	chatter	both	coast	any	scientist	any	any	any						
+cm_152_2	cm_152_2	cm_152	2	mission_control	flight.chatter	radio				0	¿Sobre qué?	About what?	calm	chatter	m	coast	any	scientist	any	any	any						
+cm_152_3	cm_152_3	cm_152	3	kerbal_a	flight.chatter	radio				0	Sobre por qué las galletas flotan mejor que el pan.	About why cookies float better than bread.	calm	chatter	both	coast	any	scientist	any	any	any						
+cm_152_4	cm_152_4	cm_152	4	mission_control	flight.chatter	radio				0	Mándanos los datos. Y una galleta.	Send us the data. And a cookie.	calm	chatter	m	coast	any	scientist	any	any	any						
+cm_190_1	cm_190_1	cm_190	1	kerbal_a	flight.chatter	radio				0	Control, he flotado hasta el techo. ¿Cómo bajo?	Control, I floated to the ceiling. How do I get down?	calm	chatter	both	coast	any	any	any	any	any						
+cm_190_2	cm_190_2	cm_190	2	mission_control	flight.chatter	radio				0	No hay techo. Todo es suelo.	There is no ceiling. Everything is floor.	calm	chatter	m	coast	any	any	any	any	any						
+cm_190_3	cm_190_3	cm_190	3	kerbal_a	flight.chatter	radio				0	Qué filosófico.	How philosophical.	calm	chatter	both	coast	any	any	any	any	any						
+mj_weather_rain_1	mj_weather_rain_1	mj_weather_rain	1	mission_control	flight.chatter	radio				0	Aquí abajo llueve sin parar.	It's raining nonstop down here.	calm	chatter	m	coast	any	any	any	any	any						
+mj_weather_rain_2	mj_weather_rain_2	mj_weather_rain	2	kerbal_a	flight.chatter	radio				0	Aquí arriba nunca llueve.	It never rains up here.	calm	chatter	both	coast	any	any	any	any	any						
+mj_weather_rain_3	mj_weather_rain_3	mj_weather_rain	3	mission_control	flight.chatter	radio				0	Presumidos.	Show-offs.	calm	chatter	m	coast	any	any	any	any	any						
+mj_coast_cookies_1	mj_coast_cookies_1	mj_coast_cookies	1	mission_control	flight.chatter	radio				0	Os quedan muchos días de viaje.	You have many days of travel left.	calm	chatter	m	coast	any	any	any	any	any						
+mj_coast_cookies_2	mj_coast_cookies_2	mj_coast_cookies	2	kerbal_a	flight.chatter	radio				0	¿Cuántas galletas por día?	How many cookies per day?	calm	chatter	both	coast	any	any	any	any	any						
+mj_coast_cookies_3	mj_coast_cookies_3	mj_coast_cookies	3	mission_control	flight.chatter	radio				0	Media.	Half of one.	calm	chatter	m	coast	any	any	any	any	any						
+sp_sock_1	sp_sock_1	sp_sock	1	kerbal_a	flight.chatter	radio				0	Control, he perdido un calcetín.	Control, I lost a sock.	calm	chatter	both	coast	any	any	any	any	any						
+sp_sock_2	sp_sock_2	sp_sock	2	mission_control	flight.chatter	radio				0	¿Dónde lo viste por última vez?	Where did you last see it?	calm	chatter	m	coast	any	any	any	any	any						
+sp_sock_3	sp_sock_3	sp_sock	3	kerbal_a	flight.chatter	radio				0	Pasando por la ventana.	Drifting past the window.	calm	chatter	both	coast	any	any	any	any	any						
+sp_booster_1	sp_booster_1	sp_booster	1	kerbal_a	flight.chatter	radio				0	Control, ¿podemos añadir otro propulsor?	Control, can we add another booster?	calm	chatter	both	coast	any	any	any	any	any						
+sp_booster_2	sp_booster_2	sp_booster	2	mission_control	flight.chatter	radio				0	No desde ahí arriba.	Not from up there.	calm	chatter	m	coast	any	any	any	any	any						
+sp_booster_3	sp_booster_3	sp_booster	3	kerbal_a	flight.chatter	radio				0	Lo apunto para la próxima.	I'll write it down for next time.	calm	chatter	both	coast	any	any	any	any	any						
+sp_sandwich_1	sp_sandwich_1	sp_sandwich	1	kerbal_a	flight.chatter	radio				0	Control, mi bocadillo se ha escapado.	Control, my sandwich escaped.	calm	chatter	both	coast	any	any	any	any	any						
+sp_sandwich_2	sp_sandwich_2	sp_sandwich	2	mission_control	flight.chatter	radio				0	Seguro que vuelve.	I'm sure it will come back.	calm	chatter	m	coast	any	any	any	any	any						
+sp_sandwich_3	sp_sandwich_3	sp_sandwich	3	kerbal_a	flight.chatter	radio				0	Lo veo. Va hacia la escotilla.	I see it. It's heading for the hatch.	calm	chatter	both	coast	any	any	any	any	any						
+sp_long_trip_1	sp_long_trip_1	sp_long_trip	1	kerbal_a	flight.chatter	radio				0	Control, este viaje es muy largo.	Control, this trip is really long.	calm	chatter	both	coast	any	any	any	any	any						
+sp_long_trip_2	sp_long_trip_2	sp_long_trip	2	mission_control	flight.chatter	radio				0	Es el espacio. Es grande.	It's space. It's big.	calm	chatter	m	coast	any	any	any	any	any						
+sp_long_trip_3	sp_long_trip_3	sp_long_trip	3	kerbal_a	flight.chatter	radio				0	Alguien debería hacerlo más pequeño.	Someone should make it smaller.	calm	chatter	both	coast	any	any	any	any	any						
+sp_i_spy_1	sp_i_spy_1	sp_i_spy	1	kerbal_a	flight.chatter	radio				0	Control, ¿jugamos a veo veo?	Control, want to play I spy?	calm	chatter	both	coast	any	any	any	any	any						
+sp_i_spy_2	sp_i_spy_2	sp_i_spy	2	mission_control	flight.chatter	radio				0	Vale. Empieza tú.	Okay. You start.	calm	chatter	m	coast	any	any	any	any	any						
+sp_i_spy_3	sp_i_spy_3	sp_i_spy	3	kerbal_a	flight.chatter	radio				0	Veo veo algo negro.	I spy something black.	calm	chatter	both	coast	any	any	any	any	any						
+sp_clock_1	sp_clock_1	sp_clock	1	kerbal_a	flight.chatter	radio				0	Control, ¿cuándo llegamos?	Control, when do we get there?	calm	chatter	both	coast	any	any	any	any	any						
+sp_clock_2	sp_clock_2	sp_clock	2	mission_control	flight.chatter	radio				0	Mira el reloj de la misión.	Check the mission clock.	calm	chatter	m	coast	any	any	any	any	any						
+sp_clock_2__v02	sp_clock_2	sp_clock	2	mission_control	flight.chatter	radio				0	Mira el reloj. Vamos por el día {day}.	Check the clock. Day {day} so far.	calm	chatter	m	coast	any	any	any	any	any						
+sp_clock_3	sp_clock_3	sp_clock	3	kerbal_a	flight.chatter	radio				0	Se ha quedado sin pilas.	It ran out of batteries.	calm	chatter	both	coast	any	any	any	any	any						
+tu_rad_05_1	tu_rad_05_1	tu_rad_05	1	kerbal_a	flight.chatter	radio				0	Control, aquí no me dejan tocar nada.	Control, they won't let me touch anything up here.	calm	chatter	both	coast	any	tourist	any	any	any						
+tu_rad_05_2	tu_rad_05_2	tu_rad_05	2	mission_control	flight.chatter	radio				0	Muy bien hecho.	Good. Very good.	calm	chatter	m	coast	any	tourist	any	any	any						
+tp_view_1	tp_view_1	tp_view	1	kerbal_a	flight.chatter	radio				0	Control, la vista de {here} desde aquí es increíble.	Control, the view of {here} from up here is amazing.	calm	chatter	both	idle	any	any	any	any	any						
+tp_view_1__v02	tp_view_1	tp_view	1	kerbal_a	flight.chatter	radio				0	Control, tendríais que ver {here} desde aquí.	Control, you should see {here} from here.	calm	chatter	both	idle	any	any	any	any	any						
+tp_view_1__v03	tp_view_1	tp_view	1	kerbal_a	flight.chatter	radio				0	Control, {here} parece tan pequeño desde aquí.	Control, {here} looks so small from up here.	calm	chatter	both	idle	any	any	any	any	any						
+tp_view_1__v04	tp_view_1	tp_view	1	kerbal_a	flight.chatter	radio				0	Control, podría mirar {here} todo el día.	Control, I could look at {here} all day.	calm	chatter	both	idle	any	any	any	any	any						
+tp_view_2	tp_view_2	tp_view	2	mission_control	flight.chatter	radio				0	Nos alegramos, {vessel}. Volved al trabajo.	Glad to hear it, {vessel}. Back to work.	calm	chatter	m	idle	any	any	any	any	any						
+tp_view_2__v02	tp_view_2	tp_view	2	mission_control	flight.chatter	radio				0	Muy bien. Ahora a trabajar, {vessel}.	Nice. Now back to work, {vessel}.	calm	chatter	m	idle	any	any	any	any	any						
+tp_view_2__v03	tp_view_2	tp_view	2	mission_control	flight.chatter	radio			landed	1	¿Ahí arriba? Estáis en el suelo, {vessel}.	Up there? You're on the ground, {vessel}.	calm	chatter	m	idle	any	any	any	any	any						
+tp_view_2__v04	tp_view_2	tp_view	2	mission_control	flight.chatter	radio			landed	1	Estáis aparcados en {here}. Eso es el suelo.	You're parked on {here}. That's the ground.	calm	chatter	m	idle	any	any	any	any	any						
+tp_view_3	tp_view_3	tp_view	3	kerbal_a	flight.chatter	radio				0	Ah. Vale.	Copy.	calm	chatter	both	idle	any	any	any	any	any						
+tp_home_when_1	tp_home_when_1	tp_home_when	1	kerbal_a	flight.chatter	radio				0	Control, ¿cuándo volvemos?	Control, when do we go home?	calm	chatter	both	coast	any	any	any	any	any						
+tp_home_when_1__v02	tp_home_when_1	tp_home_when	1	kerbal_a	flight.chatter	radio				0	Control, día {day}. ¿Ya llegamos?	Control, day {day}. Are we there yet?	calm	chatter	both	coast	any	any	any	any	any						
+tp_home_when_2	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Pronto. Más o menos.	Soon. Roughly.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v02	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Pronto. Seguramente.	Soon. Probably.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v03	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Recortes de presupuesto. Pero pronto.	Budget cuts. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v04	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	‹Gene› dice que no. Pero pronto.	Gene says no. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v05	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	El becario se lo gastó en propulsores. Pero pronto.	The intern spent it on boosters. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v06	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Quizá el año que viene. Pero pronto.	Maybe next year. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v07	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Primero rellenad el formulario veintisiete be. Pero pronto.	Fill out form 27B first. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v08	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Nos lo gastamos en aperitivos. Pero pronto.	We spent it on snacks. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v09	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Se ha perdido el formulario. Pero pronto.	The form got lost. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v10	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	El presupuesto está en órbita. Pero pronto.	The budget is in orbit. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v11	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Contabilidad está de vacaciones. Pero pronto.	Accounting is on holiday. But soon.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v12	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio				0	Pronto. Dejad de preguntar.	Soon. Stop asking.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v13	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio			kerbin	1	Seguís en nibréK. Paciencia.	You're still at Kerbin. Patience.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v14	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio			kerbin	1	Acabáis de salir. Tranquilos.	You only just left. Relax.	calm	chatter	m	coast	any	any	any	any	any						
+tp_home_when_2__v15	tp_home_when_2	tp_home_when	2	mission_control	flight.chatter	radio			landed	1	Primero tenéis que despegar.	You have to take off first.	calm	chatter	m	coast	any	any	any	any	any						

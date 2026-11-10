@@ -116,7 +116,7 @@ namespace Lonapse
             return new[] { RuntimeLines.BodySpoken(bodyName), RuntimeLines.BodyEnglish(bodyName) };
         }
 
-        /// <summary>Spoken and English vessel name, null when it is too long to say.</summary>
+        /// <summary>Spoken and English vessel name, null when empty or in an unsupported alphabet.</summary>
         string[] VesselNames() { return NamesOfVessel(ActiveVessel); }
 
         /// <summary>{vessel} on EVA: the ship nearby, not the kerbal ("Stay close to" the kerbal's own name).</summary>
@@ -1386,7 +1386,7 @@ namespace Lonapse
         {
             if (count + 4 * entries.Count > Capacity) return false;
             for (int i = 0; i < entries.Count; i++)
-                EnqueueCrew(entries[i].Folder, i == 0 ? U(0.2f, 0.6f) : ResponseDelay(host.stress.stress), 0f, (entries[i].DialogueRole == "partner" || string.IsNullOrEmpty(entries[i].DialogueRole) && i % 2 != 0) ? b : a, entries[i]);
+                EnqueueCrew(entries[i].Folder, i == 0 ? U(0.2f, 0.6f) : LocalResponseDelay(host.stress.stress), 0f, (entries[i].DialogueRole == "partner" || string.IsNullOrEmpty(entries[i].DialogueRole) && i % 2 != 0) ? b : a, entries[i]);
             return true;
         }
 

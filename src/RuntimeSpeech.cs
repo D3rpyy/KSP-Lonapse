@@ -1,5 +1,5 @@
 // Experimental (runtime voice): the pure part of speaking a line at runtime with Piper. Text: loñapsE with real
-// names, and English names spelled for a Spanish voice. Sound: the Kerbal pitch shift and the same level shaping as
+// names respelled for a Spanish voice. Sound: the Kerbal pitch shift and the same level shaping as
 // audio/build_lonapse.py (trim, fade, pad, gated RMS target with a peak limiter), so a runtime line sounds like a
 // pre-rendered one. Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
@@ -86,9 +86,10 @@ namespace Lonapse
         static bool IsVowel(char c) { return "aeiouáéíóú".IndexOf(c) >= 0; }
 
         /// <summary>
-        /// An English (KSP) name spelled so a Spanish voice says it about right: "Jebediah Kerman" becomes
-        /// "Yebedia Kerman", "Bill" "Bil", "Gilly" "Guili". Only letters change, word by word. Each word keeps a
+        /// An English, Russian or Chinese (KSP) name spelled so a Spanish voice says it about right: "Jebediah Kerman" becomes
+        /// "Yebedia Kerman", "Gilly" "Guili", "Союз" "Soyus". Only letters change, word by word. Each word keeps a
         /// capital only at its start (espeak-ng reads a capital inside a word as a separate letter).
+        /// Han characters use bundled Mandarin readings, with one Spanish syllable per character.
         /// </summary>
         public static string Respell(string name)
         {
@@ -97,9 +98,23 @@ namespace Lonapse
             int i = 0;
             while (i < name.Length)
             {
+                int code = char.IsHighSurrogate(name[i]) && i + 1 < name.Length && char.IsLowSurrogate(name[i + 1])
+                           ? char.ConvertToUtf32(name[i], name[i + 1]) : name[i];
+                string chinese = ChinesePronunciation.Spell(code);
+                if (chinese != null)
+                {
+                    // Keep syllables and adjacent Latin words separate, so Spanish digraphs cannot form across them.
+                    if (sb.Length > 0 && char.IsLetterOrDigit(sb[sb.Length - 1])) sb.Append(' ');
+                    sb.Append(chinese);
+                    i += code > 0xFFFF ? 2 : 1;
+                    if (i < name.Length && (char.IsLetterOrDigit(name[i]) || char.IsHighSurrogate(name[i]))) sb.Append(' ');
+                    continue;
+                }
                 if (!char.IsLetter(name[i])) { sb.Append(name[i]); i++; continue; }
                 int j = i;
-                while (j < name.Length && char.IsLetter(name[j])) j++;
+                while (j < name.Length && char.IsLetter(name[j]) && !ChinesePronunciation.IsHan(name[j])) j++;
+                // An unknown Han character stays visible, so validation can reject unsupported names.
+                if (j == i) { sb.Append(name[i]); i++; continue; }
                 sb.Append(RespellWord(name.Substring(i, j - i)));
                 i = j;
             }
@@ -115,6 +130,15 @@ namespace Lonapse
                 char c = w[i];
                 char n = i + 1 < w.Length ? w[i + 1] : '\0';
                 char p = o.Length > 0 ? o[o.Length - 1] : '\0';
+                // These are final Spanish spellings. Do not feed them through the English rules below
+                // (which would turn y into i, or drop an h). Sounds absent from Spanish stay approximate.
+                string russian = RussianSpelling(c, n, i == 0 || "аеёиоуыэюяьъй".IndexOf(w[i - 1]) >= 0);
+                if (russian != null)
+                {
+                    // Spanish ll is a different sound, just as with Bill below.
+                    if (c != 'л' || p != 'l') o.Append(russian);
+                    continue;
+                }
                 if (c == 'e' && n == 'e') { o.Append('i'); i++; continue; }          // Eeloo, Jeeb: i
                 if (c == 'o' && n == 'o') { o.Append('u'); i++; continue; }          // Jool, Eeloo: u
                 if (c == 'p' && n == 'h') { o.Append('f'); i++; continue; }
@@ -138,6 +162,42 @@ namespace Lonapse
             if (o.Length == 0) return word;
             o[0] = char.ToUpperInvariant(o[0]);
             return o.ToString();
+        }
+
+        static string RussianSpelling(char c, char next, bool vowelStart)
+        {
+            switch (c)
+            {
+                case 'а': return "a";
+                case 'б': return "b";
+                case 'в': return "v";
+                case 'г': return "еиэ".IndexOf(next) >= 0 ? "gu" : "g";
+                case 'д': return "d";
+                case 'е': return vowelStart ? "ye" : "e";
+                case 'ё': return "yo";
+                case 'ж': case 'ш': case 'щ': return "ch";
+                case 'з': return "s";
+                case 'и': case 'й': case 'ы': return "i";
+                case 'к': return "k";
+                case 'л': return "l";
+                case 'м': return "m";
+                case 'н': return "n";
+                case 'о': return "o";
+                case 'п': return "p";
+                case 'р': return "r";
+                case 'с': return "s";
+                case 'т': return "t";
+                case 'у': return "u";
+                case 'ф': return "f";
+                case 'х': return "j";
+                case 'ц': return "ts";
+                case 'ч': return "ch";
+                case 'ъ': case 'ь': return "";
+                case 'э': return "e";
+                case 'ю': return "yu";
+                case 'я': return "ya";
+                default: return null;
+            }
         }
 
         // a line that already ends on a radio word gets no name after it ("Copy, over, Jebediah.")
@@ -403,8 +463,8 @@ namespace Lonapse
 
         /// <summary>
         /// The kind for one line, like delivery() in build_lonapse.py: "m", "f" or "mc" with the delivery band after a
-        /// dot ("m.tense", "mc.mc_panic", "f.callout"). Calm and none give the plain kind. Null for the launch
-        /// countdown (it is never spoken at runtime).
+        /// dot ("m.tense", "mc.mc_panic", "f.callout"). Calm and none give the plain kind.
+        /// The countdown has fixed recordings and does not request runtime synthesis.
         /// </summary>
         public static string KindFor(string speaker, string band, string severity, string ev)
         {

@@ -58,7 +58,7 @@ jobs:
         run: |
           # package.sh copies these into GameData/Lonapse. A difference means it was not run before the commit.
           fail=0
-          for pair in "README.md:README.md" "CHANGELOG.md:CHANGELOG.md" "LICENSE:LICENSE.txt" "LICENSE-CC-BY-4.0:LICENSE-CC-BY-4.0.txt" "docs/LICENSING.md:LICENSING.md" "audio/CREDITS.md:CREDITS.md"; do
+          for pair in "README.md:README.md" "CHANGELOG.md:CHANGELOG.md" "LICENSE:LICENSE.txt" "LICENSE-CC-BY-4.0:LICENSE-CC-BY-4.0.txt" "LICENSE-UNICODE:LICENSE-UNICODE.txt" "docs/LICENSING.md:LICENSING.md" "audio/CREDITS.md:CREDITS.md"; do
             src="${pair%%:*}"; dst="GameData/Lonapse/${pair##*:}"
             if ! cmp -s "$src" "$dst"; then
               echo "::error::$dst differs from $src. Run ./package.sh locally and commit GameData/Lonapse."

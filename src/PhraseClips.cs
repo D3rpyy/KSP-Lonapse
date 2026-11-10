@@ -59,6 +59,8 @@ namespace Lonapse
             List<string> errors = new List<string>();
             try
             {
+                string choicePath = Path.Combine(KSPUtil.ApplicationRootPath, "GameData/Lonapse/Phrases/choices.tsv");
+                DialogueChoices.Configure(File.Exists(choicePath) ? File.ReadAllLines(choicePath, System.Text.Encoding.UTF8) : null, errors);
                 var rows = new List<string>();
                 string crewDir = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeRel);
                 string[] scenePaths = Directory.Exists(crewDir) ? Directory.GetFiles(crewDir, "*.tsv") : new string[0];
