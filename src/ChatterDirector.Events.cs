@@ -145,7 +145,7 @@ namespace Lonapse
 
         // ---------------- somber mood ----------------
 
-        /// <summary>Clock until which the crew mourns: no goofy radio scenes, no MC jokes, no intercom banter.</summary>
+        /// <summary>Clock until which the crew mourns: no calm radio scenes, no MC jokes, no intercom banter.</summary>
         public float somberUntil = -1f;
 
         public bool Somber { get { return clock < somberUntil; } }
@@ -162,21 +162,21 @@ namespace Lonapse
             Log.Info("Somber for " + t.ToString("0") + " s (" + why + ")");
         }
 
-        /// <summary>MC joke: a mj_ scene (mc_jokes.tsv) or a calm goofy chatter scene that Mission Control opens.</summary>
+        /// <summary>MC joke: a mj_ scene (mc_jokes.tsv) or a calm chatter scene that Mission Control opens.</summary>
         private static bool IsMcJoke(PhraseScene sc)
         {
             if (sc.Id.StartsWith("mj_", StringComparison.Ordinal)) return true;
             if (sc.Lines.Count > 0 && sc.Lines[0].ClipKey != null && sc.Lines[0].ClipKey.StartsWith("mj_", StringComparison.Ordinal)) return true;
-            return sc.Event == "chatter" && sc.Band == "calm" && sc.StartsWithMc && IsGoofyRow(sc.Phase);
+            return sc.Event == "chatter" && sc.Band == "calm" && sc.StartsWithMc && IsCalmRow(sc.Phase);
         }
 
-        private static bool IsGoofyRow(string phase) { return phase == FlightPhase.Goofy || FlightPhase.IsGoofy(phase); }
+        private static bool IsCalmRow(string phase) { return phase == FlightPhase.Calm || FlightPhase.IsCalm(phase); }
 
-        /// <summary>While somber: chatter scenes that are goofy (goofy phase rows) or MC jokes are not played.</summary>
+        /// <summary>While somber: chatter scenes that are calm (calm phase rows) or MC jokes are not played.</summary>
         private bool SomberBlocks(PhraseScene sc)
         {
             if (!Somber || sc.Event != "chatter") return false;
-            return IsGoofyRow(sc.Phase) || IsMcJoke(sc);
+            return IsCalmRow(sc.Phase) || IsMcJoke(sc);
         }
 
         // ---------------- events (Director API D2) ----------------
@@ -368,8 +368,10 @@ namespace Lonapse
         // channel with the radio profile, and its subtitle. LonapseAddon lets only the control channel through for it
         // (FinalCallActive) while the gate stays closed. Then the somber mood starts.
 
-        private enum FinalStep { None, QuindarIn, Line, QuindarOut }
+        private enum FinalStep { None, Preparing, QuindarIn, Line, QuindarOut }
         private FinalStep finalStep = FinalStep.None;
+        private float finalRequested;
+        private int finalGeneration;
         private PhraseEntry finalEntry;
 
         /// <summary>The closed-gate crew_lost call is playing: the control channel stays on.</summary>
@@ -416,9 +418,19 @@ namespace Lonapse
                 return;
             }
             finalEntry = e;
-            Log.Info("Event crew_lost: final call with the gate closed (" + host.gateReason + "), scene " + sc.Id);
-            if (!PlayFinalFx("beeps/quindar_in")) PlayFinalLine();
-            else finalStep = FinalStep.QuindarIn;
+            finalStep = FinalStep.Preparing;
+            finalRequested = RealNow;
+            int generation = ++finalGeneration;
+            PhraseClips.Render(e, false, clip => {
+                if (generation != finalGeneration || finalStep != FinalStep.Preparing || RealNow - finalRequested > 8f)
+                { if (clip != null) UnityEngine.Object.Destroy(clip); return; }
+                if (clip == null) { EndFinalCall("speech failed"); return; }
+                if (!host.settings.enabled || host.settings.muted || !host.settings.radioEnabled || Time.timeScale <= 0f)
+                { UnityEngine.Object.Destroy(clip); EndFinalCall("speech cancelled"); return; }
+                PhraseClips.SetRuntimeClip(e, clip);
+                if (!PlayFinalFx("beeps/quindar_in")) PlayFinalLine();
+                else finalStep = FinalStep.QuindarIn;
+            });
         }
 
         /// <summary>A one-line MC crew_lost scene (tense first, then any band). Phase is not checked: the flight is over.</summary>
@@ -426,7 +438,7 @@ namespace Lonapse
         {
             // a real clip: the final call plays it directly, not through the runtime voice
             Predicate<PhraseScene> one = x => PhraseClips.Playable(x) && !x.IsProbe && x.Lines.Count == 1 && x.McLines == 1
-                                              && PhraseClips.Clip(x.Lines[0], false) != null;
+                                              ;
             PhraseScene sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, "tense", one), rng, lastSceneId);
             if (sc == null) sc = Mem.Take(PhraseClips.table.ScenesFor(EventWatchers.CrewLost, null, one), rng, lastSceneId);
             if (sc != null) lastSceneId = sc.Id;
@@ -445,6 +457,9 @@ namespace Lonapse
             if (ch.Busy) return;
             switch (finalStep)
             {
+                case FinalStep.Preparing:
+                    if (RealNow - finalRequested > 8f) EndFinalCall("speech timed out");
+                    break;
                 case FinalStep.QuindarIn: PlayFinalLine(); break;
                 case FinalStep.Line:
                     if (PlayFinalFx("beeps/quindar_out")) finalStep = FinalStep.QuindarOut;
@@ -476,6 +491,7 @@ namespace Lonapse
             RadioProfile p = Profile;
             c.SetBand(p.HighPassHz, p.LowPassHz);
             c.Play(clip, 0.8f, 1f, false, 0f);
+            c.SetRadioVoice(RadioVoice.Control);
             c.boost = VoiceBoost;
             c.compressor = host.settings.voiceCompressor;
             c.phraseKey = e.ClipKey;
@@ -494,6 +510,7 @@ namespace Lonapse
         {
             if (finalStep == FinalStep.None) return;
             finalStep = FinalStep.None;
+            finalGeneration++;
             finalEntry = null;
             Log.Info("Crew lost final call " + why);
         }
@@ -502,6 +519,7 @@ namespace Lonapse
         private void ResetFinalCall()
         {
             finalStep = FinalStep.None;
+            finalGeneration++;
             finalEntry = null;
         }
 

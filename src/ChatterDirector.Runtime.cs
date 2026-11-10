@@ -72,7 +72,7 @@ namespace Lonapse
         }
 
         /// <summary>The setting is on and Mission Control's voice is installed.</summary>
-        bool RuntimeOn { get { return host.settings.runtimeVoice && RuntimeVoice.Missing("mc") == null; } }
+        bool RuntimeOn { get { return RuntimeVoice.Missing("mc") == null; } }
 
         /// <summary>Counters for the Debug tab.</summary>
         public string RuntimeStats
@@ -143,23 +143,23 @@ namespace Lonapse
         RuntimeLine PlanLine(PhraseEntry e, KerbalVoice speaker, string[] name, KerbalVoice partner = null)
         {
             if (e == null || e.SubtitleOnly || string.IsNullOrEmpty(e.Spanish) || !RuntimeOn) return null;
-            if (e.ClipKey != null && e.ClipKey.StartsWith("rt_", StringComparison.Ordinal)) return null; // already runtime
+            if (e.PreparedSpeech && PhraseClips.Clip(e, speaker != null && speaker.isFemale) != null) return null; // already runtime
             bool mc = e.Role == "mc";
             if (!mc && speaker == null) return null;
             // the delivery of the line's band, as in the build (tense and panic faster and higher, MC calm in a panic)
             string kind = RuntimeDelivery.KindFor(mc ? "mc" : KindFor(speaker), e.Band, e.Severity, e.Event);
             if (kind == null || RuntimeVoice.Missing(kind) != null) return null;
-            bool required = PhraseClips.Clip(e, !mc && speaker.isFemale) == null;
+            bool required = true;
             // a subtitle template with its runtime Spanish (spanish_rt): the voice says what the subtitle shows
-            string spanish = e.RuntimeSpanish ?? e.Spanish, english = e.English ?? "";
-            bool changed = e.RuntimeSpanish != null;
+            string spanish = e.RuntimeSpanish ?? e.SpanishRtVersion(0) ?? e.Spanish, english = e.English ?? "";
+
             if (spanish.IndexOf("{body}", StringComparison.Ordinal) >= 0 || english.IndexOf("{body}", StringComparison.Ordinal) >= 0)
             {
                 // a new row with {body}: the body name goes in at runtime
                 string[] b = BodyNames(BodyName) ?? new[] { "el planeta", "the planet" };
                 spanish = spanish.Replace("{body}", RuntimeSpeech.MarkRaw(b[0]));
                 english = english.Replace("{body}", b[1]);
-                changed = true;
+
             }
             else if (e.Body == FlightPhase.GenericBody && FlightPhase.BodyKey(BodyName) == FlightPhase.GenericBody)
             {
@@ -168,7 +168,7 @@ namespace Lonapse
                 string s2, e2;
                 if (b != null && RuntimeSpeech.SwapBody(spanish, english, RuntimeSpeech.MarkRaw(b[0]), b[1], out s2, out e2))
                 {
-                    spanish = s2; english = e2; changed = true;
+                    spanish = s2; english = e2;
                 }
             }
             // a subtitle slot ({vessel}, {other}) already shows a name the recorded Spanish does not say: say it too.
@@ -178,16 +178,16 @@ namespace Lonapse
             if (shown != null)
             {
                 string s4 = RuntimeSpeech.AddName(spanish, RuntimeSpeech.MarkRaw(shown[0]));
-                if (s4 != null) { spanish = s4; changed = true; name = null; }
+                if (s4 != null) { spanish = s4;  name = null; }
             }
             if (name != null)
             {
                 string s3 = RuntimeSpeech.AddName(spanish, RuntimeSpeech.MarkRaw(name[0]));
                 string e3 = RuntimeSpeech.AddName(english, name[1]);
-                if (s3 != null && e3 != null) { spanish = s3; english = e3; changed = true; }
+                if (s3 != null && e3 != null) { spanish = s3; english = e3;  }
             }
-            if (!changed && !required) return null;
-            var n = CopyEntry(e, e.ClipKey + "_rt" + (++runtimeAsked));
+            // Every spoken scene line is synthesized, including fixed wording.
+            var n = CopyEntry(e, e.ClipKey + "_speech" + (++runtimeAsked));
             n.Spanish = RuntimeSpeech.Unmarked(spanish);
             n.LonapseText = RuntimeSpeech.Spoken(spanish);
             n.English = english;
@@ -207,7 +207,7 @@ namespace Lonapse
         {
             return new PhraseEntry
             {
-                ClipKey = key, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
+                ClipKey = key, DialogueRole = e.DialogueRole, IsReply = e.IsReply, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
                 Seq = e.Seq, Gender = e.Gender, Phase = e.Phase, Cause = e.Cause, Trait = e.Trait, Persona = e.Persona,
                 Topic = e.Topic, Core = e.Core, Beep = e.Beep, Body = e.Body, Spanish = e.Spanish,
                 LonapseText = e.LonapseText, English = e.English, Folder = e.Folder,
@@ -300,9 +300,15 @@ namespace Lonapse
         {
             clip = null; shown = null;
             RuntimeLine rt = u.rt;
-            if (rt == null) return TurnGo;
+            if (rt == null)
+            {
+                if (u.entry == null || u.entry.SubtitleOnly || PhraseClips.Clip(u.entry, speaker != null && speaker.isFemale) != null) return TurnGo;
+                u.rt = rt = PlanLine(u.entry, speaker, null);
+                if (rt == null) return TurnSkip;
+            }
             // a different kerbal took the line (the planned one fainted): the other voice only when there is no clip
-            if (speaker != null && RuntimeDelivery.BaseKind(rt.kind) != KindFor(speaker) && !rt.required) { u.rt = null; return TurnGo; }
+            if (speaker != null && RuntimeDelivery.BaseKind(rt.kind) != KindFor(speaker))
+            { u.rt = PlanLine(u.entry, speaker, null); return u.rt != null ? TurnWait : TurnSkip; }
             if (rt.clip != null) { clip = rt.clip; shown = rt.entry; runtimeUsed++; return TurnGo; }
             if (!rt.failed)
             {
@@ -347,6 +353,7 @@ namespace Lonapse
             if (!host.settings.runtimeReports) return;
             RuntimeLandCheck();
             SunriseTick();
+            if (host.probeMode) return; // probe reports share the pet/hail scheduler and answer with beeps
             if (nextReport < 0f) nextReport = clock + U(ReportFirstMin, ReportFirstMax);
             if (clock < nextReport || reportPending) return;
             if (count > 0 || host.stress.stress > ReportMaxStress || !host.signal.connected || radioSilent || mcBlackout
@@ -386,6 +393,21 @@ namespace Lonapse
         /// node, sandbox funds, no fuel tanks) is left out, so the templates that need it do not fit.</summary>
         void CollectValues(Vessel v, string sit, Dictionary<string, double> nums, Dictionary<string, string[]> names, bool log = true)
         {
+            foreach (string tag in SubtitleSlots.Conditions) nums["tag_" + tag] = 0;
+            foreach (string tag in SlotConditions()) nums["tag_" + tag] = 1;
+            nums["tag_" + sit] = 1;
+            nums["splashed"] = v.situation == Vessel.Situations.SPLASHED ? 1 : 0;
+            nums["eva_thrusting"] = 0;
+            nums["eva_grounded"] = 0;
+            if (v.isEVA && v.rootPart != null)
+            {
+                KerbalEVA evaState = v.rootPart.GetComponent<KerbalEVA>();
+                if (evaState != null)
+                {
+                    nums["eva_thrusting"] = evaState.JetpackIsThrusting ? 1 : 0;
+                    nums["eva_grounded"] = v.Landed && nums["splashed"] == 0 && !evaState.OnALadder && !evaState.JetpackIsThrusting ? 1 : 0;
+                }
+            }
             nums["alt_km"] = v.altitude / 1000.0;
             nums["speed"] = sit == "orbit" || sit == "escape" ? v.obt_speed : v.srfSpeed;
             Orbit o = v.orbit;
@@ -417,6 +439,7 @@ namespace Lonapse
                     nums["has_solar"] = parts.Contains("solar") ? 1 : 0;
                     nums["has_rcs"] = parts.Contains("rcs") ? 1 : 0;
                     nums["has_legs"] = parts.Contains("legs") ? 1 : 0;
+                    SurfaceScannerValues(v, nums, names);
                 }
             }
             else
@@ -504,9 +527,36 @@ namespace Lonapse
             catch (Exception) { }
         }
 
+        // Resource scanners do not emit OnExperimentDeployed. Expose a usable live reading to normal reports/chats.
+        static void SurfaceScannerValues(Vessel v, Dictionary<string, double> nums, Dictionary<string, string[]> names)
+        {
+            if (v == null || !v.LandedOrSplashed) return;
+            double power;
+            if (!nums.TryGetValue("ec", out power) || power <= 0) return;
+            try
+            {
+                foreach (Part part in v.parts) foreach (PartModule module in part.Modules)
+                {
+                    var scanner = module as ModuleResourceScanner;
+                    if (scanner == null || !scanner.isEnabled || scanner.ScannerType != 0 || !scanner.IsSituationValid()
+                        || v.heightFromTerrain > scanner.MaxAbundanceAltitude) continue;
+                    double abundance = scanner.abundance;
+                    if (double.IsNaN(abundance) || abundance < 0 || abundance > 1) continue;
+                    string resource = RuntimeLines.CleanName(scanner.ResourceDisplayName);
+                    if (string.IsNullOrEmpty(resource)) resource = scanner.ResourceName;
+                    if (string.IsNullOrEmpty(resource)) continue;
+                    nums["resource_pct"] = abundance * 100;
+                    names["resource"] = new[] { RuntimeSpeech.Respell(resource), resource };
+                    return;
+                }
+            }
+            catch (Exception) { }
+        }
+
         static void Put(Dictionary<string, double> d, string k, double v) { if (!double.IsNaN(v)) d[k] = v; }
 
         Dictionary<string, double> rtNumbers;
+        Dictionary<string, string[]> rtNames;
         float rtNumbersAt = -100f;
         Guid rtNumbersId;
         /// <summary>How often the numbers for recorded lines are worked out, in s. CanFill asks every frame and
@@ -522,9 +572,10 @@ namespace Lonapse
             if (v == null) return null;
             if (rtNumbers != null && v.id == rtNumbersId && clock - rtNumbersAt < RuntimeNumbersEvery) return rtNumbers;
             var nums = new Dictionary<string, double>();
-            try { CollectValues(v, SituationOf(v) ?? "other", nums, new Dictionary<string, string[]>(), false); }
+            var names = new Dictionary<string, string[]>();
+            try { CollectValues(v, SituationOf(v) ?? "other", nums, names, false); }
             catch (Exception e) { Log.Debug("Runtime voice numbers: " + e.Message); }
-            rtNumbers = nums;
+            rtNumbers = nums; rtNames = names;
             rtNumbersAt = clock;
             rtNumbersId = v.id;
             return nums;
@@ -536,6 +587,7 @@ namespace Lonapse
         {
             if (k == null || v == null) return;
             nums["is_tourist"] = k.persona.IsTourist ? 1 : 0;
+            RuntimeLines.ActorConditions(nums, k.persona.ChatKeys, null);
             try
             {
                 ProtoCrewMember pcm = HighLogic.CurrentGame != null && HighLogic.CurrentGame.CrewRoster != null
@@ -652,6 +704,14 @@ namespace Lonapse
             if (fresh.Count > 0) fit = fresh;
             else if (kind == "report" || kind == "warp" || kind == "eva") return false;   // a report can wait, an answer to an event may repeat
             if (fit.Count == 0) return false;
+            if (kind == "eva")
+            {
+                double water, thrust;
+                string key = nums.TryGetValue("splashed", out water) && water == 1 ? "splashed"
+                    : sit == "orbit" && nums.TryGetValue("eva_thrusting", out thrust) && thrust == 1 ? "eva_thrusting" : null;
+                var special = fit.FindAll(t => t.Checks.Exists(c => c.Key == key));
+                if (special.Count > 0 && rng.NextDouble() < 0.75) fit = special;
+            }
             QueueRuntimeOnly(fit[rng.Next(fit.Count)], nums, names, delay, report, replyChance);
             return true;
         }
@@ -833,9 +893,20 @@ namespace Lonapse
         /// <summary>{exp} for a science line: the Spanish words go in reversed, like the rest of the text.</summary>
         static string[] ExpNames(string subjectId)
         {
-            // a mod's experiment row gives the words of its own experiment
-            string[] w = RuntimeLines.ExperimentWords(PhraseClips.runtimeTemplates, RuntimeLines.ExperimentId(subjectId));
+            string[] w = ExperimentLabels(subjectId);
             return new[] { LonapseText.ReverseText(w[0]), w[1] };
+        }
+
+        static string[] ExperimentLabels(string subjectId)
+        {
+            string id = RuntimeLines.ExperimentId(subjectId), title = null;
+            try
+            {
+                ScienceExperiment experiment = ResearchAndDevelopment.GetExperiment(id);
+                if (experiment != null) title = KSP.Localization.Localizer.Format(experiment.experimentTitle);
+            }
+            catch (Exception) { }
+            return RuntimeLines.ExperimentWords(PhraseClips.runtimeTemplates, id, title);
         }
 
         /// <summary>From GameEventHub, before the science event: true when the runtime voice takes it over. With a
@@ -847,6 +918,7 @@ namespace Lonapse
         public bool RuntimeScienceTakeover(string subjectId, float dataAmount, string bodyName)
         {
             if (!RuntimeOn || !host.settings.runtimeScience || radioSilent || !host.settings.radioEnabled) return false;
+            if (host.probeMode) return ProbeScience(subjectId, dataAmount, bodyName, null);
             string topic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId);
             bool reach = !McUnreachable && host.signal.connected;
             bool eva = Array.IndexOf(EvaScience, topic) >= 0;
@@ -950,6 +1022,7 @@ namespace Lonapse
         {
             if (!RuntimeOn || !host.settings.runtimeReports || reportPending || radioSilent || mcBlackout
                 || !host.signal.connected || !host.settings.radioEnabled) return false;
+            if (host.probeMode) return TryRuntimeProbeTopic("warp");
             Vessel v = ActiveVessel;
             if (v == null) return false;
             var nums = new Dictionary<string, double>();
@@ -1205,9 +1278,10 @@ namespace Lonapse
             {
                 // the intercom chats in one cabin, the suit radio chats between two EVA kerbals, the radio chats
                 // between two vessels (and between two EVA kerbals too)
-                fit.RemoveAll(c => way == ChatWay.Intercom ? c.Key[0].AboutEva || c.Key[0].AboutApart
-                                 : way == ChatWay.Eva ? !c.Key[0].AboutEva && !c.Key[0].AboutApart
-                                 : !c.Key[0].AboutApart);
+                fit.RemoveAll(c => c.Key[0].Dialogue != null && c.Key[0].Dialogue.Get("channel") != "auto"
+                    ? (c.Key[0].Dialogue.Get("channel") == "intercom") != (way == ChatWay.Intercom)
+                    : way == ChatWay.Intercom ? c.Key[0].AboutEva || c.Key[0].AboutApart
+                    : way == ChatWay.Eva ? !c.Key[0].AboutEva && !c.Key[0].AboutApart : !c.Key[0].AboutApart);
                 // in time warp a chat about the warp when one fits
                 if (host.warpChatter && way == ChatWay.Intercom)
                 {
@@ -1230,6 +1304,8 @@ namespace Lonapse
                 var n = namesA; namesA = namesB; namesB = n;
             }
             nums = pick.Value ? numsB : numsA;
+            RuntimeLines.ActorConditions(nums, a.persona.ChatKeys, b.persona.ChatKeys);
+            if (chat[0].Dialogue != null && chat[0].Dialogue.Get("channel") != "auto") radio = chat[0].Dialogue.Get("channel") == "radio";
             recentRuntime.Enqueue(chat[0].Id);
             while (recentRuntime.Count > 6) recentRuntime.Dequeue();
 
@@ -1238,14 +1314,14 @@ namespace Lonapse
             for (int i = 0; i < chat.Count; i++)
             {
                 string sp, en;
-                Dictionary<string, string[]> who = i % 2 == 0 ? namesA : namesB;
+                Dictionary<string, string[]> who = (chat[i].Role == "partner" || string.IsNullOrEmpty(chat[i].Role) && i % 2 != 0) ? namesB : namesA;
                 List<int> vs = RuntimeLines.FillableVersions(chat[i], nums, who);
                 // one name per chat when the lines allow it: a line with a name starts the gap, the rest prefer none
                 int vi = PickRuntimeVersion(chat[i], vs, NamesRecent);
                 if (vi < 0 || !RuntimeLines.Fill(chat[i], vi, nums, who, out sp, out en)) return false;
                 var e = new PhraseEntry
                 {
-                    ClipKey = chat[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
+                    ClipKey = chat[i].Id + "_" + (++runtimeAsked), DialogueRole = chat[i].Role, Event = "chatter", Severity = chat[i].Dialogue != null ? chat[i].Dialogue.Get("severity") : "chatter", Band = chat[i].Dialogue != null ? chat[i].Dialogue.Get("band") : "calm", Role = "crew",
                     Scene = chat[0].Id, Seq = i + 1, Gender = "both", Phase = "any", Cause = "any",
                     Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
                 };
@@ -1269,7 +1345,7 @@ namespace Lonapse
             for (int i = 0; i < entries.Count; i++)
             {
                 int idx = i;
-                Voice.Request(KindFor(i % 2 == 0 ? a : b), spanish[i], r =>
+                Voice.Request(RuntimeDelivery.KindFor(KindFor((chat[i].Role == "partner" || string.IsNullOrEmpty(chat[i].Role) && i % 2 != 0) ? b : a), entries[i].Band, entries[i].Severity, entries[i].Event), spanish[i], r =>
                 {
                     if (r.clip == null) failed = true;
                     clips[idx] = r.clip;
@@ -1310,7 +1386,7 @@ namespace Lonapse
         {
             if (count + 4 * entries.Count > Capacity) return false;
             for (int i = 0; i < entries.Count; i++)
-                EnqueueCrew(entries[i].Folder, i == 0 ? U(0.2f, 0.6f) : ResponseDelay(host.stress.stress), 0f, i % 2 == 0 ? a : b, entries[i]);
+                EnqueueCrew(entries[i].Folder, i == 0 ? U(0.2f, 0.6f) : ResponseDelay(host.stress.stress), 0f, (entries[i].DialogueRole == "partner" || string.IsNullOrEmpty(entries[i].DialogueRole) && i % 2 != 0) ? b : a, entries[i]);
             return true;
         }
 
@@ -1436,6 +1512,7 @@ namespace Lonapse
         public void RuntimeContract(bool completed, double funds, double sci, double rep, string contractType = null)
         {
             if (!RuntimeOn || !host.settings.runtimeScience) return;
+            if (host.probeMode && TryRuntimeProbeTopic("contract")) return;
             var nums = new Dictionary<string, double>();
             var names = new Dictionary<string, string[]>();
             FlightValues(nums, names);
@@ -1476,11 +1553,22 @@ namespace Lonapse
             List<int> vs = RuntimeLines.FillableVersions(t, nums, names);
             int vi = PickRuntimeVersion(t, vs, NamesRecent);
             if (vi < 0 || !RuntimeLines.Fill(t, vi, nums, names, out spanish, out english)) return;
+            Vessel evaVessel = t.Kind == "eva" ? ActiveVessel : null;
+            Func<bool> contextValid = evaVessel == null ? (Func<bool>)null : () =>
+            {
+                Vessel live = ActiveVessel;
+                if (live == null || live != evaVessel || !live.isEVA) return false;
+                string sit = SituationOf(live) ?? "other";
+                var liveNums = new Dictionary<string, double>();
+                var liveNames = new Dictionary<string, string[]>();
+                CollectValues(live, sit, liveNums, liveNames, false);
+                return RuntimeLines.Holds(t, sit, liveNums) && RuntimeLines.FillableVersions(t, liveNums, names).Contains(vi);
+            };
             recentRuntime.Enqueue(t.Id);
             while (recentRuntime.Count > 4) recentRuntime.Dequeue();
             var e = new PhraseEntry
             {
-                ClipKey = t.Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "mc",
+                ClipKey = t.Id + "_" + (++runtimeAsked), Event = "chatter", Severity = t.Dialogue != null ? t.Dialogue.Get("severity") : "chatter", Band = t.Dialogue != null ? t.Dialogue.Get("band") : "calm", Role = "mc",
                 Scene = t.Id, Seq = 1, Gender = "m", Phase = "any", Cause = "any",
                 Spanish = RuntimeSpeech.Unmarked(spanish), LonapseText = RuntimeSpeech.Spoken(spanish), English = english,
             };
@@ -1508,18 +1596,20 @@ namespace Lonapse
                 Reply x = rp;
                 rp = null;
                 if (x.clip == null) return;
-                if (!mcQueued || !CanChat(x.speaker) || count + 4 > Capacity || radioSilent || !host.signal.connected || !host.settings.radioEnabled)
+                if (!mcQueued || contextValid != null && !contextValid() || !CanChat(x.speaker) || count + 4 > Capacity || radioSilent || !host.signal.connected || !host.settings.radioEnabled)
                 {
                     UnityEngine.Object.Destroy(x.clip);
                     return;
                 }
                 PhraseClips.SetRuntimeClip(x.entry, x.clip);
                 runtimeOnly++;
+                int replyStart = count;
                 EnqueueCrew(x.entry.Folder, ResponseDelay(host.stress.stress), 0f, x.speaker, x.entry);
+                GuardQueued(replyStart, contextValid);
                 Log.Info("Runtime voice: reply " + x.entry.ClipKey + " (" + x.speaker.displayName + ") to " + t.Id);
             };
             if (rp != null)
-                Voice.Request(KindFor(rp.speaker), rp.spanish, r =>
+                Voice.Request(RuntimeDelivery.KindFor(KindFor(rp.speaker), rp.entry.Band, rp.entry.Severity, rp.entry.Event), rp.spanish, r =>
                 {
                     if (rp == null) { if (r.clip != null) UnityEngine.Object.Destroy(r.clip); return; }
                     rp.clip = r.clip;
@@ -1527,12 +1617,12 @@ namespace Lonapse
                     if (r.clip == null) runtimeFailed++;
                     reply();
                 });
-            Voice.Request("mc", spanish, r =>
+            Voice.Request(RuntimeDelivery.KindFor("mc", e.Band, e.Severity, e.Event), spanish, r =>
             {
                 if (report) reportPending = false;
                 mcDone = true;
                 if (r.clip == null) { runtimeFailed++; reply(); return; }
-                if (count + 7 > Capacity || radioSilent || mcBlackout || !host.signal.connected || !host.settings.radioEnabled)
+                if (count + 7 > Capacity || contextValid != null && !contextValid() || radioSilent || mcBlackout || !host.signal.connected || !host.settings.radioEnabled)
                 {
                     UnityEngine.Object.Destroy(r.clip);
                     Log.Info("Runtime voice: " + e.ClipKey + " dropped, the radio is busy or cut");
@@ -1541,12 +1631,20 @@ namespace Lonapse
                 }
                 PhraseClips.SetRuntimeClip(e, r.clip);
                 runtimeOnly++;
+                int reportStart = count;
                 EnqueueMc(e.Folder, delay, e);
+                GuardQueued(reportStart, contextValid);
                 mcQueued = true;
                 Log.Info("Runtime voice: " + e.ClipKey + " \"" + r.spoken + "\" ready in " + r.queueToReadyMs.ToString("0")
                          + " ms (Piper " + r.piperMs.ToString("0") + " ms), " + r.clip.length.ToString("0.00") + " s");
                 reply();
             });
+        }
+
+        private void GuardQueued(int start, Func<bool> contextValid)
+        {
+            if (contextValid == null) return;
+            for (int q = start; q < count; q++) queue[(head + q) % Capacity].contextValid = contextValid;
         }
 
         /// <summary>Share of Mission Control runtime lines the crew answers, when a reply fits.</summary>
@@ -1595,7 +1693,7 @@ namespace Lonapse
             rn["self"] = kn;
             rn["kerbal"] = kn;
             var nn = new Dictionary<string, double>(nums ?? new Dictionary<string, double>());
-            if (!ReferenceEquals(k, reportKerbal)) CrewValues(k, v, nn);
+            CrewValues(k, v, nn);
             List<RuntimeTemplate> fit = RuntimeLines.Replies(PhraseClips.runtimeTemplates, line, sit, nn, rn);
             // a tourist only gives the answers written for tourists (is_tourist=1), the rest is crew talk
             if (k.persona.IsTourist) fit.RemoveAll(x => !RuntimeLines.ForTourist(x));
@@ -1611,11 +1709,12 @@ namespace Lonapse
             while (recentReplies.Count > 8) recentReplies.Dequeue();
             var e = new PhraseEntry
             {
-                ClipKey = t.Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm", Role = "crew",
+                ClipKey = t.Id + "_" + (++runtimeAsked), Event = "chatter", Severity = t.Dialogue != null ? t.Dialogue.Get("severity") : "chatter", Band = t.Dialogue != null ? t.Dialogue.Get("band") : "calm", Role = "crew",
                 Scene = line.Id, Seq = 2, Gender = "both", Phase = "any", Cause = "any",
                 Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
             };
             e.Folder = PhraseTable.FolderFor(e.Role, e.Severity, e.Band, e.Event);
+            e.IsReply = true;
             return new Reply { speaker = k, entry = e, spanish = sp };
         }
 
@@ -1691,7 +1790,7 @@ namespace Lonapse
 
         /// <summary>
         /// After a calm chatter scene that ends with a Mission Control statement (not a question): sometimes a kerbal
-        /// answers with a general reply (replies.tsv without to=). The scene's crew speaker answers when there is one.
+        /// answers with a general reply (a reply row without to targets). The scene's crew speaker answers when there is one.
         /// </summary>
         void RecordedReply(PhraseScene sc, PhraseEntry last, KerbalVoice sp)
         {
@@ -1711,7 +1810,7 @@ namespace Lonapse
             finally { reportKerbal = null; }
             if (rp == null) return;
             float asked = clock;
-            Voice.Request(KindFor(rp.speaker), rp.spanish, r =>
+            Voice.Request(RuntimeDelivery.KindFor(KindFor(rp.speaker), rp.entry.Band, rp.entry.Severity, rp.entry.Event), rp.spanish, r =>
             {
                 if (r.clip == null) { runtimeFailed++; return; }
                 if (clock - asked > RecordedReplyMaxWait || !CanChat(rp.speaker) || count + 4 > Capacity || radioSilent

@@ -233,6 +233,8 @@ namespace Lonapse
                 // only data the active vessel sends: another vessel's antenna says nothing about this batch
                 if (data != null && !aborted && host.director != null && v != null && ReferenceEquals(v, FlightGlobals.ActiveVessel))
                     host.director.NoteTransmitted(data.subjectID);
+                if (data != null && aborted && host.director != null && v != null && ReferenceEquals(v, FlightGlobals.ActiveVessel))
+                    host.director.ProbeTransmissionAborted(data.subjectID);
             }
             catch (Exception e) { Log.Exception("GameEventHub.OnDataTransmission", e); }
         }

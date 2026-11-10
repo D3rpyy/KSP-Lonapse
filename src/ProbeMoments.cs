@@ -12,6 +12,14 @@ namespace Lonapse
     /// </summary>
     public class ProbeMilestones
     {
+        public Func<string, bool> WasRemembered;
+        public Action<string> Remember;
+        bool NewFact(string key)
+        {
+            if (WasRemembered != null && WasRemembered(key)) return false;
+            if (Remember != null) Remember(key);
+            return true;
+        }
         /// <summary>Full mission days that count, with their topic. Ascending.</summary>
         public static readonly int[] Days = { 1, 10, 100, 365 };
         public static readonly string[] DayTopics = { "day1", "day10", "day100", "day365" };
@@ -56,8 +64,8 @@ namespace Lonapse
             string hit = null;
             for (int i = 0; i < Days.Length; i++)
                 if (full >= Days[i] && set.Add(DayTopics[i])) hit = DayTopics[i];
-            if (hit != null) return hit;
-            if (orbiting && set.Add(BodyKey(Orbit, body))) return Orbit;
+            if (hit != null && NewFact(vesselId + ":milestone:" + hit)) return hit;
+            if (orbiting && set.Add(BodyKey(Orbit, body)) && NewFact(vesselId + ":milestone:" + BodyKey(Orbit, body))) return Orbit;
             return null;
         }
 
@@ -67,7 +75,7 @@ namespace Lonapse
             if (string.IsNullOrEmpty(vesselId)) return false;
             HashSet<string> set;
             if (!done.TryGetValue(vesselId, out set)) { set = new HashSet<string>(); done[vesselId] = set; }
-            return set.Add(BodyKey(Landing, body));
+            return set.Add(BodyKey(Landing, body)) && NewFact(vesselId + ":milestone:" + BodyKey(Landing, body));
         }
     }
 

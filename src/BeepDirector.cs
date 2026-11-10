@@ -21,6 +21,7 @@ namespace Lonapse
         public readonly DescentSequence descent = new DescentSequence(6f);
         // A ping is keyed like a transmission: key up, ping, key down
         private float pingSeqPing = -1f, pingSeqClose = -1f;
+        public bool TelemetryActive { get { return pingSeqPing > 0f || pingSeqClose > 0f; } }
 
         public BeepDirector(LonapseAddon host, System.Random rng)
         {
@@ -30,6 +31,12 @@ namespace Lonapse
 
         private void TickPingSequence(float dt)
         {
+            if (TelemetryActive && (host.director.VoiceActive || host.director.IntercomAudible || host.director.QueueCount > 0))
+            {
+                pingSeqPing = pingSeqClose = -1f;
+                host.beep[0].FadeOutOnce(0.05f);
+                return;
+            }
             if (pingSeqPing > 0f)
             {
                 pingSeqPing -= dt;
@@ -121,8 +128,12 @@ namespace Lonapse
                 warpPingLeft -= dt;
                 if (warpPingLeft <= 0f)
                 {
-                    warpPingLeft = -1f;
-                    PlayPing();
+                    if (host.director.TelemetryMayStart)
+                    {
+                        warpPingLeft = -1f;
+                        PlayPing();
+                    }
+                    else warpPingLeft = 0.05f;
                 }
             }
 
@@ -157,7 +168,7 @@ namespace Lonapse
             pingLeft -= dt;
             if (pingLeft <= 0f)
             {
-                if (host.control.Busy || (host.director != null && host.director.IntercomTurnOpen))
+                if (!host.director.TelemetryMayStart)
                 {
                     pingLeft = 2f;
                     return;
@@ -187,9 +198,10 @@ namespace Lonapse
         }
 
         /// <summary>One soft telemetry ping. Returns the channel or null.</summary>
-        public VoiceChannel PlayPing()
+        public VoiceChannel PlayPing(bool queued = false)
         {
             if (!host.CanStartAudio || host.director.radioSilent || host.director.mcBlackout || !host.settings.beepsEnabled) return null;
+            if (queued ? host.director.VoiceActive || host.director.IntercomTurnOpen : !host.director.TelemetryMayStart) return null;
             if (ClipLibrary.CountOf("beeps/ping") == 0) return null;
             if (pingSeqPing > 0f || pingSeqClose > 0f) return null; // one keyed ping at a time
             ShowPingSubtitle();
@@ -199,6 +211,7 @@ namespace Lonapse
                 AudioClip clip = ClipLibrary.Next("beeps/ping", rng);
                 if (clip == null) return null;
                 host.beep[0].Play(clip, Tu.pingVolume, 1f, false, 0f);
+                pingSeqClose = host.beep[0].duration + 0.03f;
                 return host.beep[0];
             }
             pingSeqPing = Math.Max(0.02f, open - 0.04f); // ping starts on the tail of the key-up noise

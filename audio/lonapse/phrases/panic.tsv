@@ -132,7 +132,7 @@ pa_fuel_t05_1	chatter	chatter	tense	crew	pa_fuel_t05	1	both	any	fuel	any	Control
 pa_fuel_t05_2	chatter	chatter	tense	mc	pa_fuel_t05	2	m	any	fuel	any	Justo. Empuje suave, sin desperdiciar.	Just barely. Gentle thrust, no waste. | Barely. Gentle thrust. | Just about. No wasting.	
 pa_fuel_p01	chatter	chatter	panic	crew	pa_fuel_p01	1	both	any	fuel	any	¡Los tanques... casi vacíos!	The tanks... nearly empty! | The tanks are almost empty! | Nearly no fuel!	
 pa_fuel_p02	chatter	chatter	panic	crew	pa_fuel_p02	1	both	any	fuel	any	¡El indicador... casi a cero!	The gauge... almost at zero! | The gauge is near zero! | Fuel gauge... almost zero!	
-pa_fuel_p03	chatter	chatter	panic	crew	pa_fuel_p03	1	both	goofy	fuel	any	¿Alguien ha traído... un bidón de repuesto?	Did anyone bring... a spare can? | Anyone pack a spare can? | Did someone bring extra fuel?	
+pa_fuel_p03	chatter	chatter	panic	crew	pa_fuel_p03	1	both	calm	fuel	any	¿Alguien ha traído... un bidón de repuesto?	Did anyone bring... a spare can? | Anyone pack a spare can? | Did someone bring extra fuel?	
 pa_fuel_p04_1	chatter	chatter	panic	crew	pa_fuel_p04	1	both	any	fuel	any	¡Control, nos quedamos sin combustible!	Control, we're running out of fuel! | Control, the fuel is running out! | Control, we're almost out!	
 pa_fuel_p04_2	chatter	chatter	panic	mc	pa_fuel_p04	2	m	any	fuel	any	Recibido. Usad lo que queda con cuidado.	Copy. Use what's left carefully. | Copy. Use the rest carefully. | Careful with what's left.	
 pa_fuel_p05	chatter	chatter	panic	crew	pa_fuel_p05	1	both	any	fuel	any	¡Queda poquísimo... poquísimo!	Hardly any left... hardly any! | Almost nothing left! | Barely any left!	

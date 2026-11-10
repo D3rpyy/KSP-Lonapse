@@ -1,0 +1,316 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+pc_001_1	pc_001_1	pc_001	1	probe	flight.probe_crew	intercom				0		[beeps with a report]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_001_2	pc_001_2	pc_001	2	kerbal_a	flight.probe_crew	intercom				0	Mm. Buenos datos.	Hmm. Good data.	calm	chatter	both	idle	any	any	any	any	any						
+pc_002_1	pc_002_1	pc_002	1	probe	flight.probe_crew	intercom				0		[beeps a question]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_002_2	pc_002_2	pc_002	2	kerbal_a	flight.probe_crew	intercom				0	No, no sé qué es eso. Yo tampoco.	No, I don't know what that is. Me neither.	calm	chatter	both	idle	any	any	any	any	any						
+pc_003_1	pc_003_1	pc_003	1	probe	flight.probe_crew	intercom				0		[beeps happily]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_003_2	pc_003_2	pc_003	2	kerbal_a	flight.probe_crew	intercom				0	Yo también me alegro de verte, amiguito.	Happy to see you too, little buddy.	calm	chatter	both	idle	any	any	any	any	any						
+pc_004_1	pc_004_1	pc_004	1	probe	flight.probe_crew	intercom				0		[beeps very slowly]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_004_2	pc_004_2	pc_004	2	kerbal_a	flight.probe_crew	intercom				0	Lo sé. A mí también me aburre esto.	I know. I'm bored too.	calm	chatter	both	idle	any	any	any	any	any						
+pc_005_1	pc_005_1	pc_005	1	kerbal_a	flight.probe_crew	intercom				0	¿Todo bien por ahí, cerebrito?	All good in there, little brain?	calm	chatter	both	idle	any	any	any	any	any						
+pc_005_2	pc_005_2	pc_005	2	probe	flight.probe_crew	intercom				0		[beeps confidently]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_005_3	pc_005_3	pc_005	3	kerbal_a	flight.probe_crew	intercom				0	Eso pensaba.	That's what I thought.	calm	chatter	both	idle	any	any	any	any	any						
+pc_006_1	pc_006_1	pc_006	1	kerbal_a	flight.probe_crew	intercom				0	Oye, ¿tú duermes?	Hey, do you sleep?	calm	chatter	both	idle	any	any	any	any	any						
+pc_006_2	pc_006_2	pc_006	2	probe	flight.probe_crew	intercom				0		[beeps sleepily]	calm	chatter	both	idle	any	any	any	any	any	sleepy					
+pc_006_3	pc_006_3	pc_006	3	kerbal_a	flight.probe_crew	intercom				0	Ya veo que sí.	I see you do.	calm	chatter	both	idle	any	any	any	any	any						
+pc_007_1	pc_007_1	pc_007	1	probe	flight.probe_crew	intercom				0		[beeps indignantly]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_007_2	pc_007_2	pc_007	2	kerbal_a	flight.probe_crew	intercom				0	Perdona, no quería apoyarme en ti.	Sorry, I didn't mean to lean on you.	calm	chatter	both	idle	any	any	any	any	any						
+pc_008_1	pc_008_1	pc_008	1	kerbal_a	flight.probe_crew	intercom				0	Te he puesto un nombre. Bip.	I gave you a name. Beep.	calm	chatter	both	idle	any	any	any	any	any						
+pc_008_2	pc_008_2	pc_008	2	probe	flight.probe_crew	intercom				0		[beeps in protest]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_008_3	pc_008_3	pc_008	3	kerbal_a	flight.probe_crew	intercom				0	Vale, vale. Señor Bip.	Okay, okay. Mister Beep.	calm	chatter	both	idle	any	any	any	any	any						
+pc_009_1	pc_009_1	pc_009	1	probe	flight.probe_crew	intercom				0		[beeps at the window]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_009_2	pc_009_2	pc_009	2	kerbal_a	flight.probe_crew	intercom				0	Sí, eso es el espacio. Mucho, ¿verdad?	Yes, that's space. A lot of it, right?	calm	chatter	both	idle	any	any	any	any	any						
+pc_010_1	pc_010_1	pc_010	1	probe	flight.probe_crew	intercom				0		[beeps nervously]	calm	chatter	both	idle	any	any	any	any	any	scared					
+pc_010_2	pc_010_2	pc_010	2	kerbal_a	flight.probe_crew	intercom				0	Tranquilo. Ese ruido era yo.	Easy. That noise was me.	calm	chatter	both	idle	any	any	any	any	any						
+pc_011_1	pc_011_1	pc_011	1	kerbal_a	flight.probe_crew	intercom				0	¿Quieres oír un chiste?	Want to hear a joke?	calm	chatter	both	idle	any	any	any	any	any						
+pc_011_2	pc_011_2	pc_011	2	probe	flight.probe_crew	intercom				0		[beeps flatly]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_011_3	pc_011_3	pc_011	3	kerbal_a	flight.probe_crew	intercom				0	Ya veo. Te lo has oído.	I see. You've heard it.	calm	chatter	both	idle	any	any	any	any	any						
+pc_012_1	pc_012_1	pc_012	1	probe	flight.probe_crew	intercom				0		[beeps a long report]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_012_2	pc_012_2	pc_012	2	kerbal_a	flight.probe_crew	intercom				0	Más despacio, que tomo notas.	Slower, I'm taking notes.	calm	chatter	both	idle	any	any	any	any	any						
+pc_012_3	pc_012_3	pc_012	3	probe	flight.probe_crew	intercom				0		[beeps even faster]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_013_1	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la comida?	What do you think of the food?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v02	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la pasta de aperitivo?	How do you like the snack paste?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v03	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del queso en tubo?	How do you like the tube cheese?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v04	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del fideos liofilizados?	How do you like the freeze-dried noodles?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v05	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del alubias espaciales?	How do you like the space beans?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v06	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del famoso chile de Jeb?	How do you like the Jeb's famous chili?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v07	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del huevos en polvo?	How do you like the powdered eggs?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v08	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del guiso misterioso?	How do you like the mystery stew?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v09	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del barritas de algas?	How do you like the algae bars?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v10	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del raciones de emergencia?	How do you like the emergency rations?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v11	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la sopa recalentada?	How do you like the reheated soup?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v12	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del pescado deshidratado?	How do you like the dehydrated fish?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v13	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas de la pizza fría?	How do you like the cold pizza?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v14	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del tacos espaciales?	How do you like the space tacos?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v15	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del puré de zanahoria?	How do you like the carrot puree?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v16	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del café instantáneo?	How do you like the instant coffee?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v17	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del cohetes de gominola?	How do you like the gummy rockets?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v18	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del pudin rehidratado?	How do you like the rehydrated pudding?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_1__v19	pc_013_1	pc_013	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú qué opinas del helado liofilizado?	How do you like the freeze-dried ice cream?	calm	chatter	both	idle	any	any	any	any	any						
+pc_013_2	pc_013_2	pc_013	2	probe	flight.probe_crew	intercom				0		[beeps cheerfully]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_013_3	pc_013_3	pc_013	3	kerbal_a	flight.probe_crew	intercom				0	Claro, tú no la tienes que comer.	Sure, you don't have to eat it.	calm	chatter	both	idle	any	any	any	any	any						
+pc_014_1	pc_014_1	pc_014	1	probe	flight.probe_crew	intercom				0		[beeps at the snacks]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_014_2	pc_014_2	pc_014	2	kerbal_a	flight.probe_crew	intercom				0	No. Esto es mío. Tú comes electricidad.	No. This is mine. You eat electricity.	calm	chatter	both	idle	any	any	any	any	any						
+pc_015_1	pc_015_1	pc_015	1	kerbal_a	flight.probe_crew	intercom				0	Buenos días, compañero.	Good morning, buddy.	calm	chatter	both	idle	any	any	any	any	any						
+pc_015_2	pc_015_2	pc_015	2	probe	flight.probe_crew	intercom				0		[beeps a yawn]	calm	chatter	both	idle	any	any	any	any	any	sleepy					
+pc_015_3	pc_015_3	pc_015	3	kerbal_a	flight.probe_crew	intercom				0	Igual que yo.	Same here.	calm	chatter	both	idle	any	any	any	any	any						
+pc_016_1	pc_016_1	pc_016	1	probe	flight.probe_crew	intercom				0		[beeps a little tune]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_016_2	pc_016_2	pc_016	2	kerbal_a	flight.probe_crew	intercom				0	¡Qué bonito! Otra vez.	How pretty! Again.	calm	chatter	both	idle	any	any	any	any	any						
+pc_016_3	pc_016_3	pc_016	3	probe	flight.probe_crew	intercom				0		[beeps the tune again]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_017_1	pc_017_1	pc_017	1	kerbal_a	flight.probe_crew	intercom				0	¿Me ayudas con la navegación?	Will you help me with navigation?	calm	chatter	both	idle	any	any	any	any	any						
+pc_017_2	pc_017_2	pc_017	2	probe	flight.probe_crew	intercom				0		[beeps very helpfully]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_017_3	pc_017_3	pc_017	3	kerbal_a	flight.probe_crew	intercom				0	Gracias. No he entendido nada, pero gracias.	Thanks. I understood nothing, but thanks.	calm	chatter	both	idle	any	any	any	any	any						
+pc_018_1	pc_018_1	pc_018	1	probe	flight.probe_crew	intercom				0		[beeps at the crew]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_018_2	pc_018_2	pc_018	2	kerbal_a	flight.probe_crew	intercom				0	¡Fue sin querer! Solo toqué un cable.	It was an accident! I only touched a cable.	calm	chatter	both	idle	any	any	any	any	any						
+pc_019_1	pc_019_1	pc_019	1	kerbal_a	flight.probe_crew	intercom				0	A veces creo que eres el más listo de aquí.	Sometimes I think you're the smartest one here.	calm	chatter	both	idle	any	any	any	any	any						
+pc_019_2	pc_019_2	pc_019	2	probe	flight.probe_crew	intercom				0		[beeps smugly]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_019_3	pc_019_3	pc_019	3	kerbal_a	flight.probe_crew	intercom				0	No hacía falta estar de acuerdo.	You didn't have to agree.	calm	chatter	both	idle	any	any	any	any	any						
+pc_020_1	pc_020_1	pc_020	1	probe	flight.probe_crew	intercom				0		[beeps softly]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_020_2	pc_020_2	pc_020	2	kerbal_a	flight.probe_crew	intercom				0	¿Tú también echas de menos casa?	Do you miss home too?	calm	chatter	both	idle	any	any	any	any	any						
+pc_020_3	pc_020_3	pc_020	3	probe	flight.probe_crew	intercom				0		[beeps warmly]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_021_1	pc_021_1	pc_021	1	kerbal_a	flight.probe_crew	intercom				0	Si te portas bien, te limpio el panel.	If you behave, I'll clean your panel.	calm	chatter	both	idle	any	any	any	any	any						
+pc_021_2	pc_021_2	pc_021	2	probe	flight.probe_crew	intercom				0		[beeps excitedly]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_022_1	pc_022_1	pc_022	1	probe	flight.probe_crew	intercom				0		[beeps a sigh]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_022_2	pc_022_2	pc_022	2	kerbal_a	flight.probe_crew	intercom				0	Ya queda poco. Creo.	Not long now. I think.	calm	chatter	both	idle	any	any	any	any	any						
+pc_023_1	pc_023_1	pc_023	1	kerbal_a	flight.probe_crew	intercom				0	¿Contamos estrellas juntos?	Shall we count stars together?	calm	chatter	both	idle	any	any	any	any	any						
+pc_023_2	pc_023_2	pc_023	2	probe	flight.probe_crew	intercom				0		[beeps a big number]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_023_3	pc_023_3	pc_023	3	kerbal_a	flight.probe_crew	intercom				0	Presumido.	Show-off.	calm	chatter	both	idle	any	any	any	any	any						
+pc_024_1	pc_024_1	pc_024	1	probe	flight.probe_crew	intercom				0		[beeps a warning]	calm	chatter	both	idle	any	any	any	any	any	scared					
+pc_024_2	pc_024_2	pc_024	2	kerbal_a	flight.probe_crew	intercom				0	Lo sé, lo sé. Lo estoy mirando.	I know, I know. I'm looking at it.	calm	chatter	both	idle	any	any	any	any	any						
+pc_025_1	pc_025_1	pc_025	1	kerbal_a	flight.probe_crew	intercom				0	Eres un buen compañero de viaje. Callado, pero bueno.	You're a good travel buddy. Quiet, but good.	calm	chatter	both	idle	any	any	any	any	any						
+pc_025_2	pc_025_2	pc_025	2	probe	flight.probe_crew	intercom				0		[beeps loudly]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_025_3	pc_025_3	pc_025	3	kerbal_a	flight.probe_crew	intercom				0	Bueno. No tan callado.	Well. Not that quiet.	calm	chatter	both	idle	any	any	any	any	any						
+pc_026_1	pc_026_1	pc_026	1	probe	flight.probe_crew	intercom				0		[beeps at the planet]	calm	chatter	both	orbit	any	any	any	any	any	curious					
+pc_026_2	pc_026_2	pc_026	2	kerbal_a	flight.probe_crew	intercom				0	Sí, es enorme. Y damos vueltas a su alrededor.	Yes, it's huge. And we go round and round it.	calm	chatter	both	orbit	any	any	any	any	any						
+pc_026_2__v02	pc_026_2	pc_026	2	kerbal_a	flight.probe_crew	intercom				0	Sí, {here} es enorme. Y damos vueltas y vueltas.	Yes, {here} is huge. Round and round we go.	calm	chatter	both	orbit	any	any	any	any	any						
+pc_027_1	pc_027_1	pc_027	1	kerbal_a	flight.probe_crew	intercom				0	Otra vuelta más, compañero.	Another lap, buddy.	calm	chatter	both	orbit	any	any	any	any	any						
+pc_027_2	pc_027_2	pc_027	2	probe	flight.probe_crew	intercom				0		[beeps very slowly]	calm	chatter	both	orbit	any	any	any	any	any	bored					
+pc_028_1	pc_028_1	pc_028	1	probe	flight.probe_crew	intercom				0		[beeps a long sigh]	calm	chatter	both	coast	any	any	any	any	any	bored					
+pc_028_2	pc_028_2	pc_028	2	kerbal_a	flight.probe_crew	intercom				0	Lo sé. El viaje es largo. Yo también lo noto.	I know. The trip is long. I feel it too.	calm	chatter	both	coast	any	any	any	any	any						
+pc_029_1	pc_029_1	pc_029	1	probe	flight.probe_crew	intercom				0		[beeps with joy]	calm	chatter	both	landed	any	any	any	any	any	happy					
+pc_029_2	pc_029_2	pc_029	2	kerbal_a	flight.probe_crew	intercom				0	¡Sí! ¡Hemos llegado! ¡Lo hemos hecho juntos!	Yes! We made it! We did it together!	calm	chatter	both	landed	any	any	any	any	any						
+pc_030_1	pc_030_1	pc_030	1	probe	flight.probe_crew	intercom				0		[beeps at the ground]	calm	chatter	both	landed	any	any	any	any	any	curious					
+pc_030_2	pc_030_2	pc_030	2	kerbal_a	flight.probe_crew	intercom				0	Es roca. Mucha roca. Bienvenido.	It's rock. Lots of rock. Welcome.	calm	chatter	both	landed	any	any	any	any	any						
+pc_030_2__v02	pc_030_2	pc_030	2	kerbal_a	flight.probe_crew	intercom				0	Roca. Mucha roca. Bienvenido a {here}.	Rock. Lots of it. Welcome to {here}.	calm	chatter	both	landed	any	any	any	any	any						
+pc_031_1	pc_031_1	pc_031	1	probe	flight.probe_crew	intercom				0		[beeps a status report]	calm	chatter	both	idle	any	engineer	any	any	any	proud					
+pc_031_2	pc_031_2	pc_031	2	kerbal_a	flight.probe_crew	intercom				0	Voltaje bien, temperatura bien. Buen trabajo.	Voltage good, temperature good. Good job.	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_032_1	pc_032_1	pc_032	1	probe	flight.probe_crew	intercom				0		[beeps an error]	calm	chatter	both	idle	any	engineer	any	any	any	offended					
+pc_032_2	pc_032_2	pc_032	2	kerbal_a	flight.probe_crew	intercom				0	Déjame ver. Ah, un tornillo flojo. Ya está.	Let me see. Ah, a loose bolt. There.	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_032_3	pc_032_3	pc_032	3	probe	flight.probe_crew	intercom				0		[beeps gratefully]	calm	chatter	both	idle	any	engineer	any	any	any	happy					
+pc_033_1	pc_033_1	pc_033	1	kerbal_a	flight.probe_crew	intercom				0	Te he ajustado el cableado. ¿Mejor?	I adjusted your wiring. Better?	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_033_2	pc_033_2	pc_033	2	probe	flight.probe_crew	intercom				0		[beeps much better]	calm	chatter	both	idle	any	engineer	any	any	any	happy					
+pc_034_1	pc_034_1	pc_034	1	probe	flight.probe_crew	intercom				0		[beeps with fresh data]	calm	chatter	both	idle	any	scientist	any	any	any	proud					
+pc_034_2	pc_034_2	pc_034	2	kerbal_a	flight.probe_crew	intercom				0	¡Fascinante! ¿Lo puedes repetir?	Fascinating! Can you repeat that?	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_034_3	pc_034_3	pc_034	3	probe	flight.probe_crew	intercom				0		[beeps it again]	calm	chatter	both	idle	any	scientist	any	any	any	proud					
+pc_034_4	pc_034_4	pc_034	4	kerbal_a	flight.probe_crew	intercom				0	Sigue siendo fascinante.	Still fascinating.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_035_1	pc_035_1	pc_035	1	probe	flight.probe_crew	intercom				0		[beeps a hypothesis]	calm	chatter	both	idle	any	scientist	any	any	any	curious					
+pc_035_2	pc_035_2	pc_035	2	kerbal_a	flight.probe_crew	intercom				0	Interesante teoría. Necesitamos más datos.	Interesting theory. We need more data.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_036_1	pc_036_1	pc_036	1	kerbal_a	flight.probe_crew	intercom				0	Compañero, hoy vamos a hacer ciencia.	Buddy, today we do science.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_036_2	pc_036_2	pc_036	2	probe	flight.probe_crew	intercom				0		[beeps excitedly]	calm	chatter	both	idle	any	scientist	any	any	any	happy					
+pc_037_1	pc_037_1	pc_037	1	probe	flight.probe_crew	intercom				0		[beeps at the pilot]	calm	chatter	both	idle	any	pilot	any	any	any	offended					
+pc_037_2	pc_037_2	pc_037	2	kerbal_a	flight.probe_crew	intercom				0	Sí, ese giro fue un poco brusco. Perdón.	Yes, that turn was a bit rough. Sorry.	calm	chatter	both	idle	any	pilot	any	any	any						
+pc_038_1	pc_038_1	pc_038	1	kerbal_a	flight.probe_crew	intercom				0	Tú calculas y yo piloto. Trato hecho.	You calculate and I fly. Deal.	calm	chatter	both	idle	any	pilot	any	any	any						
+pc_038_2	pc_038_2	pc_038	2	probe	flight.probe_crew	intercom				0		[beeps in agreement]	calm	chatter	both	idle	any	pilot	any	any	any	proud					
+pc_039_1	pc_039_1	pc_039	1	probe	flight.probe_crew	intercom				0		[beeps at the tourist]	calm	chatter	both	idle	any	tourist	any	any	any	curious					
+pc_039_2	pc_039_2	pc_039	2	kerbal_a	flight.probe_crew	intercom				0	¡Hola! ¿Tú también has pagado el billete?	Hello! Did you pay for a ticket too?	calm	chatter	both	idle	any	tourist	any	any	any						
+pc_039_3	pc_039_3	pc_039	3	probe	flight.probe_crew	intercom				0		[beeps a firm no]	calm	chatter	both	idle	any	tourist	any	any	any	offended					
+pc_040_1	pc_040_1	pc_040	1	kerbal_a	flight.probe_crew	intercom				0	¿Me haces una foto con la ventana?	Will you take a photo of me with the window?	calm	chatter	both	idle	any	tourist	any	any	any						
+pc_040_2	pc_040_2	pc_040	2	probe	flight.probe_crew	intercom				0		[beeps reluctantly]	calm	chatter	both	idle	any	tourist	any	any	any	bored					
+pc_041_1	pc_041_1	pc_041	1	probe	flight.probe_crew	intercom				0		[beeps a question]	calm	chatter	both	idle	any	any	dim	any	any	curious					
+pc_041_2	pc_041_2	pc_041	2	kerbal_a	flight.probe_crew	intercom				0	No te entiendo, pero creo que tienes razón.	I don't understand you, but I think you're right.	calm	chatter	both	idle	any	any	dim	any	any						
+pc_042_1	pc_042_1	pc_042	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú también eres un kerbal?	Are you a kerbal too?	calm	chatter	both	idle	any	any	dim	any	any						
+pc_042_2	pc_042_2	pc_042	2	probe	flight.probe_crew	intercom				0		[beeps very firmly]	calm	chatter	both	idle	any	any	dim	any	any	offended					
+pc_043_1	pc_043_1	pc_043	1	probe	flight.probe_crew	intercom				0		[beeps nervously]	calm	chatter	both	idle	any	any	nervous	any	any	scared					
+pc_043_2	pc_043_2	pc_043	2	kerbal_a	flight.probe_crew	intercom				0	¿Por qué estás nervioso? ¡Ahora yo estoy nervioso!	Why are you nervous? Now I'm nervous!	calm	chatter	both	idle	any	any	nervous	any	any						
+pc_044_1	pc_044_1	pc_044	1	probe	flight.probe_crew	intercom				0		[beeps a warning]	calm	chatter	both	idle	any	any	badass	any	any	scared					
+pc_044_2	pc_044_2	pc_044	2	kerbal_a	flight.probe_crew	intercom				0	Tranquilo, pequeño. Lo tengo todo controlado.	Relax, little one. I've got it all under control.	calm	chatter	both	idle	any	any	badass	any	any						
+pc_045_1	pc_045_1	pc_045	1	probe	flight.probe_crew	intercom				0		[beeps with a report]	calm	chatter	both	idle	any	any	veteran	any	any	proud					
+pc_045_2	pc_045_2	pc_045	2	kerbal_a	flight.probe_crew	intercom				0	Buen chico. Me recuerdas a mi primera sonda.	Good kid. You remind me of my first probe.	calm	chatter	both	idle	any	any	veteran	any	any						
+pc_046_1	pc_046_1	pc_046	1	probe	flight.probe_crew	intercom				0		[beeps at the crew]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_046_2	pc_046_2	pc_046	2	kerbal_a	flight.probe_crew	intercom				0	¿Qué? ¿Tengo algo en la cara?	What? Do I have something on my face?	calm	chatter	both	idle	any	any	any	any	any						
+pc_046_3	pc_046_3	pc_046	3	probe	flight.probe_crew	intercom				0		[beeps yes]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_047_1	pc_047_1	pc_047	1	kerbal_a	flight.probe_crew	intercom				0	Si te pregunto algo, ¿me dices la verdad?	If I ask you something, will you tell me the truth?	calm	chatter	both	idle	any	any	any	any	any						
+pc_047_2	pc_047_2	pc_047	2	probe	flight.probe_crew	intercom				0		[beeps cautiously]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_047_3	pc_047_3	pc_047	3	kerbal_a	flight.probe_crew	intercom				0	¿Mi peinado está bien?	Is my hair okay?	calm	chatter	both	idle	any	any	any	any	any						
+pc_047_4	pc_047_4	pc_047	4	probe	flight.probe_crew	intercom				0		[beeps very diplomatically]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_048_1	pc_048_1	pc_048	1	probe	flight.probe_crew	intercom				0		[beeps a tiny fanfare]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_048_2	pc_048_2	pc_048	2	kerbal_a	flight.probe_crew	intercom				0	¿Y eso por qué?	What was that for?	calm	chatter	both	idle	any	any	any	any	any						
+pc_048_3	pc_048_3	pc_048	3	probe	flight.probe_crew	intercom				0		[beeps proudly]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_048_4	pc_048_4	pc_048	4	kerbal_a	flight.probe_crew	intercom				0	Ah, has terminado los cálculos. Bien hecho.	Ah, you finished the calculations. Well done.	calm	chatter	both	idle	any	any	any	any	any						
+pc_049_1	pc_049_1	pc_049	1	kerbal_a	flight.probe_crew	intercom				0	Oye, cerebrito, ¿cuánto combustible nos queda?	Hey, little brain, how much fuel do we have?	calm	chatter	both	idle	any	any	any	any	any						
+pc_049_2	pc_049_2	pc_049	2	probe	flight.probe_crew	intercom				0		[beeps a precise number]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_049_3	pc_049_3	pc_049	3	kerbal_a	flight.probe_crew	intercom				0	Con un sí o un no me valía.	A yes or no was fine.	calm	chatter	both	idle	any	any	any	any	any						
+pc_050_1	pc_050_1	pc_050	1	probe	flight.probe_crew	intercom				0		[beeps at the snacks]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_050_2	pc_050_2	pc_050	2	kerbal_a	flight.probe_crew	intercom				0	Las migas no te van a hacer daño. Creo.	The crumbs won't hurt you. I think.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a las cartas.	I'm going to teach you to play cards.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v02	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a veo veo.	Let me teach you I spy.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v03	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a piedra, papel o tijera.	Let me teach you rock paper scissors.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v04	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a las veinte preguntas.	Let me teach you twenty questions.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v05	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a quién flota más tiempo.	Let me teach you who can float the longest.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v06	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a adivinar el aperitivo.	Let me teach you guess the snack.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v07	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a esconder la llave inglesa.	Let me teach you hide the wrench.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v08	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a adivinar el planeta.	Let me teach you guess the planet.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_1__v09	pc_051_1	pc_051	1	kerbal_a	flight.probe_crew	intercom				0	Te voy a enseñar a jugar a quién parpadea primero.	Let me teach you who blinks first.	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_2	pc_051_2	pc_051	2	probe	flight.probe_crew	intercom				0		[beeps eagerly]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_051_3	pc_051_3	pc_051	3	kerbal_a	flight.probe_crew	intercom				0	Ya has ganado. ¿Cómo has ganado?	You already won. How did you win?	calm	chatter	both	idle	any	any	any	any	any						
+pc_051_4	pc_051_4	pc_051	4	probe	flight.probe_crew	intercom				0		[beeps innocently]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_052_1	pc_052_1	pc_052	1	probe	flight.probe_crew	intercom				0		[beeps a soft yawn]	calm	chatter	both	idle	any	any	any	any	any	sleepy					
+pc_052_2	pc_052_2	pc_052	2	kerbal_a	flight.probe_crew	intercom				0	Duerme, duerme. Yo vigilo.	Sleep, sleep. I'll keep watch.	calm	chatter	both	idle	any	any	any	any	any						
+pc_053_1	pc_053_1	pc_053	1	kerbal_a	flight.probe_crew	intercom				0	Cuando volvamos, te presento a mi familia.	When we're back, I'll introduce you to my family.	calm	chatter	both	idle	any	any	any	any	any						
+pc_053_2	pc_053_2	pc_053	2	probe	flight.probe_crew	intercom				0		[beeps shyly]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_054_1	pc_054_1	pc_054	1	probe	flight.probe_crew	intercom				0		[beeps at a button]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_054_2	pc_054_2	pc_054	2	kerbal_a	flight.probe_crew	intercom				0	No. Ese no. Ni lo mires.	No. Not that one. Don't even look at it.	calm	chatter	both	idle	any	any	any	any	any						
+pc_054_3	pc_054_3	pc_054	3	probe	flight.probe_crew	intercom				0		[beeps sulkily]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_055_1	pc_055_1	pc_055	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú también oyes ese ruidito?	Do you hear that little noise too?	calm	chatter	both	idle	any	any	any	any	any						
+pc_055_2	pc_055_2	pc_055	2	probe	flight.probe_crew	intercom				0		[beeps attentively]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_055_3	pc_055_3	pc_055	3	kerbal_a	flight.probe_crew	intercom				0	Ah, es mi estómago. Perdón.	Oh, it's my stomach. Sorry.	calm	chatter	both	idle	any	any	any	any	any						
+pc_056_1	pc_056_1	pc_056	1	probe	flight.probe_crew	intercom				0		[beeps a greeting]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_056_2	pc_056_2	pc_056	2	kerbal_a	flight.probe_crew	intercom				0	Hola a ti también. Ya van cien veces hoy.	Hello to you too. That's a hundred times today.	calm	chatter	both	idle	any	any	any	any	any						
+pc_057_1	pc_057_1	pc_057	1	kerbal_a	flight.probe_crew	intercom				0	Necesito tu opinión. ¿Esto es un tornillo o una tuerca?	I need your opinion. Is this a bolt or a nut?	calm	chatter	both	idle	any	any	any	any	any						
+pc_057_2	pc_057_2	pc_057	2	probe	flight.probe_crew	intercom				0		[beeps very patiently]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_057_3	pc_057_3	pc_057	3	kerbal_a	flight.probe_crew	intercom				0	Una tuerca. Lo sabía.	A nut. I knew it.	calm	chatter	both	idle	any	any	any	any	any						
+pc_058_1	pc_058_1	pc_058	1	probe	flight.probe_crew	intercom				0		[beeps all systems green]	calm	chatter	both	idle	any	any	any	any	any	proud					
+pc_058_2	pc_058_2	pc_058	2	kerbal_a	flight.probe_crew	intercom				0	Gracias, compañero. Me quedo más tranquilo.	Thanks, buddy. That's a relief.	calm	chatter	both	idle	any	any	any	any	any						
+pc_059_1	pc_059_1	pc_059	1	kerbal_a	flight.probe_crew	intercom				0	Prometo no volver a pegarte pegatinas.	I promise not to put stickers on you again.	calm	chatter	both	idle	any	any	any	any	any						
+pc_059_2	pc_059_2	pc_059	2	probe	flight.probe_crew	intercom				0		[beeps doubtfully]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_060_1	pc_060_1	pc_060	1	probe	flight.probe_crew	intercom				0		[beeps a long question]	calm	chatter	both	idle	any	any	any	any	any	curious					
+pc_060_2	pc_060_2	pc_060	2	kerbal_a	flight.probe_crew	intercom				0	Eso no lo sé. Pregúntale a Control.	I don't know that. Ask Control.	calm	chatter	both	idle	any	any	any	any	any						
+pc_060_3	pc_060_3	pc_060	3	probe	flight.probe_crew	intercom				0		[beeps a sigh]	calm	chatter	both	idle	any	any	any	any	any	bored					
+pc_061_1	pc_061_1	pc_061	1	kerbal_a	flight.probe_crew	intercom				0	Eres el mejor ordenador con el que he hablado.	You're the best computer I've ever talked to.	calm	chatter	both	idle	any	any	any	any	any						
+pc_061_2	pc_061_2	pc_061	2	probe	flight.probe_crew	intercom				0		[beeps bashfully]	calm	chatter	both	idle	any	any	any	any	any	happy					
+pc_062_1	pc_062_1	pc_062	1	probe	flight.probe_crew	intercom				0		[beeps very loudly]	calm	chatter	both	idle	any	any	any	any	any	offended					
+pc_062_2	pc_062_2	pc_062	2	kerbal_a	flight.probe_crew	intercom				0	¡Vale! ¡Ya me aparto de tu ventilador!	Okay! I'm moving away from your fan!	calm	chatter	both	idle	any	any	any	any	any						
+pc_063_1	pc_063_1	pc_063	1	probe	flight.probe_crew	intercom				0		[beeps nervously]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_063_2	pc_063_2	pc_063	2	kerbal_a	flight.probe_crew	intercom				0	Lo sé, amigo. Lo sé. Aguanta.	I know, buddy. I know. Hold on.	tense	chatter	both	idle	any	any	any	any	any						
+pc_064_1	pc_064_1	pc_064	1	kerbal_a	flight.probe_crew	intercom				0	Dime que esto está bien.	Tell me this is fine.	tense	chatter	both	idle	any	any	any	any	any						
+pc_064_2	pc_064_2	pc_064	2	probe	flight.probe_crew	intercom				0		[beeps unconvincingly]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_064_3	pc_064_3	pc_064	3	kerbal_a	flight.probe_crew	intercom				0	Gracias. Me ayuda mucho.	Thanks. That really helps.	tense	chatter	both	idle	any	any	any	any	any						
+pc_065_1	pc_065_1	pc_065	1	probe	flight.probe_crew	intercom				0		[beeps a warning]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_065_2	pc_065_2	pc_065	2	kerbal_a	flight.probe_crew	intercom				0	Ya lo veo. No me lo recuerdes.	I see it. Don't remind me.	tense	chatter	both	idle	any	any	any	any	any						
+pc_066_1	pc_066_1	pc_066	1	kerbal_a	flight.probe_crew	intercom				0	Tú calma. Yo me encargo.	You stay calm. I've got this.	tense	chatter	both	idle	any	any	any	any	any						
+pc_066_2	pc_066_2	pc_066	2	probe	flight.probe_crew	intercom				0		[beeps doubtfully]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_067_1	pc_067_1	pc_067	1	probe	flight.probe_crew	intercom				0		[beeps faster and faster]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_067_2	pc_067_2	pc_067	2	kerbal_a	flight.probe_crew	intercom				0	Respira. Bueno, tú no respiras. Pero tranquilo.	Breathe. Well, you don't breathe. But easy.	tense	chatter	both	idle	any	any	any	any	any						
+pc_068_1	pc_068_1	pc_068	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú sabes qué ha sido ese ruido?	Do you know what that noise was?	tense	chatter	both	idle	any	any	any	any	any						
+pc_068_2	pc_068_2	pc_068	2	probe	flight.probe_crew	intercom				0		[beeps a worried no]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_069_1	pc_069_1	pc_069	1	probe	flight.probe_crew	intercom				0		[beeps a status report]	tense	chatter	both	idle	any	any	any	any	any	curious					
+pc_069_2	pc_069_2	pc_069	2	kerbal_a	flight.probe_crew	intercom				0	Vale. No es lo que quería oír, pero vale.	Okay. Not what I wanted to hear, but okay.	tense	chatter	both	idle	any	any	any	any	any						
+pc_070_1	pc_070_1	pc_070	1	kerbal_a	flight.probe_crew	intercom				0	Agárrate. Bueno, tú ya estás atornillado.	Hold on. Well, you're already bolted down.	tense	chatter	both	idle	any	any	any	any	any						
+pc_070_2	pc_070_2	pc_070	2	probe	flight.probe_crew	intercom				0		[beeps in agreement]	tense	chatter	both	idle	any	any	any	any	any	scared					
+pc_071_1	pc_071_1	pc_071	1	probe	flight.probe_crew	intercom				0		[beeps a slow tune]	calm	chatter	both	coast	any	any	any	any	any	bored					
+pc_071_2	pc_071_2	pc_071	2	kerbal_a	flight.probe_crew	intercom				0	Qué canción tan triste. Pero bonita.	What a sad song. But pretty.	calm	chatter	both	coast	any	any	any	any	any						
+pc_072_1	pc_072_1	pc_072	1	kerbal_a	flight.probe_crew	intercom				0	¿Cuántos días faltan, compañero?	How many days left, buddy?	calm	chatter	both	coast	any	any	any	any	any						
+pc_072_2	pc_072_2	pc_072	2	probe	flight.probe_crew	intercom				0		[beeps a big number]	calm	chatter	both	coast	any	any	any	any	any	proud					
+pc_072_3	pc_072_3	pc_072	3	kerbal_a	flight.probe_crew	intercom				0	No me lo digas así.	Don't say it like that.	calm	chatter	both	coast	any	any	any	any	any						
+pc_073_1	pc_073_1	pc_073	1	probe	flight.probe_crew	intercom				0		[beeps very sleepily]	calm	chatter	both	coast	any	any	any	any	any	sleepy					
+pc_073_2	pc_073_2	pc_073	2	kerbal_a	flight.probe_crew	intercom				0	Yo también. Este viaje no se acaba nunca.	Me too. This trip never ends.	calm	chatter	both	coast	any	any	any	any	any						
+pc_074_1	pc_074_1	pc_074	1	kerbal_a	flight.probe_crew	intercom				0	Juguemos a algo. Tú piensas un número.	Let's play something. You think of a number.	calm	chatter	both	coast	any	any	any	any	any						
+pc_074_2	pc_074_2	pc_074	2	probe	flight.probe_crew	intercom				0		[beeps a number]	calm	chatter	both	coast	any	any	any	any	any	happy					
+pc_074_3	pc_074_3	pc_074	3	kerbal_a	flight.probe_crew	intercom				0	No vale decirlo.	You're not supposed to say it.	calm	chatter	both	coast	any	any	any	any	any						
+pc_075_1	pc_075_1	pc_075	1	probe	flight.probe_crew	intercom				0		[beeps at the stars]	calm	chatter	both	coast	any	any	any	any	any	curious					
+pc_075_2	pc_075_2	pc_075	2	kerbal_a	flight.probe_crew	intercom				0	Sí, siguen ahí. Todas.	Yes, they're still there. All of them.	calm	chatter	both	coast	any	any	any	any	any						
+pc_076_1	pc_076_1	pc_076	1	kerbal_a	flight.probe_crew	intercom				0	Bueno, compañero. Hemos llegado. ¿Qué te parece?	Well, buddy. We made it. What do you think?	calm	chatter	both	landed	any	any	any	any	any						
+pc_076_1__v02	pc_076_1	pc_076	1	kerbal_a	flight.probe_crew	intercom				0	Bueno, compañero. Estamos en {here}. ¿Qué te parece?	So, buddy. We're on {here}. Thoughts?	calm	chatter	both	landed	any	any	any	any	any						
+pc_076_2	pc_076_2	pc_076	2	probe	flight.probe_crew	intercom				0		[beeps with delight]	calm	chatter	both	landed	any	any	any	any	any	happy					
+pc_077_1	pc_077_1	pc_077	1	probe	flight.probe_crew	intercom				0		[beeps at a rock]	calm	chatter	both	landed	any	any	any	any	any	curious					
+pc_077_2	pc_077_2	pc_077	2	kerbal_a	flight.probe_crew	intercom				0	¿Quieres que te la traiga?	Want me to bring it to you?	calm	chatter	both	landed	any	any	any	any	any						
+pc_077_3	pc_077_3	pc_077	3	probe	flight.probe_crew	intercom				0		[beeps yes please]	calm	chatter	both	landed	any	any	any	any	any	happy					
+pc_078_1	pc_078_1	pc_078	1	kerbal_a	flight.probe_crew	intercom				0	Voy a salir a dar un paseo. Cuida la casa.	I'm going out for a walk. Mind the house.	calm	chatter	both	landed	any	any	any	any	any						
+pc_078_2	pc_078_2	pc_078	2	probe	flight.probe_crew	intercom				0		[beeps responsibly]	calm	chatter	both	landed	any	any	any	any	any	proud					
+pc_079_1	pc_079_1	pc_079	1	probe	flight.probe_crew	intercom				0		[beeps a landing report]	calm	chatter	both	landed	any	any	any	any	any	proud					
+pc_079_2	pc_079_2	pc_079	2	kerbal_a	flight.probe_crew	intercom				0	Sí, lo sé, aterricé un poco torcido.	Yes, I know, I landed a bit crooked.	calm	chatter	both	landed	any	any	any	any	any						
+pc_080_1	pc_080_1	pc_080	1	kerbal_a	flight.probe_crew	intercom				0	Mira, compañero. Ahí abajo vivimos.	Look, buddy. That's where we live.	calm	chatter	both	orbit	any	any	any	any	any						
+pc_080_2	pc_080_2	pc_080	2	probe	flight.probe_crew	intercom				0		[beeps in wonder]	calm	chatter	both	orbit	any	any	any	any	any	curious					
+pc_081_1	pc_081_1	pc_081	1	probe	flight.probe_crew	intercom				0		[beeps an orbit report]	calm	chatter	both	orbit	any	any	any	any	any	proud					
+pc_081_2	pc_081_2	pc_081	2	kerbal_a	flight.probe_crew	intercom				0	Órbita estable. Lo sé. Nos ha salido bien.	Stable orbit. I know. We did well.	calm	chatter	both	orbit	any	any	any	any	any						
+pc_082_1	pc_082_1	pc_082	1	kerbal_a	flight.probe_crew	intercom				0	¿Puedes hacer los deberes por mí?	Can you do my homework for me?	calm	chatter	both	idle	any	any	dim	any	any						
+pc_082_2	pc_082_2	pc_082	2	probe	flight.probe_crew	intercom				0		[beeps a firm no]	calm	chatter	both	idle	any	any	dim	any	any	bored					
+pc_083_1	pc_083_1	pc_083	1	probe	flight.probe_crew	intercom				0		[beeps a simple question]	calm	chatter	both	idle	any	any	dim	any	any	curious					
+pc_083_2	pc_083_2	pc_083	2	kerbal_a	flight.probe_crew	intercom				0	Esa me la sé. ¡Tres!	I know this one. Three!	calm	chatter	both	idle	any	any	dim	any	any						
+pc_083_3	pc_083_3	pc_083	3	probe	flight.probe_crew	intercom				0		[beeps sadly]	calm	chatter	both	idle	any	any	dim	any	any	offended					
+pc_084_1	pc_084_1	pc_084	1	kerbal_a	flight.probe_crew	intercom				0	Si algo va mal, me avisas, ¿vale?	If something goes wrong, you tell me, okay?	calm	chatter	both	idle	any	any	nervous	any	any						
+pc_084_2	pc_084_2	pc_084	2	probe	flight.probe_crew	intercom				0		[beeps reassuringly]	calm	chatter	both	idle	any	any	nervous	any	any	happy					
+pc_084_3	pc_084_3	pc_084	3	kerbal_a	flight.probe_crew	intercom				0	Gracias. Te creo. Casi.	Thanks. I believe you. Almost.	calm	chatter	both	idle	any	any	nervous	any	any						
+pc_085_1	pc_085_1	pc_085	1	probe	flight.probe_crew	intercom				0		[beeps quietly]	calm	chatter	both	idle	any	any	nervous	any	any	curious					
+pc_085_2	pc_085_2	pc_085	2	kerbal_a	flight.probe_crew	intercom				0	¡Ah! ¡No me asustes así!	Ah! Don't scare me like that!	calm	chatter	both	idle	any	any	nervous	any	any						
+pc_086_1	pc_086_1	pc_086	1	probe	flight.probe_crew	intercom				0		[beeps nervously]	calm	chatter	both	idle	any	any	badass	any	any	scared					
+pc_086_2	pc_086_2	pc_086	2	kerbal_a	flight.probe_crew	intercom				0	Tranquilo, pequeño. He pasado por cosas peores.	Easy, little one. I've been through worse.	calm	chatter	both	idle	any	any	badass	any	any						
+pc_087_1	pc_087_1	pc_087	1	kerbal_a	flight.probe_crew	intercom				0	Tú y yo contra el universo, compañero.	You and me against the universe, buddy.	calm	chatter	both	idle	any	any	badass	any	any						
+pc_087_2	pc_087_2	pc_087	2	probe	flight.probe_crew	intercom				0		[beeps bravely]	calm	chatter	both	idle	any	any	badass	any	any	proud					
+pc_088_1	pc_088_1	pc_088	1	probe	flight.probe_crew	intercom				0		[beeps a warning]	calm	chatter	both	idle	any	any	brave	any	any	scared					
+pc_088_2	pc_088_2	pc_088	2	kerbal_a	flight.probe_crew	intercom				0	Gracias por avisar. Vamos a ello.	Thanks for the heads up. Let's do this.	calm	chatter	both	idle	any	any	brave	any	any						
+pc_089_1	pc_089_1	pc_089	1	kerbal_a	flight.probe_crew	intercom				0	No te preocupes. Pase lo que pase, estamos juntos.	Don't worry. Whatever happens, we're together.	calm	chatter	both	idle	any	any	brave	any	any						
+pc_089_2	pc_089_2	pc_089	2	probe	flight.probe_crew	intercom				0		[beeps warmly]	calm	chatter	both	idle	any	any	brave	any	any	happy					
+pc_090_1	pc_090_1	pc_090	1	probe	flight.probe_crew	intercom				0		[beeps a question]	calm	chatter	both	idle	any	any	veteran	any	any	curious					
+pc_090_2	pc_090_2	pc_090	2	kerbal_a	flight.probe_crew	intercom				0	Eso lo aprendí hace muchos años. Escucha.	I learned that many years ago. Listen.	calm	chatter	both	idle	any	any	veteran	any	any						
+pc_090_3	pc_090_3	pc_090	3	probe	flight.probe_crew	intercom				0		[beeps very slowly]	calm	chatter	both	idle	any	any	veteran	any	any	bored					
+pc_091_1	pc_091_1	pc_091	1	kerbal_a	flight.probe_crew	intercom				0	Las sondas de antes no hablaban tanto.	Probes didn't talk this much back in my day.	calm	chatter	both	idle	any	any	veteran	any	any						
+pc_091_2	pc_091_2	pc_091	2	probe	flight.probe_crew	intercom				0		[beeps indignantly]	calm	chatter	both	idle	any	any	veteran	any	any	offended					
+pc_092_1	pc_092_1	pc_092	1	kerbal_a	flight.probe_crew	intercom				0	A ver, déjame mirarte por dentro.	Let's see, let me look inside you.	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_092_2	pc_092_2	pc_092	2	probe	flight.probe_crew	intercom				0		[beeps worriedly]	calm	chatter	both	idle	any	engineer	any	any	any	scared					
+pc_092_3	pc_092_3	pc_092	3	kerbal_a	flight.probe_crew	intercom				0	Tranquilo. Solo voy a apretar un tornillo.	Easy. I'm only tightening a bolt.	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_093_1	pc_093_1	pc_093	1	probe	flight.probe_crew	intercom				0		[beeps a repair report]	calm	chatter	both	idle	any	engineer	any	any	any	proud					
+pc_093_2	pc_093_2	pc_093	2	kerbal_a	flight.probe_crew	intercom				0	¿Te has arreglado solo? Me vas a dejar sin trabajo.	You fixed yourself? You'll put me out of a job.	calm	chatter	both	idle	any	engineer	any	any	any						
+pc_094_1	pc_094_1	pc_094	1	kerbal_a	flight.probe_crew	intercom				0	Ayúdame con este experimento.	Help me with this experiment.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_094_2	pc_094_2	pc_094	2	probe	flight.probe_crew	intercom				0		[beeps eagerly]	calm	chatter	both	idle	any	scientist	any	any	any	happy					
+pc_094_3	pc_094_3	pc_094	3	kerbal_a	flight.probe_crew	intercom				0	Perfecto. Tú mides y yo apunto.	Perfect. You measure and I write.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_095_1	pc_095_1	pc_095	1	probe	flight.probe_crew	intercom				0		[beeps a new hypothesis]	calm	chatter	both	idle	any	scientist	any	any	any	curious					
+pc_095_2	pc_095_2	pc_095	2	kerbal_a	flight.probe_crew	intercom				0	Me gusta. Es una locura, pero me gusta.	I like it. It's crazy, but I like it.	calm	chatter	both	idle	any	scientist	any	any	any						
+pc_096_1	pc_096_1	pc_096	1	probe	flight.probe_crew	intercom				0		[beeps at the pilot]	calm	chatter	both	idle	any	pilot	any	any	any	offended					
+pc_096_2	pc_096_2	pc_096	2	kerbal_a	flight.probe_crew	intercom				0	Sí, ya sé que me he pasado de curva.	Yes, I know I overshot that turn.	calm	chatter	both	idle	any	pilot	any	any	any						
+pc_097_1	pc_097_1	pc_097	1	kerbal_a	flight.probe_crew	intercom				0	Tú lleva las cuentas y yo llevo el volante.	You do the math and I'll do the driving.	calm	chatter	both	idle	any	pilot	any	any	any						
+pc_097_2	pc_097_2	pc_097	2	probe	flight.probe_crew	intercom				0		[beeps very officially]	calm	chatter	both	idle	any	pilot	any	any	any	proud					
+pc_098_1	pc_098_1	pc_098	1	kerbal_a	flight.probe_crew	intercom				0	¿Esto viene con guía turística?	Does this come with a tour guide?	calm	chatter	both	idle	any	tourist	any	any	any						
+pc_098_2	pc_098_2	pc_098	2	probe	flight.probe_crew	intercom				0		[beeps a long tour]	calm	chatter	both	idle	any	tourist	any	any	any	proud					
+pc_098_3	pc_098_3	pc_098	3	kerbal_a	flight.probe_crew	intercom				0	Qué interesante. No he entendido nada.	How interesting. I understood nothing.	calm	chatter	both	idle	any	tourist	any	any	any						
+pc_099_1	pc_099_1	pc_099	1	probe	flight.probe_crew	intercom				0		[beeps for the photo]	calm	chatter	both	idle	any	tourist	any	any	any	happy					
+pc_099_2	pc_099_2	pc_099	2	kerbal_a	flight.probe_crew	intercom				0	¡Patata!	Say cheese!	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_01_1	tu_pc_01_1	tu_pc_01	1	kerbal_a	flight.probe_crew	intercom				0	¿Tú conduces esto?	Are you driving this?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_01_2	tu_pc_01_2	tu_pc_01	2	probe	flight.probe_crew	intercom				0		[beeps proudly]	calm	chatter	both	idle	any	tourist	any	any	any	proud					
+tu_pc_01_3	tu_pc_01_3	tu_pc_01	3	kerbal_a	flight.probe_crew	intercom				0	Pues lo haces muy bien.	Well, you're doing great.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_02_1	tu_pc_02_1	tu_pc_02	1	probe	flight.probe_crew	intercom				0		[beeps at the camera]	calm	chatter	both	idle	any	tourist	any	any	any	curious					
+tu_pc_02_2	tu_pc_02_2	tu_pc_02	2	kerbal_a	flight.probe_crew	intercom				0	¿Quieres salir en la foto?	Do you want to be in the photo?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_02_3	tu_pc_02_3	tu_pc_02	3	probe	flight.probe_crew	intercom				0		[beeps yes]	calm	chatter	both	idle	any	tourist	any	any	any	happy					
+tu_pc_03_1	tu_pc_03_1	tu_pc_03	1	kerbal_a	flight.probe_crew	intercom				0	¿Cuánto falta?	How much longer?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_03_2	tu_pc_03_2	tu_pc_03	2	probe	flight.probe_crew	intercom				0		[beeps a long number]	calm	chatter	both	idle	any	tourist	any	any	any	bored					
+tu_pc_03_3	tu_pc_03_3	tu_pc_03	3	kerbal_a	flight.probe_crew	intercom				0	Vale. Mucho.	Okay. A lot.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_04_1	tu_pc_04_1	tu_pc_04	1	kerbal_a	flight.probe_crew	intercom				0	¿Puedo tocar tus botones?	Can I touch your buttons?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_04_2	tu_pc_04_2	tu_pc_04	2	probe	flight.probe_crew	intercom				0		[beeps a firm no]	calm	chatter	both	idle	any	tourist	any	any	any	offended					
+tu_pc_05_1	tu_pc_05_1	tu_pc_05	1	kerbal_a	flight.probe_crew	intercom				0	Oye, ¿tú comes?	Hey, do you eat?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_05_2	tu_pc_05_2	tu_pc_05	2	probe	flight.probe_crew	intercom				0		[beeps in confusion]	calm	chatter	both	idle	any	tourist	any	any	any	curious					
+tu_pc_05_3	tu_pc_05_3	tu_pc_05	3	kerbal_a	flight.probe_crew	intercom				0	Yo tampoco he comido. Somos iguales.	I haven't eaten either. We're the same.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_06_1	tu_pc_06_1	tu_pc_06	1	probe	flight.probe_crew	intercom				0		[beeps nervously]	calm	chatter	both	idle	any	tourist	any	any	any	scared					
+tu_pc_06_2	tu_pc_06_2	tu_pc_06	2	kerbal_a	flight.probe_crew	intercom				0	Calma. Yo tampoco sé lo que hago.	Easy. I don't know what I'm doing either.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_07_1	tu_pc_07_1	tu_pc_07	1	kerbal_a	flight.probe_crew	intercom				0	Voy a contar a todos que me llevó un robot.	I'm telling everyone a robot flew me here.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_07_2	tu_pc_07_2	tu_pc_07	2	probe	flight.probe_crew	intercom				0		[beeps very flattered]	calm	chatter	both	idle	any	tourist	any	any	any	proud					
+tu_pc_08_1	tu_pc_08_1	tu_pc_08	1	kerbal_a	flight.probe_crew	intercom				0	¿Tienes nombre?	Do you have a name?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_08_2	tu_pc_08_2	tu_pc_08	2	probe	flight.probe_crew	intercom				0		[beeps its serial number]	calm	chatter	both	idle	any	tourist	any	any	any	proud					
+tu_pc_08_3	tu_pc_08_3	tu_pc_08	3	kerbal_a	flight.probe_crew	intercom				0	Te llamaré Pepito.	I'll call you Pepito.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_08_4	tu_pc_08_4	tu_pc_08	4	probe	flight.probe_crew	intercom				0		[beeps an objection]	calm	chatter	both	idle	any	tourist	any	any	any	offended					
+tu_pc_09_1	tu_pc_09_1	tu_pc_09	1	probe	flight.probe_crew	intercom				0		[beeps a yawn]	calm	chatter	both	idle	any	tourist	any	any	any	sleepy					
+tu_pc_09_2	tu_pc_09_2	tu_pc_09	2	kerbal_a	flight.probe_crew	intercom				0	No te duermas, por favor. Tú eres quien sabe.	Don't fall asleep, please. You're the one who knows how.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_10_1	tu_pc_10_1	tu_pc_10	1	kerbal_a	flight.probe_crew	intercom				0	Ponme cinco estrellas en tu reseña.	Give me five stars in your review.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_10_2	tu_pc_10_2	tu_pc_10	2	probe	flight.probe_crew	intercom				0		[beeps three]	calm	chatter	both	idle	any	tourist	any	any	any	bored					
+tu_pc_11_1	tu_pc_11_1	tu_pc_11	1	kerbal_a	flight.probe_crew	intercom				0	¿Sabes ir a casa sin mapa?	Do you know the way home without a map?	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_11_2	tu_pc_11_2	tu_pc_11	2	probe	flight.probe_crew	intercom				0		[beeps a whole route]	calm	chatter	both	idle	any	tourist	any	any	any	proud					
+tu_pc_11_3	tu_pc_11_3	tu_pc_11	3	kerbal_a	flight.probe_crew	intercom				0	Me fío de ti. No tengo otra opción.	I trust you. I have no other choice.	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pc_12_1	tu_pc_12_1	tu_pc_12	1	probe	flight.probe_crew	intercom				0		[beeps a little song]	calm	chatter	both	idle	any	tourist	any	any	any	happy					
+tu_pc_12_2	tu_pc_12_2	tu_pc_12	2	kerbal_a	flight.probe_crew	intercom				0	¡Otra! ¡Otra!	Again! Again!	calm	chatter	both	idle	any	tourist	any	any	any						
+tu_pstg_01_1	tu_pstg_01_1	tu_pstg_01	1	kerbal_a	flight.probe_crew	intercom				0	¡Etapa! ¡La he dicho yo primero!	Stage! I called it first!	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_01_2	tu_pstg_01_2	tu_pstg_01	2	probe	flight.probe_crew	intercom				0		[beeps very offended]	calm	chatter	both	any	any	tourist	any	staging	any	offended					
+tu_pstg_02_1	tu_pstg_02_1	tu_pstg_02	1	kerbal_a	flight.probe_crew	intercom				0	¿Eso era una etapa? ¡Etapa!	Was that a stage? Stage!	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_02_2	tu_pstg_02_2	tu_pstg_02	2	probe	flight.probe_crew	intercom				0		[beeps a tired yes]	calm	chatter	both	any	any	tourist	any	staging	any	bored					
+tu_pstg_03_1	tu_pstg_03_1	tu_pstg_03	1	kerbal_a	flight.probe_crew	intercom				0	¡Separación! Siempre quise decirlo.	Separation! I always wanted to say that.	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_03_2	tu_pstg_03_2	tu_pstg_03	2	probe	flight.probe_crew	intercom				0		[beeps it correctly]	calm	chatter	both	any	any	tourist	any	staging	any	proud					
+tu_pstg_04_1	tu_pstg_04_1	tu_pstg_04	1	kerbal_a	flight.probe_crew	intercom				0	¡Ignición! ¿Se dice así?	Ignition! Is that how you say it?	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_04_2	tu_pstg_04_2	tu_pstg_04	2	probe	flight.probe_crew	intercom				0		[beeps a slow correction]	calm	chatter	both	any	any	tourist	any	staging	any	curious					
+tu_pstg_04_3	tu_pstg_04_3	tu_pstg_04	3	kerbal_a	flight.probe_crew	intercom				0	Vale. Lo que tú digas.	Okay. Whatever you say.	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_05_1	tu_pstg_05_1	tu_pstg_05	1	kerbal_a	flight.probe_crew	intercom				0	¡He pulsado yo eso! Creo.	I pressed that! I think.	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_05_2	tu_pstg_05_2	tu_pstg_05	2	probe	flight.probe_crew	intercom				0		[beeps very firmly]	calm	chatter	both	any	any	tourist	any	staging	any	offended					
+tu_pstg_05_3	tu_pstg_05_3	tu_pstg_05	3	kerbal_a	flight.probe_crew	intercom				0	Vale, vale. Has sido tú.	Okay, okay. It was you.	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_06_1	tu_pstg_06_1	tu_pstg_06	1	kerbal_a	flight.probe_crew	intercom				0	¡Algo se ha soltado! ¡Etapa, supongo!	Something came off! Stage, I guess!	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_06_2	tu_pstg_06_2	tu_pstg_06	2	probe	flight.probe_crew	intercom				0		[beeps very patiently]	calm	chatter	both	any	any	tourist	any	staging	any	bored					
+tu_pstg_07_1	tu_pstg_07_1	tu_pstg_07	1	kerbal_a	flight.probe_crew	intercom				0	¡Etapa! ¿Lo he hecho bien?	Stage! Did I do it right?	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_07_2	tu_pstg_07_2	tu_pstg_07	2	probe	flight.probe_crew	intercom				0		[beeps a patient yes]	calm	chatter	both	any	any	tourist	any	staging	any	happy					
+tu_pstg_08_1	tu_pstg_08_1	tu_pstg_08	1	kerbal_a	flight.probe_crew	intercom				0	¡Todos a sus puestos! ¡Etapa!	Everyone to your stations! Stage!	calm	chatter	both	any	any	tourist	any	staging	any						
+tu_pstg_08_2	tu_pstg_08_2	tu_pstg_08	2	probe	flight.probe_crew	intercom				0		[beeps an eye roll]	calm	chatter	both	any	any	tourist	any	staging	any	offended					

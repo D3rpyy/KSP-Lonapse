@@ -11,6 +11,10 @@ namespace Lonapse
     public sealed class PhraseEntry
     {
         public string ClipKey;
+        public DialogueLine Dialogue;
+        public string DialogueRole;
+        public bool PreparedSpeech, IsReply;
+        public string RuntimeWhen;
         public string Event;
         public string Severity;
         public string Band;
@@ -18,7 +22,7 @@ namespace Lonapse
         public string Scene;
         public int Seq;
         public string Gender;
-        // Flight phase of the row: any, a phase name, serious or goofy. "any" when the table has no column.
+        // Flight phase of the row: any, a phase name, serious or idle. "any" when the table has no column.
         public string Phase = "any";
         // Stress cause of the row: any or a StressModel component name. "any" when the table has no column.
         public string Cause = "any";
@@ -214,6 +218,7 @@ namespace Lonapse
                 any = true;
                 if (es[k].IndexOf('[') == 0) { bad.Add("spanish_rt version " + (k + 1) + ": leave out the [conditions]"); return; }
                 var have = SubtitleSlots.Names(text);
+                if (text.Contains("{body}")) have.Add("body");
                 foreach (System.Text.RegularExpressions.Match m in SubtitleSlots.EsSlotRe.Matches(es[k]))
                     if (!have.Contains(m.Groups[2].Value)) { bad.Add("spanish_rt version " + (k + 1) + " uses {" + m.Groups[2].Value + "}, its english does not"); return; }
                 string rest = SubtitleSlots.EsSlotRe.Replace(es[k], "");
@@ -289,9 +294,9 @@ namespace Lonapse
         // Same values as PHASES and CAUSES in audio/build_lonapse.py
         public static readonly string[] Phases = {
             "any", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
-            "serious", "goofy" };
+            "serious", "idle" };
         public static readonly string[] SeriousPhases = { "launch", "ascent", "reentry", "descent" };
-        public static readonly string[] GoofyPhases = { "prelaunch", "orbit", "coast", "landed" };
+        public static readonly string[] CalmPhases = { "prelaunch", "orbit", "coast", "landed" };
         public static readonly string[] Causes = {
             "any", "spin", "gforce", "q", "ground", "heat", "plasma", "fuel", "impulse", "engine_out" };
         public const string GenericBody = "generic";
@@ -365,7 +370,7 @@ namespace Lonapse
         // Optional columns. A column outside Columns and Optional is ignored.
         public static readonly string[] Optional = {
             PhaseColumn, CauseColumn, LonapseColumn, FolderColumn, BodyColumn, EnglishColumn,
-            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn, SpanishRtColumn };
+            TraitColumn, PersonaColumn, TopicColumn, CoreColumn, BeepColumn, SpanishRtColumn, "runtime", "when", "dialogue" };
 
         // Topics allowed for an event: ScienceTopics for science, SoiTopics for soi_enter, StagingTopics,
         // MilestoneTopics and RoverTopics, only "any" otherwise.
@@ -493,6 +498,7 @@ namespace Lonapse
 
                 PhraseEntry e = new PhraseEntry();
                 e.ClipKey = f[col["clip_key"]];
+                if (col.ContainsKey("dialogue")) { e.Dialogue = DialogueTable.Find(f[col["dialogue"]]); e.DialogueRole = e.Dialogue != null ? e.Dialogue.Get("role") : null; }
                 e.Event = f[col["event"]];
                 e.Severity = f[col["severity"]];
                 e.Band = f[col["band"]];
@@ -503,7 +509,7 @@ namespace Lonapse
                 string seqText = f[col["seq"]];
                 bool hasEnglish = col.ContainsKey(EnglishColumn);
                 if (hasEnglish) e.English = f[col[EnglishColumn]];
-                if (col.ContainsKey(PhaseColumn)) e.Phase = f[col[PhaseColumn]];
+                if (col.ContainsKey(PhaseColumn)) e.Phase = FlightPhase.Normalize(f[col[PhaseColumn]]);
                 if (col.ContainsKey(CauseColumn)) e.Cause = f[col[CauseColumn]];
                 if (col.ContainsKey(BodyColumn)) e.Body = f[col[BodyColumn]];
                 if (col.ContainsKey(TraitColumn) && f[col[TraitColumn]].Length > 0) e.Trait = f[col[TraitColumn]];
@@ -561,7 +567,8 @@ namespace Lonapse
                 if (probeEv && e.Role == "crew") bad.Add("probe event '" + e.Event + "' cannot have crew rows");
                 if (e.Role == RoleProbe && !ProbeSubtitleOk(e.English))
                     bad.Add("probe subtitle must look like [beeps excitedly] (beeps and 1 to 3 lowercase words), got '" + e.English + "'");
-                CheckPlaceholders(e, bad);
+                if (!col.ContainsKey("runtime")) CheckPlaceholders(e, bad);
+                if (col.ContainsKey("when")) e.RuntimeWhen = f[col["when"]];
                 if (bad.Count == 0) CheckSpanishRt(e, rt, bad);
                 e.Seq = seq;
 
@@ -647,21 +654,25 @@ namespace Lonapse
 
         // ---- phase and cause matching ----
         // Same meaning as FlightPhase.Matches: "any" (or null or empty) on either side matches everything,
-        // "serious" stands for launch, ascent, reentry and descent, "goofy" for prelaunch, orbit, coast and landed.
+        // "serious" stands for launch, ascent, reentry and descent, "idle" for prelaunch, orbit, coast and landed.
         // Kept here so PhraseTable compiles on its own in the offline tests.
 
         public static bool IsSeriousPhase(string p) { return p == "serious" || Array.IndexOf(SeriousPhases, p) >= 0; }
-        public static bool IsGoofyPhase(string p) { return p == "goofy" || Array.IndexOf(GoofyPhases, p) >= 0; }
+        public static readonly string[] GoofyPhases = CalmPhases; // legacy API name
+        public static bool IsGoofyPhase(string p) { return IsCalmPhase(p); }
+        public static bool IsIdlePhase(string p) { return FlightPhase.Normalize(p) == FlightPhase.Idle || Array.IndexOf(CalmPhases, p) >= 0; }
+        public static bool IsCalmPhase(string p) { return IsIdlePhase(p); }
 
         public static bool PhaseMatches(string rowPhase, string current)
         {
+            rowPhase = FlightPhase.Normalize(rowPhase); current = FlightPhase.Normalize(current);
             if (string.IsNullOrEmpty(rowPhase) || rowPhase == "any") return true;
             if (string.IsNullOrEmpty(current) || current == "any") return true;
             if (rowPhase == current) return true;
             if (rowPhase == "serious") return IsSeriousPhase(current);
-            if (rowPhase == "goofy") return IsGoofyPhase(current);
+            if (rowPhase == FlightPhase.Idle) return IsIdlePhase(current);
             if (current == "serious") return IsSeriousPhase(rowPhase);
-            if (current == "goofy") return IsGoofyPhase(rowPhase);
+            if (current == FlightPhase.Idle) return IsIdlePhase(rowPhase);
             return false;
         }
 
@@ -837,14 +848,23 @@ namespace Lonapse
         {
             Core = string.IsNullOrEmpty(core) ? "any" : core;
             Id = id; Event = ev; Band = band; Severity = severity;
-            Phase = string.IsNullOrEmpty(phase) ? "any" : phase;
+            Phase = string.IsNullOrEmpty(phase) ? "any" : FlightPhase.Normalize(phase);
             Cause = string.IsNullOrEmpty(cause) ? "any" : cause;
             Trait = string.IsNullOrEmpty(trait) ? "any" : trait;
             Persona = string.IsNullOrEmpty(persona) ? "any" : persona;
             Topic = string.IsNullOrEmpty(topic) ? "any" : topic;
         }
 
-        public bool IsIntercom { get { return McLines == 0 && ProbeRoleLines == 0 && CrewLines >= 2; } }
+        public bool IsIntercom { get {
+            if (McLines != 0 || ProbeRoleLines != 0) return false;
+            if (Lines.Count > 0 && Lines[0].Dialogue != null)
+            {
+                string channel = Lines[0].Dialogue.Get("channel");
+                if (channel == "intercom") return true;
+                if (channel == "radio") return false;
+            }
+            return CrewLines >= 2;
+        } }
         public bool StartsWithMc { get { return Lines.Count > 0 && Lines[0].Role == "mc"; } }
         public bool HasBody { get { return Bodies.Count > 0; } }
         public bool GenderOk(bool female) { return female ? FemaleOk : MaleOk; }
@@ -903,7 +923,7 @@ namespace Lonapse
                 if (hasSlots < 0)
                 {
                     hasSlots = 0;
-                    foreach (PhraseEntry e in AllLines) if (SubtitleSlots.NeedsFill(e.English)) { hasSlots = 1; break; }
+                    foreach (PhraseEntry e in AllLines) if (e.Dialogue != null || SubtitleSlots.NeedsFill(e.English)) { hasSlots = 1; break; }
                 }
                 return hasSlots == 1;
             }

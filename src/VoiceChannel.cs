@@ -28,6 +28,13 @@ namespace Lonapse
         public bool compressor = true;
         public string phraseKey;          // Lonapse clip key of the playing line, null for other clips
         public float dropout;             // weak-signal dropouts in VoiceDsp, 0..1
+        private RadioVoice radioVoice;
+        public float radioWeakness;
+        public bool followRadioSignal;
+        public float pickupGain = 1f;
+        private static float[] cabinPickup, controlPickup;
+        private static int cabinPickupRate, controlPickupRate;
+        private static bool pickupLoaded;
         private bool hasEcho;
         private float radioHp;
         public bool intercom;              // current preset: intercom (true) or radio (false)
@@ -75,7 +82,7 @@ namespace Lonapse
             src.bypassEffects = false;
             src.bypassListenerEffects = true;
             src.bypassReverbZones = true;
-            // the game listener is ducked under voice: our sources apply the listener base volume themselves
+            // our sources apply the observed game listener volume themselves
             src.ignoreListenerVolume = true;
             src.ignoreListenerPause = false;
             src.priority = priority;
@@ -118,13 +125,52 @@ namespace Lonapse
             try { trem.sampleRate = AudioSettings.outputSampleRate; } catch (Exception) { trem.sampleRate = 48000f; }
             trem.depth = 0f;
 
-            if (kind == ChannelKind.Sfx || kind == ChannelKind.Breath || kind == ChannelKind.Beep) gainDsp = go.AddComponent<GainDsp>();
-
-            if (kind == ChannelKind.Crew || kind == ChannelKind.Control)
+            if (kind == ChannelKind.Crew || kind == ChannelKind.Control || kind == ChannelKind.Beep)
             {
                 dsp = go.AddComponent<VoiceDsp>();
                 try { dsp.sampleRate = AudioSettings.outputSampleRate; } catch (Exception) { dsp.sampleRate = 48000f; }
+                LoadPickup();
             }
+            gainDsp = go.AddComponent<GainDsp>();
+        }
+
+        private static void LoadPickup()
+        {
+            if (pickupLoaded) return;
+            pickupLoaded = true;
+            cabinPickup = ReadPickup("sfx/cabin_loop", out cabinPickupRate);
+            controlPickup = ReadPickup("sfx/control_room_loop", out controlPickupRate);
+        }
+
+        private static float[] ReadPickup(string folder, out int rate)
+        {
+            rate = 0;
+            try
+            {
+                AudioClip clip = ClipLibrary.Next(folder, new System.Random(1));
+                if (clip == null) return null;
+                clip.LoadAudioData();
+                float[] raw = new float[clip.samples * clip.channels];
+                if (!clip.GetData(raw, 0)) { Log.WarnOnce("mic-pickup:" + folder, "Could not read microphone pickup: " + folder); return null; }
+                rate = clip.frequency;
+                if (clip.channels == 1) return raw;
+                float[] mono = new float[clip.samples];
+                for (int i = 0; i < mono.Length; i++)
+                {
+                    float sum = 0f;
+                    for (int ch = 0; ch < clip.channels; ch++) sum += raw[i * clip.channels + ch];
+                    mono[i] = sum / clip.channels;
+                }
+                return mono;
+            }
+            catch (Exception e) { Log.Exception("Microphone pickup " + folder, e); return null; }
+        }
+
+        public void SetRadioVoice(RadioVoice voice, float weakness = 0f, bool followSignal = false)
+        {
+            radioVoice = voice;
+            radioWeakness = weakness;
+            followRadioSignal = followSignal;
         }
 
         /// <summary>Radio profile band-pass for the control channel.</summary>
@@ -186,6 +232,9 @@ namespace Lonapse
             }
             clipName = clip.name ?? "";
             boost = 1f;
+            radioVoice = RadioVoice.Off;
+            radioWeakness = 0f;
+            followRadioSignal = false;
             probeBeep = false;
             keySound = false;
             phraseKey = null;
@@ -198,6 +247,7 @@ namespace Lonapse
             tremDepth = 0f;
             recordedPanic = false;
             if (trem != null) trem.depth = 0f;
+            if (dsp != null) { dsp.radioVoice = RadioVoice.Off; dsp.radioGeneration++; dsp.active = true; }
             src.volume = 0f; // real volume is applied in Update before the next audio frame
             src.Play();
         }
@@ -239,6 +289,7 @@ namespace Lonapse
 
         public void Stop()
         {
+            if (dsp != null) dsp.active = false;
             if (src != null)
             {
                 src.volume = 0f;
@@ -259,6 +310,7 @@ namespace Lonapse
             tremDepth = 0f;
             recordedPanic = false;
             extraDistortion = 0f;
+            radioVoice = RadioVoice.Off;
             if (trem != null) trem.depth = 0f;
         }
 
@@ -269,6 +321,7 @@ namespace Lonapse
             {
                 src.Pause();
                 paused = true;
+                if (dsp != null) dsp.active = false;
             }
         }
 
@@ -276,6 +329,7 @@ namespace Lonapse
         {
             if (src == null || !paused) return;
             paused = false;
+            if (dsp != null) dsp.active = true;
             src.UnPause();
         }
 
@@ -375,7 +429,11 @@ namespace Lonapse
                 return;
             }
 
-            float d = DcMath.Clamp01(baseDistortion + extraDistortion);
+            bool mic = dsp != null && dspWanted && radioVoice != RadioVoice.Off;
+            if (hp != null) hp.enabled = !mic;
+            if (lp != null) lp.enabled = !mic;
+            if (echo != null) echo.enabled = !mic && hasEcho && (!intercom || radioFx);
+            float d = mic ? 0f : DcMath.Clamp01(baseDistortion + extraDistortion);
             if (dist != null)
             {
                 bool on = d > 0.001f;
@@ -407,13 +465,22 @@ namespace Lonapse
                 if (dsp.enabled != on) dsp.enabled = on;
                 dsp.outGain = boost;
                 dsp.dropout = dropout;
-                dsp.compressorOn = compressor;
+                dsp.compressorOn = kind != ChannelKind.Beep && compressor;
+                dsp.eqOn = kind != ChannelKind.Beep;
+                dsp.radioLowPass = lp != null ? lp.cutoffFrequency : 3000f;
+                dsp.radioWeakness = radioWeakness;
+                dsp.radioGrit = extraDistortion + (kind == ChannelKind.Crew ? baseDistortion : 0f);
+                dsp.pickupGain = pickupGain;
+                dsp.ambience = radioVoice == RadioVoice.Control ? controlPickup : cabinPickup;
+                dsp.ambienceRate = radioVoice == RadioVoice.Control ? controlPickupRate : cabinPickupRate;
+                dsp.radioVoice = radioVoice;
                 if (!on) boostMul = boost; // no DSP: boost through the source volume (clamped at 1)
             }
-            float ug = DcMath.Clamp(DcMath.Finite(userGain), 0f, 4f);
-            if (gainDsp != null) gainDsp.gain = ug > 1f ? ug : 1f;
-            float vol = categoryVolume * volumeScale * gain * globalMul * tremMul * boostMul * (gainDsp != null && ug > 1f ? 1f : ug);
-            src.volume = DcMath.Clamp01(DcMath.Finite(vol));
+            float level = categoryVolume * volumeScale * gain * globalMul * tremMul * boostMul;
+            float sourceGain, filterGain;
+            MixMath.SplitChannelGain(level, userGain, out sourceGain, out filterGain);
+            gainDsp.gain = filterGain;
+            src.volume = sourceGain;
         }
 
         public void Destroy()

@@ -9,7 +9,7 @@ namespace Lonapse
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class LonapseAddon : MonoBehaviour
     {
-        public const string Version = "0.8.3";
+        public const string Version = "0.9.0";
 
         // gate reasons (constant strings, no per-frame allocation)
         public const string GateOpenReason = "open";
@@ -78,7 +78,13 @@ namespace Lonapse
         public VoiceChannel breathCh;     // helmet breathing bed on EVA
         public VoiceChannel cabinCh;      // fan loop of the cabin in IVA
         public VoiceChannel cabinDownCh;  // the cabin power down, apart from the loop so the two can overlap
+        public VoiceChannel cabinRattleCh;
+        public VoiceChannel cabinSeparationCh;
         private readonly CabinAmbience cabin = new CabinAmbience();
+        private readonly List<ModuleEngines> cabinEngines = new List<ModuleEngines>();
+        private Vessel cabinVessel;
+        private int cabinPartCount = -1;
+        private float cabinRattleLevel;
 
         // radio profile and signal
         public RadioProfile profile;
@@ -92,11 +98,7 @@ namespace Lonapse
         private readonly RecentMax closing = new RecentMax(0.5f); // closing speed just before contact
         public float lastDockSpeed = -1f;
         private bool hardDockPending;
-        // Ducking of the game audio through the listener
-        private float listenerBase = -1f, lastWrittenListener = -1f;
-        public float duckGain = 1f;
-        private int duckMisses;
-        private bool duckDisabled;
+        private float listenerBase = -1f;
         private bool lastSubtitles;
 
         // probe mode: an uncrewed vessel with a probe core (minimumCrew 0) opens the gate in probe mode
@@ -208,8 +210,7 @@ namespace Lonapse
         /// <summary>Static level from the signal chain, 0 at full signal.</summary>
         public float StaticLevel { get { return signal.StaticLevel(settings); } }
         private float chutePollTimer;
-        private int lastPolledStage = int.MinValue;
-        private float lastStageEventTime = -999f;
+        private readonly StagePoll stagePoll = new StagePoll();
         private bool started;
         /// <summary>True after Start succeeded (MouthDriver stays idle before that).</summary>
         public bool Started { get { return started; } }
@@ -330,7 +331,7 @@ namespace Lonapse
             if (ReferenceEquals(Instance, this)) Instance = null;
             started = false;
             gateOpen = false;
-            RestoreListener();
+            if (countdown != null) countdown.Dispose();
             // the Piper processes stay for the next flight (RuntimeVoiceHost), only this flight's callbacks go
             try { if (runtimeVoice != null) runtimeVoice.DropCallbacks(); runtimeVoice = null; }
             catch (Exception e) { Log.Exception("OnDestroy.runtimeVoice", e); }
@@ -375,7 +376,9 @@ namespace Lonapse
             airlockCh = new VoiceChannel(t, "airlock", ChannelKind.Sfx, 95, 10f, 22000f, 0f, false);
             cabinCh = new VoiceChannel(t, "cabin", ChannelKind.Sfx, 115, 10f, 22000f, 0f, false);
             cabinDownCh = new VoiceChannel(t, "cabinPowerDown", ChannelKind.Sfx, 115, 10f, 22000f, 0f, false);
-            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, airlockCh, thrustCh, groundCh, stepCh, cabinCh, cabinDownCh };
+            cabinRattleCh = new VoiceChannel(t, "cabinRattle", ChannelKind.Sfx, 115, 10f, 22000f, 0f, false);
+            cabinSeparationCh = new VoiceChannel(t, "cabinSeparation", ChannelKind.Sfx, 94, 10f, 22000f, 0f, false);
+            allChannels = new VoiceChannel[] { crew[0], crew[1], crew[2], control, controlBed, beep[0], beep[1], staticCh, crewBed, clickCh, calloutCh, keyCh, breathCh, alarmCh, sfxCh, airlockCh, thrustCh, groundCh, stepCh, cabinCh, cabinDownCh, cabinRattleCh, cabinSeparationCh };
         }
 
         private void ReadPhysicsGlobals()
@@ -511,8 +514,9 @@ namespace Lonapse
             chutes.dirty = true;
             try
             {
-                if (p != null && ReferenceEquals(p.vessel, FlightGlobals.ActiveVessel))
+                if (p != null && (ReferenceEquals(p.vessel, FlightGlobals.ActiveVessel) || stageVesselParts.Contains(p.flightID)))
                 {
+                    stagePoll.TopologyChanged(Time.unscaledTime);
                     docking.Reset();
                     Log.Info("Undocked: " + (p.partInfo != null ? p.partInfo.title : p.name));
                     PlaySfx("sfx/airlock_undock");
@@ -848,6 +852,7 @@ namespace Lonapse
             try
             {
                 if (!started || !InvolvesActive(a)) return;
+                stagePoll.TopologyChanged(Time.unscaledTime);
                 PlaySfx("sfx/airlock_dock");
                 Tuning tu = settings.tuning;
                 // The closing speed of the last half second decides between soft capture and hard dock
@@ -909,7 +914,8 @@ namespace Lonapse
             {
                 if (!started) return;
                 stress.AddImpulse(settings.tuning.impulseStage);
-                lastStageEventTime = Time.unscaledTime;
+                stagePoll.Activated(Time.unscaledTime);
+                PlayCabinSeparation(stage);
                 beeps.OnStage(stage, null); // checks the gate itself and logs every outcome
             }
             catch (Exception e) { Log.Exception("OnStageActivate", e); }
@@ -1050,9 +1056,9 @@ namespace Lonapse
                     docking.Reset();
                     dockGeo.dirty = true;
                     chutes.dirty = true;
-                    lastPolledStage = SafeStage(v);
-                    pollDropFrom = int.MinValue;
-                    scanParts = scanIgnited = -1;
+                    stagePoll.Reset(SafeStage(v));
+                    stageScanLeft = 0f;
+                    stageVesselParts.Clear();
                     stress.ResetAll();
                     stress.StartWarmup();
                     roster.dirty = true;
@@ -1104,7 +1110,6 @@ namespace Lonapse
                 }
                 if (paused)
                 {
-                    RestoreListener(); // the pause menu owns the master volume
                     // everything frozen: sources are paused, directors do not run
                     TickEvents(0f); // handlers that fire during the pause still see a live hub, its clock stands still
                     if (overlay != null) overlay.Tick(dt);
@@ -1188,13 +1193,11 @@ namespace Lonapse
                 UpdateAlarm(dt);
                 EnforceCategoryToggles();
                 UpdateChannels(dt);
-                UpdateDuck(dt);
                 if (overlay != null) overlay.Tick(dt);
             }
             catch (Exception e)
             {
                 Log.Exception("Update", e);
-                RestoreListener(); // never leave the game audio ducked after an error
             }
         }
 
@@ -1230,6 +1233,7 @@ namespace Lonapse
             {
                 VoiceChannel c = allChannels[i];
                 c.SetDsp(settings.useDsp);
+                c.pickupGain = c.kind == ChannelKind.Crew && !cabin.Powered ? 0f : 1f;
                 if (c.kind == ChannelKind.Beep) c.userGain = c.probeBeep ? Math.Max(1f, settings.beepVolume) : 1f;   // the slider above 100% is linear gain
                 float mul = finalCall && ReferenceEquals(c, control) ? settings.masterVolume * gameGain : globalMul;
                 if (c.kind == ChannelKind.Sfx) mul = sfxMul;   // sfxCh, airlockCh, thrustCh, groundCh and stepCh
@@ -1251,12 +1255,12 @@ namespace Lonapse
             {
                 case ChannelKind.Crew: return c.intercom ? settings.intercomVolume : settings.crewVolume;
                 case ChannelKind.IntercomClick: return settings.intercomVolume;
-                case ChannelKind.Control:
-                case ChannelKind.ControlBed: return settings.controlVolume;
+                case ChannelKind.Control: return settings.controlVolume;
+                case ChannelKind.ControlBed: return settings.controlVolume * RadioNoise.Gain(settings.radioStatic);
                 case ChannelKind.Beep: return c.probeBeep ? Math.Min(settings.beepVolume, 1f) : OtherBeepVolume;   // above 100% the rest is gain, see UpdateChannels
                 case ChannelKind.Breath: return settings.crewVolume;
                 case ChannelKind.Sfx: return settings.sfxVolume;
-                default: return settings.staticVolume;
+                default: return RadioNoise.DefaultVolume * RadioNoise.Gain(settings.radioStatic);
             }
         }
 
@@ -1480,6 +1484,8 @@ namespace Lonapse
         private void UpdateProbeMoments(Vessel v, float dt)
         {
             if (v == null) return;
+            milestones.WasRemembered = key => ProbeHistory.Current != null && ProbeHistory.Current.Has(key);
+            milestones.Remember = key => { if (ProbeHistory.Current != null) ProbeHistory.Current.Remember(key); };
             Tuning tu = settings.tuning;
             try
             {
@@ -1622,7 +1628,7 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Our sources ignore the listener (it is ducked under voice), so the gain applies the stored listener base.
+        /// Our sources apply the observed listener volume themselves.
         /// When the listener sits at 1, KSP did not put the master volume on it, so the master volume is applied here.
         /// </summary>
         private float ComputeGameGain()
@@ -1637,51 +1643,10 @@ namespace Lonapse
             catch (Exception) { return 1f; }
         }
 
-        // ---------------------------------------------------------------- ducking
-
-        /// <summary>Takes the listener value as the base, unless it is the value we wrote ourselves.</summary>
+        /// <summary>Observe the game's listener volume without changing it.</summary>
         private void ReadListenerBase()
         {
-            float cur;
-            try { cur = AudioListener.volume; } catch (Exception) { return; }
-            if (listenerBase < 0f) { listenerBase = cur; Log.Info("Listener base volume " + cur.ToString("0.00")); return; }
-            if (lastWrittenListener < 0f) { listenerBase = cur; return; }
-            if (Math.Abs(cur - lastWrittenListener) > 0.002f)
-            {
-                // someone else set the listener (settings menu, another mod, or KSP every frame)
-                listenerBase = cur;
-                if (duckGain < 0.99f && ++duckMisses >= 3 && !duckDisabled)
-                {
-                    duckDisabled = true;
-                    Log.Warn("The listener volume is reset by something else, ducking is switched off for this scene");
-                }
-                lastWrittenListener = -1f;
-            }
-            else duckMisses = 0;
-        }
-
-        private void UpdateDuck(float dt)
-        {
-            if (listenerBase < 0f) return;
-            bool on = settings.duckMode == "listener" && !duckDisabled && gateOpen && !paused;
-            float targetGain = on && director != null && director.VoiceActive ? 1f - settings.duckDepth : 1f;
-            Tuning tu = settings.tuning;
-            duckGain = MixMath.DuckStep(duckGain, targetGain, dt, tu.duckAttack, tu.duckRelease);
-            if (Math.Abs(duckGain - targetGain) < 0.001f) duckGain = targetGain;
-            if (!on && duckGain > 0.999f) duckGain = 1f;
-            if (duckGain >= 1f && lastWrittenListener < 0f) return; // nothing to undo, leave the listener alone
-            float v = listenerBase * duckGain;
-            try { AudioListener.volume = v; lastWrittenListener = v; }
-            catch (Exception) { }
-            if (duckGain >= 1f) lastWrittenListener = -1f;
-        }
-
-        private void RestoreListener()
-        {
-            duckGain = 1f;
-            if (lastWrittenListener < 0f || listenerBase < 0f) return;
-            try { AudioListener.volume = listenerBase; } catch (Exception) { }
-            lastWrittenListener = -1f;
+            try { listenerBase = AudioListener.volume; } catch (Exception) { }
         }
 
         // ---------------------------------------------------------------- pollers
@@ -1803,6 +1768,9 @@ namespace Lonapse
         private void UpdateCabin()
         {
             bool inCabin = CanStartAudio && settings.cabinSfx && !evaMode && InIva();
+            UpdateCabinRattle(inCabin);
+            cabinSeparationCh.userGain = SliderGain(settings.cabinSeparationVolume);
+            if (!inCabin) cabinSeparationCh.FadeOutOnce(0.1f);
             bool wasPowered = cabin.Powered;
             cabin.Step(inCabin, sample.valid, sample.ecFrac, sample.ecMax, settings.tuning.powerMinMax);
             if (wasPowered != cabin.Powered && inCabin) Log.Info("Cabin power " + (cabin.Powered ? "back" : "lost"));
@@ -1823,6 +1791,67 @@ namespace Lonapse
             }
             else if (!cabin.LoopWanted) cabinCh.FadeOutOnce(0.8f);
             if (!inCabin) cabinDownCh.FadeOutOnce(0.5f);
+        }
+
+        private void PlayCabinSeparation(int stage)
+        {
+            if (!CanStartAudio || !settings.cabinSfx || evaMode || !InIva() || StageContents(stage) != StageKind.Separation) return;
+            PlaySfx("sfx/cabin_separation", true, settings.cabinSeparationVolume, 1f, cabinSeparationCh);
+        }
+
+        private void UpdateCabinRattle(bool inCabin)
+        {
+            Vessel v = FlightGlobals.ActiveVessel;
+            double thrust = 0, maxThrust = 0;
+            if (!inCabin || v == null)
+            {
+                cabinVessel = null;
+                cabinPartCount = -1;
+                cabinEngines.Clear();
+            }
+            if (inCabin && v != null)
+            {
+                if (v != cabinVessel || v.parts.Count != cabinPartCount)
+                {
+                    cabinVessel = v;
+                    cabinPartCount = v.parts.Count;
+                    cabinEngines.Clear();
+                    foreach (Part p in v.parts)
+                        foreach (PartModule m in p.Modules)
+                        {
+                            ModuleEngines e = m as ModuleEngines;
+                            if (e != null) cabinEngines.Add(e);
+                        }
+                    Log.Info("Cabin rattle: " + cabinEngines.Count + " engine module(s) in IVA");
+                }
+                foreach (ModuleEngines e in cabinEngines)
+                    if (e != null && e.EngineIgnited && e.finalThrust > 0)
+                    {
+                        thrust += e.finalThrust;
+                        maxThrust += Math.Max(e.maxThrust, e.finalThrust);
+                    }
+            }
+            float target = CabinAmbience.RattleLevel(inCabin, thrust, maxThrust);
+            cabinRattleLevel = FaceMath.Follow(cabinRattleLevel, target, Time.unscaledDeltaTime, 6f);
+            cabinRattleCh.userGain = SliderGain(settings.cabinThrustVolume);
+            cabinRattleCh.volumeScale = cabinRattleLevel;
+            if (target > 0f && (!cabinRattleCh.Busy || cabinRattleCh.FadingOut))
+            {
+                AudioClip c = ClipLibrary.Next("sfx/cabin_rattle", rng);
+                if (c != null)
+                {
+                    cabinRattleCh.Play(c, cabinRattleLevel, 1f, true, 0.15f);
+                    Log.Info("Cabin rattle started: thrust " + thrust.ToString("0.0") + "/" + maxThrust.ToString("0.0")
+                             + " kN, target " + target.ToString("0.00") + ", clip " + c.name);
+                }
+                else Log.WarnOnce("cabin-rattle-missing", "Cabin rattle cannot play: no sfx/cabin_rattle clip loaded");
+            }
+            else if (target <= 0f)
+            {
+                if (cabinRattleCh.Busy && !cabinRattleCh.FadingOut)
+                    Log.Info("Cabin rattle stopped: " + (inCabin ? "no engine thrust" : "outside IVA or cabin sound disabled"));
+                cabinRattleCh.FadeOutOnce(inCabin ? 0.4f : 0.15f);
+            }
         }
 
         /// <summary>Immediate stop of every source, queue cleared, scheduler and blackout reset.</summary>
@@ -2068,21 +2097,14 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Fallback for staging: if Vessel.currentStage drops without an onStageActivate event within 1 s, treat it as
-        /// staging. The shared callout cooldown prevents double callouts.
+        /// Stage-number fallback requires lost parts or an ignited engine as proof. Docking topology changes
+        /// rebase the observations while the vessel and stage list settle.
         /// </summary>
         // stage number -> bit 1 decoupler or fairing, bit 2 engine. Refreshed every second, because the decoupled
         // parts may already belong to another vessel when onStageActivate arrives.
         private readonly Dictionary<int, int> stageParts = new Dictionary<int, int>();
+        private readonly HashSet<uint> stageVesselParts = new HashSet<uint>();
         private float stageScanLeft;
-
-        // what the 1 s scan saw: the part count and the burning engines. A stage that really fired drops parts or
-        // lights an engine. Editing the stage order in flight also moves currentStage, but fires nothing.
-        private int scanParts = -1, scanIgnited = -1;
-        // a currentStage drop without onStageActivate, waiting for proof that something fired
-        private int pollDropFrom = int.MinValue, pollDropTo;
-        private float pollDropTime;
-        private const float PollProofWindow = 1.5f;
 
         private static int IgnitedEngines(Vessel v)
         {
@@ -2103,16 +2125,14 @@ namespace Lonapse
         private void ScanStages(Vessel v)
         {
             stageParts.Clear();
+            stageVesselParts.Clear();
             if (v == null || v.parts == null) return;
-            if (pollDropFrom == int.MinValue)
-            {
-                scanParts = v.parts.Count;
-                scanIgnited = IgnitedEngines(v);
-            }
+            if (!stagePoll.Pending) stagePoll.Scan(v.parts.Count, IgnitedEngines(v));
             for (int i = 0; i < v.parts.Count; i++)
             {
                 Part p = v.parts[i];
                 if (p == null) continue;
+                stageVesselParts.Add(p.flightID);
                 int bits = 0;
                 for (int m = 0; m < p.Modules.Count; m++)
                 {
@@ -2161,38 +2181,19 @@ namespace Lonapse
                 try { ScanStages(v); } catch (Exception e) { Log.WarnOnce("stagescan", "Stage scan failed: " + e.Message); }
             }
             int cur = SafeStage(v);
-            if (cur == int.MinValue) return;
-            if (lastPolledStage != int.MinValue && cur < lastPolledStage && Time.unscaledTime - lastStageEventTime > 1.0f
-                && pollDropFrom == int.MinValue)
+            if (v == null || cur == int.MinValue) return;
+            float now = Time.unscaledTime;
+            int ignited = stagePoll.NeedsProof(cur) || stagePoll.Settling(now) ? IgnitedEngines(v) : 0;
+            StagePollResult result = stagePoll.Poll(now, cur, v.parts.Count, ignited);
+            if (result == StagePollResult.Fired)
             {
-                pollDropFrom = lastPolledStage;
-                pollDropTo = cur;
-                pollDropTime = Time.unscaledTime;
+                Log.Info("Staging detected by currentStage poll (" + stagePoll.From + " -> " + stagePoll.To + "), no onStageActivate seen");
+                stress.AddImpulse(settings.tuning.impulseStage);
+                PlayCabinSeparation(stagePoll.To);
+                beeps.OnStage(stagePoll.To, "poll");
             }
-            if (pollDropFrom != int.MinValue)
-            {
-                if (lastStageEventTime >= pollDropTime - 1f)
-                    pollDropFrom = int.MinValue;   // onStageActivate came after all, it did the callout
-                else
-                {
-                    bool fired = false;
-                    try { fired = scanParts >= 0 && (v.parts.Count < scanParts || IgnitedEngines(v) > scanIgnited); }
-                    catch (Exception) { fired = false; }
-                    if (fired)
-                    {
-                        Log.Info("Staging detected by currentStage poll (" + pollDropFrom + " -> " + pollDropTo + "), no onStageActivate seen");
-                        stress.AddImpulse(settings.tuning.impulseStage);
-                        beeps.OnStage(pollDropTo, "poll");
-                        pollDropFrom = int.MinValue;
-                    }
-                    else if (Time.unscaledTime - pollDropTime > PollProofWindow)
-                    {
-                        Log.Info("Stage order changed (" + pollDropFrom + " -> " + pollDropTo + "), nothing fired: no staging callout");
-                        pollDropFrom = int.MinValue;
-                    }
-                }
-            }
-            lastPolledStage = cur;
+            else if (result == StagePollResult.Reordered)
+                Log.Info("Stage order changed (" + stagePoll.From + " -> " + stagePoll.To + "), nothing fired: no staging callout");
         }
 
         /// <summary>Parachute callouts: poll deployment states at ~4 Hz on the cached module list.</summary>

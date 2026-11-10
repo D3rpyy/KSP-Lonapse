@@ -60,16 +60,33 @@ namespace Lonapse
         public long Sequence { get { return seq; } }
 
         /// <summary>When the scene was last picked (a counter, not a time), -1 for never.</summary>
+        // Normalize identities inside saved scene, version and probe-choice keys without resetting history.
+        static string MemoryKey(string key)
+        {
+            if (key == null) return key;
+            if (!key.StartsWith(SlotPrefix, StringComparison.Ordinal)) return RuntimeLines.CanonicalId(key);
+            // Only these pools contain dialogue identities. Other pool values may be arbitrary user text.
+            foreach (string prefix in new[] { SlotPrefix + VersionPool, SlotPrefix + "probe:" })
+            {
+                if (!key.StartsWith(prefix, StringComparison.Ordinal)) continue;
+                string rest = key.Substring(prefix.Length);
+                int separator = rest.IndexOf(':');
+                return prefix + RuntimeLines.CanonicalId(separator < 0 ? rest : rest.Substring(0, separator))
+                    + (separator < 0 ? "" : rest.Substring(separator));
+            }
+            return key;
+        }
+
         public long LastSeq(string id)
         {
             long s;
-            return id != null && last.TryGetValue(id, out s) ? s : -1;
+            return id != null && last.TryGetValue(MemoryKey(id), out s) ? s : -1;
         }
 
         public void Stamp(string id)
         {
             if (string.IsNullOrEmpty(id)) return;
-            last[id] = ++seq;
+            last[MemoryKey(id)] = ++seq;
             if (last.Count > MaxEntries) Trim(MaxEntries * 9 / 10);
         }
 
@@ -149,7 +166,9 @@ namespace Lonapse
                 if (sp <= 0 || !long.TryParse(line.Substring(sp + 1), NumberStyles.Integer, CultureInfo.InvariantCulture, out v) || v < 0) continue;
                 string id = line.Substring(0, sp).Trim();
                 if (id.Length == 0) continue;
-                m.last[id] = v;
+                id = MemoryKey(id);
+                long previous;
+                if (!m.last.TryGetValue(id, out previous) || v > previous) m.last[id] = v;
                 if (v > m.seq) m.seq = v;
             }
             if (m.last.Count > MaxEntries) m.Trim(MaxEntries);

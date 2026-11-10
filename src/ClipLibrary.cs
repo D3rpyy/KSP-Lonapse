@@ -60,6 +60,9 @@ namespace Lonapse
         private static string[] BuildFolders()
         {
             List<string> r = new List<string>(BaseFolders);
+            r.Add("sfx/control_room_loop");
+            r.Add("sfx/cabin_rattle");
+            r.Add("sfx/cabin_separation");
             foreach (string f in ProbeCores.Folders()) if (!r.Contains(f)) r.Add(f);
             r.Add(ProbeCores.DataFolder);
             return r.ToArray();

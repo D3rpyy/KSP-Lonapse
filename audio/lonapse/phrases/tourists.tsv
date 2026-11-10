@@ -23,10 +23,10 @@ tu_tc_06_3	chatter	chatter	calm	crew	tu_tc_06	3	both	coast	any	tourist	any	any	Y
 tu_tc_07_1	chatter	chatter	calm	crew	tu_tc_07	1	both	orbit	any	tourist	any	any	Me flota el estómago.	My stomach is floating.	
 tu_tc_07_2	chatter	chatter	calm	crew	tu_tc_07	2	both	orbit	any	tourist	any	any	Es normal. Mira un punto fijo.	That's normal. Look at a fixed point.	
 tu_tc_07_3	chatter	chatter	calm	crew	tu_tc_07	3	both	orbit	any	tourist	any	any	Aquí todo se mueve. No hay puntos fijos.	Everything moves up here. There are no fixed points.	
-tu_tc_08_1	chatter	chatter	calm	crew	tu_tc_08	1	both	goofy	any	tourist	any	any	¿Me haces una foto con la ventana?	Can you take my photo by the window?	
-tu_tc_08_2	chatter	chatter	calm	crew	tu_tc_08	2	both	goofy	any	tourist	any	any	Estoy trabajando.	I'm working.	
-tu_tc_08_3	chatter	chatter	calm	crew	tu_tc_08	3	both	goofy	any	tourist	any	any	Solo una. Es para mi madre.	Just one. It's for my mother.	
-tu_tc_08_4	chatter	chatter	calm	crew	tu_tc_08	4	both	goofy	any	tourist	any	any	Vale. Sonríe.	Fine. Smile.	
+tu_tc_08_1	chatter	chatter	calm	crew	tu_tc_08	1	both	calm	any	tourist	any	any	¿Me haces una foto con la ventana?	Can you take my photo by the window?	
+tu_tc_08_2	chatter	chatter	calm	crew	tu_tc_08	2	both	calm	any	tourist	any	any	Estoy trabajando.	I'm working.	
+tu_tc_08_3	chatter	chatter	calm	crew	tu_tc_08	3	both	calm	any	tourist	any	any	Solo una. Es para mi madre.	Just one. It's for my mother.	
+tu_tc_08_4	chatter	chatter	calm	crew	tu_tc_08	4	both	calm	any	tourist	any	any	Vale. Sonríe.	Fine. Smile.	
 tu_tc_09_1	chatter	chatter	calm	crew	tu_tc_09	1	both	landed	any	tourist	any	any	¿Puedo salir a dar un paseo?	Can I go out for a walk?	
 tu_tc_09_2	chatter	chatter	calm	crew	tu_tc_09	2	both	landed	any	tourist	any	any	Los pasajeros se quedan dentro. Está en el contrato.	Passengers stay inside. It's in the contract.	
 tu_tc_09_3	chatter	chatter	calm	crew	tu_tc_09	3	both	landed	any	tourist	any	any	Nadie lee los contratos.	Nobody reads contracts.	
@@ -48,25 +48,25 @@ tu_tc_15_3	chatter	chatter	calm	crew	tu_tc_15	3	both	blackout	any	tourist	any	an
 tu_tc_16_1	chatter	chatter	calm	crew	tu_tc_16	1	both	blackout	any	tourist	any	any	¿Control ya no nos oye?	Can't Control hear us anymore?	
 tu_tc_16_2	chatter	chatter	calm	crew	tu_tc_16	2	both	blackout	any	tourist	any	any	Durante un rato no. Luego vuelven.	Not for a while. They'll be back.	
 tu_tc_16_3	chatter	chatter	calm	crew	tu_tc_16	3	both	blackout	any	tourist	any	any	Pues luego diles que me porto bien.	Then tell them later that I behaved.	
-tu_tc_17_1	chatter	chatter	calm	crew	tu_tc_17	1	both	goofy	any	tourist	any	any	¿A ti te pagan por esto?	Do they pay you for this?	
-tu_tc_17_2	chatter	chatter	calm	crew	tu_tc_17	2	both	goofy	any	tourist	any	any	Poco. ¿Y tú pagaste por venir?	Not much. And you paid to come?	
-tu_tc_17_3	chatter	chatter	calm	crew	tu_tc_17	3	both	goofy	any	tourist	any	any	Muchísimo.	A fortune.	
+tu_tc_17_1	chatter	chatter	calm	crew	tu_tc_17	1	both	calm	any	tourist	any	any	¿A ti te pagan por esto?	Do they pay you for this?	
+tu_tc_17_2	chatter	chatter	calm	crew	tu_tc_17	2	both	calm	any	tourist	any	any	Poco. ¿Y tú pagaste por venir?	Not much. And you paid to come?	
+tu_tc_17_3	chatter	chatter	calm	crew	tu_tc_17	3	both	calm	any	tourist	any	any	Muchísimo.	A fortune.	
 tu_tc_18_1	chatter	chatter	calm	crew	tu_tc_18	1	both	orbit	any	tourist	any	any	¿Puedo pulsar algo? Uno pequeño.	Can I press something? A small one.	
 tu_tc_18_2	chatter	chatter	calm	crew	tu_tc_18	2	both	orbit	any	tourist	any	any	Ese de ahí. No hace nada.	That one there. It does nothing.	
 tu_tc_18_3	chatter	chatter	calm	crew	tu_tc_18	3	both	orbit	any	tourist	any	any	¡Qué emoción!	How exciting!	
 tu_tct_01_1	chatter	chatter	tense	crew	tu_tct_01	1	both	blackout	heat	tourist	any	any	¡Aquí dentro hace mucho calor!	It's really hot in here!	
 tu_tct_01_2	chatter	chatter	tense	crew	tu_tct_01	2	both	blackout	heat	tourist	any	any	Aguanta. Ya casi pasa.	Hold on. It's almost over.	
-tu_tct_02_1	chatter	chatter	tense	crew	tu_tct_02	1	both	goofy	spin	tourist	any	any	¿Por qué damos vueltas? ¿Es parte del viaje?	Why are we spinning? Is this part of the trip?	
-tu_tct_02_2	chatter	chatter	tense	crew	tu_tct_02	2	both	goofy	spin	tourist	any	any	No. Pero lo estoy arreglando.	No. But I'm fixing it.	
+tu_tct_02_1	chatter	chatter	tense	crew	tu_tct_02	1	both	calm	spin	tourist	any	any	¿Por qué damos vueltas? ¿Es parte del viaje?	Why are we spinning? Is this part of the trip?	
+tu_tct_02_2	chatter	chatter	tense	crew	tu_tct_02	2	both	calm	spin	tourist	any	any	No. Pero lo estoy arreglando.	No. But I'm fixing it.	
 tu_tct_03_1	chatter	chatter	tense	crew	tu_tct_03	1	both	blackout	gforce	tourist	any	any	No puedo levantar los brazos.	I can't lift my arms.	
 tu_tct_03_2	chatter	chatter	tense	crew	tu_tct_03	2	both	blackout	gforce	tourist	any	any	Ni lo intentes. Ya bajará.	Don't even try. It'll ease off.	
-tu_tct_04_1	chatter	chatter	tense	crew	tu_tct_04	1	both	goofy	impulse	tourist	any	any	¿Qué ha sido ese golpe?	What was that bang?	
-tu_tct_04_2	chatter	chatter	tense	crew	tu_tct_04	2	both	goofy	impulse	tourist	any	any	Nada grave. Siéntate.	Nothing serious. Sit down.	
-tu_tct_04_3	chatter	chatter	tense	crew	tu_tct_04	3	both	goofy	impulse	tourist	any	any	Ya lo estoy. Más que nunca.	I am. More than ever.	
+tu_tct_04_1	chatter	chatter	tense	crew	tu_tct_04	1	both	calm	impulse	tourist	any	any	¿Qué ha sido ese golpe?	What was that bang?	
+tu_tct_04_2	chatter	chatter	tense	crew	tu_tct_04	2	both	calm	impulse	tourist	any	any	Nada grave. Siéntate.	Nothing serious. Sit down.	
+tu_tct_04_3	chatter	chatter	tense	crew	tu_tct_04	3	both	calm	impulse	tourist	any	any	Ya lo estoy. Más que nunca.	I am. More than ever.	
 tu_tct_05_1	chatter	chatter	tense	crew	tu_tct_05	1	both	blackout	any	tourist	any	any	¿Esto pasa en todos los viajes?	Does this happen on every trip?	
 tu_tct_05_2	chatter	chatter	tense	crew	tu_tct_05	2	both	blackout	any	tourist	any	any	En los buenos, sí.	On the good ones, yes.	
-tu_tct_06_1	chatter	chatter	tense	crew	tu_tct_06	1	both	goofy	any	tourist	any	any	Quiero bajarme. ¿Dónde está la parada?	I want to get off. Where's the stop?	
-tu_tct_06_2	chatter	chatter	tense	crew	tu_tct_06	2	both	goofy	any	tourist	any	any	No hay paradas. Respira.	There are no stops. Breathe.	
+tu_tct_06_1	chatter	chatter	tense	crew	tu_tct_06	1	both	calm	any	tourist	any	any	Quiero bajarme. ¿Dónde está la parada?	I want to get off. Where's the stop?	
+tu_tct_06_2	chatter	chatter	tense	crew	tu_tct_06	2	both	calm	any	tourist	any	any	No hay paradas. Respira.	There are no stops. Breathe.	
 tu_ct_01_1	chatter	chatter	calm	crew	tu_ct_01	1	both	prelaunch	any	to_tourist	any	any	¿Primera vez en un cohete?	First time on a rocket?	
 tu_ct_01_2	chatter	chatter	calm	crew	tu_ct_01	2	both	prelaunch	any	to_tourist	any	any	Primera vez fuera de casa.	First time out of the house.	
 tu_ct_02_1	chatter	chatter	calm	crew	tu_ct_02	1	both	orbit	any	to_tourist	any	any	Ese panel no se toca, por favor.	Please don't touch that panel.	
@@ -98,9 +98,9 @@ tu_ct_11_3	chatter	chatter	calm	crew	tu_ct_11	3	both	orbit	any	to_tourist	any	an
 tu_ct_12_1	chatter	chatter	calm	crew	tu_ct_12	1	both	landed	any	to_tourist	any	any	No salgas. Lo digo en serio.	Don't go outside. I mean it.	
 tu_ct_12_2	chatter	chatter	calm	crew	tu_ct_12	2	both	landed	any	to_tourist	any	any	Ni siquiera sé abrir la puerta.	I don't even know how to open the door.	
 tu_ct_12_3	chatter	chatter	calm	crew	tu_ct_12	3	both	landed	any	to_tourist	any	any	Mejor así.	Better that way.	
-tu_ct_13_1	chatter	chatter	calm	crew	tu_ct_13	1	both	goofy	any	to_tourist	any	any	¿Qué vas a contar cuando vuelvas?	What will you tell everyone when you get back?	
-tu_ct_13_2	chatter	chatter	calm	crew	tu_ct_13	2	both	goofy	any	to_tourist	any	any	Que pilotaba yo.	That I was flying it.	
-tu_ct_13_3	chatter	chatter	calm	crew	tu_ct_13	3	both	goofy	any	to_tourist	any	any	Claro que sí.	Of course you were.	
+tu_ct_13_1	chatter	chatter	calm	crew	tu_ct_13	1	both	calm	any	to_tourist	any	any	¿Qué vas a contar cuando vuelvas?	What will you tell everyone when you get back?	
+tu_ct_13_2	chatter	chatter	calm	crew	tu_ct_13	2	both	calm	any	to_tourist	any	any	Que pilotaba yo.	That I was flying it.	
+tu_ct_13_3	chatter	chatter	calm	crew	tu_ct_13	3	both	calm	any	to_tourist	any	any	Claro que sí.	Of course you were.	
 tu_ct_14_1	chatter	chatter	calm	crew	tu_ct_14	1	both	blackout	any	to_tourist	any	any	Ahora se calienta todo. Con calma.	Now everything heats up. Stay calm.	
 tu_ct_14_2	chatter	chatter	calm	crew	tu_ct_14	2	both	blackout	any	to_tourist	any	any	Estoy en calma. Por fuera.	I'm calm. On the outside.	
 tu_ct_15_1	chatter	chatter	calm	crew	tu_ct_15	1	both	prelaunch	any	to_tourist	any	any	Las manos en las rodillas, por favor.	Hands on your knees, please.	
@@ -110,17 +110,17 @@ tu_ct_16_2	chatter	chatter	calm	crew	tu_ct_16	2	both	orbit	any	to_tourist	any	an
 tu_ctt_01_1	chatter	chatter	tense	crew	tu_ctt_01	1	both	blackout	heat	to_tourist	any	any	Esto es fuerte, pero está previsto.	This is rough, but it's planned.	
 tu_ctt_01_2	chatter	chatter	tense	crew	tu_ctt_01	2	both	blackout	heat	to_tourist	any	any	¿Previsto por quién?	Planned by whom?	
 tu_ctt_01_3	chatter	chatter	tense	crew	tu_ctt_01	3	both	blackout	heat	to_tourist	any	any	Por gente muy lista. Creo.	By very smart people. I think.	
-tu_ctt_02_1	chatter	chatter	tense	crew	tu_ctt_02	1	both	goofy	spin	to_tourist	any	any	Estamos girando. Cierra los ojos.	We're spinning. Close your eyes.	
-tu_ctt_02_2	chatter	chatter	tense	crew	tu_ctt_02	2	both	goofy	spin	to_tourist	any	any	Con los ojos cerrados giro más.	With my eyes closed I spin more.	
+tu_ctt_02_1	chatter	chatter	tense	crew	tu_ctt_02	1	both	calm	spin	to_tourist	any	any	Estamos girando. Cierra los ojos.	We're spinning. Close your eyes.	
+tu_ctt_02_2	chatter	chatter	tense	crew	tu_ctt_02	2	both	calm	spin	to_tourist	any	any	Con los ojos cerrados giro más.	With my eyes closed I spin more.	
 tu_ctt_03_1	chatter	chatter	tense	crew	tu_ctt_03	1	both	blackout	gforce	to_tourist	any	any	Vas a notar mucho peso. Es normal.	You'll feel very heavy. That's normal.	
 tu_ctt_03_2	chatter	chatter	tense	crew	tu_ctt_03	2	both	blackout	gforce	to_tourist	any	any	Me siento como un saco de patatas.	I feel like a sack of potatoes.	
-tu_ctt_04_1	chatter	chatter	tense	crew	tu_ctt_04	1	both	goofy	impulse	to_tourist	any	any	¿Estás bien? Eso ha sido un golpe.	Are you okay? That was a bump.	
-tu_ctt_04_2	chatter	chatter	tense	crew	tu_ctt_04	2	both	goofy	impulse	to_tourist	any	any	Me he mordido la lengua. Y el bocadillo.	I bit my tongue. And my sandwich.	
+tu_ctt_04_1	chatter	chatter	tense	crew	tu_ctt_04	1	both	calm	impulse	to_tourist	any	any	¿Estás bien? Eso ha sido un golpe.	Are you okay? That was a bump.	
+tu_ctt_04_2	chatter	chatter	tense	crew	tu_ctt_04	2	both	calm	impulse	to_tourist	any	any	Me he mordido la lengua. Y el bocadillo.	I bit my tongue. And my sandwich.	
 tu_ctt_05_1	chatter	chatter	tense	crew	tu_ctt_05	1	both	blackout	any	to_tourist	any	any	Mírame a mí, no a la ventana.	Look at me, not at the window.	
 tu_ctt_05_2	chatter	chatter	tense	crew	tu_ctt_05	2	both	blackout	any	to_tourist	any	any	Tu cara tampoco me tranquiliza.	Your face doesn't calm me down either.	
-tu_ctt_06_1	chatter	chatter	tense	crew	tu_ctt_06	1	both	goofy	any	to_tourist	any	any	Suelta esa palanca. Despacio.	Let go of that lever. Slowly.	
-tu_ctt_06_2	chatter	chatter	tense	crew	tu_ctt_06	2	both	goofy	any	to_tourist	any	any	¿Esta? Ya está. ¿Qué hacía?	This one? Done. What did it do?	
-tu_ctt_06_3	chatter	chatter	tense	crew	tu_ctt_06	3	both	goofy	any	to_tourist	any	any	Mejor no lo sepas.	Better you don't know.	
+tu_ctt_06_1	chatter	chatter	tense	crew	tu_ctt_06	1	both	calm	any	to_tourist	any	any	Suelta esa palanca. Despacio.	Let go of that lever. Slowly.	
+tu_ctt_06_2	chatter	chatter	tense	crew	tu_ctt_06	2	both	calm	any	to_tourist	any	any	¿Esta? Ya está. ¿Qué hacía?	This one? Done. What did it do?	
+tu_ctt_06_3	chatter	chatter	tense	crew	tu_ctt_06	3	both	calm	any	to_tourist	any	any	Mejor no lo sepas.	Better you don't know.	
 tu_tt_01_1	chatter	chatter	calm	crew	tu_tt_01	1	both	prelaunch	any	tourist_pair	any	any	¿Tú también compraste el paquete completo?	Did you buy the full package too?	
 tu_tt_01_2	chatter	chatter	calm	crew	tu_tt_01	2	both	prelaunch	any	tourist_pair	any	any	No. El básico. Sin ventana.	No. The basic one. No window.	
 tu_tt_01_3	chatter	chatter	calm	crew	tu_tt_01	3	both	prelaunch	any	tourist_pair	any	any	Te dejo mirar por la mía.	You can look through mine.	
@@ -154,24 +154,24 @@ tu_tt_12_2	chatter	chatter	calm	crew	tu_tt_12	2	both	coast	any	tourist_pair	any	
 tu_tt_13_1	chatter	chatter	calm	crew	tu_tt_13	1	both	orbit	any	tourist_pair	any	any	Voy a escribir una reseña.	I'm going to write a review.	
 tu_tt_13_2	chatter	chatter	calm	crew	tu_tt_13	2	both	orbit	any	tourist_pair	any	any	¿Cuántas estrellas?	How many stars?	
 tu_tt_13_3	chatter	chatter	calm	crew	tu_tt_13	3	both	orbit	any	tourist_pair	any	any	Todas las que veo. Son muchas.	All the ones I can see. That's a lot.	
-tu_tt_14_1	chatter	chatter	calm	crew	tu_tt_14	1	both	goofy	any	tourist_pair	any	any	¿Sabes qué hace la tripulación todo el día?	Do you know what the crew does all day?	
-tu_tt_14_2	chatter	chatter	calm	crew	tu_tt_14	2	both	goofy	any	tourist_pair	any	any	Mirar números y suspirar.	Look at numbers and sigh.	
+tu_tt_14_1	chatter	chatter	calm	crew	tu_tt_14	1	both	calm	any	tourist_pair	any	any	¿Sabes qué hace la tripulación todo el día?	Do you know what the crew does all day?	
+tu_tt_14_2	chatter	chatter	calm	crew	tu_tt_14	2	both	calm	any	tourist_pair	any	any	Mirar números y suspirar.	Look at numbers and sigh.	
 tu_tt_15_1	chatter	chatter	calm	crew	tu_tt_15	1	both	blackout	any	tourist_pair	any	any	¿Tú también lo ves todo naranja?	Do you see everything orange too?	
 tu_tt_15_2	chatter	chatter	calm	crew	tu_tt_15	2	both	blackout	any	tourist_pair	any	any	Yo veo mi vida entera.	I see my whole life.	
 tu_tt_16_1	chatter	chatter	calm	crew	tu_tt_16	1	both	landed	any	tourist_pair	any	any	¿Nos dejarán quedarnos una noche más?	Will they let us stay one more night?	
 tu_tt_16_2	chatter	chatter	calm	crew	tu_tt_16	2	both	landed	any	tourist_pair	any	any	Pregunta tú. Yo ya pregunté lo de conducir.	You ask. I already asked about driving.	
 tu_ttt_01_1	chatter	chatter	tense	crew	tu_ttt_01	1	both	blackout	heat	tourist_pair	any	any	¿Es normal este calor?	Is this heat normal?	
 tu_ttt_01_2	chatter	chatter	tense	crew	tu_ttt_01	2	both	blackout	heat	tourist_pair	any	any	La tripulación no grita. Será normal.	The crew isn't screaming. Must be normal.	
-tu_ttt_02_1	chatter	chatter	tense	crew	tu_ttt_02	1	both	goofy	spin	tourist_pair	any	any	¡Estamos girando!	We're spinning!	
-tu_ttt_02_2	chatter	chatter	tense	crew	tu_ttt_02	2	both	goofy	spin	tourist_pair	any	any	¡Ya lo sé! ¡Mi bocadillo también!	I know! So is my sandwich!	
+tu_ttt_02_1	chatter	chatter	tense	crew	tu_ttt_02	1	both	calm	spin	tourist_pair	any	any	¡Estamos girando!	We're spinning!	
+tu_ttt_02_2	chatter	chatter	tense	crew	tu_ttt_02	2	both	calm	spin	tourist_pair	any	any	¡Ya lo sé! ¡Mi bocadillo también!	I know! So is my sandwich!	
 tu_ttt_03_1	chatter	chatter	tense	crew	tu_ttt_03	1	both	blackout	gforce	tourist_pair	any	any	Me pesan hasta las orejas.	Even my ears feel heavy.	
 tu_ttt_03_2	chatter	chatter	tense	crew	tu_ttt_03	2	both	blackout	gforce	tourist_pair	any	any	Las mías se han hundido en el asiento.	Mine sank into the seat.	
-tu_ttt_04_1	chatter	chatter	tense	crew	tu_ttt_04	1	both	goofy	impulse	tourist_pair	any	any	¿Qué ha sido eso?	What was that?	
-tu_ttt_04_2	chatter	chatter	tense	crew	tu_ttt_04	2	both	goofy	impulse	tourist_pair	any	any	No lo sé. Yo no he tocado nada. Esta vez.	I don't know. I didn't touch anything. This time.	
+tu_ttt_04_1	chatter	chatter	tense	crew	tu_ttt_04	1	both	calm	impulse	tourist_pair	any	any	¿Qué ha sido eso?	What was that?	
+tu_ttt_04_2	chatter	chatter	tense	crew	tu_ttt_04	2	both	calm	impulse	tourist_pair	any	any	No lo sé. Yo no he tocado nada. Esta vez.	I don't know. I didn't touch anything. This time.	
 tu_ttt_05_1	chatter	chatter	tense	crew	tu_ttt_05	1	both	blackout	any	tourist_pair	any	any	Dame la mano.	Hold my hand.	
 tu_ttt_05_2	chatter	chatter	tense	crew	tu_ttt_05	2	both	blackout	any	tourist_pair	any	any	Ya te la doy. La que tiembla es la mía.	I am. The shaking one is mine.	
-tu_ttt_06_1	chatter	chatter	tense	crew	tu_ttt_06	1	both	goofy	any	tourist_pair	any	any	Si salimos de esta, pido que me devuelvan el dinero.	If we get out of this, I want a refund.	
-tu_ttt_06_2	chatter	chatter	tense	crew	tu_ttt_06	2	both	goofy	any	tourist_pair	any	any	Yo pido el doble.	I want double.	
+tu_ttt_06_1	chatter	chatter	tense	crew	tu_ttt_06	1	both	calm	any	tourist_pair	any	any	Si salimos de esta, pido que me devuelvan el dinero.	If we get out of this, I want a refund.	
+tu_ttt_06_2	chatter	chatter	tense	crew	tu_ttt_06	2	both	calm	any	tourist_pair	any	any	Yo pido el doble.	I want double.	
 tu_rad_01_1	chatter	chatter	calm	crew	tu_rad_01	1	both	orbit	any	tourist	any	any	Control, ¿me oís? Llamo desde el asiento de atrás.	Control, can you hear me? Calling from the back seat.	
 tu_rad_01_2	chatter	chatter	calm	mc	tu_rad_01	2	m	orbit	any	tourist	any	any	Te oímos. No toques la radio, por favor.	We hear you. Please don't touch the radio.	
 tu_rad_02_1	chatter	chatter	calm	crew	tu_rad_02	1	both	orbit	any	tourist	any	any	Control, saludad a mi familia de mi parte.	Control, say hi to my family for me.	
@@ -194,9 +194,9 @@ tu_rad_10_1	chatter	chatter	calm	mc	tu_rad_10	1	m	orbit	any	tourist	any	any	¿Qu
 tu_rad_10_2	chatter	chatter	calm	crew	tu_rad_10	2	both	orbit	any	tourist	any	any	Cinco estrellas. Menos la comida.	Five stars. Minus the food.	
 tu_rad_11_1	chatter	chatter	calm	mc	tu_rad_11	1	m	landed	any	tourist	any	any	Os recordamos que los pasajeros no salen.	A reminder that passengers stay inside.	
 tu_rad_11_2	chatter	chatter	calm	crew	tu_rad_11	2	both	landed	any	tourist	any	any	Ya lo sé. Me lo han dicho cuatro veces.	I know. I've been told four times.	
-tu_rad_12_1	chatter	chatter	calm	crew	tu_rad_12	1	both	goofy	any	tourist	any	any	Control, quiero poner una queja.	Control, I'd like to file a complaint.	
-tu_rad_12_2	chatter	chatter	calm	mc	tu_rad_12	2	m	goofy	any	tourist	any	any	Adelante.	Go ahead.	
-tu_rad_12_3	chatter	chatter	calm	crew	tu_rad_12	3	both	goofy	any	tourist	any	any	Aquí arriba no hay gravedad.	There's no gravity up here.	
+tu_rad_12_1	chatter	chatter	calm	crew	tu_rad_12	1	both	calm	any	tourist	any	any	Control, quiero poner una queja.	Control, I'd like to file a complaint.	
+tu_rad_12_2	chatter	chatter	calm	mc	tu_rad_12	2	m	calm	any	tourist	any	any	Adelante.	Go ahead.	
+tu_rad_12_3	chatter	chatter	calm	crew	tu_rad_12	3	both	calm	any	tourist	any	any	Aquí arriba no hay gravedad.	There's no gravity up here.	
 tu_radt_01_1	chatter	chatter	tense	crew	tu_radt_01	1	both	any	heat	tourist	any	any	Control, ¿esto tiene que quemar así?	Control, is it supposed to burn like this?	
 tu_radt_01_2	chatter	chatter	tense	mc	tu_radt_01	2	m	any	heat	tourist	any	any	Sí. Estáis protegidos.	Yes. You're protected.	
 tu_radt_02_1	chatter	chatter	tense	crew	tu_radt_02	1	both	any	gforce	tourist	any	any	Control, el asiento me aplasta.	Control, the seat is crushing me.	

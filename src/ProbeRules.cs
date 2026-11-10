@@ -253,9 +253,47 @@ namespace Lonapse
 
         /// <summary>The probe calls Mission Control on its own (probe_hail) only when it is awake, the link
         /// works and the flight is not in a serious phase.</summary>
-        public static bool HailMayStart(string phase, bool link, bool asleep)
+        public static bool HailMayStart(string phase, bool link, bool asleep, bool station = false)
         {
-            return link && !asleep && !FlightPhase.IsSerious(phase);
+            return !station && link && !asleep && !FlightPhase.IsSerious(phase);
         }
+
+        /// <summary>Healthy stations use check-ins. Stress and the explicit exchange style keep normal probe traffic.</summary>
+        public static bool StationChecks(bool station, string style, float stress, float tenseAt, float burstAt)
+        {
+            return station && stress < tenseAt && PacingRules.StationChoice(style, stress, burstAt) == StationAction.Check;
+        }
+    }
+}
+
+namespace Lonapse
+{
+    /// <summary>Cooldowns for scheduled probe conversation. Event warnings and action callouts bypass these;
+    /// a small conversation pool must be allowed to go quiet instead of repeating its only candidate.</summary>
+    public sealed class ProbeRepeatCooldown
+    {
+        readonly Dictionary<string, float> scenes = new Dictionary<string, float>();
+        readonly Dictionary<string, float> causes = new Dictionary<string, float>();
+        static bool Scheduled(string ev)
+        {
+            return ev == ProbeRules.StressEvent || ev == ProbeRules.HailEvent || ev == "probe_chat"
+                || ev == "probe_sleepy" || ev == PhraseTable.ProbeCrewEvent;
+        }
+        static bool Specific(string cause) { return !string.IsNullOrEmpty(cause) && cause != "any" && cause != "none"; }
+        public bool Allowed(string id, string ev, string cause, float now, float causeGap, float calmGap)
+        {
+            if (!Scheduled(ev)) return true;
+            float last;
+            float gap = ev == ProbeRules.StressEvent && Specific(cause) ? causeGap : Math.Max(causeGap, calmGap);
+            if (scenes.TryGetValue(id, out last) && now - last < gap) return false;
+            return !Specific(cause) || !causes.TryGetValue(cause, out last) || now - last >= causeGap;
+        }
+        public void Stamp(string id, string ev, string cause, float now)
+        {
+            if (!Scheduled(ev)) return;
+            scenes[id] = now;
+            if (Specific(cause)) causes[cause] = now;
+        }
+        public void Clear() { scenes.Clear(); causes.Clear(); }
     }
 }

@@ -41,6 +41,17 @@ public static class Tests
 
     public static int Main()
     {
+        // Context prioritizes recovery and power before routine telemetry; custom linesets stay neutral.
+        Check(ProbeContext.Topic(12, false, true, false, false, false) == "power", "probe power outranks maneuver chatter", null);
+        Check(ProbeContext.Topic(50, true, true, false, false, false) == "recovery", "probe recovery follows earlier low power", null);
+        Check(ProbeContext.Topic(50, false, false, true, true, true) == "spin", "probe spin outranks biome chatter", null);
+        Check(ProbeContext.Personality("custom_lines") == "neutral", "custom probe lineset has no borrowed stock personality", null);
+        var rememberedProbe = new HashSet<string>();
+        var pm1 = new ProbeMilestones { WasRemembered = rememberedProbe.Contains, Remember = key => rememberedProbe.Add(key) };
+        Check(pm1.TakeLanding("v1", "Duna"), "probe history first landing", null);
+        var pm2 = new ProbeMilestones { WasRemembered = rememberedProbe.Contains, Remember = key => rememberedProbe.Add(key) };
+        Check(!pm2.TakeLanding("v1", "Duna") && pm2.TakeLanding("v2", "Duna") && pm2.TakeLanding("v1", "Mun"), "probe landing history survives watcher recreation and isolates vessels and bodies", null);
+
         // ---- FNV-1a test vectors ----
         Check(StableHash.Hash("Jebediah Kerman", 0) == 0x213D3FD0u, "fnv1a Jebediah", StableHash.Hash("Jebediah Kerman", 0).ToString("X8"));
         Check(StableHash.Hash("Bill Kerman", 0) == 0x91AF6BB9u, "fnv1a Bill", StableHash.Hash("Bill Kerman", 0).ToString("X8"));
@@ -737,6 +748,47 @@ public static class Tests
             Check(PacingRules.ClassifyStage(true, false) == StageKind.Separation && PacingRules.ClassifyStage(true, true) == StageKind.Separation
                   && PacingRules.ClassifyStage(false, true) == StageKind.Ignition && PacingRules.ClassifyStage(false, false) == StageKind.Any,
                   "staging: decoupler gives separation (also with an engine), engine alone ignition, neither neutral", null);
+            {
+                var stage = new StagePoll();
+                stage.Reset(2); stage.Scan(160, 4);
+                stage.TopologyChanged(10f);
+                Check(stage.Poll(10.122f, 1, 158, 4) == StagePollResult.None
+                      && stage.Poll(11.4f, 1, 158, 4) == StagePollResult.None
+                      && stage.Poll(12f, 1, 158, 4) == StagePollResult.None,
+                      "staging: logged station undock renumbers 2 to 1 and loses parts without a callout", null);
+                Check(stage.Poll(12.1f, 0, 158, 5) == StagePollResult.Fired && stage.To == 0,
+                      "staging: fallback detects real ignition after undocking settles", null);
+                stage.Reset(3); stage.Scan(50, 0);
+                Check(stage.Poll(20f, 2, 50, 0) == StagePollResult.None && stage.Pending,
+                      "staging: stage-number change alone waits for physical proof", null);
+                stage.TopologyChanged(20.1f);
+                Check(!stage.Pending && stage.Poll(20.2f, 1, 40, 0) == StagePollResult.None
+                      && stage.Poll(22f, 1, 40, 0) == StagePollResult.None,
+                      "staging: undocking cancels an already pending fallback and discards stale part counts", null);
+                stage.Reset(3); stage.Scan(50, 0);
+                Check(stage.Poll(30f, 2, 49, 0) == StagePollResult.Fired,
+                      "staging: real separation still works when the activation event is missing", null);
+                stage.Reset(3); stage.Scan(50, 0); stage.Activated(40f);
+                Check(stage.Poll(40.1f, 2, 49, 1) == StagePollResult.None && !stage.Pending,
+                      "staging: explicit activation is not duplicated by the fallback", null);
+                stage.Reset(3); stage.Scan(50, 0);
+                stage.Poll(50f, 2, 50, 0);
+                Check(stage.Poll(51.6f, 2, 50, 0) == StagePollResult.Reordered,
+                      "staging: editing stage order without firing anything stays silent", null);
+                stage.TopologyChanged(60f);
+                stage.Poll(60.1f, 1, 200, 6);
+                stage.Reset(1);
+                Check(stage.Poll(60.2f, 0, 40, 0) == StagePollResult.None,
+                      "staging: switching to the undocked vessel retains topology settling protection", null);
+            }
+            Check(ProbeRules.StationChecks(true, "auto", 0.1f, 0.45f, 0.6f)
+                  && ProbeRules.StationChecks(true, "check", 0.1f, 0.45f, 0.6f)
+                  && !ProbeRules.StationChecks(true, "exchange", 0.1f, 0.45f, 0.6f)
+                  && !ProbeRules.StationChecks(false, "auto", 0.1f, 0.45f, 0.6f),
+                  "probe station: healthy stations use one check-in schedule, ships and explicit exchanges keep normal traffic", null);
+            Check(!ProbeRules.StationChecks(true, "auto", 0.45f, 0.45f, 0.6f)
+                  && !ProbeRules.StationChecks(true, "check", 0.8f, 0.45f, 0.6f),
+                  "probe station: stressed probes keep their normal safety conversation even with station check style", null);
             Check(PacingRules.StagingSceneKind("staging_ign_s1") == StageKind.Ignition && PacingRules.StagingSceneKind("staging_any_01") == StageKind.Any
                   && PacingRules.StagingSceneKind("staging_s1") == StageKind.Separation && PacingRules.StagingSceneKind("staging_01") == StageKind.Separation,
                   "staging: scene ids map to separation, ignition and neutral", null);
@@ -981,7 +1033,9 @@ public static class Tests
         SubtitleSlotTests();
         RpmPageTests();
         CabinTests();
+        RadioDspTests.Run(Check);
         RuntimeSpeechTests();
+        UnifiedDialogueTests();
         ProbeCoreTests();
         ProbeSynthTests();
         ProbeSettingsTests();
@@ -996,6 +1050,21 @@ public static class Tests
     // ---- director rules in probe mode (ProbeRules) ----
     static void ProbeRulesTests()
     {
+        var repeat = new ProbeRepeatCooldown();
+        Check(repeat.Allowed("pressure", "probe_stress", "q", 0, 45, 600), "probe pressure first warning is allowed", null);
+        repeat.Stamp("pressure", "probe_stress", "q", 0);
+        bool suppressed = true;
+        for (int pressureTime = 4; pressureTime < 45; pressureTime += 4) suppressed &= !repeat.Allowed("pressure", "probe_stress", "q", pressureTime, 45, 600);
+        Check(suppressed, "sustained pressure cannot repeat every four seconds even with one scene", null);
+        Check(!repeat.Allowed("other-pressure", "probe_stress", "q", 8, 45, 600), "alternate pressure wording shares the cause cooldown", null);
+        Check(repeat.Allowed("heat", "probe_stress", "heat", 8, 45, 600), "a new stress cause can still warn immediately", null);
+        Check(repeat.Allowed("pressure", "probe_stress", "q", 45, 45, 600), "pressure can be mentioned after its cooldown", null);
+        Check(repeat.Allowed("pressure", "part_lost", "q", 4, 45, 600), "critical event reactions bypass scheduled chatter cooldowns", null);
+        repeat.Stamp("generic", "probe_stress", "any", 0);
+        Check(!repeat.Allowed("generic", "probe_stress", "any", 45, 45, 600) && repeat.Allowed("generic", "probe_stress", "any", 600, 45, 600), "generic stress reassurance uses the longer conversation cooldown", null);
+        repeat.Clear();
+        Check(repeat.Allowed("pressure", "probe_stress", "q", 4, 45, 600), "vessel reset clears probe repetition cooldowns", null);
+
         Near(ProbeRules.BeepPitch(0f, false, 1.35f), 1f, 1e-5f, "probe rules: beep pitch 1 at stress 0");
         Near(ProbeRules.BeepPitch(0.8f, false, 1.35f), 1.2f, 1e-5f, "probe rules: beep pitch 1 + 0.25 x stress");
         Near(ProbeRules.BeepPitch(1f, false, 1.2f), 1.2f, 1e-5f, "probe rules: beep pitch capped at probeBeepPitchMax");
@@ -1041,6 +1110,10 @@ public static class Tests
         Check(ProbeRules.HailMayStart("orbit", true, false) && !ProbeRules.HailMayStart("orbit", false, false)
               && !ProbeRules.HailMayStart("orbit", true, true) && !ProbeRules.HailMayStart("launch", true, false),
               "probe rules v6: a hail needs the link, an awake probe and a calm phase", null);
+        Check(!ProbeRules.HailMayStart("orbit", true, false, true)
+              && !ProbeRules.HailMayStart("landed", true, false, true)
+              && ProbeRules.HailMayStart("orbit", true, false, false),
+              "probe station: self-initiated hails are disabled independently of station style or chatter settings", null);
         bool moodsOk = true;
         foreach (string ev in PhraseTable.ProbeVariantEvents)
         {
@@ -1057,8 +1130,8 @@ public static class Tests
             "pt_a_2\tprobe_chat\tchatter\tcalm\tprobe\tpt_a\t2\tboth\tany\tany\tokto\thappy\t\t[beeps happily]",
             "pt_b_1\tprobe_chat\tchatter\tcalm\tmc\tpt_b\t1\tm\tany\tany\tany\t\tHola\tHello probe",
             "pt_b_2\tprobe_chat\tchatter\tcalm\tprobe\tpt_b\t2\tboth\tany\tany\tany\tscared\t\t[beeps nervously]",
-            "ph_a_1\tprobe_hail\tchatter\tcalm\tprobe\tph_a\t1\tboth\tgoofy\tany\tany\tcurious\t\t[beeps curiously]",
-            "ph_a_2\tprobe_hail\tchatter\tcalm\tmc\tph_a\t2\tm\tgoofy\tany\tany\t\tSi\tYes?",
+            "ph_a_1\tprobe_hail\tchatter\tcalm\tprobe\tph_a\t1\tboth\tcalm\tany\tany\tcurious\t\t[beeps curiously]",
+            "ph_a_2\tprobe_hail\tchatter\tcalm\tmc\tph_a\t2\tm\tcalm\tany\tany\t\tSi\tYes?",
             "td_a_1\ttouchdown\tchatter\tnone\tprobe\ttd_a\t1\tboth\tany\tany\tany\thappy\t\t[beeps with relief]" };
         // The diary role and the long probe subtitles are rejected
         List<string> badErrs = new List<string>();
@@ -1071,8 +1144,8 @@ public static class Tests
         // pickers skip it, and it is found by its event like the probe events.
         List<string> pcErr = new List<string>();
         PhraseTable pct = PhraseTable.Parse(new List<string> { rows[0],
-            "pc_a_1\tprobe_crew\tchatter\tcalm\tprobe\tpc_a\t1\tboth\tgoofy\tany\tany\tproud\t\t[beeps with a report]",
-            "pc_a_2\tprobe_crew\tchatter\tcalm\tcrew\tpc_a\t2\tboth\tgoofy\tany\tany\t\tBuenos datos\tGood data." }, pcErr);
+            "pc_a_1\tprobe_crew\tchatter\tcalm\tprobe\tpc_a\t1\tboth\tcalm\tany\tany\tproud\t\t[beeps with a report]",
+            "pc_a_2\tprobe_crew\tchatter\tcalm\tcrew\tpc_a\t2\tboth\tcalm\tany\tany\t\tBuenos datos\tGood data." }, pcErr);
         PhraseScene pcs = pcErr.Count == 0 && pct.Scenes.Count == 1 ? pct.Scenes[0] : null;
         Check(pcs != null && pcs.IsProbe && pcs.CrewLines == 1 && !pcs.IsIntercom,
               "0.6.0 probe_crew: probe plus crew parses, is a probe scene, not an intercom scene", string.Join(" | ", pcErr.ToArray()));
@@ -1081,7 +1154,7 @@ public static class Tests
               "0.6.0 probe_crew: found by its event, only in its phase", null);
         List<string> pcBad = new List<string>();
         PhraseTable.Parse(new List<string> { rows[0],
-            "pc_b_1\tprobe_crew\tchatter\tcalm\tmc\tpc_b\t1\tm\tgoofy\tany\tany\t\tHola\tHello." }, pcBad);
+            "pc_b_1\tprobe_crew\tchatter\tcalm\tmc\tpc_b\t1\tm\tcalm\tany\tany\t\tHola\tHello." }, pcBad);
         Check(pcBad.Count == 1 && pcBad[0].Contains("cannot have mc rows"), "0.6.0 probe_crew: an mc row is rejected",
               string.Join(" | ", pcBad.ToArray()));
         Check(!PhraseTable.IsProbeEvent("probe_crew") && PhraseTable.IsProbeCrewEvent("probe_crew"),
@@ -1209,6 +1282,183 @@ public static class Tests
     }
 
     // Experimental (runtime voice): names in loñapsE, the Spanish respelling, WAV reading and the build level shaping.
+    static void UnifiedDialogueTests()
+    {
+        Func<Dictionary<string, string>, string> row = values => {
+            var fields = new List<string>(); foreach (string key in DialogueTable.Columns) fields.Add(values.ContainsKey(key) ? values[key] : "");
+            return string.Join("\t", fields.ToArray());
+        };
+        string header = string.Join("\t", DialogueTable.Columns);
+        Func<string, string, string, string, string, Dictionary<string, string>> alternative = (id, trigger, when, prefer, text) =>
+            new Dictionary<string, string> { { "id", id }, { "line", "home_reply" }, { "scene", "home_scene" }, { "seq", "1" },
+                { "speaker", "mission_control" }, { "trigger", trigger }, { "channel", "radio" }, { "when", when }, { "prefer", prefer }, { "spanish", text }, { "english", text } };
+        var rows = new List<string> { header,
+            row(alternative("home_reply", "flight.chatter", "", "0", "Soon.")),
+            row(alternative("home_here", "flight.chatter", "kerbin", "1", "Still at Kerbin.")),
+            row(alternative("home_ground", "flight.chatter", "landed", "1", "Take off first.")),
+            row(alternative("home_value", "flight.chatter", "landed", "2", "Height {height_m}.")) };
+        var errors = new List<string>(); var doc = DialogueTable.Parse(rows, "choices.tsv", errors); var line = doc.Lines[0];
+        var nums = new Dictionary<string, double>(); var names = new Dictionary<string, string[]>();
+        Check(errors.Count == 0 && line.Alternatives.Count == 4 && line.Matching(nums, names)[0] == 0,
+            "unified alternatives: fallback stays available when conditions do not match", string.Join("; ", errors.ToArray()));
+        nums["tag_kerbin"] = 1;
+        Check(line.Matching(nums, names).Count == 1 && line.Matching(nums, names)[0] == 1,
+            "unified alternatives: conditional wording is preferred to an unconditional fallback", null);
+        nums["tag_landed"] = 1;
+        var equal = line.Matching(nums, names);
+        Check(equal.Count == 2 && equal.Contains(1) && equal.Contains(2), "unified alternatives: equal-priority matching choices remain eligible", null);
+        nums["height_m"] = 4;
+        Check(line.Matching(nums, names).Count == 1 && line.Matching(nums, names)[0] == 3,
+            "unified alternatives: preference applies after checking variable availability", null);
+        var compiled = PhraseTable.Parse(doc.SceneRows(), errors);
+        var entry = compiled.Get("home_reply");
+        var shown = SubtitleSlots.Fill(new List<PhraseEntry> { entry }, null, new Dictionary<string, string> { { "height_m", "4" } }, null,
+            (pool, choices) => choices[0], null, new List<string> { "landed" }, true);
+        Check(entry.Dialogue != null && shown.Count == 1 && shown[0].English == "Height 4." && !string.IsNullOrEmpty(shown[0].RuntimeSpanish),
+            "unified alternatives: ordinary scene playback uses the same variable/condition engine", null);
+        var probeRows = new List<string> { header };
+        var probeFirst = alternative("probe_words", "probe", "ec<15", "0", "Battery {ec}.");
+        probeFirst["line"] = "probe_words"; probeFirst["scene"] = "probe_scene"; probeFirst["on"] = "probe.power";
+        probeRows.Add(row(probeFirst));
+        var probeBeep = alternative("probe_beep", "probe", "", "0", "[beeps happily]");
+        probeBeep["line"] = "probe_beep"; probeBeep["scene"] = "probe_scene"; probeBeep["seq"] = "2";
+        probeBeep["speaker"] = "probe"; probeBeep["spanish"] = ""; probeBeep["beep"] = "happy";
+        probeRows.Add(row(probeBeep));
+        var probeErrors = new List<string>(); var probes = ProbeRuntimeTable.Parse(probeRows, "Probe/power.tsv", probeErrors);
+        var probeNums = new Dictionary<string, double> { { "ec", 10 } };
+        var plan = ProbeRuntimeTable.Fill(probes.Templates[0], probeNums, names, new SceneMemory(), new Random(1));
+        Check(probeErrors.Count == 0 && plan != null && plan.Count == 2 && plan[0].English == "Battery 10." && plan[1].English == "[beeps happily]",
+            "unified alternatives: contextual probes use the same schema without interpreting beep subtitles as conditions", string.Join("; ", probeErrors.ToArray()));
+        probeNums["ec"] = 80;
+        Check(!ProbeRuntimeTable.CanFill(probes.Templates[0], probeNums, names), "unified alternatives: stale contextual probe values make the exchange ineligible", null);
+        var broken = new List<string>(rows); var bad = alternative("invalid", "flight.chatter", "kerbin", "0", "A | B"); broken.Add(row(bad));
+        var badErrors = new List<string>(); DialogueTable.Parse(broken, "bad.tsv", badErrors);
+        Check(badErrors.Count > 0, "unified alternatives: parallel pipe strings are rejected in the canonical format", null);
+        var missing = alternative("unknown", "flight.chatter", "", "0", "{unknown_variable}");
+        var missingErrors = new List<string>(); DialogueTable.Parse(new List<string> { header, row(missing) }, "unknown.tsv", missingErrors);
+        Check(missingErrors.Count > 0, "unified alternatives: unknown variables are reported at load time", null);
+        var conversation = new List<string> { header };
+        var first = alternative("first", "chat", "", "0", "{self}"); first["line"] = "first"; first["channel"] = "intercom"; first["speaker"] = "kerbal_a";
+        var second = new Dictionary<string,string>(first); second["id"] = "second"; second["line"] = "second"; second["seq"] = "2";
+        conversation.Add(row(first)); conversation.Add(row(second));
+        var conversationErrors = new List<string>(); var templates = RuntimeLines.Parse(conversation, conversationErrors); var chats = RuntimeLines.Chats(templates);
+        Check(conversationErrors.Count == 0 && chats.Count == 1 && RuntimeLines.ChatFits(chats[0], "orbit", new Dictionary<string,double>(),
+            new Dictionary<string,string[]> { { "self", new[] { "Bob", "Bob" } } }, new Dictionary<string,string[]>()),
+            "unified alternatives: explicit speakers are independent of alternating sequence numbers", string.Join("; ", conversationErrors.ToArray()));
+        second["when"] = "ec<15 orbit job_a=engineer";
+        var guardedErrors = new List<string>();
+        var guarded = RuntimeLines.Chats(RuntimeLines.Parse(new List<string> { header, row(first), row(second) }, guardedErrors))[0];
+        var actorNames = new Dictionary<string,string[]> { { "self", new[] { "Bob", "Bob" } } };
+        var guardedNums = new Dictionary<string,double> { { "ec", 10 } };
+        Check(guardedErrors.Count == 0 && RuntimeLines.ChatFits(guarded, "orbit", guardedNums, actorNames, names, "engineer", "pilot")
+            && !RuntimeLines.ChatFits(guarded, "landed", guardedNums, actorNames, names, "engineer", "pilot")
+            && !RuntimeLines.ChatFits(guarded, "orbit", guardedNums, actorNames, names, "scientist", "pilot"),
+            "unified alternatives: later chat lines enforce situation and actor conditions", string.Join("; ", guardedErrors.ToArray()));
+        guardedNums["ec"] = 80;
+        Check(!RuntimeLines.ChatFits(guarded, "orbit", guardedNums, actorNames, names, "engineer", "pilot"),
+            "unified alternatives: later chat lines enforce shared numeric guards", null);
+        var orA = alternative("or_a", "report", "orbit flight", "0", "A.");
+        var orB = alternative("or_b", "report", "orbit landed", "0", "B.");
+        var orErrors = new List<string>();
+        var orTemplates = RuntimeLines.Parse(new List<string> { header, row(orA), row(orB) }, orErrors);
+        Check(orErrors.Count == 0 && RuntimeLines.Fitting(orTemplates, "report", "flight", nums, names).Count == 1
+            && RuntimeLines.Fitting(orTemplates, "report", "landed", nums, names).Count == 1
+            && RuntimeLines.Fitting(orTemplates, "report", "escape", nums, names).Count == 0,
+            "unified alternatives: overlapping situation alternatives do not become mandatory common guards", string.Join("; ", orErrors.ToArray()));
+        probeBeep["when"] = "ec<5";
+        var guardedProbeErrors = new List<string>();
+        var guardedProbe = ProbeRuntimeTable.Parse(new List<string> { header, row(probeFirst), row(probeBeep) }, "Probe/guarded.tsv", guardedProbeErrors);
+        probeNums["ec"] = 10;
+        Check(guardedProbeErrors.Count == 0 && !ProbeRuntimeTable.CanFill(guardedProbe.Templates[0], probeNums, names),
+            "unified alternatives: beep guards participate in whole-exchange eligibility", string.Join("; ", guardedProbeErrors.ToArray()));
+        probeBeep["when"] = ""; probeBeep["english"] = "[{probe} beeps happily]";
+        var namedProbeErrors = new List<string>();
+        var namedProbe = ProbeRuntimeTable.Parse(new List<string> { header, row(probeFirst), row(probeBeep) }, "Probe/named.tsv", namedProbeErrors);
+        bool missingCaptionName = !ProbeRuntimeTable.CanFill(namedProbe.Templates[0], probeNums, names);
+        var probeNames = new Dictionary<string,string[]> { { "probe", new[] { "Pip", "Pip" } } };
+        var namedPlan = ProbeRuntimeTable.Fill(namedProbe.Templates[0], probeNums, probeNames, new SceneMemory(), new Random(1));
+        Check(namedProbeErrors.Count == 0 && missingCaptionName && namedPlan != null && namedPlan[1].English == "[Pip beeps happily]",
+            "unified alternatives: beep caption variables use the same availability and fill rules", string.Join("; ", namedProbeErrors.ToArray()));
+        first["trigger"] = "science_talk"; first["on"] = "science"; first["channel"] = "radio";
+        second["trigger"] = "science_talk"; second["on"] = "science"; second["channel"] = "radio"; second["speaker"] = "mission_control";
+        var talkErrors = new List<string>();
+        var talks = RuntimeLines.Talks(RuntimeLines.Parse(new List<string> { header, row(first), row(second) }, talkErrors));
+        guardedNums["ec"] = 10;
+        Check(talkErrors.Count == 0 && talks.Count == 1 && RuntimeLines.TalkFits(talks[0], "orbit", guardedNums, actorNames, actorNames, "engineer")
+            && !RuntimeLines.TalkFits(talks[0], "orbit", guardedNums, actorNames, actorNames, "scientist"),
+            "unified alternatives: science talks enforce conditions on later MC lines", string.Join("; ", talkErrors.ToArray()));
+        probeBeep["seq"] = "3";
+        var gapErrors = new List<string>();
+        DialogueTable.Parse(new List<string> { header, row(probeFirst), row(probeBeep) }, "Probe/gap.tsv", gapErrors);
+        Check(gapErrors.Count > 0, "unified alternatives: contextual probe sequence gaps are reported", null);
+        var jobRow = alternative("job_specialist", "report", "job_a=scientist trait_a=brave", "0", "Calibrated.");
+        jobRow["job"] = "scientist"; jobRow["trait"] = "brave"; jobRow["type"] = "callout";
+        var jobOther = new Dictionary<string, string>(jobRow);
+        jobOther["id"] = "job_other"; jobOther["when"] = "job_a!=scientist";
+        jobOther["spanish"] = jobOther["english"] = "I think it is calibrated.";
+        var jobErrors = new List<string>();
+        var jobDoc = DialogueTable.Parse(new List<string> { header, row(jobRow), row(jobOther) }, "jobs.tsv", jobErrors);
+        var actorNums = new Dictionary<string, double>();
+        RuntimeLines.ActorConditions(actorNums, "scientist brave", "pilot");
+        bool expertFits = jobDoc.Lines[0].Matching(actorNums, names).Count == 1 && jobDoc.Lines[0].Matching(actorNums, names)[0] == 0;
+        RuntimeLines.ActorConditions(actorNums, "pilot", "scientist brave");
+        Check(jobErrors.Count == 0 && jobDoc.Lines[0].Get("trait") == "scientist" && jobDoc.Lines[0].Get("persona") == "brave"
+            && jobDoc.Lines[0].Get("severity") == "callout" && expertFits && jobDoc.Lines[0].Matching(actorNums, names)[0] == 1,
+            "dialogue schema: job and personality trait remain distinct; other jobs receive uncertain wording", string.Join("; ", jobErrors.ToArray()));
+        var oldColumns = new List<string>(); foreach (string key in DialogueTable.Columns) oldColumns.Add(DialogueTable.FieldKey(key));
+        var oldErrors = new List<string>();
+        var oldDoc = DialogueTable.Parse(new List<string> { string.Join("\t", oldColumns.ToArray()), row(jobRow).Replace("mission_control", "mc") }, "legacy.tsv", oldErrors);
+        Check(oldErrors.Count == 0 && oldDoc.Lines[0].Get("trait") == "scientist" && oldDoc.Lines[0].Get("persona") == "brave",
+            "dialogue schema: older role/severity/trait/persona headers retain their original meanings", string.Join("; ", oldErrors.ToArray()));
+        var invalidJob = new Dictionary<string, string>(jobRow); invalidJob["when"] = "job_a=brave";
+        var invalidJobErrors = new List<string>(); DialogueTable.Parse(new List<string> { header, row(invalidJob) }, "wrong-job.tsv", invalidJobErrors);
+        Check(invalidJobErrors.Count > 0, "dialogue schema: personality flags are rejected as job filters", null);
+        RuntimeLines.ActorConditions(actorNums, null, null);
+        Check(!DialogueTable.Holds("job_b=scientist", actorNums) && !DialogueTable.Holds("job_b!=scientist", actorNums)
+            && jobDoc.Lines[0].Matching(actorNums, names).Count == 0,
+            "dialogue schema: absent actors cannot satisfy either a job or an other-job condition", null);
+        var namedExperiment = RuntimeLines.ExperimentWords(null, "newExperiment", "New Experiment^N");
+        Check(namedExperiment[1] == "New Experiment" && !string.IsNullOrEmpty(namedExperiment[0])
+            && RuntimeLines.ExperimentWords(null, "newExperiment")[1] == "experiment"
+            && RuntimeLines.ExperimentWords(null, "temperatureScan", "Temperature Scan")[1] == "temperature",
+            "science names: unlisted experiment titles work, stock translations and missing-title fallback remain available", null);
+        var allErrors = new List<string>(); int lines = 0, alternatives = 0;
+        string baseDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../GameData/Lonapse"));
+        foreach (string directory in new[] { "Phrases/Crew", "Phrases/Probe", "Compat/DeepFreeze" })
+            foreach (string path in System.IO.Directory.GetFiles(System.IO.Path.Combine(baseDir,directory), "*.tsv"))
+            {
+                var parsed = DialogueTable.Parse(System.IO.File.ReadAllLines(path), path, allErrors);
+                lines += parsed.Lines.Count;
+                foreach (var parsedLine in parsed.Lines) alternatives += parsedLine.Alternatives.Count;
+            }
+        Check(allErrors.Count == 0 && lines == 6479 && alternatives == 10393,
+            "unified alternatives: the same parser validates every shipped Crew, Probe and compatibility category", lines + " lines / " + alternatives + " alternatives; " + string.Join("; ", allErrors.ToArray()));
+        var gooLine = DialogueTable.Find("st_mysterygoo_a_1");
+        RuntimeLines.ActorConditions(actorNums, "scientist", null);
+        var scientistChoices = gooLine.Matching(actorNums, names);
+        RuntimeLines.ActorConditions(actorNums, "pilot", null);
+        var pilotChoices = gooLine.Matching(actorNums, names);
+        Check(scientistChoices.Count > 0 && scientistChoices.TrueForAll(i => !gooLine.Alternatives[i].Id.EndsWith("__other_job"))
+            && pilotChoices.Count == 1 && gooLine.Alternatives[pilotChoices[0]].Id.EndsWith("__other_job"),
+            "shipped science: scientists retain specialist lines and pilots select the uncertain alternative", null);
+        var scannerLine = DialogueTable.Find("surface_scanner");
+        var scannerNums = new Dictionary<string, double> { { "tag_landed", 1 }, { "resource_pct", 0 } };
+        var scannerNames = new Dictionary<string, string[]> { { "resource", new[] { "Ore", "Ore" } } };
+        bool zeroReading = scannerLine.Matching(scannerNums, scannerNames).Count == 1;
+        scannerNums.Remove("resource_pct");
+        Check(zeroReading && scannerLine.Matching(scannerNums, scannerNames).Count == 0,
+            "surface scanner dialogue: zero is a valid reading and absent readings prevent playback", null);
+        string apiGuide = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(System.IO.Path.Combine(baseDir, "../../docs/API.md")));
+        var guideErrors = new List<string>(); int guideExamples = 0;
+        foreach (System.Text.RegularExpressions.Match example in System.Text.RegularExpressions.Regex.Matches(apiGuide, @"```tsv\r?\n([\s\S]*?)```"))
+        {
+            var exampleDoc = DialogueTable.Parse(example.Groups[1].Value.Split('\n'), "docs/API.md", guideErrors);
+            guideExamples += exampleDoc.Lines.Count;
+        }
+        Check(guideExamples > 0 && guideErrors.Count == 0,
+            "API examples: inline TSV examples are complete and load without adding missing conversation lines", string.Join("; ", guideErrors.ToArray()));
+    }
+
     static void RuntimeSpeechTests()
     {
         string[][] names = {
@@ -1413,14 +1663,169 @@ public static class Tests
         }
 
         // runtime-only lines: every file in GameData/Lonapse/Phrases/Runtime
-        string rtDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases/Runtime"));
+        string rtDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases/Crew"));
         var rtErr = new List<string>();
         var rtFiles = new List<KeyValuePair<string, IList<string>>>();
         string[] rtPaths = System.IO.Directory.GetFiles(rtDir, "*.tsv");
         Array.Sort(rtPaths, StringComparer.Ordinal);
         foreach (string f in rtPaths)
-            rtFiles.Add(new KeyValuePair<string, IList<string>>(System.IO.Path.GetFileName(f), System.IO.File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+            rtFiles.Add(new KeyValuePair<string, IList<string>>(System.IO.Path.GetFileName(f), RuntimeSceneTable.TemplateRows(System.IO.File.ReadAllLines(f, System.Text.Encoding.UTF8))));
         List<RuntimeTemplate> rtAll = RuntimeLines.ParseAll(rtFiles, rtErr);
+        string probeRuntimeDir = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(rtDir), "Probe");
+        foreach (string path in System.IO.Directory.GetFiles(probeRuntimeDir, "*.tsv"))
+            rtAll.AddRange(ProbeRuntimeTable.Parse(System.IO.File.ReadAllLines(path), "Probe/" + System.IO.Path.GetFileName(path), rtErr).Templates);
+
+        {
+            var categoryErrors = new List<string>();
+            var categoryRows = new List<string> {
+                "id\tkind\twhen\tspanish\tenglish",
+                "category_1\tscene\tscene=category event=probe_chat role=mc core=okto gender=m\tHola, {probe}. | Batería al {ec} por ciento.\tHello, {probe}. | Battery at {ec} percent.",
+                "category_2\tscene\tscene=category seq=2 event=probe_chat role=probe core=okto beep=happy\t\t[beeps happily]",
+                "category_report\treport\tec<20\tBatería al {ec} por ciento.\tBattery at {ec} percent." };
+            var category = PhraseTable.Parse(RuntimeSceneTable.Compile(categoryRows, "category.tsv", categoryErrors), categoryErrors);
+            var categoryTemplates = RuntimeLines.Parse(RuntimeSceneTable.TemplateRows(categoryRows), categoryErrors);
+            Check(categoryErrors.Count == 0 && category.Count == 2 && categoryTemplates.Count == 1
+                && category.Get("category_1").Scene == "category" && category.Get("category_2").Seq == 2
+                && category.Get("category_1").Core == "okto" && category.Get("category_2").Beep == "happy",
+                "category tables: five-column scenes preserve speaker order and linesets alongside ordinary runtime templates", string.Join("; ", categoryErrors.ToArray()));
+            var badCategoryRows = new List<string>(categoryRows);
+            badCategoryRows[1] = badCategoryRows[1].Replace("Hello, {probe}. | Battery at {ec} percent.", "Hello, {probe}.");
+            var badCategoryErrors = new List<string>();
+            RuntimeSceneTable.Compile(badCategoryRows, "bad-category.tsv", badCategoryErrors);
+            Check(badCategoryErrors.Count > 0, "category tables: mismatched spoken and subtitle alternatives are rejected", null);
+
+            var compatibilityErrors = new List<string>();
+            var compatible = RuntimeLines.Parse(new List<string> {
+                "id\tkind\twhen\tspanish\tenglish",
+                "rt_chat_legacy_1\tchat\t\tHola.\tHello.",
+                "rt_chat_legacy_2\tchat\t\tBien.\tGood.",
+                "rt_legacy_reply\treply\tto=rt_fuel*\tSí.\tYes." }, compatibilityErrors);
+            var legacyReply = compatible.Find(t => t.Kind == "reply");
+            Check(compatibilityErrors.Count == 0 && RuntimeLines.Chats(compatible).Count == 1
+                && RuntimeLines.Answers(legacyReply, "fuel_low", "report") && RuntimeLines.Answers(legacyReply, "rt_fuel_low", "report"),
+                "ID migration: legacy mod groups and reply references remain compatible with canonical IDs", string.Join("; ", compatibilityErrors.ToArray()));
+            var explicitErrors = new List<string>();
+            var explicitTalk = RuntimeLines.Parse(new List<string> {
+                "id\tkind\twhen\tspanish\tenglish\tscene\tseq",
+                "greeting\tchat\t\tHola.\tHello.\tconversation\t1",
+                "answer\tchat\t\tBien.\tGood.\tconversation\t2" }, explicitErrors);
+            Check(explicitErrors.Count == 0 && RuntimeLines.Chats(explicitTalk).Count == 1 && RuntimeLines.Chats(explicitTalk)[0][1].Id == "answer",
+                "ID migration: explicit scene/seq columns group conversations independently of ID spelling", string.Join("; ", explicitErrors.ToArray()));
+            var collisionErrors = new List<string>();
+            RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "fuel\treport\t\tA.\tA.", "rt_fuel\treport\t\tB.\tB." }, collisionErrors);
+            Check(collisionErrors.Count == 1, "ID migration: legacy and canonical aliases cannot create duplicate templates", null);
+            var oldMemory = SceneMemory.Parse(new[] { "rt_chat_legacy 12", "slot:version:rt_bo_greetings_1__mun:0 20", "bo_greetings_1 15", "bo_greetings_1__duna 18" });
+            Check(oldMemory.LastSeq("chat_legacy") == 12 && oldMemory.LastSeq("rt_chat_legacy") == 12
+                && oldMemory.LastSeq("slot:version:bo_greetings_1:0") == 20 && oldMemory.LastSeq("bo_greetings_1") == 18,
+                "ID migration: repetition history preserves legacy identities and merges body aliases using the newest timestamp", null);
+            var arbitraryMemory = SceneMemory.Parse(new[] { "slot:thing:rt_item 9", "slot:probe:rt_bo_greetings_1__mun:1:0 14" });
+            Check(arbitraryMemory.LastSeq("slot:thing:rt_item") == 9 && arbitraryMemory.LastSeq("slot:thing:item") == -1
+                && arbitraryMemory.LastSeq("slot:probe:bo_greetings_1:1:0") == 14,
+                "ID migration: dialogue keys migrate without rewriting arbitrary vocabulary values", null);
+            Check(Persona.JobForLine("fuel_low") == "pilot" && Persona.JobForLine("rt_fuel_low") == "pilot"
+                && Persona.JobForLine("ec_low") == "engineer" && Persona.JobForLine("sci_pts") == "scientist",
+                "ID migration: reply job preferences survive prefix removal", null);
+            var structuredErrors = new List<string>();
+            var structuredRows = new List<string> {
+                "id\tkind\twhen\tspanish\tenglish\tscene\tseq\tevent\trole\tcore\tband\tbeep",
+                "structured_1\tscene\tec<20\tHola, {body}. | Vista de {body}.\tHello, {body}. | View of {body}.\tstructured\t1\tprobe_chat\tmc\tokto\ttense\t",
+                "structured_2\tscene\t\t\t[beeps happily]\tstructured\t2\t\tprobe\t\t\thappy",
+                "separate\tscene\t\tBien.\tGood.\tseparate\t1\t\tcrew\t\t\t" };
+            var structured = PhraseTable.Parse(RuntimeSceneTable.Compile(structuredRows, "structured.tsv", structuredErrors), structuredErrors);
+            Check(structuredErrors.Count == 0 && structured.Get("structured_2").Core == "okto" && structured.Get("structured_2").Band == "tense"
+                && structured.Get("separate").Core == "any" && structured.Get("separate").Band == "calm"
+                && structured.Get("structured_1").RuntimeWhen == "ec<20",
+                "category columns: scene settings inherit locally while when retains only the numeric predicate", string.Join("; ", structuredErrors.ToArray()));
+            var bodyLine = structured.Get("structured_1");
+            string previousBodySpeech = null;
+            foreach (string bodyName in new[] { "the Mun", "Asteria" })
+            {
+                var bodyValues = new Dictionary<string, string> { { "body", bodyName } };
+                var bodyResult = SubtitleSlots.Fill(new List<PhraseEntry> { bodyLine }, null, bodyValues, null,
+                    (pool, choices) => "1", null, null, true);
+                string said = RuntimeSpeech.Spoken(bodyResult[0].RuntimeSpanish);
+                Check(bodyResult[0].English == "View of " + bodyName + "." && !string.IsNullOrEmpty(said)
+                    && said.IndexOf('{') < 0 && said != previousBodySpeech,
+                    "body variables: selected bilingual alternative resolves stock or modded body " + bodyName, said);
+                previousBodySpeech = said;
+            }
+
+            var targetErrors = new List<string>();
+            var targetTable = PhraseTable.Parse(RuntimeSceneTable.Compile(new List<string> {
+                "id\tkind\twhen\tspanish\tenglish",
+                "target_report\tscene\t\tVemos {target}.\tWe see {target}." }, "target.tsv", targetErrors), targetErrors);
+            var targetLine = targetTable.Get("target_report");
+            bool targetNamed;
+            var targetResult = SubtitleSlots.Fill(new List<PhraseEntry> { targetLine }, null,
+                new Dictionary<string, string> { { "target", "Station Alpha" } }, null, (pool, choices) => choices[0], null, null,
+                true, false, out targetNamed, new Dictionary<string, string[]> { { "target", new[] { "Estación Alfa", "Station Alpha" } } });
+            Check(targetErrors.Count == 0 && targetResult[0].English == "We see Station Alpha."
+                && targetResult[0].RuntimeSpanish.Contains(RuntimeSpeech.MarkRaw("Estación Alfa")),
+                "scene variables: named flight values use their paired spoken translation", null);
+            Check(!SubtitleSlots.CanFill(new List<PhraseEntry> { targetLine }, null, new Dictionary<string, string>(), null, null),
+                "scene variables: an unavailable target makes the scene ineligible", null);
+
+            var routingErrors = new List<string>();
+            var routed = RuntimeLines.Parse(new List<string> {
+                "id\tkind\ton\tto\twhen\tspanish\tenglish",
+                "named_event\tevent\tmymod.current\t\ton=mymod.legacy fuel<20\tHola.\tHello.",
+                "named_reply\treply\t\trt_named*\t\tSí.\tYes." }, routingErrors);
+            Check(routingErrors.Count == 0 && routed[0].On.Count == 1 && routed[0].On[0] == "mymod.current"
+                && routed[0].Checks.Count == 1 && RuntimeLines.Answers(routed[1], "named_event", "event"),
+                "routing columns: named on/to override inline routes and retain numeric conditions and legacy references", string.Join("; ", routingErrors.ToArray()));
+            var probeColumnErrors = new List<string>();
+            var probeColumns = ProbeRuntimeTable.Parse(new List<string> {
+                "id\tkind\ton\twhen\tspanish\tenglish\tscene\tseq\tevent\trole\tcore\tbeep",
+                "power_words\tprobe\tprobe.power\tec<20\tHola, {probe}.\tHello, {probe}.\tpower_scene\t1\tprobe_chat\tmc\tokto\t",
+                "power_beep\tprobe\t\t\t\t[beeps happily]\tpower_scene\t2\t\tprobe\t\thappy" }, "Probe/power.tsv", probeColumnErrors);
+            Check(probeColumnErrors.Count == 0 && probeColumns.Templates.Count == 1
+                && probeColumns.Templates[0].On.Contains("probe.power") && probeColumns.Templates[0].ProbeLines[1].Mood == "happy",
+                "probe columns: routing, inherited lineset and authored beep order compile together", string.Join("; ", probeColumnErrors.ToArray()));
+
+            var nativeErrors = new List<string>();
+            string nativeHeader = "clip_key\tscene\tseq\tevent\trole\tcore\tbeep\tspanish\tenglish\truntime_topic\twhen\tband\tphase";
+            var nativeRows = new List<string> { nativeHeader,
+                "native_1\trt_native\t1\tprobe_chat\tprobe\tcustom_lines\tcurious\t\t[beeps curiously]\tprobe.power\tec<20\tcalm\tany",
+                "native_2\trt_native\t2\tprobe_chat\tmc\tcustom_lines\t\tHola, {probe}.\tHello, {probe}.\t\t\tcalm\tany",
+                "native_3\trt_native\t3\tprobe_chat\tprobe\tcustom_lines\tproud\t\t[beeps proudly]\t\t\tcalm\tany",
+                "native_4\trt_native\t4\tprobe_chat\tmc\tcustom_lines\t\tBatería al {ec} por ciento.\tBattery at {ec} percent.\t\t\tcalm\tany" };
+            var native = ProbeRuntimeTable.Parse(nativeRows, "Example/Lonapse/Runtime_Probe/native.tsv", nativeErrors);
+            var nativeNames = new Dictionary<string, string[]> { { "probe", new[] { "Test", "Test" } } };
+            Check(nativeErrors.Count == 0 && native.Templates.Count == 1 && native.SceneRows.Count == 0,
+                "Runtime_Probe contextual scenes compile without entering the fixed scene pool", string.Join(";", nativeErrors.ToArray()));
+            RuntimeTemplate nativeTemplate = native.Templates[0];
+            var nativeValues = new Dictionary<string, double> { { "ec", 12 }, { "x_core_custom_lines", 1 } };
+            var nativeFit = RuntimeLines.Fitting(native.Templates, "event", "flight", nativeValues, nativeNames);
+            Check(nativeFit.Count == 1 && nativeTemplate.Where.StartsWith("Example/Lonapse/Runtime_Probe/"), "Runtime_Probe preserves core conditions and mod identity", null);
+            nativeValues["ec"] = 50;
+            Check(RuntimeLines.Fitting(native.Templates, "event", "flight", nativeValues, nativeNames).Count == 0, "Runtime_Probe rejects a scene whose numeric condition does not hold", null);
+            nativeValues.Remove("ec");
+            Check(!ProbeRuntimeTable.CanFill(nativeTemplate, nativeValues, nativeNames), "Runtime_Probe checks slots in later MC lines, not only the first", null);
+            nativeValues["ec"] = 12;
+            var nativeFilled = ProbeRuntimeTable.Fill(nativeTemplate, nativeValues, nativeNames, new SceneMemory(), new Random(1));
+            Check(nativeFilled.Count == 4 && nativeFilled[0].Role == "probe" && nativeFilled[1].Role == "mc"
+                && nativeFilled[2].Mood == "proud" && nativeFilled[3].English == "Battery at 12 percent.",
+                "Runtime_Probe fills all spoken lines and preserves authored beep order and mood", null);
+            var invalidRows = new List<string>(nativeRows); invalidRows[2] = invalidRows[2].Replace("\t2\t", "\t1\t");
+            var invalidErrors = new List<string>();
+            Check(ProbeRuntimeTable.Parse(invalidRows, "bad.tsv", invalidErrors).Templates.Count == 0 && invalidErrors.Count > 0,
+                "Runtime_Probe rejects duplicate sequence numbers instead of playing a partial scene", null);
+            bool uniform = true, scriptsFill = true;
+            foreach (string path in System.IO.Directory.GetFiles(probeRuntimeDir, "*.tsv"))
+            {
+                var sourceRows = System.IO.File.ReadAllLines(path);
+                foreach (string row in sourceRows) uniform &= row.Split('\t').Length == sourceRows[0].Split('\t').Length;
+            }
+            var allNativeValues = ProbeContext.StressValues(Calm(), 0.8f, true);
+            foreach (string slot in Slots.Numbers) allNativeValues[slot] = 50;
+            var allNativeNames = new Dictionary<string, string[]>();
+            foreach (string slot in RuntimeLines.NameSlots) allNativeNames[slot] = new[] { "Test", "Test" };
+            foreach (RuntimeTemplate template in rtAll)
+                if (template.ProbeLines != null) foreach (var speechLine in template.ProbeLines)
+                    if (speechLine.Role != "probe") for (int version = 0; version < speechLine.Speech.Versions.Count; version++)
+                    { string es, en; scriptsFill &= RuntimeLines.Fill(speechLine.Speech, version, allNativeValues, allNativeNames, out es, out en); }
+            Check(uniform && scriptsFill, "all Runtime_Probe files use uniform scene columns and all authored speech fills", null);
+        }
         int rtVersions = 0;
         foreach (RuntimeTemplate t in rtAll) rtVersions += t.Versions.Count;
         var kindCount = new Dictionary<string, int>();
@@ -1444,7 +1849,7 @@ public static class Tests
             {
                 foreach (string o in t[0].On) { int c0; perTopic.TryGetValue(o, out c0); perTopic[o] = c0 + 1; }
                 bool plain = t[0].Checks.Count == 0 && t[0].Situations.Count == 0;
-                if (plain && !RuntimeLines.TalkFits(t, "orbit", noNums, new Dictionary<string, string[]>(), new Dictionary<string, string[]>(), "scientist"))
+                if (plain && !RuntimeLines.TalkFits(t, "orbit", noNums, new Dictionary<string, string[]> { { "exp", new[] { "experimento", "experiment" } } }, new Dictionary<string, string[]>(), "scientist"))
                     emptyFail.Add(t[0].Id);
             }
             var lowTopics = new List<string>();
@@ -1474,7 +1879,7 @@ public static class Tests
                         if (!RuntimeLines.Fill(line, v, allNums, allNames, out fs, out fe)) noFill.Add(line.Id + " v" + (v + 1));
                     }
             var special = talks.FindAll(t => t[0].Checks.Count > 0 || t[0].Situations.Count > 0);
-            var firstTalk = talks.Find(t => t[0].Id == "rt_st_x_first_1");
+            var firstTalk = talks.Find(t => t[0].Id == "st_x_first_1");
             var firstNums = new Dictionary<string, double> { { "sci_first", 1 }, { "sci", 3 } };
             var firstNames = new Dictionary<string, string[]>(crewN) { { "exp", new[] { "goo", "goo" } }, { "here", new[] { "Mun", "Mun" } } };
             var firstMc = new Dictionary<string, string[]>(mcN) { { "exp", new[] { "goo", "goo" } }, { "here", new[] { "Mun", "Mun" } } };
@@ -1490,16 +1895,15 @@ public static class Tests
             Check(talkTopic > 0 && talkSci * 4 >= talkTopic && talkSci * 3 <= talkTopic * 2,
                   "science talk: a fair share of the talks about one experiment need a scientist", talkSci + " of " + talkTopic);
 
-            var medal = talks.Find(t => t[0].Id == "rt_st_medal_1");
-            var goo = talks.Find(t => t[0].Id == "rt_st_mysterygoo_a_1");
+            var medal = talks.Find(t => t[0].Id == "st_medal_1");
+            var goo = talks.Find(t => t[0].Id == "st_mysterygoo_a_1");
             Check(medal != null && medal[0].McFirst && !RuntimeLines.TalkCrewLine(medal, 0) && RuntimeLines.TalkCrewLine(medal, 1)
                   && goo != null && !goo[0].McFirst && RuntimeLines.TalkCrewLine(goo, 0) && !RuntimeLines.TalkCrewLine(goo, 1)
-                  && goo[0].TraitA == "scientist"
                   && RuntimeLines.TalkFits(goo, "orbit", noNums, crewN, mcN, "scientist")
-                  && !RuntimeLines.TalkFits(goo, "orbit", noNums, crewN, mcN, "pilot"),
-                  "science talk: the kerbal starts, who=mc lets Mission Control start, a=scientist only fits a scientist", null);
+                  && RuntimeLines.TalkFits(goo, "orbit", noNums, crewN, mcN, "pilot"),
+                  "science talk: explicit speakers preserve MC-first order and specialist wording has an other-job fallback", null);
 
-            RuntimeTemplate temp = talks.Find(t => t[0].Id == "rt_st_temperature_a03_1")[0];
+            RuntimeTemplate temp = talks.Find(t => t[0].Id == "st_temperature_a03_1")[0];
             var tempNums = new Dictionary<string, double> { { "temp_c", -12.4 } };
             string tsp = null, ten = null;
             int tv = temp.Versions.FindIndex(v => v[1].Contains("{temp_c}"));
@@ -1511,17 +1915,17 @@ public static class Tests
             var talkErr = new List<string>();
             var talkBad = RuntimeLines.ParseAll(new[] { new KeyValuePair<string, IList<string>>("t.tsv", new List<string> {
                 "id\tkind\twhen\tspanish\tenglish",
-                "rt_st_ok_1\tscience_talk\ton=crewreport a=pilot\tA.\tA.", "rt_st_ok_2\tscience_talk\t\tB.\tB.",
-                "rt_st_one_1\tscience_talk\ton=crewreport\tC.\tC.",
-                "rt_st_noon_1\tscience_talk\t\tD.\tD.", "rt_st_noon_2\tscience_talk\t\tE.\tE.",
-                "rt_st_bjob_1\tscience_talk\ton=science b=pilot\tF.\tF.", "rt_st_bjob_2\tscience_talk\t\tG.\tG.",
-                "rt_st_who_1\tscience_talk\ton=science who=probe\tH.\tH.", "rt_st_who_2\tscience_talk\t\tI.\tI.",
-                "rt_st_late_1\tscience_talk\ton=science\tJ.\tJ.", "rt_st_late_2\tscience_talk\twho=mc\tK.\tK.",
-                "rt_chat_st_1\tscience_talk\ton=science\tL.\tL.", "rt_chat_st_2\tscience_talk\t\tM.\tM." }) }, talkErr);
+                "st_ok_1\tscience_talk\ton=crewreport a=pilot\tA.\tA.", "st_ok_2\tscience_talk\t\tB.\tB.",
+                "st_one_1\tscience_talk\ton=crewreport\tC.\tC.",
+                "st_noon_1\tscience_talk\t\tD.\tD.", "st_noon_2\tscience_talk\t\tE.\tE.",
+                "st_bjob_1\tscience_talk\ton=science b=pilot\tF.\tF.", "st_bjob_2\tscience_talk\t\tG.\tG.",
+                "st_who_1\tscience_talk\ton=science who=probe\tH.\tH.", "st_who_2\tscience_talk\t\tI.\tI.",
+                "st_late_1\tscience_talk\ton=science\tJ.\tJ.", "st_late_2\tscience_talk\twho=mc\tK.\tK.",
+                "chat_st_1\tscience_talk\ton=science\tL.\tL.", "chat_st_2\tscience_talk\t\tM.\tM." }) }, talkErr);
             var okTalks = RuntimeLines.Talks(talkBad);
             string talkErrs = string.Join(" ; ", talkErr.ToArray());
-            Check(okTalks.Count == 1 && okTalks[0][0].Id == "rt_st_ok_1" && okTalks[0][0].TraitA == "pilot"
-                  && System.Linq.Enumerable.All(new[] { "b=pilot", "who=probe", "rt_st_one", "rt_st_noon", "rt_st_late", "rt_chat_st_1" }, talkErrs.Contains),
+            Check(okTalks.Count == 1 && okTalks[0][0].Id == "st_ok_1" && okTalks[0][0].TraitA == "pilot"
+                  && System.Linq.Enumerable.All(new[] { "b=pilot", "who=probe", "st_one", "st_noon", "st_late", "chat_st_1" }, talkErrs.Contains),
                   "science talk: bad talks are reported (one line, no on=, b=, a bad who=, a when after line 1, a chat id)",
                   string.Join(" ; ", talkErr.ToArray()));
 
@@ -1548,8 +1952,8 @@ public static class Tests
 
             // sent or kept: a talk that says the data arrived needs data_sent=1, a kept talk data_sent=0, and that
             // check alone does not make a talk one that only fits now
-            var fresh = talks.Find(t => t[0].Id == "rt_st_fresh_data_1");
-            var keepSafe = talks.Find(t => t[0].Id == "rt_st_keep_safe_1");
+            var fresh = talks.Find(t => t[0].Id == "st_fresh_data_1");
+            var keepSafe = talks.Find(t => t[0].Id == "st_keep_safe_1");
             var sentN = new Dictionary<string, double> { { "data_sent", 1 } };
             var keptN = new Dictionary<string, double> { { "data_sent", 0 } };
             var expCrew = new Dictionary<string, string[]>(crewN) { { "exp", new[] { "x", "goo" } }, { "here", new[] { "x", "Mun" } } };
@@ -1582,18 +1986,23 @@ public static class Tests
                   "science talk: {exp_list} joins the experiments (y, e before an i sound, and more)", l3[0] + " / " + l3[1] + " / " + l5[1]);
         }
         {
-            // the shipped Phrases/Extra tables after the shipped phrases.tsv, as PhraseClips.Build reads them: no bad
+            // the shipped Phrases/Runtime_Probe tables after the shipped phrases.tsv, as PhraseClips.Build reads them: no bad
             // row, no key or scene twice, and every probe core has its runtime-only scenes
             string gdPhrases = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Phrases"));
-            string shipped = System.IO.Path.Combine(gdPhrases, "phrases.tsv");
-            string[] extraPaths = System.IO.Directory.Exists(System.IO.Path.Combine(gdPhrases, "Extra"))
-                ? System.IO.Directory.GetFiles(System.IO.Path.Combine(gdPhrases, "Extra"), "*.tsv") : new string[0];
-            if (System.IO.File.Exists(shipped) && extraPaths.Length > 0)
+            string shipped = System.IO.Path.Combine(gdPhrases, "Crew");
+            string[] extraPaths = System.IO.Directory.Exists(System.IO.Path.Combine(gdPhrases, "Probe"))
+                ? System.IO.Directory.GetFiles(System.IO.Path.Combine(gdPhrases, "Probe"), "*.tsv") : new string[0];
+            if (System.IO.Directory.Exists(shipped) && extraPaths.Length > 0)
             {
                 Array.Sort(extraPaths, StringComparer.Ordinal);
-                var exRows = new List<string>(System.IO.File.ReadAllLines(shipped, System.Text.Encoding.UTF8));
-                foreach (string f in extraPaths) exRows.AddRange(System.IO.File.ReadAllLines(f, System.Text.Encoding.UTF8));
+                var exRows = new List<string>();
                 var exErr = new List<string>();
+                foreach (string folder in new[] { "Crew", "Probe" }) foreach (string f in System.IO.Directory.GetFiles(System.IO.Path.Combine(gdPhrases, folder), "*.tsv"))
+                {
+                    var source = System.IO.File.ReadAllLines(f);
+                    if (RuntimeSceneTable.IsSceneFile(source)) exRows.AddRange(RuntimeSceneTable.Compile(source, f, exErr));
+                    else if (folder == "Probe") exRows.AddRange(ProbeRuntimeTable.Parse(source, f, exErr).SceneRows);
+                }
                 PhraseTable ex = PhraseTable.Parse(exRows, exErr);
                 var perCore = new Dictionary<string, int>();
                 foreach (PhraseScene sc in ex.Scenes)
@@ -1605,10 +2014,10 @@ public static class Tests
                 var pc = new List<string>();
                 foreach (var kv in perCore) pc.Add(kv.Key + " " + kv.Value);
                 Check(exErr.Count == 0 && allCores,
-                      "runtime voice: shipped Phrases/Extra parses after phrases.tsv, runtime probe scenes per core (" + string.Join(", ", pc.ToArray()) + ")",
+                      "runtime voice: shipped Phrases/Runtime_Probe parses after phrases.tsv, runtime probe scenes per core (" + string.Join(", ", pc.ToArray()) + ")",
                       string.Join(" ; ", exErr.Count > 5 ? exErr.GetRange(0, 5).ToArray() : exErr.ToArray()));
             }
-            else Console.WriteLine("SKIP  runtime voice: no shipped phrases.tsv or Phrases/Extra");
+            else Console.WriteLine("SKIP  runtime voice: no shipped phrases.tsv or Phrases/Runtime_Probe");
         }
         {
             // a report that talks to one kerbal by name gets a reply of its own (to=), not only the generic ones
@@ -1629,7 +2038,7 @@ public static class Tests
             int tourReports = 0, tourReplies = 0, tourA = 0, tourB = 0, tourPair = 0;
             foreach (RuntimeTemplate t in rtAll)
             {
-                if (t.Kind == "report" && t.Where.StartsWith("crew.tsv") && !t.Id.StartsWith("rt_crew_tourist"))
+                if (t.Kind == "report" && t.Where.StartsWith("crew.tsv") && !t.Id.StartsWith("crew_tourist"))
                 {
                     bool gated = false;
                     foreach (var c in t.Checks) if (c.Key == "is_tourist" && c.Value.Value == 0) gated = true;
@@ -1649,10 +2058,10 @@ public static class Tests
                   string.Join(" ", careerOpen.ToArray()));
         }
         var rtBadErr = new List<string>();
-        RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
-            "rt_b\tnope\t\tB.\tB.", "rt_c\treport\t\tC {fuel}.\tC.", "rt_d\treport\t\tD {nothing}.\tD {nothing}.", "x_e\treport\t\tE.\tE.",
-            "rt_f\treport\torbit fuel>=2\tF {fuel}.\tF {fuel}.", "rt_f\treport\t\tF.\tF.",
-            "rt_g\treport\t\tG. | G2.\tG.", "rt_h\treport\t\tH {fuel}. | H.\tH {fuel}. | H {ec}." }, rtBadErr);
+        RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "a\treport\tfuel<<2\tA {fuel}.\tA {fuel}.",
+            "b\tnope\t\tB.\tB.", "c\treport\t\tC {fuel}.\tC.", "d\treport\t\tD {nothing}.\tD {nothing}.", "BadId\treport\t\tE.\tE.",
+            "f\treport\torbit fuel>=2\tF {fuel}.\tF {fuel}.", "f\treport\t\tF.\tF.",
+            "g\treport\t\tG. | G2.\tG.", "h\treport\t\tH {fuel}. | H.\tH {fuel}. | H {ec}." }, rtBadErr);
         Check(rtBadErr.Count == 8, "runtime voice: bad template rows are reported (condition, kind, slots differ, unknown slot, id, duplicate, version count, version slots)",
               rtBadErr.Count + ": " + string.Join(" ; ", rtBadErr.ToArray()));
 
@@ -1661,22 +2070,23 @@ public static class Tests
         var nms = new Dictionary<string, string[]> { { "body", new[] { "Kérbin", "Kerbin" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
         var orbit = RuntimeLines.Fitting(rtAll, "report", "orbit", vals, nms);
         string rs, re;
-        RuntimeTemplate t0 = rtAll.Find(t => t.Id == "rt_orbit");
+        RuntimeTemplate t0 = rtAll.Find(t => t.Id == "orbit");
         bool filled = t0 != null && RuntimeLines.Fill(t0, vals, nms, out rs, out re)
                       && re == "Stable orbit. Periapsis 80 km, apoapsis 91 km."
                       && RuntimeSpeech.Spoken(rs) == LonapseText.ReverseText("Órbita estable. Periapsis ochenta kilómetros, apoapsis noventa y un kilómetros.");
         Check(filled, "runtime voice: an orbit report, numbers in reversed Spanish words, digits in the subtitle",
-              t0 == null ? "no rt_orbit" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
+              t0 == null ? "no orbit" : (RuntimeLines.Fill(t0, vals, nms, out rs, out re) ? RuntimeSpeech.Spoken(rs) + " / " + re : "fill failed"));
         var ids = new List<string>();
         foreach (RuntimeTemplate t in orbit) ids.Add(t.Id);
-        Check(!ids.Contains("rt_flight") && !ids.Contains("rt_fuel_low") && !ids.Contains("rt_orbit_inc") && !ids.Contains("rt_node")
-              && ids.Contains("rt_fuel") && ids.Contains("rt_vessel") && ids.Contains("rt_orbit_eq") && ids.Contains("rt_ec_ok")
+        Check(!ids.Contains("flight") && !ids.Contains("fuel_low") && !ids.Contains("orbit_inc") && !ids.Contains("node")
+              && ids.Contains("fuel") && ids.Contains("vessel") && ids.Contains("orbit_eq") && ids.Contains("ec_ok")
               && RuntimeLines.Fitting(rtAll, "report", "landed", new Dictionary<string, double>(), new Dictionary<string, string[]>()).Count == 0,
               "runtime voice: templates fit the situation, the checks and the values there are", string.Join(", ", ids.ToArray()));
 
         // every template fills with every value, the check bounds are respected by a value that fits them
         var full = new Dictionary<string, double>();
         foreach (string k in RuntimeLines.NumberSlots) full[k] = 50;
+        foreach (var value in ProbeContext.StressValues(Calm(), 0.8f, true)) full[value.Key] = value.Value;
         var fullN = new Dictionary<string, string[]>();
         foreach (string k in RuntimeLines.NameSlots) fullN[k] = new[] { "Nombre", "Name" };
         var badT = new List<string>();
@@ -1691,6 +2101,43 @@ public static class Tests
         }
         Check(badT.Count == 0, "runtime voice: every version of every template fills and speaks cleanly (" + rtVersions + ")", string.Join(" ; ", badT.ToArray()));
         {
+            var stressFixture = Calm(); stressFixture.qKPa = 36; stressFixture.omega = 2; stressFixture.g = 4;
+            stressFixture.heatRatio = 0.85; stressFixture.h = 800; stressFixture.vs = -35; stressFixture.fuelFrac = 0.08;
+            int stressVersions = 0;
+            foreach (string stressCause in new[] { "q", "heat", "spin", "gforce", "fuel", "ground", "plasma", "impulse", "engine_out", "any" })
+                foreach (bool stressPanic in new[] { false, true })
+                {
+                    var stressNums = ProbeContext.StressValues(stressFixture, stressPanic ? 0.9f : 0.5f, stressPanic);
+                    var stressFit = RuntimeLines.Fitting(rtAll, "event", "flight", stressNums, fullN)
+                        .FindAll(line => line.On.Contains("probe.stress_" + stressCause));
+                    bool clean = stressFit.Count == 1 && stressFit[0].Versions.Count >= 3;
+                    foreach (RuntimeTemplate line in stressFit)
+                        for (int version = 0; version < line.Versions.Count; version++)
+                        {
+                            string spokenStress, subtitleStress;
+                            clean &= RuntimeLines.Fill(line, version, stressNums, fullN, out spokenStress, out subtitleStress);
+                            stressVersions++;
+                        }
+                    Check(clean, "runtime probe stress: " + stressCause + (stressPanic ? " panic" : " tense") + " has three fillable versions and excludes the other band", null);
+                }
+            Check(stressVersions >= 60, "runtime probe stress has at least sixty bilingual variants", stressVersions.ToString());
+            var stressBefore = ProbeContext.StressValues(stressFixture, 0.6f, false);
+            Near(stressBefore["x_spin_rpm"], 60 / Math.PI, 0.001, "runtime probe spin converts radians per second to rpm");
+            stressFixture.qKPa = 4;
+            Check(!ProbeContext.StressReadingFresh(stressBefore, ProbeContext.StressValues(stressFixture, 0.5f, false), "q"), "runtime probe discards pressure readings after a large change", null);
+            stressFixture.qKPa = double.NaN;
+            Check(!ProbeContext.StressValues(stressFixture, 0.5f, false).ContainsKey("x_q_kpa"), "runtime probe does not speak invalid telemetry", null);
+            Check(ProbeContext.StressCause("custom_cause") == "any", "unknown probe stress causes use neutral fallback wording", null);
+            var sharedProbeCooldown = new ProbeRepeatCooldown();
+            sharedProbeCooldown.Stamp("probe_stress_q", "probe_stress", "q", 0);
+            Check(!sharedProbeCooldown.Allowed("pp_stress_q_any", "probe_stress", "q", 4, 45, 600), "runtime pressure warning prevents immediate recorded pressure fallback", null);
+            sharedProbeCooldown.Clear(); sharedProbeCooldown.Stamp("pp_stress_q_any", "probe_stress", "q", 0);
+            Check(!sharedProbeCooldown.Allowed("probe_stress_q", "probe_stress", "q", 4, 45, 600), "recorded pressure warning prevents immediate runtime pressure fallback", null);
+            Check(RuntimeDelivery.KindFor("mc", "tense", "chatter", "probe_stress") == "mc.tense"
+                && RuntimeDelivery.KindFor("mc", "panic", "chatter", "probe_stress") == "mc.mc_panic", "runtime probe stress uses tense and controlled panic MC deliveries", null);
+        }
+
+        {
             // versions: only the ones whose slots have a value are picked
             var vt = RuntimeLines.Parse(new List<string> { "kind\tid\twhen\tnote\tenglish\tspanish",
                 "report\trt_v\t\tany note\tA {fuel}. | B {ec}. | C.\tA {fuel}. | B {ec}. | C." }, null);
@@ -1699,8 +2146,8 @@ public static class Tests
                   "runtime voice: columns by name, and a template only picks the versions it can fill", fv == null ? "parse failed" : string.Join(",", fv.ConvertAll(vx => vx.ToString()).ToArray()));
             var dupErr = new List<string>();
             RuntimeLines.ParseAll(new[] {
-                new KeyValuePair<string, IList<string>>("a.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_1\tchat\t\tS.\tS." }),
-                new KeyValuePair<string, IList<string>>("b.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_x\treport\t\tX.\tX.", "rt_chat_s_2\tchat\t\tS.\tS." }) }, dupErr);
+                new KeyValuePair<string, IList<string>>("a.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "x\treport\t\tX.\tX.", "chat_s_1\tchat\t\tS.\tS." }),
+                new KeyValuePair<string, IList<string>>("b.tsv", new List<string> { "id\tkind\twhen\tspanish\tenglish", "x\treport\t\tX.\tX.", "chat_s_2\tchat\t\tS.\tS." }) }, dupErr);
             Check(dupErr.Count == 2, "runtime voice: an id is unique over all files, a chat stays in one file", string.Join(" ; ", dupErr.ToArray()));
         }
         Check(RuntimeLines.BiomeSpeakable("Highlands") == "Highlands" && RuntimeLines.BiomeSpeakable("Northern Basin") == "Northern Basin"
@@ -1720,8 +2167,8 @@ public static class Tests
             // personas in chats: a=dim b=brave, several keys for one kerbal must all hold
             var pErr = new List<string>();
             var pChats = RuntimeLines.Chats(RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
-                "rt_chat_p_1\tchat\ta=dim a=pilot b=brave\tP.\tP.", "rt_chat_p_2\tchat\t\tP.\tP.",
-                "rt_chat_q_1\tchat\ta=clever\tQ.\tQ.", "rt_chat_q_2\tchat\t\tQ.\tQ." }, pErr));
+                "chat_p_1\tchat\ta=dim a=pilot b=brave\tP.\tP.", "chat_p_2\tchat\t\tP.\tP.",
+                "chat_q_1\tchat\ta=clever\tQ.\tQ.", "chat_q_2\tchat\t\tQ.\tQ." }, pErr));
             var pc = pChats.Count == 1 ? pChats[0] : null;
             var pn = new Dictionary<string, double>();
             bool personaOk = pc != null && pErr.Count == 2
@@ -1733,11 +2180,11 @@ public static class Tests
             var rec = new RuntimeTemplate("cm_001", RuntimeLines.RecordedKind, "", "");
             var rRec = RuntimeLines.Replies(rtAll, rec, "orbit", new Dictionary<string, double>(),
                 new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } } }).ConvertAll(t => t.Id);
-            RuntimeTemplate sunT = rtAll.Find(t => t.Id == "rt_sunrise_count");
+            RuntimeTemplate sunT = rtAll.Find(t => t.Id == "sunrise_count");
             var rSun = RuntimeLines.Replies(rtAll, sunT, "orbit", new Dictionary<string, double>(),
                 new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } } }).ConvertAll(t => t.Id);
-            Check(shadowOk && personaOk && rRec.Contains("rt_re_any") && !rRec.Contains("rt_re_fuel") && !rRec.Contains("rt_re_sunrise")
-                  && rSun.Contains("rt_re_sunrise") && rSun.Contains("rt_re_any"),
+            Check(shadowOk && personaOk && rRec.Contains("re_any") && !rRec.Contains("re_fuel") && !rRec.Contains("re_sunrise")
+                  && rSun.Contains("re_sunrise") && rSun.Contains("re_any"),
                   "runtime voice: sunrise shadow test, persona checks in chats, replies to sunrise and recorded MC lines",
                   "shadow " + shadowOk + " persona " + personaOk + " (" + string.Join(" ; ", pErr.ToArray()) + ") / " + string.Join(",", rRec.ToArray()) + " / " + string.Join(",", rSun.ToArray()));
         }
@@ -1746,33 +2193,62 @@ public static class Tests
             var rn = new Dictionary<string, string[]> { { "self", new[] { "Yeb", "Jeb" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } },
                                                         { "body", new[] { "Kérbin", "Kerbin" } } };
             var rv = new Dictionary<string, double> { { "fuel", 12 }, { "crew", 3 } };
-            RuntimeTemplate fuelLow = rtAll.Find(t => t.Id == "rt_fuel_low"), dockFar = rtAll.Find(t => t.Id == "rt_dock_far"),
-                            orbitInc = rtAll.Find(t => t.Id == "rt_orbit_inc"), sciPts = rtAll.Find(t => t.Id == "rt_sci_pts");
+            RuntimeTemplate fuelLow = rtAll.Find(t => t.Id == "fuel_low"), dockFar = rtAll.Find(t => t.Id == "dock_far"),
+                            orbitInc = rtAll.Find(t => t.Id == "orbit_inc"), sciPts = rtAll.Find(t => t.Id == "sci_pts");
             var rFuel = RuntimeLines.Replies(rtAll, fuelLow, "orbit", rv, rn).ConvertAll(t => t.Id);
             var rDock = RuntimeLines.Replies(rtAll, dockFar, "orbit", rv, rn).ConvertAll(t => t.Id);
             var rOrbit = RuntimeLines.Replies(rtAll, orbitInc, "orbit", rv, rn).ConvertAll(t => t.Id);
             var rSci = RuntimeLines.Replies(rtAll, sciPts, "orbit", rv, rn).ConvertAll(t => t.Id);
             var toErr = new List<string>();
-            RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "rt_r1\treport\tto=rt_fuel\tA.\tA.",
-                "rt_r2\treply\tto=fuel\tB.\tB.", "rt_r3\treply\tto=rt_fuel* to=rt_ec\tC.\tC." }, toErr);
-            Check(rFuel.Contains("rt_re_fuel_low") && rFuel.Contains("rt_re_any") && rFuel.Contains("rt_re_vessel") && !rFuel.Contains("rt_re_fuel")
-                  && rDock.Count == 0 && rOrbit.Contains("rt_re_orbit") && rSci.Contains("rt_re_sci") && !rSci.Contains("rt_re_any")
-                  && toErr.Count == 2,
+            var toParsed = RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish", "r1\treport\tto=fuel\tA.\tA.",
+                "r2\treply\tto=fuel\tB.\tB.", "r3\treply\tto=fuel* to=ec\tC.\tC." }, toErr);
+            Check(rFuel.Contains("re_fuel_low") && rFuel.Contains("re_any") && rFuel.Contains("re_vessel") && !rFuel.Contains("re_fuel")
+                  && rDock.Count == 0 && rOrbit.Contains("re_orbit") && rSci.Contains("re_sci") && !rSci.Contains("re_any")
+                  && toErr.Count == 1 && toParsed.Count == 2,
                   "runtime voice: crew replies answer their own MC lines, the general ones any report",
                   string.Join(",", rFuel.ToArray()) + " / dock " + rDock.Count + " / " + string.Join(",", rOrbit.ToArray()) + " / " + string.Join(",", rSci.ToArray())
                   + " / " + string.Join(" ; ", toErr.ToArray()));
             {
-                var en = new Dictionary<string, double> { { "jet", 80 }, { "ship_m", 120 }, { "eva_mins", 6 }, { "at_home", 0 }, { "day", 3 } };
+                var en = new Dictionary<string, double> { { "splashed", 0 }, { "eva_grounded", 1 }, { "eva_thrusting", 0 }, { "jet", 80 }, { "ship_m", 120 }, { "eva_mins", 6 }, { "at_home", 0 }, { "day", 3 } };
                 var enm = new Dictionary<string, string[]> { { "kerbal", new[] { "Yeb", "Jeb" } }, { "here", new[] { "Mun", "Mun" } },
                                                             { "biome", new[] { "Midlands", "Midlands" } }, { "vessel", new[] { "Kerbal X", "Kerbal X" } } };
                 var evaFit = RuntimeLines.Fitting(rtAll, "eva", "landed", en, enm).ConvertAll(t => t.Id);
-                RuntimeTemplate flagNamed = rtAll.Find(t => t.Id == "rt_flag_named");
+                var orbitNums = new Dictionary<string, double>(en) { { "tag_orbit", 1 } };
+                orbitNums["eva_grounded"] = 0;
+                RuntimeTemplate evaGeneric = rtAll.Find(t => t.Id == "eva");
+                var orbitVersions = RuntimeLines.FillableVersions(evaGeneric, orbitNums, enm);
+                Check(!orbitVersions.Exists(i => evaGeneric.Versions[i][1].Contains("one foot")),
+                      "EVA: orbital and ladder reports cannot select the walking alternative", null);
+                orbitNums["eva_thrusting"] = 1;
+                var thrusting = RuntimeLines.Fitting(rtAll, "eva", "orbit", orbitNums, enm);
+                orbitNums["eva_thrusting"] = 0;
+                var coasting = RuntimeLines.Fitting(rtAll, "eva", "orbit", orbitNums, enm);
+                Check(thrusting.Exists(t => t.Id == "eva_jet_orbit") && !coasting.Exists(t => t.Id == "eva_jet_orbit"),
+                      "EVA: orbital jetpack lines require active thrust, without a body restriction", null);
+                var waterNums = new Dictionary<string, double>(en) { { "tag_landed", 1 }, { "link", 1 } };
+                waterNums["splashed"] = 1; waterNums["eva_grounded"] = 0;
+                var waterReports = RuntimeLines.Fitting(rtAll, "eva", "landed", waterNums, enm);
+                Check(waterReports.Exists(t => t.Id == "eva_water") && !waterReports.Exists(t => t.Id == "eva_landed"),
+                      "EVA: splashed reports select water lines and exclude dry ground", null);
+                var waterNames = new Dictionary<string, string[]>(enm) { { "self", new[] { "Yeb", "Jeb" } } };
+                foreach (string topic in new[] { "evareport", "surfacesample" })
+                {
+                    var waterTalks = RuntimeLines.Talks(rtAll).FindAll(t => t[0].On.Contains(topic)
+                        && RuntimeLines.TalkFits(t, "landed", waterNums, waterNames, enm, "scientist"));
+                    Check(waterTalks.Count == 3 && waterTalks.TrueForAll(t => t[0].Id.Contains("_water")),
+                          "water science: " + topic + " uses complete water exchanges, with no rock or walking scenes", waterTalks.Count.ToString());
+                    var waterChats = RuntimeLines.Chats(rtAll).FindAll(t => t[0].On.Contains(topic)
+                        && RuntimeLines.ChatFits(t, "landed", waterNums, waterNames, waterNames));
+                    Check(waterChats.Exists(t => t[0].Id == "chat_" + topic + "_water"),
+                          "water science: " + topic + " has a suitable event chat too", null);
+                }
+                RuntimeTemplate flagNamed = rtAll.Find(t => t.Id == "flag_named");
                 var fn = new Dictionary<string, string[]>(enm) { { "flag", new[] { "Bob", "Bob" } }, { "self", new[] { "Yeb", "Jeb" } } };
                 var flagRe = flagNamed != null ? RuntimeLines.Replies(rtAll, flagNamed, "landed", en, fn).ConvertAll(t => t.Id) : new List<string>();
                 var noFlag = RuntimeLines.Fitting(rtAll, "flag", "landed", en, enm).ConvertAll(t => t.Id);
-                Check(evaFit.Contains("rt_eva_far") && evaFit.Contains("rt_eva_jet") && evaFit.Contains("rt_eva_away") && evaFit.Contains("rt_eva_time")
-                      && !evaFit.Contains("rt_eva_near") && !evaFit.Contains("rt_eva_jet_low") && !evaFit.Contains("rt_eva_orbit")
-                      && flagRe.Contains("rt_re_flag_named") && flagRe.Contains("rt_re_flag") && !noFlag.Contains("rt_flag_named") && noFlag.Contains("rt_flag_ship"),
+                Check(evaFit.Contains("eva_far") && evaFit.Contains("eva_jet") && evaFit.Contains("eva_away") && evaFit.Contains("eva_time")
+                      && !evaFit.Contains("eva_near") && !evaFit.Contains("eva_jet_low") && !evaFit.Contains("eva_orbit")
+                      && flagRe.Contains("re_flag_named") && flagRe.Contains("re_flag") && !noFlag.Contains("flag_named") && noFlag.Contains("flag_ship"),
                       "runtime voice: EVA lines fit the jetpack, the ship distance and the time outside. Flag lines get the planter's answer",
                       string.Join(",", evaFit.ToArray()) + " / " + string.Join(",", flagRe.ToArray()));
             }
@@ -1785,7 +2261,7 @@ public static class Tests
                 nb["other"] = new[] { "Yeb", "Jeb" };
                 var onEva = new Dictionary<string, double> { { "on_eva", 1 }, { "pair_m", 50 }, { "jet", 20 }, { "ship_m", 80 }, { "eva_mins", 12 } };
                 var inside = new Dictionary<string, double> { { "fuel", 50 }, { "crew", 2 } };
-                List<RuntimeTemplate> pair = evaChats.Find(c => c[0].Id == "rt_chat_evapair_1");
+                List<RuntimeTemplate> pair = evaChats.Find(c => c[0].Id == "chat_evapair_1");
                 bool evaFits = pair != null && RuntimeLines.ChatFits(pair, "landed", onEva, na, nb, "pilot", "scientist");
                 bool insideFits = evaChats.Exists(c => RuntimeLines.ChatFits(c, "landed", inside, na, nb, "pilot brave", "scientist nervous"));
                 Check(evaChats.Count >= 12 && evaFits && !insideFits,
@@ -1801,8 +2277,8 @@ public static class Tests
                 var se = apartChats.FindAll(c => RuntimeLines.ChatFits(c, "landed", shipToEva, na2, nb2)).ConvertAll(c => c[0].Id);
                 var es = apartChats.FindAll(c => RuntimeLines.ChatFits(c, "landed", evaToShip, nb2, na2)).ConvertAll(c => c[0].Id);
                 bool noApartInside = !apartChats.Exists(c => RuntimeLines.ChatFits(c, "landed", inside, na, nb));
-                Check(apartChats.Count >= 12 && se.Contains("rt_chat_rshipeva_1") && !se.Contains("rt_chat_rjet_1")
-                      && es.Contains("rt_chat_rjet_1") && !es.Contains("rt_chat_rshipeva_1") && !se.Contains("rt_chat_rnolink_1") && noApartInside
+                Check(apartChats.Count >= 12 && se.Contains("chat_rshipeva_1") && !se.Contains("chat_rjet_1")
+                      && es.Contains("chat_rjet_1") && !es.Contains("chat_rshipeva_1") && !se.Contains("chat_rnolink_1") && noApartInside
                       && !apartChats.Exists(c => c[0].AboutEva || c[0].IsEvent),
                       "runtime voice: radio chats between two vessels fit the side of each kerbal, never in one cabin",
                       apartChats.Count + " radio chats, ship to EVA " + string.Join(",", se.ToArray()) + " / EVA to ship " + string.Join(",", es.ToArray()));
@@ -1810,7 +2286,7 @@ public static class Tests
                 // event chats: only on their event, one line for a kerbal alone, link picks Control or not
                 var ev = allChats.FindAll(c => c[0].IsEvent);
                 Func<string, bool, double, List<string>> evFit = (e, alone, link) => ev.FindAll(c => RuntimeLines.OnFits(c[0], e) && alone == (c.Count == 1)
-                    && RuntimeLines.ChatFits(c, "landed", new Dictionary<string, double> { { "link", link }, { "at_home", 0 } },
+                    && RuntimeLines.ChatFits(c, "landed", new Dictionary<string, double> { { "splashed", 0 }, { "link", link }, { "at_home", 0 } },
                         new Dictionary<string, string[]>(na) { { "here", new[] { "la Mun", "Mun" } }, { "exp", new[] { "x", "surface sample" } },
                                                                { "device", new[] { "x", "the antenna" } } }, nb)).ConvertAll(c => c[0].Id);
                 List<string> sampleLink = evFit("surfacesample", true, 1), sampleNo = evFit("surfacesample", true, 0),
@@ -1818,23 +2294,23 @@ public static class Tests
                              deploy = evFit("deploy", true, 1), tempNo = evFit("temperaturescan", true, 0);
                 bool noControlWithoutLink = !ev.Exists(c => c[0].Checks.Exists(k => k.Key == "link" && k.Value.Value == 0)
                                                             && c.Exists(l => l.Versions.Exists(vv => System.Text.RegularExpressions.Regex.IsMatch(vv[1], @"\bControl\b"))));
-                Check(ev.Count >= 15 && sampleLink.Contains("rt_chat_ssample_1") && !sampleLink.Contains("rt_chat_ssamplenolink_1")
-                      && sampleNo.Contains("rt_chat_ssamplenolink_1") && flagAloneLink.Count == 0 && flagAloneNo.Contains("rt_chat_fsolo_1")
-                      && flagPair.Contains("rt_chat_fflag_1") && deploy.Contains("rt_chat_sdeploy_1") && tempNo.Contains("rt_chat_snolink_1")
-                      && !tempNo.Contains("rt_chat_ssamplenolink_1") && noControlWithoutLink
-                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "rt_chat_snolink_1")[0], "flag")
-                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "rt_chat_snolink_1")[0], "deploy"),
+                Check(ev.Count >= 15 && sampleLink.Contains("chat_ssample_1") && !sampleLink.Contains("chat_ssamplenolink_1")
+                      && sampleNo.Contains("chat_ssamplenolink_1") && flagAloneLink.Count == 0 && flagAloneNo.Contains("chat_fsolo_1")
+                      && flagPair.Contains("chat_fflag_1") && deploy.Contains("chat_sdeploy_1") && tempNo.Contains("chat_snolink_1")
+                      && !tempNo.Contains("chat_ssamplenolink_1") && noControlWithoutLink
+                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "chat_snolink_1")[0], "flag")
+                      && !RuntimeLines.OnFits(ev.Find(c => c[0].Id == "chat_snolink_1")[0], "deploy"),
                       "runtime voice: event chats play on their event, alone one line, without a link never to Control",
                       ev.Count + " event chats; sample " + string.Join(",", sampleLink.ToArray()) + " / " + string.Join(",", sampleNo.ToArray())
                       + "; flag " + string.Join(",", flagAloneNo.ToArray()) + " / " + string.Join(",", flagPair.ToArray()));
                 var sciOn = rtAll.FindAll(t => (t.Kind == "science" || t.Kind == "science_pts") && t.On.Count > 0).ConvertAll(t => t.Id);
-                Check(sciOn.Contains("rt_sci_sample_pts") && sciOn.Contains("rt_sci_deploy") && sciOn.Contains("rt_sci_evarep"),
+                Check(sciOn.Contains("sci_sample_pts") && sciOn.Contains("sci_deploy") && sciOn.Contains("sci_evarep"),
                       "runtime voice: Mission Control has science lines for the EVA experiments and deployed parts", string.Join(",", sciOn.ToArray()));
                 var oneErr = new List<string>();
                 var one = RuntimeLines.ParseAll(new[] { new KeyValuePair<string, IList<string>>("a.tsv", new List<string> {
-                    "id\tkind\twhen\tspanish\tenglish", "rt_chat_ok_1\tchat\ton=flag\tA.\tA.", "rt_chat_bad_1\tchat\t\tB.\tB.",
-                    "rt_x\treport\ton=flag\tX.\tX.", "rt_chat_ev_1\tchat\ton=nothing\tE.\tE." }) }, oneErr);
-                Check(one.Count == 1 && one[0].Id == "rt_chat_ok_1" && oneErr.Count == 3,
+                    "id\tkind\twhen\tspanish\tenglish", "chat_ok_1\tchat\ton=flag\tA.\tA.", "chat_bad_1\tchat\t\tB.\tB.",
+                    "x\treport\ton=flag\tX.\tX.", "chat_ev_1\tchat\ton=nothing\tE.\tE." }) }, oneErr);
+                Check(one.Count == 1 && one[0].Id == "chat_ok_1" && oneErr.Count == 3,
                       "runtime voice: an event chat may have one line, a normal chat not, on= only on chats and science, known events only",
                       string.Join(" ; ", oneErr.ToArray()));
             }
@@ -1846,6 +2322,7 @@ public static class Tests
                     System.IO.File.ReadAllLines(exPath, System.Text.Encoding.UTF8)));
                 var modErr = new List<string>();
                 List<RuntimeTemplate> withMod = RuntimeLines.ParseAll(modFiles, modErr);
+                withMod.AddRange(rtAll.FindAll(t => t.ProbeLines != null));
                 var mine = withMod.FindAll(t => t.Where.StartsWith("ExampleMod/", StringComparison.Ordinal));
                 ModEventInfo repair = ModEvents.Info(withMod, "examplemod.repair_done");
                 ModEventInfo supplies = ModEvents.Info(withMod, "examplemod.supplies_low");
@@ -1857,6 +2334,20 @@ public static class Tests
                       && !ModEvents.Info(withMod, "examplemod.nothing").HasLines && modIds.Count == 3 && modIds[0] == "examplemod.experiment_done",
                       "mod API: the example mod file parses next to the Lonapse files, with its meta settings",
                       mine.Count + " mod templates; " + string.Join(" ; ", modErr.ToArray()));
+                var repairOpener = mine.Find(t => t.Id == "chat_examplemod_repair_1").Dialogue;
+                var repairNames = new Dictionary<string, string[]> { { "other", new[] { "Bob", "Bob" } },
+                    { "x_part", new[] { "la antena", "the antenna" } } };
+                var repairNumbers = new Dictionary<string, double>();
+                RuntimeLines.ActorConditions(repairNumbers, "engineer nervous", "scientist");
+                var expertRepair = repairOpener.Matching(repairNumbers, repairNames);
+                RuntimeLines.ActorConditions(repairNumbers, "pilot", "scientist");
+                var cautiousRepair = repairOpener.Matching(repairNumbers, repairNames);
+                RuntimeLines.ActorConditions(repairNumbers, "pilot nervous", "scientist");
+                var nervousRepair = repairOpener.Matching(repairNumbers, repairNames);
+                Check(expertRepair.Count == 1 && repairOpener.Alternatives[expertRepair[0]].Id == "chat_examplemod_repair_1"
+                    && cautiousRepair.Count == 1 && repairOpener.Alternatives[cautiousRepair[0]].Id == "chat_examplemod_repair_1__v02"
+                    && nervousRepair.Count == 1 && repairOpener.Alternatives[nervousRepair[0]].Id == "chat_examplemod_repair_1__nervous",
+                    "API examples: repair wording distinguishes profession from personality and prefers the matching trait", null);
                 // DeepFreeze: the lines Lonapse ships in Compat/DeepFreeze, read as that mod's files
                 {
                     string dfPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(here, "../../GameData/Lonapse/Compat/DeepFreeze/deepfreeze.tsv"));
@@ -1894,24 +2385,24 @@ public static class Tests
                                 dfBad.Add(t.Id + " version " + (v + 1) + " does not fill");
                         }
                     }
-                    Check(dfBad.Count == 0 && dfCount >= 50 && !rtAll.Exists(t => t.Id.StartsWith("rt_deepfreeze") || t.Id.StartsWith("rt_chat_deepfreeze")),
+                    Check(dfBad.Count == 0 && dfCount >= 50 && !rtAll.Exists(t => t.Id.StartsWith("deepfreeze") || t.Id.StartsWith("chat_deepfreeze")),
                           "DeepFreeze: the Compat lines parse as the mod DeepFreeze, frozen, thawed and comatose for one, two and a group have chats, Mission Control lines and replies, no cooldown ("
                           + dfCount + ")", string.Join(" ; ", dfBad.ToArray()));
                 }
 
                 // mod events never mix with the stock events, the stock lines never answer them
-                RuntimeTemplate anySci = withMod.Find(t => t.Id == "rt_chat_snolink_1");
-                RuntimeTemplate modChat = withMod.Find(t => t.Id == "rt_chat_examplemod_repair_1");
+                RuntimeTemplate anySci = withMod.Find(t => t.Id == "chat_snolink_1");
+                RuntimeTemplate modChat = withMod.Find(t => t.Id == "chat_examplemod_repair_1");
                 Check(anySci != null && modChat != null && !RuntimeLines.OnFits(anySci, "examplemod.repair_done")
                       && RuntimeLines.OnFits(modChat, "examplemod.repair_done") && !RuntimeLines.OnFits(modChat, "examplemod.supplies_low")
                       && !RuntimeLines.OnFits(modChat, "flag") && !withMod.Exists(t => t.Kind == "reply" && t.To.Count == 0
-                          && RuntimeLines.Answers(t, "rt_examplemod_repair", "event")),
+                          && RuntimeLines.Answers(t, "examplemod_repair", "event")),
                       "mod API: a mod event only fits its own lines, and only its own replies answer it", "");
 
                 // a mod experiment through stock science: the experiment row names its topic and the words of {exp}
-                RuntimeTemplate soilSci = withMod.Find(t => t.Id == "rt_sci_examplemod_soil");
+                RuntimeTemplate soilSci = withMod.Find(t => t.Id == "sci_examplemod_soil");
                 RuntimeTemplate stockSci = withMod.Find(t => t.On.Contains("science"));
-                RuntimeTemplate soilChat = withMod.Find(t => t.Id == "rt_chat_examplemod_soil_1");
+                RuntimeTemplate soilChat = withMod.Find(t => t.Id == "chat_examplemod_soil_1");
                 string soilTopic = RuntimeLines.ScienceTopic(withMod, "exampleSoil@KerbinSrfLandedShores");
                 string soilGen = RuntimeLines.GeneralOf(withMod, soilTopic);
                 Check(soilTopic == "examplemod.soil" && RuntimeLines.ScienceTopic(withMod, "crewReport@KerbinFlyingLow") == "crewreport"
@@ -1933,8 +2424,8 @@ public static class Tests
                 string drill = RuntimeLines.DeviceTopic(withMod, "exampleDrillRig");
                 string drillGen = RuntimeLines.GeneralOf(withMod, drill);
                 RuntimeTemplate deployChat = withMod.Find(t => t.Kind == "chat" && t.On.Contains("deploy"));
-                RuntimeTemplate drillSci = withMod.Find(t => t.Id == "rt_sci_examplemod_drill");
-                RuntimeTemplate salvage = withMod.Find(t => t.Id == "rt_con_examplemod_salvage");
+                RuntimeTemplate drillSci = withMod.Find(t => t.Id == "sci_examplemod_drill");
+                RuntimeTemplate salvage = withMod.Find(t => t.Id == "con_examplemod_salvage");
                 Check(drill == "examplemod.drill" && drillGen == "deploy" && RuntimeLines.DeviceTopic(withMod, "DeployedRTG") == "deploy"
                       && RuntimeLines.DeviceWords(withMod, "exampleDrillRig", "part")[1] == "the drill rig"
                       && RuntimeLines.DeviceWords(withMod, "DeployedRTG", "power")[1] == "the generator"
@@ -1958,15 +2449,15 @@ public static class Tests
                 // x_ slots: numbers in Spanish words and digits, names as "spanish|english", checks on x_ values
                 var xn = new Dictionary<string, double> { { "x_days", 4 } };
                 var xs = new Dictionary<string, string[]> { { "other", new[] { "Bil", "Bill" } } };
-                RuntimeTemplate sup = withMod.Find(t => t.Id == "rt_examplemod_supplies");
-                RuntimeTemplate one = withMod.Find(t => t.Id == "rt_examplemod_supplies_one");
+                RuntimeTemplate sup = withMod.Find(t => t.Id == "examplemod_supplies");
+                RuntimeTemplate one = withMod.Find(t => t.Id == "examplemod_supplies_one");
                 string es0, en0;
                 bool supFill = sup != null && RuntimeLines.Fill(sup, 0, xn, xs, out es0, out en0)
                                && en0 == "You have supplies for 4 days. Plan the trip home."
                                && RuntimeSpeech.Spoken(es0).Contains(LonapseText.ReverseText("cuatro"));
                 string[] nm = ModEvents.SplitName("el grifo|the tap");
                 var expNames = new Dictionary<string, string[]> { { "x_experiment", ModEvents.SplitName("plant growth") }, { "kerbal", new[] { "Yeb", "Jeb" } } };
-                RuntimeTemplate et = withMod.Find(t => t.Id == "rt_examplemod_experiment");
+                RuntimeTemplate et = withMod.Find(t => t.Id == "examplemod_experiment");
                 Check(supFill && RuntimeLines.Fitting(withMod, "event", "orbit", xn, xs).Contains(sup)
                       && !RuntimeLines.Fitting(withMod, "event", "orbit", xn, xs).Contains(one)
                       && RuntimeLines.Fitting(withMod, "event", "orbit", new Dictionary<string, double> { { "x_days", 1 } }, xs).Contains(one)
@@ -1979,33 +2470,33 @@ public static class Tests
                 var badFiles = new List<KeyValuePair<string, IList<string>>>(rtFiles);
                 badFiles.Add(new KeyValuePair<string, IList<string>>("SomeMod/Lonapse/a.tsv", new List<string> {
                         "id\tkind\twhen\tspanish\tenglish",
-                        "rt_somemod_ok\tevent\ton=somemod.thing\tVale {x_n}.\tOkay {x_n}.",
-                        "rt_somemod_noon\tevent\t\tA.\tA.",
-                        "rt_somemod_stock\tevent\ton=flag\tB.\tB.",
-                        "rt_somemod_unknown\tchat\ton=nothing\tC.\tC.",
-                        "rt_somemod_onelang\tevent\ton=somemod.thing\tD {x_n}.\tD.",
-                        "rt_somemod_meta\tmeta\ton=somemod.thing cooldown=abc\t\t",
-                        "rt_orbit\tevent\ton=somemod.thing\tE.\tE.",
-                        "rt_somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF.",
-                        "rt_somemod_sci\tscience\ton=somemod.thing\tG.\tG.",
-                        "rt_somemod_exp\texperiment\ton=somemod.scan id=someScan\tescaneo\tscan",
-                        "rt_somemod_scan\tscience\ton=somemod.scan\tEl {exp}.\tThe {exp}.",
-                        "rt_somemod_stockexp\texperiment\ton=somemod.crew id=crewReport\tinforme\treport",
-                        "rt_somemod_noid\texperiment\ton=somemod.noid\tH\tH",
-                        "rt_somemod_slotexp\texperiment\ton=somemod.slot id=slotScan\t{x_n}\t{x_n}",
-                        "rt_somemod_twice\texperiment\ton=somemod.other id=someScan\tI\tI",
-                        "rt_somemod_dev\tdevice\ton=somemod.rig id=someRig\tel equipo\tthe rig",
-                        "rt_somemod_rigsci\tscience\ton=somemod.rig\tJ.\tJ.",
-                        "rt_somemod_stockdev\tdevice\ton=somemod.rtg id=DeployedRTG\tK\tK",
-                        "rt_somemod_con\tcontract\ton=somemod.job id=SomeJob\tel trabajo\tthe job",
-                        "rt_somemod_jobdone\tcontract_done\ton=somemod.job\tHecho {contract}.\tDone: {contract}.",
-                        "rt_somemod_jobsci\tscience\ton=somemod.job\tL.\tL.",
-                        "rt_somemod_rigcon\tcontract_done\ton=somemod.rig\tM.\tM.",
-                        "rt_somemod_stockcon\tcontract_done\ton=flag\tN.\tN." }));
+                        "somemod_ok\tevent\ton=somemod.thing\tVale {x_n}.\tOkay {x_n}.",
+                        "somemod_noon\tevent\t\tA.\tA.",
+                        "somemod_stock\tevent\ton=flag\tB.\tB.",
+                        "somemod_unknown\tchat\ton=nothing\tC.\tC.",
+                        "somemod_onelang\tevent\ton=somemod.thing\tD {x_n}.\tD.",
+                        "somemod_meta\tmeta\ton=somemod.thing cooldown=abc\t\t",
+                        "orbit\tevent\ton=somemod.thing\tE.\tE.",
+                        "somemod_check\tevent\ton=somemod.thing x_n>=2\tF.\tF.",
+                        "somemod_sci\tscience\ton=somemod.thing\tG.\tG.",
+                        "somemod_exp\texperiment\ton=somemod.scan id=someScan\tescaneo\tscan",
+                        "somemod_scan\tscience\ton=somemod.scan\tEl {exp}.\tThe {exp}.",
+                        "somemod_stockexp\texperiment\ton=somemod.crew id=crewReport\tinforme\treport",
+                        "somemod_noid\texperiment\ton=somemod.noid\tH\tH",
+                        "somemod_slotexp\texperiment\ton=somemod.slot id=slotScan\t{x_n}\t{x_n}",
+                        "somemod_twice\texperiment\ton=somemod.other id=someScan\tI\tI",
+                        "somemod_dev\tdevice\ton=somemod.rig id=someRig\tel equipo\tthe rig",
+                        "somemod_rigsci\tscience\ton=somemod.rig\tJ.\tJ.",
+                        "somemod_stockdev\tdevice\ton=somemod.rtg id=DeployedRTG\tK\tK",
+                        "somemod_con\tcontract\ton=somemod.job id=SomeJob\tel trabajo\tthe job",
+                        "somemod_jobdone\tcontract_done\ton=somemod.job\tHecho {contract}.\tDone: {contract}.",
+                        "somemod_jobsci\tscience\ton=somemod.job\tL.\tL.",
+                        "somemod_rigcon\tcontract_done\ton=somemod.rig\tM.\tM.",
+                        "somemod_stockcon\tcontract_done\ton=flag\tN.\tN." }));
                 List<RuntimeTemplate> badRows = RuntimeLines.ParseAll(badFiles, badErr)
                     .FindAll(t => t.Where.StartsWith("SomeMod/", StringComparison.Ordinal));
                 var badIds = badRows.ConvertAll(t => t.Id);
-                Check(string.Join(",", badIds.ToArray()) == "rt_somemod_ok,rt_somemod_check,rt_somemod_exp,rt_somemod_scan,rt_somemod_dev,rt_somemod_rigsci,rt_somemod_con,rt_somemod_jobdone"
+                Check(string.Join(",", badIds.ToArray()) == "somemod_ok,somemod_check,somemod_exp,somemod_scan,somemod_dev,somemod_rigsci,somemod_con,somemod_jobdone"
                       && badErr.Count == 15,
                       "mod API: bad mod rows are reported and skipped one by one (no on=, a stock event, unknown event, one language, bad meta, duplicate id, a science line on an unregistered topic, a stock experiment id, no id=, slots in the words, an id registered twice, a stock part, a science line on a contract topic, a contract line on a device topic or a stock event)",
                       badErr.Count + ": " + string.Join(" ; ", badErr.ToArray()));
@@ -2047,8 +2538,8 @@ public static class Tests
                   "deployed parts: words by part name, else by kind", "");
             Check(Persona.JobFor("staging") == "pilot" && Persona.JobFor("touchdown") == "pilot" && Persona.JobFor("power_low") == "engineer"
                   && Persona.JobFor("science") == "scientist" && Persona.JobFor("chatter") == null && Persona.JobFor(null) == null
-                  && Persona.JobForLine("rt_fuel_low") == "pilot" && Persona.JobForLine("rt_ec_ok") == "engineer"
-                  && Persona.JobForLine("rt_sci_pts") == "scientist" && Persona.JobForLine("rt_funds") == null && Persona.JobForLine("rt_crew") == null,
+                  && Persona.JobForLine("fuel_low") == "pilot" && Persona.JobForLine("ec_ok") == "engineer"
+                  && Persona.JobForLine("sci_pts") == "scientist" && Persona.JobForLine("funds") == null && Persona.JobForLine("crew") == null,
                   "jobs: the pilot flies, the engineer watches power and parts, the scientist the science", "");
             Check(!rtAll.Exists(t => t.Kind == "reply" && t.Versions.Exists(vv0 => vv0[1].Contains("{self"))),
                   "runtime voice: no crew reply says its own name", "");
@@ -2064,10 +2555,10 @@ public static class Tests
             var cFail = new Dictionary<string, double> { { "funds", 12000 }, { "con_rep", 15 }, { "contracts", 0 } };
             var idsC = RuntimeLines.Fitting(rtAll, "contract_failed", null, cFail, sn).ConvertAll(t => t.Id);
             var idsP = RuntimeLines.Fitting(rtAll, "contract_funds", null, cFail, sn).ConvertAll(t => t.Id);
-            Check(idsF.Contains("rt_sci_first") && idsF.Contains("rt_sci_left") && idsF.Contains("rt_sci_far") && !idsF.Contains("rt_sci_repeat")
-                  && idsD.Contains("rt_sci_repeat") && idsD.Contains("rt_sci_small") && !idsD.Contains("rt_sci_first") && !idsD.Contains("rt_sci_pts_more")
-                  && idsC.Contains("rt_con_fail_cost") && idsC.Contains("rt_con_fail_rep") && !idsC.Contains("rt_con_fail_left")
-                  && idsP.Contains("rt_con_last") && !idsP.Contains("rt_con_left") && !idsP.Contains("rt_con_one"),
+            Check(idsF.Contains("sci_first") && idsF.Contains("sci_left") && idsF.Contains("sci_far") && !idsF.Contains("sci_repeat")
+                  && idsD.Contains("sci_repeat") && idsD.Contains("sci_small") && !idsD.Contains("sci_first") && !idsD.Contains("sci_pts_more")
+                  && idsC.Contains("con_fail_cost") && idsC.Contains("con_fail_rep") && !idsC.Contains("con_fail_left")
+                  && idsP.Contains("con_last") && !idsP.Contains("con_left") && !idsP.Contains("con_one"),
                   "runtime voice: science and contract lines fit the first data, what is left, the penalty and the open contracts",
                   string.Join(",", idsF.ToArray()) + " / " + string.Join(",", idsD.ToArray()) + " / " + string.Join(",", idsC.ToArray()) + " / " + string.Join(",", idsP.ToArray()));
         }
@@ -2080,20 +2571,20 @@ public static class Tests
             foreach (RuntimeTemplate t in RuntimeLines.Fitting(rtAll, "warp", "orbit", wv, wn)) wIds.Add(t.Id);
             var noWarp = new Dictionary<string, double>(wv);
             noWarp.Remove("in_warp");
-            int chatsWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", wv, wn).FindAll(t => t.Id.StartsWith("rt_chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
-            int chatsNoWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", noWarp, wn).FindAll(t => t.Id.StartsWith("rt_chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
-            RuntimeTemplate soi = rtAll.Find(t => t.Id == "rt_warp_soi");
+            int chatsWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", wv, wn).FindAll(t => t.Id.StartsWith("chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
+            int chatsNoWarp = RuntimeLines.Fitting(rtAll, "chat", "orbit", noWarp, wn).FindAll(t => t.Id.StartsWith("chat_warp", StringComparison.Ordinal) && t.Id.EndsWith("_1", StringComparison.Ordinal)).Count;
+            RuntimeTemplate soi = rtAll.Find(t => t.Id == "warp_soi");
             string ws, we;
             bool soiOk = soi != null && RuntimeLines.Fill(soi, 0, wv, wn, out ws, out we) && we == "You reach Duna in 12 hours."
                          && RuntimeSpeech.Unmarked(ws) == "Llegáis a Duna en doce horas." && RuntimeSpeech.Spoken(ws).Contains(" Duna ");
-            Check(wIds.Contains("rt_warp") && wIds.Contains("rt_warp_node_h") && wIds.Contains("rt_warp_soi") && wIds.Contains("rt_warp_orbit")
-                  && !wIds.Contains("rt_warp_node") && !wIds.Contains("rt_warp_soi_soon") && !wIds.Contains("rt_warp_landed")
+            Check(wIds.Contains("warp") && wIds.Contains("warp_node_h") && wIds.Contains("warp_soi") && wIds.Contains("warp_orbit")
+                  && !wIds.Contains("warp_node") && !wIds.Contains("warp_soi_soon") && !wIds.Contains("warp_landed")
                   && chatsWarp >= 3 && chatsNoWarp == 0 && soiOk,
                   "runtime voice: warp lines fit the burn and the next body, warp chats only in warp",
                   string.Join(", ", wIds.ToArray()) + " / chats " + chatsWarp + " and " + chatsNoWarp + " without warp / soi "
                   + (soi != null && RuntimeLines.Fill(soi, 0, wv, wn, out ws, out we) ? RuntimeSpeech.Spoken(ws) + " / " + we : "no fill"));
         }
-        // runtime chats: rt_chat_<name>_<seq>, two kerbals take turns, self and other per speaker
+        // runtime chats: chat_<name>_<seq>, two kerbals take turns, self and other per speaker
         var chats = RuntimeLines.Chats(rtAll);
         var nA = new Dictionary<string, string[]>(fullN);
         nA["self"] = new[] { "Bil", "Bill" }; nA["other"] = new[] { "Bob", "Bob" };
@@ -2113,27 +2604,28 @@ public static class Tests
                 else if (ck.Value.Key == ">" || ck.Value.Key == ">=") cv[ck.Key] = Math.Max(cv[ck.Key], n + 1);
                 else cv[ck.Key] = n;
             }
-            if (!RuntimeLines.ChatFits(c, sit, cv, nA, nB)) badChat.Add(c[0].Id + " does not fit with values that meet its checks");
+            string actorA = c[0].TraitA ?? "pilot", actorB = c[0].TraitB ?? "engineer";
+            if (!RuntimeLines.ChatFits(c, sit, cv, nA, nB, actorA, actorB)) badChat.Add(c[0].Id + " does not fit with values and actors that meet its checks");
         }
         string c1, c2;
-        var dayChat = chats.Find(c => c[0].Id == "rt_chat_day_1");
+        var dayChat = chats.Find(c => c[0].Id == "chat_day_1");
         bool dayOk = dayChat != null && RuntimeLines.Fill(dayChat[2], new Dictionary<string, double> { { "day", 4 } }, nA, out c1, out c2)
                      && c2 == "That's the ship's paint, Bob." && RuntimeSpeech.Spoken(c1).EndsWith(", Bob.");
         Check(chats.Count >= 12 && badChat.Count == 0 && dayOk,
               "runtime voice: " + chats.Count + " runtime chats, each fits and fills with the names of its speakers", string.Join(" ; ", badChat.ToArray()));
         var chatErr = new List<string>();
         var badChats = RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
-            "rt_chat_a_1\tchat\t\tA.\tA.", "rt_chat_b_1\tchat\t\tB.\tB.", "rt_chat_b_3\tchat\t\tB.\tB.",
-            "rt_chat_c_1\tchat\t\tC.\tC.", "rt_chat_c_2\tchat\torbit\tC.\tC.", "rt_chat_ok_1\tchat\t\tD.\tD.", "rt_chat_ok_2\tchat\t\tD.\tD." }, chatErr);
+            "chat_a_1\tchat\t\tA.\tA.", "chat_b_1\tchat\t\tB.\tB.", "chat_b_3\tchat\t\tB.\tB.",
+            "chat_c_1\tchat\t\tC.\tC.", "chat_c_2\tchat\torbit\tC.\tC.", "chat_ok_1\tchat\t\tD.\tD.", "chat_ok_2\tchat\t\tD.\tD." }, chatErr);
         Check(chatErr.Count == 3 && RuntimeLines.Chats(badChats).Count == 1, "runtime voice: a bad chat is dropped (one line, a gap, a when after line 1)",
               string.Join(" ; ", chatErr.ToArray()));
         // jobs in a chat: a=pilot b=scientist on line 1 only, a known job, chats only
         var jobErr = new List<string>();
         var jobChats = RuntimeLines.Chats(RuntimeLines.Parse(new List<string> { "id\tkind\twhen\tspanish\tenglish",
-            "rt_chat_j_1\tchat\ta=pilot b=scientist\tJ.\tJ.", "rt_chat_j_2\tchat\t\tJ.\tJ.",
-            "rt_chat_x_1\tchat\ta=cook\tX.\tX.", "rt_chat_x_2\tchat\t\tX.\tX.",
-            "rt_chat_y_1\tchat\t\tY.\tY.", "rt_chat_y_2\tchat\tb=pilot\tY.\tY.",
-            "rt_jobreport\treport\ta=pilot\tR.\tR." }, jobErr));
+            "chat_j_1\tchat\ta=pilot b=scientist\tJ.\tJ.", "chat_j_2\tchat\t\tJ.\tJ.",
+            "chat_x_1\tchat\ta=cook\tX.\tX.", "chat_x_2\tchat\t\tX.\tX.",
+            "chat_y_1\tchat\t\tY.\tY.", "chat_y_2\tchat\tb=pilot\tY.\tY.",
+            "jobreport\treport\ta=pilot\tR.\tR." }, jobErr));
         var jc = jobChats.Count == 1 ? jobChats[0] : null;
         var none = new Dictionary<string, double>();
         bool jobsOk = jc != null && jc[0].TraitA == "pilot" && jc[0].TraitB == "scientist"
@@ -2161,11 +2653,18 @@ public static class Tests
               hist["missions"] + " " + hist["flight_no"] + " " + hist["visits"] + " " + hist["landings"] + " " + hist["stars"]);
         // spanish_rt (runtime Spanish next to the line) and the spanish column of pools.tsv
         {
-            string dir = rtDir.Substring(0, rtDir.Length - "/Runtime".Length);
+            string dir = System.IO.Path.GetDirectoryName(rtDir);
             var tErr = new List<string>();
-            PhraseTable built = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "phrases.tsv"), System.Text.Encoding.UTF8)), tErr);
+            var categoryRows = new List<string>();
+            foreach (string category in new[] { "Crew", "Probe" })
+                foreach (string path in System.IO.Directory.GetFiles(System.IO.Path.Combine(dir, category), "*.tsv"))
+                {
+                    var source = System.IO.File.ReadAllLines(path);
+                    if (RuntimeSceneTable.IsSceneFile(source)) categoryRows.AddRange(RuntimeSceneTable.Compile(source, path, tErr));
+                }
+            PhraseTable built = PhraseTable.Parse(categoryRows, tErr);
             var pErr = new List<string>();
-            SlotPools realPools = SlotPools.Parse(new List<string>(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "pools.tsv"), System.Text.Encoding.UTF8)), pErr);
+            SlotPools realPools = new SlotPools();
             int slotted = 0, withRt = 0, versionsNoRt = 0, rtLines = 0;
             var noEs = new List<string>();
             foreach (PhraseEntry pe in built.Entries)
@@ -2196,13 +2695,14 @@ public static class Tests
                     }
                 }
             }
-            Check(tErr.Count == 0 && pErr.Count == 0 && rtLines >= 65 && realPools.SpanishCount >= 172 && noEs.Count == 0,
+            Check(tErr.Count == 0 && pErr.Count == 0 && rtLines >= 65 && realPools.Count == 0 && noEs.Count == 0,
                   "spanish_rt: " + rtLines + " rows with runtime Spanish, " + realPools.SpanishCount + " pool values with Spanish, every pool value a runtime line uses has its Spanish",
                   string.Join(" ; ", tErr.ToArray()) + string.Join(" ; ", pErr.ToArray()) + string.Join(" ; ", noEs.ToArray()));
             // every runtime Spanish version fills, with every value there is, and speaks without marks or slots left
             {
                 var allVals = new Dictionary<string, string> { { "day", "3" }, { "here", "the Mun" }, { "vessel", "Kerbal X" }, { "alt_km", "85" } };
                 foreach (string k in Slots.Numbers) if (!allVals.ContainsKey(k)) allVals[k] = "42";
+                foreach (string k in Slots.Names) if (!allVals.ContainsKey(k)) allVals[k] = "Test";
                 var badRt = new List<string>();
                 int spoken = 0;
                 foreach (PhraseEntry pe in built.Entries)
@@ -2356,9 +2856,9 @@ public static class Tests
             if (RuntimeLines.Fill(t, v, one, fullN, out a1, out a2) && (pluralRe.IsMatch(a1) || pluralRe.IsMatch(a2))) plural.Add(t.Id + ": " + a1 + " / " + a2);
         }
         string o1, o2;
-        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit_period"), new Dictionary<string, double> { { "period_min", 1.04 } }, null, out o1, out o2);
+        RuntimeLines.Fill(rtAll.Find(t => t.Id == "orbit_period"), new Dictionary<string, double> { { "period_min", 1.04 } }, null, out o1, out o2);
         string m1, m2;
-        RuntimeLines.Fill(rtAll.Find(t => t.Id == "rt_orbit"), 1, new Dictionary<string, double> { { "alt_km", 15e6 } },
+        RuntimeLines.Fill(rtAll.Find(t => t.Id == "orbit"), 1, new Dictionary<string, double> { { "alt_km", 15e6 } },
                           new Dictionary<string, string[]> { { "body", new[] { "Kérbol", "Kerbol" } } }, out m1, out m2);
         Check(m1 == "Os vemos a quince millones de kilómetros sobre ⟪Kérbol⟫." && m2 == "We see you 15 million km above Kerbol.",
               "runtime voice: a value in millions: \"quince millones de kilómetros\", \"15 million km\"", m1 + " / " + m2);
@@ -2907,7 +3407,7 @@ public static class Tests
                 var badPatch = new List<string>();
                 int patchedParts = 0;
                 foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(cfg,
-                         @"@PART\[([^\]]+)\][^\n]*\n\{\s*MODULE \{ name = ModuleLonapse  voice = ([a-z0-9]+)  priority = (-?[0-9]+) \}"))
+                         @"@PART\[([^\]]+)\][^\n]*\n\{\s*MODULE\s*\{\s*name = ModuleLonapse\s*\n\s*voice = ([a-z0-9]+)\s*\n\s*priority = (-?[0-9]+)\s*\n\s*\}"))
                     foreach (string pn in m.Groups[1].Value.Split('|'))
                     {
                         patchedParts++;
@@ -3083,7 +3583,7 @@ public static class Tests
 
         // the phrase table: the core column accepts a registered lineset, not an unknown id
         string head = "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\ttrait\tpersona\ttopic\tcore\tbeep\tspanish\tenglish";
-        Func<string, string> row = core => "px_t_1\tprobe_chat\tchatter\tcalm\tmc\tpx_t\t1\tm\tgoofy\tany\tany\tany\tany\t" + core + "\t\tHola\tHello";
+        Func<string, string> row = core => "px_t_1\tprobe_chat\tchatter\tcalm\tmc\tpx_t\t1\tm\tcalm\tany\tany\tany\tany\t" + core + "\t\tHola\tHello";
         var e1 = new List<string>();
         PhraseTable t1 = PhraseTable.Parse(new List<string> { head, row("my_probe2") }, e1);
         var e2 = new List<string>();
@@ -3128,17 +3628,27 @@ public static class Tests
             {
                 ProbeCores.ClearLinesets();
                 var ee = new List<string>();
-                PhraseTable noSet = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8)), ee);
+                PhraseTable noSet = PhraseTable.Parse(RuntimeSceneTable.Compile(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8), exTsv, ee), ee);
                 bool refused = ee.Count > 0 && noSet.Entries.Count == 0;
                 ProbeCores.RegisterLineset(new Dictionary<string, string> { { "name", "pip" } }, null);
                 ee.Clear();
-                PhraseTable ex = PhraseTable.Parse(new List<string>(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8)), ee);
+                PhraseTable ex = PhraseTable.Parse(RuntimeSceneTable.Compile(System.IO.File.ReadAllLines(exTsv, System.Text.Encoding.UTF8), exTsv, ee), ee);
                 bool probeRows = false;
                 foreach (PhraseEntry pe in ex.Entries) probeRows |= pe.Role == "probe" && pe.Core == "pip";
                 Check(refused && ee.Count == 0 && ex.Entries.Count == 5 && probeRows && ex.Scenes.Count == 2
                       && System.IO.File.ReadAllText(exCfg).Contains("name = pip"),
                       "lineset: docs/api/example_lineset.tsv parses clean once its lineset is registered, and not before",
                       ee.Count + " errors, " + ex.Entries.Count + " rows, " + string.Join(" ; ", ee.ToArray()));
+                var contextualErrors = new List<string>();
+                var contextualExample = ProbeRuntimeTable.Parse(System.IO.File.ReadAllLines(System.IO.Path.Combine(dir, "example_probe_lineset.tsv")), "ExampleMod/Lonapse/Probe/power.tsv", contextualErrors);
+                var contextualValues = new Dictionary<string, double> { { "ec", 10 }, { "x_core_pip", 1 } };
+                var contextualNames = new Dictionary<string, string[]> { { "probe", new[] { "Pip", "Pip" } } };
+                var fittingExamples = RuntimeLines.Fitting(contextualExample.Templates, "event", "orbit", contextualValues, contextualNames);
+                var examplePlan = fittingExamples.Count > 0 ? ProbeRuntimeTable.Fill(fittingExamples[0], contextualValues, contextualNames, new SceneMemory(), new Random(1)) : null;
+                Check(contextualErrors.Count == 0 && examplePlan != null && examplePlan.Count == 3
+                    && examplePlan[0].Role == "mc" && examplePlan[0].English.Contains("10 percent")
+                    && examplePlan[1].Role == "probe" && examplePlan[1].Mood == "offended" && examplePlan[2].Role == "mc",
+                    "API examples: contextual power exchange shares pip registration and fills in authored order", string.Join("; ", contextualErrors.ToArray()));
             }
             else Console.WriteLine("INFO  lineset example not found next to the tests");
         }
@@ -3186,8 +3696,62 @@ public static class Tests
         Near(DcMath.StaticCurve(1f), 1.0, 1e-6, "radio static: 100 % is the full level");
         Near(DcMath.StaticCurve(float.NaN), 0.0, 1e-6, "radio static: NaN is silent");
         Check(new Settings().radioStatic == 0.5f, "radio static: on by default (50 %)", null);
+        var stationDefaults = new Tuning();
+        var stationOld = new Settings();
+        stationOld.tuning.stationMcMin = 150f;
+        stationOld.tuning.stationMcMax = 300f;
+        stationOld.MigrateValues(14);
+        Check(stationDefaults.stationMcMin == 120f && stationDefaults.stationMcMax == 120f
+              && stationOld.tuning.stationMcMin == 120f && stationOld.tuning.stationMcMax == 120f,
+              "station: new and migrated default settings use two-minute check-ins", null);
+        var checkGap = new Tuning();
+        checkGap.stationMcMin = checkGap.stationMcMax = 15f;
+        checkGap.Sanitize();
+        Check(checkGap.stationMcMin == 15f && checkGap.stationMcMax == 15f,
+              "station: the shortest check-in setting survives settings sanitization", null);
+        checkGap.stationMcMin = 1f; checkGap.stationMcMax = 500f;
+        checkGap.Sanitize();
+        Check(checkGap.stationMcMin == 15f && checkGap.stationMcMax == 180f,
+              "station: saved check-in intervals stay within the slider range", null);
+        var cabinSplit = new Settings();
+        cabinSplit.cabinVolume = 0.43f;
+        cabinSplit.MigrateValues(15);
+        Check(cabinSplit.cabinVolume == 0.43f && cabinSplit.cabinThrustVolume == 0.43f,
+              "cabin: migrating the shared slider preserves both fan and thrust volume", null);
+        cabinSplit.cabinThrustVolume = 0f;
+        cabinSplit.Clamp();
+        Check(cabinSplit.cabinVolume == 0.43f && cabinSplit.cabinThrustVolume == 0f,
+              "cabin: thrust can be muted without changing fan volume", null);
+        {
+            float source, filter;
+            MixMath.SplitChannelGain(0.4f, 1f, out source, out filter);
+            Check(source == 0.4f && filter == 1f, "volume: existing gain below unity remains unchanged", null);
+            MixMath.SplitChannelGain(0.4f, 2f, out source, out filter);
+            Check(source == 0.4f && filter == 2f, "volume: existing boosted effects retain their gain split", null);
+            MixMath.SplitChannelGain(4f, 1f, out source, out filter);
+            Check(source == 1f && filter == 4f, "volume: master and category headroom survive the source-volume ceiling", null);
+            MixMath.SplitChannelGain(4f, 2.5f, out source, out filter);
+            Check(source == 1f && filter == 10f, "volume: effect, category and master headroom combine without lost gain", null);
+            MixMath.SplitChannelGain(4f, 0f, out source, out filter);
+            Check(source == 0f, "volume: a muted effect stays silent even with master and category boosted", null);
+            MixMath.SplitChannelGain(float.NaN, 1f, out source, out filter);
+            Check(source == 0f && filter == 1f, "volume: invalid levels cannot reach the audio thread", null);
+            var volumes = new Settings();
+            string[] volumeFields = { "masterVolume", "crewVolume", "controlVolume", "beepVolume", "sfxVolume",
+                "thudVolume", "footstepVolume", "hatchVolume", "dockingVolume", "jetpackVolume", "breathVolume",
+                "cabinVolume", "cabinThrustVolume", "cabinSeparationVolume", "weakSignalVolume", "intercomVolume", "calloutVolume", "evaRadioVolume", "radioStatic" };
+            foreach (string field in volumeFields) typeof(Settings).GetField(field).SetValue(volumes, 2f);
+            volumes.Clamp();
+            Check(Array.TrueForAll(volumeFields, field => (float)typeof(Settings).GetField(field).GetValue(volumes) == 2f),
+                  "volume: every saved audio slider retains the expanded maximum", null);
+            volumes.cabinVolume = 0.43f; volumes.cabinThrustVolume = 0.8f;
+            volumes.Clamp();
+            Check(volumes.cabinVolume == 0.43f && volumes.cabinThrustVolume == 0.8f,
+                  "volume: saved listening levels are preserved on the expanded slider range", null);
+            Check(RadioNoise.Gain(2f) == 2f * RadioNoise.Gain(1f), "volume: radio static has the same doubled headroom", null);
+        }
         Settings old = new Settings(); old.tuningVersion = Tuning.CurrentVersion;
-        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 13, "settings v5: no migration needed at the current version (13 since the crew stress pitch went)", null);
+        Check(old.MigrateValues(Tuning.CurrentVersion).Count == 0 && Tuning.CurrentVersion == 16, "settings: no migration needed at the current version", null);
     }
 
     static void ReviewFixTests()
@@ -4017,12 +4581,12 @@ public static class Tests
                   "face: tense -0.5, badass tense +0.4", null);
             Check(FaceMath.Mood("calm", "chatter", "ascent", false, false) == 0.8f && FaceMath.Mood("calm", "staging", "orbit", false, false) == 0.8f
                   && FaceMath.Mood("calm", "staging", "launch", true, false) == 0.8f && FaceMath.Mood("calm", "relief", null, false, false) == 0.8f,
-                  "face: calm chatter, goofy phase, intercom and relief grin +0.8", null);
+                  "face: calm chatter, calm phase, intercom and relief grin +0.8", null);
             Check(FaceMath.Mood("calm", "staging", "launch", false, false) == FaceMath.MoodCalm && FaceMath.Mood("none", "staging", "ascent", false, true) == 0.4f
                   && FaceMath.Mood(null, "touchdown", null, false, false) == FaceMath.MoodCalm, "face: plain calm callout a hint of a smile, badass +0.4", null);
-            Check(FaceMath.IsGoofyPhase("landed") && !FaceMath.IsGoofyPhase("reentry")
-                  && Array.TrueForAll(PhraseTable.Phases, ph => FaceMath.IsGoofyPhase(ph) == PhraseTable.IsGoofyPhase(ph)),
-                  "face: IsGoofyPhase equals PhraseTable.IsGoofyPhase", null);
+            Check(FaceMath.IsCalmPhase("landed") && !FaceMath.IsCalmPhase("reentry")
+                  && Array.TrueForAll(PhraseTable.Phases, ph => FaceMath.IsCalmPhase(ph) == PhraseTable.IsCalmPhase(ph)),
+                  "face: IsCalmPhase equals PhraseTable.IsCalmPhase", null);
             Check(FaceMath.BandName(0) == "calm" && FaceMath.BandName(1) == "tense" && FaceMath.BandName(2) == "panic" && FaceMath.BandName(7) == "panic"
                   && FaceMath.BandName((int)Band.Panic) == "panic" && FaceMath.BandName((int)Band.Tense) == "tense", "face: BandName follows the Band enum", null);
             Check(FaceMath.Stronger(0.4f, -0.8f) == -0.8f && FaceMath.Stronger(-0.5f, 0.5f) == -0.5f, "face: Stronger by magnitude", null);
@@ -4346,7 +4910,7 @@ public static class Tests
     {
         // Minimum counts the finished table (about 1000 source rows) must reach.
         const int MinSeriousCalmRadio = 15;   // per serious phase: calm radio chatter rows tagged with the phase or "serious"
-        const int MinGoofyCalm = 25;          // per goofy phase: calm chatter rows tagged with the phase or "goofy"
+        const int MinCalmRows = 25;          // per calm phase: calm chatter rows tagged with the phase or "calm"
         const int MinPerCause = 8;            // rows per cause (any event, any band)
         const int MinSourceRows = 900;
 
@@ -4448,7 +5012,7 @@ public static class Tests
             Check(pe.Count == 0, "v3 tables: PhraseTable.Parse reads the concatenated files without errors (" + t.Count + " rows)", Short(pe, 5));
             Check(rows.Count >= MinSourceRows, "v3 tables: at least " + MinSourceRows + " source rows", rows.Count + " rows");
             {
-                // In launch and ascent Mission Control never talked to the probe (every probe_chat row was goofy)
+                // In launch and ascent Mission Control never talked to the probe (every probe_chat row was calm)
                 List<string> noChat = new List<string>();
                 // the lines each stock core uses (a core without own lines yet borrows generic, ProbeCores.DefaultLines)
                 var lineSets = new List<string>();
@@ -4522,15 +5086,15 @@ public static class Tests
             Check(shortList.Count == 0, "v3 tables: calm radio chatter per serious phase >= " + MinSeriousCalmRadio + " (phase or serious)",
                   shortList.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortList.ToArray()));
             shortList.Clear(); have = "";
-            foreach (string p in PhraseTable.GoofyPhases)
+            foreach (string p in PhraseTable.CalmPhases)
             {
                 int n = 0;
                 foreach (SrcRow r in rows)
-                    if (r["event"] == "chatter" && r["band"] == "calm" && (r["phase"] == p || r["phase"] == "goofy")) n++;
+                    if (r["event"] == "chatter" && r["band"] == "calm" && (r["phase"] == p || r["phase"] == "calm")) n++;
                 have += p + " " + n + " ";
-                if (n < MinGoofyCalm) shortList.Add(p + " " + n + "/" + MinGoofyCalm);
+                if (n < MinCalmRows) shortList.Add(p + " " + n + "/" + MinCalmRows);
             }
-            Check(shortList.Count == 0, "v3 tables: calm chatter per goofy phase >= " + MinGoofyCalm + " (phase or goofy)",
+            Check(shortList.Count == 0, "v3 tables: calm chatter per calm phase >= " + MinCalmRows + " (phase or calm)",
                   shortList.Count == 0 ? have.Trim() : "short: " + string.Join(", ", shortList.ToArray()));
             shortList.Clear(); have = "";
             foreach (string c in PhraseTable.Causes)
@@ -4729,7 +5293,7 @@ public static class Tests
                 Check(lost.Count > 0 && mcRows == 0, "v4 tables: signal_lost has no MC rows (Control cannot hear the crew)", mcRows + " MC rows");
                 Check(back.Count >= 6, "v4 tables: signal_back >= 6 scenes", back.Count.ToString());
             }
-            // crew_lost: 6 MC single + 3 crew, no joke words, not tagged goofy
+            // crew_lost: 6 MC single + 3 crew, no joke words, not tagged calm
             {
                 List<List<SrcRow>> s = scenes("crew_lost");
                 int mc = s.FindAll(l => mcOnly(l)).Count, crew = s.FindAll(l => !hasMc(l) || !mcOnly(l)).Count;
@@ -4737,10 +5301,10 @@ public static class Tests
                 List<string> joke = new List<string>();
                 foreach (List<SrcRow> l in s)
                     foreach (SrcRow r in l)
-                        if (JokeWords.IsMatch(r["english"]) || JokeWords.IsMatch(r["spanish"]) || PhraseTable.IsGoofyPhase(r["phase"])
+                        if (JokeWords.IsMatch(r["english"]) || JokeWords.IsMatch(r["spanish"]) || PhraseTable.IsCalmPhase(r["phase"])
                             || r["band"] == "calm")
                             joke.Add(r["clip_key"]);
-                Check(s.Count > 0 && joke.Count == 0, "v4 tables: crew_lost rows have no joke words, no goofy phase, no calm band", Short(joke, 6));
+                Check(s.Count > 0 && joke.Count == 0, "v4 tables: crew_lost rows have no joke words, no calm phase, no calm band", Short(joke, 6));
             }
             // persona and trait groups: >= 4 scenes each
             {
@@ -4846,21 +5410,42 @@ public static class Tests
             object[][] cases = {
                 new object[] { "any", "blackout", true }, new object[] { "", "coast", true }, new object[] { null, "orbit", true },
                 new object[] { "serious", "launch", true }, new object[] { "serious", "descent", true }, new object[] { "serious", "orbit", false },
-                new object[] { "serious", "blackout", false }, new object[] { "goofy", "landed", true }, new object[] { "goofy", "prelaunch", true },
-                new object[] { "goofy", "reentry", false }, new object[] { "goofy", "blackout", false }, new object[] { "orbit", "orbit", true },
+                new object[] { "serious", "blackout", false }, new object[] { "calm", "landed", true }, new object[] { "calm", "prelaunch", true },
+                new object[] { "calm", "reentry", false }, new object[] { "calm", "blackout", false }, new object[] { "orbit", "orbit", true },
                 new object[] { "orbit", "coast", false }, new object[] { "blackout", "blackout", true }, new object[] { "launch", null, false },
                 new object[] { "any", null, true } };
             List<string> wrong = new List<string>();
             foreach (object[] c in cases)
                 if (FlightPhase.Matches((string)c[0], (string)c[1]) != (bool)c[2]) wrong.Add((c[0] ?? "null") + "/" + (c[1] ?? "null"));
             Check(wrong.Count == 0, "phase: Matches table (" + cases.Length + " cases)", Short(wrong, 5));
+            Check(FlightPhase.Matches("idle", "prelaunch") && FlightPhase.Matches("idle", "orbit")
+                && FlightPhase.Matches("idle", "coast") && FlightPhase.Matches("idle", "landed")
+                && !FlightPhase.Matches("idle", "launch") && !FlightPhase.Matches("idle", "ascent")
+                && !FlightPhase.Matches("idle", "reentry") && !FlightPhase.Matches("idle", "descent")
+                && !FlightPhase.Matches("idle", "blackout"),
+                "phase idle keeps the quieter flight stages separate from serious stages and blackout", null);
+            Check(FlightPhase.Normalize("calm") == "idle" && FlightPhase.Normalize("idle") == "idle"
+                && PhraseTable.PhaseMatches("calm", "orbit") && PhraseTable.PhaseMatches("orbit", "idle")
+                && !PhraseTable.PhaseMatches("calm", "reentry"),
+                "legacy phase calm maps to idle without changing when its scenes play", null);
+            Check(FlightPhase.Normalize("goofy") == "idle" && FlightPhase.Matches("goofy", "orbit")
+                && !FlightPhase.Matches("goofy", "ascent") && PhraseTable.PhaseMatches("goofy", "landed"),
+                "legacy mod phase spelling remains compatible", null);
+            var legacyPhaseErrors = new List<string>();
+            var legacyPhaseTable = PhraseTable.Parse(new List<string> {
+                "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\tspanish\tenglish",
+                "legacy_phase_1\tchatter\tchatter\tcalm\tmc\tlegacy_phase\t1\tm\tgoofy\tany\tHola\tHello" }, legacyPhaseErrors);
+            Check(legacyPhaseErrors.Count == 0 && legacyPhaseTable.Get("legacy_phase_1").Phase == "idle"
+                && legacyPhaseTable.Get("legacy_phase_1").Band == "calm",
+                "legacy table phase normalizes to idle while its calm voice band stays unchanged", null);
+
             bool agree = true;
             foreach (string row in PhraseTable.Phases)
                 foreach (string cur in FlightPhase.All)
                     if (FlightPhase.Matches(row, cur) != PhraseTable.PhaseMatches(row, cur)) agree = false;
             Check(agree, "phase: FlightPhase.Matches and PhraseTable.PhaseMatches agree for every concrete phase", null);
-            Check(FlightPhase.IsSerious("reentry") && !FlightPhase.IsSerious("orbit") && FlightPhase.IsGoofy("coast") && !FlightPhase.IsGoofy("blackout"),
-                  "phase: IsSerious and IsGoofy", null);
+            Check(FlightPhase.IsSerious("reentry") && !FlightPhase.IsSerious("orbit") && FlightPhase.IsCalm("coast") && !FlightPhase.IsCalm("blackout"),
+                  "phase: IsSerious and IsCalm", null);
             Check(FlightPhase.BodyKey("Sun") == "kerbol" && FlightPhase.BodyKey("Mun") == "mun" && FlightPhase.BodyKey("Kerbin") == "kerbin"
                   && FlightPhase.BodyKey("Foo") == "generic" && FlightPhase.BodyKey(null) == "generic" && FlightPhase.BodyKey("") == "generic",
                   "phase: BodyKey Sun->kerbol, Mun->mun, Foo->generic, null->generic", FlightPhase.BodyKey("Sun") + " " + FlightPhase.BodyKey("Foo"));
@@ -4945,6 +5530,34 @@ public static class Tests
                       "phase: a vessel loaded in flight (no liftoff seen) is never launch", null);
             }
 
+            Check(CabinAmbience.RattleLevel(true, 0, 100) == 0f
+                  && CabinAmbience.RattleLevel(false, 100, 100) == 0f
+                  && CabinAmbience.RattleLevel(true, 100, 100) == 1f
+                  && CabinAmbience.RattleLevel(true, 25, 100) == 0.5f
+                  && CabinAmbience.RattleLevel(true, double.NaN, 100) == 0f,
+                  "cabin rattle: actual thrust, partial output, no thrust, outside IVA and invalid data", null);
+            {
+                bool calmSafe = true;
+                foreach (float stress in new[] { 0f, 0.1f, 0.199f, 0.2f })
+                    for (int stock = -10; stock <= 10; stock++)
+                        for (int mood = -10; mood <= 10; mood++)
+                            foreach (float weight in new[] { 0f, 0.5f, 1f })
+                            {
+                                float face = FaceMath.FaceMood(mood / 10f, weight, stock / 10f, stress, 0.3f, 0.7f);
+                                if (face < 0f || face > 1f) calmSafe = false;
+                                foreach (float sign in new[] { -1f, 1f })
+                                {
+                                    float blended = FaceMath.Blend(sign * stock / 10f, face, weight, sign);
+                                    if (FaceMath.LimitFear(sign * blended, stress) < 0f) calmSafe = false;
+                                }
+                            }
+                Check(calmSafe, "face: stock panic, fearful lines, listeners and partial blend cannot frighten calm crew", null);
+                Near(FaceMath.LimitFear(-1f, 0.25f), -0.5, 1e-5, "face: fear eases in above 0.2 stress");
+                Check(FaceMath.LimitFear(-1f, 0.20001f) > -0.0001f
+                      && FaceMath.LimitFear(-1f, 0.3f) == -1f,
+                      "face: no sudden jump at the calm threshold, full range restored at 0.3", null);
+            }
+
             // ---- MouthMath ----
             {
                 // loudness track: 1 kHz stereo, 0.1 s quiet tone, 0.1 s silence, 0.1 s loud tone
@@ -4967,10 +5580,10 @@ public static class Tests
                 Check(MouthMath.EnvelopeOpen(0.1f) == 0f && MouthMath.EnvelopeOpen(0.8f) == 1f && MouthMath.EnvelopeOpen(1f) == 1f
                       && Math.Abs(MouthMath.EnvelopeOpen(0.46f) - 0.5f) < 1e-4,
                       "mouth track: closed in pauses, wide on the loud syllables", "");
-                Check(FaceMath.HeldMood(0.8f, -0.6f, 0f, 0.3f, 0.7f) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0f, 0.3f, 0.7f) == -1f
+                Check(FaceMath.HeldMood(0.8f, -0.6f, 0.4f, 0.3f, 0.7f) == -0.6f && FaceMath.HeldMood(-1f, -0.6f, 0.4f, 0.3f, 0.7f) == -1f
                       && FaceMath.HeldMood(0.8f, 0f, 0.1f, 0.3f, 0.7f) == 0.8f && FaceMath.HeldMood(0.8f, 0f, 1f, 0.3f, 0.7f) == -1f
                       && Math.Abs(FaceMath.HeldMood(0.8f, 0f, 0.7f, 0.3f, 0.7f) - FaceMath.FaceAtPanic) < 1e-5
-                      && FaceMath.HeldMood(-0.5f, 0.5f, 0f, 0.3f, 0.7f) == -0.5f,
+                      && FaceMath.HeldMood(-0.5f, 0.5f, 0.4f, 0.3f, 0.7f) == -0.5f,
                       "face: a calm line keeps a scared face scared, stress caps the grin, a fearful line still shows", "");
                 // the thresholds of a real test crew (KSP.log 2026-11-06): Sidfrod 0.29/0.66, Mae (badass) 0.35/0.83
                 Check(FaceMath.StressCap(0.2f, 0.29f, 0.66f) == 1f && FaceMath.StressCap(0.29f, 0.29f, 0.66f) == 1f
@@ -5027,10 +5640,10 @@ public static class Tests
                       && FaceMath.IdleMood(-0.8f, 0.4f, 0.3f, 0.7f) == -0.8f && Math.Abs(FaceMath.IdleMood(0.8f, 0.7f, 0.3f, 0.7f) + 0.5f) < 1e-5,
                       "face: between lines a grinning stock face is capped by stress, a scared one stays scared", "");
                 Check(Math.Abs(FaceMath.FaceMood(-1f, 0f, 0.5f, 0.1f, 0.3f, 0.7f) - 0.5f) < 1e-5
-                      && Math.Abs(FaceMath.FaceMood(-1f, 1f, 0.5f, 0.1f, 0.3f, 0.7f) + 1f) < 1e-5
-                      && Math.Abs(FaceMath.FaceMood(-1f, 0.5f, 0.5f, 0.1f, 0.3f, 0.7f) + 0.25f) < 1e-5
+                      && FaceMath.FaceMood(-1f, 1f, 0.5f, 0.1f, 0.3f, 0.7f) == 0f
+                      && Math.Abs(FaceMath.FaceMood(-1f, 0.5f, 0.5f, 0.1f, 0.3f, 0.7f) - 0.25f) < 1e-5
                       && Math.Abs(FaceMath.FaceMood(0.8f, 0f, 0.8f, 1f, 0.3f, 0.7f) + 1f) < 1e-5,
-                      "face: no stress is the old stock to line blend, high stress holds the fear between lines", "");
+                      "face: low stress permits only neutral or happy faces, high stress holds fear between lines", "");
                 float fa = 0f, sl = 0f, peak = 0f, steady = 0f;
                 for (int i = 0; i < 30; i++) peak = Math.Max(peak, FaceMath.Accent(ref fa, ref sl, 1f, 0.01f));
                 for (int i = 0; i < 400; i++) steady = FaceMath.Accent(ref fa, ref sl, 1f, 0.01f);
@@ -5177,10 +5790,10 @@ public static class Tests
                 List<string> e = new List<string>();
                 PhraseTable bt = PhraseTable.Parse(new List<string> {
                     "clip_key\tevent\tseverity\tband\trole\tscene\tseq\tgender\tphase\tcause\tspanish\tbody\tenglish",
-                    "v_1\tchatter\tchatter\tcalm\tmc\tv\t1\tm\tgoofy\tany\tQue tal la vista\t\tHow's the view",
-                    "v_2__kerbin\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tgoofy\tany\tVeo nibreK\tkerbin\tI see Kerbin",
-                    "v_2__mun\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tgoofy\tany\tVeo la nuM\tmun\tI see the Mun",
-                    "v_2__generic\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tgoofy\tany\tVeo el planeta\tgeneric\tI see the planet" }, e);
+                    "v_1\tchatter\tchatter\tcalm\tmc\tv\t1\tm\tcalm\tany\tQue tal la vista\t\tHow's the view",
+                    "v_2__kerbin\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tcalm\tany\tVeo nibreK\tkerbin\tI see Kerbin",
+                    "v_2__mun\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tcalm\tany\tVeo la nuM\tmun\tI see the Mun",
+                    "v_2__generic\tchatter\tchatter\tcalm\tcrew\tv\t2\tboth\tcalm\tany\tVeo el planeta\tgeneric\tI see the planet" }, e);
                 PhraseScene sc = bt.Scenes.Count == 1 ? bt.Scenes[0] : null;
                 Check(e.Count == 0 && sc != null && sc.HasBody && sc.Bodies.Count == 3 && sc.Lines.Count == 2,
                       "body: variants of one seq form one scene with 2 lines", e.Count + " errors");
@@ -5191,8 +5804,8 @@ public static class Tests
                     Check(duna.Count == 2 && duna[1].ClipKey == "v_2__generic", "body: LinesFor of a body without a variant falls back to generic", duna.Count > 1 ? duna[1].ClipKey : "-");
                     Check(none.Count == 2 && none[1].ClipKey == "v_2__generic" && sc.Lines[1].ClipKey == "v_2__generic",
                           "body: LinesFor(null) and Lines are the generic version", null);
-                    Check(sc.Phase == "goofy" && bt.ScenesFor("chatter", "calm", "orbit", "spin").Count == 1 && bt.ScenesFor("chatter", "calm", "launch", null).Count == 0,
-                          "body: scene phase goofy plays in orbit, not in launch", null);
+                    Check(sc.Phase == "idle" && bt.ScenesFor("chatter", "calm", "orbit", "spin").Count == 1 && bt.ScenesFor("chatter", "calm", "launch", null).Count == 0,
+                          "body: scene phase idle plays in orbit, not in launch", null);
                 }
             }
         }

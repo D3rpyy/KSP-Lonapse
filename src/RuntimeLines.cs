@@ -15,6 +15,12 @@ namespace Lonapse
     public sealed class RuntimeTemplate
     {
         public string Id, Kind;
+        public DialogueLine Dialogue;
+        public string Role;
+        public string Scene;
+        public int Sequence;
+        public string ProbeBand, ProbePhase;
+        public List<ProbeRuntimeLine> ProbeLines; // authored Runtime_Probe scene, null for legacy templates
         /// <summary>The versions of the line: { spanish, english } pairs, split by | in the file, in the same order.
         /// One is picked per play from the versions whose slots all have a value.</summary>
         public readonly List<string[]> Versions = new List<string[]>();
@@ -26,7 +32,7 @@ namespace Lonapse
         /// <summary>Chat only: the job kerbal A and kerbal B must have (a=pilot b=scientist in the when column).
         /// Null: any job.</summary>
         public string TraitA, TraitB;
-        /// <summary>Reply only: the Mission Control lines it answers, ids or prefixes ending in * (to=rt_fuel* in the
+        /// <summary>Reply only: the Mission Control lines it answers, ids or prefixes ending in * (to=fuel* in the
         /// when column). Empty: any report or warp line.</summary>
         public readonly List<string> To = new List<string>();
         /// <summary>Where the row is: "reports.tsv:12".</summary>
@@ -108,6 +114,26 @@ namespace Lonapse
 
     public static class RuntimeLines
     {
+        /// <summary>Legacy runtime IDs remain valid aliases of the prefix-free IDs.</summary>
+        public static string CanonicalId(string id)
+        {
+            return DialogueIds.Resolve(id != null && id.StartsWith("rt_", StringComparison.Ordinal) ? id.Substring(3) : id);
+        }
+
+        /// <summary>Named routing/settings columns override their legacy inline spelling in when.</summary>
+        public static List<string> ConditionTokens(string when, Func<string, string> get)
+        {
+            var tokens = new List<string>((when ?? "").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            foreach (string key in new[] { "on", "to", "who", "cooldown", "priority" })
+            {
+                string value = get(key);
+                if (string.IsNullOrWhiteSpace(value)) continue;
+                tokens.RemoveAll(token => token.StartsWith(key + "=", StringComparison.Ordinal));
+                foreach (string item in value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)) tokens.Add(key + "=" + item);
+            }
+            return tokens;
+        }
+
         public static readonly string[] Kinds = { "report", "dock", "land", "science", "science_pts",
                                                   "contract_funds", "contract_done", "contract_failed", "chat", "warp", "reply", "sunrise", "eva", "flag",
                                                   "event", "meta", "experiment", "device", "contract", "undock", "dock_close", "dock_callout", "science_talk" };
@@ -165,18 +191,24 @@ namespace Lonapse
             nums["landings"] = lands.Count;
             nums["stars"] = Math.Max(0, stars);
         }
-        /// <summary>A chat line: rt_chat_&lt;name&gt;_&lt;seq&gt;, a science talk line rt_st_&lt;name&gt;_&lt;seq&gt;. The
+        /// <summary>A legacy-compatible chat line: chat_&lt;name&gt;_&lt;seq&gt;, a science talk line st_&lt;name&gt;_&lt;seq&gt;. The
         /// lines of one name form one chat, seq from 1.</summary>
-        static readonly Regex ChatId = new Regex(@"^(rt_chat_[a-z0-9_]+?)_([0-9]+)$");
-        static readonly Regex TalkId = new Regex(@"^(rt_st_[a-z0-9_]+?)_([0-9]+)$");
+        static readonly Regex ChatId = new Regex(@"^((?:rt_)?chat_[a-z0-9_]+?)_([0-9]+)$");
+        static readonly Regex TalkId = new Regex(@"^((?:rt_)?st_[a-z0-9_]+?)_([0-9]+)$");
         /// <summary>Kinds whose rows are lines of a group (a chat, a science talk).</summary>
         static bool IsGroupKind(string kind) { return kind == "chat" || kind == "science_talk"; }
         static Match GroupMatch(RuntimeTemplate t) { return (t.Kind == "science_talk" ? TalkId : ChatId).Match(t.Id); }
+        static string GroupId(RuntimeTemplate t)
+        {
+            if (!string.IsNullOrEmpty(t.Scene)) return CanonicalId(t.Scene);
+            Match match = GroupMatch(t);
+            return match.Success ? CanonicalId(match.Groups[1].Value) : null;
+        }
 
-        static readonly Regex Check = new Regex(@"^([a-z_]+)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
+        static readonly Regex Check = new Regex(@"^([a-z][a-z0-9_]*)(<=|>=|<|>|=)(-?[0-9]+(?:\.[0-9]+)?)$");
         static readonly Regex TraitCheck = new Regex(@"^(a|b)=([a-z]+)$");
-        static readonly Regex IdRe = new Regex(@"^rt_[a-z0-9_]+$");
-        static readonly Regex ToRe = new Regex(@"^to=(rt_[a-z0-9_]*\*?)$");
+        static readonly Regex IdRe = new Regex(@"^[a-z0-9_]+$");
+        static readonly Regex ToRe = new Regex(@"^to=([a-z0-9_]+\*?|\*)$");
         static readonly Regex OnRe = new Regex(@"^on=([a-z0-9_]+(?:\.[a-z0-9_]+)?)$");
         static readonly Regex MetaRe = new Regex(@"^(cooldown|priority|who)=([a-z0-9.]+)$");
         static readonly Regex RegIdRe = new Regex(@"^id=([A-Za-z0-9_.\-]+)$");
@@ -272,16 +304,24 @@ namespace Lonapse
         }
 
         /// <summary>
-        /// Parses the files of Phrases/Runtime (name, lines) as one set: ids are unique over all files, and a chat may
-        /// not be split over two files. Each file has its own header with at least id, kind, when, spanish, english
-        /// (any order, other columns are ignored). # starts a comment. Bad rows go to errors and are skipped.
+        /// Parses category files as one set: logical ids are unique and a chat may not span files. Unified input
+        /// uses DialogueTable; the kind-based reader remains for legacy mods. Bad rows are reported and skipped.
         /// </summary>
         public static List<RuntimeTemplate> ParseAll(IEnumerable<KeyValuePair<string, IList<string>>> files, List<string> errors)
         {
             var r = new List<RuntimeTemplate>();
             var seen = new HashSet<string>();
             foreach (var file in files)
-                ParseFile(file.Key, file.Value, errors, seen, r);
+            {
+                if (DialogueTable.IsUnified(file.Value))
+                {
+                    var doc = DialogueTable.Parse(file.Value, file.Key, errors);
+                    int start = r.Count;
+                    ParseFile(file.Key, doc.TemplateRows(), errors, seen, r);
+                    doc.Attach(r, start);
+                }
+                else ParseFile(file.Key, file.Value, errors, seen, r);
+            }
             // registration rows (experiment, device, contract): each topic has one, each id one per kind. A science
             // or contract line with a mod topic needs the registration row of that topic (in any file).
             var topics = new Dictionary<string, string>();
@@ -316,22 +356,22 @@ namespace Lonapse
                 }
             }
             r.RemoveAll(t => dropReg.Contains(t));
-            // chats: ids rt_chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only.
-            // Science talks the same with rt_st_<name>_<seq>, and line 1 needs on= (the experiment).
+            // chats: explicit scene/seq columns, or ids chat_<name>_<seq>, seq 1, 2, 3 ... without gaps, at least 2 lines, conditions on line 1 only.
+            // Science talks the same with st_<name>_<seq>, and line 1 needs on= (the experiment).
             var groups = new Dictionary<string, List<RuntimeTemplate>>();
             var drop = new HashSet<RuntimeTemplate>();
             foreach (RuntimeTemplate t in r)
             {
                 if (!IsGroupKind(t.Kind)) continue;
-                Match m = GroupMatch(t);
-                if (!m.Success)
+                string groupId = GroupId(t);
+                if (groupId == null)
                 {
-                    if (errors != null) errors.Add(t.Where + " (" + t.Id + "): " + (t.Kind == "chat" ? "a chat id is rt_chat_<name>_<seq>" : "a science talk id is rt_st_<name>_<seq>"));
+                    if (errors != null) errors.Add(t.Where + " (" + t.Id + "): supply scene/seq columns or use chat_<name>_<seq> / st_<name>_<seq>");
                     drop.Add(t);
                     continue;
                 }
                 List<RuntimeTemplate> g;
-                if (!groups.TryGetValue(m.Groups[1].Value, out g)) groups[m.Groups[1].Value] = g = new List<RuntimeTemplate>();
+                if (!groups.TryGetValue(t.Kind + ":" + groupId, out g)) groups[t.Kind + ":" + groupId] = g = new List<RuntimeTemplate>();
                 g.Add(t);
             }
             foreach (var kv in groups)
@@ -399,10 +439,23 @@ namespace Lonapse
                 var bad = new List<string>();
                 var t = new RuntimeTemplate(f[col["id"]], f[col["kind"]], f[col["spanish"]], f[col["english"]]);
                 t.Where = where;
-                if (!IdRe.IsMatch(t.Id)) bad.Add("id '" + t.Id + "' must match rt_[a-z0-9_]+");
-                else if (!seen.Add(t.Id)) bad.Add("duplicate id " + t.Id);
+                if (col.ContainsKey("role")) t.Role = f[col["role"]];
+                if (IsGroupKind(t.Kind))
+                {
+                    string scene = col.ContainsKey("scene") ? f[col["scene"]] : "";
+                    string sequence = col.ContainsKey("seq") ? f[col["seq"]] : "";
+                    if (scene.Length > 0 || sequence.Length > 0)
+                    {
+                        int seq;
+                        if (!IdRe.IsMatch(scene) || !int.TryParse(sequence, out seq) || seq < 1)
+                            bad.Add("scene and seq must name a valid group and a positive line number");
+                        else { t.Scene = scene; t.Sequence = seq; }
+                    }
+                }
+                if (!IdRe.IsMatch(t.Id)) bad.Add("id '" + t.Id + "' must match [a-z0-9_]+");
+                else if (!seen.Add(CanonicalId(t.Id))) bad.Add("duplicate id " + t.Id);
                 if (Array.IndexOf(Kinds, t.Kind) < 0) bad.Add("unknown kind '" + t.Kind + "'");
-                foreach (string tok in f[col["when"]].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string tok in ConditionTokens(f[col["when"]], key => col.ContainsKey(key) ? f[col[key]] : ""))
                 {
                     if (tok == "any") continue;
                     if (Array.IndexOf(Situations, tok) >= 0) { t.Situations.Add(tok); continue; }
@@ -517,6 +570,7 @@ namespace Lonapse
 
         static int ChatSeq(RuntimeTemplate t)
         {
+            if (t.Sequence > 0) return t.Sequence;
             Match m = GroupMatch(t);
             return m.Success ? int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture) : 0;
         }
@@ -579,10 +633,10 @@ namespace Lonapse
                 foreach (RuntimeTemplate t in all)
                 {
                     if (t.Kind != kind) continue;
-                    Match m = GroupMatch(t);
-                    if (!m.Success) continue;
+                    string groupId = GroupId(t);
+                    if (groupId == null) continue;
                     List<RuntimeTemplate> g;
-                    if (!map.TryGetValue(m.Groups[1].Value, out g)) { map[m.Groups[1].Value] = g = new List<RuntimeTemplate>(); order.Add(m.Groups[1].Value); }
+                    if (!map.TryGetValue(groupId, out g)) { map[groupId] = g = new List<RuntimeTemplate>(); order.Add(groupId); }
                     g.Add(t);
                 }
             var r = new List<List<RuntimeTemplate>>();
@@ -594,16 +648,35 @@ namespace Lonapse
         /// that fills with the names of its speaker: line i is spoken by A when i is even. namesA and namesB hold self
         /// and other for each speaker. jobA and jobB are the trait keys of the two kerbals (Persona.trait). Null: the
         /// job is not checked.</summary>
+        public static void ActorConditions(Dictionary<string, double> nums, string a, string b)
+        {
+            if (nums == null) return;
+            foreach (string key in new[] { "pilot", "engineer", "scientist", "tourist", "badass", "brave", "nervous", "dim", "veteran" })
+            {
+                if (a == null) nums.Remove("job_a_" + key); else nums["job_a_" + key] = Array.IndexOf(a.Split(' '), key) >= 0 ? 1 : 0;
+                if (b == null) nums.Remove("job_b_" + key); else nums["job_b_" + key] = Array.IndexOf(b.Split(' '), key) >= 0 ? 1 : 0;
+            }
+        }
+
+        static Dictionary<string, double> SituationValues(Dictionary<string, double> nums, string situation)
+        {
+            var values = new Dictionary<string, double>(nums ?? new Dictionary<string, double>());
+            foreach (string tag in Situations) values["tag_" + tag] = tag == situation ? 1 : 0;
+            return values;
+        }
+
         public static bool ChatFits(List<RuntimeTemplate> chat, string situation, Dictionary<string, double> nums,
                                     Dictionary<string, string[]> namesA, Dictionary<string, string[]> namesB,
                                     string jobA = null, string jobB = null)
         {
             if (chat == null || chat.Count == 0) return false;
+            nums = SituationValues(nums, situation);
+            ActorConditions(nums, jobA, jobB);
             if (!JobOk(chat[0].TraitA, jobA) || !JobOk(chat[0].TraitB, jobB)) return false;
             if (!Persona.ChatSideFits(chat[0].TraitA, jobA) || !Persona.ChatSideFits(chat[0].TraitB, jobB)) return false;
-            if (!Holds(chat[0], situation, nums) || FillableVersions(chat[0], nums, namesA).Count == 0) return false;
+            if (!Holds(chat[0], situation, nums) || FillableVersions(chat[0], nums, chat[0].Role == "partner" ? namesB : namesA).Count == 0) return false;
             for (int i = 1; i < chat.Count; i++)
-                if (FillableVersions(chat[i], nums, i % 2 == 0 ? namesA : namesB).Count == 0) return false;
+                if (FillableVersions(chat[i], nums, (chat[i].Role == "partner" || string.IsNullOrEmpty(chat[i].Role) && i % 2 != 0) ? namesB : namesA).Count == 0) return false;
             return true;
         }
 
@@ -615,6 +688,8 @@ namespace Lonapse
                                     Dictionary<string, string[]> namesCrew, Dictionary<string, string[]> namesMc, string job = null)
         {
             if (talk == null || talk.Count == 0) return false;
+            nums = SituationValues(nums, situation);
+            ActorConditions(nums, job, null);
             if (!JobOk(talk[0].TraitA, job) || !Persona.ChatSideFits(talk[0].TraitA, job)) return false;
             if (!Holds(talk[0], situation, nums)) return false;
             for (int i = 0; i < talk.Count; i++)
@@ -625,6 +700,7 @@ namespace Lonapse
         /// <summary>Line i of a science talk is the kerbal's (else Mission Control's).</summary>
         public static bool TalkCrewLine(List<RuntimeTemplate> talk, int i)
         {
+            if (talk != null && i < talk.Count && !string.IsNullOrEmpty(talk[i].Role)) return talk[i].Role != "mc";
             bool mcFirst = talk != null && talk.Count > 0 && talk[0].McFirst;
             return (i % 2 == 0) != mcFirst;
         }
@@ -671,6 +747,7 @@ namespace Lonapse
         {
             var r = new List<RuntimeTemplate>();
             if (all == null) return r;
+            nums = SituationValues(nums, situation);
             foreach (RuntimeTemplate t in all)
                 if (t.Kind == kind && Holds(t, situation, nums) && FillableVersions(t, nums, names).Count > 0) r.Add(t);
             return r;
@@ -686,8 +763,10 @@ namespace Lonapse
             if (reply == null || reply.Kind != "reply" || string.IsNullOrEmpty(lineId)) return false;
             if (reply.To.Count == 0) return lineKind == "report" || lineKind == "warp" || lineKind == "sunrise" || lineKind == "eva"
                                          || lineKind == RecordedKind;
-            foreach (string p in reply.To)
+            lineId = CanonicalId(lineId);
+            foreach (string original in reply.To)
             {
+                string p = CanonicalId(original);
                 if (p.EndsWith("*", StringComparison.Ordinal) ? lineId.StartsWith(p.Substring(0, p.Length - 1), StringComparison.Ordinal)
                                                               : lineId == p) return true;
             }
@@ -714,8 +793,10 @@ namespace Lonapse
         }
 
         /// <summary>The situation and the checks of the when column hold.</summary>
-        static bool Holds(RuntimeTemplate t, string situation, Dictionary<string, double> nums)
+        internal static bool Holds(RuntimeTemplate t, string situation, Dictionary<string, double> nums)
         {
+            if (t.Dialogue != null) foreach (string token in t.Dialogue.Common)
+                if (Array.IndexOf(SubtitleSlots.Conditions, token) >= 0 && Array.IndexOf(Situations, token) < 0 && !DialogueTable.Holds(token, nums)) return false;
             if (t.Situations.Count > 0 && !t.Situations.Contains(situation ?? "")) return false;
             foreach (var c in t.Checks)
             {
@@ -741,6 +822,7 @@ namespace Lonapse
         {
             var r = new List<int>();
             if (t == null) return r;
+            if (t.Dialogue != null) return t.Dialogue.Matching(nums, names);
             for (int v = 0; v < t.Versions.Count; v++)
             {
                 string s, e;
@@ -804,10 +886,15 @@ namespace Lonapse
         /// <summary>Spanish and English words of an experiment. Unknown (modded) ids: "los datos" style generic words.
         /// Comet samples (cometSample_short ...) share one entry.</summary>
         /// <summary>ExperimentWords, where a mod's experiment row (kind experiment) gives the words of its own id.</summary>
-        public static string[] ExperimentWords(IList<RuntimeTemplate> all, string experimentId)
+        public static string[] ExperimentWords(IList<RuntimeTemplate> all, string experimentId, string displayName = null)
         {
             RuntimeTemplate m = ModExperiment(all, experimentId);
             if (m != null && m.Versions.Count > 0) return new[] { m.Versions[0][0], m.Versions[0][1] };
+            // A registry row can supply a translation; otherwise use the game's title for any unlisted experiment.
+            string[] known;
+            if (!string.IsNullOrEmpty(experimentId) && (Experiments.TryGetValue(experimentId, out known) || experimentId.StartsWith("cometSample", StringComparison.Ordinal))) return ExperimentWords(experimentId);
+            displayName = CleanName(displayName);
+            if (!string.IsNullOrEmpty(displayName) && !displayName.StartsWith("#")) return new[] { RuntimeSpeech.Respell(displayName), displayName };
             return ExperimentWords(experimentId);
         }
 

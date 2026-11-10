@@ -50,11 +50,13 @@ EFFECTS = {
     "thud_heavy":     "thud_heavy.wav",       # synthesized when this file is missing
     "thud_light":     "thud_light.wav",       # same
     "jetpack_loop":   "jetpack_loop.wav",     # synthesized when this file is missing
+    "cabin_separation": "cabin_separation.wav",
 }
 
 # Effects that only get louder: one plain gain to a loudness target (LUFS), no body lift, so the recording keeps its
 # own shape. The limiter catches the peaks above the ceiling. -16 LUFS is about the airlock.
-GAIN_ONLY = {"flag_plant": -16.0, "jetpack_on": -20.0, "jetpack_off": -20.0, "jetpack_loop": -26.0}
+GAIN_ONLY = {"flag_plant": -16.0, "jetpack_on": -20.0, "jetpack_off": -20.0, "jetpack_loop": -26.0,
+             "cabin_separation": -16.0}
 
 
 # Effects that are synthesized because there is no recording: name -> list of (freq Hz, start s, length s, amp).
@@ -62,6 +64,74 @@ GAIN_ONLY = {"flag_plant": -16.0, "jetpack_on": -20.0, "jetpack_off": -20.0, "je
 SYNTH = {
     "soi_change": [(880.0, 0.00, 0.22, 0.50), (1318.5, 0.16, 0.45, 0.45)],
 }
+
+
+def build_cabin_rattle(out_dir):
+    """Prefer the owner's recording, with a quiet level and a crossfade at the loop boundary."""
+    src = SOURCES / "cabin_rattle.wav"
+    if src.is_file():
+        duration = bc.probe(src)["duration"]
+        if duration < 0.5:
+            bc.die("cabin_rattle.wav must be at least half a second long")
+        xf = min(0.15, duration / 4)
+        graph = (
+            "[0:a]asplit=3[body][tail][head];"
+            "[body]atrim=start=%.6f:end=%.6f,asetpts=PTS-STARTPTS[mid];"
+            "[tail]atrim=start=%.6f,asetpts=PTS-STARTPTS[t];"
+            "[head]atrim=end=%.6f,asetpts=PTS-STARTPTS[h];"
+            "[t][h]acrossfade=d=%.6f:c1=qsin:c2=qsin[seam];"
+            "[mid][seam]concat=n=2:v=0:a=1,volume=%.2fdB,%s[out]"
+        ) % (xf, duration - xf, duration - xf, xf, xf, -15 - source_lufs(src), LIMIT)
+        path = out_dir / "cabin_rattle" / "sfx_cabin_rattle_000.wav"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        bc.run(["ffmpeg", "-hide_banner", "-nostdin", "-loglevel", "error", "-y", "-i", str(src),
+                "-filter_complex", graph, "-map", "[out]", "-ar", str(SR), "-c:a", "pcm_s16le", str(path)])
+        bc.log("record  %s  %.2f s  (owner's recording, stereo preserved)" % (path.name, duration - xf))
+        return
+    import random
+    rng = random.Random("cabin_rattle")
+    dur, xf = 8.0, 0.5
+    n, m = int(dur * SR), int(xf * SR)
+    raw = bc.noise(71, dur + xf, "brown", "highpass=f=70,lowpass=f=1200")
+    for k in range(m):
+        t = (k + 0.5) / m
+        raw[k] = raw[k] * math.sin(t * math.pi / 2) + raw[n + k] * math.cos(t * math.pi / 2)
+    x = [raw[k] * 0.12 + 0.015 * math.sin(2 * math.pi * 37 * k / SR) for k in range(n)]
+    for _ in range(96):
+        start = rng.randrange(n)
+        f = rng.uniform(180, 650)
+        amp = rng.uniform(0.04, 0.14)
+        decay = rng.uniform(0.012, 0.035)
+        length = int(0.25 * SR)
+        for k in range(length):
+            t = k / SR
+            env = min(1.0, t / 0.0015) * math.exp(-t / decay) * (1 - k / length) ** 2
+            tap = math.sin(2 * math.pi * f * t) + 0.4 * math.sin(2 * math.pi * f * 2.71 * t)
+            x[(start + k) % n] += amp * env * tap
+    gain = min(10 ** (-30 / 20) / bc.rms(x), 10 ** (-6 / 20) / max(abs(v) for v in x))
+    x = [v * gain for v in x]
+    path = out_dir / "cabin_rattle" / "sfx_cabin_rattle_000.wav"
+    bc.write_wav(path, x)
+    bc.log("synth   %s  %.2f s  rms %.1f dBFS" % (path.name, dur, bc.db(bc.rms(x))))
+
+
+def build_control_room(out_dir):
+    """Quiet air conditioning and console hum, before the Mission Control microphone filters."""
+    dur, xf = 8.0, 0.5
+    n, m = int(dur * SR), int(xf * SR)
+    raw = bc.noise(5, dur + xf, "brown", "highpass=f=80,lowpass=f=900")
+    for k in range(m):
+        a = math.sin(0.5 * math.pi * k / m)
+        b = math.cos(0.5 * math.pi * k / m)
+        raw[k] = raw[k] * a + raw[n + k] * b
+    x = []
+    for k in range(n):
+        t = k / SR
+        hum = 0.02 * math.sin(2 * math.pi * 50 * t) + 0.012 * math.sin(2 * math.pi * 100 * t)
+        x.append(raw[k] * 10 ** (-38 / 20) + hum * 10 ** (-6 / 20))
+    path = out_dir / "control_room_loop" / "sfx_control_room_loop_000.wav"
+    bc.write_wav(path, x)
+    bc.log("synth   %s  %.2f s  (microphone pickup, no loudness normalization)" % (path.name, dur))
 
 
 def build_loop_synth(name, out_dir):
@@ -287,16 +357,20 @@ def main():
     if a.list:
         for n, f in EFFECTS.items():
             bc.log("%s  from %s" % (n, f))
-        for n in list(SYNTH) + list(CABIN):
+        for n in list(SYNTH) + list(CABIN) + ["control_room_loop", "cabin_rattle"]:
             bc.log("%s  synthesized" % n)
         return
-    names = a.effects or (list(EFFECTS) + list(SYNTH) + list(CABIN))
+    names = a.effects or (list(EFFECTS) + list(SYNTH) + list(CABIN) + ["control_room_loop", "cabin_rattle"])
     for n in names:
-        if n not in EFFECTS and n not in SYNTH and n not in CABIN:
+        if n not in EFFECTS and n not in SYNTH and n not in CABIN and n not in ("control_room_loop", "cabin_rattle"):
             bc.die("unknown effect '%s', try --list" % n)
     cabin_done = False
     for n in names:
-        if n in CABIN:
+        if n == "cabin_rattle":
+            build_cabin_rattle(a.out)
+        elif n == "control_room_loop":
+            build_control_room(a.out)
+        elif n in CABIN:
             if not cabin_done:     # the two cabin sounds share one gain, so they are always built together
                 build_cabin(a.out)
                 cabin_done = True

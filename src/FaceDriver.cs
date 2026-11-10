@@ -64,6 +64,7 @@ namespace Lonapse
             public float moodTarget;           // kept while the weight eases out
             public float stress;               // the kerbal's own stress (KerbalVoice.sk), caps the happy side
             public float faceStress;           // stress smoothed for the face (FaceMath.StressCap)
+            public float calmStress;           // low vessel or personal stress also rules out stock fear
             public float tenseAt, panicAt;     // the kerbal's own thresholds, so the face turns scared with the voice
             public bool badass;
             public float moodW;
@@ -293,6 +294,7 @@ namespace Lonapse
                 bool engaged = f.speaking || f.listening;
                 KerbalVoice kv = host.roster != null ? host.roster.Find(f.name) : null;
                 f.stress = kv != null ? kv.sk : 0f;
+                f.calmStress = Math.Min(f.stress, host.stress != null ? host.stress.stress : 0f);
                 // smoothed for the face, so a short stress jump does not make it twitch (about 0.7 s to follow)
                 f.faceStress = FaceMath.Follow(f.faceStress, f.stress, dt, 1.5f);
                 f.badass = kv != null && kv.BadassEffective;
@@ -325,11 +327,13 @@ namespace Lonapse
                     // between lines the stress still caps the face, so it does not grin between two scared lines
                     float lw = FaceMath.Smooth01(f.moodW);
                     mood = FaceMath.FaceMood(f.moodTarget, lw, stockMood, f.faceStress, f.tenseAt, f.panicAt);
-                    if (lw <= 0f && mood >= stockMood - 1e-4f) continue;   // nothing to change: leave the stock face
+                    if (lw <= 0f && Math.Abs(mood - stockMood) < 1e-4f
+                        && stockMood >= FaceMath.LimitFear(-1f, f.calmStress)) continue;
                     w = exprWeight;
                 }
                 if (w <= 0f) continue;
                 f.lastExpr = FaceMath.Blend(f.kes.expression, mood, w, exprSign);
+                if (!exprTest) f.lastExpr = exprSign * FaceMath.LimitFear(exprSign * f.lastExpr, f.calmStress);
                 f.anim.SetFloat(f.exprHash, f.lastExpr);
                 f.exprWritten = true;
             }

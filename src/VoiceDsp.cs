@@ -1,6 +1,6 @@
 // Voice clarity DSP on the audio thread: presence EQ (+3 dB peaking around 2.5 kHz) and a
 // feed-forward peak compressor (threshold -18 dB, ratio 3, makeup). Coefficients come from MixMath.
-// Runs as the last filter on crew and control sources. No allocation in OnAudioFilterRead.
+// Radio voices use the microphone/receiver chain in RadioDsp. No allocation in OnAudioFilterRead.
 using System;
 using UnityEngine;
 
@@ -16,6 +16,17 @@ namespace Lonapse
         public float sampleRate = 48000f;
         public float outGain = 1f;   // voice boost and callout volume, linear (soft clipped above 0.8)
         public float dropout;        // 0..1: weak signal, short gaps and bit crunch (MC channel)
+        public volatile bool active;
+        public volatile RadioVoice radioVoice;
+        public volatile float radioWeakness;
+        public float radioLowPass = 3000f;
+        public float radioGrit;
+        public float pickupGain = 1f;
+        public float[] ambience;
+        public int ambienceRate;
+        public volatile int radioGeneration;
+        private int seenRadioGeneration = -1;
+        private readonly RadioDsp radio = new RadioDsp();
 
         private uint rngState = 2463534242u;
         private int gapLeft, gapLen;     // samples left in the current dropout, its length
@@ -96,7 +107,24 @@ namespace Lonapse
 
         private void OnAudioFilterRead(float[] data, int channels)
         {
-            if (channels <= 0 || channels > 8) return;
+            if (!active || data == null || channels <= 0 || channels > 8 || data.Length % channels != 0) return;
+            RadioVoice voice = radioVoice;
+            if (voice != RadioVoice.Off)
+            {
+                int generation = radioGeneration;
+                if (generation != seenRadioGeneration)
+                {
+                    radio.Reset();
+                    gapLeft = holdCount = 0; gapGain = 1f;
+                    seenRadioGeneration = generation;
+                }
+                radio.Process(data, channels, sampleRate, voice, radioWeakness, radioLowPass,
+                              compressorOn, outGain, ambience, ambienceRate, radioGrit, pickupGain);
+                lastReductionDb = radio.ReductionDb;
+                float drop = dropout;
+                if (drop > 0.001f) Dropouts(data, channels, drop);
+                return;
+            }
             if (coefSr != sampleRate) Coefficients();
             bool eq = eqOn, comp = compressorOn;
             float og = outGain;

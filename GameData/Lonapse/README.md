@@ -30,7 +30,7 @@ with a text to speech voice and pitched up. It sounds like a real language witho
 - **Callouts.** The crew will call out when staging, parachutes, full throttle or throttle cutoff happens. They will also call out during docking maneuvers or when they do a science experiment.
 - **Cabin intercom.** With two or more kerbals aboard they chat among themselves now and then with some jokes. Jokes about floating around the cabin only come up in space.
 - **The radio sounds like a radio.** Quindar tones on Mission Control, static that follows your CommNet signal (or
-  RemoteTech), reentry blackout, a delay on the answers far from Kerbin and dropouts on a weak link. A light static plays under every transmission, which you can set in the Sound tab. This way the radio follows your connection with the KSC.
+  RemoteTech), reentry blackout, a delay on the answers far from Kerbin and dropouts on a weak link. The crew sounds like they are talking through a headset, with a little cabin noise behind the mic. On EVA you hear the short resonance of the helmet. Mission Control has a fuller voice with the quiet control room behind it, and a narrower sound when the link gets weak. You can set the hiss and crackle with "Radio static" in the Sound tab. At 0% the static is silent. This way the radio follows your connection with the KSC.
 - **Probes.** Each (vanilla) probe core has its own beep voice with moods (happy, curious, scared, sleepy and more). Mission
   Control checks in, reacts to staging, burns, landings and docking, and notices when the batteries run low.
 - **Probes and crew together.** A crewed vessel with a probe core gets small cabin chats: the probe beeps a report and
@@ -38,23 +38,24 @@ with a text to speech voice and pitched up. It sounds like a real language witho
   also works with only one kerbal aboard. You can turn it off in the Probes tab.
 - **EVA suit radio.** Breathing in the helmet that speeds up when you run, short check-ins with Mission Control and a
   few words when your kerbal falls over. The suit relays through a ship nearby.
+- **Cabin sound in IVA.** Fans and a soft hum in the cabin while you look through a kerbal's eyes. The cabin rattles while the engines thrust. When the batteries run flat, the fans power down.
 - **Animated talking kerbals.** Jaws move when a Kerbal talks and the others turn their heads to the speaker. This is visible in EVA, IVA and in the
   portraits while flying.
 - **Launch countdown.** Press Alt+C on the pad and launch control counts you down (well, up. It is reversed after all). If you want a real countdown from 10, pick Down in the General tab.
 - **Stations and bases.** These get regular check-ins from mission control on a larger interval. The crew will still joke on the intercom though.
-- **Runtime voice: they say your names.** A small speech engine (Piper) ships with the mod and speaks new lines while you play, in the same voices as the recorded ones. It is on by default and runs on Windows and Linux (see Runtime voice files below).
+- **Runtime speech throughout.** Piper speaks all crew and Mission Control dialogue while you play, including names and live values. Category tables in `Phrases/Crew` and `Phrases/Probe` contain the dialogue; no recorded voices or generated phrase/pool tables are required. Speech runs on Windows and Linux.
   - **Names.** Mission Control ends a line with the name of the kerbal who just spoke or with your vessel's name, and kerbals on the intercom call each other by name. A planet from a mod is called by its real name.
   - **Real numbers.** Now and then Mission Control reports your orbit, altitude, speed, fuel, battery, the next burn, the mission day, funds, science or reputation. Low over the ground it reads your height and descent speed, on a docking approach the distance to the target. After science it says the points, after a contract the funds.
   - **Crew history.** Mission Control knows your kerbals' careers: a first flight, the tenth mission, a first time at Duna, a landing here before, or their level. Two kerbals can chat about it too.
   - **22 crew chats with values**, some only for the right jobs, like a pilot and an engineer talking about the fuel.
   - **The voice says what the subtitle shows.** For lines whose subtitle fills in a word (a lost thing, a food, a part, a name), the voice speaks that exact version.
-  - **Your own lines.** Add a row or a file of your own to `Phrases/Runtime/` (the format is at the top of `reports.tsv`), or a file in `Phrases/Extra/`, and restart KSP. No audio to render. When a line is not ready within a second, the recorded line plays instead.
-- **English subtitles** with a colour per speaker. Most lines have several wordings, so a line you heard before can read differently. The number of subtitle lines, their size, width and position are fully customizable.
-- **Lots of lines.** 1896 recorded interactions with 6478 extra subtitle wordings, plus 53 runtime lines and 22 runtime chats. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
+  - **Your own lines.** Add a category file under `Phrases/Crew/` or `Phrases/Probe/`, or a mod table under `GameData/YourMod/Lonapse/`. Both use the [same format](docs/API.md#one-alternative-per-row). Use Reload lines after editing. Speech waits briefly for synthesis and skips a line if it cannot be prepared.
+- **English subtitles** with a colour per speaker. Each alternative row pairs the spoken line with its subtitle. The number of subtitle lines, their size, width and position are fully customizable.
+- **Lots of dialogue.** Category tables preserve the existing crew and probe scenes, with paired spoken alternatives and contextual conversations. The mod remembers which ones you heard, also after a restart, so you hear the rest before one comes back.
 
 ## Install
 
-1. Download `Lonapse-0.8.3.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
+1. Download `Lonapse-0.9.0.zip` from the releases page. The `GameData` folder in this repo has the same files, except the runtime voice (`PluginData/Runtime`), which is only in the zip.
 2. Copy the `GameData/Lonapse` folder into the `GameData` folder of your KSP install.
 
 That's all. Lonapse has no dependencies. The mod is available for install via the CKAN. Additionally, the mod is available on [SpaceDock](https://spacedock.info/mod/4786/Lonapse).
@@ -66,6 +67,8 @@ your settings.
 
 Click the antenna button on the toolbar in flight. There you can set how chatty the radio is, the volumes, which
 events Mission Control reacts to, the probe behaviour, the subtitles and a bunch more just to your liking.
+Volume sliders run from 0 to 100%. The maximum gives twice the gain of the old 100% setting. Your saved
+audio levels stay the same, at lower slider positions.
 
 Hotkeys:
 
@@ -126,7 +129,8 @@ Moods you don't write keep the stock pattern. Mistakes are written to `KSP.log` 
 A voice is only text. Lonapse makes the sound in the game, so a mod ships one `.cfg` file and no audio.
 A voice named after a stock core (`okto`, `hecs` and so on) replaces that core's voice. To give any other part a
 voice, add `ModuleLonapse` to it. A part author can put the `MODULE` block in the part's own config. To add it to a
-part from another mod, or only when Lonapse is installed, use a Module Manager patch:
+part from another mod, or only when Lonapse is installed, use a Module Manager patch. See
+[ModuleLonapse and Module Manager](docs/ModuleLonapse.md) for guarded add/edit patches and selection precedence:
 
 ```
 @PART[myProbeCore]:NEEDS[Lonapse]
@@ -137,6 +141,7 @@ part from another mod, or only when Lonapse is installed, use a Module Manager p
         voice = myprobe     // a stock voice or a LONAPSE_PROBE_VOICE name
         priority = 0        // with several cores on a vessel, the highest wins
         displayName = STP   // optional, the subtitle name of this part
+        lines = mylines     // optional, your own lines for this probe (see below)
     }
 }
 ```
@@ -153,6 +158,25 @@ stock core's voice.
 The module is saved in craft and save files like any part module. If you remove Lonapse, KSP writes a warning about
 the missing module to its log. Nothing else happens.
 
+## Your own lines for a probe
+
+The probe talk (Mission Control and the probe) is written per stock core. A mod or a player can add a set of lines of
+their own, a lineset, without Module Manager:
+
+1. Register it with a `LONAPSE_PROBE_LINES` node in any `.cfg`. `name` is a to z, 0 to 9 and `_` (at most 32
+   characters, not `any` and not a stock core). `displayName` is optional.
+2. Write the lines in a table with the format of `GameData/Lonapse/Phrases/Probe/personalities.tsv` and put the name
+   in the `core` column on the scene's first row. A mod puts the file in `GameData/<Mod>/Lonapse/Probe/*.tsv`. For your own game,
+   `GameData/Lonapse/Phrases/Probe/` accepts these scene tables too; the older `Extra/` location remains supported. Use Reload lines after a table change; restart KSP for new config registrations.
+3. Give a probe the lines with `lines = <name>` in a `LONAPSE_PROBE_VOICE` or on `ModuleLonapse`. The module wins over
+   the voice, except for a voice you picked yourself in the Lonapse window. There the Lines button steps through your
+   linesets after the stock cores.
+
+Piper speaks the Spanish text and shows the matching English subtitle. Probe rows select a beep mood and show
+subtitles such as `[beeps happily]`. `{probe}` in both languages resolves to the probe's display name. Custom
+linesets retain their existing selection and weighting. See [ModuleLonapse](docs/ModuleLonapse.md) for MM patches and lineset setup, and
+[Unified dialogue](docs/API.md#one-alternative-per-row) for the base columns, optional scene fields, and scene selectors.
+
 ## Lines for your own mod
 
 Another mod can give its own events a voice: a repair that is done, supplies that run low, an experiment that is
@@ -166,7 +190,7 @@ names. Players who do not like the lines of one mod can turn them off in the Mod
 ## Compatibility
 
 - Built and tested on KSP 1.12.5. Other 1.12 versions should work but I have not tried them.
-- I play on Linux. Windows and macOS should be fine since it is a plain plugin, but I have not tested them.
+- Spoken dialogue requires the bundled Piper runtime on Windows or Linux. macOS has no supported speech runtime and no recorded-voice fallback.
 - Don't run it together with Chatterer. Both would talk at the same time.
 - RemoteTech is supported for the radio signal simulation, but I have not tested it in game yet.
 
@@ -181,8 +205,12 @@ names. Players who do not like the lines of one mod can turn them off in the Mod
 The repo has the plugin source, the phrase tables and the audio scripts. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 for the build and [audio/README.md](audio/README.md) for the sound pipeline.
 
-`GameData/Lonapse/Phrases/phrases.tsv` is built by `audio/build_lonapse.py` and is too large for GitHub to show as a
-table. The lines it is built from are in [audio/lonapse/phrases/](audio/lonapse/phrases/), one table per topic.
+Dialogue is authored directly in [Crew](GameData/Lonapse/Phrases/Crew/) and
+[Probe](GameData/Lonapse/Phrases/Probe/) category tables. See [Unified dialogue](docs/API.md#one-alternative-per-row)
+for the base columns, optional scene fields, and scene selectors. Validate them with `python3 tools/validate_dialogue.py`. No speech recordings or generated phrase/pool tables are required.
+
+Routine Crew dialogue is grouped into `intercom_chatter.tsv` and `radio_chatter.tsv`. Event-triggered dialogue
+lives in `events.tsv`; its channel follows the participants.
 
 ## Runtime voice files
 
@@ -217,7 +245,7 @@ hashes up on [VirusTotal](https://www.virustotal.com):
 | `voices/es_MX-ald-medium.onnx` | `07cfd143e350cc5e6400f2da0b98409b8a16ca4524e3b26c11900d709c573468` |
 
 There is no runtime voice on macOS. The macOS build of this Piper release is missing its libraries and cannot start.
-On a Mac, Lonapse plays the recorded lines only. I play KSP for Windows under Proton, so the Linux build is not tested
+There is no recorded-voice fallback on a Mac. I play KSP for Windows under Proton, so the Linux build is not tested
 in the game.
 
 The licence texts and the source links are in `PluginData/Runtime/LICENSES`. The source code of Piper,
@@ -233,14 +261,13 @@ from the ones on Hugging Face. `audio/quantize_runtime_voices.py` makes them, an
 onnx 1.23.2 and onnxruntime 1.31.1.
 
 `piper.exe` is not code signed, and a game that starts another program can look suspicious to a virus scanner. I
-have not tested this with any antivirus program. If yours blocks it, compare the hashes above first. Lonapse keeps
-working without the runtime voice, it then uses the recorded clips only.
+have not tested this with any antivirus program. If yours blocks it, compare the hashes above first. Spoken dialogue requires Piper; beeps and sound effects remain separate.
 
 ## Credits and license
 
 Inspired by [Chatterer](https://github.com/Athlonic/Chatterer). Lonapse contains none of its code or sounds.
 
-The recorded voices are spoken by [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine,
+The speech-rendering source fixtures used [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural text to speech engine,
 with three Spanish voice models. Their credits are in [audio/CREDITS.md](audio/CREDITS.md). The beeps and static are
 synthesized.
 

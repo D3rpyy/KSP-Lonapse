@@ -14,7 +14,7 @@ namespace Lonapse
     {
         public const float MoodPanic = -1f;     // panic line: full fear
         public const float MoodTense = -0.5f;   // tense line: mild fear
-        public const float MoodGrin = 0.8f;     // calm goofy line, calm chatter, relief or intercom: grin
+        public const float MoodGrin = 0.8f;     // line in a calm phase, calm chatter, relief or intercom: grin
         public const float MoodBadass = 0.4f;   // badass kerbal on a tense line: mild grin
         public const float MoodCalm = 0.2f;     // other calm lines (plain callouts): a hint of a smile
         public const float ListenerScale = 0.5f; // listeners in the same vessel react at half strength
@@ -31,8 +31,8 @@ namespace Lonapse
             band = band ?? "calm";
             if (band == "panic") return badass ? MoodTense : MoodPanic;
             if (band == "tense") return badass ? MoodBadass : MoodTense;
-            bool goofy = intercom || ev == "chatter" || ev == "relief" || IsGoofyPhase(phase);
-            if (goofy) return MoodGrin;
+            bool calm = intercom || ev == "chatter" || ev == "relief" || IsCalmPhase(phase);
+            if (calm) return MoodGrin;
             return badass ? MoodBadass : MoodCalm;
         }
 
@@ -41,6 +41,12 @@ namespace Lonapse
 
         /// <summary>The face at the kerbal's own panic threshold: clearly scared.</summary>
         public const float FaceAtPanic = -0.5f;
+
+        /// <summary>Neutral or happy through 0.2 stress. Fear eases in over the next 0.1.</summary>
+        public static float LimitFear(float mood, float stress)
+        {
+            return Clamp(mood, -Smooth01((stress - 0.2f) / 0.1f), 1f);
+        }
 
         /// <summary>
         /// How happy a face may look at this personal stress (sk, 0..1), anchored to the kerbal's own thresholds, so
@@ -75,8 +81,8 @@ namespace Lonapse
 
         /// <summary>
         /// The mood a talking or listening face moves to. The line mood, but a line never makes the face happier than
-        /// it is: a fearful stock face (stockMood below FearFace) keeps its fear on a calm line, a fearful line may
-        /// deepen it. The stress caps how happy the face can look (StressCap).
+        /// it is at higher stress. A fearful stock face can keep its fear on a calm line. Below 0.2 stress only
+        /// neutral or happy expressions are allowed. Stress also caps how happy the face can look (StressCap).
         /// </summary>
         public static float HeldMood(float lineMood, float stockMood, float stress, float tenseAt, float panicAt)
         {
@@ -86,18 +92,18 @@ namespace Lonapse
             if (stockMood < FearFace && m > stockMood) m = stockMood;
             float cap = StressCap(stress, tenseAt, panicAt);
             if (m > cap) m = cap;
-            return Clamp(m, -1f, 1f);
+            return LimitFear(m, stress);
         }
 
         /// <summary>
         /// The mood of a face between lines: the stock face, but never happier than the stress allows. So a stressed
         /// kerbal no longer grins between two scared lines (stock KSP grins at speed and G). Below tenseAt it is the
-        /// stock face.
+        /// stock face, with fear limited at low stress.
         /// </summary>
         public static float IdleMood(float stockMood, float stress, float tenseAt, float panicAt)
         {
             if (float.IsNaN(stockMood) || float.IsInfinity(stockMood)) stockMood = 0f;
-            return Clamp(Math.Min(stockMood, StressCap(stress, tenseAt, panicAt)), -1f, 1f);
+            return LimitFear(Math.Min(stockMood, StressCap(stress, tenseAt, panicAt)), stress);
         }
 
         /// <summary>
@@ -111,10 +117,11 @@ namespace Lonapse
             return Clamp(idle + (line - idle) * Clamp01(lineWeight), -1f, 1f);
         }
 
-        /// <summary>Same as PhraseTable.IsGoofyPhase, repeated here so this file stays free of the table.</summary>
-        public static bool IsGoofyPhase(string p)
+        /// <summary>Same as PhraseTable.IsCalmPhase, repeated here so this file stays free of the table.</summary>
+        public static bool IsGoofyPhase(string p) { return IsCalmPhase(p); } // legacy API name
+        public static bool IsCalmPhase(string p)
         {
-            return p == "goofy" || p == "prelaunch" || p == "orbit" || p == "coast" || p == "landed";
+            return p == "idle" || p == "goofy" || p == "calm" || p == "prelaunch" || p == "orbit" || p == "coast" || p == "landed";
         }
 
         /// <summary>Band name for the enum value of KerbalVoice.band (0 calm, 1 tense, 2 panic).</summary>

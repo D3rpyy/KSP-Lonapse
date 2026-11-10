@@ -1,0 +1,46 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+vo_welcome_1	vo_welcome_1	vo_welcome	1	mission_control	flight.soi_enter	radio				0	Bienvenidos. Esto es {body}.	Welcome. This is {body}.	calm	chatter	m	any	any	any	any	any	any						
+vo_welcome_2	vo_welcome_2	vo_welcome	2	kerbal_a	flight.soi_enter	radio				0	Gracias. ¿Dónde dejamos las maletas?	Thanks. Where do we leave the luggage?	calm	chatter	both	any	any	any	any	any	any						
+vo_sign_1	vo_sign_1	vo_sign	1	mission_control	flight.soi_enter	radio				0	Tripulación, {body} os da la bienvenida.	Crew, {body} welcomes you.	calm	chatter	m	any	any	any	any	any	any						
+vo_sign_2	vo_sign_2	vo_sign	2	kerbal_a	flight.soi_enter	radio				0	Qué amable. Pero no he visto ningún cartel.	How kind. But I didn't see a sign.	calm	chatter	both	any	any	any	any	any	any						
+vo_map_1	vo_map_1	vo_map	1	kerbal_a	flight.soi_enter	radio				0	Control, ¿dónde estamos ahora?	Control, where are we now?	calm	chatter	both	any	any	any	any	any	any						
+vo_map_2	vo_map_2	vo_map	2	mission_control	flight.soi_enter	radio				0	Según el mapa, eso de ahí es {body}.	According to the map, that over there is {body}.	calm	chatter	m	any	any	any	any	any	any						
+vo_passport_1	vo_passport_1	vo_passport	1	mission_control	flight.soi_enter	radio				0	Tenéis {body} delante. Preparad los pasaportes.	{body} is right ahead. Get your passports ready.	calm	chatter	m	any	any	any	any	any	any						
+vo_passport_2	vo_passport_2	vo_passport	2	kerbal_a	flight.soi_enter	radio				0	Mi pasaporte se quedó en la plataforma.	My passport stayed on the launchpad.	calm	chatter	both	any	any	any	any	any	any						
+vo_behave_1	vo_behave_1	vo_behave	1	mission_control	flight.soi_enter	radio				0	Atención: {body} os saluda. Portaos bien.	Attention: {body} says hello. Behave yourselves.	calm	chatter	m	any	any	any	any	any	any						
+vo_behave_2	vo_behave_2	vo_behave	2	kerbal_a	flight.soi_enter	radio				0	Siempre nos portamos bien. Casi siempre.	We always behave. Almost always.	calm	chatter	both	any	any	any	any	any	any						
+vo_in_charge_1	vo_in_charge_1	vo_in_charge	1	mission_control	flight.soi_enter	radio				0	Llegada confirmada. Ahora manda {body}.	Arrival confirmed. {body} is in charge now.	calm	chatter	m	any	any	any	any	any	any						
+vo_in_charge_2	vo_in_charge_2	vo_in_charge	2	kerbal_a	flight.soi_enter	radio				0	Entendido. Saludaremos a la nueva gravedad.	Understood. We'll say hi to the new gravity.	calm	chatter	both	any	any	any	any	any	any						
+vo_guidebook_1	vo_guidebook_1	vo_guidebook	1	mission_control	flight.soi_enter	radio				0	La guía dice que en esta época {body} merece la pena.	The guidebook says {body} is worth it this time of year.	calm	chatter	m	any	any	any	any	any	any						
+vo_guidebook_2	vo_guidebook_2	vo_guidebook	2	kerbal_a	flight.soi_enter	radio				0	¿Y quién escribió la guía? Nadie ha venido nunca.	And who wrote the guidebook? Nobody has ever been here.	calm	chatter	both	any	any	any	any	any	any						
+vo_postcard_1	vo_postcard_1	vo_postcard	1	mission_control	flight.soi_enter	radio				0	Haced muchas fotos de {body}.	Take lots of photos of {body}.	calm	chatter	m	any	any	any	any	any	any						
+vo_postcard_2	vo_postcard_2	vo_postcard	2	kerbal_a	flight.soi_enter	radio				0	Vale. Pero todas van a salir movidas.	Okay. But they'll all come out blurry.	calm	chatter	both	any	any	any	any	any	any						
+vo_doorbell_1	vo_doorbell_1	vo_doorbell	1	kerbal_a	flight.soi_enter	radio				0	¡Hola! ¿Hay alguien en casa?	Hello! Anybody home?	calm	chatter	both	any	any	any	any	any	any						
+vo_doorbell_2	vo_doorbell_2	vo_doorbell	2	mission_control	flight.soi_enter	radio				0	{body} no contesta. Dejad un mensaje.	{body} isn't answering. Leave a message.	calm	chatter	m	any	any	any	any	any	any						
+vo_neighbor_1	vo_neighbor_1	vo_neighbor	1	mission_control	flight.soi_enter	radio				0	Nuevo vecino a la vista: {body}.	New neighbor in sight: {body}.	calm	chatter	m	any	any	any	any	any	any						
+vo_neighbor_2	vo_neighbor_2	vo_neighbor	2	kerbal_a	flight.soi_enter	radio				0	Voy a saludar con las dos manos.	I'm going to wave with both hands.	calm	chatter	both	any	any	any	any	any	any						
+vo_home_crew_1	vo_home_crew_1	vo_home_crew	1	mission_control	flight.soi_enter	radio				0	Bienvenidos a casa, tripulación.	Welcome home, crew.	calm	chatter	m	any	any	any	any	home	any						
+vo_home_crew_2	vo_home_crew_2	vo_home_crew	2	kerbal_a	flight.soi_enter	radio				0	Por fin. Huele a césped desde aquí.	Finally. I can smell the grass from here.	calm	chatter	both	any	any	any	any	home	any						
+vo_home_soup_1	vo_home_soup_1	vo_home_soup	1	kerbal_a	flight.soi_enter	radio				0	Control, ya vemos nuestra casa.	Control, we can see home.	calm	chatter	both	any	any	any	any	home	any						
+vo_home_soup_2	vo_home_soup_2	vo_home_soup	2	mission_control	flight.soi_enter	radio				0	Bienvenidos. Hay sopa caliente esperando.	Welcome back. There's hot soup waiting.	calm	chatter	m	any	any	any	any	home	any						
+vo_home_gifts_1	vo_home_gifts_1	vo_home_gifts	1	mission_control	flight.soi_enter	radio				0	Bienvenidos a casa. ¿Habéis traído algo?	Welcome home. Did you bring anything?	calm	chatter	m	any	any	any	any	home	any						
+vo_home_gifts_2	vo_home_gifts_2	vo_home_gifts	2	kerbal_a	flight.soi_enter	radio				0	Datos, fotos y un poco de polvo en las botas.	Data, photos and some dust on our boots.	calm	chatter	both	any	any	any	any	home	any						
+chat_calm_s4_1	chat_calm_s4_1	chat_calm_s4	1	mission_control	flight.chatter	radio				0	¿Qué tal la vista desde ahí arriba?	How's the view from up there?	calm	chatter	m	orbit	any	any	any	any	any						
+chat_calm_s4_1__v02	chat_calm_s4_1	chat_calm_s4	1	mission_control	flight.chatter	radio				0	¿Qué tal la vista, {vessel}?	How's the view, {vessel}?	calm	chatter	m	orbit	any	any	any	any	any						
+chat_calm_s4_2	chat_calm_s4_2	chat_calm_s4	2	kerbal_a	flight.chatter	radio				0	Increíble. Qué vista sobre {body}.	Incredible. What a view of {body}.	calm	chatter	both	orbit	any	any	any	any	any						
+bo_greetings_1	bo_greetings_1	bo_greetings	1	mission_control	flight.chatter	radio				0	Saludos para {body} de parte de todos.	Say hi to {body} from all of us.	calm	chatter	m	idle	any	any	any	any	any						
+bo_greetings_2	bo_greetings_2	bo_greetings	2	kerbal_a	flight.chatter	radio				0	Hecho. No ha contestado.	Done. No answer.	calm	chatter	both	idle	any	any	any	any	any						
+bo_postcards_1	bo_postcards_1	bo_postcards	1	mission_control	flight.chatter	radio				0	¿Cómo se ve {body} desde ahí?	How does {body} look from there?	calm	chatter	m	coast	any	any	any	any	any						
+bo_postcards_2	bo_postcards_2	bo_postcards	2	kerbal_a	flight.chatter	radio				0	Menos grande que en las postales.	Smaller than on the postcards.	calm	chatter	both	coast	any	any	any	any	any						
+bo_first_song_1	bo_first_song_1	bo_first_song	1	kerbal_a	flight.chatter	radio				0	Control, vamos a cantar una canción.	Control, we're going to sing a song.	calm	chatter	both	idle	any	any	any	any	any						
+bo_first_song_2	bo_first_song_2	bo_first_song	2	mission_control	flight.chatter	radio				0	Bajito, que no os oiga {body}.	Quietly, don't let {body} hear you.	calm	chatter	m	idle	any	any	any	any	any						
+bo_first_song_3	bo_first_song_3	bo_first_song	3	kerbal_a	flight.chatter	radio				0	Demasiado tarde. Ya nos ha oído.	Too late. It already heard us.	calm	chatter	both	idle	any	any	any	any	any						
+bo_today_1	bo_today_1	bo_today	1	mission_control	flight.chatter	radio				0	¿Qué tal está {body} hoy?	How's {body} today?	calm	chatter	m	idle	any	any	any	any	any						
+bo_today_2	bo_today_2	bo_today	2	kerbal_a	flight.chatter	radio				0	Igual que ayer. Sigue en su sitio.	Same as yesterday. Still where we left it.	calm	chatter	both	idle	any	any	any	any	any						
+bo_museum_1	bo_museum_1	bo_museum	1	mission_control	flight.chatter	radio				0	Haced muchas fotos. El museo quiere ver {body}.	Take lots of photos. The museum wants to see {body}.	calm	chatter	m	idle	any	any	any	any	any						
+bo_museum_2	bo_museum_2	bo_museum	2	kerbal_a	flight.chatter	radio				0	Ya tenemos doscientas. Todas con mi dedo delante.	We have two hundred already. All with my finger in front.	calm	chatter	both	idle	any	any	any	any	any						
+bo_kids_1	bo_kids_1	bo_kids	1	mission_control	flight.chatter	radio				0	Hay niños en casa mirando hacia {body} ahora mismo.	Kids at home are looking toward {body} right now.	calm	chatter	m	idle	any	any	any	any	any						
+bo_kids_2	bo_kids_2	bo_kids	2	kerbal_a	flight.chatter	radio				0	¡Hola, niños! Comed verdura.	Hello, kids! Eat your vegetables.	calm	chatter	both	idle	any	any	any	any	any						
+bo_souvenir_1	bo_souvenir_1	bo_souvenir	1	mission_control	flight.chatter	radio				0	Recordad: no se puede llevar {body} a casa.	Remember: you can't take {body} home.	calm	chatter	m	idle	any	any	any	any	any						
+bo_souvenir_2	bo_souvenir_2	bo_souvenir	2	kerbal_a	flight.chatter	radio				0	¿Ni un trocito?	Not even a little piece?	calm	chatter	both	idle	any	any	any	any	any						
+bo_souvenir_3	bo_souvenir_3	bo_souvenir	3	mission_control	flight.chatter	radio				0	Ni un trocito.	Not even a little piece.	calm	chatter	m	idle	any	any	any	any	any						

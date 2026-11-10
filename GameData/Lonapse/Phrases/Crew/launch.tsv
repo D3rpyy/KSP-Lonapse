@@ -1,0 +1,124 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+staging_01	staging_01	staging_01	1	kerbal_a	flight.staging	radio				0	Separación	Separation	none	callout	both	any	any	any	any	any	any						
+staging_02	staging_02	staging_02	1	kerbal_a	flight.staging	radio				0	Soltar	Release	none	callout	both	any	any	any	any	any	any						
+throttle_full_01	throttle_full_01	throttle_full_01	1	kerbal_a	flight.throttle_full	radio				0	Empuje máximo	Maximum thrust	none	callout	both	any	any	any	any	any	any						
+throttle_full_02	throttle_full_02	throttle_full_02	1	kerbal_a	flight.throttle_full	radio				0	Acelerador a fondo	Full throttle	none	callout	both	any	any	any	any	any	any						
+throttle_cut_01	throttle_cut_01	throttle_cut_01	1	kerbal_a	flight.throttle_cut	radio				0	Motor apagado	Engine off	none	callout	both	any	any	any	any	any	any						
+throttle_cut_02	throttle_cut_02	throttle_cut_02	1	kerbal_a	flight.throttle_cut	radio				0	Corte de empuje	Thrust cut	none	callout	both	any	any	any	any	any	any						
+staging_any_01	staging_any_01	staging_any_01	1	kerbal_a	flight.staging	radio				0	¡Etapa!	Stage!	none	callout	both	any	any	any	any	any	any						
+staging_04	staging_04	staging_04	1	kerbal_a	flight.staging	radio				0	¡Fuera!	Away!	none	callout	both	any	any	any	any	any	any						
+staging_s1_1	staging_s1_1	staging_s1	1	kerbal_a	flight.staging	radio				0	¡Separación!	Separation!	none	callout	both	any	any	any	any	any	any						
+staging_s1_2	staging_s1_2	staging_s1	2	mission_control	flight.staging	radio				0	Separación confirmada.	Separation confirmed.	none	callout	m	any	any	any	any	any	any						
+staging_s1_2__v02	staging_s1_2	staging_s1	2	mission_control	flight.staging	radio				0	Separación confirmada a {speed} metros por segundo.	Separation confirmed at {speed} m/s.	none	callout	m	any	any	any	any	any	any						
+staging_s2_1	staging_s2_1	staging_s2	1	kerbal_a	flight.staging	radio				0	Etapa fuera.	Stage away.	none	callout	both	any	any	any	any	any	any						
+staging_s2_2	staging_s2_2	staging_s2	2	mission_control	flight.staging	radio				0	Recibido, buena separación.	Copy, good separation.	none	callout	m	any	any	any	any	any	any						
+staging_ign_s1_1	staging_ign_s1_1	staging_ign_s1	1	kerbal_a	flight.staging	radio				0	Encendido de la siguiente etapa.	Next stage ignition.	none	callout	both	any	any	any	any	any	any						
+staging_ign_s1_2	staging_ign_s1_2	staging_ign_s1	2	mission_control	flight.staging	radio				0	Confirmado, empuje nominal.	Confirmed, thrust nominal.	none	callout	m	any	any	any	any	any	any						
+staging_ign_s1_2__v02	staging_ign_s1_2	staging_ign_s1	2	mission_control	flight.staging	radio				0	Confirmado. Buen empuje. {speed} metros por segundo y subiendo.	Confirmed. Thrust looks good. {speed} m/s and climbing.	none	callout	m	any	any	any	any	any	any						
+throttle_full_03	throttle_full_03	throttle_full_03	1	kerbal_a	flight.throttle_full	radio				0	¡A tope!	Full power!	none	callout	both	any	any	any	any	any	any						
+throttle_full_s1_1	throttle_full_s1_1	throttle_full_s1	1	kerbal_a	flight.throttle_full	radio				0	Potencia máxima.	Maximum power.	none	callout	both	any	any	any	any	any	any						
+throttle_full_s1_2	throttle_full_s1_2	throttle_full_s1	2	mission_control	flight.throttle_full	radio				0	Recibido, potencia máxima.	Copy, maximum power.	none	callout	m	any	any	any	any	any	any						
+throttle_cut_03	throttle_cut_03	throttle_cut_03	1	kerbal_a	flight.throttle_cut	radio				0	Corte.	Cutoff.	none	callout	both	any	any	any	any	any	any						
+throttle_cut_s1_1	throttle_cut_s1_1	throttle_cut_s1	1	kerbal_a	flight.throttle_cut	radio				0	Motores apagados.	Engines off.	none	callout	both	any	any	any	any	any	any						
+throttle_cut_s1_2	throttle_cut_s1_2	throttle_cut_s1	2	mission_control	flight.throttle_cut	radio				0	Confirmado, apagado del motor.	Confirmed, engine shutdown.	none	callout	m	any	any	any	any	any	any						
+throttle_cut_s1_2__v02	throttle_cut_s1_2	throttle_cut_s1	2	mission_control	flight.throttle_cut	radio				0	Confirmado. Motores apagados a {speed} metros por segundo.	Confirmed. Engines off at {speed} m/s.	none	callout	m	any	any	any	any	any	any						
+countdown_01	countdown_01	countdown_s1	1	mission_control	flight.countdown	radio				0	Uno.	One	none	callout	m	any	any	any	any	any	any						
+countdown_02	countdown_02	countdown_s1	2	mission_control	flight.countdown	radio				0	Dos.	Two	none	callout	m	any	any	any	any	any	any						
+countdown_03	countdown_03	countdown_s1	3	mission_control	flight.countdown	radio				0	Tres.	Three	none	callout	m	any	any	any	any	any	any						
+countdown_04	countdown_04	countdown_s1	4	mission_control	flight.countdown	radio				0	Cuatro.	Four	none	callout	m	any	any	any	any	any	any						
+countdown_05	countdown_05	countdown_s1	5	mission_control	flight.countdown	radio				0	Sinko.	Five	none	callout	m	any	any	any	any	any	any						
+countdown_06	countdown_06	countdown_s1	6	mission_control	flight.countdown	radio				0	Seis.	Six	none	callout	m	any	any	any	any	any	any						
+countdown_07	countdown_07	countdown_s1	7	mission_control	flight.countdown	radio				0	Siete.	Seven	none	callout	m	any	any	any	any	any	any						
+countdown_08	countdown_08	countdown_s1	8	mission_control	flight.countdown	radio				0	Ocho.	Eight	none	callout	m	any	any	any	any	any	any						
+countdown_09	countdown_09	countdown_s1	9	mission_control	flight.countdown	radio				0	Neuve.	Nine	none	callout	m	any	any	any	any	any	any						
+countdown_10	countdown_10	countdown_s1	10	mission_control	flight.countdown	radio				0	Diez.	Ten	none	callout	m	any	any	any	any	any	any						
+countdown_liftoff	countdown_liftoff	countdown_s1	11	mission_control	flight.countdown	radio				0	¡Despegue!	Liftoff!	none	callout	m	any	any	any	any	any	any						
+countdown_abort	countdown_abort	countdown_abort	1	mission_control	flight.countdown	radio				0	¡Lanzamiento cancelado!	Launch cancelled.	none	callout	m	any	any	any	any	any	any						
+staging_ign_01	staging_ign_01	staging_ign_01	1	kerbal_a	flight.staging	radio				0	¡Ignición!	Ignition!	none	callout	both	any	any	any	any	any	any						
+staging_ign_02	staging_ign_02	staging_ign_02	1	kerbal_a	flight.staging	radio				0	¡Encendido!	Lit!	none	callout	both	any	any	any	any	any	any						
+staging_ign_03	staging_ign_03	staging_ign_03	1	kerbal_a	flight.staging	radio				0	Motores en marcha.	Engines running.	none	callout	both	any	any	any	any	any	any						
+staging_ign_s2_1	staging_ign_s2_1	staging_ign_s2	1	kerbal_a	flight.staging	radio				0	Motor encendido.	Engine lit.	none	callout	both	any	any	any	any	any	any						
+staging_ign_s2_2	staging_ign_s2_2	staging_ign_s2	2	mission_control	flight.staging	radio				0	Recibido, buen encendido.	Copy, good ignition.	none	callout	m	any	any	any	any	any	any						
+staging_any_02	staging_any_02	staging_any_02	1	kerbal_a	flight.staging	radio				0	Siguiente etapa.	Next stage.	none	callout	both	any	any	any	any	any	any						
+la_pre_s1_1	la_pre_s1_1	la_pre_s1	1	mission_control	flight.chatter	radio				0	Tripulación, comprobación final. ¿Estado?	Crew, final check. Status?	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s1_2	la_pre_s1_2	la_pre_s1	2	kerbal_a	flight.chatter	radio				0	Todos listos en cabina.	All set in the cockpit.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s1_3	la_pre_s1_3	la_pre_s1	3	mission_control	flight.chatter	radio				0	Recibido. Buen trabajo.	Copy. Good work.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s2_1	la_pre_s2_1	la_pre_s2	1	kerbal_a	flight.chatter	radio				0	Control, cinturones abrochados.	Control, belts fastened.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s2_2	la_pre_s2_2	la_pre_s2	2	mission_control	flight.chatter	radio				0	Recibido, cerrad la escotilla.	Copy, close the hatch.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s3_1	la_pre_s3_1	la_pre_s3	1	mission_control	flight.chatter	radio				0	Sondeo de lanzamiento. ¿Propulsión?	Launch poll. Propulsion?	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s3_2	la_pre_s3_2	la_pre_s3	2	kerbal_a	flight.chatter	radio				0	Propulsión lista.	Propulsion is go.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s3_3	la_pre_s3_3	la_pre_s3	3	mission_control	flight.chatter	radio				0	Guiado listo. Todo en verde.	Guidance is go. All green.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s6_1	la_pre_s6_1	la_pre_s6	1	mission_control	flight.chatter	radio				0	Brazo de acceso retirado.	Access arm retracted.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s6_2	la_pre_s6_2	la_pre_s6	2	kerbal_a	flight.chatter	radio				0	Recibido, esperando la cuenta.	Copy, standing by for the count.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s8_1	la_pre_s8_1	la_pre_s8	1	kerbal_a	flight.chatter	radio				0	Prueba de radio. ¿Me oís?	Radio check. Do you read?	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s8_2	la_pre_s8_2	la_pre_s8	2	mission_control	flight.chatter	radio				0	Alto y claro.	Loud and clear.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s8_2__v02	la_pre_s8_2	la_pre_s8	2	mission_control	flight.chatter	radio				0	Os oímos bien, {vessel}.	We hear you fine, {vessel}.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s9_1	la_pre_s9_1	la_pre_s9	1	mission_control	flight.chatter	radio				0	Último sondeo. ¿Tripulación?	Final poll. Crew?	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s9_2	la_pre_s9_2	la_pre_s9	2	kerbal_a	flight.chatter	radio				0	La tripulación está lista.	Crew is go.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_s9_3	la_pre_s9_3	la_pre_s9	3	mission_control	flight.chatter	radio				0	Listos para el lanzamiento.	We are go for launch.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_s9_3__v02	la_pre_s9_3	la_pre_s9	3	mission_control	flight.chatter	radio				0	Listos para el lanzamiento, {vessel}.	Go for launch, {vessel}.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_01	la_pre_01	la_pre_01	1	kerbal_a	flight.chatter	radio				0	Listos cuando digáis.	Ready when you say.	calm	chatter	both	prelaunch	any	any	any	any	any						
+la_pre_02	la_pre_02	la_pre_02	1	mission_control	flight.chatter	radio				0	Presión de tanques nominal.	Tank pressure nominal.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_pre_04	la_pre_04	la_pre_04	1	mission_control	flight.chatter	radio				0	Estamos en verde para lanzar.	We are green for launch.	calm	chatter	m	prelaunch	any	any	any	any	any						
+la_lau_s1_1	la_lau_s1_1	la_lau_s1	1	mission_control	flight.chatter	radio				0	Despegue confirmado.	Liftoff confirmed.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s1_2	la_lau_s1_2	la_lau_s1	2	kerbal_a	flight.chatter	radio				0	Subiendo. Todo estable.	Climbing. All stable.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s2_1	la_lau_s2_1	la_lau_s2	1	kerbal_a	flight.chatter	radio				0	Libres de la torre.	Clear of the tower.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s2_2	la_lau_s2_2	la_lau_s2	2	mission_control	flight.chatter	radio				0	Recibido, libres de la torre.	Copy, clear of the tower.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s3_1	la_lau_s3_1	la_lau_s3	1	kerbal_a	flight.chatter	radio				0	Iniciando programa de alabeo.	Starting roll program.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s3_2	la_lau_s3_2	la_lau_s3	2	mission_control	flight.chatter	radio				0	Recibido, alabeo en curso.	Copy, roll in progress.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s4_1	la_lau_s4_1	la_lau_s4	1	kerbal_a	flight.chatter	radio				0	Alabeo completo.	Roll complete.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s4_2	la_lau_s4_2	la_lau_s4	2	mission_control	flight.chatter	radio				0	Confirmado, rumbo correcto.	Confirmed, heading good.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s6_1	la_lau_s6_1	la_lau_s6	1	mission_control	flight.chatter	radio				0	Llegando a presión máxima.	Approaching max Q.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s6_2	la_lau_s6_2	la_lau_s6	2	kerbal_a	flight.chatter	radio				0	Recibido, nos agarramos.	Copy, holding on.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s7_1	la_lau_s7_1	la_lau_s7	1	kerbal_a	flight.chatter	radio				0	Presión máxima superada.	Through max Q.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s7_2	la_lau_s7_2	la_lau_s7	2	mission_control	flight.chatter	radio				0	Recibido. Subid el empuje.	Copy. Throttle back up.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s8_1	la_lau_s8_1	la_lau_s8	1	mission_control	flight.chatter	radio				0	Buena velocidad, buena altura.	Good speed, good altitude.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s8_2	la_lau_s8_2	la_lau_s8	2	kerbal_a	flight.chatter	radio				0	Todo según el plan.	All on plan.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_s9_1	la_lau_s9_1	la_lau_s9	1	mission_control	flight.chatter	radio				0	Superáis la velocidad del sonido.	You are going supersonic.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_s9_2	la_lau_s9_2	la_lau_s9	2	kerbal_a	flight.chatter	radio				0	Recibido, más suave ahora.	Copy, smoother now.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_01	la_lau_01	la_lau_01	1	kerbal_a	flight.chatter	radio				0	Vibración dentro de lo normal.	Vibration within limits.	calm	chatter	both	launch	any	any	any	any	any						
+la_lau_02	la_lau_02	la_lau_02	1	mission_control	flight.chatter	radio				0	Trayectoria nominal.	Trajectory nominal.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_02__v02	la_lau_02	la_lau_02	1	mission_control	flight.chatter	radio				0	Buena trayectoria, {vessel}.	Good trajectory, {vessel}.	calm	chatter	m	launch	any	any	any	any	any						
+la_lau_04	la_lau_04	la_lau_04	1	mission_control	flight.chatter	radio				0	Ascenso limpio.	Clean climb.	calm	chatter	m	launch	any	any	any	any	any						
+la_asc_s1_1	la_asc_s1_1	la_asc_s1	1	kerbal_a	flight.chatter	radio				0	Iniciando giro gravitatorio.	Starting gravity turn.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_s1_2	la_asc_s1_2	la_asc_s1	2	mission_control	flight.chatter	radio				0	Recibido, buen perfil.	Copy, good profile.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s2_1	la_asc_s2_1	la_asc_s2	1	mission_control	flight.chatter	radio				0	El apoapsis sube bien.	Apoapsis rising nicely.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s2_2	la_asc_s2_2	la_asc_s2	2	kerbal_a	flight.chatter	radio				0	Lo vemos. Seguimos.	We see it. Continuing.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_s6_1	la_asc_s6_1	la_asc_s6	1	mission_control	flight.chatter	radio				0	Preparad la maniobra de circularización.	Prepare the circularisation maneuver.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s6_2	la_asc_s6_2	la_asc_s6	2	kerbal_a	flight.chatter	radio				0	Recibido, orientando al prógrado.	Copy, pointing prograde.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_s8_1	la_asc_s8_1	la_asc_s8	1	mission_control	flight.chatter	radio				0	Listos para la órbita.	You are go for orbit.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s8_1__v02	la_asc_s8_1	la_asc_s8	1	mission_control	flight.chatter	radio				0	Listos para la órbita, {vessel}.	Go for orbit, {vessel}.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s8_2	la_asc_s8_2	la_asc_s8	2	kerbal_a	flight.chatter	radio				0	Recibido, seguimos hacia la órbita.	Copy, continuing to orbit.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_s9_1	la_asc_s9_1	la_asc_s9	1	mission_control	flight.chatter	radio				0	Sondeo de ascenso. ¿Estado?	Ascent poll. Status?	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s9_2	la_asc_s9_2	la_asc_s9	2	kerbal_a	flight.chatter	radio				0	Todo nominal a bordo.	All nominal on board.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_s9_3	la_asc_s9_3	la_asc_s9	3	mission_control	flight.chatter	radio				0	Recibido. Continuad.	Copy. Continue.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s13_1	la_asc_s13_1	la_asc_s13	1	mission_control	flight.chatter	radio				0	Trayectoria suborbital confirmada.	Suborbital trajectory confirmed.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_s13_2	la_asc_s13_2	la_asc_s13	2	kerbal_a	flight.chatter	radio				0	Recibido, mantenemos la actitud.	Copy, holding attitude.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_01	la_asc_01	la_asc_01	1	kerbal_a	flight.chatter	radio				0	Inclinando hacia el horizonte.	Pitching toward the horizon.	calm	chatter	both	ascent	any	any	any	any	any						
+la_asc_02	la_asc_02	la_asc_02	1	mission_control	flight.chatter	radio				0	Perfil de ascenso nominal.	Ascent profile nominal.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_03	la_asc_03	la_asc_03	1	kerbal_a	flight.chatter	radio				0	Combustible según lo previsto.	Fuel as expected.	calm	chatter	both	ascent	fuel	any	any	any	any						
+la_asc_06	la_asc_06	la_asc_06	1	mission_control	flight.chatter	radio				0	Os seguimos en el radar.	We have you on radar.	calm	chatter	m	ascent	any	any	any	any	any						
+la_asc_06__v02	la_asc_06	la_asc_06	1	mission_control	flight.chatter	radio				0	Os tenemos en el radar, {vessel}.	You're on our radar, {vessel}.	calm	chatter	m	ascent	any	any	any	any	any						
+la_ten_s1_1	la_ten_s1_1	la_ten_s1	1	kerbal_a	flight.chatter	radio				0	Control, mucha vibración.	Control, heavy vibration.	tense	chatter	both	launch	q	any	any	any	any						
+la_ten_s1_2	la_ten_s1_2	la_ten_s1	2	mission_control	flight.chatter	radio				0	Recibido. Lo vemos, aguantad.	Copy. We see it, hang in there.	tense	chatter	m	launch	q	any	any	any	any						
+la_ten_s2_1	la_ten_s2_1	la_ten_s2	1	mission_control	flight.chatter	radio				0	Presión dinámica alta.	Dynamic pressure high.	tense	chatter	m	launch	q	any	any	any	any						
+la_ten_s2_2	la_ten_s2_2	la_ten_s2	2	kerbal_a	flight.chatter	radio				0	Recibido, lo notamos.	Copy, we can feel it.	tense	chatter	both	launch	q	any	any	any	any						
+la_ten_s3_1	la_ten_s3_1	la_ten_s3	1	kerbal_a	flight.chatter	radio				0	La aceleración aprieta mucho.	The g-load is heavy.	tense	chatter	both	ascent	gforce	any	any	any	any						
+la_ten_s3_2	la_ten_s3_2	la_ten_s3	2	mission_control	flight.chatter	radio				0	Recibido. Bajad un poco el empuje.	Copy. Ease the throttle a little.	tense	chatter	m	ascent	gforce	any	any	any	any						
+la_ten_s4_1	la_ten_s4_1	la_ten_s4	1	mission_control	flight.chatter	radio				0	Combustible justo para la órbita.	Fuel is tight for orbit.	tense	chatter	m	ascent	fuel	any	any	any	any						
+la_ten_s4_2	la_ten_s4_2	la_ten_s4	2	kerbal_a	flight.chatter	radio				0	Recibido, ahorrando cada gota.	Copy, saving every drop.	tense	chatter	both	ascent	fuel	any	any	any	any						
+la_ten_s5_1	la_ten_s5_1	la_ten_s5	1	kerbal_a	flight.chatter	radio				0	Perdimos un motor.	We lost an engine.	tense	chatter	both	ascent	engine_out	any	any	any	any						
+la_ten_s5_2	la_ten_s5_2	la_ten_s5	2	mission_control	flight.chatter	radio				0	Recibido. Seguid con los demás.	Copy. Continue on the others.	tense	chatter	m	ascent	engine_out	any	any	any	any						
+la_ten_s6_1	la_ten_s6_1	la_ten_s6	1	kerbal_a	flight.chatter	radio				0	La nave gira sola.	The ship is rolling by itself.	tense	chatter	both	launch	spin	any	any	any	any						
+la_ten_s6_1__v02	la_ten_s6_1	la_ten_s6	1	kerbal_a	flight.chatter	radio				0	La {vessel} gira sola.	{vessel} is rolling on its own.	tense	chatter	both	launch	spin	any	any	any	any						
+la_ten_s6_2	la_ten_s6_2	la_ten_s6	2	mission_control	flight.chatter	radio				0	Recibido. Corregid el alabeo.	Copy. Correct the roll.	tense	chatter	m	launch	spin	any	any	any	any						
+la_ten_01	la_ten_01	la_ten_01	1	mission_control	flight.chatter	radio				0	Vigilad la aceleración.	Watch the g-load.	tense	chatter	m	ascent	gforce	any	any	any	any						
+la_ten_03	la_ten_03	la_ten_03	1	kerbal_a	flight.chatter	radio				0	Combustible bajo en esta etapa.	Fuel low in this stage.	tense	chatter	both	ascent	fuel	any	any	any	any						
+la_ten_04	la_ten_04	la_ten_04	1	mission_control	flight.chatter	radio				0	Vemos un motor apagado.	We see an engine out.	tense	chatter	m	ascent	engine_out	any	any	any	any						
+la_stg_sep_1	la_stg_sep_1	staging_sep_la1	1	kerbal_a	flight.staging	radio				0	Desacople.	Decouple.	none	callout	both	any	any	any	any	any	any						
+la_stg_sep_s2_1	la_stg_sep_s2_1	staging_sep_la2	1	kerbal_a	flight.staging	radio				0	Etapa separada.	Stage separated.	none	callout	both	any	any	any	any	any	any						
+la_stg_sep_s2_2	la_stg_sep_s2_2	staging_sep_la2	2	mission_control	flight.staging	radio				0	Confirmado, separación limpia.	Confirmed, clean separation.	none	callout	m	any	any	any	any	any	any						
+la_stg_ign_s1_1	la_stg_ign_s1_1	staging_ign_la1	1	kerbal_a	flight.staging	radio				0	Ignición de etapa.	Stage ignition.	none	callout	both	any	any	any	any	any	any						
+la_stg_ign_s1_2	la_stg_ign_s1_2	staging_ign_la1	2	mission_control	flight.staging	radio				0	Recibido, empuje estable.	Copy, steady thrust.	none	callout	m	any	any	any	any	any	any						
+la_stg_ign_s1_2__v02	la_stg_ign_s1_2	staging_ign_la1	2	mission_control	flight.staging	radio				0	Recibido. Empuje estable. Vais a {speed} metros por segundo.	Copy. Steady thrust. You're doing {speed} m/s.	none	callout	m	any	any	any	any	any	any						
+la_stg_any_1	la_stg_any_1	staging_any_la1	1	kerbal_a	flight.staging	radio				0	Activando etapa.	Staging.	none	callout	both	any	any	any	any	any	any						

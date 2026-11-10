@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+  <!-- Toolbar adaptation of the orange antenna mark in lonapse-logo-light.svg.
+       Shorter mast and heavier arcs preserve the silhouette at 38 px. -->
+  <g stroke="#f2a33a" stroke-linecap="round">
+    <path d="M19 19V11" fill="none" stroke-width="2.6"/>
+    <path d="M13.5 9A6.35 6.35 0 0 1 24.5 9" fill="none" stroke-width="2.2"/>
+    <path d="M9.5 7A10.97 10.97 0 0 1 28.5 7" fill="none" stroke-width="2" opacity="0.78"/>
+    <circle cx="19" cy="26.5" r="8.5" fill="none" stroke-width="4.8"/>
+  </g>
+  <g fill="#f2a33a">
+    <circle cx="19" cy="11" r="2.3"/>
+    <circle cx="19" cy="26.5" r="2.5"/>
+  </g>
+</svg>

@@ -1,56 +1,50 @@
-id	kind	when	spanish	english
-# Example lines of a made-up mod, 'examplemod', for the Lonapse API (docs/API.md).				
-# Put a file like this in GameData/<YourMod>/Lonapse/ and Lonapse reads it at the first flight scene.				
-# The format is that of GameData/Lonapse/Phrases/Runtime (explained at the top of reports.tsv). For mod events:				
-#   on=yourmod.event   the event of a chat (an event chat: the kerbal who did it says line 1) or of an event line				
-#   kind event         a Mission Control line about the event. A reply with to= its id lets the kerbal answer.				
-#   kind meta          the settings of an event: cooldown=<seconds> (default 120), priority=low|normal|high,				
-#                      who=crew|mc|any (default any). No text.				
-#   {x_name}           your own values, sent with the event. A number becomes Spanish words in the voice and digits				
-#                      in the subtitle, a name is said as it is. Every version uses the same slots in both languages.				
-# Ids start with rt_ and must be unique over all files: start them with rt_<yourmod>_ (chats rt_chat_<yourmod>_...).				
-# meta rows: the settings of each event (all optional).				
-rt_examplemod_repair_meta	meta	on=examplemod.repair_done cooldown=180 priority=normal who=any		
-rt_examplemod_supplies_meta	meta	on=examplemod.supplies_low cooldown=600 priority=high		
-rt_examplemod_experiment_meta	meta	on=examplemod.experiment_done priority=low who=mc		
-# examplemod.repair_done, sent with the kerbal who did it and x_part, the part with its article.				
-rt_chat_examplemod_repair_1	chat	on=examplemod.repair_done	{other}, ya está arreglado: {x_part}. | {other}, reparación terminada.	{other}, it's fixed: {x_part}. | {other}, repair done.
-rt_chat_examplemod_repair_2	chat		¿Y por qué sobra un tornillo? | Buen trabajo. ¿Has usado cinta?	Then why is there a screw left over? | Good work. Did you use tape?
-rt_chat_examplemod_repair_3	chat		Es de repuesto. | Mucha. Mucha cinta.	It's a spare. | Lots. Lots of tape.
-# One line, for a kerbal alone.				
-rt_chat_examplemod_repairsolo_1	chat	on=examplemod.repair_done	Reparación terminada. Me ha sobrado un tornillo. | Arreglado. Creo. Bueno, ya no hace ruido.	Repair done. I have a screw left over. | Fixed. I think. Well, it stopped making noise.
-# Mission Control about it, and the kerbal's answer.				
-rt_examplemod_repair	event	on=examplemod.repair_done	{kerbal}, vemos la reparación en los datos. Buen trabajo. | Reparación recibida. Ya no parpadea nada en la pantalla.	{kerbal}, we see the repair in the data. Good work. | Repair confirmed. Nothing is blinking on the screen anymore.
-rt_re_examplemod_repair	reply	to=rt_examplemod_repair	Gracias. No toquéis nada. | De nada. Sobró un tornillo, por cierto.	Thanks. Don't touch anything. | You're welcome. One screw left over, by the way.
-# examplemod.supplies_low, sent with x_days, the days of supplies left. A check on x_days keeps the plural right.				
-rt_chat_examplemod_supplies_1	chat	on=examplemod.supplies_low x_days>=2	{other}, quedan provisiones para {x_days} días. | {other}, la despensa dice {x_days} días.	{other}, we have supplies for {x_days} days. | {other}, the pantry says {x_days} days.
-rt_chat_examplemod_supplies_2	chat		Entonces nada de segundas raciones. | Vale. Escondo mis galletas.	Then no second helpings. | Okay. I'm hiding my cookies.
-rt_chat_examplemod_supplies_3	chat		Lo apunto en la lista. | Me parece bien.	I'll put it on the list. | Sounds fair.
-rt_examplemod_supplies	event	on=examplemod.supplies_low x_days>=2	Os quedan provisiones para {x_days} días. Planead la vuelta. | Según los datos, {x_days} días de provisiones. Comed despacio.	You have supplies for {x_days} days. Plan the trip home. | The data says {x_days} days of supplies. Eat slowly.
-rt_examplemod_supplies_one	event	on=examplemod.supplies_low x_days<2	Solo queda comida para un día. Volved pronto.	Only one day of food left. Come home soon.
-# examplemod.experiment_done, sent with x_experiment as 'spanish|english'. who=mc: only Mission Control.				
-rt_examplemod_experiment	event	on=examplemod.experiment_done	Experimento de {x_experiment} terminado. Los científicos ya miran los datos. | Recibido: {x_experiment}, completo. Buen trabajo, {kerbal}.	The {x_experiment} experiment is done. The scientists are looking at the data. | Copy: {x_experiment}, complete. Good work, {kerbal}.
-rt_re_examplemod_experiment	reply	to=rt_examplemod_experiment	Ha sido fácil. Casi. | Gracias. El manual ayudó mucho.	That was easy. Almost. | Thanks. The manual helped a lot.
-# An experiment of your own that runs through the KSP science system (a ModuleScienceExperiment with experimentID				
-# exampleSoil). Lonapse sees it like a stock experiment, so do not call Trigger for it. The experiment row gives {exp}				
-# its words and names its topic. Science lines and event chats with on=examplemod.soil only play for it.				
-rt_examplemod_soil_exp	experiment	on=examplemod.soil id=exampleSoil	análisis del suelo	soil analysis
-rt_sci_examplemod_soil	science	on=examplemod.soil	Recibimos el {exp}. Mucha tierra, pocas sorpresas. | Ya tenemos el {exp}. Los geólogos están contentos.	We have the {exp}. Lots of dirt, few surprises. | The {exp} is in. The geologists are happy.
-rt_chat_examplemod_soil_1	chat	on=examplemod.soil	{other}, el {exp} está listo. Es tierra.	{other}, the {exp} is done. It's dirt.
-rt_chat_examplemod_soil_2	chat		¿Solo tierra? | ¿Tierra buena, al menos?	Just dirt? | Good dirt, at least?
-rt_chat_examplemod_soil_3	chat		Tierra muy científica.	Very scientific dirt.
-rt_chat_examplemod_soilsolo_1	chat	on=examplemod.soil	Ya tengo el {exp}. Es tierra, sobre todo.	I have the {exp}. It's mostly dirt.
-# A Breaking Ground part of your own (a ModuleGroundSciencePart, part name exampleDrillRig). Lonapse sees the deploy				
-# itself. The device row gives {device} its words and names its topic. Chats with on=deploy play for it too.				
-rt_examplemod_drill_dev	device	on=examplemod.drill id=exampleDrillRig	el taladro	the drill rig
-rt_chat_examplemod_drill_1	chat	on=examplemod.drill	{other}, {device} ya está montado.	{other}, {device} is set up.
-rt_chat_examplemod_drill_2	chat		¿Y si encuentra agua? | ¿Hace mucho ruido?	What if it finds water? | Is it loud?
-rt_chat_examplemod_drill_3	chat		Entonces somos ricos. | Solo un poco.	Then we're rich. | Only a little.
-rt_chat_examplemod_drillsolo_1	chat	on=examplemod.drill	Listo, {device} está montado. A ver si encuentra algo.	Done, {device} is set up. Let's see if it finds something.
-rt_sci_examplemod_drill	science	on=examplemod.drill	Llegan datos: {device} funciona.	Data is coming in: {device} works.
-# A contract type of your own (the class name of your Contract, ExampleSalvageContract). The contract row gives				
-# {contract} its words. Contract lines with on=examplemod.salvage play only for that contract.				
-rt_examplemod_salvage_con	contract	on=examplemod.salvage id=ExampleSalvageContract	el rescate de chatarra	the salvage job
-rt_con_examplemod_salvage	contract_funds	on=examplemod.salvage	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.
-rt_con_examplemod_salvage_fail	contract_failed	on=examplemod.salvage	Hemos perdido {contract}. Otra vez será.	We lost {contract}. Maybe next time.
-rt_con_examplemod_salvage_done	contract_done	on=examplemod.salvage	Listo: {contract}. Buen trabajo.	Done: {contract}. Good work.
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+examplemod_repair_meta	examplemod_repair_meta	examplemod_repair_meta	1		meta	radio	examplemod.repair_done			0			calm	chatter	both	any	any	any	any	any	any			any	180	normal	
+examplemod_supplies_meta	examplemod_supplies_meta	examplemod_supplies_meta	1		meta	radio	examplemod.supplies_low			0			calm	chatter	both	any	any	any	any	any	any				600	high	
+examplemod_experiment_meta	examplemod_experiment_meta	examplemod_experiment_meta	1		meta	radio	examplemod.experiment_done			0			calm	chatter	both	any	any	any	any	any	any			mc		low	
+chat_examplemod_repair_1	chat_examplemod_repair_1	chat_examplemod_repair	1	kerbal_a	chat	auto	examplemod.repair_done		job_a=engineer	0	{other}, he probado {x_part}. La reparación está verificada.	{other}, I tested {x_part}. The repair checks out.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_1__v02	chat_examplemod_repair_1	chat_examplemod_repair	1	kerbal_a	chat	auto	examplemod.repair_done		job_a!=engineer	0	{other}, creo que ya funciona {x_part}. He seguido el manual.	{other}, I think {x_part} works now. I followed the manual.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_1__nervous	chat_examplemod_repair_1	chat_examplemod_repair	1	kerbal_a	chat	auto	examplemod.repair_done		job_a!=engineer trait_a=nervous	1	{other}, he seguido el manual para reparar {x_part}. ¿Puedes comprobarlo?	{other}, I followed the manual to repair {x_part}. Can you check it?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_2	chat_examplemod_repair_2	chat_examplemod_repair	2	kerbal_b	chat	auto	examplemod.repair_done			0	¿Lo has comprobado dos veces?	Did you check it twice?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_2__v02	chat_examplemod_repair_2	chat_examplemod_repair	2	kerbal_b	chat	auto	examplemod.repair_done			0	¿Y has probado que funciona?	And did you test that it works?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_3	chat_examplemod_repair_3	chat_examplemod_repair	3	kerbal_a	chat	auto	examplemod.repair_done			0	Sí. La segunda vez desde más lejos.	Yes. The second time from farther away.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repair_3__v02	chat_examplemod_repair_3	chat_examplemod_repair	3	kerbal_a	chat	auto	examplemod.repair_done			0	Sí. Esta vez he seguido el manual.	Yes. I followed the manual this time.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repairsolo_1	chat_examplemod_repairsolo_1	chat_examplemod_repairsolo	1	kerbal_a	chat	auto	examplemod.repair_done		job_a=engineer	0	Reparación terminada. Me ha sobrado un tornillo.	Repair done. I have a screw left over.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_repairsolo_1__v02	chat_examplemod_repairsolo_1	chat_examplemod_repairsolo	1	kerbal_a	chat	auto	examplemod.repair_done		job_a!=engineer	0	Arreglado. Creo. Bueno, ya no hace ruido.	Fixed. I think. Well, it stopped making noise.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_repair	examplemod_repair	examplemod_repair	1	mission_control	event	radio	examplemod.repair_done			0	{kerbal}, vemos la reparación en los datos. Buen trabajo.	{kerbal}, we see the repair in the data. Good work.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_repair__v02	examplemod_repair	examplemod_repair	1	mission_control	event	radio	examplemod.repair_done			0	Reparación recibida. Ya no parpadea nada en la pantalla.	Repair confirmed. Nothing is blinking on the screen anymore.	calm	chatter	both	any	any	any	any	any	any						
+re_examplemod_repair	re_examplemod_repair	re_examplemod_repair	1	kerbal_a	reply	radio		examplemod_repair		0	Gracias. No toquéis nada.	Thanks. Don't touch anything.	calm	chatter	both	any	any	any	any	any	any						
+re_examplemod_repair__v02	re_examplemod_repair	re_examplemod_repair	1	kerbal_a	reply	radio		examplemod_repair		0	De nada. Sobró un tornillo, por cierto.	You're welcome. One screw left over, by the way.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_1	chat_examplemod_supplies_1	chat_examplemod_supplies	1	kerbal_a	chat	auto	examplemod.supplies_low		x_days>=2	0	{other}, quedan provisiones para {x_days} días.	{other}, we have supplies for {x_days} days.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_1__v02	chat_examplemod_supplies_1	chat_examplemod_supplies	1	kerbal_a	chat	auto	examplemod.supplies_low		x_days>=2	0	{other}, la despensa dice {x_days} días.	{other}, the pantry says {x_days} days.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_2	chat_examplemod_supplies_2	chat_examplemod_supplies	2	kerbal_b	chat	auto	examplemod.supplies_low			0	Entonces nada de segundas raciones.	Then no second helpings.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_2__v02	chat_examplemod_supplies_2	chat_examplemod_supplies	2	kerbal_b	chat	auto	examplemod.supplies_low			0	Vale. Escondo mis galletas.	Okay. I'm hiding my cookies.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_3	chat_examplemod_supplies_3	chat_examplemod_supplies	3	kerbal_a	chat	auto	examplemod.supplies_low			0	Lo apunto en la lista.	I'll put it on the list.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_supplies_3__v02	chat_examplemod_supplies_3	chat_examplemod_supplies	3	kerbal_a	chat	auto	examplemod.supplies_low			0	Me parece bien.	Sounds fair.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_supplies	examplemod_supplies	examplemod_supplies	1	mission_control	event	radio	examplemod.supplies_low		x_days>=2	0	Os quedan provisiones para {x_days} días. Planead la vuelta.	You have supplies for {x_days} days. Plan the trip home.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_supplies__v02	examplemod_supplies	examplemod_supplies	1	mission_control	event	radio	examplemod.supplies_low		x_days>=2	0	Según los datos, {x_days} días de provisiones. Comed despacio.	The data says {x_days} days of supplies. Eat slowly.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_supplies_one	examplemod_supplies_one	examplemod_supplies_one	1	mission_control	event	radio	examplemod.supplies_low		x_days<2	0	Solo queda comida para un día. Volved pronto.	Only one day of food left. Come home soon.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_experiment	examplemod_experiment	examplemod_experiment	1	mission_control	event	radio	examplemod.experiment_done			0	Experimento de {x_experiment} terminado. Los científicos ya miran los datos.	The {x_experiment} experiment is done. The scientists are looking at the data.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_experiment__v02	examplemod_experiment	examplemod_experiment	1	mission_control	event	radio	examplemod.experiment_done			0	Recibido: {x_experiment}, completo. Buen trabajo, {kerbal}.	Copy: {x_experiment}, complete. Good work, {kerbal}.	calm	chatter	both	any	any	any	any	any	any						
+re_examplemod_experiment	re_examplemod_experiment	re_examplemod_experiment	1	kerbal_a	reply	radio		examplemod_experiment		0	Ha sido fácil. Casi.	That was easy. Almost.	calm	chatter	both	any	any	any	any	any	any						
+re_examplemod_experiment__v02	re_examplemod_experiment	re_examplemod_experiment	1	kerbal_a	reply	radio		examplemod_experiment		0	Gracias. El manual ayudó mucho.	Thanks. The manual helped a lot.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_soil_exp	examplemod_soil_exp	examplemod_soil_exp	1		experiment	radio	examplemod.soil			0	análisis del suelo	soil analysis	calm	chatter	both	any	any	any	any	any	any						exampleSoil
+sci_examplemod_soil	sci_examplemod_soil	sci_examplemod_soil	1	mission_control	science	radio	examplemod.soil			0	Recibimos el {exp}. Mucha tierra, pocas sorpresas.	We have the {exp}. Lots of dirt, few surprises.	calm	chatter	both	any	any	any	any	any	any						
+sci_examplemod_soil__v02	sci_examplemod_soil	sci_examplemod_soil	1	mission_control	science	radio	examplemod.soil			0	Ya tenemos el {exp}. Los geólogos están contentos.	The {exp} is in. The geologists are happy.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_soil_1	chat_examplemod_soil_1	chat_examplemod_soil	1	kerbal_a	chat	auto	examplemod.soil			0	{other}, el {exp} está listo. Es tierra.	{other}, the {exp} is done. It's dirt.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_soil_2	chat_examplemod_soil_2	chat_examplemod_soil	2	kerbal_b	chat	auto	examplemod.soil			0	¿Solo tierra?	Just dirt?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_soil_2__v02	chat_examplemod_soil_2	chat_examplemod_soil	2	kerbal_b	chat	auto	examplemod.soil			0	¿Tierra buena, al menos?	Good dirt, at least?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_soil_3	chat_examplemod_soil_3	chat_examplemod_soil	3	kerbal_a	chat	auto	examplemod.soil			0	Tierra muy científica.	Very scientific dirt.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_soilsolo_1	chat_examplemod_soilsolo_1	chat_examplemod_soilsolo	1	kerbal_a	chat	auto	examplemod.soil			0	Ya tengo el {exp}. Es tierra, sobre todo.	I have the {exp}. It's mostly dirt.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_drill_dev	examplemod_drill_dev	examplemod_drill_dev	1		device	radio	examplemod.drill			0	el taladro	the drill rig	calm	chatter	both	any	any	any	any	any	any						exampleDrillRig
+chat_examplemod_drill_1	chat_examplemod_drill_1	chat_examplemod_drill	1	kerbal_a	chat	auto	examplemod.drill			0	{other}, {device} ya está montado.	{other}, {device} is set up.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_drill_2	chat_examplemod_drill_2	chat_examplemod_drill	2	kerbal_b	chat	auto	examplemod.drill			0	¿Y si encuentra agua?	What if it finds water?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_drill_2__v02	chat_examplemod_drill_2	chat_examplemod_drill	2	kerbal_b	chat	auto	examplemod.drill			0	¿Hace mucho ruido?	Is it loud?	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_drill_3	chat_examplemod_drill_3	chat_examplemod_drill	3	kerbal_a	chat	auto	examplemod.drill			0	Entonces somos ricos.	Then we're rich.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_drill_3__v02	chat_examplemod_drill_3	chat_examplemod_drill	3	kerbal_a	chat	auto	examplemod.drill			0	Solo un poco.	Only a little.	calm	chatter	both	any	any	any	any	any	any						
+chat_examplemod_drillsolo_1	chat_examplemod_drillsolo_1	chat_examplemod_drillsolo	1	kerbal_a	chat	auto	examplemod.drill			0	Listo, {device} está montado. A ver si encuentra algo.	Done, {device} is set up. Let's see if it finds something.	calm	chatter	both	any	any	any	any	any	any						
+sci_examplemod_drill	sci_examplemod_drill	sci_examplemod_drill	1	mission_control	science	radio	examplemod.drill			0	Llegan datos: {device} funciona.	Data is coming in: {device} works.	calm	chatter	both	any	any	any	any	any	any						
+examplemod_salvage_con	examplemod_salvage_con	examplemod_salvage_con	1		contract	radio	examplemod.salvage			0	el rescate de chatarra	the salvage job	calm	chatter	both	any	any	any	any	any	any						ExampleSalvageContract
+con_examplemod_salvage	con_examplemod_salvage	con_examplemod_salvage	1	mission_control	contract_funds	radio	examplemod.salvage			0	Listo: {contract}. Os pagan {funds} fondos.	Done: {contract}. It pays {funds} funds.	calm	chatter	both	any	any	any	any	any	any						
+con_examplemod_salvage_fail	con_examplemod_salvage_fail	con_examplemod_salvage_fail	1	mission_control	contract_failed	radio	examplemod.salvage			0	Hemos perdido {contract}. Otra vez será.	We lost {contract}. Maybe next time.	calm	chatter	both	any	any	any	any	any	any						
+con_examplemod_salvage_done	con_examplemod_salvage_done	con_examplemod_salvage_done	1	mission_control	contract_done	radio	examplemod.salvage			0	Listo: {contract}. Buen trabajo.	Done: {contract}. Good work.	calm	chatter	both	any	any	any	any	any	any						

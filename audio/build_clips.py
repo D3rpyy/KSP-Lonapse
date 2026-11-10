@@ -688,8 +688,8 @@ def make_static(folder, i, seed):
         return y
     if name == "breath_loop":
         # EVA helmet breathing: exactly 8 s, two breaths per loop.
-        # Each breath: inhale (brighter, narrower band near 1.9 kHz, 1.0 to 1.3 s, a smooth bell),
-        # a short hold, then exhale (darker and wider near 0.95 kHz, 1.4 to 1.8 s, quick onset and a
+        # Each breath: inhale (brighter, narrower band near 2.35 kHz, 1.0 to 1.3 s, a smooth bell),
+        # a short hold, then exhale (darker and wider near 1.35 kHz, 1.4 to 1.8 s, quick onset and a
         # long tail). Under it a faint suit-fan hiss so the helmet never goes fully silent.
         # The mix gets a short double echo (6 and 11 ms) and a low-pass: a small closed space.
         # The breaths sit inside the loop and are silent at both ends, so only the fan hiss crosses
@@ -697,8 +697,8 @@ def make_static(folder, i, seed):
         L = int(SR * 8.0)
         X = int(SR * 0.5)
         nseed = 3000 + i + 37 * len(legacy) + seed * 101
-        inh = noise(nseed, 8.1, "pink", "highpass=f=700,bandpass=f=1900:width_type=q:w=0.9")
-        exh = noise(nseed + 1, 8.1, "pink", "highpass=f=200,bandpass=f=950:width_type=q:w=0.6")
+        inh = noise(nseed, 8.1, "pink", "highpass=f=850,bandpass=f=2350:width_type=q:w=0.9")
+        exh = noise(nseed + 1, 8.1, "pink", "highpass=f=300,bandpass=f=1350:width_type=q:w=0.6")
         breath = [0.0] * L
         for b in range(2):
             start = b * 4.0 + rng.uniform(0.15, 0.35)
@@ -714,10 +714,24 @@ def make_static(folder, i, seed):
                 breath[a + k] += inh[a + k] * g_in * math.sin(math.pi * u) ** 2
             a2 = a + m + int(SR * hold)
             m2 = int(SR * t_ex)
+            # A quiet voiced sigh in the Kerbal register, under the air noise. The cycle timing stays natural.
+            voice, phase = [], 0.0
+            for k in range(m2):
+                u = k / m2
+                f0 = 275 + 12 * i + 6 * b - 25 * u + 2 * math.sin(2 * math.pi * 4.5 * k / SR)
+                phase += 2 * math.pi * f0 / SR
+                v = 0.0
+                for h in range(1, 13):
+                    hz = h * f0
+                    formant = (0.15 + math.exp(-0.5 * ((hz - 850) / 220) ** 2)
+                               + 0.6 * math.exp(-0.5 * ((hz - 1750) / 350) ** 2))
+                    v += math.sin(h * phase) * formant / h
+                voice.append(v)
+            voice_gain = 0.18 * rms(exh[a2:a2 + m2]) / max(rms(voice), 1e-9)
             for k in range(m2):
                 u = k / m2
                 rise = math.sin(0.5 * math.pi * min(1.0, u / 0.18)) ** 2
-                breath[a2 + k] += exh[a2 + k] * g_ex * rise * (1.0 - u) ** 1.3
+                breath[a2 + k] += (exh[a2 + k] + voice[k] * voice_gain) * g_ex * rise * (1.0 - u) ** 1.3
         fan = noise(nseed + 2, (L + X) / SR + 0.05, "pink", "highpass=f=120,lowpass=f=1400")
         fan_loop = fan[:L]
         for k in range(X):

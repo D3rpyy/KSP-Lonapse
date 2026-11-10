@@ -1,0 +1,31 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+sunrise	sunrise	sunrise	1	mission_control	sunrise	radio				0	{vessel}, ahí sale el sol otra vez. Buenos días.	{vessel}, there's the sun again. Good morning.	calm	chatter	both	any	any	any	any	any	any						
+sunrise__v02	sunrise	sunrise	1	mission_control	sunrise	radio				0	Amanecer sobre {body}. Poneos las gafas de sol.	Sunrise over {body}. Put your sunglasses on.	calm	chatter	both	any	any	any	any	any	any						
+sunrise__v03	sunrise	sunrise	1	mission_control	sunrise	radio				0	Buenos días, otra vez.	Good morning, again.	calm	chatter	both	any	any	any	any	any	any						
+sunrise_first	sunrise_first	sunrise_first	1	mission_control	sunrise	radio			sunrises=1	0	Vuestro primer amanecer en órbita. Disfrutadlo.	Your first sunrise in orbit. Enjoy it.	calm	chatter	both	any	any	any	any	any	any						
+sunrise_first__v02	sunrise_first	sunrise_first	1	mission_control	sunrise	radio			sunrises=1	0	Primer amanecer del vuelo. Precioso, ¿verdad?	First sunrise of the flight. Beautiful, isn't it?	calm	chatter	both	any	any	any	any	any	any						
+sunrise_count	sunrise_count	sunrise_count	1	mission_control	sunrise	radio			sunrises>=2	0	Amanecer número {sunrises} de este vuelo. Seguimos contando.	Sunrise number {sunrises} this flight. We're still counting.	calm	chatter	both	any	any	any	any	any	any						
+sunrise_count__v02	sunrise_count	sunrise_count	1	mission_control	sunrise	radio			sunrises>=2	0	Ya van {sunrises} amaneceres. Aquí abajo solo hemos visto uno.	That's {sunrises} sunrises. Down here we've only seen one.	calm	chatter	both	any	any	any	any	any	any						
+sunrise_many	sunrise_many	sunrise_many	1	mission_control	sunrise	radio			sunrises>=20	0	{sunrises} amaneceres. Ya no sabéis qué día es, ¿verdad?	{sunrises} sunrises. You don't know what day it is anymore, do you?	calm	chatter	both	any	any	any	any	any	any						
+sunrise_ec	sunrise_ec	sunrise_ec	1	mission_control	sunrise	radio			ec<50 has_solar=1	0	Sale el sol. Batería al {ec} por ciento. Los paneles lo agradecen.	Here comes the sun. Battery at {ec} percent. The panels are grateful.	calm	chatter	both	any	any	any	any	any	any						
+re_sunrise	re_sunrise	re_sunrise	1	kerbal_a	reply	radio		sunrise*		0	Otra vez no. Acababa de dormirme.	Not again. I just fell asleep.	calm	chatter	both	any	any	any	any	any	any						
+re_sunrise__v02	re_sunrise	re_sunrise	1	kerbal_a	reply	radio		sunrise*		0	Buenos días, Control. ¿Hay café?	Good morning, Control. Is there coffee?	calm	chatter	both	any	any	any	any	any	any						
+re_sunrise__v03	re_sunrise	re_sunrise	1	kerbal_a	reply	radio		sunrise*		0	Mis ojos. Mis pobres ojos.	My eyes. My poor eyes.	calm	chatter	both	any	any	any	any	any	any						
+biome	biome	biome	1	mission_control	report	radio			orbit flight suborbital	0	Pasáis por encima de {biome}.	You're passing over {biome}.	calm	chatter	both	any	any	any	any	any	any						
+biome__v02	biome	biome	1	mission_control	report	radio			orbit flight suborbital	0	Debajo tenéis {biome}. Saludad.	Below you is {biome}. Wave.	calm	chatter	both	any	any	any	any	any	any						
+biome__v03	biome	biome	1	mission_control	report	radio			orbit flight suborbital	0	Según el mapa, estáis sobre {biome}.	According to the map, you're over {biome}.	calm	chatter	both	any	any	any	any	any	any						
+biome_landed	biome_landed	biome_landed	1	mission_control	report	radio			landed	0	Os tenemos en {biome}, en {body}.	We have you at {biome}, on {body}.	calm	chatter	both	any	any	any	any	any	any						
+biome_landed__v02	biome_landed	biome_landed	1	mission_control	report	radio			landed	0	{biome}. Buen sitio para aparcar.	{biome}. Nice place to park.	calm	chatter	both	any	any	any	any	any	any						
+re_biome	re_biome	re_biome	1	kerbal_a	reply	radio		biome*		0	Ya lo vemos. Muy bonito. Muy marrón.	We see it. Very pretty. Very brown.	calm	chatter	both	any	any	any	any	any	any						
+re_biome__v02	re_biome	re_biome	1	kerbal_a	reply	radio		biome*		0	¿{biome}? ¿Quién pone estos nombres?	{biome}? Who comes up with these names?	calm	chatter	both	any	any	any	any	any	any						
+chat_sunrise_1	chat_sunrise_1	chat_sunrise	1	kerbal_a	chat	intercom			orbit sunrises>=3	0	{other}, llevamos {sunrises} amaneceres.	{other}, that's {sunrises} sunrises.	calm	chatter	both	any	any	any	any	any	any						
+chat_sunrise_1__v02	chat_sunrise_1	chat_sunrise	1	kerbal_a	chat	intercom			orbit sunrises>=3	0	Ya he visto {sunrises} amaneceres en este vuelo.	I've seen {sunrises} sunrises this flight.	calm	chatter	both	any	any	any	any	any	any						
+chat_sunrise_2	chat_sunrise_2	chat_sunrise	2	kerbal_b	chat	intercom				0	Y yo sigo con sueño.	And I'm still sleepy.	calm	chatter	both	any	any	any	any	any	any						
+chat_sunrise_2__v02	chat_sunrise_2	chat_sunrise	2	kerbal_b	chat	intercom				0	Y ninguno me ha despertado a tiempo.	And none of them woke me up on time.	calm	chatter	both	any	any	any	any	any	any						
+chat_biome_1	chat_biome_1	chat_biome	1	kerbal_a	chat	intercom			orbit flight suborbital	0	{other}, mira. Eso de abajo es {biome}.	{other}, look. That down there is {biome}.	calm	chatter	both	any	any	any	any	any	any						
+chat_biome_1__v02	chat_biome_1	chat_biome	1	kerbal_a	chat	intercom			orbit flight suborbital	0	Ahora pasamos por {biome}.	We're passing over {biome} now.	calm	chatter	both	any	any	any	any	any	any						
+chat_biome_2	chat_biome_2	chat_biome	2	kerbal_b	chat	intercom				0	Se parece al resto.	Looks like the rest.	calm	chatter	both	any	any	any	any	any	any						
+chat_biome_2__v02	chat_biome_2	chat_biome	2	kerbal_b	chat	intercom				0	Desde aquí parece muy pequeño.	Looks tiny from up here.	calm	chatter	both	any	any	any	any	any	any						
+chat_biomeland_1	chat_biomeland_1	chat_biomeland	1	kerbal_a	chat	intercom			landed	0	Bienvenidos a {biome}. Población: nosotros.	Welcome to {biome}. Population: us.	calm	chatter	both	any	any	any	any	any	any						
+chat_biomeland_2	chat_biomeland_2	chat_biomeland	2	kerbal_b	chat	intercom				0	¿Hay algo para comer en {biome}?	Is there anything to eat in {biome}?	calm	chatter	both	any	any	any	any	any	any						
+chat_biomeland_2__v02	chat_biomeland_2	chat_biomeland	2	kerbal_b	chat	intercom				0	Pues el sitio necesita un bar.	Well, the place needs a bar.	calm	chatter	both	any	any	any	any	any	any						

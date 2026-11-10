@@ -1,0 +1,4 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+pip_power_1	pip_power_1	pip_power	1	mission_control	probe	radio	probe.power		ec<15	0	{probe}, batería al {ec} por ciento.	{probe}, battery at {ec} percent.	calm	chatter	both	any	any	any	any	any	pip						
+pip_power_2	pip_power_2	pip_power	2	probe	probe	radio	probe.power			0		[beeps indignantly]	calm	chatter	both	any	any	any	any	any	pip	offended					
+pip_power_3	pip_power_3	pip_power	3	mission_control	probe	radio	probe.power			0	Sí, eso incluye las quejas.	Yes, that includes complaints.	calm	chatter	both	any	any	any	any	any	pip						

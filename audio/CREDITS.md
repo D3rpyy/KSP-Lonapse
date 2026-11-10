@@ -5,6 +5,7 @@ The voice clips in `Sounds/crew/` and `Sounds/control/` are loñapsE lines spoke
 Beeps (`Sounds/beeps/`) and the radio static and breathing in `Sounds/sfx/` (`burst`, `loop`, `squelch`,
 `breath_loop`) are synthesized by `build_clips.py` with ffmpeg's `sine`, `aevalsrc` and `anoisesrc` sources and
 plain Python. They contain no recorded material.
+The EVA breathing uses brighter air resonances and a quiet synthesized voiced exhale in the Kerbal register.
 
 The flag plant (`Sounds/sfx/flag_plant`) is made by `build_sfx.py` from `audio/sfx_sources/flag_plant.wav`, which uses
 these two recordings:
@@ -29,6 +30,13 @@ recorded material.
 
 The cabin sound in IVA (`Sounds/sfx/cabin_loop`) and its power down (`cabin_power_down`) are synthesized by
 `build_sfx.py` from filtered noise and sine tones. They contain no recorded material.
+
+The cabin rattle (`cabin_rattle`) uses the owner's recording in `audio/sfx_sources/cabin_rattle.wav`. The build
+keeps its stereo sound, sets a quiet level and crossfades the loop boundary. Without that recording the build
+uses synthesized panel vibration and metallic taps.
+
+The IVA separation clunk (`cabin_separation`) uses the owner-provided metal clunk recording in
+`audio/sfx_sources/cabin_separation.wav`.
 
 No audio from the Chatterer mod or any other mod was used.
 

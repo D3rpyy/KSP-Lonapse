@@ -48,11 +48,12 @@ namespace Lonapse
         public static string JobForLine(string id)
         {
             if (string.IsNullOrEmpty(id)) return null;
-            string[] pilot = { "rt_fuel", "rt_node", "rt_mono", "rt_dock", "rt_land", "rt_flight", "rt_sub", "rt_orbit", "rt_escape" };
-            string[] engineer = { "rt_ec", "rt_parts" };
+            id = RuntimeLines.CanonicalId(id);
+            string[] pilot = { "fuel", "node", "mono", "dock", "land", "flight", "sub", "orbit", "escape" };
+            string[] engineer = { "ec", "parts" };
             foreach (string p in pilot) if (id.StartsWith(p, StringComparison.Ordinal)) return "pilot";
             foreach (string p in engineer) if (id.StartsWith(p, StringComparison.Ordinal)) return "engineer";
-            if (id.StartsWith("rt_sci", StringComparison.Ordinal)) return "scientist";
+            if (id.StartsWith("sci", StringComparison.Ordinal)) return "scientist";
             return null;
         }
         public static readonly string[] PersonaKeys = { "badass", "brave", "nervous", "dim", "veteran" };

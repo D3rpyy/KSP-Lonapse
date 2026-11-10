@@ -5,10 +5,10 @@
 // This file uses only KSP and .NET types, so your DLL never references Lonapse.dll.
 //
 //   if (LonapseWrapper.Available)
-//       LonapseWrapper.Trigger("yourmod.repair_done", vessel, kerbal,
-//           new Dictionary<string, double> { { "x_parts", 3 } },
-//           new Dictionary<string, string> { { "x_tool", "la llave|the wrench" } });
+//       LonapseWrapper.Trigger("examplemod.repair_done", vessel, kerbal,
+//           names: new Dictionary<string, string> { { "x_part", "la antena|the antenna" } });
 //
+// This call matches example_mod.tsv. Rename examplemod in both the code and table for your own mod.
 // The lines go in GameData/YourMod/Lonapse/*.tsv. See docs/API.md in the Lonapse repository.
 using System;
 using System.Collections.Generic;

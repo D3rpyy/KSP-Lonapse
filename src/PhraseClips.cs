@@ -1,5 +1,4 @@
-// Lonapse phrase clips: loads GameData/Lonapse/Phrases/phrases.tsv and resolves each row to its AudioClips
-//. Scenes without a playable clip are dropped, so the director only sees what can be heard.
+// Runtime category dialogue and prepared speech clips. Scene metadata is independent of audio files.
 // sceneCount counts a {body} scene once. clipCount counts every clip, body variants included.
 // Probe rows are subtitle only. They need no clip, and the director shows their text
 // with Subtitle and plays the probe beep itself.
@@ -12,19 +11,19 @@ namespace Lonapse
 {
     public static class PhraseClips
     {
-        public const string TableRel = "GameData/Lonapse/Phrases/phrases.tsv";
+
 
         public static PhraseTable table;
-        /// <summary>Experimental (procedural talk): subtitle slot values from pools.tsv next to phrases.tsv. Empty
-        /// when the file is missing, then a slot shows "...".</summary>
+        /// <summary>Empty vocabulary for legacy mod subtitle adapters. Shipped dialogue has paired alternatives.</summary>
         public static SlotPools pools = new SlotPools();
-        public const string PoolsRel = "GameData/Lonapse/Phrases/pools.tsv";
+
         /// <summary>Experimental (runtime voice): extra rows, in the source format of audio/lonapse/phrases. They have
         /// no clips, so they only play when Piper can speak them (runtimeCanSpeak).</summary>
+        public const string ProbeRuntimeRel = "GameData/Lonapse/Phrases/Probe";
         public const string ExtraRel = "GameData/Lonapse/Phrases/Extra";
         public static int extraFiles;
-        /// <summary>Runtime voice: the runtime-only templates from every Phrases/Runtime/*.tsv, empty without the folder.</summary>
-        public const string RuntimeRel = "GameData/Lonapse/Phrases/Runtime";
+        /// <summary>General runtime templates; probe scene tables live in Probe.</summary>
+        public const string RuntimeRel = "GameData/Lonapse/Phrases/Crew";
         /// <summary>Lines Lonapse ships for other mods: Compat/&lt;Assembly&gt;/*.tsv, read only when that assembly is
         /// loaded. They count as lines of that mod (the Mods tab, its switch).</summary>
         public const string CompatRel = "GameData/Lonapse/Compat";
@@ -39,45 +38,57 @@ namespace Lonapse
         private static readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         private static bool built;
         public static int clipCount, sceneCount;
+        public static int SceneGeneration { get; private set; }
         // Rows without a clip (probe) and playable probe scenes (IsProbeScene)
         public static int subtitleOnlyCount, probeSceneCount;
         public static string status = "not loaded";
 
-        public static bool Loaded { get { return table != null && clipCount > 0; } }
+        public static bool Loaded { get { return table != null && table.Count > 0; } }
 
         public static void Build()
         {
             if (built) return;
             built = true;
-            clips.Clear();
-            clipCount = 0;
-            sceneCount = 0;
-            subtitleOnlyCount = 0;
-            probeSceneCount = 0;
-            table = null;
-            string path;
-            try { path = Path.Combine(KSPUtil.ApplicationRootPath, TableRel); }
-            catch (Exception e) { status = "no root path: " + e.Message; Log.Warn("Lonapse: " + status); return; }
-            if (!File.Exists(path))
-            {
-                status = "missing " + TableRel;
-                Log.Warn("Lonapse: " + status + ". Chatter falls back to random clips per folder.");
-                return;
-            }
+            LoadSceneTables();
+        }
+
+        static void LoadSceneTables()
+        {
+            DialogueTable.Clear();
+            clipCount = 0; sceneCount = 0; subtitleOnlyCount = 0; probeSceneCount = 0;
             List<string> errors = new List<string>();
             try
             {
-                var rows = new List<string>(File.ReadAllLines(path, System.Text.Encoding.UTF8));
+                var rows = new List<string>();
+                string crewDir = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeRel);
+                string[] scenePaths = Directory.Exists(crewDir) ? Directory.GetFiles(crewDir, "*.tsv") : new string[0];
+                Array.Sort(scenePaths, StringComparer.Ordinal);
+                foreach (string scenePath in scenePaths)
+                {
+                    var sceneRows = File.ReadAllLines(scenePath, System.Text.Encoding.UTF8);
+                    if (RuntimeSceneTable.IsSceneFile(sceneRows)) rows.AddRange(RuntimeSceneTable.Compile(sceneRows, scenePath, errors));
+                }
                 extraFiles = 0;
                 string extra = Path.Combine(KSPUtil.ApplicationRootPath, ExtraRel);
                 if (Directory.Exists(extra))
                 {
                     string[] files = Directory.GetFiles(extra, "*.tsv");
                     Array.Sort(files, StringComparer.Ordinal);
-                    foreach (string f in files) { rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8)); extraFiles++; }
+                    foreach (string f in files)
+                    {
+                        if (Path.GetFileName(f) == "probe_runtime.tsv" && File.Exists(Path.Combine(KSPUtil.ApplicationRootPath, ProbeRuntimeRel + "/personalities.tsv"))) continue;
+                        rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8)); extraFiles++;
+                    }
                 }
-                extraFiles += AddModProbeFiles(rows);
+                foreach (var file in ProbeRuntimeFiles())
+                {
+                    if (RuntimeSceneTable.IsSceneFile(file.Value))
+                    { rows.AddRange(RuntimeSceneTable.Compile(file.Value, file.Key, errors)); }
+                    ProbeRuntimeTable probe = ProbeRuntimeTable.Parse(file.Value, file.Key, errors);
+                    rows.AddRange(probe.SceneRows); extraFiles++;
+                }
                 table = PhraseTable.Parse(rows, errors);
+                SceneGeneration++;
             }
             catch (Exception e)
             {
@@ -88,45 +99,25 @@ namespace Lonapse
             }
             for (int i = 0; i < errors.Count && i < 10; i++) Log.Warn("Lonapse table: " + errors[i]);
             if (errors.Count > 10) Log.Warn("Lonapse table: " + (errors.Count - 10) + " more error(s)");
-            LoadPools();
             LoadRuntimeTemplates();
 
-            GameDatabase db = GameDatabase.Instance;
-            int missing = 0;
-            foreach (PhraseEntry e in table.Entries)
-            {
-                if (e.SubtitleOnly) { subtitleOnlyCount++; continue; }
-                string fixedG = PhraseTable.FixedGender(e.Role);
-                for (int g = 0; g < 2; g++)
-                {
-                    string gs = g == 0 ? "m" : "f";
-                    if (!PhraseTable.HasGender(e, gs) || (fixedG != null && fixedG != gs)) continue;
-                    string url = e.ClipUrl(gs);
-                    AudioClip c = null;
-                    try { if (db != null && db.ExistsAudioClip(url)) c = db.GetAudioClip(url); }
-                    catch (Exception) { c = null; }
-                    if (c == null) { missing++; if (missing <= 5) Log.Warn("Lonapse clip missing: " + url); continue; }
-                    clips[url] = c;
-                    clipCount++;
-                }
-            }
+            foreach (PhraseEntry e in table.Entries) if (e.SubtitleOnly) subtitleOnlyCount++;
             foreach (PhraseScene sc in table.Scenes)
             {
-                if (!Playable(sc)) continue;
                 sceneCount++;
                 if (sc.IsProbe) probeSceneCount++;
             }
-            status = clipCount + " clips, " + sceneCount + " scenes (" + probeSceneCount + " probe), "
-                     + subtitleOnlyCount + " subtitle-only rows" + (missing > 0 ? ", " + missing + " missing" : "")
+            status = "runtime speech, " + sceneCount + " scenes (" + probeSceneCount + " probe), "
+                     + subtitleOnlyCount + " subtitle-only rows"
                      + (extraFiles > 0 ? ", " + extraFiles + " extra table(s) for the runtime voice" : "");
             Log.Info("Lonapse: " + status);
         }
 
-        /// <summary>Reads Phrases/Runtime and the mod line files again (the Mods tab, after editing a file). A
+        /// <summary>Reads Phrases/Crew, contextual Probe scenes and mod line files again (the Mods tab, after editing a file). A
         /// short result for the overlay, the bad rows go to KSP.log as at the start.</summary>
         public static string ReloadRuntimeTemplates()
         {
-            LoadRuntimeTemplates();
+            LoadSceneTables();
             int mods = 0;
             foreach (var kv in modTemplateCounts) mods += kv.Value;
             return "Reloaded: " + (allRuntimeTemplates.Count - mods) + " Lonapse and " + mods + " mod templates, "
@@ -188,12 +179,17 @@ namespace Lonapse
             try
             {
                 string dir = Path.Combine(KSPUtil.ApplicationRootPath, RuntimeRel);
-                if (!Directory.Exists(dir)) return;
-                string[] paths = Directory.GetFiles(dir, "*.tsv");
+                string[] paths = Directory.Exists(dir) ? Directory.GetFiles(dir, "*.tsv") : new string[0];
                 Array.Sort(paths, StringComparer.Ordinal);
                 var files = new List<KeyValuePair<string, IList<string>>>();
                 foreach (string f in paths)
-                    files.Add(new KeyValuePair<string, IList<string>>(Path.GetFileName(f), File.ReadAllLines(f, System.Text.Encoding.UTF8)));
+                {
+                    string name = Path.GetFileName(f);
+                    if (name == "probe_context.tsv" && File.Exists(Path.Combine(KSPUtil.ApplicationRootPath, ProbeRuntimeRel + "/reports.tsv"))) continue;
+                    if (name == "probe_stress.tsv" && File.Exists(Path.Combine(KSPUtil.ApplicationRootPath, ProbeRuntimeRel + "/stress.tsv"))) continue;
+                    var fileRows = File.ReadAllLines(f, System.Text.Encoding.UTF8);
+                    files.Add(new KeyValuePair<string, IList<string>>(name, RuntimeSceneTable.TemplateRows(fileRows)));
+                }
                 int own = files.Count;
                 // other mods: GameData/<Mod>/Lonapse/*.tsv, after the Lonapse files (a duplicate id is the mod's row)
                 var modFiles = CompatLineFiles();
@@ -201,6 +197,14 @@ namespace Lonapse
                 files.AddRange(modFiles);
                 var rerr = new List<string>();
                 allRuntimeTemplates = RuntimeLines.ParseAll(files, rerr);
+                foreach (var file in ProbeRuntimeFiles())
+                    foreach (RuntimeTemplate template in ProbeRuntimeTable.Parse(file.Value, file.Key, rerr).Templates)
+                    {
+                        RuntimeTemplate old = allRuntimeTemplates.Find(t => RuntimeLines.CanonicalId(t.Id) == RuntimeLines.CanonicalId(template.Id));
+                        if (old != null && ModOf(old.Where) != null && ModOf(template.Where) == null) continue;
+                        if (old != null) allRuntimeTemplates.Remove(old);
+                        allRuntimeTemplates.Add(template);
+                    }
                 lastRuntimeErrors = rerr.Count;
                 ApplyModMutes();
                 for (int i = 0; i < rerr.Count && i < 10; i++) Log.Warn("Lonapse runtime: " + rerr[i]);
@@ -218,14 +222,14 @@ namespace Lonapse
                 int modCount = 0;
                 var per = new List<string>();
                 foreach (var kv in modTemplateCounts) { modCount += kv.Value; per.Add(kv.Key + " (" + kv.Value + ")"); }
-                Log.Info("Lonapse: " + (allRuntimeTemplates.Count - modCount) + " runtime voice templates from " + own + " file(s) in Phrases/Runtime");
+                Log.Info("Lonapse: " + (allRuntimeTemplates.Count - modCount) + " runtime voice templates from " + own + " general file(s) and Phrases/Probe");
                 if (modFiles.Count > 0)
                     Log.Info("Lonapse: " + modCount + " mod templates from " + modFiles.Count + " file(s): " + string.Join(", ", per.ToArray())
                              + (mutedMods.Count > 0 ? ", muted by the player: " + string.Join(", ", new List<string>(mutedMods).ToArray()) : ""));
             }
             catch (Exception e)
             {
-                Log.Warn("Lonapse Phrases/Runtime: read failed: " + e.Message);
+                Log.Warn("Lonapse Phrases/Crew: read failed: " + e.Message);
                 runtimeTemplates = new List<RuntimeTemplate>();
                 allRuntimeTemplates = runtimeTemplates;
             }
@@ -286,33 +290,28 @@ namespace Lonapse
         /// <summary>The probe line files of other mods: GameData/&lt;Mod&gt;/Lonapse/Probe/*.tsv, same format as
         /// Phrases/Extra (a core column that names a lineset from LONAPSE_PROBE_LINES). Added after the Lonapse rows.
         /// Returns the number of files read.</summary>
-        static int AddModProbeFiles(List<string> rows)
+        static List<KeyValuePair<string, IList<string>>> ProbeRuntimeFiles()
         {
-            int n = 0;
+            var files = new List<KeyValuePair<string, IList<string>>>();
             string gd = Path.Combine(KSPUtil.ApplicationRootPath, "GameData");
-            if (!Directory.Exists(gd)) return 0;
-            string[] mods = Directory.GetDirectories(gd);
-            Array.Sort(mods, StringComparer.Ordinal);
-            foreach (string m in mods)
+            if (!Directory.Exists(gd)) return files;
+            var roots = new List<string> { Path.Combine(gd, "Lonapse") };
+            string[] mods = Directory.GetDirectories(gd); Array.Sort(mods, StringComparer.Ordinal);
+            foreach (string mod in mods) if (Path.GetFileName(mod) != "Lonapse") roots.Add(mod);
+            foreach (string root in roots)
             {
-                string mod = Path.GetFileName(m);
-                if (mod == "Lonapse") continue;
-                try
+                bool own = Path.GetFileName(root) == "Lonapse";
+                string dir = own ? Path.Combine(root, "Phrases/Probe") : Path.Combine(root, "Lonapse/Probe");
+                if (!Directory.Exists(dir)) continue;
+                string[] paths = Directory.GetFiles(dir, "*.tsv"); Array.Sort(paths, StringComparer.Ordinal);
+                foreach (string path in paths)
                 {
-                    string dir = Path.Combine(Path.Combine(m, "Lonapse"), "Probe");
-                    if (!Directory.Exists(dir)) continue;
-                    string[] paths = Directory.GetFiles(dir, "*.tsv");
-                    Array.Sort(paths, StringComparer.Ordinal);
-                    foreach (string f in paths)
-                    {
-                        rows.AddRange(File.ReadAllLines(f, System.Text.Encoding.UTF8));
-                        n++;
-                        Log.Info("Lonapse: probe lines of " + mod + "/Lonapse/Probe/" + Path.GetFileName(f));
-                    }
+                    string where = own ? "Probe/" + Path.GetFileName(path)
+                        : Path.GetFileName(root) + "/Lonapse/Probe/" + Path.GetFileName(path);
+                    files.Add(new KeyValuePair<string, IList<string>>(where, File.ReadAllLines(path, System.Text.Encoding.UTF8)));
                 }
-                catch (Exception e) { Log.Warn("Lonapse: probe lines of " + mod + " not read: " + e.Message); }
             }
-            return n;
+            return files;
         }
 
         static List<KeyValuePair<string, IList<string>>> ModLineFiles()
@@ -340,23 +339,8 @@ namespace Lonapse
             return r;
         }
 
-        static void LoadPools()
-        {
-            pools = new SlotPools();
-            try
-            {
-                string pp = Path.Combine(KSPUtil.ApplicationRootPath, PoolsRel);
-                if (!File.Exists(pp)) return;
-                var perr = new List<string>();
-                pools = SlotPools.Parse(new List<string>(File.ReadAllLines(pp, System.Text.Encoding.UTF8)), perr);
-                for (int i = 0; i < perr.Count && i < 10; i++) Log.Warn("Lonapse pools: " + perr[i]);
-                Log.Info("Lonapse: " + pools.Count + " subtitle slot pools, " + pools.SpanishCount + " values with Spanish");
-            }
-            catch (Exception e) { Log.Warn("Lonapse pools: read failed: " + e.Message); pools = new SlotPools(); }
-        }
-
-        private static readonly Queue<string> runtimeUrls = new Queue<string>();
-        private const int RuntimeKeep = 16;
+        private static readonly Queue<KeyValuePair<string, AudioClip>> runtimeUrls = new Queue<KeyValuePair<string, AudioClip>>();
+        private const int RuntimeKeep = 64;
 
         /// <summary>Experimental (runtime voice): a clip made at runtime for a row that has no file, so Clip(e) finds
         /// it like any other. Only the last RuntimeKeep stay, older ones are destroyed.</summary>
@@ -364,14 +348,26 @@ namespace Lonapse
         {
             if (e == null || clip == null) return;
             string url = e.ClipUrl(PhraseTable.FixedGender(e.Role) ?? "m");
+            e.PreparedSpeech = true;
             clips[url] = clip;
-            runtimeUrls.Enqueue(url);
+            runtimeUrls.Enqueue(new KeyValuePair<string, AudioClip>(url, clip));
             while (runtimeUrls.Count > RuntimeKeep)
             {
-                string old = runtimeUrls.Dequeue();
-                AudioClip c;
-                if (clips.TryGetValue(old, out c)) { clips.Remove(old); if (c != null) UnityEngine.Object.Destroy(c); }
+                var old = runtimeUrls.Dequeue();
+                AudioClip current;
+                if (clips.TryGetValue(old.Key, out current) && current == old.Value) clips.Remove(old.Key);
+                if (old.Value != null) UnityEngine.Object.Destroy(old.Value);
             }
+        }
+
+        /// <summary>Prepare direct speech paths (countdown, callouts and the final MC call).</summary>
+        public static void Render(PhraseEntry e, bool female, Action<AudioClip> ready)
+        {
+            if (e == null || e.SubtitleOnly) { ready(null); return; }
+            string kind = RuntimeDelivery.KindFor(e.Role == "mc" ? "mc" : female ? "f" : "m", e.Band, e.Severity, e.Event);
+            if (kind == null || RuntimeVoice.Missing(kind) != null) { ready(null); return; }
+            string spanish = e.RuntimeSpanish ?? e.SpanishRtVersion(0) ?? e.Spanish;
+            RuntimeVoice.Shared.Request(kind, spanish, result => ready(result.clip));
         }
 
         /// <summary>Clip for a row. A crew row falls back to the other gender, so a line is never lost.
@@ -428,7 +424,7 @@ namespace Lonapse
             for (int i = 0; i < want.Count; i++)
             {
                 PhraseEntry e = want[i];
-                if (e.HasBody && !e.SubtitleOnly && Clip(e, false) == null)
+                if (e.HasBody && !e.SubtitleOnly && Clip(e, false) == null && (runtimeCanSpeak == null || !runtimeCanSpeak(e)))
                 {
                     for (int k = 0; k < sc.Lines.Count; k++)
                         if (sc.Lines[k].Seq == e.Seq) { e = sc.Lines[k]; break; }

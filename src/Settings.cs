@@ -50,7 +50,7 @@ namespace Lonapse
         public float warpRateGain = 0.4f, warpRateMax = 2.5f, warpPitchGain = 0.04f, warpPitchMax = 1.18f;
         public float stationRateFactor = 0.5f, stationMcFactor = 1.0f, stationCalmBias = 0.6f, stationPingFactor = 2.0f;
         // periodic MC-initiated "station, Houston" exchange on stations and bases
-        public float stationMcMin = 150f, stationMcMax = 300f;
+        public float stationMcMin = 120f, stationMcMax = 120f;
 
         // --- Phase 2: crew intercom chats ---
         // intercom at stress 0: 60 s everywhere. The station and quiet coast boosts are 1 now, they were for the
@@ -99,8 +99,6 @@ namespace Lonapse
         // --- Radio, callouts, stress causes and pacing. ---
         // Chatter hold after a callout preempts it
         public float calloutHoldPad = 0.3f;
-        // Ducking of game audio
-        public float duckAttack = 0.08f, duckRelease = 0.4f;
         // Throttle callouts
         public float throttleFullAt = 0.98f, throttleCutAt = 0.05f, throttleMinGap = 5f;
         // Pitch factor per gender
@@ -218,7 +216,7 @@ namespace Lonapse
         public static readonly string[] SignedFields = { "faceExpressionSign" };
 
         /// <summary>Schema version of the saved TUNING node. Bump when defaults of existing fields change.</summary>
-        public const int CurrentVersion = 13;
+        public const int CurrentVersion = 16;
 
         /// <summary>
         /// Fields whose defaults changed in version 3. A file written by an older version gets these reset to
@@ -250,9 +248,10 @@ namespace Lonapse
             FixPair(ref reopenDelayMin, ref reopenDelayMax); FixPair(ref mcTenseLo, ref mcTenseHi);
             FixPair(ref intercomGapMin, ref intercomGapMax); FixPair(ref intercomMaxStress, ref intercomAbortStress);
             FixPair(ref dockApproachDist, ref dockRearmDist);
-            FixPair(ref stationMcMin, ref stationMcMax); FixPair(ref dockCloseMin, ref dockCloseMax);
+            FixPair(ref dockCloseMin, ref dockCloseMax);
             FixPair(ref dockCloseDist, ref dockCloseExit); FixPair(ref descentVolLo, ref descentVolHi);
-            if (stationMcMin < 20f) stationMcMin = 20f;
+            stationMcMin = DcMath.Clamp(stationMcMin, 15f, 180f);
+            stationMcMax = Math.Max(stationMcMin, DcMath.Clamp(stationMcMax, 15f, 180f));
             if (dockCloseMin < 3f) dockCloseMin = 3f;
             crewStressSemitones = DcMath.Clamp(crewStressSemitones, 0f, 12f);
             crewPitchMax = DcMath.Clamp(crewPitchMax, 0.8f, 2f);
@@ -398,7 +397,7 @@ namespace Lonapse
         public float controlVolume = 0.8f;
         public float beepVolume = 0.6f;   // 0..2, above 1 the beeps get extra gain
         public float sfxVolume = 1.0f;          // sound effects of the ship itself (docking), not a radio sound
-        public float staticVolume = 0.5f;
+        public float staticVolume = 0.5f;           // read from older settings files for migration only
         public float weakSignalVolume = 0.4f;   // extra static, bursts and grit on MC at a weak signal (1 = the old, harsher level)
         public float intercomVolume = 0.8f;
         public bool intercomEnabled = true;
@@ -424,8 +423,6 @@ namespace Lonapse
         public float calloutVolume = 1.0f;          // 0..2
         public float voiceBoostDb = 6f;             // 0..12
         public bool voiceCompressor = true;         // voice clarity: presence EQ and compressor
-        public string duckMode = "listener";        // listener | off
-        public float duckDepth = 0.35f;             // 0..0.8
         public bool throttleCallouts = true;        // callouts at full throttle and cut-off
         public bool roverStress = true;             // rough rover driving adds stress
         public string stationStyle = "auto";        // auto | check | exchange
@@ -434,7 +431,7 @@ namespace Lonapse
         public bool warpChatter = true;             // calm chatter during rails warp, events wait for the end of it
         public bool evaGroup = true;                // kerbals nearby (EVA, other ships) join the radio
         public bool evaRelay = true;                // the EVA suit radio reaches MC through a nearby ship
-        public float evaRadioVolume = 0.8f;         // 0..1
+        public float evaRadioVolume = 0.8f;         // 0..2
         public bool planChatter = true;             // chatter about maneuver nodes
         public string signalMode = "auto";          // auto | off | fixed
         public float signalFixed = 0.7f;            // 0..1
@@ -470,7 +467,9 @@ namespace Lonapse
         public bool jetpackSfx = true;              // a gas click and hiss when a kerbal switches the EVA jetpack on or off
         public bool soiSfx = true;                  // a soft ping when the ship enters a new sphere of influence
         public bool cabinSfx = true;                // fans and hum of the cabin in IVA, a power down when the batteries run flat
-        public float cabinVolume = SfxVolumeDefault;     // cabin sound in IVA
+        public float cabinVolume = SfxVolumeDefault;     // cabin fans and power down in IVA
+        public float cabinThrustVolume = SfxVolumeDefault;
+        public float cabinSeparationVolume = SfxVolumeDefault;
         // --- Mouths ---
         public bool mouthAnimation = true;          // kerbals move their jaw while they talk
         public bool mouthDebug = false;             // log and show mouth driver details
@@ -494,7 +493,7 @@ namespace Lonapse
         public int subtitleMaxEntries = 2;          // 1 .. 4
         public float subtitleWidth = 1.0f;          // 0.5 .. Times the width of the position preset
         public float subtitleHold = SubtitleLayout.DefaultHold; // s a subtitle stays after its line ends, 0 .. 10
-        public float radioStatic = 0.5f;            // 0..1, static under every radio line at any signal (DcMath.StaticCurve)
+        public float radioStatic = RadioNoise.DefaultVolume; // 0..2, volume of all radio hiss, bursts and crackle
         public bool intercomRadioFx = false;        // crew-to-crew lines get the radio sound, not the cabin sound
         // --- Probe mode ---
         public bool probeMode = true;               // uncrewed vessels with a probe core get probe chatter
@@ -535,8 +534,8 @@ namespace Lonapse
         public const string TuningNodeName = "TUNING";
 
         /// <summary>
-        /// Pure part of the migration: resets fields whose defaults changed since <paramref name="fromVersion"/>.
-        /// Returns the names that were reset (empty when nothing changed).
+        /// Pure part of the migration: updates settings from <paramref name="fromVersion"/>.
+        /// Returns the changed fields (empty when nothing changed).
         /// </summary>
         public System.Collections.Generic.List<string> MigrateValues(int fromVersion)
         {
@@ -627,6 +626,21 @@ namespace Lonapse
                 // default moves.
                 ResetIfOld(reset, "crewStressSemitones", 0.5f, 0.5f);
             }
+            if (fromVersion < 14)
+            {
+                radioStatic = RadioNoise.FromLegacy(staticVolume, radioStatic);
+                reset.Add("radioStatic");
+            }
+            if (fromVersion < 15)
+            {
+                ResetIfOld(reset, "stationMcMin", 150f, 150f);
+                ResetIfOld(reset, "stationMcMax", 300f, 300f);
+            }
+            if (fromVersion < 16)
+            {
+                cabinThrustVolume = cabinVolume;
+                reset.Add("cabinThrustVolume");
+            }
             tuningVersion = Tuning.CurrentVersion;
             return reset;
         }
@@ -645,21 +659,23 @@ namespace Lonapse
 
         public void Clamp()
         {
-            masterVolume = DcMath.Clamp(DcMath.Finite(masterVolume), 0f, 1f);
-            crewVolume = DcMath.Clamp(DcMath.Finite(crewVolume), 0f, 1f);
-            controlVolume = DcMath.Clamp(DcMath.Finite(controlVolume), 0f, 1f);
-            beepVolume = DcMath.Clamp(DcMath.Finite(beepVolume), 0f, 2f);
-            sfxVolume = DcMath.Clamp(DcMath.Finite(sfxVolume), 0f, 1f);
+            masterVolume = MixMath.ClampVolume(masterVolume);
+            crewVolume = MixMath.ClampVolume(crewVolume);
+            controlVolume = MixMath.ClampVolume(controlVolume);
+            beepVolume = MixMath.ClampVolume(beepVolume);
+            sfxVolume = MixMath.ClampVolume(sfxVolume);
             staticVolume = DcMath.Clamp(DcMath.Finite(staticVolume), 0f, 1f);
-            thudVolume = DcMath.Clamp(DcMath.Finite(thudVolume), 0f, 1f);
-            footstepVolume = DcMath.Clamp(DcMath.Finite(footstepVolume), 0f, 1f);
-            hatchVolume = DcMath.Clamp(DcMath.Finite(hatchVolume), 0f, 1f);
-            dockingVolume = DcMath.Clamp(DcMath.Finite(dockingVolume), 0f, 1f);
-            jetpackVolume = DcMath.Clamp(DcMath.Finite(jetpackVolume), 0f, 1f);
-            breathVolume = DcMath.Clamp(DcMath.Finite(breathVolume), 0f, 1f);
-            cabinVolume = DcMath.Clamp(DcMath.Finite(cabinVolume), 0f, 1f);
-            weakSignalVolume = DcMath.Clamp(DcMath.Finite(weakSignalVolume), 0f, 1f);
-            intercomVolume = DcMath.Clamp(DcMath.Finite(intercomVolume), 0f, 1f);
+            thudVolume = MixMath.ClampVolume(thudVolume);
+            footstepVolume = MixMath.ClampVolume(footstepVolume);
+            hatchVolume = MixMath.ClampVolume(hatchVolume);
+            dockingVolume = MixMath.ClampVolume(dockingVolume);
+            jetpackVolume = MixMath.ClampVolume(jetpackVolume);
+            breathVolume = MixMath.ClampVolume(breathVolume);
+            cabinVolume = MixMath.ClampVolume(cabinVolume);
+            cabinThrustVolume = MixMath.ClampVolume(cabinThrustVolume);
+            cabinSeparationVolume = MixMath.ClampVolume(cabinSeparationVolume);
+            weakSignalVolume = MixMath.ClampVolume(weakSignalVolume);
+            intercomVolume = MixMath.ClampVolume(intercomVolume);
             if (float.IsNaN(rateMultiplier) || float.IsInfinity(rateMultiplier)) rateMultiplier = 1f;
             rateMultiplier = DcMath.Clamp(rateMultiplier, 0.25f, 4f);
             if (maxCrewVoices < 1) maxCrewVoices = 1;
@@ -670,12 +686,10 @@ namespace Lonapse
             if (string.IsNullOrEmpty(muteModifier)) muteModifier = "None";
             if (string.IsNullOrEmpty(countdownKey)) countdownKey = "None";
             if (string.IsNullOrEmpty(countdownModifier)) countdownModifier = "None";
-            calloutVolume = DcMath.Clamp(DcMath.Finite(calloutVolume), 0f, 2f);
+            calloutVolume = MixMath.ClampVolume(calloutVolume);
             voiceBoostDb = DcMath.Clamp(DcMath.Finite(voiceBoostDb), 0f, 12f);
-            duckDepth = DcMath.Clamp(DcMath.Finite(duckDepth), 0f, 0.8f);
-            evaRadioVolume = DcMath.Clamp(DcMath.Finite(evaRadioVolume), 0f, 1f);
+            evaRadioVolume = MixMath.ClampVolume(evaRadioVolume);
             signalFixed = DcMath.Clamp(DcMath.Finite(signalFixed), 0f, 1f);
-            duckMode = OneOf(duckMode, "listener", "listener", "off");
             stationStyle = OneOf(stationStyle, "auto", "auto", "check", "exchange");
             radioProfile = OneOf(radioProfile, "auto", "auto", "station", "ship", "eva");
             signalMode = OneOf(signalMode, "auto", "auto", "off", "fixed");
@@ -692,7 +706,7 @@ namespace Lonapse
             subtitleWidth = DcMath.Clamp(subtitleWidth, SubtitleLayout.MinWidthScale, SubtitleLayout.MaxWidthScale);
             if (float.IsNaN(subtitleHold) || float.IsInfinity(subtitleHold)) subtitleHold = SubtitleLayout.DefaultHold;
             subtitleHold = DcMath.Clamp(subtitleHold, 0f, SubtitleLayout.MaxHold);
-            radioStatic = DcMath.Clamp(DcMath.Finite(radioStatic), 0f, 1f);
+            radioStatic = MixMath.ClampVolume(radioStatic);
             if (subtitleMaxEntries < 1) subtitleMaxEntries = 1;
             if (subtitleMaxEntries > SubtitleMaxEntriesCap) subtitleMaxEntries = SubtitleMaxEntriesCap;
             if (tuning == null) tuning = new Tuning();
@@ -803,6 +817,8 @@ namespace Lonapse
                 n.TryGetValue("jetpackVolume", ref s.jetpackVolume);
                 n.TryGetValue("breathVolume", ref s.breathVolume);
                 n.TryGetValue("cabinVolume", ref s.cabinVolume);
+                n.TryGetValue("cabinThrustVolume", ref s.cabinThrustVolume);
+                n.TryGetValue("cabinSeparationVolume", ref s.cabinSeparationVolume);
                 n.TryGetValue("weakSignalVolume", ref s.weakSignalVolume);
                 n.TryGetValue("intercomVolume", ref s.intercomVolume);
                 n.TryGetValue("intercomEnabled", ref s.intercomEnabled);
@@ -828,8 +844,6 @@ namespace Lonapse
                 n.TryGetValue("calloutVolume", ref s.calloutVolume);
                 n.TryGetValue("voiceBoostDb", ref s.voiceBoostDb);
                 n.TryGetValue("voiceCompressor", ref s.voiceCompressor);
-                n.TryGetValue("duckMode", ref s.duckMode);
-                n.TryGetValue("duckDepth", ref s.duckDepth);
                 n.TryGetValue("throttleCallouts", ref s.throttleCallouts);
                 n.TryGetValue("roverStress", ref s.roverStress);
                 n.TryGetValue("stationStyle", ref s.stationStyle);
@@ -848,7 +862,7 @@ namespace Lonapse
                 n.TryGetValue("countdownDown", ref s.countdownDown);
                 n.TryGetValue("rogerBeep", ref s.rogerBeep);
                 n.TryGetValue("lightDelay", ref s.lightDelay);
-                n.TryGetValue("runtimeVoice", ref s.runtimeVoice);
+                s.runtimeVoice = true; // retained legacy field; all speech now requires runtime synthesis
                 n.TryGetValue("runtimeReports", ref s.runtimeReports);
                 n.TryGetValue("runtimeScience", ref s.runtimeScience);
                 n.TryGetValue("mutedMods", ref s.mutedMods);
@@ -963,7 +977,6 @@ namespace Lonapse
                 n.AddValue("controlVolume", F(controlVolume));
                 n.AddValue("beepVolume", F(beepVolume));
                 n.AddValue("sfxVolume", F(sfxVolume));
-                n.AddValue("staticVolume", F(staticVolume));
                 n.AddValue("hatchVolume", F(hatchVolume));
                 n.AddValue("footstepVolume", F(footstepVolume));
                 n.AddValue("footstepSfx", footstepSfx);
@@ -973,6 +986,8 @@ namespace Lonapse
                 n.AddValue("jetpackVolume", F(jetpackVolume));
                 n.AddValue("breathVolume", F(breathVolume));
                 n.AddValue("cabinVolume", F(cabinVolume));
+                n.AddValue("cabinThrustVolume", F(cabinThrustVolume));
+                n.AddValue("cabinSeparationVolume", F(cabinSeparationVolume));
                 n.AddValue("weakSignalVolume", F(weakSignalVolume));
                 n.AddValue("intercomVolume", F(intercomVolume));
                 n.AddValue("intercomEnabled", intercomEnabled);
@@ -996,8 +1011,6 @@ namespace Lonapse
                 n.AddValue("calloutVolume", F(calloutVolume));
                 n.AddValue("voiceBoostDb", F(voiceBoostDb));
                 n.AddValue("voiceCompressor", voiceCompressor);
-                n.AddValue("duckMode", duckMode);
-                n.AddValue("duckDepth", F(duckDepth));
                 n.AddValue("throttleCallouts", throttleCallouts);
                 n.AddValue("roverStress", roverStress);
                 n.AddValue("stationStyle", stationStyle);
@@ -1016,7 +1029,6 @@ namespace Lonapse
                 n.AddValue("countdownDown", countdownDown);
                 n.AddValue("rogerBeep", rogerBeep);
                 n.AddValue("lightDelay", lightDelay);
-                n.AddValue("runtimeVoice", runtimeVoice);
                 n.AddValue("runtimeReports", runtimeReports);
                 n.AddValue("runtimeScience", runtimeScience);
                 n.AddValue("mutedMods", mutedMods ?? "");

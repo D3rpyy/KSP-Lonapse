@@ -106,23 +106,33 @@ mv -f "$GD/Plugins/Lonapse.dll.tmp" "$GD/Plugins/Lonapse.dll"
 echo "Installed: $GD/Plugins/Lonapse.dll ($(stat -c %s "$GD/Plugins/Lonapse.dll") bytes)"
 
 # ---- the rest of what players get, from the same sources as package.sh ----
-# phrase tables: the text tables in GameData/Lonapse/Phrases (pools.tsv, ...) and Phrases/Runtime/*.tsv,
-# phrases.tsv from the audio build when there is one, and the Phrases/Extra tables the repo ships (runtime-only
-# scenes). A file of the player's own in Phrases/Extra or Phrases/Runtime is not touched (only the files the repo
-# ships are replaced).
-mkdir -p "$GD/Phrases" "$GD/Phrases/Runtime" "$GD/Phrases/Extra"
+# Toolbar artwork is committed; installing does not require an SVG renderer.
+mkdir -p "$GD/Icons"
+cp -f "$REPO/GameData/Lonapse/Icons/button.png" "$GD/Icons/button.png"
+# Category dialogue is authored directly in Crew/ and Probe/. Extra is a legacy mod adapter.
+# Existing custom category files are preserved; the repo's category files are replaced.
+mkdir -p "$GD/Phrases" "$GD/Phrases/Crew" "$GD/Phrases/Extra" "$GD/Phrases/Probe"
 shopt -s nullglob
 for f in "$REPO"/GameData/Lonapse/Phrases/*.tsv; do
   cp -f "$f" "$GD/Phrases/"
   echo "Installed: $GD/Phrases/$(basename "$f")"
 done
-for f in "$REPO"/GameData/Lonapse/Phrases/Runtime/*.tsv; do
-  cp -f "$f" "$GD/Phrases/Runtime/"
-  echo "Installed: $GD/Phrases/Runtime/$(basename "$f")"
+for f in "$REPO"/GameData/Lonapse/Phrases/Crew/*.tsv; do
+  cp -f "$f" "$GD/Phrases/Crew/"
+  echo "Installed: $GD/Phrases/Crew/$(basename "$f")"
 done
 for f in "$REPO"/GameData/Lonapse/Phrases/Extra/*.tsv; do
   cp -f "$f" "$GD/Phrases/Extra/"
   echo "Installed: $GD/Phrases/Extra/$(basename "$f")"
+done
+# Unified probe scene tables. Old shipped copies may remain; the loader prefers these canonical files.
+for f in "$REPO"/GameData/Lonapse/Phrases/Probe/*.tsv; do
+  cp -f "$f" "$GD/Phrases/Probe/"
+  echo "Installed: $GD/Phrases/Probe/$(basename "$f")"
+done
+# Retired shipped categories were consolidated into docking/landing, intercom/radio chatter, and events.
+for retired in dock_land.tsv dock_close.tsv undock.tsv chats.tsv chatter.tsv cabin.tsv radio_chats.tsv eva_chats.tsv event_chats.tsv replies.tsv; do
+  if [[ -f "$GD/Phrases/Crew/$retired" ]]; then rm -f "$GD/Phrases/Crew/$retired"; fi
 done
 # lines Lonapse ships for other mods, read only when that mod is installed
 for d in "$REPO"/GameData/Lonapse/Compat/*/; do
@@ -141,15 +151,17 @@ for f in "$REPO"/GameData/Lonapse/Patches/*.cfg; do
 done
 shopt -u nullglob
 # The DeepFreeze lines moved to Compat/DeepFreeze
-if [[ -f "$GD/Phrases/Runtime/deepfreeze.tsv" ]]; then rm -f "$GD/Phrases/Runtime/deepfreeze.tsv"; echo "Removed old: $GD/Phrases/Runtime/deepfreeze.tsv"; fi
-# Tables of older installs that moved: runtime.tsv is now Phrases/Runtime, slots_es.tsv is the spanish_rt column and pools.tsv
+if [[ -f "$GD/Phrases/Crew/deepfreeze.tsv" ]]; then rm -f "$GD/Phrases/Crew/deepfreeze.tsv"; echo "Removed old: $GD/Phrases/Crew/deepfreeze.tsv"; fi
+# Tables of older installs that moved: runtime.tsv is now Phrases/Crew, slots_es.tsv is the spanish_rt column and pools.tsv
 for old in runtime.tsv slots_es.tsv; do
   if [[ -f "$GD/Phrases/$old" ]]; then rm -f "$GD/Phrases/$old"; echo "Removed old: $GD/Phrases/$old"; fi
 done
-if [[ -f "$REPO/audio/build/lonapse/phrases.tsv" ]]; then
-  cp -f "$REPO/audio/build/lonapse/phrases.tsv" "$GD/Phrases/phrases.tsv"
-  echo "Installed: $GD/Phrases/phrases.tsv (from the audio build)"
-fi
+
+
+# Remove the retired generated tables; canonical category files have already been installed.
+for retired in phrases.tsv pools.tsv; do
+  if [[ -f "$GD/Phrases/$retired" ]]; then rm -f "$GD/Phrases/$retired"; fi
+done
 
 # docs and the version file, as in the zip
 cp -f "$REPO/LICENSE" "$GD/LICENSE.txt"
@@ -181,11 +193,13 @@ fi
 # Only audio files: a .cfg under GameData would be parsed by KSP. --delete removes clips that are no longer built.
 if [[ $NO_SOUNDS -eq 0 ]]; then
   SND="$REPO/audio/build/Sounds"
-  for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant sfx/jetpack_on sfx/jetpack_off sfx/jetpack_loop sfx/thud_heavy sfx/thud_light sfx/footstep crew control; do [[ -d "$SND/$d" ]] || SND="$REPO/GameData/Lonapse/Sounds"; done
+  for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant sfx/jetpack_on sfx/jetpack_off sfx/jetpack_loop sfx/thud_heavy sfx/thud_light sfx/footstep sfx/cabin_rattle sfx/cabin_separation; do [[ -d "$SND/$d" ]] || SND="$REPO/GameData/Lonapse/Sounds"; done
   if [[ -d "$SND" ]]; then
     mkdir -p "$GD/Sounds"
     case "$GD/Sounds" in */GameData/Lonapse/Sounds) ;; *) echo "ERROR: sounds path sanity check failed" >&2; exit 1 ;; esac
-    rsync -a --delete --prune-empty-dirs --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' "$SND/" "$GD/Sounds/"
+    rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' "$SND/" "$GD/Sounds/"
+    # Retired stock speech folders are never used by the runtime-only release.
+    rm -rf -- "$GD/Sounds/crew" "$GD/Sounds/control"
     echo "Installed sounds from: $SND"
   fi
 else

@@ -1,3 +1,5 @@
+> Legacy speech-rendering documentation. Shipped dialogue is now authored directly in `GameData/Lonapse/Phrases/Crew` and `Probe`. See [Unified dialogue](../../docs/API.md#one-alternative-per-row). These sources remain as historical/test fixtures.
+
 # loñapsE: the language of the kerbals
 
 loñapsE is the language the kerbals speak in Lonapse. Every crew and Mission Control line in the mod is spoken in it.
@@ -21,7 +23,7 @@ The source files are:
 | `phrases/launch.tsv` | Staging, throttle and countdown callouts. Serious launch and ascent radio. | `la_` |
 | `phrases/return.tsv` | Reentry and descent radio, chutes, touchdown, splashdown. | `re_` |
 | `phrases/panic.tsv` | Stress radio in the `tense` and `panic` bands, one cause per scene. | `pa_` |
-| `phrases/space_radio.tsv` | Goofy kerbal radio with Mission Control in orbit, coast and landed. | `sp_` |
+| `phrases/space_radio.tsv` | Calm kerbal radio with Mission Control in orbit, coast and landed. | `sp_` |
 | `phrases/mc_jokes.tsv` | Mission Control jokes to the crew. | `mj_` |
 | `phrases/intercom.tsv` | Crew-only scenes with two or more lines. Always funny. | `ic_` |
 | `phrases/blackout.tsv` | Intercom scenes for the radio blackout (phase `blackout`). | `bl_` |
@@ -29,7 +31,7 @@ The source files are:
 | `phrases/bodies.tsv` | Scenes that name the current body with `{body}`. | `bo_` |
 | `phrases/probe_pet.tsv` | Mission Control talks to the probe, the probe beeps back (`probe_chat`, `probe_sleepy`). The probe calls first (`probe_hail`), stress per cause (`probe_stress`), "say again?" (`probe_say_again`), milestones (`probe_milestone`), rover moments (`probe_rover`) and data (`probe_data`). | `pp_` |
 | `phrases/probe_events.tsv` | Probe scenes for science, power, SOI, part lost, signal back, touchdown, splashdown, docked and burn_soon. | `pe_` |
-| `phrases/chatter_more.tsv` | 0.6.0: calm radio with Mission Control, mostly jokes. Goofy phases, some per trait and persona. | `cm_` |
+| `phrases/chatter_more.tsv` | 0.6.0: calm radio with Mission Control, mostly jokes. Calm phases, some per trait and persona. | `cm_` |
 | `phrases/intercom_more.tsv` | 0.6.0: more crew-only chats. Always funny. | `im_` |
 | `phrases/tense_more.tsv` | 0.6.0: tense radio. Many `cause any` scenes, so a generic line no longer repeats. | `tm_` |
 | `phrases/serious_more.tsv` | 0.6.0: calm radio in launch, ascent, reentry and descent. Short and mostly procedural. | `sr_` |
@@ -89,7 +91,7 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | `scene` | `[a-z0-9_]+`. The lines of one conversation share the scene. A scene lives in one file. |
 | `seq` | integer, 1 or higher. The seq numbers of a scene run 1, 2, 3 without gaps. |
 | `gender` | `m`, `f`, `both` |
-| `phase` | `any`, `prelaunch`, `launch`, `ascent`, `orbit`, `coast`, `reentry`, `descent`, `landed`, `blackout`, `serious`, `goofy` |
+| `phase` | `any`, `prelaunch`, `launch`, `ascent`, `orbit`, `coast`, `reentry`, `descent`, `landed`, `blackout`, `serious`, `calm` |
 | `cause` | `any`, `spin`, `gforce`, `q`, `ground`, `heat`, `plasma`, `fuel`, `impulse`, `engine_out` |
 | `trait` | optional. `any`, `pilot`, `engineer`, `scientist`, `tourist`, `to_tourist`, `tourist_pair`. The crew speaker must have this trait. In an intercom scene that is speaker A, and a tourist in the chat needs a scene for that pair: `tourist` (a tourist talks to a crew member), `to_tourist` (a crew member talks to a tourist) or `tourist_pair` (two tourists). The last two are only for intercom scenes. A tourist never makes a job callout (staging, chutes, docking, power, science) unless the scene has trait `tourist`. On the radio a tourist only says scenes with trait `tourist`, calm or stressed, and screams. With only tourists aboard and a probe core the ship runs in probe mode: the probe is the crew, the tourists talk to each other and to the probe (`probe_crew` scenes with trait `tourist`). |
 | `persona` | optional. `any`, `badass`, `brave`, `nervous`, `dim`, `veteran`. The crew speaker must have this persona. |
@@ -99,7 +101,7 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	core	beep	spanish
 | `spanish` | the Spanish source, not empty. May hold `{body}`. Empty on the subtitle-only role `probe`. |
 | `english` | the English subtitle, not empty. In game the subtitles show only this text. Holds `{body}` when `spanish` does. |
 
-`phase` says when a scene may play. `serious` stands for launch, ascent, reentry and descent. `goofy` stands for prelaunch, orbit, coast and landed. `any` plays in every phase. The code that decides the current phase is `src/FlightPhase.cs`.
+`phase` says when a scene may play. `serious` stands for launch, ascent, reentry and descent. `calm` stands for prelaunch, orbit, coast and landed. This phase group is independent of the `calm` delivery band; the old phase spelling `goofy` is accepted when loading legacy tables. `any` plays in every phase. The code that decides the current phase is `src/FlightPhase.cs`.
 
 `cause` says which stress component the line is about. The names are the components in `src/StressModel.cs`, plus `engine_out`. Use `any` for a line that fits every cause. A tense or panic line only names what the game measures. So no fire: the game has no fire. Use heat instead.
 
@@ -126,8 +128,8 @@ A template is a normal row. The Spanish is a general sentence, so the clip is re
 
 ```
 clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english
-tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	goofy	any	¿Quién ha cogido mis cosas?	Who took my {thing}?
-tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	goofy	any	Yo no. Mira detrás de eso.	Not me, {other}. Look behind the {spot}.
+tp_lost_1	chatter	chatter	calm	crew	tp_lost	1	both	calm	any	¿Quién ha cogido mis cosas?	Who took my {thing}?
+tp_lost_2	chatter	chatter	calm	crew	tp_lost	2	both	calm	any	Yo no. Mira detrás de eso.	Not me, {other}. Look behind the {spot}.
 ```
 
 The slots:
@@ -252,7 +254,7 @@ Want to give the kerbals something new to say? It doesn't need any code.
 
 1. Pick the file by event family (table above). Use its key prefix: `la_`, `re_`, `pa_`, `sp_`, `mj_`, `ic_`, `bl_`, `ev_`, `bo_`, `cm_`, `im_`, `tm_`, `sr_`, `pc_`, `em_`, `pm_`.
 2. Give the lines of one exchange the same `scene` and number them with `seq` from 1.
-3. Fill `phase` and `cause`. Serious work (launch, ascent, reentry, descent) is short and procedural. Orbit, coast and landed are goofy. Intercom is always goofy or `blackout`.
+3. Fill `phase` and `cause`. Serious work (launch, ascent, reentry, descent) is short and procedural. Orbit, coast and landed are calm. Intercom is always calm or `blackout`.
 4. Check the tables without rendering:
 
 ```bash
@@ -271,7 +273,7 @@ Lines with real values that have no recording at all go into `GameData/Lonapse/P
 
 With the runtime voice installed and the setting "Speak names and new lines at runtime" on, rows can also go into `GameData/Lonapse/Phrases/Extra/*.tsv` in the KSP install. Same columns as the files here, no build step. Piper speaks them in game, in loñapsE like every other line. `{body}` in such a row gets the current body name, also on a modded planet.
 
-Lonapse ships one such table itself: `GameData/Lonapse/Phrases/Extra/probe_runtime.tsv`, 10 probe scenes per core with Mission Control (keys `px_`). `build.sh` installs it and the zip carries it. An update replaces only the files the repo ships, so a file of your own in that folder stays. The rows follow every rule of this README. The offline tests parse the file after the shipped `phrases.tsv`, like the game does.
+Lonapse ships one such table itself: `GameData/Lonapse/Phrases/Runtime_Probe/probe_runtime.tsv`, 10 probe scenes per core with Mission Control (keys `px_`). `build.sh` installs it and the zip carries it. An update replaces only the files the repo ships, so a file of your own in that folder stays. The rows follow every rule of this README. The offline tests parse the file after the shipped `phrases.tsv`, like the game does.
 
 These rows have no clip. Without the runtime voice they never play. A line that is not ready 4 s after its turn is skipped. Nobody listened to these lines before they play, so a word can come out wrong.
 
@@ -375,3 +377,9 @@ All clips are OGG Vorbis, mono, 44.1 kHz, with `libvorbis -q:a 3`. The beeps and
 ## Licence note
 
 The licenses come from the model cards of the voices. Piper itself is GPL-3.0 or later. Whether the output of a GPL program falls under the GPL is not settled. See `audio/CREDITS.md`.
+
+Probe runtime scene tables now live together in `GameData/Lonapse/Phrases/Runtime_Probe/`, split into reports,
+science talk, science/contracts, docking, warp, and stress files. Each non-stress contextual category has a
+core-specific scene for every stock probe core. Their common source columns add `runtime_topic` and `when`; each MC/crew utterance and
+beep has its own row. The general `Runtime` template format and legacy `Extra` scene loader remain supported.
+See `docs/API.md` for the authoring format and upgrade behavior.

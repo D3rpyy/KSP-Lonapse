@@ -83,7 +83,7 @@ namespace Lonapse
               .Append("  static ").Append(host.StaticLevel.ToString("0.00", Inv))
               .Append("  KSC ").Append(host.signal.distanceKm.ToString("0", Inv)).Append(" km")
               .Append("  delay ").Append(host.LightDelay.ToString("0.00", Inv)).Append(" s  dropout ").Append(host.Dropout.ToString("0.00", Inv)).Append('\n');
-            sb.Append("duck ").Append(host.duckGain.ToString("0.00", Inv)).Append("  hold ").Append(cd.Holding ? "yes" : "no")
+            sb.Append("hold ").Append(cd.Holding ? "yes" : "no")
               .Append("  panic downgrades ").Append(cd.panicDowngrades).Append("  rate limited ").Append(cd.bucketDenied)
               .Append("  dock contact ").Append(host.lastDockSpeed.ToString("0.00", Inv)).Append(" m/s\n");
             sb.Append("plan nodes ").Append(host.plan.nodeCount);

@@ -1,0 +1,13 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+pe_soi_generic_1	pe_soi_generic_1	pe_soi_generic	1	mission_control	flight.soi_enter	radio				0	Bienvenida, sonda. Esto es {body}.	Welcome, probe. This is {body}.	calm	chatter	m	any	any	any	any	any	generic						
+pe_soi_hecs_1	pe_soi_hecs_1	pe_soi_hecs	1	mission_control	flight.soi_enter	radio				0	HECS, hemos llegado. Esto es {body}.	HECS, we're here. This is {body}.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_soi_okto_1	pe_soi_okto_1	pe_soi_okto	1	mission_control	flight.soi_enter	radio				0	Bienvenido. Delante tienes {body}.	Welcome. Right ahead of you is {body}.	calm	chatter	m	any	any	any	any	any	okto						
+pe_soi_rovemate_1	pe_soi_rovemate_1	pe_soi_rovemate	1	mission_control	flight.soi_enter	radio				0	¡Mira, Rovemate! ¡Es {body}!	Look, Rovemate! It's {body}!	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_soi_snob_1	pe_soi_snob_1	pe_soi_snob	1	mission_control	flight.soi_enter	radio				0	Su excelencia, {body} le espera.	Your excellency, {body} awaits you.	calm	chatter	m	any	any	any	any	any	snob						
+pe_soi_stayputnik_1	pe_soi_stayputnik_1	pe_soi_stayputnik	1	mission_control	flight.soi_enter	radio				0	Stayputnik, esto es {body}.	Stayputnik, this is {body}.	calm	chatter	m	any	any	any	any	any	stayputnik						
+pk_mk2drone_soi_1	pk_mk2drone_soi_1	pk_mk2drone_soi	1	mission_control	flight.soi_enter	radio				0	Dron, esto es {body}. Por favor, no lo conquistes.	Drone, this is {body}. Please don't conquer it.	calm	chatter	m	any	any	any	any	any	mk2drone						
+pk_mpo_soi_1	pk_mpo_soi_1	pk_mpo_soi	1	mission_control	flight.soi_enter	radio				0	MPO, esto es {body}. ¿Hace suficiente calor?	MPO, this is {body}. Hot enough for you?	calm	chatter	m	any	any	any	any	any	mpo						
+pk_mtm_soi_1	pk_mtm_soi_1	pk_mtm_soi	1	mission_control	flight.soi_enter	radio				0	MTM, esto es {body}. Una entrega más.	MTM, this is {body}. One more delivery.	calm	chatter	m	any	any	any	any	any	mtm						
+pk_qbe_soi_1	pk_qbe_soi_1	pk_qbe_soi	1	mission_control	flight.soi_enter	radio				0	QBE, esto es {body}. Es un poco más grande que tú.	QBE, this is {body}. It's a bit bigger than you.	calm	chatter	m	any	any	any	any	any	qbe						
+pp_ms_landing_any_1_2	pp_ms_landing_any_1_2	pp_ms_landing_any_1	2	mission_control	flight.probe_milestone	radio				0	¡Primer aterrizaje en {body}!	First landing on {body}!	calm	chatter	m	any	any	any	any	landing	any						
+pp_ms_landing_any_2_1	pp_ms_landing_any_2_1	pp_ms_landing_any_2	1	mission_control	flight.probe_milestone	radio				0	Tocamos {body} por primera vez.	We touched {body} for the first time.	calm	chatter	m	any	any	any	any	landing	any						

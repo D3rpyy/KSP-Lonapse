@@ -15,6 +15,7 @@ namespace Lonapse
     {
         public float hailLeft = -1f;          // s to the next probe hail, -1 = not in probe mode
         private bool wasProbeMode;
+        private readonly ProbeRepeatCooldown probeRepeat = new ProbeRepeatCooldown();
         private float lastProbeCalloutMc = -1e9f;   // clock of the last MC answer to a probe callout
         private float lastSayAgain = -1e9f;         // clock of the last "say again?"
 
@@ -22,6 +23,11 @@ namespace Lonapse
         private bool ProbeAsleep { get { return host.probeSleepState == ProbeSleepState.Asleep; } }
         private bool ProbeDrowsy { get { return host.probeSleepState == ProbeSleepState.Drowsy; } }
         private bool ProbeTense { get { return host.stress.stress >= Tu.mcTenseHi; } }
+        private bool ProbeStationChecks
+        {
+            get { return host.probeMode && ProbeRules.StationChecks(host.stationMode, host.settings.stationStyle,
+                         host.stress.stress, Tu.mcTenseHi, Tu.burstBand); }
+        }
         /// <summary>The radio link to the probe works: signal, no blackout.</summary>
         private bool ProbeLink { get { return host.signal.connected && !radioSilent && !InBlackoutPhase; } }
 
@@ -37,7 +43,8 @@ namespace Lonapse
             {
                 if (!host.probeMode) return "off";
                 return Core + " " + host.probeSleepState.ToString().ToLowerInvariant()
-                       + ", hail " + (hailLeft < 0f ? "-" : Math.Max(0f, hailLeft / RadioRate).ToString("0") + " s");
+                       + (ProbeStationChecks ? ", station check " + Math.Max(0f, stationMcLeft).ToString("0") + " s"
+                           : ", hail " + (hailLeft < 0f ? "-" : Math.Max(0f, hailLeft / RadioRate).ToString("0") + " s"));
             }
         }
 
@@ -60,7 +67,8 @@ namespace Lonapse
         {
             if (!PhraseClips.Loaded) return null;
             List<PhraseScene> list = PhraseClips.table.ProbeScenesFor(ev, Core, CurrentPhase, false,
-                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)) && SlotsOk(sc));
+                sc => PhraseClips.Playable(sc) && (filter == null || filter(sc)) && SlotsOk(sc)
+                    && probeRepeat.Allowed(sc.Id, sc.Event, sc.Cause, clock, Tu.causeRepeatGap, Tu.calmRepeatGap));
             if (list.Count == 0) return null;
             if (!IsAnyKey(topic))
             {
@@ -90,7 +98,7 @@ namespace Lonapse
         /// </summary>
         private bool EnqueueProbeScene(PhraseScene sc, float delay, bool mcOnly = false, bool firstOnly = false)
         {
-            if (sc == null) return false;
+            if (sc == null || !probeRepeat.Allowed(sc.Id, sc.Event, sc.Cause, clock, Tu.causeRepeatGap, Tu.calmRepeatGap)) return false;
             List<PhraseEntry> lines = PlayLines(sc);
             if (lines.Count == 0) return false;
             ProbeShape shape = ProbeRules.ShapeOf(lines);
@@ -144,6 +152,7 @@ namespace Lonapse
                 if (firstOnly) break;
             }
             if (queued == 0) return false;
+            probeRepeat.Stamp(sc.Id, sc.Event, sc.Cause, clock);
             Log.Debug("Probe scene " + sc.Id + " (" + sc.Event + ", core " + sc.Core + ") queued for " + Core
                       + (mcOnly ? ", MC only" : ""));
             return true;
@@ -171,7 +180,7 @@ namespace Lonapse
                 case UttKind.ProbeBeep:
                 {
                     // the probe answers over the link: no link, blackout or a sleeping probe means no answer
-                    if (!host.signal.connected || radioSilent || ProbeAsleep) return StartResult.Skip;
+                    if (!ProbeLink || ProbeAsleep) return StartResult.Skip;
                     VoiceChannel b = host.beep[1];
                     if (b.Busy) return StartResult.Wait;
                     // u.folder: a mood set by the director (fallback beep, "say again?" repeat), else the row's mood
@@ -195,6 +204,7 @@ namespace Lonapse
                     b.SetBand(p.HighPassHz, p.LowPassHz);
                     b.Play(clip, 0.7f, pitch, false, 0f);
                     b.probeBeep = true;
+                    StartProbeCarrier();
                     b.baseDistortion = Math.Max(0.08f, 0.5f * p.Distortion) + 0.3f * host.StaticLevel * cfg.weakSignalVolume;
                     b.dropout = host.Dropout; // a weak signal chops the beeps like the MC lines
                     if (staticChop) b.TruncateAt(U(tu.chopMin, tu.chopMax) * pitch);
@@ -247,7 +257,8 @@ namespace Lonapse
             if (appendOverlap) return true;           // no crew bursts in probe mode
             Settings cfg = host.settings;
             if (!cfg.probePetTalk || !host.signal.connected) return true;
-            Predicate<PhraseScene> fits = x => ProbeRules.SceneFits(ProbeRules.ShapeOf(x), false, true);
+            Predicate<PhraseScene> fits = x => ProbeRules.SceneFits(ProbeRules.ShapeOf(x), false, true)
+                && (!host.stationMode || ProbeTense || x.Lines.Count > 0 && x.Lines[0].Role == "mc");
             if (ProbeAsleep)
             {
                 // the probe sleeps: now and then Mission Control talks anyway, nobody answers
@@ -259,6 +270,10 @@ namespace Lonapse
                 }
                 return true;
             }
+            // Let a requested runtime stress exchange finish rather than racing a recorded scene against it.
+            if (probeContextPending) return true;
+            if (ProbeTense && cfg.probeStressTalk && TryRuntimeProbeStress()) return true;
+            if (!ProbeTense && TryContextProbe(false)) return true;
             string ev = ProbeDrowsy ? "probe_sleepy" : "probe_chat";
             PhraseScene sc = null;
             // Under stress Mission Control calms the probe about the main cause (heat, spin, g, ...)
@@ -274,7 +289,7 @@ namespace Lonapse
             // no pet talk scene for this phase and core: a telemetry ping now and then
             Log.Info("Pet talk: no scene for " + ev + " in phase " + CurrentPhase + ", core " + Core
                      + (sc != null ? " (" + sc.Id + " not queued)" : ""));
-            if (cfg.beepsEnabled && rng.NextDouble() < 0.5) Enqueue(UttKind.PingPattern, null, 0f, 0f, null);
+            if (!ProbeTense && cfg.beepsEnabled && rng.NextDouble() < 0.5) Enqueue(UttKind.PingPattern, null, 0f, 0f, null);
             return true;
         }
 
@@ -283,6 +298,7 @@ namespace Lonapse
         {
             if (!host.probeMode) { wasProbeMode = false; hailLeft = -1f; return; }
             if (!wasProbeMode) { wasProbeMode = true; ResetProbe(); Log.Info("Probe mode: core " + Core); }
+            ProbeContextTick();
             UpdateHail(dt);
         }
 
@@ -367,7 +383,11 @@ namespace Lonapse
             {
                 PhraseScene sc = PickProbe(ProbeRules.DataEvent, x => ProbeRules.StartsWithProbe(x.Lines)
                                                                       && ProbeRules.SceneFits(ProbeRules.ShapeOf(x), false, true));
-                if (sc != null && EnqueueProbeScene(sc, 0.2f)) { Log.Info("Probe data: " + sc.Id); return; }
+                if (sc != null)
+                {
+                    if (host.settings.beepsEnabled) Enqueue(UttKind.ControlFx, "beeps/ping", 0f, 0f, null);
+                    if (EnqueueProbeScene(sc, 0.2f)) { Log.Info("Probe data: " + sc.Id); return; }
+                }
             }
             Enqueue(UttKind.ProbeBeep, ProbeCores.DataFolder, 0.1f, 0f, null);
             Log.Debug("Probe data beep" + (first ? " (send started)" : ""));
@@ -377,18 +397,27 @@ namespace Lonapse
         /// Own timer (hailInterval), only awake, with the link and outside a serious phase.</summary>
         private void UpdateHail(float dt)
         {
+            if (host.stationMode) return;
             if (!host.settings.probeHail) return;
             if (holdoff > 0f) return;
             if (hailLeft > 0f) { hailLeft -= dt * RadioRate; return; }
             if (!AirFree || clock - lastRadioClock < AirRules.IntercomStartGap) { hailLeft = 1f; return; }
-            if (!ProbeRules.HailMayStart(CurrentPhase, ProbeLink, ProbeAsleep) || Somber) { hailLeft = 5f; return; }
+            if (!ProbeRules.HailMayStart(CurrentPhase, ProbeLink, ProbeAsleep, host.stationMode) || Somber) { hailLeft = 5f; return; }
+            hailLeft = NextHailGap();
+            StartProbeHail();
+        }
+
+        private bool StartProbeHail()
+        {
+            if (!host.settings.probeHail || !ProbeRules.HailMayStart(CurrentPhase, ProbeLink, ProbeAsleep, host.stationMode) || Somber) return false;
+            if (TryContextProbe(true)) return true;
             PhraseScene sc = PickProbe(ProbeRules.HailEvent, x => ProbeRules.StartsWithProbe(x.Lines)
                                                                   && ProbeRules.SceneFits(ProbeRules.ShapeOf(x), false, true));
-            hailLeft = NextHailGap();
-            if (sc == null || !EnqueueProbeScene(sc, U(0.2f, 0.6f))) return;
+            if (sc == null || !EnqueueProbeScene(sc, U(0.2f, 0.6f))) return false;
             // the hail is the radio turn: the pet talk timer gives it room
             if (progress > target * 0.5f) progress = target * 0.5f;
             Log.Info("Probe hail " + sc.Id + " queued, next in about " + (hailLeft / RadioRate).ToString("0") + " s");
+            return true;
         }
 
         /// <summary>
@@ -563,6 +592,7 @@ namespace Lonapse
         /// </summary>
         private bool FireProbeCrew()
         {
+            if (TryContextCrewProbe()) return true;
             List<KerbalVoice> list = host.roster.voices;
             KerbalVoice a = Effects ? host.roster.PickIntercomA(rng, null, null) : KerbalVoice.Pick(list, null, rng, null);
             if (a == null) return false;
@@ -630,6 +660,7 @@ namespace Lonapse
                 prev = e.Role;
             }
             if (prev == PhraseTable.RoleCrew) Enqueue(UttKind.IntercomClick, null, 0.1f, 0f, null); // release click
+            probeRepeat.Stamp(sc.Id, sc.Event, sc.Cause, clock);
             Log.Debug("Probe and crew chat queued: " + ProbeDisplayNameSafe + " and " + a.displayName + ", scene " + sc.Id
                       + " (" + sc.Band + ")");
             return true;

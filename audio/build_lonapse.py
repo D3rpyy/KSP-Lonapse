@@ -159,9 +159,9 @@ BUILT_COLUMNS = ["clip_key", "event", "severity", "band", "role", "scene", "seq"
                  ENGLISH_COLUMN, SPANISH_RT_COLUMN]
 BODY_COLUMNS = ["key", "spanish", "english"]
 PHASES = ["any", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout",
-          "serious", "goofy"]
+          "serious", "idle"]
 SERIOUS_PHASES = ["launch", "ascent", "reentry", "descent"]
-GOOFY_PHASES = ["prelaunch", "orbit", "coast", "landed"]
+CALM_PHASES = ["prelaunch", "orbit", "coast", "landed"]
 CAUSES = ["any", "spin", "gforce", "q", "ground", "heat", "plasma", "fuel", "impulse", "engine_out"]
 # 17 stock bodies (lowercase bodyName, as FlightSample.body gives them) plus generic for everything else
 STOCK_BODIES = ["kerbol", "moho", "eve", "gilly", "kerbin", "mun", "minmus", "duna", "ike", "dres", "jool",
@@ -184,8 +184,8 @@ NUMBER_SLOTS = ["alt_km", "pe_km", "ap_km", "speed", "fuel", "day", "sci", "fund
                 "at_home", "flight_no", "missions", "stars", "visits", "landings", "in_warp", "node_h", "soi_h",
                 "sci_left", "sci_first", "con_sci", "con_rep", "sunrises", "eva_mins", "ship_m", "jet", "on_eva", "pair_m",
                 "link", "apart", "a_eva", "b_eva", "has_solar", "has_rcs", "has_legs", "is_tourist",
-                "temp_c", "press_kpa", "grav_g", "sci_flight", "exp_runs", "exp_count", "data_sent"]
-NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list", "probe"]
+                "temp_c", "press_kpa", "grav_g", "sci_flight", "exp_runs", "exp_count", "data_sent", "resource_pct", "splashed", "eva_thrusting", "eva_grounded"]
+NAME_SLOTS = ["here", "vessel", "body", "exp", "target", "next", "biome", "flag", "my_ship", "their_ship", "device", "contract", "exp_list", "probe", "resource"]
 RUNTIME_PERSONS = ["other", "self", "kerbal"]
 # On every flight, also without the runtime voice (Slots.Flight)
 FLIGHT_SLOTS = ["day", "here", "vessel", "alt_km", "probe"]
@@ -371,6 +371,8 @@ def read_tsv(path, want_columns, label, optional=None):
             errors.append("%s: expected %d columns, got %d" % (loc, len(header), len(fields)))
             continue
         row = dict(zip(header, fields))
+        if row.get("phase") in ("calm", "goofy"):
+            row["phase"] = "idle"
         for c, d in optional.items():
             if not row.get(c):
                 row[c] = d
@@ -1789,7 +1791,7 @@ def try_render(rows, keys, out, njobs):
     return 1 if errors else 0
 
 
-def main():
+def legacy_render_main():
     global PIPER_PY
     ap = argparse.ArgumentParser(description="Build the Lonapse (reversed Spanish) clips with Piper and ffmpeg.")
     ap.add_argument("--clean", action="store_true",
@@ -1868,6 +1870,17 @@ def main():
     except BuildError as e:
         log("ERROR " + str(e))
         return 1
+
+
+def main():
+    """The release dialogue is no longer generated from the legacy recording sources."""
+    import runpy
+    print("Speech recordings are retired. Validating Phrases/Crew and Phrases/Probe instead.")
+    if any(arg not in ("--validate-only", "--verify-only") for arg in sys.argv[1:]):
+        print("Edit the five-column category tables directly; no speech-rendering flags are supported.")
+        return 2
+    validator = runpy.run_path(str(ROOT.parent / "tools" / "validate_dialogue.py"))
+    return int(validator["validate"]())
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@
 // only picked when the director gives that number, which it only does with the runtime voice on (Slots).
 // Pure code: no Unity or KSP references, so it compiles under DC_OFFLINE_TEST.
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -294,18 +295,35 @@ namespace Lonapse
         public static List<PhraseEntry> Fill(IList<PhraseEntry> lines, SlotPools pools, IDictionary<string, string> values,
                                              Func<int, IDictionary<string, string>> lineValues,
                                              Func<string, IList<string>, string> pick, List<string> unresolved,
-                                             ICollection<string> conditions, bool spoken, bool fewNames, out bool named)
+                                             ICollection<string> conditions, bool spoken, bool fewNames, out bool named,
+                                             IDictionary<string, string[]> speechNames = null)
         {
             named = false;
             var r = new List<PhraseEntry>();
             if (lines == null) return r;
             var st = new FillState();
             st.pools = pools; st.values = values; st.pick = pick; st.unresolved = unresolved; st.conditions = conditions; st.spoken = spoken;
-            st.fewNames = fewNames;
+            st.fewNames = fewNames; st.speechNames = speechNames;
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
-                if (e == null || !NeedsFill(e.English)) { r.Add(e); continue; }
+                if (e == null) { r.Add(e); continue; }
+                if (e.Dialogue != null)
+                {
+                    var per = lineValues != null ? lineValues(e.Dialogue.Get("role") == "partner" ? 1 : 0) : null;
+                    Dictionary<string, double> nums; Dictionary<string, string[]> names;
+                    var available = DialogueTable.Resolve(e.Dialogue, values, per, speechNames, conditions, out nums, out names);
+                    if (fewNames) { var bare = available.FindAll(v => !NamesSomeone(e.Dialogue.Alternatives[v].English)); if (bare.Count > 0) available = bare; }
+                    if (available.Count == 0) return new List<PhraseEntry>();
+                    var options = new List<string>(); foreach (int version in available) options.Add(version.ToString(CultureInfo.InvariantCulture));
+                    int selected = int.Parse(pick != null ? pick(SceneMemory.VersionPool + e.ClipKey, options) : options[0], CultureInfo.InvariantCulture);
+                    string spokenEs, shownEn;
+                    var alt = e.Dialogue.Alternatives[selected];
+                    if (!RuntimeLines.FillText(alt.Spanish, alt.English, nums, names, out spokenEs, out shownEn)) return new List<PhraseEntry>();
+                    if (NamesSomeone(alt.English)) { named = true; fewNames = true; }
+                    r.Add(CopyWithEnglish(e, shownEn, spokenEs)); continue;
+                }
+                if (!NeedsFill(e.English)) { r.Add(st.spoken && e.SpanishRt != null ? CopyWithEnglish(e, e.English, e.SpanishRtVersion(0)) : e); continue; }
                 st.per = lineValues != null ? lineValues(i) : null;
                 st.where = e.ClipKey + " (line " + i + ")";
                 int vi;
@@ -332,7 +350,15 @@ namespace Lonapse
             for (int i = 0; i < lines.Count; i++)
             {
                 PhraseEntry e = lines[i];
-                if (e == null || !NeedsFill(e.English)) continue;
+                if (e == null) continue;
+                if (e.Dialogue != null)
+                {
+                    Dictionary<string, double> nums; Dictionary<string, string[]> names;
+                    var per = lineValues != null ? lineValues(e.Dialogue.Get("role") == "partner" ? 1 : 0) : null;
+                    if (DialogueTable.Resolve(e.Dialogue, values, per, null, conditions, out nums, out names).Count == 0) return false;
+                    continue;
+                }
+                if (!NeedsFill(e.English)) continue;
                 st.per = lineValues != null ? lineValues(i) : null;
                 if (FillableVersions(e, st).Count == 0) return false;
             }
@@ -343,6 +369,7 @@ namespace Lonapse
         {
             public SlotPools pools;
             public IDictionary<string, string> values, per;
+            public IDictionary<string, string[]> speechNames;
             public Func<string, IList<string>, string> pick;
             public List<string> unresolved;
             public ICollection<string> conditions;
@@ -509,7 +536,7 @@ namespace Lonapse
         static string Resolve(Match m, int depth, FillState st)
         {
             string name = m.Groups[1].Value, n = m.Groups[2].Success ? m.Groups[2].Value : "1";
-            if (name == "body") return m.Value;   // {body} rows are expanded at build time, never here
+            if (name == "body" && (st.values == null || !st.values.ContainsKey("body"))) return m.Value; // legacy callers may leave it for the runtime planner
             string v;
             if (st.per != null && st.per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return v;
             if (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)) return ShownValue(name, v);
@@ -549,7 +576,7 @@ namespace Lonapse
             if (string.IsNullOrEmpty(src)) return null;
             bool ok = true;
             string t = ExpandEs(Plurals(src, st, true), true, 0, st, ref ok);
-            if (!ok || string.IsNullOrEmpty(t) || t == e.Spanish) return null;
+            if (!ok || string.IsNullOrEmpty(t)) return null;
             return t;
         }
 
@@ -573,11 +600,15 @@ namespace Lonapse
         {
             string art = m.Groups[1].Success ? m.Groups[1].Value : null;
             string name = m.Groups[2].Value, n = m.Groups[3].Success ? m.Groups[3].Value : "1";
+            if (name == "body" && (st.values == null || !st.values.ContainsKey("body"))) return m.Value;
             string v;
             if ((st.per != null && st.per.TryGetValue(name, out v) && !string.IsNullOrEmpty(v))
                 || (st.values != null && st.values.TryGetValue(name, out v) && !string.IsNullOrEmpty(v)))
             {
-                string said = art == null ? SpokenValue(name, v) : null;
+                string[] bilingual;
+                string said = art == null && st.speechNames != null && st.speechNames.TryGetValue(name, out bilingual)
+                    && bilingual != null && bilingual.Length > 1 && bilingual[1] == v && !string.IsNullOrEmpty(bilingual[0])
+                    ? RuntimeSpeech.MarkRaw(bilingual[0]) : art == null ? SpokenValue(name, v) : null;
                 if (said == null) ok = false;
                 return said ?? "";
             }
@@ -608,10 +639,12 @@ namespace Lonapse
                 case "vessel":
                     string say = v.StartsWith("#", StringComparison.Ordinal) ? null : RuntimeLines.VesselSpeakable(v);
                     return say == null ? null : RuntimeSpeech.MarkName(say);
+                case "body":
                 case "here":
                     string body = v.StartsWith("the ", StringComparison.OrdinalIgnoreCase) ? v.Substring(4) : v;
                     return RuntimeSpeech.MarkRaw(RuntimeLines.BodySpoken(body));
                 default:
+                    if (Slots.IsName(name) || Slots.IsPerson(name)) return RuntimeSpeech.MarkName(RuntimeLines.CleanName(v));
                     double d;
                     if (!Slots.IsNumber(name) || !double.TryParse(v, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out d)) return null;
                     return RuntimeLines.Words(name, d);
@@ -707,7 +740,7 @@ namespace Lonapse
         {
             return new PhraseEntry
             {
-                ClipKey = e.ClipKey, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
+                ClipKey = e.ClipKey, DialogueRole = e.DialogueRole, PreparedSpeech = e.PreparedSpeech, IsReply = e.IsReply, Event = e.Event, Severity = e.Severity, Band = e.Band, Role = e.Role, Scene = e.Scene,
                 Seq = e.Seq, Gender = e.Gender, Phase = e.Phase, Cause = e.Cause, Trait = e.Trait, Persona = e.Persona,
                 Topic = e.Topic, Core = e.Core, Beep = e.Beep, Body = e.Body, Spanish = e.Spanish,
                 LonapseText = e.LonapseText, English = english, Folder = e.Folder, RuntimeSpanish = runtimeSpanish,

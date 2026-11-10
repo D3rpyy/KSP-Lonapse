@@ -1,0 +1,242 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+pe_bn_any_a_1	pe_bn_any_a_1	pe_bn_any_a	1	mission_control	flight.burn_soon	radio				0	Sonda, prepárate para el encendido.	Probe, get ready for the burn.	tense	warning	m	any	any	any	any	any	any						
+pe_bn_any_a_2	pe_bn_any_a_2	pe_bn_any_a	2	probe	flight.burn_soon	radio				0		[beeps attentively]	tense	warning	both	any	any	any	any	any	any	curious					
+pe_bn_any_b_1	pe_bn_any_b_1	pe_bn_any_b	1	probe	flight.burn_soon	radio				0		[beeps eagerly]	tense	warning	both	any	any	any	any	any	any	happy					
+pe_bn_any_b_2	pe_bn_any_b_2	pe_bn_any_b	2	mission_control	flight.burn_soon	radio				0	Sí, ya lo vemos. Espera a la marca.	Yes, we see it. Wait for the mark.	tense	warning	m	any	any	any	any	any	any						
+pe_bn_any_c_1	pe_bn_any_c_1	pe_bn_any_c	1	mission_control	flight.burn_soon	radio				0	Encendido en breve. Apunta bien.	Burn coming up. Point it right.	tense	warning	m	any	any	any	any	any	any						
+pe_bn_any_c_2	pe_bn_any_c_2	pe_bn_any_c	2	probe	flight.burn_soon	radio				0		[beeps confidently]	tense	warning	both	any	any	any	any	any	any	proud					
+pe_bn_hecs_1	pe_bn_hecs_1	pe_bn_hecs	1	mission_control	flight.burn_soon	radio				0	HECS, el encendido es pronto.	HECS, the burn is coming up.	tense	warning	m	any	any	any	any	any	hecs						
+pe_bn_hecs_2	pe_bn_hecs_2	pe_bn_hecs	2	probe	flight.burn_soon	radio				0		[beeps nervously]	tense	warning	both	any	any	any	any	any	hecs	scared					
+pe_chf_any_a_1	pe_chf_any_a_1	pe_chf_any_a	1	probe	flight.chute_full	radio				0		[beeps with relief]	none	chatter	both	any	any	any	any	any	any	happy					
+pe_chf_any_a_2	pe_chf_any_a_2	pe_chf_any_a	2	mission_control	flight.chute_full	radio				0	Paracaídas abiertos del todo.	Chutes are fully open.	none	chatter	m	any	any	any	any	any	any						
+pe_chf_any_b_1	pe_chf_any_b_1	pe_chf_any_b	1	probe	flight.chute_full	radio				0		[beeps gently]	none	chatter	both	any	any	any	any	any	any	happy					
+pe_chf_any_b_2	pe_chf_any_b_2	pe_chf_any_b	2	mission_control	flight.chute_full	radio				0	Bajando despacio. Muy bien.	Coming down slowly. Very good.	none	chatter	m	any	any	any	any	any	any						
+pe_chf_snob_1	pe_chf_snob_1	pe_chf_snob	1	probe	flight.chute_full	radio				0		[beeps gracefully]	none	chatter	both	any	any	any	any	any	snob	proud					
+pe_chf_snob_2	pe_chf_snob_2	pe_chf_snob	2	mission_control	flight.chute_full	radio				0	Un descenso digno de la realeza.	A descent fit for royalty.	none	chatter	m	any	any	any	any	any	snob						
+pe_chs_any_a_1	pe_chs_any_a_1	pe_chs_any_a	1	probe	flight.chute_semi	radio				0		[beeps attentively]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_chs_any_a_2	pe_chs_any_a_2	pe_chs_any_a	2	mission_control	flight.chute_semi	radio				0	Paracaídas desplegados a medias.	Chutes are semi deployed.	none	chatter	m	any	any	any	any	any	any						
+pe_chs_hecs_1	pe_chs_hecs_1	pe_chs_hecs	1	probe	flight.chute_semi	radio				0		[beeps hopefully]	none	chatter	both	any	any	any	any	any	hecs	scared					
+pe_chs_hecs_2	pe_chs_hecs_2	pe_chs_hecs	2	mission_control	flight.chute_semi	radio				0	Sí, HECS, se están abriendo.	Yes, HECS, they're opening.	none	chatter	m	any	any	any	any	any	hecs						
+pe_chs_rovemate_1	pe_chs_rovemate_1	pe_chs_rovemate	1	probe	flight.chute_semi	radio				0		[beeps excitedly]	none	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_chs_rovemate_2	pe_chs_rovemate_2	pe_chs_rovemate	2	mission_control	flight.chute_semi	radio				0	Es un paracaídas, no una cometa.	It's a parachute, not a kite.	none	chatter	m	any	any	any	any	any	rovemate						
+pe_dk_any_a_1	pe_dk_any_a_1	pe_dk_any_a	1	mission_control	flight.docked	radio				0	Acoplamiento confirmado.	Docking confirmed.	none	chatter	m	any	any	any	any	any	any						
+pe_dk_any_a_2	pe_dk_any_a_2	pe_dk_any_a	2	probe	flight.docked	radio				0		[beeps happily]	none	chatter	both	any	any	any	any	any	any	happy					
+pe_dk_any_b_1	pe_dk_any_b_1	pe_dk_any_b	1	probe	flight.docked	radio				0		[beeps curiously]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_dk_any_b_2	pe_dk_any_b_2	pe_dk_any_b	2	mission_control	flight.docked	radio				0	Sé amable con la vecina.	Be nice to the neighbor.	none	chatter	m	any	any	any	any	any	any						
+pe_dk_hecs_1	pe_dk_hecs_1	pe_dk_hecs	1	mission_control	flight.docked	radio				0	Acoplados. Bien hecho, HECS.	Docked. Well done, HECS.	none	chatter	m	any	any	any	any	any	hecs						
+pe_dk_hecs_2	pe_dk_hecs_2	pe_dk_hecs	2	probe	flight.docked	radio				0		[beeps anxiously]	none	chatter	both	any	any	any	any	any	hecs	curious					
+pe_dk_okto_1	pe_dk_okto_1	pe_dk_okto	1	probe	flight.docked	radio				0		[beeps smugly]	none	chatter	both	any	any	any	any	any	okto	proud					
+pe_dk_okto_2	pe_dk_okto_2	pe_dk_okto	2	mission_control	flight.docked	radio				0	Acoplamiento perfecto, Okto. No te lo creas mucho.	Perfect docking, Okto. Don't let it go to your head.	none	chatter	m	any	any	any	any	any	okto						
+pe_pl_any_a_1	pe_pl_any_a_1	pe_pl_any_a	1	mission_control	flight.part_lost	radio				0	¡Sonda! ¡Algo ha estallado!	Probe! Something blew up!	tense	warning	m	any	any	any	any	any	any						
+pe_pl_any_a_2	pe_pl_any_a_2	pe_pl_any_a	2	probe	flight.part_lost	radio				0		[beeps very nervously]	tense	warning	both	any	any	any	any	any	any	scared					
+pe_pl_any_a_3	pe_pl_any_a_3	pe_pl_any_a	3	mission_control	flight.part_lost	radio				0	Seguimos aquí. Aguanta.	We're still here. Hang in there.	tense	warning	m	any	any	any	any	any	any						
+pe_pl_any_b_1	pe_pl_any_b_1	pe_pl_any_b	1	probe	flight.part_lost	radio				0		[beeps nervously]	tense	warning	both	any	impulse	any	any	any	any	scared					
+pe_pl_any_b_2	pe_pl_any_b_2	pe_pl_any_b	2	mission_control	flight.part_lost	radio				0	Calma, sonda. Seguimos contigo.	Easy, probe. We're still with you.	tense	warning	m	any	impulse	any	any	any	any						
+pe_pl_generic_1	pe_pl_generic_1	pe_pl_generic	1	probe	flight.part_lost	radio				0		[beeps nervously]	tense	warning	both	any	any	any	any	any	generic	scared					
+pe_pl_generic_2	pe_pl_generic_2	pe_pl_generic	2	mission_control	flight.part_lost	radio				0	¿Eso era importante?	Was that important?	tense	warning	m	any	any	any	any	any	generic						
+pe_pl_generic_3	pe_pl_generic_3	pe_pl_generic	3	probe	flight.part_lost	radio				0		[beeps uncertainly]	tense	warning	both	any	any	any	any	any	generic	curious					
+pe_pl_hecs_1	pe_pl_hecs_1	pe_pl_hecs	1	probe	flight.part_lost	radio				0		[beeps frantically]	tense	warning	both	any	any	any	any	any	hecs	scared					
+pe_pl_hecs_2	pe_pl_hecs_2	pe_pl_hecs	2	mission_control	flight.part_lost	radio				0	Tranquilo, HECS. Era una sola pieza.	Easy, HECS. It was one part.	tense	warning	m	any	any	any	any	any	hecs						
+pe_pl_hecs_3	pe_pl_hecs_3	pe_pl_hecs	3	probe	flight.part_lost	radio				0		[beeps still frantically]	tense	warning	both	any	any	any	any	any	hecs	scared					
+pe_pl_okto_1	pe_pl_okto_1	pe_pl_okto	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	impulse	any	any	any	okto	scared					
+pe_pl_okto_2	pe_pl_okto_2	pe_pl_okto	2	mission_control	flight.part_lost	radio				0	Okto, ¿qué ha sido ese boom?	Okto, what was that boom?	tense	warning	m	any	impulse	any	any	any	okto						
+pe_pl_okto_3	pe_pl_okto_3	pe_pl_okto	3	probe	flight.part_lost	radio				0		[beeps accusingly]	tense	warning	both	any	impulse	any	any	any	okto	offended					
+pe_pl_rovemate_1	pe_pl_rovemate_1	pe_pl_rovemate	1	probe	flight.part_lost	radio				0		[beeps fearfully]	tense	warning	both	any	impulse	any	any	any	rovemate	scared					
+pe_pl_rovemate_2	pe_pl_rovemate_2	pe_pl_rovemate	2	mission_control	flight.part_lost	radio				0	Tranquilo, chico. Solo era una pieza.	Easy, boy. It was just a part.	tense	warning	m	any	impulse	any	any	any	rovemate						
+pe_pl_snob_1	pe_pl_snob_1	pe_pl_snob	1	probe	flight.part_lost	radio				0		[beeps in outrage]	tense	warning	both	any	any	any	any	any	snob	offended					
+pe_pl_snob_2	pe_pl_snob_2	pe_pl_snob	2	mission_control	flight.part_lost	radio				0	Algo ha explotado, su excelencia.	Something exploded, your excellency.	tense	warning	m	any	any	any	any	any	snob						
+pe_pl_snob_3	pe_pl_snob_3	pe_pl_snob	3	probe	flight.part_lost	radio				0		[beeps indignantly]	tense	warning	both	any	any	any	any	any	snob	offended					
+pe_pl_stayputnik_1	pe_pl_stayputnik_1	pe_pl_stayputnik	1	probe	flight.part_lost	radio				0		[beeps in alarm]	tense	warning	both	any	any	any	any	any	stayputnik	scared					
+pe_pl_stayputnik_2	pe_pl_stayputnik_2	pe_pl_stayputnik	2	mission_control	flight.part_lost	radio				0	Stayputnik, ¿eso era importante?	Stayputnik, was that important?	tense	warning	m	any	any	any	any	any	stayputnik						
+pe_pl_stayputnik_3	pe_pl_stayputnik_3	pe_pl_stayputnik	3	probe	flight.part_lost	radio				0		[beeps very nervously]	tense	warning	both	any	any	any	any	any	stayputnik	scared					
+pe_pn_any_a_1	pe_pn_any_a_1	pe_pn_any_a	1	mission_control	flight.plan_node	radio				0	Plan de maniobra recibido.	Burn plan received.	none	chatter	m	any	any	any	any	any	any						
+pe_pn_any_a_2	pe_pn_any_a_2	pe_pn_any_a	2	probe	flight.plan_node	radio				0		[beeps attentively]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_pn_any_b_1	pe_pn_any_b_1	pe_pn_any_b	1	mission_control	flight.plan_node	radio				0	Hay un nodo nuevo en el mapa.	There's a new node on the map.	none	chatter	m	any	any	any	any	any	any						
+pe_pn_any_b_2	pe_pn_any_b_2	pe_pn_any_b	2	probe	flight.plan_node	radio				0		[beeps inquisitively]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_pn_generic_a_1	pe_pn_generic_a_1	pe_pn_generic_a	1	mission_control	flight.plan_node	radio				0	Sonda, tenemos un plan nuevo.	Probe, we have a new plan.	none	chatter	m	any	any	any	any	any	generic						
+pe_pn_generic_a_2	pe_pn_generic_a_2	pe_pn_generic_a	2	probe	flight.plan_node	radio				0		[beeps curiously]	none	chatter	both	any	any	any	any	any	generic	curious					
+pe_pn_generic_b_1	pe_pn_generic_b_1	pe_pn_generic_b	1	mission_control	flight.plan_node	radio				0	Nodo listo. Te avisamos antes.	Node ready. We'll warn you before.	none	chatter	m	any	any	any	any	any	generic						
+pe_pn_generic_b_2	pe_pn_generic_b_2	pe_pn_generic_b	2	probe	flight.plan_node	radio				0		[beeps okay]	none	chatter	both	any	any	any	any	any	generic	happy					
+pe_pn_hecs_a_1	pe_pn_hecs_a_1	pe_pn_hecs_a	1	mission_control	flight.plan_node	radio				0	HECS, nodo nuevo. Respira hondo.	HECS, new node. Take a deep breath.	none	chatter	m	any	any	any	any	any	hecs						
+pe_pn_hecs_a_2	pe_pn_hecs_a_2	pe_pn_hecs_a	2	probe	flight.plan_node	radio				0		[beeps nervously]	none	chatter	both	any	any	any	any	any	hecs	scared					
+pe_pn_hecs_b_1	pe_pn_hecs_b_1	pe_pn_hecs_b	1	mission_control	flight.plan_node	radio				0	Es una maniobra pequeña, HECS.	It's a small burn, HECS.	none	chatter	m	any	any	any	any	any	hecs						
+pe_pn_hecs_b_2	pe_pn_hecs_b_2	pe_pn_hecs_b	2	probe	flight.plan_node	radio				0		[beeps doubtfully]	none	chatter	both	any	any	any	any	any	hecs	curious					
+pe_pn_okto_a_1	pe_pn_okto_a_1	pe_pn_okto_a	1	mission_control	flight.plan_node	radio				0	Okto, revisa este nodo, por favor.	Okto, check this node, please.	none	chatter	m	any	any	any	any	any	okto						
+pe_pn_okto_a_2	pe_pn_okto_a_2	pe_pn_okto_a	2	probe	flight.plan_node	radio				0		[beeps a correction]	none	chatter	both	any	any	any	any	any	okto	proud					
+pe_pn_okto_b_1	pe_pn_okto_b_1	pe_pn_okto_b	1	mission_control	flight.plan_node	radio				0	Plan de maniobra listo.	Burn plan is ready.	none	chatter	m	any	any	any	any	any	okto						
+pe_pn_okto_b_2	pe_pn_okto_b_2	pe_pn_okto_b	2	probe	flight.plan_node	radio				0		[beeps unimpressed]	none	chatter	both	any	any	any	any	any	okto	bored					
+pe_pn_rovemate_a_1	pe_pn_rovemate_a_1	pe_pn_rovemate_a	1	mission_control	flight.plan_node	radio				0	Rovemate, mira este nodo.	Rovemate, look at this node.	none	chatter	m	any	any	any	any	any	rovemate						
+pe_pn_rovemate_a_2	pe_pn_rovemate_a_2	pe_pn_rovemate_a	2	probe	flight.plan_node	radio				0		[beeps excitedly]	none	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_pn_rovemate_b_1	pe_pn_rovemate_b_1	pe_pn_rovemate_b	1	mission_control	flight.plan_node	radio				0	No, no podemos ir hacia la piedra.	No, we can't go towards the rock.	none	chatter	m	any	any	any	any	any	rovemate						
+pe_pn_rovemate_b_2	pe_pn_rovemate_b_2	pe_pn_rovemate_b	2	probe	flight.plan_node	radio				0		[beeps sulkily]	none	chatter	both	any	any	any	any	any	rovemate	bored					
+pe_pn_snob_a_1	pe_pn_snob_a_1	pe_pn_snob_a	1	mission_control	flight.plan_node	radio				0	Su excelencia, hemos preparado una ruta.	Your excellency, we prepared a route.	none	chatter	m	any	any	any	any	any	snob						
+pe_pn_snob_a_2	pe_pn_snob_a_2	pe_pn_snob_a	2	probe	flight.plan_node	radio				0		[beeps condescendingly]	none	chatter	both	any	any	any	any	any	snob	bored					
+pe_pn_snob_b_1	pe_pn_snob_b_1	pe_pn_snob_b	1	mission_control	flight.plan_node	radio				0	El plan de maniobra, como pidió.	The burn plan, as you asked.	none	chatter	m	any	any	any	any	any	snob						
+pe_pn_snob_b_2	pe_pn_snob_b_2	pe_pn_snob_b	2	probe	flight.plan_node	radio				0		[beeps approvingly]	none	chatter	both	any	any	any	any	any	snob	proud					
+pe_pn_stayputnik_a_1	pe_pn_stayputnik_a_1	pe_pn_stayputnik_a	1	mission_control	flight.plan_node	radio				0	Stayputnik, tenemos un plan de maniobra.	Stayputnik, we have a burn plan.	none	chatter	m	any	any	any	any	any	stayputnik						
+pe_pn_stayputnik_a_2	pe_pn_stayputnik_a_2	pe_pn_stayputnik_a	2	probe	flight.plan_node	radio				0		[beeps eagerly]	none	chatter	both	any	any	any	any	any	stayputnik	curious					
+pe_pn_stayputnik_b_1	pe_pn_stayputnik_b_1	pe_pn_stayputnik_b	1	mission_control	flight.plan_node	radio				0	Un nodo nuevo. No te preocupes, es fácil.	A new node. Don't worry, it's easy.	none	chatter	m	any	any	any	any	any	stayputnik						
+pe_pn_stayputnik_b_2	pe_pn_stayputnik_b_2	pe_pn_stayputnik_b	2	probe	flight.plan_node	radio				0		[beeps confidently]	none	chatter	both	any	any	any	any	any	stayputnik	proud					
+pe_pow_low_generic_1	pe_pow_low_generic_1	pe_pow_low_generic	1	probe	flight.power_low	radio				0		[beeps sleepily]	tense	warning	both	any	any	any	any	any	generic	sleepy					
+pe_pow_low_generic_2	pe_pow_low_generic_2	pe_pow_low_generic	2	mission_control	flight.power_low	radio				0	Batería baja. Hora de la siesta, sonda.	Battery low. Nap time, probe.	tense	warning	m	any	any	any	any	any	generic						
+pe_pow_low_hecs_1	pe_pow_low_hecs_1	pe_pow_low_hecs	1	probe	flight.power_low	radio				0		[beeps worriedly]	tense	warning	both	any	any	any	any	any	hecs	scared					
+pe_pow_low_hecs_2	pe_pow_low_hecs_2	pe_pow_low_hecs	2	mission_control	flight.power_low	radio				0	Tranquilo, HECS. Hora de la siesta.	Easy, HECS. Nap time.	tense	warning	m	any	any	any	any	any	hecs						
+pe_pow_low_okto_1	pe_pow_low_okto_1	pe_pow_low_okto	1	mission_control	flight.power_low	radio				0	Okto, te quedas sin batería.	Okto, your battery is running out.	tense	warning	m	any	any	any	any	any	okto						
+pe_pow_low_okto_2	pe_pow_low_okto_2	pe_pow_low_okto	2	probe	flight.power_low	radio				0		[beeps sleepily]	tense	warning	both	any	any	any	any	any	okto	sleepy					
+pe_pow_low_okto_3	pe_pow_low_okto_3	pe_pow_low_okto	3	mission_control	flight.power_low	radio				0	Hora de la siesta.	Nap time.	tense	warning	m	any	any	any	any	any	okto						
+pe_pow_low_rovemate_1	pe_pow_low_rovemate_1	pe_pow_low_rovemate	1	probe	flight.power_low	radio				0		[beeps sleepily]	tense	warning	both	any	any	any	any	any	rovemate	sleepy					
+pe_pow_low_rovemate_2	pe_pow_low_rovemate_2	pe_pow_low_rovemate	2	mission_control	flight.power_low	radio				0	Échate, Rovemate. Hora de la siesta.	Lie down, Rovemate. Nap time.	tense	warning	m	any	any	any	any	any	rovemate						
+pe_pow_low_snob_1	pe_pow_low_snob_1	pe_pow_low_snob	1	probe	flight.power_low	radio				0		[beeps indignantly]	tense	warning	both	any	any	any	any	any	snob	offended					
+pe_pow_low_snob_2	pe_pow_low_snob_2	pe_pow_low_snob	2	mission_control	flight.power_low	radio				0	Lo siento, su excelencia. Hora de la siesta.	Sorry, your excellency. Nap time.	tense	warning	m	any	any	any	any	any	snob						
+pe_pow_low_stayputnik_1	pe_pow_low_stayputnik_1	pe_pow_low_stayputnik	1	probe	flight.power_low	radio				0		[beeps faintly]	tense	warning	both	any	any	any	any	any	stayputnik	sleepy					
+pe_pow_low_stayputnik_2	pe_pow_low_stayputnik_2	pe_pow_low_stayputnik	2	mission_control	flight.power_low	radio				0	Hora de la siesta, veterano.	Nap time, veteran.	tense	warning	m	any	any	any	any	any	stayputnik						
+pe_pow_ok_generic_1	pe_pow_ok_generic_1	pe_pow_ok_generic	1	probe	flight.power_ok	radio				0		[beeps happily]	calm	chatter	both	any	any	any	any	any	generic	happy					
+pe_pow_ok_generic_2	pe_pow_ok_generic_2	pe_pow_ok_generic	2	mission_control	flight.power_ok	radio				0	¡Buenos días!	Good morning!	calm	chatter	m	any	any	any	any	any	generic						
+pe_pow_ok_hecs_1	pe_pow_ok_hecs_1	pe_pow_ok_hecs	1	probe	flight.power_ok	radio				0		[beeps inquisitively]	calm	chatter	both	any	any	any	any	any	hecs	curious					
+pe_pow_ok_hecs_2	pe_pow_ok_hecs_2	pe_pow_ok_hecs	2	mission_control	flight.power_ok	radio				0	Buenos días. No te has perdido nada.	Good morning. You didn't miss a thing.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_pow_ok_okto_1	pe_pow_ok_okto_1	pe_pow_ok_okto	1	probe	flight.power_ok	radio				0		[beeps casually]	calm	chatter	both	any	any	any	any	any	okto	proud					
+pe_pow_ok_okto_2	pe_pow_ok_okto_2	pe_pow_ok_okto	2	mission_control	flight.power_ok	radio				0	Buenos días, Okto. Sí, estabas dormido.	Good morning, Okto. Yes, you were asleep.	calm	chatter	m	any	any	any	any	any	okto						
+pe_pow_ok_rovemate_1	pe_pow_ok_rovemate_1	pe_pow_ok_rovemate	1	probe	flight.power_ok	radio				0		[beeps excitedly]	calm	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_pow_ok_rovemate_2	pe_pow_ok_rovemate_2	pe_pow_ok_rovemate	2	mission_control	flight.power_ok	radio				0	¡Buenos días, chico!	Good morning, boy!	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_pow_ok_snob_1	pe_pow_ok_snob_1	pe_pow_ok_snob	1	mission_control	flight.power_ok	radio				0	Buenos días, su excelencia.	Good morning, your excellency.	calm	chatter	m	any	any	any	any	any	snob						
+pe_pow_ok_snob_2	pe_pow_ok_snob_2	pe_pow_ok_snob	2	probe	flight.power_ok	radio				0		[beeps demandingly]	calm	chatter	both	any	any	any	any	any	snob	bored					
+pe_pow_ok_stayputnik_1	pe_pow_ok_stayputnik_1	pe_pow_ok_stayputnik	1	probe	flight.power_ok	radio				0		[beeps eagerly]	calm	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_pow_ok_stayputnik_2	pe_pow_ok_stayputnik_2	pe_pow_ok_stayputnik	2	mission_control	flight.power_ok	radio				0	¡Buenos días, veterano!	Good morning, veteran!	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_sci_any_a_1	pe_sci_any_a_1	pe_sci_any_a	1	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	any	proud					
+pe_sci_any_a_2	pe_sci_any_a_2	pe_sci_any_a	2	mission_control	flight.science	radio				0	¡Ciencia! ¡Ha llegado ciencia!	Science! Science just came in!	calm	chatter	m	any	any	any	any	any	any						
+pe_sci_any_a_3	pe_sci_any_a_3	pe_sci_any_a	3	probe	flight.science	radio				0		[beeps expectantly]	calm	chatter	both	any	any	any	any	any	any	happy					
+pe_sci_any_b_1	pe_sci_any_b_1	pe_sci_any_b	1	mission_control	flight.science	radio				0	Sonda, esto va directo al laboratorio.	Probe, this goes straight to the lab.	calm	chatter	m	any	any	any	any	any	any						
+pe_sci_any_b_2	pe_sci_any_b_2	pe_sci_any_b	2	probe	flight.science	radio				0		[beeps very proudly]	calm	chatter	both	any	any	any	any	any	any	proud					
+pe_sci_generic_a_1	pe_sci_generic_a_1	pe_sci_generic_a	1	mission_control	flight.science	radio				0	Ciencia recibida. Buen trabajo.	Science received. Good work.	calm	chatter	m	any	any	any	any	any	generic						
+pe_sci_generic_a_2	pe_sci_generic_a_2	pe_sci_generic_a	2	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	generic	proud					
+pe_sci_generic_b_1	pe_sci_generic_b_1	pe_sci_generic_b	1	mission_control	flight.science	radio				0	Datos nuevos. No sabemos qué son, pero son nuevos.	New data. No idea what it is, but it's new.	calm	chatter	m	any	any	any	any	any	generic						
+pe_sci_generic_b_2	pe_sci_generic_b_2	pe_sci_generic_b	2	probe	flight.science	radio				0		[beeps happily]	calm	chatter	both	any	any	any	any	any	generic	happy					
+pe_sci_generic_c_1	pe_sci_generic_c_1	pe_sci_generic_c	1	mission_control	flight.science	radio				0	Una sonda normal, haciendo ciencia.	Just a normal probe, doing science.	calm	chatter	m	any	any	any	any	any	generic						
+pe_sci_generic_c_2	pe_sci_generic_c_2	pe_sci_generic_c	2	probe	flight.science	radio				0		[beeps contentedly]	calm	chatter	both	any	any	any	any	any	generic	happy					
+pe_sci_generic_c_3	pe_sci_generic_c_3	pe_sci_generic_c	3	mission_control	flight.science	radio				0	Eres mi favorita. No se lo digas a las demás.	You're my favorite. Don't tell the others.	calm	chatter	m	any	any	any	any	any	generic						
+pe_sci_hecs_a_1	pe_sci_hecs_a_1	pe_sci_hecs_a	1	mission_control	flight.science	radio				0	Datos recibidos, HECS. Perfectos.	Data received, HECS. Perfect.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sci_hecs_a_1__v02	pe_sci_hecs_a_1	pe_sci_hecs_a	1	mission_control	flight.science	radio				0	Datos recibidos, HECS. El laboratorio ya tiene {sci_total} puntos.	Got the data, HECS. The lab is at {sci_total} points now.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sci_hecs_a_2	pe_sci_hecs_a_2	pe_sci_hecs_a	2	probe	flight.science	radio				0		[beeps anxiously]	calm	chatter	both	any	any	any	any	any	hecs	scared					
+pe_sci_hecs_a_3	pe_sci_hecs_a_3	pe_sci_hecs_a	3	mission_control	flight.science	radio				0	No hace falta repetir.	No need to redo it.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sci_hecs_b_1	pe_sci_hecs_b_1	pe_sci_hecs_b	1	mission_control	flight.science	radio				0	HECS, has enviado el informe tres veces.	HECS, you sent the report three times.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sci_hecs_b_2	pe_sci_hecs_b_2	pe_sci_hecs_b	2	probe	flight.science	radio				0		[beeps defensively]	calm	chatter	both	any	any	any	any	any	hecs	curious					
+pe_sci_hecs_c_1	pe_sci_hecs_c_1	pe_sci_hecs_c	1	probe	flight.science	radio				0		[beeps at length]	calm	chatter	both	any	any	any	any	any	hecs	curious					
+pe_sci_hecs_c_2	pe_sci_hecs_c_2	pe_sci_hecs_c	2	mission_control	flight.science	radio				0	HECS, ¿le has puesto notas a un termómetro?	HECS, did you add footnotes to a thermometer?	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sci_hecs_c_3	pe_sci_hecs_c_3	pe_sci_hecs_c	3	probe	flight.science	radio				0		[beeps tidily]	calm	chatter	both	any	any	any	any	any	hecs	proud					
+pe_sci_okto_a_1	pe_sci_okto_a_1	pe_sci_okto_a	1	mission_control	flight.science	radio				0	Excelente medición, Okto.	Excellent measurement, Okto.	calm	chatter	m	any	any	any	any	any	okto						
+pe_sci_okto_a_1__v02	pe_sci_okto_a_1	pe_sci_okto_a	1	mission_control	flight.science	radio				0	Gran medida, Okto. {sci_total} puntos de ciencia en el laboratorio.	Great measurement, Okto. {sci_total} science points in the lab.	calm	chatter	m	any	any	any	any	any	okto						
+pe_sci_okto_a_2	pe_sci_okto_a_2	pe_sci_okto_a	2	probe	flight.science	radio				0		[beeps smugly]	calm	chatter	both	any	any	any	any	any	okto	proud					
+pe_sci_okto_b_1	pe_sci_okto_b_1	pe_sci_okto_b	1	mission_control	flight.science	radio				0	Okto, ¿has hecho la ciencia o la has corregido?	Okto, did you do the science or correct it?	calm	chatter	m	any	any	any	any	any	okto						
+pe_sci_okto_b_2	pe_sci_okto_b_2	pe_sci_okto_b	2	probe	flight.science	radio				0		[beeps very smugly]	calm	chatter	both	any	any	any	any	any	okto	proud					
+pe_sci_okto_c_1	pe_sci_okto_c_1	pe_sci_okto_c	1	mission_control	flight.science	radio				0	Estos datos son demasiado buenos, Okto.	This data is too good, Okto.	calm	chatter	m	any	any	any	any	any	okto						
+pe_sci_okto_c_2	pe_sci_okto_c_2	pe_sci_okto_c	2	probe	flight.science	radio				0		[beeps casually]	calm	chatter	both	any	any	any	any	any	okto	proud					
+pe_sci_okto_c_3	pe_sci_okto_c_3	pe_sci_okto_c	3	mission_control	flight.science	radio				0	Claro que sí.	Of course it is.	calm	chatter	m	any	any	any	any	any	okto						
+pe_sci_rovemate_a_1	pe_sci_rovemate_a_1	pe_sci_rovemate_a	1	mission_control	flight.science	radio				0	¡Rovemate ha encontrado algo!	Rovemate found something!	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sci_rovemate_a_2	pe_sci_rovemate_a_2	pe_sci_rovemate_a	2	probe	flight.science	radio				0		[beeps excitedly]	calm	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_sci_rovemate_a_3	pe_sci_rovemate_a_3	pe_sci_rovemate_a	3	mission_control	flight.science	radio				0	Buen chico. Suéltalo.	Good boy. Drop it.	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sci_rovemate_b_1	pe_sci_rovemate_b_1	pe_sci_rovemate_b	1	mission_control	flight.science	radio				0	¿Has hecho ciencia o te has tumbado encima?	Did you do science, or just lie on it?	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sci_rovemate_b_2	pe_sci_rovemate_b_2	pe_sci_rovemate_b	2	probe	flight.science	radio				0		[beeps guiltily]	calm	chatter	both	any	any	any	any	any	rovemate	bored					
+pe_sci_rovemate_c_1	pe_sci_rovemate_c_1	pe_sci_rovemate_c	1	mission_control	flight.science	radio				0	¿Has medido algo, Rovemate?	Did you measure something, Rovemate?	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sci_rovemate_c_2	pe_sci_rovemate_c_2	pe_sci_rovemate_c	2	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_sci_rovemate_c_3	pe_sci_rovemate_c_3	pe_sci_rovemate_c	3	mission_control	flight.science	radio				0	Creo que fue sin querer. Pero cuenta.	I think it was an accident. But it counts.	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sci_snob_a_1	pe_sci_snob_a_1	pe_sci_snob_a	1	mission_control	flight.science	radio				0	Gracias por los datos, su excelencia.	Thank you for the data, your excellency.	calm	chatter	m	any	any	any	any	any	snob						
+pe_sci_snob_a_2	pe_sci_snob_a_2	pe_sci_snob_a	2	probe	flight.science	radio				0		[beeps graciously]	calm	chatter	both	any	any	any	any	any	snob	bored					
+pe_sci_snob_b_1	pe_sci_snob_b_1	pe_sci_snob_b	1	mission_control	flight.science	radio				0	Datos de primera clase.	First-class data.	calm	chatter	m	any	any	any	any	any	snob						
+pe_sci_snob_b_2	pe_sci_snob_b_2	pe_sci_snob_b	2	probe	flight.science	radio				0		[beeps haughtily]	calm	chatter	both	any	any	any	any	any	snob	proud					
+pe_sci_snob_c_1	pe_sci_snob_c_1	pe_sci_snob_c	1	probe	flight.science	radio				0		[beeps expectantly]	calm	chatter	both	any	any	any	any	any	snob	bored					
+pe_sci_snob_c_2	pe_sci_snob_c_2	pe_sci_snob_c	2	mission_control	flight.science	radio				0	¿Nos cobra los datos, su excelencia?	Are you charging us for the data, your excellency?	calm	chatter	m	any	any	any	any	any	snob						
+pe_sci_snob_c_3	pe_sci_snob_c_3	pe_sci_snob_c	3	probe	flight.science	radio				0		[beeps haughtily]	calm	chatter	both	any	any	any	any	any	snob	offended					
+pe_sci_stayputnik_a_1	pe_sci_stayputnik_a_1	pe_sci_stayputnik_a	1	mission_control	flight.science	radio				0	¡Datos nuevos del Stayputnik!	New data from the Stayputnik!	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_sci_stayputnik_a_2	pe_sci_stayputnik_a_2	pe_sci_stayputnik_a	2	probe	flight.science	radio				0		[beeps proudly]	calm	chatter	both	any	any	any	any	any	stayputnik	proud					
+pe_sci_stayputnik_b_1	pe_sci_stayputnik_b_1	pe_sci_stayputnik_b	1	mission_control	flight.science	radio				0	Stayputnik, ¿cómo has medido eso?	Stayputnik, how did you even measure that?	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_sci_stayputnik_b_2	pe_sci_stayputnik_b_2	pe_sci_stayputnik_b	2	probe	flight.science	radio				0		[beeps mysteriously]	calm	chatter	both	any	any	any	any	any	stayputnik	proud					
+pe_sci_stayputnik_c_1	pe_sci_stayputnik_c_1	pe_sci_stayputnik_c	1	probe	flight.science	radio				0		[beeps delightedly]	calm	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_sci_stayputnik_c_2	pe_sci_stayputnik_c_2	pe_sci_stayputnik_c	2	mission_control	flight.science	radio				0	Sí, Stayputnik, ya lo tenemos.	Yes, Stayputnik, we got it.	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_sci_stayputnik_c_2__v02	pe_sci_stayputnik_c_2	pe_sci_stayputnik_c	2	mission_control	flight.science	radio				0	Recibido, Stayputnik. Ya son {sci_total} puntos de ciencia.	Got it, Stayputnik. That makes {sci_total} science points.	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_sci_stayputnik_c_3	pe_sci_stayputnik_c_3	pe_sci_stayputnik_c	3	probe	flight.science	radio				0		[beeps once more]	calm	chatter	both	any	any	any	any	any	stayputnik	proud					
+pe_sd_any_a_1	pe_sd_any_a_1	pe_sd_any_a	1	mission_control	flight.splashdown	radio				0	Amerizaje confirmado.	Splashdown confirmed.	none	chatter	m	any	any	any	any	any	any						
+pe_sd_any_a_2	pe_sd_any_a_2	pe_sd_any_a	2	probe	flight.splashdown	radio				0		[beeps curiously]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_sd_any_b_1	pe_sd_any_b_1	pe_sd_any_b	1	probe	flight.splashdown	radio				0		[beeps worriedly]	none	chatter	both	any	any	any	any	any	any	scared					
+pe_sd_any_b_2	pe_sd_any_b_2	pe_sd_any_b	2	mission_control	flight.splashdown	radio				0	Tranquila, sonda. Flotas.	Easy, probe. You float.	none	chatter	m	any	any	any	any	any	any						
+pe_sd_any_c_1	pe_sd_any_c_1	pe_sd_any_c	1	mission_control	flight.splashdown	radio				0	Bienvenida al agua.	Welcome to the water.	none	chatter	m	any	any	any	any	any	any						
+pe_sd_any_c_2	pe_sd_any_c_2	pe_sd_any_c	2	probe	flight.splashdown	radio				0		[beeps soggily]	none	chatter	both	any	any	any	any	any	any	offended					
+pe_sd_rovemate_1	pe_sd_rovemate_1	pe_sd_rovemate	1	probe	flight.splashdown	radio				0		[beeps delightedly]	none	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_sd_rovemate_2	pe_sd_rovemate_2	pe_sd_rovemate	2	mission_control	flight.splashdown	radio				0	Rovemate, no es hora del baño.	Rovemate, it's not bath time.	none	chatter	m	any	any	any	any	any	rovemate						
+pe_sig_back_generic_1	pe_sig_back_generic_1	pe_sig_back_generic	1	probe	flight.signal_back	radio				0		[beeps happily]	calm	chatter	both	any	any	any	any	any	generic	happy					
+pe_sig_back_generic_2	pe_sig_back_generic_2	pe_sig_back_generic	2	mission_control	flight.signal_back	radio				0	¡Ahí estás!	There you are!	calm	chatter	m	any	any	any	any	any	generic						
+pe_sig_back_hecs_1	pe_sig_back_hecs_1	pe_sig_back_hecs	1	probe	flight.signal_back	radio				0		[beeps with relief]	calm	chatter	both	any	any	any	any	any	hecs	scared					
+pe_sig_back_hecs_2	pe_sig_back_hecs_2	pe_sig_back_hecs	2	mission_control	flight.signal_back	radio				0	¡Ahí estás! Todo está bien.	There you are! Everything's fine.	calm	chatter	m	any	any	any	any	any	hecs						
+pe_sig_back_okto_1	pe_sig_back_okto_1	pe_sig_back_okto	1	probe	flight.signal_back	radio				0		[beeps casually]	calm	chatter	both	any	any	any	any	any	okto	proud					
+pe_sig_back_okto_2	pe_sig_back_okto_2	pe_sig_back_okto	2	mission_control	flight.signal_back	radio				0	Ahí estás. Sí, te hemos echado de menos.	There you are. Yes, we missed you.	calm	chatter	m	any	any	any	any	any	okto						
+pe_sig_back_rovemate_1	pe_sig_back_rovemate_1	pe_sig_back_rovemate	1	probe	flight.signal_back	radio				0		[beeps joyfully]	calm	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_sig_back_rovemate_2	pe_sig_back_rovemate_2	pe_sig_back_rovemate	2	mission_control	flight.signal_back	radio				0	¡Ahí estás, chico!	There you are, boy!	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_sig_back_snob_1	pe_sig_back_snob_1	pe_sig_back_snob	1	mission_control	flight.signal_back	radio				0	¡Ahí está, su excelencia!	There you are, your excellency!	calm	chatter	m	any	any	any	any	any	snob						
+pe_sig_back_snob_2	pe_sig_back_snob_2	pe_sig_back_snob	2	probe	flight.signal_back	radio				0		[beeps dismissively]	calm	chatter	both	any	any	any	any	any	snob	bored					
+pe_sig_back_stayputnik_1	pe_sig_back_stayputnik_1	pe_sig_back_stayputnik	1	probe	flight.signal_back	radio				0		[beeps very eagerly]	calm	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_sig_back_stayputnik_2	pe_sig_back_stayputnik_2	pe_sig_back_stayputnik	2	mission_control	flight.signal_back	radio				0	¡Ahí estás, veterano!	There you are, veteran!	calm	chatter	m	any	any	any	any	any	stayputnik						
+pe_soi_generic_2	pe_soi_generic_2	pe_soi_generic	2	probe	flight.soi_enter	radio				0		[beeps curiously]	calm	chatter	both	any	any	any	any	any	generic	curious					
+pe_soi_hecs_2	pe_soi_hecs_2	pe_soi_hecs	2	probe	flight.soi_enter	radio				0		[beeps nervously]	calm	chatter	both	any	any	any	any	any	hecs	scared					
+pe_soi_home_a_1	pe_soi_home_a_1	pe_soi_home_a	1	mission_control	flight.soi_enter	radio				0	Bienvenida a casa, sonda.	Welcome home, probe.	calm	chatter	m	any	any	any	any	home	any						
+pe_soi_home_a_2	pe_soi_home_a_2	pe_soi_home_a	2	probe	flight.soi_enter	radio				0		[beeps joyfully]	calm	chatter	both	any	any	any	any	home	any	happy					
+pe_soi_home_b_1	pe_soi_home_b_1	pe_soi_home_b	1	probe	flight.soi_enter	radio				0		[beeps very happily]	calm	chatter	both	any	any	any	any	home	any	happy					
+pe_soi_home_b_2	pe_soi_home_b_2	pe_soi_home_b	2	mission_control	flight.soi_enter	radio				0	Te hemos echado de menos.	We missed you.	calm	chatter	m	any	any	any	any	home	any						
+pe_soi_okto_2	pe_soi_okto_2	pe_soi_okto	2	probe	flight.soi_enter	radio				0		[beeps knowingly]	calm	chatter	both	any	any	any	any	any	okto	curious					
+pe_soi_rovemate_2	pe_soi_rovemate_2	pe_soi_rovemate	2	probe	flight.soi_enter	radio				0		[beeps curiously]	calm	chatter	both	any	any	any	any	any	rovemate	curious					
+pe_soi_rovemate_3	pe_soi_rovemate_3	pe_soi_rovemate	3	mission_control	flight.soi_enter	radio				0	Sí, podrás explorar. Luego.	Yes, you can explore. Later.	calm	chatter	m	any	any	any	any	any	rovemate						
+pe_soi_snob_2	pe_soi_snob_2	pe_soi_snob	2	probe	flight.soi_enter	radio				0		[beeps dismissively]	calm	chatter	both	any	any	any	any	any	snob	bored					
+pe_soi_stayputnik_2	pe_soi_stayputnik_2	pe_soi_stayputnik	2	probe	flight.soi_enter	radio				0		[beeps excitedly]	calm	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_stg_any_a_1	pe_stg_any_a_1	pe_stg_any_a	1	probe	flight.staging	radio				0		[beeps briskly]	none	chatter	both	any	any	any	any	any	any	happy					
+pe_stg_any_a_2	pe_stg_any_a_2	pe_stg_any_a	2	mission_control	flight.staging	radio				0	Etapa confirmada.	Stage confirmed.	none	chatter	m	any	any	any	any	any	any						
+pe_stg_generic_1	pe_stg_generic_1	pe_stg_generic	1	probe	flight.staging	radio				0		[beeps twice]	none	chatter	both	any	any	any	any	any	generic	happy					
+pe_stg_generic_2	pe_stg_generic_2	pe_stg_generic	2	mission_control	flight.staging	radio				0	Recibido. Etapa fuera.	Copy. Stage away.	none	chatter	m	any	any	any	any	any	generic						
+pe_stg_hecs_1	pe_stg_hecs_1	pe_stg_hecs	1	probe	flight.staging	radio				0		[beeps nervously]	none	chatter	both	any	any	any	any	any	hecs	scared					
+pe_stg_hecs_2	pe_stg_hecs_2	pe_stg_hecs	2	mission_control	flight.staging	radio				0	Tranquilo, HECS, era la etapa.	Easy, HECS, that was the stage.	none	chatter	m	any	any	any	any	any	hecs						
+pe_stg_ign_any_a_1	pe_stg_ign_any_a_1	pe_stg_ign_any_a	1	probe	flight.staging	radio				0		[beeps with determination]	none	chatter	both	any	any	any	any	ignition	any	proud					
+pe_stg_ign_any_a_2	pe_stg_ign_any_a_2	pe_stg_ign_any_a	2	mission_control	flight.staging	radio				0	Ignición. Buen empuje.	Ignition. Good thrust.	none	chatter	m	any	any	any	any	ignition	any						
+pe_stg_ign_any_b_1	pe_stg_ign_any_b_1	pe_stg_ign_any_b	1	probe	flight.staging	radio				0		[beeps eagerly]	none	chatter	both	any	any	any	any	ignition	any	happy					
+pe_stg_ign_any_b_2	pe_stg_ign_any_b_2	pe_stg_ign_any_b	2	mission_control	flight.staging	radio				0	Motor encendido. Allá vamos.	Engine lit. Here we go.	none	chatter	m	any	any	any	any	ignition	any						
+pe_stg_okto_1	pe_stg_okto_1	pe_stg_okto	1	probe	flight.staging	radio				0		[beeps precisely]	none	chatter	both	any	any	any	any	any	okto	proud					
+pe_stg_okto_2	pe_stg_okto_2	pe_stg_okto	2	mission_control	flight.staging	radio				0	Justo a tiempo, como siempre.	Right on time, as always.	none	chatter	m	any	any	any	any	any	okto						
+pe_stg_rovemate_1	pe_stg_rovemate_1	pe_stg_rovemate	1	probe	flight.staging	radio				0		[beeps playfully]	none	chatter	both	any	any	any	any	separation	rovemate	happy					
+pe_stg_rovemate_2	pe_stg_rovemate_2	pe_stg_rovemate	2	mission_control	flight.staging	radio				0	No, Rovemate, no puedes ir a buscarla.	No, Rovemate, you can't fetch it.	none	chatter	m	any	any	any	any	separation	rovemate						
+pe_stg_sep_any_a_1	pe_stg_sep_any_a_1	pe_stg_sep_any_a	1	probe	flight.staging	radio				0		[beeps a goodbye]	none	chatter	both	any	any	any	any	separation	any	happy					
+pe_stg_sep_any_a_2	pe_stg_sep_any_a_2	pe_stg_sep_any_a	2	mission_control	flight.staging	radio				0	Separación confirmada.	Separation confirmed.	none	chatter	m	any	any	any	any	separation	any						
+pe_stg_sep_any_b_1	pe_stg_sep_any_b_1	pe_stg_sep_any_b	1	probe	flight.staging	radio				0		[beeps lightly]	none	chatter	both	any	any	any	any	separation	any	curious					
+pe_stg_sep_any_b_2	pe_stg_sep_any_b_2	pe_stg_sep_any_b	2	mission_control	flight.staging	radio				0	Un poco más ligera, ¿eh?	A bit lighter, huh?	none	chatter	m	any	any	any	any	separation	any						
+pe_stg_snob_1	pe_stg_snob_1	pe_stg_snob	1	probe	flight.staging	radio				0		[beeps dismissively]	none	chatter	both	any	any	any	any	separation	snob	bored					
+pe_stg_snob_2	pe_stg_snob_2	pe_stg_snob	2	mission_control	flight.staging	radio				0	Su excelencia ya no necesitaba esa etapa.	Your excellency no longer needed that stage.	none	chatter	m	any	any	any	any	separation	snob						
+pe_stg_stayputnik_1	pe_stg_stayputnik_1	pe_stg_stayputnik	1	probe	flight.staging	radio				0		[beeps a farewell]	none	chatter	both	any	any	any	any	separation	stayputnik	happy					
+pe_stg_stayputnik_2	pe_stg_stayputnik_2	pe_stg_stayputnik	2	mission_control	flight.staging	radio				0	Sí, Stayputnik, esa pieza no vuelve.	Yes, Stayputnik, that piece isn't coming back.	none	chatter	m	any	any	any	any	separation	stayputnik						
+pe_td_any_a_1	pe_td_any_a_1	pe_td_any_a	1	probe	flight.touchdown	radio				0		[beeps uncertainly]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_td_any_a_2	pe_td_any_a_2	pe_td_any_a	2	mission_control	flight.touchdown	radio				0	Cuenta. Seguimos de una pieza.	It counts. We're still in one piece.	none	chatter	m	any	any	any	any	any	any						
+pe_td_any_b_1	pe_td_any_b_1	pe_td_any_b	1	mission_control	flight.touchdown	radio				0	Contacto. ¿Todo bien ahí abajo?	Contact. All good down there?	none	chatter	m	any	any	any	any	any	any						
+pe_td_any_b_2	pe_td_any_b_2	pe_td_any_b	2	probe	flight.touchdown	radio				0		[beeps cheerfully]	none	chatter	both	any	any	any	any	any	any	happy					
+pe_td_any_b_3	pe_td_any_b_3	pe_td_any_b	3	mission_control	flight.touchdown	radio				0	Eso es un sí.	That's a yes.	none	chatter	m	any	any	any	any	any	any						
+pe_td_generic_1	pe_td_generic_1	pe_td_generic	1	mission_control	flight.touchdown	radio				0	Aterrizaje confirmado, sonda.	Touchdown confirmed, probe.	none	chatter	m	any	any	any	any	any	generic						
+pe_td_generic_2	pe_td_generic_2	pe_td_generic	2	probe	flight.touchdown	radio				0		[beeps happily]	none	chatter	both	any	any	any	any	any	generic	happy					
+pe_td_hecs_1	pe_td_hecs_1	pe_td_hecs	1	probe	flight.touchdown	radio				0		[beeps shakily]	none	chatter	both	any	any	any	any	any	hecs	scared					
+pe_td_hecs_2	pe_td_hecs_2	pe_td_hecs	2	mission_control	flight.touchdown	radio				0	HECS, has aterrizado. Puedes dejar de temblar.	HECS, you landed. You can stop shaking.	none	chatter	m	any	any	any	any	any	hecs						
+pe_td_hecs_3	pe_td_hecs_3	pe_td_hecs	3	probe	flight.touchdown	radio				0		[beeps with relief]	none	chatter	both	any	any	any	any	any	hecs	happy					
+pe_td_okto_1	pe_td_okto_1	pe_td_okto	1	mission_control	flight.touchdown	radio				0	Aterrizaje confirmado. Muy limpio, Okto.	Touchdown confirmed. Very clean, Okto.	none	chatter	m	any	any	any	any	any	okto						
+pe_td_okto_2	pe_td_okto_2	pe_td_okto	2	probe	flight.touchdown	radio				0		[beeps smugly]	none	chatter	both	any	any	any	any	any	okto	proud					
+pe_td_rovemate_1	pe_td_rovemate_1	pe_td_rovemate	1	probe	flight.touchdown	radio				0		[beeps excitedly]	none	chatter	both	any	any	any	any	any	rovemate	happy					
+pe_td_rovemate_2	pe_td_rovemate_2	pe_td_rovemate	2	mission_control	flight.touchdown	radio				0	¡Quieto, Rovemate! Primero el informe.	Stay, Rovemate! Report first.	none	chatter	m	any	any	any	any	any	rovemate						
+pe_td_rovemate_3	pe_td_rovemate_3	pe_td_rovemate	3	probe	flight.touchdown	radio				0		[beeps sulkily]	none	chatter	both	any	any	any	any	any	rovemate	bored					
+pe_td_snob_1	pe_td_snob_1	pe_td_snob	1	mission_control	flight.touchdown	radio				0	Su excelencia ha llegado.	Your excellency has arrived.	none	chatter	m	any	any	any	any	any	snob						
+pe_td_snob_1__v02	pe_td_snob_1	pe_td_snob	1	mission_control	flight.touchdown	radio				0	Su excelencia ha aterrizado en {here}.	Your excellency has landed on {here}.	none	chatter	m	any	any	any	any	any	snob						
+pe_td_snob_2	pe_td_snob_2	pe_td_snob	2	probe	flight.touchdown	radio				0		[beeps disapprovingly]	none	chatter	both	any	any	any	any	any	snob	bored					
+pe_td_stayputnik_1	pe_td_stayputnik_1	pe_td_stayputnik	1	probe	flight.touchdown	radio				0		[beeps bouncily]	none	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_td_stayputnik_2	pe_td_stayputnik_2	pe_td_stayputnik	2	mission_control	flight.touchdown	radio				0	¡Bienvenido al suelo, veterano!	Welcome to the ground, veteran!	none	chatter	m	any	any	any	any	any	stayputnik						
+pe_td_stayputnik_2__v02	pe_td_stayputnik_2	pe_td_stayputnik	2	mission_control	flight.touchdown	radio				0	¡Bienvenido a {here}, veterano!	Welcome to {here}, veteran!	none	chatter	m	any	any	any	any	any	stayputnik						
+pe_thc_any_a_1	pe_thc_any_a_1	pe_thc_any_a	1	probe	flight.throttle_cut	radio				0		[beeps quietly]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_thc_any_a_2	pe_thc_any_a_2	pe_thc_any_a	2	mission_control	flight.throttle_cut	radio				0	Motor apagado.	Engine off.	none	chatter	m	any	any	any	any	any	any						
+pe_thc_any_b_1	pe_thc_any_b_1	pe_thc_any_b	1	probe	flight.throttle_cut	radio				0		[beeps questioningly]	none	chatter	both	any	any	any	any	any	any	curious					
+pe_thc_any_b_2	pe_thc_any_b_2	pe_thc_any_b	2	mission_control	flight.throttle_cut	radio				0	Sí, ya está. Paramos aquí.	Yes, that's it. We stop here.	none	chatter	m	any	any	any	any	any	any						
+pe_thc_hecs_1	pe_thc_hecs_1	pe_thc_hecs	1	probe	flight.throttle_cut	radio				0		[beeps anxiously]	none	chatter	both	any	any	any	any	any	hecs	scared					
+pe_thc_hecs_2	pe_thc_hecs_2	pe_thc_hecs	2	mission_control	flight.throttle_cut	radio				0	Lo apagamos a propósito, HECS.	We cut it on purpose, HECS.	none	chatter	m	any	any	any	any	any	hecs						
+pe_thf_any_a_1	pe_thf_any_a_1	pe_thf_any_a	1	probe	flight.throttle_full	radio				0		[beeps powerfully]	none	chatter	both	any	any	any	any	any	any	proud					
+pe_thf_any_a_2	pe_thf_any_a_2	pe_thf_any_a	2	mission_control	flight.throttle_full	radio				0	Potencia máxima.	Full power.	none	chatter	m	any	any	any	any	any	any						
+pe_thf_okto_1	pe_thf_okto_1	pe_thf_okto	1	probe	flight.throttle_full	radio				0		[beeps smugly]	none	chatter	both	any	any	any	any	any	okto	proud					
+pe_thf_okto_2	pe_thf_okto_2	pe_thf_okto	2	mission_control	flight.throttle_full	radio				0	Sí, Okto, eso es todo lo que tiene.	Yes, Okto, that's all it has.	none	chatter	m	any	any	any	any	any	okto						
+pe_thf_stayputnik_1	pe_thf_stayputnik_1	pe_thf_stayputnik	1	probe	flight.throttle_full	radio				0		[beeps very bravely]	none	chatter	both	any	any	any	any	any	stayputnik	happy					
+pe_thf_stayputnik_2	pe_thf_stayputnik_2	pe_thf_stayputnik	2	mission_control	flight.throttle_full	radio				0	Agárrate, Stayputnik.	Hold on, Stayputnik.	none	chatter	m	any	any	any	any	any	stayputnik						

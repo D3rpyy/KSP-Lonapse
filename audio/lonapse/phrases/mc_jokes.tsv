@@ -3,95 +3,95 @@ clip_key	event	severity	band	role	scene	seq	gender	phase	cause	spanish	english	s
 # Columns and values: audio/lonapse/README.md. UTF-8, tab separated, # starts a comment line.												
 chat_calm_s6_1	chatter	chatter	calm	crew	chat_calm_s6	1	both	orbit	any	Control, ¿qué tiempo hace en el centro espacial?	Control, how's the weather at the space center? | Control, what's the weather like at the space center? | Control, how's the weather down there?	
 chat_calm_s6_2	chatter	chatter	calm	mc	chat_calm_s6	2	m	orbit	any	Nublado. Os envidiamos un poco.	Cloudy. We envy you a little. | Gray. We're a bit jealous of you. | Cloudy. We kind of envy you.	
-chat_calm_s7_1	chatter	chatter	calm	mc	chat_calm_s7	1	m	goofy	any	Recordad comer algo.	Remember to eat something. | Don't forget to eat. | Remember lunch, {vessel}.	 |  | Acordaos de comer, {vessel}.
-chat_calm_s7_2	chatter	chatter	calm	crew	chat_calm_s7	2	both	goofy	any	Ya estamos con los bocadillos.	We're already on the sandwiches. | Already eating sandwiches. | We're on the sandwiches.	
-chat_calm_s7_3	chatter	chatter	calm	mc	chat_calm_s7	3	m	goofy	any	Sin migas en los paneles, por favor.	No crumbs on the panels, please. | No crumbs on the panels. | Keep the crumbs off the panels, please.	
-chat_calm_s9_1	chatter	chatter	calm	mc	chat_calm_s9	1	m	goofy	any	Los científicos quieren más datos.	The scientists want more data. | The scientists want more data. | Science wants more data, {vessel}.	 |  | Los científicos quieren más datos, {vessel}.
-chat_calm_s9_2	chatter	chatter	calm	crew	chat_calm_s9	2	both	goofy	any	Siempre quieren más datos.	They always want more data. | They always do. | They always want more.	
-chat_calm_s9_3	chatter	chatter	calm	mc	chat_calm_s9	3	m	goofy	any	Lo sé. Lo sé.	I know. I know. | I know. Believe me. | Yes. I know.	
-chat_calm_s10_1	chatter	chatter	calm	crew	chat_calm_s10	1	both	goofy	any	¿Alguien ha visto mi lápiz?	Has anyone seen my pencil? | Control, anyone seen my pencil? | Control, I lost my pencil.	
-chat_calm_s10_2	chatter	chatter	calm	mc	chat_calm_s10	2	m	goofy	any	Mirad detrás del panel dos.	Look behind panel two. | Behind panel two. | Check behind panel two.	
-chat_calm_s11_1	chatter	chatter	calm	mc	chat_calm_s11	1	m	goofy	any	El director pregunta si podéis saludar.	The director asks if you can wave. | The director wants you to wave. | The flight director asks for a wave.	
-chat_calm_s11_2	chatter	chatter	calm	crew	chat_calm_s11	2	both	goofy	any	Dile que estamos saludando.	Tell him we're waving. | We're waving. Tell him. | Tell him we're waving.	
-mj_intern_coffee_1	chatter	chatter	calm	mc	mj_intern_coffee	1	m	goofy	any	El becario ha tirado café en la consola.	The intern spilled coffee on the console. | The intern spilled coffee on the console. | Coffee on the console. The intern again.	
-mj_intern_coffee_2	chatter	chatter	calm	crew	mj_intern_coffee	2	both	goofy	any	¿Eso explica los datos raros?	Does that explain the weird data? | Is that why the data is weird? | That explains the strange data?	
-mj_intern_coffee_3	chatter	chatter	calm	mc	mj_intern_coffee	3	m	goofy	any	Explica muchas cosas.	It explains a lot of things. | It explains a lot. | That explains many things.	
-mj_intern_button_1	chatter	chatter	calm	mc	mj_intern_button	1	m	goofy	any	El becario ha pulsado algo. Tranquilos.	The intern pressed something. Relax. | The intern pressed something. Stay calm. | Relax. The intern just pressed something.	
-mj_intern_button_2	chatter	chatter	calm	crew	mj_intern_button	2	both	goofy	any	Ahora no estamos tranquilos.	Now we're not relaxed. | We are not calm now. | Now we're not relaxed.	
-mj_intern_button_3	chatter	chatter	calm	mc	mj_intern_button	3	m	goofy	any	Era la cafetera. Todo bien.	It was the coffee maker. All good. | It was the coffee maker. All fine. | Only the coffee machine. Fine.	
-mj_shiny_button_1	chatter	chatter	calm	mc	mj_shiny_button	1	m	goofy	any	Por favor, deja de pulsar el botón brillante.	Please stop pressing the shiny button. | Stop pressing the shiny button, please. | Please quit pressing the shiny button.	
-mj_shiny_button_2	chatter	chatter	calm	crew	mj_shiny_button	2	both	goofy	any	¿Cuál? Aquí todos brillan.	Which one? They all shine in here. | Which one? Everything shines in here. | They're all shiny up here.	
-mj_shiny_button_3	chatter	chatter	calm	mc	mj_shiny_button	3	m	goofy	any	El que estás pulsando ahora mismo.	The one you're pressing right now. | The one you're pressing now. | That one. The one under your finger.	
-mj_mom_1	chatter	chatter	calm	mc	mj_mom	1	m	goofy	any	Ha llamado tu madre.	Your mom called. | Your mom called. | Message from your mom.	
-mj_mom_2	chatter	chatter	calm	crew	mj_mom	2	both	goofy	any	¿Qué ha dicho?	What did she say? | What did she want? | What did she say?	
-mj_mom_3	chatter	chatter	calm	mc	mj_mom	3	m	goofy	any	Que te pongas la chaqueta.	Put on a jacket. | Wear a jacket. | She says: put on a jacket.	
-mj_mom_food_1	chatter	chatter	calm	mc	mj_mom_food	1	m	goofy	any	Tu madre pregunta si comes bien.	Your mom asks if you're eating well. | Your mom wants to know if you're eating well. | Mom asks: are you eating enough?	
-mj_mom_food_2	chatter	chatter	calm	crew	mj_mom_food	2	both	goofy	any	Dile que sí. Mucho.	Tell her yes. A lot. | Yes. Lots. | Tell her yes. Plenty.	
-mj_mom_food_3	chatter	chatter	calm	mc	mj_mom_food	3	m	goofy	any	Lo sabe. Ha visto el inventario.	She knows. She saw the inventory. | She knows. She read the inventory. | She saw the food report.	
-mj_director_bday_1	chatter	chatter	calm	mc	mj_director_bday	1	m	goofy	any	Hoy es el cumpleaños del director de vuelo.	Today is the flight director's birthday. | It's the flight director's birthday today. | Today the flight director turns another year older.	
-mj_director_bday_2	chatter	chatter	calm	crew	mj_director_bday	2	both	goofy	any	¡Felicidades, jefe!	Happy birthday, boss! | Happy birthday, boss! | Happy birthday from up here!	
-mj_director_bday_3	chatter	chatter	calm	mc	mj_director_bday	3	m	goofy	any	Dice gracias, y que sigáis trabajando.	He says thanks, and get back to work. | He says thanks. Now back to work. | Thanks, he says. And get back to work.	
-mj_bday_cake_1	chatter	chatter	calm	mc	mj_bday_cake	1	m	goofy	any	Hay tarta en la sala de control.	There's cake in the control room. | There's cake in the control room. | We have cake down here.	
-mj_bday_cake_2	chatter	chatter	calm	crew	mj_bday_cake	2	both	goofy	any	¿Nos guardáis un trozo?	Will you save us a piece? | Save us a slice? | Keep a piece for us?	
-mj_bday_cake_3	chatter	chatter	calm	mc	mj_bday_cake	3	m	goofy	any	Ya no queda nada. Lo siento.	It's all gone. Sorry. | Gone. Sorry. | All eaten. Sorry.	
-mj_budget_cheap_1	chatter	chatter	calm	mc	mj_budget_cheap	1	m	goofy	any	Contabilidad pregunta si podéis volver más barato.	Accounting asks if you can come back cheaper. | Accounting wants you to come back cheaper. | Accounting asks for a cheaper return.	
-mj_budget_cheap_2	chatter	chatter	calm	crew	mj_budget_cheap	2	both	goofy	any	¿Más barato cómo?	Cheaper how? | Cheaper how? | How, cheaper?	
-mj_budget_cheap_3	chatter	chatter	calm	mc	mj_budget_cheap	3	m	goofy	any	Sin propulsores, por ejemplo.	Without boosters, for example. | Without boosters, maybe. | No boosters, for example.	
-mj_budget_cookies_1	chatter	chatter	calm	mc	mj_budget_cookies	1	m	goofy	any	El presupuesto de galletas está agotado.	The cookie budget is used up. | The cookie budget is gone. | You've used up the cookie budget.	
-mj_budget_cookies_2	chatter	chatter	calm	crew	mj_budget_cookies	2	both	goofy	any	¡Eso es una emergencia!	That's an emergency! | Emergency! | This is an emergency!	
-mj_budget_cookies_3	chatter	chatter	calm	mc	mj_budget_cookies	3	m	goofy	any	No para contabilidad.	Not for accounting. | Accounting disagrees. | Not for accounting.	
-mj_sign_hull_1	chatter	chatter	calm	mc	mj_sign_hull	1	m	goofy	any	Recordad firmar el casco antes de volver.	Remember to sign the hull before you come back. | Sign the hull before you come home. | Don't forget to sign the hull, {vessel}.	 |  | No olvidéis firmar el casco, {vessel}.
-mj_sign_hull_2	chatter	chatter	calm	crew	mj_sign_hull	2	both	goofy	any	Ya lo hemos firmado. Por dentro.	Already signed it. On the inside. | Signed it already. From inside. | Done. On the inside.	
+chat_calm_s7_1	chatter	chatter	calm	mc	chat_calm_s7	1	m	calm	any	Recordad comer algo.	Remember to eat something. | Don't forget to eat. | Remember lunch, {vessel}.	 |  | Acordaos de comer, {vessel}.
+chat_calm_s7_2	chatter	chatter	calm	crew	chat_calm_s7	2	both	calm	any	Ya estamos con los bocadillos.	We're already on the sandwiches. | Already eating sandwiches. | We're on the sandwiches.	
+chat_calm_s7_3	chatter	chatter	calm	mc	chat_calm_s7	3	m	calm	any	Sin migas en los paneles, por favor.	No crumbs on the panels, please. | No crumbs on the panels. | Keep the crumbs off the panels, please.	
+chat_calm_s9_1	chatter	chatter	calm	mc	chat_calm_s9	1	m	calm	any	Los científicos quieren más datos.	The scientists want more data. | The scientists want more data. | Science wants more data, {vessel}.	 |  | Los científicos quieren más datos, {vessel}.
+chat_calm_s9_2	chatter	chatter	calm	crew	chat_calm_s9	2	both	calm	any	Siempre quieren más datos.	They always want more data. | They always do. | They always want more.	
+chat_calm_s9_3	chatter	chatter	calm	mc	chat_calm_s9	3	m	calm	any	Lo sé. Lo sé.	I know. I know. | I know. Believe me. | Yes. I know.	
+chat_calm_s10_1	chatter	chatter	calm	crew	chat_calm_s10	1	both	calm	any	¿Alguien ha visto mi lápiz?	Has anyone seen my pencil? | Control, anyone seen my pencil? | Control, I lost my pencil.	
+chat_calm_s10_2	chatter	chatter	calm	mc	chat_calm_s10	2	m	calm	any	Mirad detrás del panel dos.	Look behind panel two. | Behind panel two. | Check behind panel two.	
+chat_calm_s11_1	chatter	chatter	calm	mc	chat_calm_s11	1	m	calm	any	El director pregunta si podéis saludar.	The director asks if you can wave. | The director wants you to wave. | The flight director asks for a wave.	
+chat_calm_s11_2	chatter	chatter	calm	crew	chat_calm_s11	2	both	calm	any	Dile que estamos saludando.	Tell him we're waving. | We're waving. Tell him. | Tell him we're waving.	
+mj_intern_coffee_1	chatter	chatter	calm	mc	mj_intern_coffee	1	m	calm	any	El becario ha tirado café en la consola.	The intern spilled coffee on the console. | The intern spilled coffee on the console. | Coffee on the console. The intern again.	
+mj_intern_coffee_2	chatter	chatter	calm	crew	mj_intern_coffee	2	both	calm	any	¿Eso explica los datos raros?	Does that explain the weird data? | Is that why the data is weird? | That explains the strange data?	
+mj_intern_coffee_3	chatter	chatter	calm	mc	mj_intern_coffee	3	m	calm	any	Explica muchas cosas.	It explains a lot of things. | It explains a lot. | That explains many things.	
+mj_intern_button_1	chatter	chatter	calm	mc	mj_intern_button	1	m	calm	any	El becario ha pulsado algo. Tranquilos.	The intern pressed something. Relax. | The intern pressed something. Stay calm. | Relax. The intern just pressed something.	
+mj_intern_button_2	chatter	chatter	calm	crew	mj_intern_button	2	both	calm	any	Ahora no estamos tranquilos.	Now we're not relaxed. | We are not calm now. | Now we're not relaxed.	
+mj_intern_button_3	chatter	chatter	calm	mc	mj_intern_button	3	m	calm	any	Era la cafetera. Todo bien.	It was the coffee maker. All good. | It was the coffee maker. All fine. | Only the coffee machine. Fine.	
+mj_shiny_button_1	chatter	chatter	calm	mc	mj_shiny_button	1	m	calm	any	Por favor, deja de pulsar el botón brillante.	Please stop pressing the shiny button. | Stop pressing the shiny button, please. | Please quit pressing the shiny button.	
+mj_shiny_button_2	chatter	chatter	calm	crew	mj_shiny_button	2	both	calm	any	¿Cuál? Aquí todos brillan.	Which one? They all shine in here. | Which one? Everything shines in here. | They're all shiny up here.	
+mj_shiny_button_3	chatter	chatter	calm	mc	mj_shiny_button	3	m	calm	any	El que estás pulsando ahora mismo.	The one you're pressing right now. | The one you're pressing now. | That one. The one under your finger.	
+mj_mom_1	chatter	chatter	calm	mc	mj_mom	1	m	calm	any	Ha llamado tu madre.	Your mom called. | Your mom called. | Message from your mom.	
+mj_mom_2	chatter	chatter	calm	crew	mj_mom	2	both	calm	any	¿Qué ha dicho?	What did she say? | What did she want? | What did she say?	
+mj_mom_3	chatter	chatter	calm	mc	mj_mom	3	m	calm	any	Que te pongas la chaqueta.	Put on a jacket. | Wear a jacket. | She says: put on a jacket.	
+mj_mom_food_1	chatter	chatter	calm	mc	mj_mom_food	1	m	calm	any	Tu madre pregunta si comes bien.	Your mom asks if you're eating well. | Your mom wants to know if you're eating well. | Mom asks: are you eating enough?	
+mj_mom_food_2	chatter	chatter	calm	crew	mj_mom_food	2	both	calm	any	Dile que sí. Mucho.	Tell her yes. A lot. | Yes. Lots. | Tell her yes. Plenty.	
+mj_mom_food_3	chatter	chatter	calm	mc	mj_mom_food	3	m	calm	any	Lo sabe. Ha visto el inventario.	She knows. She saw the inventory. | She knows. She read the inventory. | She saw the food report.	
+mj_director_bday_1	chatter	chatter	calm	mc	mj_director_bday	1	m	calm	any	Hoy es el cumpleaños del director de vuelo.	Today is the flight director's birthday. | It's the flight director's birthday today. | Today the flight director turns another year older.	
+mj_director_bday_2	chatter	chatter	calm	crew	mj_director_bday	2	both	calm	any	¡Felicidades, jefe!	Happy birthday, boss! | Happy birthday, boss! | Happy birthday from up here!	
+mj_director_bday_3	chatter	chatter	calm	mc	mj_director_bday	3	m	calm	any	Dice gracias, y que sigáis trabajando.	He says thanks, and get back to work. | He says thanks. Now back to work. | Thanks, he says. And get back to work.	
+mj_bday_cake_1	chatter	chatter	calm	mc	mj_bday_cake	1	m	calm	any	Hay tarta en la sala de control.	There's cake in the control room. | There's cake in the control room. | We have cake down here.	
+mj_bday_cake_2	chatter	chatter	calm	crew	mj_bday_cake	2	both	calm	any	¿Nos guardáis un trozo?	Will you save us a piece? | Save us a slice? | Keep a piece for us?	
+mj_bday_cake_3	chatter	chatter	calm	mc	mj_bday_cake	3	m	calm	any	Ya no queda nada. Lo siento.	It's all gone. Sorry. | Gone. Sorry. | All eaten. Sorry.	
+mj_budget_cheap_1	chatter	chatter	calm	mc	mj_budget_cheap	1	m	calm	any	Contabilidad pregunta si podéis volver más barato.	Accounting asks if you can come back cheaper. | Accounting wants you to come back cheaper. | Accounting asks for a cheaper return.	
+mj_budget_cheap_2	chatter	chatter	calm	crew	mj_budget_cheap	2	both	calm	any	¿Más barato cómo?	Cheaper how? | Cheaper how? | How, cheaper?	
+mj_budget_cheap_3	chatter	chatter	calm	mc	mj_budget_cheap	3	m	calm	any	Sin propulsores, por ejemplo.	Without boosters, for example. | Without boosters, maybe. | No boosters, for example.	
+mj_budget_cookies_1	chatter	chatter	calm	mc	mj_budget_cookies	1	m	calm	any	El presupuesto de galletas está agotado.	The cookie budget is used up. | The cookie budget is gone. | You've used up the cookie budget.	
+mj_budget_cookies_2	chatter	chatter	calm	crew	mj_budget_cookies	2	both	calm	any	¡Eso es una emergencia!	That's an emergency! | Emergency! | This is an emergency!	
+mj_budget_cookies_3	chatter	chatter	calm	mc	mj_budget_cookies	3	m	calm	any	No para contabilidad.	Not for accounting. | Accounting disagrees. | Not for accounting.	
+mj_sign_hull_1	chatter	chatter	calm	mc	mj_sign_hull	1	m	calm	any	Recordad firmar el casco antes de volver.	Remember to sign the hull before you come back. | Sign the hull before you come home. | Don't forget to sign the hull, {vessel}.	 |  | No olvidéis firmar el casco, {vessel}.
+mj_sign_hull_2	chatter	chatter	calm	crew	mj_sign_hull	2	both	calm	any	Ya lo hemos firmado. Por dentro.	Already signed it. On the inside. | Signed it already. From inside. | Done. On the inside.	
 mj_weather_rain_1	chatter	chatter	calm	mc	mj_weather_rain	1	m	coast	any	Aquí abajo llueve sin parar.	It's raining nonstop down here. | It hasn't stopped raining down here. | Rain, rain and more rain here.	
 mj_weather_rain_2	chatter	chatter	calm	crew	mj_weather_rain	2	both	coast	any	Aquí arriba nunca llueve.	It never rains up here. | It never rains up here. | No rain up here.	
 mj_weather_rain_3	chatter	chatter	calm	mc	mj_weather_rain	3	m	coast	any	Presumidos.	Show-offs. | Show-offs. | Bragging.	
-mj_weather_wind_1	chatter	chatter	calm	mc	mj_weather_wind	1	m	goofy	any	Hace tanto viento que el becario ha volado.	It's so windy the intern blew away. | So windy the intern flew away. | The wind took the intern.	
-mj_weather_wind_2	chatter	chatter	calm	crew	mj_weather_wind	2	both	goofy	any	¿Ha llegado a la órbita?	Did he reach orbit? | Did he make orbit? | Did he reach orbit?	
-mj_weather_wind_3	chatter	chatter	calm	mc	mj_weather_wind	3	m	goofy	any	Casi. Le falta un propulsor.	Almost. He needs a booster. | Close. He needs a booster. | Nearly. Needs a booster.	
-mj_fan_rock_1	chatter	chatter	calm	mc	mj_fan_rock	1	m	goofy	any	Os leo una carta de un fan.	I'll read you a fan letter. | Fan letter for you. | I'll read you some fan mail.	
-mj_fan_rock_2	chatter	chatter	calm	crew	mj_fan_rock	2	both	goofy	any	¡Adelante!	Go ahead! | Go on! | Read it!	
-mj_fan_rock_3	chatter	chatter	calm	mc	mj_fan_rock	3	m	goofy	any	Dice: ¿podéis traerme una roca?	It says: can you bring me a rock? | It says: please bring me a rock. | They write: can I have a rock?	
-mj_fan_boosters_1	chatter	chatter	calm	mc	mj_fan_boosters	1	m	goofy	any	Carta de un fan: pide más propulsores.	Fan letter: they want more boosters. | Fan mail: more boosters, please. | A fan writes: they want more boosters.	
-mj_fan_boosters_2	chatter	chatter	calm	crew	mj_fan_boosters	2	both	goofy	any	¡Por fin alguien con criterio!	Finally someone with taste! | Someone with taste! | Finally, good taste!	
-mj_fan_autograph_1	chatter	chatter	calm	mc	mj_fan_autograph	1	m	goofy	any	Un fan pide tu autógrafo.	A fan wants your autograph. | A fan asks for your autograph. | Someone wants your signature.	
-mj_fan_autograph_2	chatter	chatter	calm	crew	mj_fan_autograph	2	both	goofy	any	Lo firmo en una galleta.	I'll sign a cookie. | I'll sign a cookie. | I'll autograph a cookie.	
-mj_fan_autograph_3	chatter	chatter	calm	mc	mj_fan_autograph	3	m	goofy	any	Llegará en migas.	It will arrive as crumbs. | It'll arrive as crumbs. | That arrives as crumbs.	
-mj_inv_cookies_1	chatter	chatter	calm	mc	mj_inv_cookies	1	m	goofy	any	Inventario: os quedan veinte galletas.	Inventory: you have twenty cookies left. | Inventory says twenty cookies left. | Cookie count: twenty.	
-mj_inv_cookies_2	chatter	chatter	calm	crew	mj_inv_cookies	2	both	goofy	any	Diecinueve.	Nineteen. | Nineteen. | Make that nineteen.	
-mj_inv_cookies_3	chatter	chatter	calm	mc	mj_inv_cookies	3	m	goofy	any	Dieciocho, por el ruido.	Eighteen, by the sound of it. | Eighteen, from the sound of it. | Eighteen, I hear.	
-mj_inv_tomorrow_1	chatter	chatter	calm	mc	mj_inv_tomorrow	1	m	goofy	any	¿Quién se ha comido las raciones de mañana?	Who ate tomorrow's rations? | Who ate tomorrow's food? | Tomorrow's rations are gone. Who?	
-mj_inv_tomorrow_2	chatter	chatter	calm	crew	mj_inv_tomorrow	2	both	goofy	any	Las de mañana sabían mejor.	Tomorrow's tasted better. | Tomorrow's was tastier. | It tasted better than today's.	
-mj_inv_pickles_1	chatter	chatter	calm	mc	mj_inv_pickles	1	m	goofy	any	Recordad: los pepinillos son para emergencias.	Remember: the pickles are for emergencies. | The pickles are for emergencies. Remember. | Reminder: pickles are emergency food.	
-mj_inv_pickles_2	chatter	chatter	calm	crew	mj_inv_pickles	2	both	goofy	any	Ha sido una emergencia de hambre.	It was a hunger emergency. | It was a hunger emergency. | We had a hunger emergency.	
-mj_struts_eng_1	chatter	chatter	calm	mc	mj_struts_eng	1	m	goofy	any	Ingeniería dice que no hacen falta más puntales.	Engineering says no more struts are needed. | Engineering says you don't need more struts. | No more struts, says engineering.	
-mj_struts_eng_2	chatter	chatter	calm	crew	mj_struts_eng	2	both	goofy	any	Ingeniería no va sentada aquí.	Engineering isn't sitting in here. | Engineering isn't sitting up here. | Engineering isn't up here with us.	
-mj_lick_window_1	chatter	chatter	calm	mc	mj_lick_window	1	m	goofy	any	Deja de lamer la ventana.	Stop licking the window. | Please stop licking the window. | Quit licking the window.	
-mj_lick_window_2	chatter	chatter	calm	crew	mj_lick_window	2	both	goofy	any	¿Cómo lo sabéis?	How do you know? | How do you know that? | How can you tell?	
-mj_lick_window_3	chatter	chatter	calm	mc	mj_lick_window	3	m	goofy	any	Por la cámara interior.	The interior camera. | Interior camera. | We have a camera in there.	
-mj_parking_ticket_1	chatter	chatter	calm	mc	mj_parking_ticket	1	m	goofy	any	Te dejaste el coche mal aparcado.	You left your car badly parked. | Your car is badly parked. | You parked your car very badly.	
-mj_parking_ticket_2	chatter	chatter	calm	crew	mj_parking_ticket	2	both	goofy	any	¿Me han puesto una multa?	Did I get a ticket? | A ticket? | Did I get a ticket?	
-mj_parking_ticket_3	chatter	chatter	calm	mc	mj_parking_ticket	3	m	goofy	any	Dos. Te esperan a la vuelta.	Two. They're waiting for you. | Two. Waiting for you. | Two of them. They'll wait.	
-mj_team_won_1	chatter	chatter	calm	mc	mj_team_won	1	m	goofy	any	Noticias: nuestro equipo ha ganado.	News: our team won. | Big news: our team won. | Our team won the match.	
-mj_team_won_2	chatter	chatter	calm	crew	mj_team_won	2	both	goofy	any	¡Sabía que podían!	I knew they could! | I knew it! | I knew they could do it!	
-mj_team_won_3	chatter	chatter	calm	mc	mj_team_won	3	m	goofy	any	El otro equipo no vino.	The other team didn't show up. | The other team never showed up. | The other team didn't come.	
+mj_weather_wind_1	chatter	chatter	calm	mc	mj_weather_wind	1	m	calm	any	Hace tanto viento que el becario ha volado.	It's so windy the intern blew away. | So windy the intern flew away. | The wind took the intern.	
+mj_weather_wind_2	chatter	chatter	calm	crew	mj_weather_wind	2	both	calm	any	¿Ha llegado a la órbita?	Did he reach orbit? | Did he make orbit? | Did he reach orbit?	
+mj_weather_wind_3	chatter	chatter	calm	mc	mj_weather_wind	3	m	calm	any	Casi. Le falta un propulsor.	Almost. He needs a booster. | Close. He needs a booster. | Nearly. Needs a booster.	
+mj_fan_rock_1	chatter	chatter	calm	mc	mj_fan_rock	1	m	calm	any	Os leo una carta de un fan.	I'll read you a fan letter. | Fan letter for you. | I'll read you some fan mail.	
+mj_fan_rock_2	chatter	chatter	calm	crew	mj_fan_rock	2	both	calm	any	¡Adelante!	Go ahead! | Go on! | Read it!	
+mj_fan_rock_3	chatter	chatter	calm	mc	mj_fan_rock	3	m	calm	any	Dice: ¿podéis traerme una roca?	It says: can you bring me a rock? | It says: please bring me a rock. | They write: can I have a rock?	
+mj_fan_boosters_1	chatter	chatter	calm	mc	mj_fan_boosters	1	m	calm	any	Carta de un fan: pide más propulsores.	Fan letter: they want more boosters. | Fan mail: more boosters, please. | A fan writes: they want more boosters.	
+mj_fan_boosters_2	chatter	chatter	calm	crew	mj_fan_boosters	2	both	calm	any	¡Por fin alguien con criterio!	Finally someone with taste! | Someone with taste! | Finally, good taste!	
+mj_fan_autograph_1	chatter	chatter	calm	mc	mj_fan_autograph	1	m	calm	any	Un fan pide tu autógrafo.	A fan wants your autograph. | A fan asks for your autograph. | Someone wants your signature.	
+mj_fan_autograph_2	chatter	chatter	calm	crew	mj_fan_autograph	2	both	calm	any	Lo firmo en una galleta.	I'll sign a cookie. | I'll sign a cookie. | I'll autograph a cookie.	
+mj_fan_autograph_3	chatter	chatter	calm	mc	mj_fan_autograph	3	m	calm	any	Llegará en migas.	It will arrive as crumbs. | It'll arrive as crumbs. | That arrives as crumbs.	
+mj_inv_cookies_1	chatter	chatter	calm	mc	mj_inv_cookies	1	m	calm	any	Inventario: os quedan veinte galletas.	Inventory: you have twenty cookies left. | Inventory says twenty cookies left. | Cookie count: twenty.	
+mj_inv_cookies_2	chatter	chatter	calm	crew	mj_inv_cookies	2	both	calm	any	Diecinueve.	Nineteen. | Nineteen. | Make that nineteen.	
+mj_inv_cookies_3	chatter	chatter	calm	mc	mj_inv_cookies	3	m	calm	any	Dieciocho, por el ruido.	Eighteen, by the sound of it. | Eighteen, from the sound of it. | Eighteen, I hear.	
+mj_inv_tomorrow_1	chatter	chatter	calm	mc	mj_inv_tomorrow	1	m	calm	any	¿Quién se ha comido las raciones de mañana?	Who ate tomorrow's rations? | Who ate tomorrow's food? | Tomorrow's rations are gone. Who?	
+mj_inv_tomorrow_2	chatter	chatter	calm	crew	mj_inv_tomorrow	2	both	calm	any	Las de mañana sabían mejor.	Tomorrow's tasted better. | Tomorrow's was tastier. | It tasted better than today's.	
+mj_inv_pickles_1	chatter	chatter	calm	mc	mj_inv_pickles	1	m	calm	any	Recordad: los pepinillos son para emergencias.	Remember: the pickles are for emergencies. | The pickles are for emergencies. Remember. | Reminder: pickles are emergency food.	
+mj_inv_pickles_2	chatter	chatter	calm	crew	mj_inv_pickles	2	both	calm	any	Ha sido una emergencia de hambre.	It was a hunger emergency. | It was a hunger emergency. | We had a hunger emergency.	
+mj_struts_eng_1	chatter	chatter	calm	mc	mj_struts_eng	1	m	calm	any	Ingeniería dice que no hacen falta más puntales.	Engineering says no more struts are needed. | Engineering says you don't need more struts. | No more struts, says engineering.	
+mj_struts_eng_2	chatter	chatter	calm	crew	mj_struts_eng	2	both	calm	any	Ingeniería no va sentada aquí.	Engineering isn't sitting in here. | Engineering isn't sitting up here. | Engineering isn't up here with us.	
+mj_lick_window_1	chatter	chatter	calm	mc	mj_lick_window	1	m	calm	any	Deja de lamer la ventana.	Stop licking the window. | Please stop licking the window. | Quit licking the window.	
+mj_lick_window_2	chatter	chatter	calm	crew	mj_lick_window	2	both	calm	any	¿Cómo lo sabéis?	How do you know? | How do you know that? | How can you tell?	
+mj_lick_window_3	chatter	chatter	calm	mc	mj_lick_window	3	m	calm	any	Por la cámara interior.	The interior camera. | Interior camera. | We have a camera in there.	
+mj_parking_ticket_1	chatter	chatter	calm	mc	mj_parking_ticket	1	m	calm	any	Te dejaste el coche mal aparcado.	You left your car badly parked. | Your car is badly parked. | You parked your car very badly.	
+mj_parking_ticket_2	chatter	chatter	calm	crew	mj_parking_ticket	2	both	calm	any	¿Me han puesto una multa?	Did I get a ticket? | A ticket? | Did I get a ticket?	
+mj_parking_ticket_3	chatter	chatter	calm	mc	mj_parking_ticket	3	m	calm	any	Dos. Te esperan a la vuelta.	Two. They're waiting for you. | Two. Waiting for you. | Two of them. They'll wait.	
+mj_team_won_1	chatter	chatter	calm	mc	mj_team_won	1	m	calm	any	Noticias: nuestro equipo ha ganado.	News: our team won. | Big news: our team won. | Our team won the match.	
+mj_team_won_2	chatter	chatter	calm	crew	mj_team_won	2	both	calm	any	¡Sabía que podían!	I knew they could! | I knew it! | I knew they could do it!	
+mj_team_won_3	chatter	chatter	calm	mc	mj_team_won	3	m	calm	any	El otro equipo no vino.	The other team didn't show up. | The other team never showed up. | The other team didn't come.	
 mj_quiz_orbit_1	chatter	chatter	calm	mc	mj_quiz_orbit	1	m	orbit	any	Examen sorpresa: ¿qué es una órbita?	Pop quiz: what is an orbit? | Quick quiz: what's an orbit? | Pop quiz, {vessel}: what is an orbit?	 |  | Examen sorpresa, {vessel}: ¿qué es una órbita?
 mj_quiz_orbit_2	chatter	chatter	calm	crew	mj_quiz_orbit	2	both	orbit	any	¿Caer sin acertar al suelo?	Falling and missing the ground? | Falling and missing the ground? | Falling, but missing?	
 mj_quiz_orbit_3	chatter	chatter	calm	mc	mj_quiz_orbit	3	m	orbit	any	Correcto. Diez puntos.	Correct. Ten points. | Correct. Ten points. | Right. Ten points.	
-mj_joke_school_1	chatter	chatter	calm	mc	mj_joke_school	1	m	goofy	any	¿Por qué fue el cohete al colegio?	Why did the rocket go to school? | Why did the rocket go to school? | Joke time. Why did the rocket go to school?	
-mj_joke_school_2	chatter	chatter	calm	crew	mj_joke_school	2	both	goofy	any	No sé. ¿Por qué?	Don't know. Why? | Why? | No idea. Why?	
-mj_joke_school_3	chatter	chatter	calm	mc	mj_joke_school	3	m	goofy	any	Para subir de nivel.	To level up. | To level up. | It wanted to level up.	
-mj_joke_party_1	chatter	chatter	calm	mc	mj_joke_party	1	m	goofy	any	¿Cómo se prepara una fiesta en el espacio?	How do you throw a party in space? | How do you plan a party in space? | Space party. How do you organize one?	
-mj_joke_party_2	chatter	chatter	calm	crew	mj_joke_party	2	both	goofy	any	¿Cómo?	How? | How? | Tell us.	
-mj_joke_party_3	chatter	chatter	calm	mc	mj_joke_party	3	m	goofy	any	Se planetea.	You planet. | You planet. | You planet it.	
-mj_hold_music_1	chatter	chatter	calm	mc	mj_hold_music	1	m	goofy	any	Por favor, espere. Su llamada es importante.	Please hold. Your call is important to us. | Please hold. Your call matters to us. | You are on hold. Please stay on the line.	
-mj_hold_music_2	chatter	chatter	calm	crew	mj_hold_music	2	both	goofy	any	¿Control? ¿Hola?	Control? Hello? | Control? Hello? | Hello? Control?	
-mj_hold_music_3	chatter	chatter	calm	mc	mj_hold_music	3	m	goofy	any	Era broma. Aquí estamos.	Just kidding. We're here. | Kidding. We're here. | Just joking. We're here.	
-mj_lost_sock_1	chatter	chatter	calm	mc	mj_lost_sock	1	m	goofy	any	Objetos perdidos tiene tu calcetín.	Lost and found has your sock. | Lost and found has your sock. | Your sock turned up at lost and found.	
-mj_lost_sock_2	chatter	chatter	calm	crew	mj_lost_sock	2	both	goofy	any	¿Cómo ha llegado ahí?	How did it get there? | How did it get down there? | How?	
-mj_lost_sock_3	chatter	chatter	calm	mc	mj_lost_sock	3	m	goofy	any	Es un misterio de la ingeniería.	It's an engineering mystery. | Engineering mystery. | Nobody knows. Engineering is baffled.	
-mj_tidy_1	chatter	chatter	calm	mc	mj_tidy	1	m	goofy	any	Recordad limpiar antes de volver.	Remember to tidy up before you come back. | Tidy up before you come back. | Clean up before coming home.	
-mj_tidy_2	chatter	chatter	calm	crew	mj_tidy	2	both	goofy	any	¿Las migas también?	The crumbs too? | Crumbs too? | Even the crumbs?	
-mj_tidy_3	chatter	chatter	calm	mc	mj_tidy	3	m	goofy	any	Sobre todo las migas.	Especially the crumbs. | Crumbs most of all. | Especially those.	
+mj_joke_school_1	chatter	chatter	calm	mc	mj_joke_school	1	m	calm	any	¿Por qué fue el cohete al colegio?	Why did the rocket go to school? | Why did the rocket go to school? | Joke time. Why did the rocket go to school?	
+mj_joke_school_2	chatter	chatter	calm	crew	mj_joke_school	2	both	calm	any	No sé. ¿Por qué?	Don't know. Why? | Why? | No idea. Why?	
+mj_joke_school_3	chatter	chatter	calm	mc	mj_joke_school	3	m	calm	any	Para subir de nivel.	To level up. | To level up. | It wanted to level up.	
+mj_joke_party_1	chatter	chatter	calm	mc	mj_joke_party	1	m	calm	any	¿Cómo se prepara una fiesta en el espacio?	How do you throw a party in space? | How do you plan a party in space? | Space party. How do you organize one?	
+mj_joke_party_2	chatter	chatter	calm	crew	mj_joke_party	2	both	calm	any	¿Cómo?	How? | How? | Tell us.	
+mj_joke_party_3	chatter	chatter	calm	mc	mj_joke_party	3	m	calm	any	Se planetea.	You planet. | You planet. | You planet it.	
+mj_hold_music_1	chatter	chatter	calm	mc	mj_hold_music	1	m	calm	any	Por favor, espere. Su llamada es importante.	Please hold. Your call is important to us. | Please hold. Your call matters to us. | You are on hold. Please stay on the line.	
+mj_hold_music_2	chatter	chatter	calm	crew	mj_hold_music	2	both	calm	any	¿Control? ¿Hola?	Control? Hello? | Control? Hello? | Hello? Control?	
+mj_hold_music_3	chatter	chatter	calm	mc	mj_hold_music	3	m	calm	any	Era broma. Aquí estamos.	Just kidding. We're here. | Kidding. We're here. | Just joking. We're here.	
+mj_lost_sock_1	chatter	chatter	calm	mc	mj_lost_sock	1	m	calm	any	Objetos perdidos tiene tu calcetín.	Lost and found has your sock. | Lost and found has your sock. | Your sock turned up at lost and found.	
+mj_lost_sock_2	chatter	chatter	calm	crew	mj_lost_sock	2	both	calm	any	¿Cómo ha llegado ahí?	How did it get there? | How did it get down there? | How?	
+mj_lost_sock_3	chatter	chatter	calm	mc	mj_lost_sock	3	m	calm	any	Es un misterio de la ingeniería.	It's an engineering mystery. | Engineering mystery. | Nobody knows. Engineering is baffled.	
+mj_tidy_1	chatter	chatter	calm	mc	mj_tidy	1	m	calm	any	Recordad limpiar antes de volver.	Remember to tidy up before you come back. | Tidy up before you come back. | Clean up before coming home.	
+mj_tidy_2	chatter	chatter	calm	crew	mj_tidy	2	both	calm	any	¿Las migas también?	The crumbs too? | Crumbs too? | Even the crumbs?	
+mj_tidy_3	chatter	chatter	calm	mc	mj_tidy	3	m	calm	any	Sobre todo las migas.	Especially the crumbs. | Crumbs most of all. | Especially those.	
 mj_nice_landing_1	chatter	chatter	calm	mc	mj_nice_landing	1	m	landed	any	Bonito aterrizaje. Casi todo de una pieza.	Nice landing. Mostly in one piece. | Nice landing. Mostly one piece. | Good landing. Most of you is still there.	
 mj_nice_landing_2	chatter	chatter	calm	crew	mj_nice_landing	2	both	landed	any	Casi todo cuenta.	Mostly counts. | Mostly is enough. | Mostly counts.	
 mj_pretty_rock_1	chatter	chatter	calm	mc	mj_pretty_rock	1	m	landed	any	Los científicos piden una roca bonita.	The scientists want a pretty rock. | Science wants a pretty rock. | The scientists asked for a nice rock.	
@@ -108,18 +108,18 @@ mj_falling_style_2	chatter	chatter	calm	crew	mj_falling_style	2	both	orbit	any	S
 mj_coast_cookies_1	chatter	chatter	calm	mc	mj_coast_cookies	1	m	coast	any	Os quedan muchos días de viaje.	You have many days of travel left. | Many days of travel left. | You still have a long way to go.	
 mj_coast_cookies_2	chatter	chatter	calm	crew	mj_coast_cookies	2	both	coast	any	¿Cuántas galletas por día?	How many cookies per day? | How many cookies a day? | And cookies per day?	
 mj_coast_cookies_3	chatter	chatter	calm	mc	mj_coast_cookies	3	m	coast	any	Media.	Half of one. | Half a cookie. | One half.	
-mj_pink_paint_1	chatter	chatter	calm	mc	mj_pink_paint	1	m	goofy	any	Marketing quiere pintar el cohete de rosa.	Marketing wants to paint the rocket pink. | Marketing wants a pink rocket. | Marketing asks to paint the rocket pink.	
-mj_pink_paint_2	chatter	chatter	calm	crew	mj_pink_paint	2	both	goofy	any	¿Con propulsores rosas?	With pink boosters? | Pink boosters too? | Even the boosters?	
-mj_pink_paint_3	chatter	chatter	calm	mc	mj_pink_paint	3	m	goofy	any	Sobre todo los propulsores.	Especially the boosters. | The boosters most of all. | Boosters first.	
-mj_award_1	chatter	chatter	calm	mc	mj_award	1	m	goofy	any	Habéis ganado el premio al vuelo del mes.	You won flight of the month. | You're flight of the month. | Flight of the month goes to you.	
-mj_award_2	chatter	chatter	calm	crew	mj_award	2	both	goofy	any	¿Había más vuelos?	Were there other flights? | Were there other flights? | Any other flights?	
-mj_award_3	chatter	chatter	calm	mc	mj_award	3	m	goofy	any	No. Pero el trofeo es bonito.	No. But the trophy is nice. | No. The trophy is nice, though. | None. Nice trophy, though.	
-mj_plaque_1	chatter	chatter	calm	mc	mj_plaque	1	m	goofy	any	Hemos escrito mal tu nombre en la placa.	We misspelled your name on the plaque. | We spelled your name wrong on the plaque. | The plaque has a typo. Your name.	
-mj_plaque_2	chatter	chatter	calm	crew	mj_plaque	2	both	goofy	any	¿Muy mal?	How badly? | How wrong? | How bad?	
-mj_plaque_3	chatter	chatter	calm	mc	mj_plaque	3	m	goofy	any	Pone Galleta.	It says Cookie. | It says Cookie. | It reads Cookie.	
-mj_teasing_snore_1	chatter	chatter	calm	mc	mj_teasing_snore	1	m	goofy	any	Anoche roncaste por la radio.	Last night you snored over the radio. | You snored on the radio last night. | We heard you snoring on the radio.	
-mj_teasing_snore_2	chatter	chatter	calm	crew	mj_teasing_snore	2	both	goofy	any	Yo no ronco.	I don't snore. | I do not snore. | That wasn't me.	
-mj_teasing_snore_3	chatter	chatter	calm	mc	mj_teasing_snore	3	m	goofy	any	Lo tenemos grabado.	We have it on tape. | It's recorded. | We have the recording.	
-mj_crayons_1	chatter	chatter	calm	mc	mj_crayons	1	m	goofy	any	¿Quién ha dibujado en el manual de vuelo?	Who drew in the flight manual? | Who drew in the flight manual? | Someone colored in the flight manual.	
-mj_crayons_2	chatter	chatter	calm	crew	mj_crayons	2	both	goofy	any	Lo hemos mejorado.	We improved it. | We made it better. | Improvements.	
-mj_crayons_3	chatter	chatter	calm	mc	mj_crayons	3	m	goofy	any	Ahora tiene más propulsores.	Now it has more boosters. | It has more boosters now. | Now it has extra boosters.	
+mj_pink_paint_1	chatter	chatter	calm	mc	mj_pink_paint	1	m	calm	any	Marketing quiere pintar el cohete de rosa.	Marketing wants to paint the rocket pink. | Marketing wants a pink rocket. | Marketing asks to paint the rocket pink.	
+mj_pink_paint_2	chatter	chatter	calm	crew	mj_pink_paint	2	both	calm	any	¿Con propulsores rosas?	With pink boosters? | Pink boosters too? | Even the boosters?	
+mj_pink_paint_3	chatter	chatter	calm	mc	mj_pink_paint	3	m	calm	any	Sobre todo los propulsores.	Especially the boosters. | The boosters most of all. | Boosters first.	
+mj_award_1	chatter	chatter	calm	mc	mj_award	1	m	calm	any	Habéis ganado el premio al vuelo del mes.	You won flight of the month. | You're flight of the month. | Flight of the month goes to you.	
+mj_award_2	chatter	chatter	calm	crew	mj_award	2	both	calm	any	¿Había más vuelos?	Were there other flights? | Were there other flights? | Any other flights?	
+mj_award_3	chatter	chatter	calm	mc	mj_award	3	m	calm	any	No. Pero el trofeo es bonito.	No. But the trophy is nice. | No. The trophy is nice, though. | None. Nice trophy, though.	
+mj_plaque_1	chatter	chatter	calm	mc	mj_plaque	1	m	calm	any	Hemos escrito mal tu nombre en la placa.	We misspelled your name on the plaque. | We spelled your name wrong on the plaque. | The plaque has a typo. Your name.	
+mj_plaque_2	chatter	chatter	calm	crew	mj_plaque	2	both	calm	any	¿Muy mal?	How badly? | How wrong? | How bad?	
+mj_plaque_3	chatter	chatter	calm	mc	mj_plaque	3	m	calm	any	Pone Galleta.	It says Cookie. | It says Cookie. | It reads Cookie.	
+mj_teasing_snore_1	chatter	chatter	calm	mc	mj_teasing_snore	1	m	calm	any	Anoche roncaste por la radio.	Last night you snored over the radio. | You snored on the radio last night. | We heard you snoring on the radio.	
+mj_teasing_snore_2	chatter	chatter	calm	crew	mj_teasing_snore	2	both	calm	any	Yo no ronco.	I don't snore. | I do not snore. | That wasn't me.	
+mj_teasing_snore_3	chatter	chatter	calm	mc	mj_teasing_snore	3	m	calm	any	Lo tenemos grabado.	We have it on tape. | It's recorded. | We have the recording.	
+mj_crayons_1	chatter	chatter	calm	mc	mj_crayons	1	m	calm	any	¿Quién ha dibujado en el manual de vuelo?	Who drew in the flight manual? | Who drew in the flight manual? | Someone colored in the flight manual.	
+mj_crayons_2	chatter	chatter	calm	crew	mj_crayons	2	both	calm	any	Lo hemos mejorado.	We improved it. | We made it better. | Improvements.	
+mj_crayons_3	chatter	chatter	calm	mc	mj_crayons	3	m	calm	any	Ahora tiene más propulsores.	Now it has more boosters. | It has more boosters now. | Now it has extra boosters.	

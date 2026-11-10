@@ -1,5 +1,5 @@
 // Runtime voice: science talk. After an experiment the kerbal who did it reports and Mission Control answers, from
-// Phrases/Runtime/science_talk.tsv (kind science_talk). The lines hold real values: the experiment, the biome, the
+// Phrases/Crew/science_talk.tsv (trigger science_talk). The lines hold real values: the experiment, the biome, the
 // science points, what the thermometer, barometer or gravity scanner reads, the science of this flight. The crew
 // science scenes have no recording, so without Piper an experiment gets no talk.
 using System;
@@ -35,13 +35,14 @@ namespace Lonapse
                 sciFlight = 0;
                 expRuns.Clear();
             }
-            string topic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId) ?? "any";
+            string topic = RuntimeLines.ExperimentId(subjectId).ToLowerInvariant();
             int n;
             expRuns.TryGetValue(topic, out n);
             expRuns[topic] = n + 1;
             double pts, left;
             bool first;
             if (SciencePoints(subjectId, dataAmount, out pts, out left, out first)) sciFlight += pts;
+            SnapshotProbeScience(subjectId, dataAmount);
         }
 
         /// <summary>The science points of the data, what is left of the subject after it, and whether it is the first
@@ -87,7 +88,7 @@ namespace Lonapse
             if (sciFlight >= 0.05) nums["sci_flight"] = sciFlight;
             if (!double.IsNaN(sciSentNow)) nums["data_sent"] = sciSentNow;
             int runs;
-            string topic = RuntimeLines.ScienceTopic(PhraseClips.runtimeTemplates, subjectId) ?? "any";
+            string topic = RuntimeLines.ExperimentId(subjectId).ToLowerInvariant();
             if (expRuns.TryGetValue(topic, out runs)) nums["exp_runs"] = runs;
             Vessel v = ActiveVessel;
             if (v == null) return;
@@ -153,6 +154,7 @@ namespace Lonapse
             var spanish = new List<string>();
             var crewLine = new List<bool>();
             bool saidSci = false;
+            RuntimeLines.ActorConditions(nums, job, null);
             for (int i = 0; i < talk.Count; i++)
             {
                 bool crew = RuntimeLines.TalkCrewLine(talk, i);
@@ -163,7 +165,7 @@ namespace Lonapse
                 if (talk[i].Versions[vi][1].IndexOf("{sci}", StringComparison.Ordinal) >= 0) saidSci = true;
                 var e = new PhraseEntry
                 {
-                    ClipKey = talk[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = "chatter", Band = "calm",
+                    ClipKey = talk[i].Id + "_" + (++runtimeAsked), Event = "chatter", Severity = talk[i].Dialogue != null ? talk[i].Dialogue.Get("severity") : "chatter", Band = talk[i].Dialogue != null ? talk[i].Dialogue.Get("band") : "calm",
                     Role = crew ? "crew" : "mc", Scene = talk[0].Id, Seq = i + 1, Gender = crew ? "both" : "m", Phase = "any", Cause = "any",
                     Spanish = RuntimeSpeech.Unmarked(sp), LonapseText = RuntimeSpeech.Spoken(sp), English = en,
                 };
@@ -184,7 +186,7 @@ namespace Lonapse
             for (int i = 0; i < entries.Count; i++)
             {
                 int idx = i;
-                Voice.Request(crewLine[i] ? KindFor(k) : "mc", spanish[i], r =>
+                Voice.Request(RuntimeDelivery.KindFor(crewLine[i] ? KindFor(k) : "mc", entries[i].Band, entries[i].Severity, entries[i].Event), spanish[i], r =>
                 {
                     if (r.clip == null) failed = true;
                     clips[idx] = r.clip;
@@ -287,7 +289,7 @@ namespace Lonapse
             // without a link too: then the kerbals talk about it among themselves
             bool reach = !McUnreachable && host.signal.connected;
             KerbalVoice k = ScienceKerbal();
-            if (k == null || RuntimeVoice.Missing(KindFor(k)) != null || (reach && RuntimeVoice.Missing("mc") != null)) return false;
+            if (!host.probeMode && (k == null || RuntimeVoice.Missing(KindFor(k)) != null || (reach && RuntimeVoice.Missing("mc") != null))) return false;
             // a batch that is waiting for the talk before it keeps growing, so it can be long
             if (sciBatch == null) sciBatch = new SciBatch { first = clock, body = bodyName };
             sciBatch.subjects.Add(subjectId);
@@ -332,6 +334,7 @@ namespace Lonapse
         public void NoteTransmitted(string subjectId)
         {
             if (sciBatch != null && subjectId != null) sciBatch.sent.Add(subjectId);
+            ProbeScienceReceived(subjectId);
         }
 
         static bool ResultsDialogOpen
@@ -387,6 +390,7 @@ namespace Lonapse
 
         void CloseBatch(SciBatch b)
         {
+            if (host.probeMode) { ProbeScience(b.subjects[0], b.amounts[0], b.body, b); return; }
             if (b.subjects.Count == 1)
             {
                 if (!RuntimeScienceTakeover(b.subjects[0], b.amounts[0], b.body))
@@ -509,7 +513,7 @@ namespace Lonapse
                     if (!first) allFirst = false;
                 }
                 else allFirst = false;
-                string[] w = RuntimeLines.ExperimentWords(PhraseClips.runtimeTemplates, RuntimeLines.ExperimentId(b.subjects[i]));
+                string[] w = ExperimentLabels(b.subjects[i]);
                 if (!en.Contains(w[1])) { es.Add(w[0]); en.Add(w[1]); }
             }
             nums.Remove("sci");

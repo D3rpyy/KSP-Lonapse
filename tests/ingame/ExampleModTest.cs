@@ -171,9 +171,9 @@ namespace ExampleMod
             try
             {
                 File.WriteAllLines(ReloadFile(), new[] {
-                    "id\tkind\twhen\tspanish\tenglish",
-                    "rt_examplemod_reload\tevent\ton=" + ReloadEvent + "\tLa recarga funciona.\tThe reload works.",
-                    "rt_chat_examplemod_reloadsolo_1\tchat\ton=" + ReloadEvent + "\tLa recarga funciona.\tThe reload works." },
+                    "id\tline\tscene\tseq\trole\ttrigger\tchannel\ton\twhen\tspanish\tenglish",
+                    "examplemod_reload\texamplemod_reload\texamplemod_reload\t1\tmc\tevent\tradio\t" + ReloadEvent + "\t\tLa recarga funciona.\tThe reload works.",
+                    "chat_examplemod_reloadsolo_1\tchat_examplemod_reloadsolo_1\tchat_examplemod_reloadsolo\t1\tcrew\tchat\tauto\t" + ReloadEvent + "\t\tLa recarga funciona.\tThe reload works." },
                     new System.Text.UTF8Encoding(false));
                 Check("before the reload there are no lines yet", !LonapseWrapper.HasLines(ReloadEvent));
                 Note("now press Reload lines in the Lonapse Mods tab, then 12");

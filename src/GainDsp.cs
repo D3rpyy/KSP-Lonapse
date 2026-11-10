@@ -1,5 +1,5 @@
-// A plain gain stage on the audio thread for the sound effect channels. A source volume cannot pass 1,
-// so a slider above its default (80%) boosts here. Linear up to 0.8, then a smooth knee that never passes 1,
+// Final output gain on the audio thread for every channel. A source volume cannot pass 1,
+// so extra slider gain boosts here. Linear up to 0.8, then a smooth knee that never passes 1,
 // the same curve as VoiceDsp. No allocation in OnAudioFilterRead.
 using System;
 using UnityEngine;

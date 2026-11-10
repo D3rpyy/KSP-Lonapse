@@ -5,7 +5,7 @@ namespace Lonapse
 {
     /// <summary>
     /// Phase names as used in the `phase` column of the phrase TSV files, plus the matching rules.
-    /// serious = launch, ascent, reentry, descent. goofy = prelaunch, orbit, coast, landed.
+    /// serious = launch, ascent, reentry, descent. idle = prelaunch, orbit, coast, landed.
     /// blackout is neither: it is set by BlackoutMachine, never by the classifier.
     /// </summary>
     public static class FlightPhase
@@ -21,9 +21,14 @@ namespace Lonapse
         public const string Landed = "landed";
         public const string Blackout = "blackout";
         public const string Serious = "serious";
-        public const string Goofy = "goofy";
+        public const string Idle = "idle";
+        // Compatibility for mods using the previous phase-group names.
+        public const string Calm = Idle;
+        public const string Goofy = Idle;
+        public static string Normalize(string phase) { return phase == "calm" || phase == "goofy" ? Idle : phase; }
+        public static bool IsGoofy(string phase) { return IsCalm(phase); }
 
-        /// <summary>The concrete phases a vessel can be in (no any/serious/goofy groups).</summary>
+        /// <summary>The concrete phases a vessel can be in (no any/serious/idle groups).</summary>
         public static readonly string[] All = { Prelaunch, Launch, Ascent, Orbit, Coast, Reentry, Descent, Landed, Blackout };
 
         public const string GenericBody = "generic";
@@ -40,7 +45,8 @@ namespace Lonapse
             return phase == Launch || phase == Ascent || phase == Reentry || phase == Descent;
         }
 
-        public static bool IsGoofy(string phase)
+        public static bool IsCalm(string phase) { return IsIdle(phase); }
+        public static bool IsIdle(string phase)
         {
             return phase == Prelaunch || phase == Orbit || phase == Coast || phase == Landed;
         }
@@ -48,15 +54,16 @@ namespace Lonapse
         /// <summary>
         /// True when a phrase row tagged rowPhase may play in the current phase.
         /// Empty or null rowPhase counts as any. "any" matches everything, blackout included.
-        /// "serious" and "goofy" match their groups and never blackout. A concrete phase matches only itself.
+        /// "serious" and "idle" match their groups and never blackout. A concrete phase matches only itself.
         /// A null or empty current phase only matches "any".
         /// </summary>
         public static bool Matches(string rowPhase, string current)
         {
+            rowPhase = Normalize(rowPhase); current = Normalize(current);
             if (string.IsNullOrEmpty(rowPhase) || rowPhase == Any) return true;
             if (string.IsNullOrEmpty(current)) return false;
             if (rowPhase == Serious) return IsSerious(current);
-            if (rowPhase == Goofy) return IsGoofy(current);
+            if (rowPhase == Idle) return IsIdle(current);
             return rowPhase == current;
         }
 

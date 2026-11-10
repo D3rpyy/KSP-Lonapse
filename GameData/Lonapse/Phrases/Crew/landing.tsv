@@ -1,0 +1,70 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+tu_td_01	tu_td_01	tu_td_01	1	kerbal_a	flight.touchdown	radio				0	¿Ya está? ¿Hemos llegado?	Is that it? Are we there?	none	chatter	both	any	any	tourist	any	any	any						
+tu_td_02	tu_td_02	tu_td_02	1	kerbal_a	flight.touchdown	radio				0	¡Suelo! ¡Suelo de verdad!	Ground! Real ground!	none	chatter	both	any	any	tourist	any	any	any						
+tu_sd_01	tu_sd_01	tu_sd_01	1	kerbal_a	flight.splashdown	radio				0	¡Agua! ¿Alguien sabe nadar?	Water! Can anyone swim?	none	chatter	both	any	any	tourist	any	any	any						
+tu_sd_02	tu_sd_02	tu_sd_02	1	kerbal_a	flight.splashdown	radio				0	Flotamos. Como un barco muy caro.	We're floating. Like a very expensive boat.	none	chatter	both	any	any	tourist	any	any	any						
+land	land	land	1	mission_control	land	radio			vspeed_ms>=2	0	Altura {height_m} metros, bajando a {vspeed_ms} metros por segundo.	Height {height_m} meters, coming down at {vspeed_ms} m/s.	calm	chatter	both	any	any	any	any	any	any						
+land__v02	land	land	1	mission_control	land	radio			vspeed_ms>=2	0	Altura {height_m} metros. Velocidad de bajada {vspeed_ms} metros por segundo.	Height {height_m} meters. Coming down at {vspeed_ms} m/s.	calm	chatter	both	any	any	any	any	any	any						
+land__v03	land	land	1	mission_control	land	radio			vspeed_ms>=2	0	Bajando a {vspeed_ms} metros por segundo. Quedan {height_m} metros.	Coming down at {vspeed_ms} m/s. {height_m} meters to go.	calm	chatter	both	any	any	any	any	any	any						
+land_fast	land_fast	land_fast	1	mission_control	land	radio			vspeed_ms>=30	0	Bajáis a {vspeed_ms} metros por segundo. Eso es mucho. Frenad.	Coming down at {vspeed_ms} m/s. That's a lot. Brake.	calm	chatter	both	any	any	any	any	any	any						
+land_fast__v02	land_fast	land_fast	1	mission_control	land	radio			vspeed_ms>=30	0	{vspeed_ms} metros por segundo hacia abajo. Demasiado rápido. Motores ya.	{vspeed_ms} m/s down. Too fast. Engines now.	calm	chatter	both	any	any	any	any	any	any						
+land_fast__v03	land_fast	land_fast	1	mission_control	land	radio			vspeed_ms>=30	0	Bajáis a {vspeed_ms} metros por segundo. Eso no es un aterrizaje, es un choque. Frenad.	Coming down at {vspeed_ms} m/s. That's not a landing, that's a crash. Brake.	calm	chatter	both	any	any	any	any	any	any						
+land_body	land_body	land_body	1	mission_control	land	radio			height_m>=2	0	Faltan {height_m} metros para {body}. Suerte.	{height_m} meters to {body}. Good luck.	calm	chatter	both	any	any	any	any	any	any						
+land_body__v02	land_body	land_body	1	mission_control	land	radio			height_m>=2	0	Quedan {height_m} metros hasta {body}. Con suavidad.	{height_m} meters to {body}. Gently.	calm	chatter	both	any	any	any	any	any	any						
+land_legs	land_legs	land_legs	1	mission_control	land	radio			height_m>=2 has_legs=1	0	{body} a {height_m} metros. Patas fuera.	{body} is {height_m} meters below. Legs out.	calm	chatter	both	any	any	any	any	any	any						
+land_slow	land_slow	land_slow	1	mission_control	land	radio			vspeed_ms>=2 vspeed_ms<6	0	Bajáis a {vspeed_ms} metros por segundo. Perfecto, así.	Coming down at {vspeed_ms} m/s. Perfect, like that.	calm	chatter	both	any	any	any	any	any	any						
+land_slow__v02	land_slow	land_slow	1	mission_control	land	radio			vspeed_ms>=2 vspeed_ms<6	0	Descenso suave. {height_m} metros y bajando despacio.	Gentle descent. {height_m} meters and coming down slowly.	calm	chatter	both	any	any	any	any	any	any						
+land_vessel	land_vessel	land_vessel	1	mission_control	land	radio			height_m>=2	0	{vessel}, quedan {height_m} metros. Os estamos mirando todos.	{vessel}, {height_m} meters to go. We're all watching.	calm	chatter	both	any	any	any	any	any	any						
+land_mid	land_mid	land_mid	1	mission_control	land	radio			vspeed_ms>=6 vspeed_ms<30	0	{vspeed_ms} metros por segundo. Id frenando.	{vspeed_ms} m/s. Start braking.	calm	chatter	both	any	any	any	any	any	any						
+land_mid__v02	land_mid	land_mid	1	mission_control	land	radio			vspeed_ms>=6 vspeed_ms<30	0	Bajando a {vspeed_ms} metros por segundo. Un poco más de motor.	Coming down at {vspeed_ms} m/s. A bit more engine.	calm	chatter	both	any	any	any	any	any	any						
+touchdown_01	touchdown_01	touchdown_01	1	mission_control	flight.touchdown	radio				0	Habéis tocado suelo. Todo bien.	You're down. All good.	none	chatter	m	any	any	any	any	any	any						
+touchdown_01__v02	touchdown_01	touchdown_01	1	mission_control	flight.touchdown	radio				0	Habéis bajado bien, {vessel}.	Down safely, {vessel}.	none	chatter	m	any	any	any	any	any	any						
+touchdown_02	touchdown_02	touchdown_02	1	kerbal_a	flight.touchdown	radio				0	Estamos en tierra.	We're on the ground.	none	chatter	both	any	any	any	any	any	any						
+splashdown_01	splashdown_01	splashdown_01	1	mission_control	flight.splashdown	radio				0	Amerizaje confirmado.	Splashdown confirmed.	none	chatter	m	any	any	any	any	any	any						
+splashdown_02	splashdown_02	splashdown_02	1	kerbal_a	flight.splashdown	radio				0	Estamos en el agua.	We're in the water.	none	chatter	both	any	any	any	any	any	any						
+touchdown_03	touchdown_03	touchdown_03	1	kerbal_a	flight.touchdown	radio				0	Suave como una pluma.	Soft as a feather.	none	chatter	both	any	any	any	any	any	any						
+touchdown_s1_1	touchdown_s1_1	touchdown_s1	1	kerbal_a	flight.touchdown	radio				0	¡Contacto!	Contact!	none	chatter	both	any	any	any	any	any	any						
+touchdown_s1_2	touchdown_s1_2	touchdown_s1	2	mission_control	flight.touchdown	radio				0	Contacto confirmado. Bienvenidos.	Contact confirmed. Welcome.	none	chatter	m	any	any	any	any	any	any						
+touchdown_s1_2__v02	touchdown_s1_2	touchdown_s1	2	mission_control	flight.touchdown	radio				0	Confirmado. Bienvenidos a {here}.	Confirmed. Welcome to {here}.	none	chatter	m	any	any	any	any	any	any						
+splashdown_03	splashdown_03	splashdown_03	1	kerbal_a	flight.splashdown	radio				0	Flotamos bien.	We're floating fine.	none	chatter	both	any	any	any	any	any	any						
+re_td_s1_1	re_td_s1_1	re_td_s1	1	kerbal_a	flight.touchdown	radio				0	Contacto con el suelo.	Ground contact.	none	chatter	both	landed	any	any	any	any	any						
+re_td_s1_2	re_td_s1_2	re_td_s1	2	mission_control	flight.touchdown	radio				0	Confirmado. Buen aterrizaje.	Confirmed. Good landing.	none	chatter	m	landed	any	any	any	any	any						
+re_td_s2_1	re_td_s2_1	re_td_s2	1	mission_control	flight.touchdown	radio				0	Aterrizaje confirmado.	Touchdown confirmed.	none	chatter	m	landed	any	any	any	any	any						
+re_td_s2_2	re_td_s2_2	re_td_s2	2	kerbal_a	flight.touchdown	radio				0	Tripulación bien. Asegurando la nave.	Crew fine. Securing the ship.	none	chatter	both	landed	any	any	any	any	any						
+re_td_s2_2__v02	re_td_s2_2	re_td_s2	2	kerbal_a	flight.touchdown	radio				0	Tripulación bien. Asegurando la {vessel}.	Crew okay. Securing {vessel}.	none	chatter	both	landed	any	any	any	any	any						
+re_td_s3_1	re_td_s3_1	re_td_s3	1	kerbal_a	flight.touchdown	radio				0	Estamos abajo. Todo estable.	We're down. All stable.	none	chatter	both	landed	any	any	any	any	any						
+re_td_s3_2	re_td_s3_2	re_td_s3	2	mission_control	flight.touchdown	radio				0	Recibido. Buen trabajo, equipo.	Copy. Good work, team.	none	chatter	m	landed	any	any	any	any	any						
+re_td_s4_1	re_td_s4_1	re_td_s4	1	mission_control	flight.touchdown	radio				0	Os vemos en tierra.	We see you on the ground.	none	chatter	m	landed	any	any	any	any	any						
+re_td_s4_2	re_td_s4_2	re_td_s4	2	kerbal_a	flight.touchdown	radio				0	Confirmado, nave en pie.	Confirmed, ship upright.	none	chatter	both	landed	any	any	any	any	any						
+re_td_01	re_td_01	re_td_01	1	kerbal_a	flight.touchdown	radio				0	Aterrizados.	Landed.	none	chatter	both	landed	any	any	any	any	any						
+re_td_02	re_td_02	re_td_02	1	mission_control	flight.touchdown	radio				0	Contacto. Apagad los sistemas.	Contact. Power down the systems.	none	chatter	m	landed	any	any	any	any	any						
+re_sd_s1_1	re_sd_s1_1	re_sd_s1	1	kerbal_a	flight.splashdown	radio				0	Amerizaje.	Splashdown.	none	chatter	both	landed	any	any	any	any	any						
+re_sd_s1_2	re_sd_s1_2	re_sd_s1	2	mission_control	flight.splashdown	radio				0	Confirmado. Rescate en camino.	Confirmed. Recovery on the way.	none	chatter	m	landed	any	any	any	any	any						
+re_sd_s2_1	re_sd_s2_1	re_sd_s2	1	mission_control	flight.splashdown	radio				0	Os vemos en el agua.	We see you in the water.	none	chatter	m	landed	any	any	any	any	any						
+re_sd_s2_2	re_sd_s2_2	re_sd_s2	2	kerbal_a	flight.splashdown	radio				0	Flotando, tripulación bien.	Floating, crew fine.	none	chatter	both	landed	any	any	any	any	any						
+re_sd_s3_1	re_sd_s3_1	re_sd_s3	1	kerbal_a	flight.splashdown	radio				0	Agua tranquila aquí.	Calm water here.	none	chatter	both	landed	any	any	any	any	any						
+re_sd_s3_2	re_sd_s3_2	re_sd_s3	2	mission_control	flight.splashdown	radio				0	Recibido. Llegan los barcos.	Copy. Ships are coming.	none	chatter	m	landed	any	any	any	any	any						
+re_sd_01	re_sd_01	re_sd_01	1	kerbal_a	flight.splashdown	radio				0	Estamos a flote.	We're afloat.	none	chatter	both	landed	any	any	any	any	any						
+re_sd_02	re_sd_02	re_sd_02	1	mission_control	flight.splashdown	radio				0	Amerizaje limpio.	Clean splashdown.	none	chatter	m	landed	any	any	any	any	any						
+em_072	em_072	em_072	1	kerbal_a	flight.touchdown	radio				0	¡Tocamos suelo!	Ground contact!	none	chatter	both	any	any	any	any	any	any						
+em_073_1	em_073_1	em_073	1	kerbal_a	flight.touchdown	radio				0	En el suelo. Todos bien.	On the ground. All fine.	none	chatter	both	any	any	any	any	any	any						
+em_073_1__v02	em_073_1	em_073	1	kerbal_a	flight.touchdown	radio				0	En el suelo de {here}. Todos bien.	Down on {here}. All good.	none	chatter	both	any	any	any	any	any	any						
+em_073_2	em_073_2	em_073	2	mission_control	flight.touchdown	radio				0	Recibido. Bienvenidos.	Copy. Welcome.	none	chatter	m	any	any	any	any	any	any						
+em_073_2__v02	em_073_2	em_073	2	mission_control	flight.touchdown	radio				0	Recibido. Bienvenidos a {here}.	Copy. Welcome to {here}.	none	chatter	m	any	any	any	any	any	any						
+em_074_1	em_074_1	em_074	1	kerbal_a	flight.touchdown	radio				0	Aterrizaje completado.	Landing complete.	none	chatter	both	any	any	any	any	any	any						
+em_074_2	em_074_2	em_074	2	mission_control	flight.touchdown	radio				0	Confirmado. Buen trabajo.	Confirmed. Good work.	none	chatter	m	any	any	any	any	any	any						
+em_075_1	em_075_1	em_075	1	mission_control	flight.touchdown	radio				0	¡Aterrizaje confirmado! Aquí aplauden todos.	Landing confirmed! Everyone here is clapping.	none	chatter	m	any	any	any	any	any	any						
+em_075_2	em_075_2	em_075	2	kerbal_a	flight.touchdown	radio				0	Que sigan. Nos lo hemos ganado.	Let them. We earned it.	none	chatter	both	any	any	any	any	any	any						
+em_076_1	em_076_1	em_076	1	kerbal_a	flight.touchdown	radio				0	Estamos parados. Creo.	We've stopped. I think.	none	chatter	both	any	any	any	any	any	any						
+em_076_2	em_076_2	em_076	2	mission_control	flight.touchdown	radio				0	Parados del todo. Bien hecho.	Fully stopped. Well done.	none	chatter	m	any	any	any	any	any	any						
+em_077	em_077	em_077	1	kerbal_a	flight.touchdown	radio				0	Qué bien se está en tierra firme.	Solid ground feels so good.	none	chatter	both	any	any	any	any	any	any						
+em_078	em_078	em_078	1	kerbal_a	flight.splashdown	radio				0	¡Al agua!	Into the water!	none	chatter	both	any	any	any	any	any	any						
+em_079_1	em_079_1	em_079	1	kerbal_a	flight.splashdown	radio				0	Amerizaje. Todos bien.	Splashdown. All fine.	none	chatter	both	any	any	any	any	any	any						
+em_079_2	em_079_2	em_079	2	mission_control	flight.splashdown	radio				0	Recibido. Ya va el barco.	Copy. The boat is on its way.	none	chatter	m	any	any	any	any	any	any						
+em_080_1	em_080_1	em_080	1	mission_control	flight.splashdown	radio				0	Amerizaje confirmado. ¿Flotáis?	Splashdown confirmed. Are you floating?	none	chatter	m	any	any	any	any	any	any						
+em_080_2	em_080_2	em_080	2	kerbal_a	flight.splashdown	radio				0	Flotamos. Y nos mareamos un poco.	We're floating. And a bit seasick.	none	chatter	both	any	any	any	any	any	any						
+em_081_1	em_081_1	em_081	1	kerbal_a	flight.splashdown	radio				0	Qué chapuzón.	What a splash.	none	chatter	both	any	any	any	any	any	any						
+em_081_2	em_081_2	em_081	2	mission_control	flight.splashdown	radio				0	Recibido. Bienvenidos a casa.	Copy. Welcome home.	none	chatter	m	any	any	any	any	any	any						
+em_082	em_082	em_082	1	kerbal_a	flight.splashdown	radio				0	Agua por todas partes.	Water everywhere.	none	chatter	both	any	any	any	any	any	any						
+em_083_1	em_083_1	em_083	1	kerbal_a	flight.splashdown	radio				0	¡Plof! Estamos en el agua.	Splash! We're in the water.	none	chatter	both	any	any	any	any	any	any						
+em_083_2	em_083_2	em_083	2	mission_control	flight.splashdown	radio				0	Confirmado. No abráis la escotilla todavía.	Confirmed. Don't open the hatch yet.	none	chatter	m	any	any	any	any	any	any						

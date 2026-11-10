@@ -13,7 +13,15 @@ All voices speak loñapsE, the language of the kerbals. That is Spanish with the
 like kerbals. How that works is in [audio/lonapse/README.md](../audio/lonapse/README.md). The credits for the voices
 are in [audio/CREDITS.md](../audio/CREDITS.md).
 
+See [Unified dialogue](API.md#one-alternative-per-row) for the canonical alternative-row category tables and optional structural columns,
+The fields are `speaker` (who speaks), `job` (profession), `trait` (personality) and `type` (delivery category).
+See the [field explanations](API.md#jobs-traits-and-speaker-identities) for conditions, defaults and reply routing,
+and [ModuleLonapse](ModuleLonapse.md) for MM part integration. The old speech
+rendering sources are legacy fixtures; releases do not build or ship recordings, phrases.tsv, or pools.tsv.
+
 ## Building
+
+Validate category dialogue with `python3 tools/validate_dialogue.py`; `bash tests/run.sh` includes this check.
 
 First tell the scripts where your KSP install is. You can set `KSP_DIR`, or write the path into a file called
 `.ksp_dir` in the repo root (one line, it stays out of git).
@@ -55,9 +63,8 @@ This is what ends up in the game:
 GameData/Lonapse/
   Plugins/Lonapse.dll
   Sounds/...                (from the audio pipeline)
-  Phrases/phrases.tsv       (all scenes and subtitles, from the audio pipeline, with the spanish_rt column)
-  Phrases/pools.tsv         (subtitle slot values and their Spanish)
-  Phrases/Runtime/*.tsv     (runtime voice lines with real values, no audio)
+  Phrases/Crew/*.tsv        (crew and Mission Control dialogue)
+  Phrases/Probe/*.tsv       (probe dialogue, linesets and contextual exchanges)
   Patches/*.cfg             (Module Manager patches: ModuleLonapse on the stock cores, optional MM)
   PluginData/Runtime/       (runtime voice: windows/, linux/, voices/, LICENSES/)
   PluginData/settings.cfg   (written by the plugin on first start)
@@ -84,13 +91,36 @@ clips each folder has against its target, in red when it has too few.
 | `beeps/click_desk` | 1 | station and base radio key click |
 | `beeps/headset_open`, `beeps/headset_close` | 1 each | ship and EVA radio key-up and key-down (short squelch noise) |
 | `sfx/breath_loop` | 1 | helmet breathing on EVA |
-| `sfx/cabin_loop`, `sfx/cabin_power_down` | 1 each | cabin fans and hum in IVA, and the power down when the batteries run flat |
+| `sfx/cabin_loop`, `sfx/cabin_power_down`, `sfx/cabin_rattle` | 1 each | cabin fans and hum in IVA, power down, and panel rattling under engine thrust |
+| `sfx/control_room_loop` | 1 | quiet room pickup mixed into the Mission Control mic before the radio filters |
 | `beeps/roger` | 1 | roger beep at the end of a crew transmission |
 
-The crew and control folders hold the voice clips, named `<clip_key>_m.ogg` and `<clip_key>_f.ogg`. Male kerbals get
-the `_m` clips and female kerbals the `_f` clips. The plugin reads `Phrases/phrases.tsv` to put the clips together into
-scenes, like a crew line with an answer from Mission Control, or a chat between two kerbals. Without the table it
-falls back to random clips per folder.
+Speech is generated in game from the alternative-row category tables and optional structural columns in `Phrases/Crew` and `Phrases/Probe`.
+Scene selectors in `when` preserve conversations, speaker roles, core/lineset targeting, and eligibility.
+Runtime speech goes through `RadioDsp` at playback time.
+The crew gets a steep 320 to 3000 Hz band, a gentle headset capsule peak, compression and soft saturation. The cabin loop
+is mixed in at -30 dB before these filters, so it stays behind the voice even when the compressor lifts the gaps
+between words. The control room pickup is reduced by 12 dB. EVA uses short helmet reflections
+instead of the cabin pickup. Mission Control has its own 300 to 3000 Hz receiver band, a little warmth and the quiet
+control room. A weak signal moves it towards 400 to 2500 Hz with stronger compression. The room and cabin pickup
+only run on a playing voice, with its volume, pause and fade. Plain intercom chats keep their cabin preset. Fan
+pickup stops when the cabin has no power, also outside IVA. The existing `useDsp = False` setting falls back to
+the Unity filters without the microphone pickup.
+
+"Cabin fan noise (IVA)" adjusts the fans and power down. "Cabin thrust noise (IVA)" adjusts the engine rattle
+independently. Both follow Sound effects. The rattle follows actual engine thrust,
+including solid motors, and fades out after shutdown or leaving IVA. "Cabin separation noise (IVA)" controls
+the metal clunk on separation stages. It plays independently of radio callouts and stops on leaving IVA. Microphone pickup has its own quieter level.
+Lonapse observes the game's listener volume but never changes it when speech starts or stops.
+
+Audio volume sliders display 0 to 100% over a saved linear gain of 0 to 2. Old saved gains are retained, so
+existing audio stays at its previous level at a lower displayed percentage. Source gains above unity go through
+the final soft-limited sample gain stage on every channel, after the voice effects. Fixed signal and probe chat
+share remain ordinary 0 to 100% controls.
+
+"Radio static" in Sound is the volume for all radio hiss, bursts and crackle, from the crew and Mission Control.
+It works while a line plays, and 0% silences that noise. A weak signal can still make the radio sound narrower or
+give it dropouts. Settings from before the single slider have their two static values combined on load.
 
 If `crew/callout` is empty, staging uses the stage tone and docking callouts use a short calm line instead.
 
@@ -105,6 +135,8 @@ jetpack fuel far from any ship. The suit has no antenna of its own, so it relays
 (`evaRelay`). That ship needs a command pod or probe core. The kerbal gets the ship's signal, full up to 1 km
 (`evaRelayFullKm`) and gone at 2.3 km (`evaRelayZeroKm`). So a weak ship signal means a weak suit radio too.
 
+The breathing has brighter air resonances and a faint voiced exhale in the Kerbal register. Each loop keeps two
+breaths over eight seconds, with a short helmet echo and the same quiet level under speech.
 The breathing speeds up when your kerbal runs. Running builds exertion over about 20 s (`evaExertRise`) and it fades
 over 30 s (`evaExertFall`). At its peak the breathing is 1.4x as fast (`evaBreathRate`) and 1.5x as loud
 (`evaBreathGain`). Hops and falls never count as a landing or as something hitting the kerbal. Tumbling on the
@@ -117,7 +149,7 @@ When the vessel is destroyed the sound stops at once. The pause menu pauses all 
 During time warp on rails the calm talk goes on ("Chatter during time warp", on by default). The radio and the
 intercom keep their normal pace in real seconds. Events wait until the warp ends, and the alarm and the rover moments
 stay off. With the runtime voice on, Mission Control often talks about the warp itself: the hours to the next burn and
-the hours to the next body (`Phrases/Runtime/warp.tsv`). A few crew chats there only fit in warp.
+the hours to the next body (`Phrases/Crew/warp.tsv`). A few crew chats there only fit in warp.
 With the setting off, warp on rails is silent as before. When you come out of warp a short ping tells you the radio
 is back, and the voices follow a few seconds later. If you tap warp on and off a lot, the ping waits at least 15 s
 between two warps (`warpPingCooldown`). Physics warp plays normally. All timers run in real time, so warp can never
@@ -167,7 +199,7 @@ These keys are not all in the window, but you can edit them in the file:
 | `muteModifier` | `LeftAlt` | KeyCode that must be held, or `None`. Left/right variants both count |
 | `countdownKey` | `C` | KeyCode of the launch countdown hotkey (start on the pad, press again to stop), `None` = off. "Set key" in the window |
 | `countdownModifier` | `LeftAlt` | KeyCode that must be held for the countdown hotkey, or `None` |
-| `weakSignalVolume` | `0.4` | How loud the extra static, bursts and grit on Mission Control get at a weak signal, 0 to 1 |
+| `weakSignalVolume` | `0.4` | How loud the extra static, bursts and grit on Mission Control get at a weak signal, linear gain 0 to 2 |
 | `masterAlarm` | `True` | Soft two-tone caution loop far in the background when the stress reaches `alarmStress` (0.9) |
 | `useGameVolume` | `True` | Scale by the stock Voice volume (and Master, if KSP does not apply it already) |
 | `useDsp` | `True` | Tremolo in an audio filter. Set `False` if you hear crackle, tremolo then runs on the volume |
@@ -176,14 +208,12 @@ These keys are not all in the window, but you can edit them in the file:
 | `calloutVolume` | `1.0` | Extra gain on callouts, 0 to 2 |
 | `voiceBoostDb` | `6` | Gain on every voice after the compressor, 0 to 12 dB |
 | `voiceCompressor` | `True` | Compressor on crew and MC voices |
-| `duckMode` | `listener` | `listener` lowers the game audio under a voice, `off` disables it |
-| `duckDepth` | `0.35` | How far the game audio ducks, 0 to 0.8 |
 | `throttleCallouts` | `True` | Full throttle and throttle cutoff callouts |
 | `roverStress` | `True` | Rover component in the stress model |
 | `stationStyle` | `auto` | Stations and bases: `auto` (MC check-ins at low stress, exchanges at high), `check`, `exchange` |
 | `radioProfile` | `auto` | Force `station`, `ship` or `eva` keying and band-pass (debug) |
 | `evaRadio` | `True` | EVA suit radio |
-| `evaRadioVolume` | `0.8` | Volume of everything on EVA, 0 to 1 |
+| `evaRadioVolume` | `0.8` | Volume of everything on EVA, linear gain 0 to 2 |
 | `evaRelay` | `True` | The EVA suit radio reaches Mission Control through a nearby ship with a control point |
 | `probeHail` | `True` | Probe mode: the probe calls Mission Control on its own, about every `hailInterval` (120 s) divided by `rateMultiplier` |
 | `probeCallouts` | `True` | Probe mode: the probe beeps at staging, chutes and throttle, MC answers now and then (`probeCalloutMcChance` 0.35, at most once per `probeCalloutMcGap` 20 s) |
@@ -338,7 +368,7 @@ When you set a vessel's type to Station or Base (in the rename dialog, this work
 
 - The crew talks half as often (`stationRateFactor`).
 - The crew is more relaxed: below high stress, a line is one band calmer 60% of the time (`stationCalmBias`).
-- Mission Control checks in on its own every 150 to 300 s (`stationMcMin`, `stationMcMax`), and the crew answers.
+- Mission Control checks in on its own every 120 s by default. The General tab's "MC check-in gap" slider sets 15 to 180 s (`stationMcMin`, `stationMcMax`), and the crew answers.
 - Telemetry pings come half as often (`stationPingFactor`).
 
 The debug overlay shows when station mode is on.
@@ -394,3 +424,32 @@ these yet:
 - RemoteTech.
 
 If you try any of these, I would love to hear how it went!
+
+### Toolbar icon
+
+`GameData/Lonapse/Icons/button.png` is the transparent 38×38 stock launcher icon, loaded by
+`SettingsWindow.GetIcon`. The editable source is `docs/images/lonapse-toolbar.svg`, adapted from the existing
+orange antenna logo with a shorter mast and heavier arcs for small sizes. Regenerate it with ImageMagick:
+
+```sh
+magick -background none -density 768 docs/images/lonapse-toolbar.svg -resize 38x38 -strip PNG32:GameData/Lonapse/Icons/button.png
+```
+
+The PNG is committed, copied by `build.sh`, and checked in the release ZIP by `pack_zip.sh`.
+
+### Unified dialogue tables
+
+All shipped probe dialogue synthesized in game is under `GameData/Lonapse/Phrases/Probe/`.
+Crew categories use the identical header under `Phrases/Crew/`. `DialogueTable` parses both into ordered logical
+lines with typed alternatives. Every alternative has its own row, paired text, `when` and `prefer`; probe beep
+captions use the same model. `Matching` checks conditions and variable availability before selecting the highest
+eligible preference. There are no parallel condition strings or positional pipe placeholders.
+
+The existing event schedulers consume projections of this common model: `flight.*` hooks use `PhraseTable`,
+while reports, chats, science talks and contextual probes use `RuntimeTemplate`. Both retain the typed dialogue
+line and delegate alternative selection to the same engine. Speaker roles and channels are explicit.
+`ContextExchange` renders every speech row before queueing the script and preserves its beep order/mood.
+The report, science, contracts, docking, and warp tables each provide one contextual scene for every stock
+probe core; stress remains separate and is balanced by cause and delivery band.
+Mod files may use `GameData/<Mod>/Lonapse/Probe/`. Legacy loaders remain available; canonical shipped
+files suppress their obsolete installed copies. The build copies the new folder without deleting user files.

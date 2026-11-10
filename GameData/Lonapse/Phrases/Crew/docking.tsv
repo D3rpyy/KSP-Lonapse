@@ -1,0 +1,135 @@
+id	line	scene	seq	speaker	trigger	channel	on	to	when	prefer	spanish	english	band	type	gender	phase	cause	job	trait	topic	core	beep	body	who	cooldown	priority	registration
+chat_dclose1_1	chat_dclose1_1	chat_dclose1	1	kerbal_a	chat	auto	dockclose		dist_m>=2	0	A {dist_m} metros. Vamos despacio.	{dist_m} meters. Nice and slow.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose1_1__v02	chat_dclose1_1	chat_dclose1	1	kerbal_a	chat	auto	dockclose		dist_m>=2	0	{dist_m} metros. Todo bajo control.	{dist_m} meters. All under control.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose2_1	chat_dclose2_1	chat_dclose2	1	kerbal_a	chat	auto	dockclose			0	Puerto a la vista. Alineando.	Port in sight. Aligning.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose2_1__v02	chat_dclose2_1	chat_dclose2	1	kerbal_a	chat	auto	dockclose			0	Casi en el puerto. Alineando.	Nearly at the port. Aligning.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose3_1	chat_dclose3_1	chat_dclose3	1	kerbal_a	chat	auto	dockclose			0	Ya casi. Pulso firme.	Almost there. Steady hands.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose3_1__v02	chat_dclose3_1	chat_dclose3	1	kerbal_a	chat	auto	dockclose			0	Despacio, despacio.	Slowly, slowly.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose4_1	chat_dclose4_1	chat_dclose4	1	kerbal_a	chat	auto	dockclose			0	Cerca de {target}. Todo en orden.	Close to {target}. All in order.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose4_1__v02	chat_dclose4_1	chat_dclose4	1	kerbal_a	chat	auto	dockclose			0	{target} justo delante.	{target} dead ahead.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose5_1	chat_dclose5_1	chat_dclose5	1	kerbal_a	chat	auto	dockclose			0	Velocidad baja, puertos alineados.	Low speed, ports aligned.	calm	chatter	both	any	any	any	any	any	any						
+chat_dclose5_1__v02	chat_dclose5_1	chat_dclose5	1	kerbal_a	chat	auto	dockclose			0	Cerca. Muy cerca.	Close. Very close.	calm	chatter	both	any	any	any	any	any	any						
+dclose_1	dclose_1	dclose_1	1	mission_control	dock_close	radio				0	Os vemos bien. Seguid así.	Looking good. Keep it up.	calm	chatter	both	any	any	any	any	any	any						
+dclose_1__v02	dclose_1	dclose_1	1	mission_control	dock_close	radio				0	Buena aproximación. Seguid así.	Good approach. Keep it up.	calm	chatter	both	any	any	any	any	any	any						
+dclose_2	dclose_2	dclose_2	1	mission_control	dock_close	radio			dist_m>=2	0	{target} a {dist_m} metros. Con calma.	{target} at {dist_m} meters. Take it easy.	calm	chatter	both	any	any	any	any	any	any						
+dclose_2__v02	dclose_2	dclose_2	1	mission_control	dock_close	radio			dist_m>=2	0	Vais bien hacia {target}. Con calma.	You're on course for {target}. Take it easy.	calm	chatter	both	any	any	any	any	any	any						
+dclose_3	dclose_3	dclose_3	1	mission_control	dock_close	radio				0	Alineación correcta. Sin prisas.	Alignment is good. No hurry.	calm	chatter	both	any	any	any	any	any	any						
+dclose_3__v02	dclose_3	dclose_3	1	mission_control	dock_close	radio				0	Vuestra alineación es buena. Sin prisas.	Your alignment is good. No hurry.	calm	chatter	both	any	any	any	any	any	any						
+dclose_4	dclose_4	dclose_4	1	mission_control	dock_close	radio				0	Velocidad perfecta. Así se hace.	Perfect speed. That's how it's done.	calm	chatter	both	any	any	any	any	any	any						
+dclose_4__v02	dclose_4	dclose_4	1	mission_control	dock_close	radio				0	Muy buena velocidad de acercamiento.	Very good closing speed.	calm	chatter	both	any	any	any	any	any	any						
+dclose_5	dclose_5	dclose_5	1	mission_control	dock_close	radio			close_ms>=0.1	0	Os acercáis a {close_ms} metros por segundo. Perfecto.	You're closing at {close_ms} meters per second. Perfect.	calm	chatter	both	any	any	any	any	any	any						
+dclose_5__v02	dclose_5	dclose_5	1	mission_control	dock_close	radio			close_ms>=0.1	0	{close_ms} metros por segundo. Justo lo que queremos.	{close_ms} meters per second. Just what we want.	calm	chatter	both	any	any	any	any	any	any						
+dclose_6	dclose_6	dclose_6	1	mission_control	dock_close	radio				0	Casi estáis. Despacio y sin sustos.	Almost there. Slow and no scares.	calm	chatter	both	any	any	any	any	any	any						
+dclose_6__v02	dclose_6	dclose_6	1	mission_control	dock_close	radio				0	Ya casi. Sin sustos.	Almost there. No scares.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall1_1	chat_dcall1_1	chat_dcall1	1	kerbal_a	chat	auto	dockcallout		dist_m>=25	0	{dist_m} metros.	{dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall1_1__v02	chat_dcall1_1	chat_dcall1	1	kerbal_a	chat	auto	dockcallout		dist_m>=25	0	Estamos a {dist_m} metros.	We're at {dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall1_1__v03	chat_dcall1_1	chat_dcall1	1	kerbal_a	chat	auto	dockcallout		dist_m>=25	0	{dist_m} metros. Todo bien.	{dist_m} meters. All good.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall2_1	chat_dcall2_1	chat_dcall2	1	kerbal_a	chat	auto	dockcallout		dist_m>=10 dist_m<25	0	{dist_m} metros. Despacio.	{dist_m} meters. Slowly.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall2_1__v02	chat_dcall2_1	chat_dcall2	1	kerbal_a	chat	auto	dockcallout		dist_m>=10 dist_m<25	0	Quedan {dist_m} metros.	{dist_m} meters to go.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall3_1	chat_dcall3_1	chat_dcall3	1	kerbal_a	chat	auto	dockcallout		dist_m<10	0	{dist_m} metros. Casi.	{dist_m} meters. Almost.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall3_1__v02	chat_dcall3_1	chat_dcall3	1	kerbal_a	chat	auto	dockcallout		dist_m<10	0	{dist_m} metros. Sin movimientos bruscos.	{dist_m} meters. No sudden moves.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall4_1	chat_dcall4_1	chat_dcall4	1	kerbal_a	chat	auto	dockcallout		dist_m>=10	0	Aproximación a {dist_m} metros.	Approach at {dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall4_1__v02	chat_dcall4_1	chat_dcall4	1	kerbal_a	chat	auto	dockcallout		dist_m>=10	0	{dist_m} metros del puerto.	{dist_m} meters from the port.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall5_1	chat_dcall5_1	chat_dcall5	1	kerbal_a	chat	auto	dockcallout		dist_m<25	0	Faltan {dist_m} metros.	{dist_m} meters left.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall5_1__v02	chat_dcall5_1	chat_dcall5	1	kerbal_a	chat	auto	dockcallout		dist_m<25	0	{dist_m} metros. Puertos casi alineados.	{dist_m} meters. Ports almost aligned.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_1	dcallmc_1	dcallmc_1	1	mission_control	dock_callout	radio			dist_m>=25	0	Os vemos a {dist_m} metros. Todo bien.	We see you at {dist_m} meters. All good.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_1__v02	dcallmc_1	dcallmc_1	1	mission_control	dock_callout	radio			dist_m>=25	0	Confirmado, {dist_m} metros. Seguid así.	Confirmed, {dist_m} meters. Keep it up.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_2	dcallmc_2	dcallmc_2	1	mission_control	dock_callout	radio			dist_m>=25	0	Copiado, {dist_m} metros. Con calma.	Copy, {dist_m} meters. Take it easy.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_3	dcallmc_3	dcallmc_3	1	mission_control	dock_callout	radio			dist_m>=10 dist_m<25	0	Copiado, {dist_m} metros. Despacio en el último tramo.	Copy, {dist_m} meters. Easy on the last stretch.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_4	dcallmc_4	dcallmc_4	1	mission_control	dock_callout	radio			dist_m>=10 dist_m<25	0	{dist_m} metros. La alineación se ve bien.	{dist_m} meters. Alignment looks good.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_5	dcallmc_5	dcallmc_5	1	mission_control	dock_callout	radio			dist_m<10	0	{dist_m} metros. Ya casi. Suave.	{dist_m} meters. Almost there. Gently.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_6	dcallmc_6	dcallmc_6	1	mission_control	dock_callout	radio			dist_m<10	0	{dist_m} metros. Contacto inminente. Suave.	{dist_m} meters. Contact soon. Gently.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall6_1	chat_dcall6_1	chat_dcall6	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	Objetivo a {dist_m} metros. Nos acercamos.	Target at {dist_m} meters. Closing in.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall6_1__v02	chat_dcall6_1	chat_dcall6	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	{dist_m} metros. Aproximación en marcha.	{dist_m} meters. Approach under way.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall7_1	chat_dcall7_1	chat_dcall7	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	{target} a {dist_m} metros.	{target} at {dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall7_1__v02	chat_dcall7_1	chat_dcall7	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	A {dist_m} metros de {target}.	{dist_m} meters from {target}.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall8_1	chat_dcall8_1	chat_dcall8	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	{dist_m} metros. Preparando el atraque.	{dist_m} meters. Preparing to dock.	calm	chatter	both	any	any	any	any	any	any						
+chat_dcall8_1__v02	chat_dcall8_1	chat_dcall8	1	kerbal_a	chat	auto	dockcallout		dist_m>=75	0	Todo listo para el atraque, {dist_m} metros.	All set for docking, {dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_7	dcallmc_7	dcallmc_7	1	mission_control	dock_callout	radio			dist_m>=75	0	Os seguimos a {dist_m} metros. Buena aproximación.	We follow you at {dist_m} meters. Good approach.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_7__v02	dcallmc_7	dcallmc_7	1	mission_control	dock_callout	radio			dist_m>=75	0	{dist_m} metros del objetivo. Todo en orden.	{dist_m} meters from the target. All in order.	calm	chatter	both	any	any	any	any	any	any						
+dcallmc_8	dcallmc_8	dcallmc_8	1	mission_control	dock_callout	radio			dist_m>=75	0	Copiado, {dist_m} metros. Preparad el atraque.	Copy, {dist_m} meters. Prepare to dock.	calm	chatter	both	any	any	any	any	any	any						
+dock_far	dock_far	dock_far	1	mission_control	dock	radio			dist_m>=100 close_ms>0	0	Objetivo a {dist_m} metros. Os acercáis a {close_ms} metros por segundo.	Target at {dist_m} meters. Closing at {close_ms} m/s.	calm	chatter	both	any	any	any	any	any	any						
+dock_far__v02	dock_far	dock_far	1	mission_control	dock	radio			dist_m>=100 close_ms>0	0	Distancia al objetivo, {dist_m} metros.	Distance to target, {dist_m} meters.	calm	chatter	both	any	any	any	any	any	any						
+dock_far__v03	dock_far	dock_far	1	mission_control	dock	radio			dist_m>=100 close_ms>0	0	{target} a {dist_m} metros. Velocidad de acercamiento, {close_ms} metros por segundo.	{target} at {dist_m} meters. Closing speed {close_ms} m/s.	calm	chatter	both	any	any	any	any	any	any						
+dock_near	dock_near	dock_near	1	mission_control	dock	radio			dist_m>=2 dist_m<100	0	Solo {dist_m} metros hasta {target}. Despacio.	Only {dist_m} meters to {target}. Slowly.	calm	chatter	both	any	any	any	any	any	any						
+dock_near__v02	dock_near	dock_near	1	mission_control	dock	radio			dist_m>=2 dist_m<100	0	{dist_m} metros. Ya casi, despacio.	{dist_m} meters. Almost there, slowly.	calm	chatter	both	any	any	any	any	any	any						
+dock_near__v03	dock_near	dock_near	1	mission_control	dock	radio			dist_m>=2 dist_m<100	0	{target} a {dist_m} metros. Alinead los puertos.	{target} at {dist_m} meters. Line up the ports.	calm	chatter	both	any	any	any	any	any	any						
+dock_fast	dock_fast	dock_fast	1	mission_control	dock	radio			close_ms>=5	0	Vais a {close_ms} metros por segundo hacia {target}. Frenad un poco.	You're closing on {target} at {close_ms} m/s. Slow down a bit.	calm	chatter	both	any	any	any	any	any	any						
+dock_fast__v02	dock_fast	dock_fast	1	mission_control	dock	radio			close_ms>=5	0	{close_ms} metros por segundo es demasiado. Frenad antes de llegar.	{close_ms} m/s is too much. Brake before you get there.	calm	chatter	both	any	any	any	any	any	any						
+dock_fast__v03	dock_fast	dock_fast	1	mission_control	dock	radio			close_ms>=5	0	Ojo, vais muy rápido hacia {target}. {close_ms} metros por segundo.	Careful, you're going fast toward {target}. {close_ms} m/s.	calm	chatter	both	any	any	any	any	any	any						
+dock_slow	dock_slow	dock_slow	1	mission_control	dock	radio			dist_m>=100 close_ms>0 close_ms<1	0	{target} a {dist_m} metros, y os acercáis muy despacio. Paciencia.	{target} at {dist_m} meters, closing very slowly. Patience.	calm	chatter	both	any	any	any	any	any	any						
+dock_slow__v02	dock_slow	dock_slow	1	mission_control	dock	radio			dist_m>=100 close_ms>0 close_ms<1	0	Velocidad de acercamiento casi cero. Así se llega, pero tarde.	Closing speed almost zero. You'll get there, just late.	calm	chatter	both	any	any	any	any	any	any						
+dock_away	dock_away	dock_away	1	mission_control	dock	radio			close_ms<0	0	Os alejáis del objetivo. Dad la vuelta.	You're drifting away from the target. Turn around.	calm	chatter	both	any	any	any	any	any	any						
+dock_away__v02	dock_away	dock_away	1	mission_control	dock	radio			close_ms<0	0	{target} se aleja. Revisad la dirección.	{target} is getting further away. Check your heading.	calm	chatter	both	any	any	any	any	any	any						
+dock_vessel	dock_vessel	dock_vessel	1	mission_control	dock	radio			dist_m>=2	0	{vessel}, {target} a {dist_m} metros. Todo vuestro.	{vessel}, {target} at {dist_m} meters. It's all yours.	calm	chatter	both	any	any	any	any	any	any						
+dock_vessel__v02	dock_vessel	dock_vessel	1	mission_control	dock	radio			dist_m>=2	0	{vessel}, os quedan {dist_m} metros. Con calma.	{vessel}, {dist_m} meters to go. Take it easy.	calm	chatter	both	any	any	any	any	any	any						
+dock_close	dock_close	dock_close	1	mission_control	dock	radio			dist_m<2	0	Contacto en cualquier momento. Quietos.	Contact any moment now. Hold still.	calm	chatter	both	any	any	any	any	any	any						
+dock_close__v02	dock_close	dock_close	1	mission_control	dock	radio			dist_m<2	0	Ya casi tocáis. Nada de movimientos bruscos.	Almost touching. No sudden moves.	calm	chatter	both	any	any	any	any	any	any						
+dock_close_a_1	dock_close_a_1	dock_close_a	1	kerbal_a	flight.dock_close	radio				0	Estamos muy cerca del puerto.	We're very close to the port.	tense	chatter	both	any	any	any	any	any	any						
+dock_close_a_2	dock_close_a_2	dock_close_a	2	mission_control	flight.dock_close	radio				0	Mantened el rumbo.	Hold your heading.	tense	chatter	m	any	any	any	any	any	any						
+docked_01	docked_01	docked_01	1	mission_control	flight.docked	radio				0	Acoplamiento confirmado.	Docking confirmed.	none	chatter	m	any	any	any	any	any	any						
+docked_01__v02	docked_01	docked_01	1	mission_control	flight.docked	radio				0	Confirmamos el acoplamiento, {vessel}.	We confirm docking, {vessel}.	none	chatter	m	any	any	any	any	any	any						
+docked_02	docked_02	docked_02	1	kerbal_a	flight.docked	radio				0	Estamos unidos.	We're joined.	none	chatter	both	any	any	any	any	any	any						
+docked_s1_1	docked_s1_1	docked_s1	1	kerbal_a	flight.docked	radio				0	Captura completa.	Capture complete.	none	chatter	both	any	any	any	any	any	any						
+docked_s1_2	docked_s1_2	docked_s1	2	mission_control	flight.docked	radio				0	Acoplamiento firme, bien hecho.	Hard dock, well done.	none	chatter	m	any	any	any	any	any	any						
+docked_s1_2__v02	docked_s1_2	docked_s1	2	mission_control	flight.docked	radio				0	Acoplamiento firme. Juntos son {parts} piezas.	Hard dock. Together that's {parts} parts.	none	chatter	m	any	any	any	any	any	any						
+dock_close_b_1	dock_close_b_1	dock_close_b	1	kerbal_a	flight.dock_close	radio				0	Diez metros.	Ten meters.	tense	chatter	both	any	any	any	any	any	any						
+dock_close_b_2	dock_close_b_2	dock_close_b	2	mission_control	flight.dock_close	radio				0	Despacio, muy despacio.	Slowly, very slowly.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_01_1	ev_dcl_01_1	ev_dcl_01	1	kerbal_a	flight.dock_close	radio				0	Cinco metros. Casi.	Five meters. Almost.	tense	chatter	both	any	any	any	any	any	any						
+ev_dcl_01_2	ev_dcl_01_2	ev_dcl_01	2	mission_control	flight.dock_close	radio				0	Despacio. Muy bien.	Slowly. Very good.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_02_1	ev_dcl_02_1	ev_dcl_02	1	kerbal_a	flight.dock_close	radio				0	Nos acercamos un poco rápido.	Closing a bit fast.	tense	chatter	both	any	any	any	any	any	any						
+ev_dcl_02_2	ev_dcl_02_2	ev_dcl_02	2	mission_control	flight.dock_close	radio				0	Frenad un poco antes del contacto.	Brake a little before contact.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_03_1	ev_dcl_03_1	ev_dcl_03	1	mission_control	flight.dock_close	radio				0	Velocidad de cierre alta. Frenad.	High closing speed. Slow down.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_03_1__v02	ev_dcl_03_1	ev_dcl_03	1	mission_control	flight.dock_close	radio				0	Demasiado rápido, {vessel}. Frenad.	Too fast, {vessel}. Slow down.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_03_2	ev_dcl_03_2	ev_dcl_03	2	kerbal_a	flight.dock_close	radio				0	Frenando.	Braking.	tense	chatter	both	any	any	any	any	any	any						
+ev_dcl_04	ev_dcl_04	ev_dcl_04	1	mission_control	flight.dock_close	radio				0	Cuidado con la velocidad de cierre.	Careful with the closing speed.	tense	chatter	m	any	any	any	any	any	any						
+ev_dcl_05	ev_dcl_05	ev_dcl_05	1	kerbal_a	flight.dock_close	radio				0	Casi tocamos. Agarraos.	Almost touching. Hold on.	tense	chatter	both	any	any	any	any	any	any						
+ev_dkd_01_1	ev_dkd_01_1	ev_dkd_01	1	kerbal_a	flight.docked	radio				0	Acoplados. Puerto firme.	Docked. Port is secure.	none	chatter	both	any	any	any	any	any	any						
+ev_dkd_01_2	ev_dkd_01_2	ev_dkd_01	2	mission_control	flight.docked	radio				0	Confirmado. Buen trabajo.	Confirmed. Good work.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_02_1	ev_dkd_02_1	ev_dkd_02	1	mission_control	flight.docked	radio				0	Vemos el acoplamiento. Enhorabuena.	We see the docking. Congratulations.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_02_1__v02	ev_dkd_02_1	ev_dkd_02	1	mission_control	flight.docked	radio				0	Acoplamiento confirmado. Enhorabuena, {vessel}.	Docking confirmed. Congrats, {vessel}.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_02_2	ev_dkd_02_2	ev_dkd_02	2	kerbal_a	flight.docked	radio				0	Gracias. Ha sido suave.	Thanks. That was smooth.	none	chatter	both	any	any	any	any	any	any						
+ev_dkd_03_1	ev_dkd_03_1	ev_dkd_03	1	kerbal_a	flight.docked	radio				0	Estamos unidos. Igualando presión.	We're joined. Equalizing pressure.	none	chatter	both	any	any	any	any	any	any						
+ev_dkd_03_2	ev_dkd_03_2	ev_dkd_03	2	mission_control	flight.docked	radio				0	Recibido. Tomaos un momento.	Copy. Take a moment.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_04	ev_dkd_04	ev_dkd_04	1	mission_control	flight.docked	radio				0	Acoplamiento completo. Bienvenidos.	Docking complete. Welcome.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_04__v02	ev_dkd_04	ev_dkd_04	1	mission_control	flight.docked	radio				0	Acoplamiento completo. Ahora hay {crew} kerbals a bordo.	Docking complete. Now there are {crew} kerbals aboard.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_05	ev_dkd_05	ev_dkd_05	1	mission_control	flight.docked	radio				0	Dos naves, ahora una. Bien hecho.	Two ships, now one. Well done.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_05__v02	ev_dkd_05	ev_dkd_05	1	mission_control	flight.docked	radio				0	Dos naves, ahora una. {parts} piezas en total.	Two ships, now one. {parts} parts in total.	none	chatter	m	any	any	any	any	any	any						
+ev_dkd_06	ev_dkd_06	ev_dkd_06	1	kerbal_a	flight.docked	radio				0	Enganchados. ¡Qué bonito!	Latched. How lovely!	none	chatter	both	any	any	any	any	any	any						
+ev_dkd_07	ev_dkd_07	ev_dkd_07	1	kerbal_a	flight.docked	radio				0	Contacto y captura.	Contact and capture.	none	chatter	both	any	any	any	any	any	any						
+em_084_1	em_084_1	em_084	1	kerbal_a	flight.dock_close	radio				0	Casi tocamos.	Almost touching.	tense	chatter	both	any	any	any	any	any	any						
+em_084_2	em_084_2	em_084	2	mission_control	flight.dock_close	radio				0	Despacio. Muy bien.	Slowly. Very good.	tense	chatter	m	any	any	any	any	any	any						
+em_085_1	em_085_1	em_085	1	kerbal_a	flight.dock_close	radio				0	Dos metros.	Two meters.	tense	chatter	both	any	any	any	any	any	any						
+em_085_2	em_085_2	em_085	2	mission_control	flight.dock_close	radio				0	Mantened la línea.	Hold the line.	tense	chatter	m	any	any	any	any	any	any						
+em_086_1	em_086_1	em_086	1	kerbal_a	flight.dock_close	radio				0	Muy cerca. Manos quietas.	Very close. Hands still.	tense	chatter	both	any	any	any	any	any	any						
+em_086_2	em_086_2	em_086	2	mission_control	flight.dock_close	radio				0	Recibido. Así, así.	Copy. Like that, like that.	tense	chatter	m	any	any	any	any	any	any						
+em_087_1	em_087_1	em_087	1	kerbal_a	flight.dock_close	radio				0	Un poco más.	A little more.	tense	chatter	both	any	any	any	any	any	any						
+em_087_2	em_087_2	em_087	2	mission_control	flight.dock_close	radio				0	Suave. Ya casi.	Gently. Nearly there.	tense	chatter	m	any	any	any	any	any	any						
+em_092	em_092	em_092	1	kerbal_a	flight.docked	radio				0	¡Acoplados!	Docked!	none	chatter	both	any	any	any	any	any	any						
+em_093_1	em_093_1	em_093	1	kerbal_a	flight.docked	radio				0	Unidos. Buen trabajo.	Joined. Good work.	none	chatter	both	any	any	any	any	any	any						
+em_093_2	em_093_2	em_093	2	mission_control	flight.docked	radio				0	Confirmado. Acoplamiento completo.	Confirmed. Docking complete.	none	chatter	m	any	any	any	any	any	any						
+em_094_1	em_094_1	em_094	1	mission_control	flight.docked	radio				0	¡Acoplamiento confirmado! Bien hecho.	Docking confirmed! Well done.	none	chatter	m	any	any	any	any	any	any						
+em_094_1__v02	em_094_1	em_094	1	mission_control	flight.docked	radio				0	¡Acoplados! Buen trabajo, {vessel}.	Docked! Nice work, {vessel}.	none	chatter	m	any	any	any	any	any	any						
+em_094_2	em_094_2	em_094	2	kerbal_a	flight.docked	radio				0	Gracias. Ha sido suave.	Thanks. It was smooth.	none	chatter	both	any	any	any	any	any	any						
+em_095	em_095	em_095	1	kerbal_a	flight.docked	radio				0	Ya estamos enganchados.	We're hooked up.	none	chatter	both	any	any	any	any	any	any						
+chat_undock1_1	chat_undock1_1	chat_undock1	1	kerbal_a	chat	auto	undock			0	Estamos libres.	We're free.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock2_1	chat_undock2_1	chat_undock2	1	kerbal_a	chat	auto	undock			0	Desacoplamiento completo.	Undocking complete.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock3_1	chat_undock3_1	chat_undock3	1	kerbal_a	chat	auto	undock			0	Puerto libre. Nos alejamos.	Port is clear. Drifting away.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock4_1	chat_undock4_1	chat_undock4	1	kerbal_a	chat	auto	undock			0	Túnel despresurizado. Nos hemos separado.	Tunnel depressurized. We've separated.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock5_1	chat_undock5_1	chat_undock5	1	kerbal_a	chat	auto	undock			0	Ha sido una buena visita.	That was a good visit.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock6_1	chat_undock6_1	chat_undock6	1	kerbal_a	chat	auto	undock			0	Y ahora, a no chocar con nada.	And now, let's not hit anything.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock7_1	chat_undock7_1	chat_undock7	1	kerbal_a	chat	auto	undock			0	Separación completa. Todo en orden.	Separation complete. All in order.	calm	chatter	both	any	any	any	any	any	any						
+chat_undock8_1	chat_undock8_1	chat_undock8	1	kerbal_a	chat	auto	undock			0	Libres. Nadie ha roto nada, ¿verdad?	Free. Nobody broke anything, right?	calm	chatter	both	any	any	any	any	any	any						
+chat_undock9_1	chat_undock9_1	chat_undock9	1	kerbal_a	chat	auto	undock			0	{vessel}, libres del puerto.	{vessel}, clear of the port.	calm	chatter	both	any	any	any	any	any	any						
+undock_1	undock_1	undock_1	1	mission_control	undock	radio				0	Separación confirmada, {vessel}. Buen viaje.	Separation confirmed, {vessel}. Safe travels.	calm	chatter	both	any	any	any	any	any	any						
+undock_1__v02	undock_1	undock_1	1	mission_control	undock	radio				0	Os vemos libres, {vessel}. Buen viaje.	We see you clear, {vessel}. Safe travels.	calm	chatter	both	any	any	any	any	any	any						
+undock_2	undock_2	undock_2	1	mission_control	undock	radio				0	Os vemos separados. Mantened la distancia.	We see you separated. Keep your distance.	calm	chatter	both	any	any	any	any	any	any						
+undock_2__v02	undock_2	undock_2	1	mission_control	undock	radio				0	Separados. Mantened la distancia, por favor.	Separated. Keep your distance, please.	calm	chatter	both	any	any	any	any	any	any						
+undock_3	undock_3	undock_3	1	mission_control	undock	radio				0	Copiado. Estáis libres.	Copy. You're clear.	calm	chatter	both	any	any	any	any	any	any						
+undock_3__v02	undock_3	undock_3	1	mission_control	undock	radio				0	Recibido. Estáis libres del puerto.	Received. You're clear of the port.	calm	chatter	both	any	any	any	any	any	any						
+undock_4	undock_4	undock_4	1	mission_control	undock	radio				0	Recibido. Volved cuando queráis.	Received. Come back any time.	calm	chatter	both	any	any	any	any	any	any						
+undock_4__v02	undock_4	undock_4	1	mission_control	undock	radio				0	Recibido. Siempre sois bienvenidos.	Received. You're always welcome.	calm	chatter	both	any	any	any	any	any	any						
+undock_5	undock_5	undock_5	1	mission_control	undock	radio			parts>=2	0	La nave tiene ahora {parts} piezas. Todas en su sitio, esperamos.	The ship has {parts} parts now. All in place, we hope.	calm	chatter	both	any	any	any	any	any	any						
+undock_5__v02	undock_5	undock_5	1	mission_control	undock	radio			parts>=2	0	Ahora sois {parts} piezas. Que no se suelte ninguna.	You're {parts} parts now. Don't lose any.	calm	chatter	both	any	any	any	any	any	any						
+undock_6	undock_6	undock_6	1	mission_control	undock	radio				0	Con cuidado, por favor.	Careful, please.	calm	chatter	both	any	any	any	any	any	any						
+undock_6__v02	undock_6	undock_6	1	mission_control	undock	radio				0	Con calma al alejaros.	Take it easy as you pull away.	calm	chatter	both	any	any	any	any	any	any						

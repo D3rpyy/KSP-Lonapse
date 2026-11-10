@@ -12,3 +12,9 @@ notes/
 dist/
 GameData/Lonapse/PluginData/
 
+
+# Full local workspace snapshots
+.backups/
+
+# Python validation helpers
+tools/__pycache__/

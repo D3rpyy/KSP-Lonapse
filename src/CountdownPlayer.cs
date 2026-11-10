@@ -7,16 +7,65 @@ using KSP.UI.Screens;
 
 namespace Lonapse
 {
-    public class CountdownPlayer
+    public class CountdownPlayer : IDisposable
     {
         private readonly LonapseAddon host;
         private readonly LaunchCountdown count = new LaunchCountdown(0.6f, 1f);
         private float quindarOutLeft = -1f;
+        private readonly System.Collections.Generic.Dictionary<string, AudioClip> speech = new System.Collections.Generic.Dictionary<string, AudioClip>();
+        private readonly System.Collections.Generic.Dictionary<string, PhraseEntry> preparedLines = new System.Collections.Generic.Dictionary<string, PhraseEntry>();
+        private Guid preparedVessel;
+        private int preparationTicket;
+        private bool preparing;
+        private bool disposed;
+        private int preparedGeneration = -1;
+        private string preparationError;
+
+        void Prepare()
+        {
+            Vessel vessel = FlightGlobals.ActiveVessel;
+            if (disposed || !PhraseClips.Loaded || vessel == null || host.director == null) return;
+            if (preparedGeneration != PhraseClips.SceneGeneration || preparedVessel != vessel.id)
+            {
+                if (Running) return;
+                foreach (AudioClip old in speech.Values) if (old != null) UnityEngine.Object.Destroy(old);
+                speech.Clear(); preparedLines.Clear(); preparationError = null; preparing = false;
+                preparedGeneration = PhraseClips.SceneGeneration; preparedVessel = vessel.id; preparationTicket++;
+            }
+            if (preparing || speech.Count > 0) return;
+            preparing = true;
+            int requestedGeneration = preparedGeneration, ticket = preparationTicket;
+            Guid requestedVessel = vessel.id;
+            int remaining = 0;
+            foreach (PhraseEntry entry in PhraseClips.table.Entries) if (entry.Event == "countdown") remaining++;
+            if (remaining == 0) { preparationError = "no countdown dialogue"; return; }
+            foreach (PhraseEntry entry in PhraseClips.table.Entries)
+            {
+                if (entry.Event != "countdown") continue;
+                PhraseEntry line = host.director.ResolveSpeechLine(entry);
+                if (line == null) { preparationError = "no matching countdown speech"; if (--remaining == 0) preparing = false; continue; }
+                preparedLines[entry.ClipKey] = line;
+                PhraseClips.Render(line, false, clip => {
+                    if (disposed || ticket != preparationTicket || requestedGeneration != PhraseClips.SceneGeneration
+                        || FlightGlobals.ActiveVessel == null || FlightGlobals.ActiveVessel.id != requestedVessel) { if (clip != null) UnityEngine.Object.Destroy(clip); return; }
+                    if (clip == null) preparationError = "countdown speech could not be prepared";
+                    else speech[line.ClipKey] = clip;
+                    if (--remaining == 0) preparing = false;
+                });
+            }
+        }
 
         // Band and distortion of the count lines: the mild ship radio band, the same for every number.
         public const float CleanHighPassHz = 300f;
         public const float CleanLowPassHz = 3600f;
         public const float CleanDistortion = 0.05f;
+
+        public void Dispose()
+        {
+            disposed = true;
+            foreach (AudioClip clip in speech.Values) if (clip != null) UnityEngine.Object.Destroy(clip);
+            speech.Clear(); preparedLines.Clear();
+        }
 
         public CountdownPlayer(LonapseAddon host) { this.host = host; }
 
@@ -30,6 +79,11 @@ namespace Lonapse
             if (!host.settings.radioEnabled) return "radio disabled";
             if (v == null || v.situation != Vessel.Situations.PRELAUNCH) return "not on the launch pad";
             if (!PhraseClips.Loaded || PhraseClips.table.Get(LaunchCountdown.ClipKey(1)) == null) return "no countdown clips";
+            string missing = RuntimeVoice.Missing("mc");
+            if (missing != null) return missing;
+            Prepare();
+            if (preparationError != null) return preparationError;
+            if (preparing) return "preparing countdown speech";
             return null;
         }
 
@@ -79,14 +133,16 @@ namespace Lonapse
 
         private bool Play(string key, float vol)
         {
-            PhraseEntry e = PhraseClips.table != null ? PhraseClips.table.Get(key) : null;
-            AudioClip clip = PhraseClips.Clip(e, false);
+            PhraseEntry e;
+            if (!preparedLines.TryGetValue(key, out e)) return false;
+            AudioClip clip;
+            if (!speech.TryGetValue(key, out clip)) return false;
             if (clip == null) return false;
             VoiceChannel c = host.control;
-            // Clean, fixed band for every count line (some numbers sounded muffled). Not the station or
-            // EVA profile (low-pass 2800 or 2600 Hz), no weak-signal dropouts, only a trace of radio distortion.
+            // A fixed receiver sound for every number, without weak-link narrowing or dropouts.
             c.SetBand(CleanHighPassHz, CleanLowPassHz);
             c.Play(clip, vol, 1f, false, 0f);
+            c.SetRadioVoice(RadioVoice.Control);
             c.boost = MixMath.DbToLin(host.settings.voiceBoostDb) * host.settings.calloutVolume;
             c.compressor = host.settings.voiceCompressor;
             c.phraseKey = e.ClipKey;
@@ -106,6 +162,8 @@ namespace Lonapse
 
         public void Update(float dt, Vessel v)
         {
+            if (Running && (v == null || v.id != preparedVessel)) Abort("vessel changed");
+            if (v != null && v.situation == Vessel.Situations.PRELAUNCH && RuntimeVoice.Missing("mc") == null) Prepare();
             if (quindarOutLeft > 0f)
             {
                 quindarOutLeft -= dt;

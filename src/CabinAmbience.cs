@@ -23,6 +23,14 @@ namespace Lonapse
 
         private bool quietInIva;   // in IVA without power: the next loop start is the power coming back
 
+        /// <summary>Actual engine output controls the rattle, including solid motors and empty tanks.</summary>
+        public static float RattleLevel(bool inCabin, double thrust, double maxThrust)
+        {
+            if (!inCabin || double.IsNaN(thrust) || double.IsInfinity(thrust) || thrust <= 0
+                || double.IsNaN(maxThrust) || double.IsInfinity(maxThrust) || maxThrust <= 0) return 0f;
+            return (float)System.Math.Sqrt(System.Math.Min(1.0, thrust / maxThrust));
+        }
+
         public CabinAmbience()
         {
             Powered = true;

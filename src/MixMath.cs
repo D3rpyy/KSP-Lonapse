@@ -8,6 +8,22 @@ namespace Lonapse
     {
         // Floor used by LinToDb for zero or negative input.
         public const float MinDb = -120f;
+        public const float MaxVolume = 2f;
+
+        public static float ClampVolume(float value)
+        {
+            return DcMath.Clamp(DcMath.Finite(value), 0f, MaxVolume);
+        }
+
+        /// <summary>Retain gain above AudioSource's ceiling in the final sample filter.</summary>
+        public static void SplitChannelGain(float level, float userGain, out float source, out float filter)
+        {
+            level = Math.Max(0f, DcMath.Finite(level));
+            userGain = DcMath.Clamp(DcMath.Finite(userGain), 0f, 4f);
+            float beforeFilter = level * Math.Min(userGain, 1f);
+            source = Math.Min(beforeFilter, 1f);
+            filter = Math.Max(userGain, 1f) * Math.Max(beforeFilter, 1f);
+        }
 
         public static float DbToLin(float db)
         {

@@ -27,6 +27,9 @@ synthesized by `build_sfx.py` from filtered noise and sine tones. They contain n
 The sphere of influence ping (`Sounds/sfx/soi_change`) is synthesized by `build_sfx.py` from sine notes. It contains no
 recorded material.
 
+The cabin sound in IVA (`Sounds/sfx/cabin_loop`) and its power down (`cabin_power_down`) are synthesized by
+`build_sfx.py` from filtered noise and sine tones. They contain no recorded material.
+
 No audio from the Chatterer mod or any other mod was used.
 
 ## Runtime voice

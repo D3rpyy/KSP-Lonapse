@@ -28,7 +28,7 @@ namespace Lonapse
 
         sealed class Job
         {
-            public string id, spoken, wavPath;
+            public string id, spoken, wavPath, cacheKey;
             public double pitchSt;
             public Action<Result> done;
             public Stopwatch sw;
@@ -167,11 +167,26 @@ namespace Lonapse
         /// </summary>
         public void Request(string kind, string spanishTemplate, Action<Result> done) { Request(kind, spanishTemplate, done, null); }
 
+        // Cache processed PCM, not AudioClips: each request owns its playback clip, so one scene cannot
+        // destroy a clip still used by another. Bound to 16 MiB of samples and 128 sentences.
+        const int SpeechCacheSamples = 4 * 1024 * 1024;
+        readonly Dictionary<string, float[]> speechCache = new Dictionary<string, float[]>();
+        readonly Queue<string> speechCacheOrder = new Queue<string>();
+        int speechCacheSize;
+
         void Request(string kind, string spanishTemplate, Action<Result> done, string warmKind)
         {
             var job = new Job { id = "rt" + Interlocked.Increment(ref counter), spoken = RuntimeSpeech.Spoken(spanishTemplate),
                                 done = done, sw = Stopwatch.StartNew(), generation = generation, warmKind = warmKind };
             if (disposed) return;
+            job.cacheKey = kind + "\n" + job.spoken;
+            if (done != null)
+                lock (gate)
+                {
+                    float[] cached;
+                    if (speechCache.TryGetValue(job.cacheKey, out cached))
+                    { job.samples = cached; finished.Enqueue(job); return; }
+                }
             lock (requests)
             {
                 requests.Enqueue(new KeyValuePair<string, Job>(kind, job));
@@ -376,6 +391,16 @@ namespace Lonapse
                 lock (gate) { if (finished.Count == 0) return; j = finished.Dequeue(); }
                 if (j.warmKind != null) warmPending.Remove(j.warmKind);
                 if (j.generation != generation) j.done = null; // asked by a scene that has ended
+                if (j.error == null && j.samples != null && j.warmKind == null && j.samples.Length <= SpeechCacheSamples)
+                    lock (gate)
+                    {
+                        if (!speechCache.ContainsKey(j.cacheKey))
+                        {
+                            while (speechCacheOrder.Count > 0 && (speechCacheSize + j.samples.Length > SpeechCacheSamples || speechCacheOrder.Count >= 128))
+                            { string old = speechCacheOrder.Dequeue(); speechCacheSize -= speechCache[old].Length; speechCache.Remove(old); }
+                            speechCache[j.cacheKey] = j.samples; speechCacheOrder.Enqueue(j.cacheKey); speechCacheSize += j.samples.Length;
+                        }
+                    }
                 var r = new Result { error = j.error, spoken = j.spoken, piperMs = j.piperMs };
                 if (j.error == null && j.samples != null && j.done != null) // no clip for a warm-up line
                 {

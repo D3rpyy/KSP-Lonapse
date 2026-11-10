@@ -4,7 +4,7 @@
 # Needs the KSP DLLs to compile (KSP_DIR or .ksp_dir, see build.sh) and a finished audio build:
 #   python3 -I audio/build_clips.py   (beeps, radio static and breathing in sfx)
 #   python3 -I audio/build_sfx.py     (docking effects from audio/sfx_sources, into sfx)
-#   python3 -I audio/build_lonapse.py (voices, phrase table)
+# Dialogue is authored directly in GameData/Lonapse/Phrases/{Crew,Probe}.
 #   ./fetch_runtime.sh                (runtime voice: Piper and the voices, into audio/build/runtime/Runtime)
 # Commit the changed GameData/ afterwards.
 set -euo pipefail
@@ -24,11 +24,11 @@ fi
 grep -q "^## $VERSION" CHANGELOG.md || { echo "ERROR: CHANGELOG.md has no entry for $VERSION" >&2; exit 1; }
 
 SOUNDS="$REPO/audio/build/Sounds"
-TABLE="$REPO/audio/build/lonapse/phrases.tsv"
-for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant sfx/jetpack_on sfx/jetpack_off sfx/jetpack_loop sfx/thud_heavy sfx/thud_light sfx/footstep sfx/cabin_loop sfx/cabin_power_down crew control; do
+for d in beeps sfx sfx/airlock_dock sfx/airlock_undock sfx/soi_change sfx/hatch_open sfx/hatch_close sfx/flag_plant sfx/jetpack_on sfx/jetpack_off sfx/jetpack_loop sfx/thud_heavy sfx/thud_light sfx/footstep sfx/cabin_loop sfx/cabin_power_down sfx/control_room_loop sfx/cabin_rattle sfx/cabin_separation; do
   [[ -d "$SOUNDS/$d" ]] || { echo "ERROR: $SOUNDS/$d is missing, build the audio first" >&2; exit 1; }
 done
-[[ -f "$TABLE" ]] || { echo "ERROR: $TABLE is missing, run audio/build_lonapse.py first" >&2; exit 1; }
+
+python3 tools/validate_dialogue.py
 
 echo "Running the offline tests"
 bash tests/run.sh >/dev/null || { echo "ERROR: tests failed, run tests/run.sh to see why" >&2; exit 1; }
@@ -39,9 +39,8 @@ bash tests/run.sh >/dev/null || { echo "ERROR: tests failed, run tests/run.sh to
 mkdir -p "$GD/Plugins" "$GD/Sounds" "$GD/Phrases"
 cp build/Lonapse.dll "$GD/Plugins/Lonapse.dll"
 # Only audio files. A .cfg under GameData would be parsed by KSP.
-rsync -a --delete --prune-empty-dirs --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' \
+rsync -a --delete --prune-empty-dirs --exclude='/crew/***' --exclude='/control/***' --include='*/' --include='*.wav' --include='*.ogg' --exclude='*' \
   "$SOUNDS/" "$GD/Sounds/"
-cp "$TABLE" "$GD/Phrases/phrases.tsv"
 cp LICENSE "$GD/LICENSE.txt"
 cp LICENSE-CC-BY-4.0 "$GD/LICENSE-CC-BY-4.0.txt"
 cp docs/LICENSING.md "$GD/LICENSING.md"

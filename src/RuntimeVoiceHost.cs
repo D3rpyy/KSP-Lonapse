@@ -23,8 +23,6 @@ namespace Lonapse
         {
             try
             {
-                Settings s = Settings.Load();
-                if (!s.runtimeVoice) { Log.Info("Runtime voice is off: no Piper voices loaded at the save start"); return; }
                 string why = RuntimeVoice.Missing("mc");
                 if (why != null) { Log.Info("Runtime voice: no voices loaded at the save start (" + why + ")"); return; }
                 RuntimeVoice v = RuntimeVoice.Shared;

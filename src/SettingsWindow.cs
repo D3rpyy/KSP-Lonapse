@@ -255,10 +255,10 @@ namespace Lonapse
             return nv;
         }
 
-        /// <summary>A 0..max volume row shown in percent.</summary>
-        private float Volume(string name, float v, float max = 1f)
+        /// <summary>Volume headroom fills a 0 to 100 percent slider. Saved linear gains stay unchanged.</summary>
+        private float Volume(string name, float v, float max = MixMath.MaxVolume)
         {
-            return Row(name, v, 0f, max, Mathf.Round(v * 100f), "0'%'");
+            return Row(name, v, 0f, max, Mathf.Round(v / max * 100f), "0'%'");
         }
 
         /// <summary>Old style slider (label above, slider below). Only on the Advanced and Debug tabs.</summary>
@@ -322,7 +322,7 @@ namespace Lonapse
         private static readonly string[] TestTopics = PhraseTable.TopicCycle();
         private static readonly string[] TestPhases =
         {
-            "", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout", "serious", "goofy",
+            "", "prelaunch", "launch", "ascent", "orbit", "coast", "reentry", "descent", "landed", "blackout", "serious", "calm",
         };
         private static readonly string[] ForcePhases =
         {
@@ -471,6 +471,14 @@ namespace Lonapse
             s.rateMultiplier = Mathf.Round(Row("Radio amount", s.rateMultiplier, 0.25f, 4f, s.rateMultiplier, "0.0#'x'") * 20f) / 20f;
             Hint("How often the crew and Mission Control talk. 2x is twice as often.");
             Tuning tu = s.tuning;
+            float checkGap = Mathf.Round(Row("MC check-in gap", tu.stationMcMin, 15f, 180f, tu.stationMcMin, "0' s'"));
+            if (checkGap != tu.stationMcMin || checkGap != tu.stationMcMax)
+            {
+                tu.stationMcMin = tu.stationMcMax = checkGap;
+                host.settingsDirty = true;
+                if (host.director != null) host.director.ResetStationCheckTimer();
+            }
+            Hint("Time between Mission Control check-ins at stations and bases. The new wait starts when you change this.");
             // TUNING/intercomInterval in seconds, shown in minutes
             float g = Row("Intercom gap", tu.intercomInterval, 30f, 900f, tu.intercomInterval / 60f, "0.#' min'");
             tu.intercomInterval = Mathf.Round(g / 10f) * 10f;
@@ -507,15 +515,13 @@ namespace Lonapse
             s.intercomVolume = Volume("Intercom", s.intercomVolume);
             s.calloutVolume = Volume("Callouts", s.calloutVolume, 2f);
             s.beepVolume = Volume("Probe beeps", s.beepVolume, 2f);
-            s.staticVolume = Volume("Static", s.staticVolume);
             s.sfxVolume = Volume("Sound effects", s.sfxVolume);
             s.evaRadioVolume = Volume("EVA radio", s.evaRadioVolume);
-            s.duckDepth = Row("Lower game audio", s.duckDepth, 0f, 0.8f, Mathf.Round(s.duckDepth * 100f), "0'%'");
-            Hint("Static: bursts, crackle and radio clicks. Lower game audio: how much the game gets quieter while someone talks.");
+            Hint("100% gives twice the gain of the old 100% setting. Saved audio levels are kept at lower slider positions.");
 
             Header("Effects");
-            s.radioStatic = Mathf.Round(Volume("Radio static", s.radioStatic) * 20f) / 20f;
-            Hint("Static under every radio line, also with a full signal. A weak signal still adds its own noise on top.");
+            s.radioStatic = Volume("Radio static", s.radioStatic);
+            Hint("Volume of all radio hiss, bursts and crackle, for the crew and Mission Control. 0% silences it.");
             s.intercomRadioFx = Toggle(s.intercomRadioFx, "Radio sound effects on the intercom");
             Hint("Crew-to-crew chats sound like the radio instead of a voice in the cabin.");
             s.rogerBeep = Toggle(s.rogerBeep, "Roger beep");
@@ -530,13 +536,15 @@ namespace Lonapse
             s.jetpackLoopSfx = Toggle(s.jetpackLoopSfx, "Thruster hiss while the EVA jetpack is firing");
             s.evaBreathing = Toggle(s.evaBreathing, "Helmet breathing on EVA");
             s.cabinSfx = Toggle(s.cabinSfx, "Cabin sound in IVA");
-            Hint("Fans and hum in the cabin while you look through a kerbal's eyes. When the batteries run flat the cabin powers down.");
+            Hint("Fans and hum in IVA, with a cabin rattle while the engines thrust. When the batteries run flat the fans power down.");
             Header("Sound effect volumes");
             s.hatchVolume = Volume("Hatch", s.hatchVolume);
             s.dockingVolume = Volume("Airlock (dock and undock)", s.dockingVolume);
             s.jetpackVolume = Volume("Jetpack (switch and thrusters)", s.jetpackVolume);
             s.breathVolume = Volume("Helmet breathing", s.breathVolume);
-            s.cabinVolume = Volume("Cabin (IVA)", s.cabinVolume);
+            s.cabinVolume = Volume("Cabin fan noise (IVA)", s.cabinVolume);
+            s.cabinThrustVolume = Volume("Cabin thrust noise (IVA)", s.cabinThrustVolume);
+            s.cabinSeparationVolume = Volume("Cabin separation noise (IVA)", s.cabinSeparationVolume);
             s.thudVolume = Volume("Ground thud (EVA)", s.thudVolume);
             s.footstepVolume = Volume("Footsteps (EVA)", s.footstepVolume);
             Hint("80% is the normal loudness. Above 80% the effect is boosted, and loud hits can distort a little.");
@@ -551,11 +559,11 @@ namespace Lonapse
             Hint("Far from Kerbin, Mission Control answers later (up to 10 s at Duna and beyond). Off: answers come right away.");
 
             Header("Runtime voice");
-            s.runtimeVoice = Toggle(s.runtimeVoice, "Speak names and new lines at runtime");
+            s.runtimeVoice = true;
             {
-                string why = s.runtimeVoice ? RuntimeVoice.Missing("mc") : null;
+                string why = RuntimeVoice.Missing("mc");
                 Hint(why != null ? "Not available: " + why
-                     : "Names of kerbals, the vessel and modded planets are spoken in the lines. When a line is not ready in time, the normal one plays.");
+                     : "All dialogue is spoken at runtime. Piper and the bundled voices are required (Windows or Linux).");
             }
             s.runtimeReports = Toggle(s.runtimeReports, "Mission Control reports with numbers");
             Hint("Now and then: orbit, altitude, speed, fuel or the mission day, read out with the real values.");
@@ -929,7 +937,7 @@ namespace Lonapse
                 if (on && shownMode != modes[i]) pendingSignalMode = modes[i];
             }
             GUILayout.EndHorizontal();
-            if (s.signalMode == "fixed") s.signalFixed = Volume("Fixed signal", s.signalFixed);
+            if (s.signalMode == "fixed") s.signalFixed = Volume("Fixed signal", s.signalFixed, 1f);
             Hint("auto: the signal comes from CommNet or RemoteTech. off: always a perfect signal. fixed: the signal stays at the level you set.");
 
             Header("Timing");
@@ -938,7 +946,7 @@ namespace Lonapse
             tu.tQuiet = Mathf.Round(q / 5f) * 5f;
             Hint("Average time between radio transmissions on a calm flight, before Radio amount. Stress makes it shorter.");
             tu.probeRateFactor = Mathf.Round(Row("Probe talk gap", tu.probeRateFactor, 0.5f, 4f, tu.probeRateFactor, "0.0#'x'") * 20f) / 20f;
-            tu.probeCrewShare = Mathf.Round(Volume("Probe and crew chats", tu.probeCrewShare) * 20f) / 20f;
+            tu.probeCrewShare = Mathf.Round(Volume("Probe and crew chats", tu.probeCrewShare, 1f) * 20f) / 20f;
             Hint("With 2 or more crew and a probe core: the share of intercom chats where the probe joins in.");
             Hint("The radio gap is this many times longer on a probe. 2x means half as much talk.");
             GUILayout.Label(d != null ? "Radio gap now: " + Label("radio now", Mathf.Round(d.currentInterval), "0' s'") : "Radio gap now: -");

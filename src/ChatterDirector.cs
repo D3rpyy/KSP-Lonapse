@@ -24,11 +24,12 @@ namespace Lonapse
         public float overlapAt;       // > 0: may start at this fraction of the previous crew line
         public float pitchMul = 1f;   // intercom pair pitch nudge
         public PhraseEntry entry;     // Lonapse row, null for folder clips
+        public Func<bool> contextValid;
         public ChatterDirector.RuntimeLine rt; // experimental: the same MC line with a crew name, rendered at runtime
 
         public void Set(UttKind k, string f, float delay, float overlap, KerbalVoice sp)
         {
-            who = k; folder = f; startDelay = delay; overlapAt = overlap; speaker = sp; pitchMul = 1f; entry = null; rt = null;
+            who = k; folder = f; startDelay = delay; overlapAt = overlap; speaker = sp; pitchMul = 1f; entry = null; rt = null; contextValid = null;
         }
     }
 
@@ -168,13 +169,13 @@ namespace Lonapse
         {
             var lines = PlayLinesRaw(sc);
             bool any = false;
-            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && SubtitleSlots.NeedsFill(lines[i].English);
+            for (int i = 0; i < lines.Count && !any; i++) any = lines[i] != null && (lines[i].Dialogue != null || SubtitleSlots.NeedsFill(lines[i].English));
             if (!any) return lines;
             var unresolved = new System.Collections.Generic.List<string>();
             bool named;
             var filled = SubtitleSlots.Fill(lines, PhraseClips.pools, SlotFlightValues(), perLine,
                                             (pool, vals) => Mem.TakeValue(pool, vals, rng), unresolved, SlotConditions(),
-                                            RuntimeOn, NamesRecent, out named);
+                                            RuntimeOn, NamesRecent, out named, rtNames);
             if (named) NameSaid();
             foreach (string u in unresolved) Log.Warn("Lonapse slot not filled: " + u);
             for (int i = 0; i < filled.Count; i++)
@@ -240,7 +241,21 @@ namespace Lonapse
         /// names for {other} and {self}, other scenes none.</summary>
         private bool SlotsOk(PhraseScene sc)
         {
-            if (sc == null || !sc.HasSlots) return true;
+            if (sc == null) return false;
+            string predicate = sc.Lines.Count > 0 ? sc.Lines[0].RuntimeWhen : null;
+            if (!string.IsNullOrEmpty(predicate))
+            {
+                Vessel vessel = ActiveVessel;
+                if (vessel == null) return false;
+                var nums = new System.Collections.Generic.Dictionary<string, double>();
+                var predicateNames = new System.Collections.Generic.Dictionary<string, string[]>();
+                string situation = SituationOf(vessel) ?? "other";
+                CollectValues(vessel, situation, nums, predicateNames);
+                var templates = RuntimeLines.Parse(new System.Collections.Generic.List<string> {
+                    "id\tkind\twhen\tspanish\tenglish", "scene_condition\treport\t" + predicate + "\tHola.\tHello." }, null);
+                if (RuntimeLines.Fitting(templates, "report", situation, nums, predicateNames).Count == 0) return false;
+            }
+            if (!sc.HasSlots) return true;
             System.Collections.Generic.IDictionary<string, string> names = new System.Collections.Generic.Dictionary<string, string> {
                 { SubtitleSlots.Self, "a" }, { SubtitleSlots.Other, "b" } };
             Func<int, System.Collections.Generic.IDictionary<string, string>> per = null;
@@ -270,6 +285,9 @@ namespace Lonapse
             if (nums != null)
                 foreach (var kv in nums)
                     if (!d.ContainsKey(kv.Key)) d[kv.Key] = kv.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture);
+            if (nums != null && rtNames != null)
+                foreach (var pair in rtNames)
+                    if (!d.ContainsKey(pair.Key) && pair.Value != null && pair.Value.Length > 1 && !string.IsNullOrEmpty(pair.Value[1])) d[pair.Key] = pair.Value[1];
             return d;
         }
 
@@ -296,7 +314,19 @@ namespace Lonapse
             if (here == "Mun") here = "the Mun";   // as KSP writes it, a capital at a sentence start
             string probe = null;
             try { if (host.probeMode) probe = host.ProbeDisplayName; } catch (Exception) { }   // the subtitle name of the probe
-            return SubtitleSlots.FlightValues(host.missionTime, LonapseAddon.DayLength(), here, vessel, alt, probe);
+            var values = SubtitleSlots.FlightValues(host.missionTime, LonapseAddon.DayLength(), here, vessel, alt, probe);
+            if (!string.IsNullOrEmpty(here)) values["body"] = here;
+            return values;
+        }
+
+        public PhraseEntry ResolveSpeechLine(PhraseEntry entry)
+        {
+            bool named;
+            var resolved = SubtitleSlots.Fill(new System.Collections.Generic.List<PhraseEntry> { entry }, PhraseClips.pools,
+                SlotFlightValues(), null, (pool, options) => Mem.TakeValue(pool, options, rng), null, SlotConditions(), true,
+                NamesRecent, out named, rtNames);
+            if (named) NameSaid();
+            return resolved.Count == 1 ? resolved[0] : null;
         }
 
         private System.Collections.Generic.List<PhraseEntry> PlayLinesRaw(PhraseScene sc)
@@ -325,6 +355,11 @@ namespace Lonapse
         public int QueueCount { get { return count; } }
         public bool Holding { get { return clock < holdUntil; } }
 
+        public void ResetStationCheckTimer()
+        {
+            stationMcLeft = U(Tu.stationMcMin, Tu.stationMcMax);
+        }
+
         /// <summary>True when nothing is queued and no voice/control channel is busy.</summary>
         public bool Idle
         {
@@ -337,7 +372,7 @@ namespace Lonapse
             }
         }
 
-        /// <summary>Any voice is audible (crew, callout, control): the game audio ducks under it.</summary>
+        /// <summary>Any crew, callout or Mission Control voice is audible.</summary>
         public bool VoiceActive
         {
             get
@@ -346,6 +381,13 @@ namespace Lonapse
                 if (host.calloutCh != null && host.calloutCh.Busy) return true;
                 return host.control.Busy;
             }
+        }
+
+        /// <summary>Telemetry waits for the entire exchange, including queued replies and turn gaps.</summary>
+        public bool TelemetryMayStart
+        {
+            get { return Idle && !Holding && !IntercomTurnOpen && !calloutPending && !runtimeChatPending && !reportPending
+                         && !RadioAudible && (host.countdown == null || !host.countdown.Running); }
         }
 
         /// <summary>
@@ -361,6 +403,7 @@ namespace Lonapse
                 if (host.calloutCh != null && host.calloutCh.Busy) return true;
                 if (host.control.Busy) return true; // the static bed is left out: it only runs under MC, and an orphan loop would block the intercom
                 if (host.keyCh != null && host.keyCh.Busy) return true;
+                if (host.beeps != null && host.beeps.TelemetryActive) return true;
                 if (host.probeMode && host.beep.Length > 1 && host.beep[1].Busy) return true; // the probe answers on the radio
                 BlackoutState bs = host.blackout != null ? host.blackout.state : BlackoutState.Clear;
                 return host.staticCh != null && host.staticCh.Busy && bs != BlackoutState.Static && bs != BlackoutState.Blackout;
@@ -450,6 +493,9 @@ namespace Lonapse
 
         public void HardReset()
         {
+            probeContextGeneration++;
+            probeContextPending = false;
+            carrierRunning = false;
             head = 0; count = 0;
             chatA = chatB = null;
             abortChat = false;
@@ -474,11 +520,18 @@ namespace Lonapse
         /// <paramref name="evaHop"/>: a kerbal goes out on EVA or comes back, a waiting science line stays.</summary>
         public void ResetPacing(bool evaHop = false)
         {
+            probeContextGeneration++;
+            probeContextPending = false;
+            pendingProbeScience = null;
+            receivedSubjects.Clear();
+            receivedPoints.Clear();
+            probeMeasurements.Clear();
             cool.Clear();
             bucket = null;
             lastPanic = -1e9f;
             esc.Decay(1f, 0f);
             lastSceneId = null;
+            probeRepeat.Clear();
             causeSaid.Clear();
             stressSaid.Clear();
             calmSaid.Clear();
@@ -662,10 +715,10 @@ namespace Lonapse
                    || k == UttKind.RogerBeep || k == UttKind.ProbeBeep || k == UttKind.SubtitleLine;
         }
 
-        /// <summary>A crew reply to a Mission Control runtime line (rt_re_...), logged when it plays or is skipped.</summary>
+        /// <summary>A crew reply to a Mission Control runtime line, logged when it plays or is skipped.</summary>
         private static bool IsReplyLine(PhraseEntry e)
         {
-            return e != null && e.ClipKey != null && e.ClipKey.StartsWith("rt_re_", StringComparison.Ordinal);
+            return e != null && e.IsReply;
         }
 
         /// <summary>Voice pitch in a time warp (the kerbals and Mission Control sound sped up), else 1.</summary>
@@ -795,12 +848,15 @@ namespace Lonapse
         }
 
         private float VoiceBoost { get { return MixMath.DbToLin(host.settings.voiceBoostDb); } }
+        private float ReceiverWeakness { get { return host.settings.signalMode == "off" ? 0f : DcMath.Clamp01(1f - host.signal.signal); } }
 
-        /// <summary>Radio profile on a crew radio line: higher high-pass and a low-pass ceiling.</summary>
+        /// <summary>Headset microphone, with helmet resonance on EVA.</summary>
         private void ApplyProfile(VoiceChannel c)
         {
             RadioProfile p = Profile;
-            c.CapLowPass(p.LowPassHz);
+            c.CapLowPass(host.settings.useDsp ? 3000f : p.LowPassHz);
+            bool helmet = host.settings.radioProfile == "auto" ? c.speaker != null && c.speaker.onEva : p.Context == RadioContext.Eva;
+            c.SetRadioVoice(helmet ? RadioVoice.Helmet : RadioVoice.Headset);
         }
 
         /// <summary>Panic lines obey the global gap and the per-speaker cooldown, otherwise they drop to tense.</summary>
@@ -836,6 +892,8 @@ namespace Lonapse
         private StartResult Start(Utterance u, bool overlapping, out VoiceChannel ch)
         {
             ch = null;
+            if (u.contextValid != null && !u.contextValid()) return StartResult.Skip;
+            if (host.stationMode && u.entry != null && u.entry.Event == ProbeRules.HailEvent) return StartResult.Skip;
             // Absolute rule: the director never starts audio while the gate is closed.
             if (!host.CanStartAudio) return StartResult.Wait;
             float s = host.stress.stress;
@@ -1071,6 +1129,7 @@ namespace Lonapse
                     RadioProfile p = Profile;
                     c.SetBand(p.HighPassHz, p.LowPassHz);
                     c.Play(clip, vol, pitch, false, 0f);
+                    c.SetRadioVoice(RadioVoice.Control, ReceiverWeakness, true);
                     c.boost = VoiceBoost;
                     c.compressor = cfg.voiceCompressor;
                     c.phraseKey = u.entry != null ? u.entry.ClipKey : null; // the table row (FaceDriver), also for a named line
@@ -1101,16 +1160,7 @@ namespace Lonapse
                 }
                 case UttKind.BedStart:
                 {
-                    VoiceChannel b = host.controlBed;
-                    if (!host.signal.connected) return StartResult.Instant;
-                    if (!b.Busy && ClipLibrary.CountOf("sfx/loop") > 0)
-                    {
-                        AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
-                        // weaker signal, louder bed
-                        // radioStatic: extra static at any signal, on top of the weak-signal part
-                        if (clip != null) b.Play(clip, DcMath.Clamp01(tu.controlBedVolume + DcMath.StaticCurve(cfg.radioStatic) * RadioStaticMcBed
-                                                                     + host.StaticLevel * host.settings.weakSignalVolume), 1f, true, 0.12f);
-                    }
+                    StartControlBed();
                     return StartResult.Instant;
                 }
                 case UttKind.BedStop:
@@ -1118,6 +1168,7 @@ namespace Lonapse
                     return StartResult.Instant;
                 case UttKind.StaticBurst:
                 {
+                    if (cfg.radioStatic <= 0f) return StartResult.Instant;
                     AudioClip clip = ClipLibrary.Next("sfx/burst", rng);
                     if (clip == null) return StartResult.Skip;
                     VoiceChannel st = host.staticCh;
@@ -1133,7 +1184,7 @@ namespace Lonapse
                     return StartCabinBeep(u, out ch);
                 case UttKind.PingPattern:
                 {
-                    VoiceChannel b = host.beeps.PlayPing();
+                    VoiceChannel b = host.beeps.PlayPing(true);
                     if (b == null) return StartResult.Skip;
                     ch = b;
                     return StartResult.Started;
@@ -1185,8 +1236,9 @@ namespace Lonapse
             // a weak signal sometimes cracks before the transmission
             // far away the delayed answer arrives with a short crackle first
             // radioStatic also gives an occasional crackle at a full signal
-            double crackle = Math.Max(host.StaticLevel, RadioStaticBurstChance * host.settings.radioStatic);
-            if (rng.NextDouble() < crackle || host.LightDelay > 0.5f) Enqueue(UttKind.StaticBurst, null, delay, 0f, null);
+            double crackle = Math.Max(host.StaticLevel, RadioStaticBurstChance * Math.Min(host.settings.radioStatic, 1f));
+            if (host.settings.radioStatic > 0f && (rng.NextDouble() < crackle || host.LightDelay > 0.5f))
+                Enqueue(UttKind.StaticBurst, null, delay, 0f, null);
             Enqueue(UttKind.BedStart, null, delay, 0f, null);
             Enqueue(UttKind.ControlFx, "beeps/quindar_in", 0f, 0f, null);
             Utterance u = Enqueue(UttKind.ControlLine, folder, 0.05f, 0f, null);
@@ -1246,21 +1298,21 @@ namespace Lonapse
 
         // ---- context ----
 
-        /// <summary>Radio rule: FlightPhase.Matches. Serious phases get serious, that-phase and any rows, goofy phases
-        /// goofy, that-phase and any rows, blackout only blackout and any rows. No phase yet: only any rows.</summary>
+        /// <summary>Radio rule: FlightPhase.Matches. Serious phases get serious, that-phase and any rows, idle phases
+        /// idle, that-phase and any rows, blackout only blackout and any rows. No phase yet: only any rows.</summary>
         private static bool RadioPhaseOk(PhraseScene sc, string phase)
         {
             return FlightPhase.Matches(sc.Phase, phase);
         }
 
-        /// <summary>Intercom rule: always funny. Any and goofy rows, a goofy concrete phase row only in that phase,
+        /// <summary>Intercom rule: always funny. Any and idle rows, an idle concrete phase row only in that phase,
         /// blackout rows only in blackout, never a serious row.</summary>
         private static bool IntercomPhaseOk(PhraseScene sc, string phase)
         {
             string row = sc.Phase;
-            if (string.IsNullOrEmpty(row) || row == FlightPhase.Any || row == FlightPhase.Goofy) return true;
+            if (string.IsNullOrEmpty(row) || row == FlightPhase.Any || row == FlightPhase.Idle) return true;
             if (row == FlightPhase.Blackout) return phase == FlightPhase.Blackout;
-            return FlightPhase.IsGoofy(row) && row == phase;
+            return FlightPhase.IsIdle(row) && row == phase;
         }
 
         /// <summary>Stress cause key for the phrase table: the largest comp*weight, "engine_out" while an engine is out.</summary>
@@ -1491,6 +1543,7 @@ namespace Lonapse
         /// <summary>Scheduled radio activity. Returns false when the rate limiter said no (try again later).</summary>
         private bool Fire(bool appendOverlap)
         {
+            if (ProbeStationChecks) return true; // the station check-in timer owns routine probe conversation
             if (!TakeToken()) return false;
             // time warp: often a runtime line about the warp instead of the usual exchange
             if (!appendOverlap && host.warpChatter && rng.NextDouble() < WarpLineChance && QueueWarpLine()) return true;
@@ -1740,7 +1793,11 @@ namespace Lonapse
         /// <summary>Docked. A hard dock is a warning: it cuts chatter and plays the dock_hard scene.</summary>
         public void EnqueueDocked(bool hard)
         {
-            if (host.probeMode) { EnqueueProbeReaction(ProbeRules.Docked, hard ? 0.4f : 0.8f, hard); return; }
+            if (host.probeMode)
+            {
+                if (!hard && RuntimeOn && host.settings.runtimeReports && TryRuntimeProbeTopic("docking")) return;
+                EnqueueProbeReaction(ProbeRules.Docked, hard ? 0.4f : 0.8f, hard); return;
+            }
             if (!host.CanStartAudio || radioSilent) return;
             if (hard)
             {
@@ -1898,14 +1955,16 @@ namespace Lonapse
             }
         }
 
-        private string PlayCalloutNow(string ev, string fallbackFolder, float maxLen, string what, Predicate<PhraseScene>[] prefer)
+        private string PlayCalloutNow(string ev, string fallbackFolder, float maxLen, string what, Predicate<PhraseScene>[] prefer,
+            AudioClip rendered = null, PhraseScene renderedScene = null, KerbalVoice renderedSpeaker = null,
+            System.Collections.Generic.List<PhraseEntry> renderedLines = null)
         {
-            KerbalVoice sp = KerbalVoice.PickCallout(host.roster.voices, rng);
+            KerbalVoice sp = renderedSpeaker ?? KerbalVoice.PickCallout(host.roster.voices, rng);
             if (sp == null) return "no conscious crew";
 
             // prefer: filters tried in order (staging by stage contents), then any scene of the event
-            PhraseScene sc = null;
-            if (ev != null && prefer != null)
+            PhraseScene sc = renderedScene;
+            if (sc == null && ev != null && prefer != null)
                 for (int i = 0; i < prefer.Length && sc == null; i++)
                 {
                     Predicate<PhraseScene> f = prefer[i];
@@ -1914,23 +1973,23 @@ namespace Lonapse
             if (sc == null && ev != null) sc = PickScene(ev, null, x => x.Lines.Count > 0 && x.Lines[0].Role == "crew" && FitsSpeaker(x, sp));
             AudioClip clip = null;
             string folder = null;
-            var scLines = sc != null ? PlayLines(sc) : null; // {body} variants
-            if (scLines != null && scLines.Count > 0) clip = PhraseClips.Clip(scLines[0], sp.isFemale);
-            // with the table only a real line: a folder clip has no subtitle and could say anything
-            if (clip == null && PhraseClips.Loaded) return "no fitting line in the phrase table";
+            var scLines = renderedLines ?? (sc != null ? PlayLines(sc) : null); // resolve speech and subtitles together
+            clip = rendered;
             if (clip == null)
             {
-                sc = null;
-                // without an event, crew/callout would give a staging or chute word: use the given folder
-                folder = (ev == null && fallbackFolder != null) ? fallbackFolder : "crew/callout";
-                if (ClipLibrary.CountOf(folder) == 0)
-                {
-                    if (fallbackFolder == null) return "no crew/callout clips";
-                    folder = fallbackFolder;
-                }
-                clip = ClipLibrary.NextFor(folder, sp.isFemale, sp.rng);
+                if (scLines == null || scLines.Count == 0) return "no fitting runtime callout";
+                Vessel vessel = ActiveVessel; Guid vesselId = vessel != null ? vessel.id : Guid.Empty;
+                float requested = clock;
+                PhraseClips.Render(scLines[0], sp.isFemale, prepared => {
+                    if (prepared == null) return;
+                    if (!host.CanStartAudio || !host.settings.radioEnabled || ActiveVessel == null || ActiveVessel.id != vesselId
+                        || clock - requested > 3f || !CanChat(sp) || host.calloutCh.Busy)
+                    { UnityEngine.Object.Destroy(prepared); return; }
+                    PlayCalloutNow(ev, fallbackFolder, maxLen, what, prefer, prepared, sc, sp, scLines);
+                });
+                return null;
             }
-            if (clip == null) return "no clip in " + folder;
+            PhraseClips.SetRuntimeClip(scLines[0], clip);
 
             VoiceChannel c = host.calloutCh;
             Tuning tu = Tu;
@@ -2051,7 +2110,7 @@ namespace Lonapse
                                                DcMath.CrewPitchMin, Math.Max(DcMath.CrewPitchMin, Tu.crewPitchMax));
             for (int i = 0; i < turns; i++)
             {
-                bool second = (i % 2) == 1;
+                bool second = lines != null && i < lines.Count && !string.IsNullOrEmpty(lines[i].DialogueRole) ? lines[i].DialogueRole == "partner" : (i % 2) == 1;
                 // push-to-talk click at the start of every line
                 Enqueue(UttKind.IntercomClick, null, i == 0 ? U(0f, 0.3f) : U(Tu.intercomGapMin, Tu.intercomGapMax), 0f, null);
                 Utterance u = Enqueue(UttKind.IntercomLine, null, 0.04f, 0f, second ? b : a);
@@ -2159,24 +2218,36 @@ namespace Lonapse
             else if (!intercomEligible) intercomWaitStart = -1f;
 
             bool radioOn = host.settings.radioEnabled;
-            bool checkStyle = !host.probeMode && host.stationMode && PacingRules.StationChoice(host.settings.stationStyle, s, tu.burstBand) == StationAction.Check;
+            bool checkStyle = host.probeMode ? ProbeStationChecks
+                : host.stationMode && PacingRules.StationChoice(host.settings.stationStyle, s, tu.burstBand) == StationAction.Check;
+            if (host.stationMode && !wasStation) stationMcLeft = U(tu.stationMcMin, tu.stationMcMax);
+            wasStation = host.stationMode;
             if (radioOn && checkStyle && !radioSilent && !McUnreachable && holdoff <= 0f)
             {
                 // stations and bases: Mission Control checks in now and then. Only this mechanism at low stress.
                 stationMcLeft -= dt;
                 if (stationMcLeft <= 0f && !HasRadioItems() && !Holding)
                 {
-                    if (!EnqueueRadioScene(PickScene("station_check", null, null), PickRested(), U(0f, 0.3f)) && !PhraseClips.Loaded)
+                    if (host.probeMode)
                     {
-                        EnqueueMcFor("station_check", U(0f, 0.3f));
-                        EnqueueCrew("crew/calm", ResponseDelay(s), 0f);
+                        if (AirFree && !probeContextPending && TakeToken())
+                        {
+                            if (host.settings.probePetTalk) FireProbe(false);
+                            stationMcLeft = U(tu.stationMcMin, tu.stationMcMax);
+                        }
                     }
-                    stationMcLeft = U(tu.stationMcMin, tu.stationMcMax);
-                    Log.Info("Station call from Mission Control queued, next in about " + stationMcLeft.ToString("0") + " s");
+                    else
+                    {
+                        if (!EnqueueRadioScene(PickScene("station_check", null, null), PickRested(), U(0f, 0.3f)) && !PhraseClips.Loaded)
+                        {
+                            EnqueueMcFor("station_check", U(0f, 0.3f));
+                            EnqueueCrew("crew/calm", ResponseDelay(s), 0f);
+                        }
+                        stationMcLeft = U(tu.stationMcMin, tu.stationMcMax);
+                        Log.Info("Station call from Mission Control queued, next in about " + stationMcLeft.ToString("0") + " s");
+                    }
                 }
             }
-            if (host.stationMode && !wasStation) stationMcLeft = U(tu.stationMcMin, tu.stationMcMax) * 0.5f; // first check-in sooner
-            wasStation = host.stationMode;
 
             if (!radioSilent)
             {
@@ -2379,12 +2450,33 @@ namespace Lonapse
                 bool gDominant = 0.40f * gs >= 0.10f * DcMath.Smooth(sp.sk, 0.8, 1.0);
                 c.tremRate = gDominant ? sp.tremRate : 9f;
             }
-            if (host.control.Busy) host.control.extraDistortion = extra;
+            if (host.control.Busy)
+            {
+                host.control.extraDistortion = extra;
+                if (host.control.followRadioSignal)
+                {
+                    host.control.radioWeakness = ReceiverWeakness;
+                    host.control.dropout = host.Dropout;
+                    StartControlBed();
+                }
+            }
+            if (host.controlBed.Busy)
+                host.controlBed.volumeScale = RadioNoise.ControlLevel(tu.controlBedVolume, host.StaticLevel, host.settings.weakSignalVolume);
             UpdateCrewBed();
+            UpdateProbeRadio();
         }
 
-        // radioStatic: static bed levels. At 100 % the crew bed sits a bit above the MC bed at a full signal.
-        private const float RadioStaticMcBed = 0.30f, RadioStaticCrewBed = 0.6f, RadioStaticBurstChance = 0.35f;
+        private const float RadioStaticBurstChance = 0.35f;
+
+        private void StartControlBed()
+        {
+            VoiceChannel b = host.controlBed;
+            if (b == null || !host.CanStartAudio || !host.settings.radioEnabled || !host.signal.connected || mcBlackout || radioSilent || host.settings.radioStatic <= 0f
+                || b.Busy || ClipLibrary.CountOf("sfx/loop") == 0) return;
+            AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
+            if (clip != null)
+                b.Play(clip, RadioNoise.ControlLevel(Tu.controlBedVolume, host.StaticLevel, host.settings.weakSignalVolume), 1f, true, 0.12f);
+        }
 
         /// <summary>
         /// Intercom line with radio sound effects: the crew radio filters, the radio profile band (300 to 3600 Hz on a
@@ -2404,7 +2496,7 @@ namespace Lonapse
             float amount = host.settings.radioStatic;
             if (b == null || amount <= 0f || b.Busy || ClipLibrary.CountOf("sfx/loop") == 0) return;
             AudioClip clip = ClipLibrary.Next("sfx/loop", rng);
-            if (clip != null) b.Play(clip, DcMath.Clamp01(RadioStaticCrewBed * DcMath.StaticCurve(amount)), 1f, true, 0.08f);
+            if (clip != null) b.Play(clip, RadioNoise.CrewBed, 1f, true, 0.08f);
         }
 
         /// <summary>The crew bed only runs while a crew radio line plays. Following the lines (no queue item) means
@@ -2412,10 +2504,11 @@ namespace Lonapse
         private void UpdateCrewBed()
         {
             VoiceChannel b = host.crewBed;
-            if (b == null || !b.Busy) return;
+            if (b == null) return;
             bool line = host.calloutCh != null && host.calloutCh.Busy;
             for (int i = 0; i < host.crew.Length && !line; i++) line = host.crew[i].Busy && (!host.crew[i].intercom || host.crew[i].radioFx);
             if (!line || host.settings.radioStatic <= 0f) b.FadeOutOnce(0.2f);
+            else if (!b.Busy) StartCrewBed();
         }
     }
 }
