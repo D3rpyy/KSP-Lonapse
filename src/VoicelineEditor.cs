@@ -24,6 +24,7 @@ namespace Lonapse
         private Texture icon;
         private bool visible, locked, typingLock, destroyed, started;
         private Rect rect = new Rect(320f, 90f, WindowWidth, 10f);
+        private readonly UiClickBlocker uiBlocker = new UiClickBlocker("Lonapse_voicelines_blocker");
         private Vector2 listScroll, pickScroll;
         private GUIStyle headerStyle, hintStyle, lineStyle, offStyle, warnStyle, toggleStyle;
 
@@ -137,6 +138,7 @@ namespace Lonapse
             catch (Exception e) { Log.Exception("VoicelineEditor.events", e); }
             try { RemoveButton(); } catch (Exception e) { Log.Exception("VoicelineEditor.button", e); }
             ReleaseLocks();
+            uiBlocker.Destroy();
             // a preview that Piper still renders ends without a clip
             try { RuntimeVoice.Shared.DropCallbacks(); } catch (Exception) { }
             try
@@ -343,7 +345,7 @@ namespace Lonapse
 
         private void OnGUI()
         {
-            if (!started || !visible) { if (locked || typingLock) ReleaseLocks(); return; }
+            if (!started || !visible) { uiBlocker.Hide(); if (locked || typingLock) ReleaseLocks(); return; }
             try
             {
                 if (headerStyle == null)
@@ -367,6 +369,7 @@ namespace Lonapse
                 r.x = Mathf.Clamp(r.x, 0f, Math.Max(0f, Screen.width - 60f));
                 r.y = Mathf.Clamp(r.y, 0f, Math.Max(0f, Screen.height - 40f));
                 rect = r;
+                uiBlocker.Cover(rect);
                 SetLock(rect.Contains(Event.current.mousePosition));
             }
             catch (Exception e) { Log.Exception("VoicelineEditor.OnGUI", e); }

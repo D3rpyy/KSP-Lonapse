@@ -13,6 +13,7 @@ namespace Lonapse
         private const ControlTypes LockMask = ControlTypes.CAMERACONTROLS | ControlTypes.MAP_UI | ControlTypes.TARGETING |
                                               ControlTypes.TWEAKABLES | ControlTypes.MANNODE_ADDEDIT | ControlTypes.MANNODE_DELETE;
         private bool locked;
+        private readonly UiClickBlocker uiBlocker = new UiClickBlocker("Lonapse_window_blocker");
         private readonly LonapseAddon host;
         private ApplicationLauncherButton button;
         private bool visible;
@@ -77,6 +78,7 @@ namespace Lonapse
             button = null;
             visible = false;
             ReleaseLock();
+            uiBlocker.Destroy();
         }
 
         public bool Visible { get { return visible; } }
@@ -96,6 +98,7 @@ namespace Lonapse
 
         public void ReleaseLock()
         {
+            uiBlocker.Hide();
             if (locked) SetLock(false);
             if (typingLock)
             {
@@ -184,6 +187,7 @@ namespace Lonapse
                 host.settingsDirty = true;
             }
             rect = r;
+            uiBlocker.Cover(rect);
             SetLock(visible && rect.Contains(Event.current.mousePosition));
         }
 

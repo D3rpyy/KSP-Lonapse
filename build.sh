@@ -37,7 +37,7 @@ command -v mcs >/dev/null || { echo "ERROR: mcs not found (install mono)" >&2; e
 refs=()
 for a in Assembly-CSharp Assembly-CSharp-firstpass UnityEngine UnityEngine.CoreModule \
          UnityEngine.AudioModule UnityEngine.IMGUIModule UnityEngine.InputLegacyModule \
-         UnityEngine.PhysicsModule UnityEngine.AnimationModule UnityEngine.TextRenderingModule UnityEngine.UI; do
+         UnityEngine.PhysicsModule UnityEngine.AnimationModule UnityEngine.TextRenderingModule UnityEngine.UIModule UnityEngine.UI; do
   refs+=("-r:$MG/$a.dll")
 done
 

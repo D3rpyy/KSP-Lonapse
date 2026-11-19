@@ -1,3 +1,11 @@
+# Visual Studio and Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.rsuser
+*.userprefs
+
 build/
 bin/
 obj/
